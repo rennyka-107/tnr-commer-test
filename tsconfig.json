@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "paths": {
+      "@components": ["components"],
+      "@constants": ["constants"],
+      "@components/*": ["components/*"],
+      "@shared/*": ["shared/*"],
+      "@layouts/*": ["layouts/*"]
+    },
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true
+  },
+  "exclude": ["node_modules"],
+  "include": ["next-env.d.ts", "next-custom.d.ts", "**/*.ts", "**/*.tsx", "src/components/Reviews/CompanyInfo/StyledTooltip.js", "src/components/App/HeaderChange/index.jsx"]
+}
