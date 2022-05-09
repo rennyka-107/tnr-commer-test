@@ -1,6 +1,32 @@
-const IconBag = ({ style }: { style?: React.CSSProperties }) => {
+import styled from "@emotion/styled";
+
+const WrapIconBagContainer = styled.div`
+  position: relative;
+`;
+
+const TotalItemsContainer = styled.span`
+  position: absolute;
+  background: #1b3459;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  bottom: 0;
+  right: -30%;
+  color: #ffffff;
+  font-weight: 400;
+  font-size: 10px;
+  text-align: center;
+`;
+
+const IconBag = ({
+  style,
+  total,
+}: {
+  style?: React.CSSProperties;
+  total?: number;
+}) => {
   return (
-    <>
+    <WrapIconBagContainer>
       <svg
         width="22"
         height="22"
@@ -13,7 +39,8 @@ const IconBag = ({ style }: { style?: React.CSSProperties }) => {
           fill="#0E1D34"
         />
       </svg>
-    </>
+      {total > 0 && <TotalItemsContainer>{total}</TotalItemsContainer>}
+    </WrapIconBagContainer>
   );
 };
 

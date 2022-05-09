@@ -12,7 +12,9 @@ export default function Home() {
         isHomePage: true,
       }}
     >
-      <h1> TNR Ecommerce</h1>
+      <div style={{ marginTop: "127px" }}>
+        <h1> TNR Ecommerce</h1>
+      </div>
     </Page>
   );
 }

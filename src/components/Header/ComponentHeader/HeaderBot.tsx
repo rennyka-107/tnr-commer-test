@@ -44,14 +44,7 @@ const ButtonBuyHelp = styled(Button)`
   background: #ffffff;
   border: 1px solid #ea242a;
   border-radius: 8px;
-  padding: 25px;
-`;
-const IconAccountWrap = styled.div`
-  display: flex;
-  gap: 30px;
-`;
-const TextBuyHelp = styled.span`
-  width: auto;
+  padding: 8px 25px;
   font-family: "Roboto";
   font-style: normal;
   font-weight: 400;
@@ -60,7 +53,20 @@ const TextBuyHelp = styled.span`
   text-align: center;
   color: #0e1d34;
   text-transform: none;
+
+  :hover {
+    background: #ea242a;
+    color: #ffffff;
+  }
 `;
+const IconAccountWrap = styled.div`
+  display: flex;
+  gap: 30px;
+`;
+// const TextBuyHelp = styled.span`
+//   width: auto;
+
+// `;
 const HeaderBot = () => {
   return (
     <ContainerNavTop>
@@ -77,13 +83,11 @@ const HeaderBot = () => {
           </Button>
         </WrapMenuItem>
         <WrapRightItem>
-          <ButtonBuyHelp>
-            <TextBuyHelp>Hướng dẫn mua online</TextBuyHelp>
-          </ButtonBuyHelp>
+          <ButtonBuyHelp>Hướng dẫn mua online</ButtonBuyHelp>
           <IconAccountWrap>
             <IconUser />
             <IconHeart />
-            <IconBag />
+            <IconBag total={10} />
           </IconAccountWrap>
         </WrapRightItem>
       </BodyContainer>

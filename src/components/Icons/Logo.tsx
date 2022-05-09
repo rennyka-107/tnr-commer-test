@@ -2,6 +2,7 @@ const Logo = ({ style }: { style?: React.CSSProperties }) => {
   return (
     <>
       <svg
+        style={style}
         width="98"
         height="37"
         viewBox="0 0 98 37"

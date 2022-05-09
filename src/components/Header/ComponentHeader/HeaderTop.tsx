@@ -18,7 +18,7 @@ const WrapContainer = styled.div`
   align-items: center;
 `;
 const LinkContainer = styled.div`
-  gap: 50px;
+  gap: 56px;
   display: flex;
   justify-content: center;
 `;
@@ -35,12 +35,11 @@ const TextLink = styled.a`
   }
 `;
 
-const CountryIconWrap = styled.a`
-position: absolute;
-right: 0;
-padding: 30px;
-cursor: pointer;
-`
+const IconCountryStyle = {
+  position: "absolute" as "absolute",
+  right: "50px",
+  cursor: "pointer",
+};
 
 const HeaderTop = () => {
   return (
@@ -60,9 +59,7 @@ const HeaderTop = () => {
             <TextLink>Về hỗ trợ</TextLink>
           </Link>
         </LinkContainer>
-        <CountryIconWrap>
-          <IconCountry />
-        </CountryIconWrap>
+          <IconCountry style={IconCountryStyle} />
       </WrapContainer>
     </ContainerStyled>
   );

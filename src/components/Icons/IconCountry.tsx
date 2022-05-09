@@ -2,6 +2,7 @@ const IconCountry = ({ style }: { style?: React.CSSProperties }) => {
   return (
     <>
       <svg
+        style={style}
         width="20"
         height="20"
         viewBox="0 0 20 20"
