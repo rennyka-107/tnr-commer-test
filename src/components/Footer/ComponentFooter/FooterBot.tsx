@@ -70,7 +70,7 @@ const IconsBlock = styled.div`
 `
 type Props = {};
 
-export default (props: Props) => {
+export default function FooterBot (props: Props) {
   return (
     <WrapFooterBot>
       <Logo style={{ width: 148, height: 56, margin: "56px 0 28px 0" }} />

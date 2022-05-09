@@ -20,7 +20,7 @@ const ChildWrapFooterTop = styled.div`
   align-items: center;
   justify-content: center;
   gap: 7rem;
-  
+
   @media (max-width: 1000px) {
     gap: 2rem;
   }
@@ -64,7 +64,7 @@ const WrapFlexOne = styled.div`
 
 type Props = {};
 
-export default (props: Props) => {
+export default function FooterTop(props: Props) {
   return (
     <WrapContainerFooterTop>
       <ChildWrapFooterTop>
@@ -82,4 +82,4 @@ export default (props: Props) => {
       </ChildWrapFooterTop>
     </WrapContainerFooterTop>
   );
-};
+}
