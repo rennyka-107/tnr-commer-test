@@ -148,9 +148,9 @@ export default function Slider3dShowBottom() {
             }}
           />
           <Swiper
-            // autoplay={{
-            //   delay: 1000,
-            // }}
+            autoplay={{
+              delay: 1000,
+            }}
             navigation={{
               nextEl: ".y-right",
               prevEl: ".y-left",
