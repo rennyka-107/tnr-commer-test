@@ -70,7 +70,7 @@ const IconsBlock = styled.div`
 `
 type Props = {};
 
-export default function FooterBot (props: Props) {
+const FooterBot = (props: Props) => {
   return (
     <WrapFooterBot>
       <Logo style={{ width: 148, height: 56, margin: "56px 0 28px 0" }} />
@@ -116,9 +116,10 @@ export default function FooterBot (props: Props) {
             <IconInstagramCircle />
             <IconFacebookCircle />
           </IconsBlock>
-          <Image src="/images/BCT.png" width="135.24px" height="51pxpx" />
+          <Image src="/images/BCT.png" width="135.24px" height="51pxpx" alt="" />
         </BlockDiv>
       </WrapContent>
     </WrapFooterBot>
   );
 };
+export default FooterBot;

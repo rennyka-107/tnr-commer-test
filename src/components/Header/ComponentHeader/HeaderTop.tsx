@@ -46,20 +46,20 @@ const HeaderTop = () => {
     <ContainerStyled>
       <WrapContainer>
         <LinkContainer>
-          <Link href="/">
+          <Link href="/" passHref>
             <TextLink>Về tài khoản</TextLink>
           </Link>
-          <Link href="/">
+          <Link href="/" passHref>
             <TextLink>Về quy trình mua BĐS Online</TextLink>
           </Link>
-          <Link href="/">
+          <Link href="/" passHref>
             <TextLink>Về TNR</TextLink>
           </Link>
-          <Link href="/">
+          <Link href="/" passHref>
             <TextLink>Về hỗ trợ</TextLink>
           </Link>
         </LinkContainer>
-          <IconCountry style={IconCountryStyle} />
+        <IconCountry style={IconCountryStyle} />
       </WrapContainer>
     </ContainerStyled>
   );

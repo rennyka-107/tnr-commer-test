@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "@emotion/styled";
 import Input from "@mui/material/Input";
-import CustomButton from "@components/CustomButton";
+import CustomButton from "@components/CustomComponent/CustomButton";
 
 const WrapContainerFooterTop = styled.div`
   background: #fec83c;
@@ -20,7 +20,7 @@ const ChildWrapFooterTop = styled.div`
   align-items: center;
   justify-content: center;
   gap: 7rem;
-
+  
   @media (max-width: 1000px) {
     gap: 2rem;
   }
@@ -64,7 +64,7 @@ const WrapFlexOne = styled.div`
 
 type Props = {};
 
-export default function FooterTop(props: Props) {
+const FooterTop = (props: Props) => {
   return (
     <WrapContainerFooterTop>
       <ChildWrapFooterTop>
@@ -82,4 +82,5 @@ export default function FooterTop(props: Props) {
       </ChildWrapFooterTop>
     </WrapContainerFooterTop>
   );
-}
+};
+export default FooterTop;

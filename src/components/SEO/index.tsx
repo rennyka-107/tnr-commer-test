@@ -1,9 +1,9 @@
-import Head from 'next/head';
-import React from 'react';
-import { useRouter } from 'next/router';
+import Head from "next/head";
+import React from "react";
+import { useRouter } from "next/router";
 
 export type SEOProps = {
-	children?: any;
+  children?: any;
   title: string;
   description: string;
   about?: string;
@@ -33,14 +33,13 @@ const SEO: React.FC<SEOProps> = ({
   isAbout,
   isPricing,
 }) => {
-  const pageTitle = title ? `${title.trim()}` : '';
+  const pageTitle = title ? `${title.trim()}` : "";
   const router = useRouter();
-  const pageDescription = description || '';
-
+  const pageDescription = description || "";
 
   return (
     <>
-      <Head >
+      <Head>
         <title>{pageTitle}</title>
         <link rel="shortcut icon" href="/favicon.ico" />
         <link rel="icon" href="/favicon.ico" />
@@ -50,30 +49,21 @@ const SEO: React.FC<SEOProps> = ({
         <meta property="og:title" content={pageTitle} />
         <meta
           property="og:url"
-          content={
-            typeof canonical !== 'undefined'
-              ? canonical
-              : ''
-          }
+          content={typeof canonical !== "undefined" ? canonical : ""}
         />
-        <meta
-          property="og:image"
-          content={
-            urlimage !== null ? urlimage : ''
-          }
-        />
+        <meta property="og:image" content={urlimage !== null ? urlimage : ""} />
         <meta property="og:description" content={pageDescription} />
         <meta property="og:type" content="website" />
         <meta content="width=device-width, initial-scale=1" name="viewport" />
         <link
           rel="canonical"
-          href={
-            typeof canonical !== 'undefined'
-              ? canonical
-              : ''
-          }
+          href={typeof canonical !== "undefined" ? canonical : ""}
         />
-
+        <link rel="stylesheet" href="https://unpkg.com/swiper/css/swiper.css" />
+        <link
+          rel="stylesheet"
+          href="https://unpkg.com/swiper/css/swiper.min.css"
+        />
       </Head>
       {children}
     </>

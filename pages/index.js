@@ -1,9 +1,9 @@
-import Head from "next/head";
-import Image from "next/image";
-import styles from "../styles/Home.module.css";
 import Page from "@layouts/Page";
+import styled from "@emotion/styled";
+import { HomePage } from "../src/components/LayoutIndex/index";
 
-export default function Home() {
+
+const Home = () => {
   return (
     <Page
       meta={{
@@ -13,8 +13,10 @@ export default function Home() {
       }}
     >
       <div style={{ marginTop: "127px" }}>
-        <h1> TNR Ecommerce</h1>
+        <HomePage />
       </div>
     </Page>
-  );
+  )
 }
+
+export default Home;

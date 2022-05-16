@@ -13,10 +13,7 @@ const Page: React.FC<PageProps> = ({ meta, children }) => {
       <SEO {...meta} />
       <main style={{ display: "flex", flexDirection: "column" }}>
         <Header />
-        {children}
-        {/* <div id="footer">
-          <DynamicFooter />
-        </div> */}
+	   {children}
         <Footer />
       </main>
     </>

@@ -1,0 +1,1 @@
+export { default as HomePage } from './HomeComponent/HomePage';

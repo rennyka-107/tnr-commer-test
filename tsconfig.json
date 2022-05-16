@@ -6,7 +6,10 @@
       "@constants": ["constants"],
       "@components/*": ["components/*"],
       "@shared/*": ["shared/*"],
-      "@layouts/*": ["layouts/*"]
+      "@layouts/*": ["layouts/*"],
+      "@HOCs/*": ["HOCs/*"],
+      "@context/*": ["context/*"],
+
     },
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
