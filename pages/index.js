@@ -1,5 +1,4 @@
 import Page from "@layouts/Page";
-import styled from "@emotion/styled";
 import { HomePage } from "../src/components/LayoutIndex/index";
 
 

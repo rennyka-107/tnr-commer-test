@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
-import { Autoplay, Pagination, Navigation } from "swiper";
+import  SwiperCore,{ Autoplay, Pagination, Navigation } from "swiper";
 import styled from "@emotion/styled";
 import Mask1 from "../../../../public/images/mask_g_1.png";
 import Mask2 from "../../../../public/images/mask_g_2.png";
@@ -23,7 +23,7 @@ const CardContainer = styled.div`
   background-size: cover;
   border-radius: 10px;
 `;
-
+SwiperCore.use([ Autoplay,Pagination,Navigation ]);
 export default function SliderShowComponent() {
 
   return (
@@ -47,7 +47,7 @@ export default function SliderShowComponent() {
         }}
         observer={true}
         observeParents={true}
-        modules={[Autoplay, Pagination, Navigation]}
+        // modules={[Autoplay, Pagination, Navigation]}
         className="mySwiper"
         style={{ width: 1113 }}
 		

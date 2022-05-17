@@ -117,6 +117,7 @@ export default function ModalAdvanSearch() {
         placement={placement}
         transition
         style={{ zIndex: 1000 }}
+		
       >
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={350}>

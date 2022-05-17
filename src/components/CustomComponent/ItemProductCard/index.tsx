@@ -7,6 +7,7 @@ import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import styled from "@emotion/styled";
+import { IconPlusProduct } from "../../Icons/index";
 
 import {
   IconBath,
@@ -16,6 +17,7 @@ import {
   IconHeartProduct,
   IconMuaOnline,
 } from "@components/Icons";
+import Link from "next/link";
 
 type Props = {
   src?: any;
@@ -29,6 +31,7 @@ type Props = {
   };
   priceListed?: number;
   priceSub?: number;
+  activeSoSanh?: boolean;
   onClick?: MouseEventHandler<HTMLButtonElement>;
   ticketCard?: string;
 };
@@ -44,12 +47,13 @@ const CardStyled = styled(Card)`
 const CardContentStyled = styled(CardContent)`
   padding: 25px;
 `;
-const TextTitleStyled = styled(Typography)`
+const TextTitleStyled = styled.a`
   font-family: "Roboto";
   font-style: normal;
   font-weight: 500;
   font-size: 22px;
   line-height: 26px;
+  cursor: pointer;
   /* identical to box height */
 
   /* Brand/Main color */
@@ -57,16 +61,16 @@ const TextTitleStyled = styled(Typography)`
   color: #1b3459;
 `;
 const TextitleBottom = styled(Typography)`
-  font-family: "Roboto";
-  width: 85%;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 16px;
+width: 85%;
+font-family: 'Roboto';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 16px;
 
-  /* Brand/Text */
+/* Brand/Text */
 
-  color: #0e1d34;
+color: #0E1D34;
 `;
 const LineStyled = styled.div`
   width: 302px;
@@ -171,6 +175,17 @@ const ButtonStyled = styled(Button)`
   flex-grow: 0;
   margin: 0px 4px;
 `;
+const TextButtonStyled = styled(Typography)`
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16px;
+
+  /* Brand/Text */
+
+  color: #0e1d34;
+`;
 export default function ItemProductCard({
   src,
   title,
@@ -179,11 +194,12 @@ export default function ItemProductCard({
   priceListed,
   priceSub,
   onClick,
-  ticketCard
+  ticketCard,
+  activeSoSanh,
 }: Props) {
   function currencyFormat(num) {
     if (!num) {
-      return
+      return;
     }
     return num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
   }
@@ -200,7 +216,7 @@ export default function ItemProductCard({
       <div
         style={{
           background: "#FEC83C",
-          width: 87,
+          width: 'auto',
           height: 30,
           position: "absolute",
           marginTop: 160,
@@ -234,13 +250,18 @@ export default function ItemProductCard({
 
       <CardContentStyled>
         <div style={{ marginBottom: 7 }}>
-          <TextTitleStyled style={{ marginBottom: 9 }}>{title}</TextTitleStyled>
+          <Link href="/products/1">
+            <TextTitleStyled style={{ marginBottom: 9 }}>
+              {title}
+            </TextTitleStyled>
+          </Link>
           <TextitleBottom>{subTitle}</TextitleBottom>
         </div>
         <LineStyled />
         <CenterIntemWrap>
           <WrapItemCenter>
             <IconFrame />
+
             <TextCenterItem>{dataItem?.item1}</TextCenterItem>
           </WrapItemCenter>
           <WrapItemCenter>
@@ -276,12 +297,39 @@ export default function ItemProductCard({
           </div>
         </div>
       </CardContentStyled>
-      <CardActions style={{ flexDirection: "column", marginBottom: 24 }}>
-        <ButtonStyled onClick={() => { onClick }}>
-          Mua Online&nbsp;
-          <IconMuaOnline />
-        </ButtonStyled>
-      </CardActions>
+      {activeSoSanh === true ? (
+        <CardActions
+          style={{
+            flexDirection: "row",
+            marginBottom: 24,
+            justifyContent: "space-around",
+          }}
+        >
+          <div style={{ gap: 10, display: "flex", flexDirection: "row" }}>
+            <IconPlusProduct />
+            <TextButtonStyled>So sánh</TextButtonStyled>
+          </div>
+          <ButtonStyled
+            onClick={() => {
+              onClick;
+            }}
+          >
+            Mua Online&nbsp;
+            <IconMuaOnline />
+          </ButtonStyled>
+        </CardActions>
+      ) : (
+        <CardActions style={{ flexDirection: "column", marginBottom: 24 }}>
+          <ButtonStyled
+            onClick={() => {
+              onClick;
+            }}
+          >
+            Mua Online&nbsp;
+            <IconMuaOnline />
+          </ButtonStyled>
+        </CardActions>
+      )}
     </CardStyled>
   );
 }

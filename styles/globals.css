@@ -65,12 +65,42 @@ a {
     transition: transform .2s;
     /* opacity: 1 !important; */
     filter: brightness(110%) !important;
+    width: 241px !important;
 }
 
 .swiper-wrapper {
     align-items: center !important;
+    width: 241px !important;
 }
 
 .swiper-3d .swiper-wrapper {
     margin-left: -250px !important;
+}
+
+::-webkit-scrollbar {
+    width: 8px !important;
+    height: 10px !important;
+}
+
+
+/* Track */
+
+ ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+
+/* Handle */
+
+ ::-webkit-scrollbar-thumb {
+    background: #8190A7;
+    height: 10px !important;
+    border-radius: 10px;
+}
+
+
+/* Handle on hover */
+
+ ::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }

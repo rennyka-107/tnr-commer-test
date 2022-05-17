@@ -6,9 +6,7 @@ import SwiperCore, {
   EffectCoverflow,
   Autoplay,
 } from "swiper";
-import Slider1 from "../../../../public/images/slider-1.png";
-import Slider2 from "../../../../public/images/slider-2.png";
-import Slider3 from "../../../../public/images/slider-3.png";
+
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/navigation";
@@ -140,7 +138,7 @@ export default function Slider3dShowBottom() {
           <IconSliderYellowLeft
             className="y-left"
             style={{
-              zIndex: 1000,
+              zIndex: 10,
               position: "absolute",
               top: "42%",
               cursor: "pointer",
@@ -335,7 +333,7 @@ export default function Slider3dShowBottom() {
           <IconSliderYellowRight
             className="y-right"
             style={{
-              zIndex: 1000,
+              zIndex: 10,
               position: "absolute",
               right: "-18px",
               top: "42%",

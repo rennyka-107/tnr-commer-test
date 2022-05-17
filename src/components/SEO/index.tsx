@@ -59,11 +59,6 @@ const SEO: React.FC<SEOProps> = ({
           rel="canonical"
           href={typeof canonical !== "undefined" ? canonical : ""}
         />
-        <link rel="stylesheet" href="https://unpkg.com/swiper/css/swiper.css" />
-        <link
-          rel="stylesheet"
-          href="https://unpkg.com/swiper/css/swiper.min.css"
-        />
       </Head>
       {children}
     </>
