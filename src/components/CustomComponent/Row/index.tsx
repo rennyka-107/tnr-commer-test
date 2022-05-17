@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 
 type Props = {
     children?: ReactNode;
+    customStyle?: React.CSSProperties
 };
 
 
@@ -11,9 +12,9 @@ const RowWapper = styled.div`
 `;
 
 const Row: React.FC<Props> = (props: Props) => {
-    const { children } = props
+    const { children, customStyle } = props
     return (
-        <RowWapper>
+        <RowWapper style={customStyle}>
             {children}
         </RowWapper>
     );

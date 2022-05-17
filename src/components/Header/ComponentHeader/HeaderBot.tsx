@@ -24,7 +24,7 @@ const WrapMenuItem = styled.div`
   align-items: center;
   gap: 20px;
 `;
-const TextLink = styled.span`
+const TextLink = styled.a`
   text-transform: none;
   font-family: "Roboto";
   font-style: normal;
@@ -79,7 +79,9 @@ const HeaderBot = () => {
             <TextLink>Khuyến mãi</TextLink>
           </Button>
           <Button>
-            <TextLink>Tin tức</TextLink>
+            <Link href={"https://tnrvietnam.com.vn/sites/tnr/tin-tuc/"} passHref >
+              <TextLink target={"_blank"}>Tin tức</TextLink>
+            </Link>
           </Button>
         </WrapMenuItem>
         <WrapRightItem>
