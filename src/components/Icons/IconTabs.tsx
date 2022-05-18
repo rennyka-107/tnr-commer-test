@@ -7,7 +7,7 @@ const IconTabs = ({ style }: { style?: React.CSSProperties }) => {
         viewBox="0 0 28 28"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-		style={style}
+        style={style}
       >
         <path
           d="M27.3725 8.35377C26.8778 7.16509 26.1852 6.04245 25.3937 5.01887C23.9096 6.4717 22.1286 7.36321 20.2488 7.75943C20.6116 5.87736 21.535 4.06132 22.9861 2.60849C21.9637 1.81604 20.8754 1.12264 19.6551 0.627358C19.0615 0.363208 18.4679 0.165094 17.8412 0C16.9838 1.91509 16.2912 3.92925 15.7965 6.00943C15.6646 6.53774 15.5656 7.03302 15.4667 7.56132C15.1369 9.37736 14.939 11.2264 14.873 13.1415C16.7529 13.1085 18.6328 12.9104 20.4137 12.5472C20.9414 12.4481 21.4361 12.3491 21.9637 12.217C24.0415 11.7217 26.0862 11.0283 27.9991 10.1698C27.8012 9.54245 27.6363 8.94811 27.3725 8.35377Z"
@@ -34,8 +34,8 @@ const IconTabs = ({ style }: { style?: React.CSSProperties }) => {
             y2="4.16006"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#FCB715" />
-            <stop offset="1" stop-color="#E08E26" />
+            <stop stopColor="#FCB715" />
+            <stop offset="1" stopColor="#E08E26" />
           </linearGradient>
           <linearGradient
             id="paint1_linear_197_2513"
@@ -45,8 +45,8 @@ const IconTabs = ({ style }: { style?: React.CSSProperties }) => {
             y2="24.1343"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#FCB715" />
-            <stop offset="1" stop-color="#E08E26" />
+            <stop stopColor="#FCB715" />
+            <stop offset="1" stopColor="#E08E26" />
           </linearGradient>
           <linearGradient
             id="paint2_linear_197_2513"
@@ -56,8 +56,8 @@ const IconTabs = ({ style }: { style?: React.CSSProperties }) => {
             y2="3.94682"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#FCB715" />
-            <stop offset="1" stop-color="#E08E26" />
+            <stop stopColor="#FCB715" />
+            <stop offset="1" stopColor="#E08E26" />
           </linearGradient>
           <linearGradient
             id="paint3_linear_197_2513"
@@ -67,8 +67,8 @@ const IconTabs = ({ style }: { style?: React.CSSProperties }) => {
             y2="24.0885"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#FCB715" />
-            <stop offset="1" stop-color="#E08E26" />
+            <stop stopColor="#FCB715" />
+            <stop offset="1" stopColor="#E08E26" />
           </linearGradient>
         </defs>
       </svg>

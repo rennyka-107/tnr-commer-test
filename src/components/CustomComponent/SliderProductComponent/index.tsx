@@ -48,31 +48,34 @@ export default function SliderProductComponent() {
       >
         <SwiperSlide>
           <CardContainer>
-            <img
+            <Image
               src="/images/product_1.png"
               alt="Picture of the author"
               width={703}
               height={381}
+			  layout="fixed"
             />
           </CardContainer>
         </SwiperSlide>
 		<SwiperSlide>
 		<CardContainer>
-            <img
+            <Image
               src="/images/product_1.png"
               alt="Picture of the author"
               width={703}
               height={381}
+			  layout="fixed"
             />
           </CardContainer>
         </SwiperSlide>
 		<SwiperSlide>
 		<CardContainer>
-            <img
+            <Image
               src="/images/product_1.png"
               alt="Picture of the author"
               width={703}
               height={381}
+			  layout="fixed"
             />
           </CardContainer>
         </SwiperSlide>

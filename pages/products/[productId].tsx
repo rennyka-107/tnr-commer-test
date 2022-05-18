@@ -25,6 +25,7 @@ import {
 } from "@components/Icons";
 import TabsComponent from "@components/CustomComponent/TabsComponent";
 import PhieuTinhGia from "@components/LayoutProduct/PhieuTinhGia";
+import Image from "next/image";
 
 const dataFake = [
   {
@@ -535,7 +536,7 @@ const Product = () => {
                     khu vực.
                   </li>
                 </div>
-                <img src="/images/banner_map_product.png" />
+                <Image src="/images/banner_map_product.png" width={1108} height={700}/>
                 <BottomProdComponent
                   style={{ marginTop: 50, marginBottom: 85 }}
                   data={dataFake}

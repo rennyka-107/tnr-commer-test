@@ -26,7 +26,7 @@ const IconNextProduct = ({ style }: { style?: React.CSSProperties }) => {
         <path
           d="M18.4 15.1468L24 20.0002L18.4 24.8535"
           stroke="#C7C9D9"
-          stroke-linecap="square"
+          strokeLinecap="square"
         />
       </svg>
     </>

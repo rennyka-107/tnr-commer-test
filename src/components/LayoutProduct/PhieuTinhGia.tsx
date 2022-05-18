@@ -238,8 +238,8 @@ export default function PhieuTinhGia() {
       <ContainerLeft>
         <TitleStyled>Thông tin lô đất</TitleStyled>
         <WrapCardItem>
-          {FakeDataTable1.map((table1) => (
-            <WrapItemOnCard>
+          {FakeDataTable1.map((table1, index) => (
+            <WrapItemOnCard key={index}>
               <TextLeftOnCardLeft>{table1.title}:</TextLeftOnCardLeft>
               <TextRightOnCardLeft>{table1.value}</TextRightOnCardLeft>
             </WrapItemOnCard>
@@ -262,7 +262,7 @@ export default function PhieuTinhGia() {
               overflowY: FakeDataTable3.length >= 5 ? "scroll" : "hidden",
             }}
           >
-            {FakeDataTable3.map((item3) => (
+            {FakeDataTable3.map((item3, index) => (
               <>
                 <div
                   style={{
@@ -272,6 +272,7 @@ export default function PhieuTinhGia() {
                     gap: 28,
                     padding: "18px 22px 18px 21px",
                   }}
+				  key={index}
                 >
                   <div
                     style={{
@@ -302,8 +303,8 @@ export default function PhieuTinhGia() {
       <ContainerRight>
         <TitleStyled>Giá trị nhà ở</TitleStyled>
         <WrapCardItem>
-          {FakeDataTable2.map((item2) => (
-            <WrapItemOnCard>
+          {FakeDataTable2.map((item2,index) => (
+            <WrapItemOnCard key={index}>
               <div
                 style={{
                   display: "flex",
@@ -407,7 +408,7 @@ export default function PhieuTinhGia() {
 			  padding: 20
             }}
           >
-            {FakeDataTable4.map((item4) => (
+            {FakeDataTable4.map((item4,index) => (
               <div
                 style={{
                   display: "flex",
@@ -415,6 +416,7 @@ export default function PhieuTinhGia() {
                   gap: 15,
                   marginTop: 20,
                 }}
+				key={index}
               >
                 <div
                   style={{

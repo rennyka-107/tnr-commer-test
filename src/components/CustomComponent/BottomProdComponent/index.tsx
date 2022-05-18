@@ -137,8 +137,8 @@ export default function BottomProdComponent({
       </Typography>
 
 		<div style={{display: "flex", justifyContent: 'space-between', marginTop: 50}}>
-		{data.map((item) => (
-			      <CardStyled sx={{ maxWidth: 350 }}>
+		{data.map((item, index) => (
+			      <CardStyled sx={{ maxWidth: 350 }} key={index}>
 				  <IconHeartProduct
 					style={{
 					  cursor: "pointer",
@@ -183,7 +183,7 @@ export default function BottomProdComponent({
 				  />
 				  <CardContentStyled>
 					<div style={{ marginBottom: 7 }}>
-					  <Link href="/products/1">
+					  <Link href="/products/1" key={index} >
 						<TextTitleStyled style={{ marginBottom: 9 }}>
 						  {item.title}
 						</TextTitleStyled>

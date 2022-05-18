@@ -19,7 +19,7 @@ const IconPrevProduct = ({ style }: { style?: React.CSSProperties }) => {
       <path
         d="M21.6 24.8532L16 19.9998L21.6 15.1465"
         stroke="#C7C9D9"
-        stroke-linecap="square"
+        strokeLinecap="square"
       />
     </svg>
   );
