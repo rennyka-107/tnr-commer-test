@@ -8,15 +8,15 @@ type Props = {
 };
 
 
-const ColumnWapper = styled.div<{ col?: number }>`
+const ColumnWrapper = styled.div<{ col?: number }>`
     flex:${({ col }) => col ?? 1};
     padding:0px 30px;
 `
 const Column: React.FC<Props> = ({ children, col, customStyle }) => {
     return (
-        <ColumnWapper col={col} style={customStyle}>
+        <ColumnWrapper col={col} style={customStyle}>
             {children}
-        </ColumnWapper>
+        </ColumnWrapper>
     );
 };
 export default Column;

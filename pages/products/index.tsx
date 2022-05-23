@@ -7,10 +7,22 @@ import {
   Select,
   Typography,
 } from "@mui/material";
-import { BreadcrumsComponent } from "../../src/components/CustomComponent/BreadcrumsComponent";
 import styled from "@emotion/styled";
-import { ItemProduct } from "@components/LayoutProduct/ItemProduct";
+import dynamic from "next/dynamic";
 
+const DynamicBreadcrumsComponent = dynamic(() =>
+  import("../../src/components/CustomComponent/BreadcrumsComponent").then(
+    (m) => m.BreadcrumsComponent,
+    (e) => null as never
+  )
+);
+
+const DynamicItemProductComponent = dynamic(() =>
+  import("@components/LayoutProduct/ItemProduct").then(
+    (m) => m.ItemProduct,
+    (e) => null as never
+  )
+);
 const TextHeaderStyled = styled(Typography)`
   font-family: "Roboto";
   font-style: normal;
@@ -53,7 +65,7 @@ const ListProduct = () => {
           }}
         >
           <div>
-            <BreadcrumsComponent
+            <DynamicBreadcrumsComponent
               breaditem={listBread}
 			  activePage="Tiểu khu"
             />
@@ -104,7 +116,7 @@ const ListProduct = () => {
             </div>
           </div>
         </div>
-		<ItemProduct />
+		<DynamicItemProductComponent />
       </FlexContainer>
     </Page>
   );

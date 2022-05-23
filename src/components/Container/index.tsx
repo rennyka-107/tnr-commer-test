@@ -9,7 +9,7 @@ interface Props {
     title?: string;
     rightContent?: React.ReactNode;
 }
-const ContainerWapper = styled.div`
+const ContainerWrapper = styled.div`
     padding:29px 164px;
     margin-top: 127px;
     width:100%;
@@ -25,8 +25,8 @@ const HeaderView = styled.div`
 
 const Container: React.FC<Props> = ({ children, title, rightContent }) => {
     return (
-        <ContainerWapper>
-            <Breadcrumbs />
+        <ContainerWrapper>
+            <Breadcrumbs title={title} />
             <Row customStyle={{ marginBottom: 52, marginTop: 22 }}>
                 <Column customStyle={{ padding: 0, alignItems: "center", display: 'flex', }}>
                     {title && <HeaderView>{title}</HeaderView>}
@@ -36,7 +36,7 @@ const Container: React.FC<Props> = ({ children, title, rightContent }) => {
                 </Column>
             </Row>
             {children}
-        </ContainerWapper>
+        </ContainerWrapper>
     )
 }
 

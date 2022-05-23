@@ -1,8 +1,11 @@
 import { IconBag, IconHeart, IconUser, Logo } from "@components/Icons";
 import styled from "@emotion/styled";
+import { Route } from "@mui/icons-material";
 import { Button } from "@mui/material";
 import MenuDropdown from "ItemComponents/MenuDropdown";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import PathRoute from "utils/PathRoute";
 
 const ContainerNavTop = styled.div`
   height: 93px;
@@ -16,7 +19,7 @@ const BodyContainer = styled.div`
   display: flex;
   height: 100%;
   align-items: center;
-  padding: 0px 50px 0px 50px;
+  padding: 0px 50px 0px 167px;
   justify-content: space-between;
 `;
 const WrapMenuItem = styled.div`
@@ -67,27 +70,89 @@ const IconAccountWrap = styled.div`
 //   width: auto;
 
 // `;
+const lbds = [
+  {
+    id: 1,
+    value: "Chung cư",
+  },
+  {
+    id: 2,
+    value: "Căn hộ dịch vụ",
+  },
+  {
+    id: 3,
+    value: "Bất động sản nghỉ dưỡng",
+  },
+  {
+    id: 4,
+    value: "Khu đô thị",
+  },
+];
+const Duan = [
+  {
+    id: 1,
+    value: "TNR Star Bỉm Sơn",
+  },
+  {
+    id: 2,
+    value: "TNR Star Kiến Tường",
+  },
+  {
+    id: 3,
+    value: "TNR Star Lam Sơn",
+  },
+];
 const HeaderBot = () => {
+  const Router = useRouter();
   return (
     <ContainerNavTop>
       <BodyContainer>
         <WrapMenuItem>
-          <Logo />
-          <MenuDropdown title={"Loại bất động sản"} />
-          <MenuDropdown title={"Dự Án"} />
-          <Button>
-            <TextLink>Khuyến mãi</TextLink>
-          </Button>
-          <Button>
-            <Link href={"https://tnrvietnam.com.vn/sites/tnr/tin-tuc/"} passHref >
-              <TextLink target={"_blank"}>Tin tức</TextLink>
-            </Link>
-          </Button>
+          <div>
+            <Logo />
+          </div>
+          <div style={{ display: 'flex', gap: 35, marginLeft: 38 }}>
+            <MenuDropdown title={"Loại bất động sản"}
+              data={lbds}
+              onSelect={(item) => {
+                console.log('Router.beforePopState', Router.pathname);
+                if (Router.pathname == `/${PathRoute.ProjectTNR}/[type]`) {
+                  Router.replace(`/${PathRoute.ProjectTNR}/${item.id}`)
+                } else {
+                  Router.push(`/${PathRoute.ProjectTNR}/${item.id}`)
+                }
+              }}
+            />
+            <MenuDropdown title={"Dự Án"} data={Duan} />
+            <Button>
+              <TextLink>Khuyến mãi</TextLink>
+            </Button>
+            <Button>
+              <Link
+                href={"https://tnrvietnam.com.vn/sites/tnr/tin-tuc/"}
+                passHref
+              >
+                <TextLink target={"_blank"}>Tin tức</TextLink>
+              </Link>
+            </Button>
+          </div>
         </WrapMenuItem>
         <WrapRightItem>
-          <ButtonBuyHelp>Hướng dẫn mua online</ButtonBuyHelp>
+          <ButtonBuyHelp
+            onClick={() => {
+              Router.push({ pathname: PathRoute.BuyingGuide });
+            }}
+          >
+            <span>Hướng dẫn mua online</span>
+          </ButtonBuyHelp>
           <IconAccountWrap>
-            <IconUser />
+            <span
+              onClick={() => {
+                Router.push({ pathname: PathRoute.Profile });
+              }}
+            >
+              <IconUser />
+            </span>
             <IconHeart />
             <IconBag total={10} />
           </IconAccountWrap>

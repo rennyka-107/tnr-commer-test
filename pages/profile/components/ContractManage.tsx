@@ -183,6 +183,7 @@ const ContractManage = () => {
                     </BoxContainer>
                 </HeaderContainer>
             }
+            styleCustom={{ padding: "21px 24px" }}
         >
             {products.map((item: ProductI, index) => ProductCard(item, index == products.length - 1))}
         </BoxContainer>

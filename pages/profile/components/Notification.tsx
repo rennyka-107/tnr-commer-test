@@ -117,7 +117,7 @@ const Notification = () => {
         </BoxContainer>
     )
     return (
-        <BoxContainer titleHeader="Quản lý thông báo">
+        <BoxContainer titleHeader="Quản lý thông báo" styleCustom={{ padding: "21px 24px" }}>
             {notifications.map((item) => ItemCard(item))}
         </BoxContainer>
     )

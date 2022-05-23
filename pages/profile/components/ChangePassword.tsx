@@ -54,7 +54,7 @@ const ChangePassword = () => {
     }
 
     return (
-        <BoxContainer titleHeader="Đổi mật khẩu">
+        <BoxContainer titleHeader="Đổi mật khẩu" styleCustom={{ padding: "21px 24px" }}>
             <form onSubmit={handleSubmit((values) => onSubmit(values))}>
                 <FormGroup sx={{ mb: 2, mt: 2 }} fullWidth>
                     <PasswordTextField

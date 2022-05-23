@@ -1,11 +1,8 @@
 import React, { useState } from "react";
 import FlexContainer from "@components/CustomComponent/FlexContainer";
 import Page from "@layouts/Page";
-import { Button, Typography } from "@mui/material";
-import { BreadcrumsComponent } from "../../src/components/CustomComponent/BreadcrumsComponent";
-import BottomProdComponent from "../../src/components/CustomComponent/BottomProdComponent";
+import { Box, Button, Modal, Typography, Menu, MenuItem } from "@mui/material";
 import styled from "@emotion/styled";
-import SliderProductComponent from "@components/CustomComponent/SliderProductComponent";
 import Product1 from "../../public/images/product1.png";
 import Product2 from "../../public/images/product2.png";
 import Product3 from "../..//public/images/product3.png";
@@ -20,13 +17,46 @@ import {
   IconNhaMau,
   IconPhieuTinhGia,
   IconReceiptDisabled,
-  IconTabs,
   IconDownloadPTG,
+  IconSetting,
 } from "@components/Icons";
-import TabsComponent from "@components/CustomComponent/TabsComponent";
-import PhieuTinhGia from "@components/LayoutProduct/PhieuTinhGia";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 
+const DynamicBreadcrumsComponent = dynamic(() =>
+  import("../../src/components/CustomComponent/BreadcrumsComponent").then(
+    (m) => m.BreadcrumsComponent,
+    (e) => null as never
+  )
+);
+
+const DynamicBottomProdComponent = dynamic(() =>
+  import("../../src/components/CustomComponent/BottomProdComponent").then(
+    (m) => m.default,
+    (e) => null as never
+  )
+);
+
+const DynamicSliderProductComponent = dynamic(() =>
+  import("@components/CustomComponent/SliderProductComponent").then(
+    (m) => m.default,
+    (e) => null as never
+  )
+);
+
+const DynamicTabsComponent = dynamic(() =>
+  import("@components/CustomComponent/TabsComponent").then(
+    (m) => m.default,
+    (e) => null as never
+  )
+);
+
+const DynamicPhieuTinhGiaComponent = dynamic(() =>
+  import("@components/LayoutProduct/PhieuTinhGia").then(
+    (m) => m.default,
+    (e) => null as never
+  )
+);
 const dataFake = [
   {
     src: Product1,
@@ -273,6 +303,26 @@ const listBread = [
 const Product = () => {
   const [tabCardValue, setTabCardValue] = useState(true);
   const [typeBottomShow, setTypeBottomShow] = useState(1);
+  const [openModalVideo, setOpenModalVideo] = useState(false)
+  const [numberRoom, setNumberRoom] = useState({ num: 'S.202', open: false, anchor: null })
+  const [roomType, setRoomType] = useState({ type: 'living', open: false, anchor: null })
+
+  const convertRoom = (type: string): string => {
+    switch (type) {
+      case 'living':
+        return 'Phòng khách'
+      case 'bed':
+        return 'Phòng ngủ'
+      case 'kitchen':
+        return 'Phòng bếp'
+      case 'balcony':
+        return 'Ban công'
+      case 'toilet':
+        return 'Nhà vệ sinh'
+      default:
+        return 'Phòng khách'
+    }
+  }
 
   const handlePhieuTinhGia = () => {
     setTabCardValue(false);
@@ -302,11 +352,10 @@ const Product = () => {
             display: "flex",
             flexDirection: "column",
             width: "70%",
-
           }}
         >
           <div>
-            <BreadcrumsComponent breaditem={listBread} activePage="Lô A01" />
+            <DynamicBreadcrumsComponent breaditem={listBread} activePage="Lô A01" />
           </div>
           <div
             style={{
@@ -322,20 +371,79 @@ const Product = () => {
             </TextHeaderStyled>
           </div>
         </div>
-        <div style={{marginBottom: 128}}>
+        <div style={{ marginBottom: 128 }}>
           <div
             style={{
               display: "flex",
               flexDirection: "row",
               gap: 16,
               justifyContent: "center",
-			  
             }}
           >
             <div>
-              <SliderProductComponent />
+              <DynamicSliderProductComponent />
+              <Modal
+                open={openModalVideo}
+                onClose={() => setOpenModalVideo(false)}
+                style={{ padding: '5vh 3%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+              >
+                <Box style={{ position: 'relative', maxWidth: '1660px', width: '100%', height: '100%' }}>
+                  <iframe src='https://360riverpark.tnrstars.vn/'
+                    style={{ width: '100%', height: '100%' }}
+                    frameBorder={'0'}
+                    allow='autoplay; encrypted-media'
+                    allowFullScreen
+                    title='video'
+                  />
+                  <Box style={{ position: 'absolute', top: 30, left: 30, width: 50, height: 50, cursor: 'pointer' }}>
+                    <IconSetting style={{ width: 50, height: 50 }} />
+                  </Box>
+                  <Box style={{ position: 'absolute', top: 30, right: 30, cursor: 'pointer' }}>
+                    <Button
+                      id="button-number-room"
+                      onClick={(event) => setNumberRoom({ ...numberRoom, open: true, anchor: event.currentTarget })}
+                      style={{ background: 'white', borderRadius: '8px 0px 0px 8px', borderRight: '1px solid #c7c9d9' }}
+                    >
+                      {numberRoom.num}
+                    </Button>
+                    <Menu
+                      open={numberRoom.open}
+                      anchorEl={numberRoom.anchor}
+                      MenuListProps={{ 'aria-labelledby': 'button-number-room' }}
+                      onClose={() => setNumberRoom({ ...numberRoom, open: false, anchor: null })}
+                      className="menu-select-room-number-video360"
+                      style={{ position: 'absolute', top: 0, left: 0, boxShadow: 'none' }}
+                    >
+                      <MenuItem style={{ borderTop: '0.5px solid #c7c9d9', color: '#8190A7' }} onClick={() => setNumberRoom({ num: 'S.203', open: false, anchor: null })}>S.203</MenuItem>
+                      <MenuItem style={{ color: '#8190A7' }} onClick={() => setNumberRoom({ num: 'S.204', open: false, anchor: null })}>S.204</MenuItem>
+                      <MenuItem style={{ color: '#8190A7' }} onClick={() => setNumberRoom({ num: 'S.205', open: false, anchor: null })}>S.205</MenuItem>
+                      <MenuItem style={{ color: '#8190A7' }} onClick={() => setNumberRoom({ num: 'S.206', open: false, anchor: null })}>S.206</MenuItem>
+                    </Menu>
+                    <Button
+                      id="button-room-type"
+                      onClick={(event) => setRoomType({ ...roomType, open: true, anchor: event.currentTarget })}
+                      style={{ background: 'white', borderRadius: '0px 8px 8px 0px' }}
+                    >
+                      {convertRoom(roomType.type)}
+                    </Button>
+                    <Menu
+                      open={roomType.open}
+                      anchorEl={roomType.anchor}
+                      MenuListProps={{ 'aria-labelledby': 'button-room-type' }}
+                      onClose={() => setRoomType({ ...roomType, open: false, anchor: null })}
+                      className="menu-select-room-type-video360"
+                      style={{ position: 'absolute', top: 0, right: 0, boxShadow: 'none' }}
+                    >
+                      <MenuItem style={{ borderTop: '0.5px solid #c7c9d9', color: '#8190A7' }} onClick={() => setRoomType({ type: 'living', open: false, anchor: null })}>{convertRoom('living')}</MenuItem>
+                      <MenuItem style={{ color: '#8190A7' }} onClick={() => setRoomType({ type: 'kitchen', open: false, anchor: null })}>{convertRoom('kitchen')}</MenuItem>
+                      <MenuItem style={{ color: '#8190A7' }} onClick={() => setRoomType({ type: 'toilet', open: false, anchor: null })}>{convertRoom('toilet')}</MenuItem>
+                      <MenuItem style={{ color: '#8190A7' }} onClick={() => setRoomType({ type: 'balcony', open: false, anchor: null })}>{convertRoom('balcony')}</MenuItem>
+                    </Menu>
+                  </Box>
+                </Box>
+              </Modal>
               <div style={{ display: "flex", gap: 19, marginTop: 24 }}>
-                <ButtonYellowStyled onClick={() => handleThamQuan()}>
+                <ButtonYellowStyled onClick={() => setOpenModalVideo(true)}>
                   <Icon360 />
                   <TextInSideButtonYellow> Video tour</TextInSideButtonYellow>
                 </ButtonYellowStyled>
@@ -517,7 +625,7 @@ const Product = () => {
           </div>
           {typeBottomShow === 1 ? (
             <>
-              <TabsComponent />
+              <DynamicTabsComponent />
               <div>
                 <div style={{ width: 896, padding: 50 }}>
                   <li>
@@ -536,8 +644,12 @@ const Product = () => {
                     khu vực.
                   </li>
                 </div>
-                <Image src="/images/banner_map_product.png" width={1108} height={700}/>
-                <BottomProdComponent
+                <Image
+                  src="/images/banner_map_product.png"
+                  width={1108}
+                  height={700}
+                />
+                <DynamicBottomProdComponent
                   style={{ marginTop: 50, marginBottom: 85 }}
                   data={dataFake}
                 />
@@ -545,7 +657,7 @@ const Product = () => {
             </>
           ) : (
             <>
-              <PhieuTinhGia />
+              <DynamicPhieuTinhGiaComponent />
             </>
           )}
           {/* Tab Components */}

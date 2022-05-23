@@ -1,6 +1,9 @@
 import Page from "@layouts/Page";
-import { HomePage } from "../src/components/LayoutIndex/index";
-
+import styled from "@emotion/styled";
+import {
+  FavoriteProducts,
+  HomePage,
+} from "../src/components/LayoutIndex/index";
 
 const Home = () => {
   return (
@@ -13,9 +16,10 @@ const Home = () => {
     >
       <div style={{ marginTop: "127px" }}>
         <HomePage />
+        {/* <FavoriteProducts /> */}
       </div>
     </Page>
-  )
-}
+  );
+};
 
 export default Home;

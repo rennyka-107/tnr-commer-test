@@ -1,11 +1,35 @@
 import * as React from "react";
 import { IconDropDown } from "@components/Icons";
 import styled from "@emotion/styled";
-import { Button, ButtonProps, Menu, MenuItem } from "@mui/material";
+import { Button, ButtonProps, Menu, MenuItem, Typography } from "@mui/material";
 
+type ItemValueProps = {
+  id: number,
+  value: string
+}
 export type DropDownProps = {
   title: string;
+  data?: ItemValueProps[];
+  onSelect?: (data: ItemValueProps) => void;
 };
+
+const MenuItemStyled = styled(MenuItem)`
+	height: 53px;
+	border-bottom: 1px solid #F2F2F5;
+`
+const TextInline = styled(Typography)`
+font-family: 'Roboto';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 16px;
+/* identical to box height */
+
+
+/* Brand */
+
+color: #1B3459;
+`
 
 const TextButton = styled.span`
   font-family: "Roboto";
@@ -17,7 +41,7 @@ const TextButton = styled.span`
   text-transform: none;
 `;
 
-export default function MenuDropdown({ title }: DropDownProps) {
+export default function MenuDropdown({ title, data, onSelect }: DropDownProps) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -47,9 +71,20 @@ export default function MenuDropdown({ title }: DropDownProps) {
           "aria-labelledby": "basic-button",
         }}
       >
-        <MenuItem onClick={handleClose}>Profile</MenuItem>
-        <MenuItem onClick={handleClose}>My account</MenuItem>
-        <MenuItem onClick={handleClose}>Logout</MenuItem>
+        {data?.map((item) => (
+          <MenuItemStyled
+            onClick={() => {
+              handleClose();
+              onSelect && onSelect(item)
+            }}
+            key={item.id}>
+            <TextInline>{item.value}</TextInline>
+          </MenuItemStyled>
+        ))}
+
+        {/* <MenuItemStyled onClick={handleClose}><TextInline>Căn hộ dịch vụ</TextInline></MenuItemStyled>
+        <MenuItemStyled onClick={handleClose}><TextInline>Bất động sản nghỉ dưỡng</TextInline></MenuItemStyled>
+		<MenuItemStyled onClick={handleClose}><TextInline>Khu đô thị</TextInline></MenuItemStyled> */}
       </Menu>
     </div>
   );

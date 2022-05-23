@@ -4,6 +4,10 @@ let PathRoute = {
     Home: '/',
     Profile: '/profile',
     ProjectTNR: 'projectTNR',
+    BuyingGuide: '/buyingGuide',
+    AboutAccount : '/aboutAccount',
+    AboutProcedure: '/aboutProcedure',
+    AboutSupport: '/aboutSupport'
 }
 
 export default PathRoute;

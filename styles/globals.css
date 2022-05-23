@@ -1,34 +1,34 @@
 html,
 body {
-    padding: 0;
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
 a {
-    color: inherit;
-    text-decoration: none;
+  color: inherit;
+  text-decoration: none;
 }
 
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 .icon-rightArow:hover {
-    border: 1px solid #48576d;
-    border-radius: 50px;
+  border: 1px solid #48576d;
+  border-radius: 50px;
 }
 
 .icon-elippse:hover {
-    stroke: #ffffff;
-    fill: #ffffff;
-    border: 1px solid #48576d;
+  stroke: #ffffff;
+  fill: #ffffff;
+  border: 1px solid #48576d;
 }
 
 .exampleCarousel1 {
-    align-items: center;
+  align-items: center;
 }
-
 
 /* .swiper-slide.swiper-slide-visible.swiper-slide-prev.swiper-3d {
     height: 342px !important;
@@ -57,50 +57,61 @@ a {
 } */
 
 .swiper-slide {
-    transition: all 200ms linear !important;
+  transition: all 200ms linear !important;
 }
 
 .swiper-slide.swiper-3d.swiper-slide-active {
-    height: 412px !important;
-    transition: transform .2s;
-    /* opacity: 1 !important; */
-    filter: brightness(110%) !important;
-    width: 241px !important;
+  height: 412px !important;
+  transition: transform 0.2s;
+  /* opacity: 1 !important; */
+  filter: brightness(110%) !important;
+  width: 241px !important;
 }
 
 .swiper-wrapper {
-    align-items: center !important;
-    width: 241px !important;
+  align-items: center !important;
+  width: 241px !important;
 }
 
 .swiper-3d .swiper-wrapper {
-    margin-left: -250px !important;
+  margin-left: -250px !important;
 }
 
 ::-webkit-scrollbar {
-    width: 8px !important;
-    height: 10px !important;
+  width: 8px !important;
+  height: 10px !important;
 }
-
 
 /* Track */
 
- ::-webkit-scrollbar-track {
-    background: #f1f1f1;
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
 }
-
 
 /* Handle */
 
- ::-webkit-scrollbar-thumb {
-    background: #8190A7;
-    height: 10px !important;
-    border-radius: 10px;
+::-webkit-scrollbar-thumb {
+  background: #8190a7;
+  height: 10px !important;
+  border-radius: 10px;
 }
-
 
 /* Handle on hover */
 
- ::-webkit-scrollbar-thumb:hover {
-    background: #555;
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* handle menu video360 */
+
+.menu-select-room-number-video360
+  .css-1poimk-MuiPaper-root-MuiMenu-paper-MuiPaper-root-MuiPopover-paper {
+  box-shadow: none;
+  margin-top: -8px;
+}
+.menu-select-room-type-video360
+  .css-1poimk-MuiPaper-root-MuiMenu-paper-MuiPaper-root-MuiPopover-paper {
+  box-shadow: none;
+  margin-top: -8px;
+  left: 1200px !important;
 }

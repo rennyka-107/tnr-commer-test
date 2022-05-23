@@ -11,7 +11,7 @@ type PageProps = {
 const BoxWrapper = styled.div`
     border-radius: 20px;
     border: 1px solid #C7C9D9;
-    padding:46px 35px;
+    padding: 2px 0px;
 `;
 
 const Header = styled.span`

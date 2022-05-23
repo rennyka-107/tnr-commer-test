@@ -1,7 +1,9 @@
 import styled from "@emotion/styled";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import PropTypes from 'prop-types';
 import React from "react";
+import Breadscrumb from "utils/BreadScrumb";
 
 const Container = styled.div`
     display:flex;
@@ -30,39 +32,42 @@ const Path = styled.span`
     padding:0px 5px;
 `;
 
-
-export default function Breadcrumbs() {
-
+export default function Breadcrumbs({ title }) {
     const Router = useRouter();
-    const paths = Router.asPath.split('/');
+    const paths = Router.pathname.split('/').filter((path) => !path.includes('[') && !path.includes(']'));
     return (
         <Container>
             {paths.map((path, index) => {
                 if (path.length == 0) {
                     return (
-                        <>
+                        <React.Fragment key={index}>
                             <Link href={'/'} passHref>
                                 <LinkLabel key={index} href={`/`}>
                                     Trang chủ
                                 </LinkLabel>
                             </Link>
                             {index != paths.length - 1 && <Path>/</Path>}
-                        </>
-
+                        </React.Fragment>
                     )
                 }
                 return (
-                    <>
+                    <React.Fragment key={index}>
                         <Link href={`/${path}`} passHref>
                             <LinkLabel key={index} href={`/${path}`}>
-                                {path}
+                                {Breadscrumb.find((el) => el.path == path)?.title}
                             </LinkLabel>
                         </Link>
                         {index !== paths.length - 1 && <Path>/</Path>}
-                    </>
-
+                    </React.Fragment>
                 )
             })}
         </Container>
     )
+}
+
+Breadcrumbs.defaultProps = {
+    title: 'Trang chủ'
+}
+Breadcrumbs.prototype = {
+    title: PropTypes.string,
 }

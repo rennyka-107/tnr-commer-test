@@ -1,7 +1,25 @@
-import React, { ReactNode, useEffect, useState } from "react";
-import { Header, Footer, SEO, SEOProps } from "@components";
+import React, { ReactNode } from "react";
+import { SEOProps } from "@components";
 import dynamic from "next/dynamic";
+const DynamicSEOComponent = dynamic(() =>
+  import("../../components/SEO").then(
+    (m) => m.default,
+    (e) => null as never
+  )
+);
 
+const DynamicHeaderComponent = dynamic(() =>
+  import("../../components/Header").then(
+    (m) => m.Header,
+    (e) => null as never
+  )
+);
+const DynamicFooterComponent = dynamic(() =>
+  import("../../components/Footer").then(
+    (m) => m.Footer,
+    (e) => null as never
+  )
+);
 type PageProps = {
   meta: SEOProps;
   children?: ReactNode;
@@ -10,11 +28,11 @@ type PageProps = {
 const Page: React.FC<PageProps> = ({ meta, children }) => {
   return (
     <>
-      <SEO {...meta} />
+      <DynamicSEOComponent {...meta} />
       <main style={{ display: "flex", flexDirection: "column" }}>
-        <Header />
-	   {children}
-        <Footer />
+        <DynamicHeaderComponent />
+        {children}
+        <DynamicFooterComponent />
       </main>
     </>
   );

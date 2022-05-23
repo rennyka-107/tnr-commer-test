@@ -1,7 +1,8 @@
-
 import { IconCountry } from "@components/Icons";
 import styled from "@emotion/styled";
 import Link from "next/link";
+import Router from "next/router";
+import PathRoute from "utils/PathRoute";
 
 const ContainerStyled = styled.div`
   height: 34px;
@@ -46,17 +47,38 @@ const HeaderTop = () => {
     <ContainerStyled>
       <WrapContainer>
         <LinkContainer>
-          <Link href="/" passHref>
-            <TextLink>Về tài khoản</TextLink>
+          <Link href="" passHref>
+            <TextLink
+              onClick={() => {
+                Router.push({ pathname: PathRoute.AboutAccount });
+              }}
+            >
+              Về tài khoản
+            </TextLink>
           </Link>
-          <Link href="/" passHref>
-            <TextLink>Về quy trình mua BĐS Online</TextLink>
+          <Link href="" passHref>
+            <TextLink
+              onClick={() => {
+                Router.push({ pathname: PathRoute.AboutProcedure });
+              }}
+            >
+              Về quy trình mua BĐS Online
+            </TextLink>
           </Link>
-          <Link href="/" passHref>
-            <TextLink>Về TNR</TextLink>
+          <Link
+            href={"https://tnrvietnam.com.vn/sites/tnr/ve-chung-toi/"}
+            passHref
+          >
+            <TextLink target={"_blank"}>Về TNR</TextLink>
           </Link>
-          <Link href="/" passHref>
-            <TextLink>Về hỗ trợ</TextLink>
+          <Link href="" passHref>
+            <TextLink
+              onClick={() => {
+                Router.push({ pathname: PathRoute.AboutSupport });
+              }}
+            >
+              Về hỗ trợ
+            </TextLink>
           </Link>
         </LinkContainer>
         <IconCountry style={IconCountryStyle} />

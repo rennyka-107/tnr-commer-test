@@ -54,7 +54,7 @@ const EditProfile = () => {
 
     return (
         <form onSubmit={handleSubmit((values) => onSubmit(values))}>
-            <BoxContainer titleHeader="Chỉnh sửa hồ sơ">
+            <BoxContainer titleHeader="Chỉnh sửa hồ sơ" styleCustom={{ padding: "21px 24px" }}>
                 <AvataContainer>
                     <Image src={"/images/avatar.png"} alt="" width={125} height={125} style={{ borderRadius: 20 }} />
                 </AvataContainer>

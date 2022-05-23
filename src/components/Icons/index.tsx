@@ -40,3 +40,5 @@ export { default as IconTabs } from "./IconTabs";
 export { default as IconReceiptDisabled } from "./IconReceiptDisabled";
 export { default as IconDownloadPTG } from "./IconDownloadPTG";
 export { default as IconDownSelect } from "./IconDownSelect";
+export { default as IconTimes } from './IconTimes'
+export { default as IconSetting } from './IconSetting'
