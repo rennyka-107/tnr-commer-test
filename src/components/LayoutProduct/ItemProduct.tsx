@@ -12,7 +12,7 @@ const ProductWrap = styled.div`
   gap: 31px;
   grid-template-columns: repeat(3, 1fr);
 `;
-export function ItemProduct() {
+const ItemProduct = () => {
   return (
     <>
       <ProductWrap>
@@ -158,3 +158,4 @@ export function ItemProduct() {
     </>
   );
 }
+export default ItemProduct;

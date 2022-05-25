@@ -2,10 +2,14 @@ import { IconBag, IconHeart, IconUser, Logo } from "@components/Icons";
 import styled from "@emotion/styled";
 import { Route } from "@mui/icons-material";
 import { Button } from "@mui/material";
+import useAuth from "hooks/useAuth";
 import MenuDropdown from "ItemComponents/MenuDropdown";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useCallback } from "react";
 import PathRoute from "utils/PathRoute";
+
+
 
 const ContainerNavTop = styled.div`
   height: 93px;
@@ -66,26 +70,23 @@ const IconAccountWrap = styled.div`
   display: flex;
   gap: 30px;
 `;
-// const TextBuyHelp = styled.span`
-//   width: auto;
 
-// `;
 const lbds = [
   {
-    id: 1,
-    value: "Chung cư",
+    id: '1',
+    name: "Chung cư",
   },
   {
-    id: 2,
-    value: "Căn hộ dịch vụ",
+    id: '2',
+    name: "Căn hộ dịch vụ",
   },
   {
-    id: 3,
-    value: "Bất động sản nghỉ dưỡng",
+    id: '3',
+    name: "Bất động sản nghỉ dưỡng",
   },
   {
-    id: 4,
-    value: "Khu đô thị",
+    id: '4',
+    name: "Khu đô thị",
   },
 ];
 const Duan = [
@@ -102,18 +103,52 @@ const Duan = [
     value: "TNR Star Lam Sơn",
   },
 ];
-const HeaderBot = () => {
-  const Router = useRouter();
+interface ItemValueUserProps {
+	id: number,
+	value: string
+  }
+  
+
+interface ItemValueProps {
+  id: string,
+  name: string
+}
+
+interface MenuProps{
+	menuData?: ItemValueProps[];
+	menuDataProject?: ItemValueProps[];
+};
+
+const HeaderBot = ({menuDataProject,menuData}: MenuProps) => {
+	const Router = useRouter();
+  
+  const menuUser: ItemValueUserProps[] = [{ id: 1, value: 'Thông tin cá nhân' }, { id: 2, value: 'Đăng xuất' }]
+  const { logout } = useAuth()
+  const handleNavigateUser = useCallback(
+    (value: ItemValueUserProps) => {
+      switch (value.id) {
+        case 1:
+          Router.push({ pathname: PathRoute.Profile });
+          break;
+        case 2:
+          logout();
+          break;
+
+        default:
+          break;
+      }
+
+    }, [])
   return (
     <ContainerNavTop>
       <BodyContainer>
         <WrapMenuItem>
           <div>
-            <Logo />
+		  <Logo/>
           </div>
           <div style={{ display: 'flex', gap: 35, marginLeft: 38 }}>
             <MenuDropdown title={"Loại bất động sản"}
-              data={lbds}
+              data={menuDataProject}
               onSelect={(item) => {
                 console.log('Router.beforePopState', Router.pathname);
                 if (Router.pathname == `/${PathRoute.ProjectTNR}/[type]`) {
@@ -123,7 +158,7 @@ const HeaderBot = () => {
                 }
               }}
             />
-            <MenuDropdown title={"Dự Án"} data={Duan} />
+            <MenuDropdown title={"Dự Án"} data={menuData} />
             <Button>
               <TextLink>Khuyến mãi</TextLink>
             </Button>
@@ -146,13 +181,27 @@ const HeaderBot = () => {
             <span>Hướng dẫn mua online</span>
           </ButtonBuyHelp>
           <IconAccountWrap>
-            <span
+            {/* <span
               onClick={() => {
                 Router.push({ pathname: PathRoute.Profile });
               }}
             >
               <IconUser />
-            </span>
+            </span> */}
+            <MenuDropdown
+              customButton={
+                <span
+                  onClick={() => {
+                    Router.push({ pathname: PathRoute.Profile });
+                  }}
+                >
+                  <IconUser />
+                </span>
+              }
+              userData={menuUser}
+              title=""
+              onSelect={handleNavigateUser}
+            />
             <IconHeart />
             <IconBag total={10} />
           </IconAccountWrap>

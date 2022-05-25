@@ -23,7 +23,7 @@ const CardContainer = styled.div`
 `;
 
 SwiperCore.use([ Autoplay,Pagination,Navigation ]);
-export default function SliderProductComponent() {
+const SliderProductComponent = () => {
 
   return (
     <WrapSlide>
@@ -84,3 +84,4 @@ export default function SliderProductComponent() {
     </WrapSlide>
   );
 }
+export default SliderProductComponent;

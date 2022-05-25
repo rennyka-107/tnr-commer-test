@@ -110,11 +110,11 @@ const WrapItemCenter = styled.div`
 
 
 
-export default function BottomProdComponent({
+const BottomProdComponent = ({
   style,
   data,
   onClick,
-}: Props) {
+}: Props) => {
 
   function currencyFormat(num) {
     if (!num) {
@@ -216,3 +216,4 @@ export default function BottomProdComponent({
     </div>
   );
 }
+export default BottomProdComponent;

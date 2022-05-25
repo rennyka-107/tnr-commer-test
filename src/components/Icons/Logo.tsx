@@ -1,4 +1,4 @@
-const Logo = ({ style }: { style?: React.CSSProperties }) => {
+const Logo = ({ style}: { style?: React.CSSProperties }) => {
   return (
     <>
       <svg

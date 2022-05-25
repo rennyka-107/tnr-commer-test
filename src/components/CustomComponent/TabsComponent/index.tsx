@@ -3,7 +3,7 @@ import { Tab, Tabs } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import React from "react";
 
-export default function TabsComponent() {
+const TabsComponent = () => {
   const useStyles = makeStyles((theme) => ({
     root: {
       "& .MuiTabs-flexContainer": {
@@ -66,3 +66,5 @@ export default function TabsComponent() {
     </div>
   );
 }
+
+export default TabsComponent;

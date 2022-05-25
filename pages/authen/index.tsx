@@ -1,9 +1,25 @@
-import React, { useState } from 'react';
 import styled from '@emotion/styled';
 import Page from "@layouts/Page";
 import { Tab, Tabs } from '@mui/material';
-import Login from './components/Login';
-import Register from './components/Reigster';
+import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
+import React, { useEffect, useMemo, useState } from 'react';
+
+
+const DynamicLogin = dynamic(() =>
+    import("./Login").then(
+        (m) => m.default,
+        (e) => null as never
+    )
+);
+
+const DynamicRegister = dynamic(() =>
+    import("./Reigster").then(
+        (m) => m.default,
+        (e) => null as never
+    )
+);
+
 
 const ContainerRegister = styled.div`
     background-image: url("/images/bg_register.png");
@@ -78,6 +94,23 @@ const ContainForm = styled.div`
 
 const Authen = () => {
     const [tab, setTab] = useState<'login' | 'register'>('register');
+    const { tabIndex } = useRouter().query;
+    const renderTab = useMemo(() => {
+        switch (tab) {
+            case 'login':
+                return <DynamicLogin />;
+            case 'register':
+                return <DynamicRegister />
+            default:
+                return null;
+        }
+    }, [tab])
+
+    useEffect(() => {
+        if (!!tabIndex && tabIndex == 'login') {
+            setTab('login');
+        }
+    }, [tabIndex])
     return (
         <Page
             meta={{
@@ -107,7 +140,6 @@ const Authen = () => {
                                 }
                             }}
                             indicatorColor="secondary"
-                            aria-label="secondary tabs example"
                             TabIndicatorProps={{ style: { background: '#FEC83C' } }}
                             scrollButtons
                             allowScrollButtonsMobile
@@ -131,12 +163,7 @@ const Authen = () => {
                                 }}
                             />
                         </Tabs>
-                        {tab == "login" && (
-                            <Login />
-                        )}
-                        {tab == "register" && (
-                            <Register />
-                        )}
+                        {renderTab}
                     </ContainForm>
                 </ItemRight>
             </ContainerRegister>

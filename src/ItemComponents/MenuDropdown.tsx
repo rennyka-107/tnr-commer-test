@@ -4,16 +4,24 @@ import styled from "@emotion/styled";
 import { Button, ButtonProps, Menu, MenuItem, Typography } from "@mui/material";
 
 type ItemValueProps = {
-  id: number,
-  value: string
+  id: string,
+  name: string
 }
+type ItemValuePropsUser = {
+	id: number,
+	value: string
+  }
+
 export type DropDownProps = {
   title: string;
   data?: ItemValueProps[];
-  onSelect?: (data: ItemValueProps) => void;
+  userData?:ItemValuePropsUser[];
+  onSelect?: (data: any) => void;
+  customButton?: React.ReactNode;
 };
 
 const MenuItemStyled = styled(MenuItem)`
+	max-height: 300px;
 	height: 53px;
 	border-bottom: 1px solid #F2F2F5;
 `
@@ -41,7 +49,7 @@ const TextButton = styled.span`
   text-transform: none;
 `;
 
-export default function MenuDropdown({ title, data, onSelect }: DropDownProps) {
+export default function MenuDropdown({ title, data, onSelect, customButton ,userData}: DropDownProps) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -53,7 +61,8 @@ export default function MenuDropdown({ title, data, onSelect }: DropDownProps) {
 
   return (
     <div>
-      <Button
+
+      {/* <Button
         id="basic-button"
         aria-controls={open ? "basic-menu" : undefined}
         aria-haspopup="true"
@@ -61,24 +70,40 @@ export default function MenuDropdown({ title, data, onSelect }: DropDownProps) {
         onClick={handleClick}
       >
         <TextButton>{title}</TextButton> <IconDropDown />
-      </Button>
+      </Button> */}
+      {customButton ? (
+        <span onClick={handleClick}>
+          {customButton}
+        </span>
+      ) : (
+        <Button
+          id="basic-button"
+          aria-controls={open ? "basic-menu" : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? "true" : undefined}
+          onClick={handleClick}
+        >
+          <TextButton>{title}</TextButton> <IconDropDown />
+        </Button>
+      )}
       <Menu
         id="basic-menu"
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
+		style={{maxHeight: 400}}
         MenuListProps={{
           "aria-labelledby": "basic-button",
         }}
       >
-        {data?.map((item) => (
+        {data?.map((item,index) => (
           <MenuItemStyled
             onClick={() => {
               handleClose();
               onSelect && onSelect(item)
             }}
-            key={item.id}>
-            <TextInline>{item.value}</TextInline>
+            key={index}>
+            <TextInline>{item.name}</TextInline>
           </MenuItemStyled>
         ))}
 

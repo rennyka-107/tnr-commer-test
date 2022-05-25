@@ -3,14 +3,21 @@ import type {
   AxiosInstance,
   AxiosRequestConfig,
   AxiosResponse,
-} from 'axios';
-import axios from 'axios';
-import { baseURL } from './constants';
-import LocalStorage from './LocalStorage';
-import SessionStorage from './SessionStorage';
+} from "axios";
+import axios from "axios";
+import { baseURL } from "./constants";
+import LocalStorage from "./LocalStorage";
+import SessionStorage from "./SessionStorage";
 
-const headers: AxiosRequestConfig['headers'] = {
-  'Content-Type': 'application/json',
+declare module 'axios' {
+	export interface AxiosRequestConfig {
+	  withToken?: boolean;
+	}
+  }
+
+  
+const headers: AxiosRequestConfig["headers"] = {
+  "Content-Type": "application/json",
 };
 
 class Axios {
@@ -21,11 +28,13 @@ class Axios {
       baseURL,
       headers,
     });
-
+	
     // Request interceptor
     httpInstance.interceptors.request.use(
       (config: AxiosRequestConfig) => {
-        const accessToken = LocalStorage.get('accessToken') || SessionStorage.get('accessToken');
+		if (config?.withToken === true) {
+        const accessToken =
+          LocalStorage.get("accessToken") || SessionStorage.get("accessToken");
         if (config.headers) {
           if (accessToken) {
             config.headers.Authorization = `Bearer ${accessToken}`;
@@ -33,6 +42,7 @@ class Axios {
             delete config.headers.Authorization;
           }
         }
+	}
         return config;
       },
       (error) => Promise.reject(error)
@@ -40,6 +50,7 @@ class Axios {
 
     // Response interceptor
     httpInstance.interceptors.response.use(
+	
       (response: AxiosResponse) => response.data,
       (error: AxiosError) => Promise.reject(error)
     );

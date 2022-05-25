@@ -6,9 +6,24 @@ import styled from "@emotion/styled";
 import Page from "@layouts/Page";
 import { Grid } from "@mui/material";
 import { NextPageContext } from "next";
+import dynamic from "next/dynamic";
 import React from "react";
-import Filter from "./components/filter";
-import ItemProjectCard, { ProjectI } from "./components/ProjectCard";
+import { ProjectI } from "./ProjectCard";
+
+
+const DynamicFilter = dynamic(() =>
+    import("./filter").then(
+        (m) => m.default,
+        (e) => null as never
+    )
+);
+
+const DynamicProductCard = dynamic(() =>
+    import("./ProjectCard").then(
+        (m) => m.default,
+        (e) => null as never
+    )
+);
 
 const ContainerProduct = styled.div`
     display: flex;
@@ -44,13 +59,13 @@ const ProjectTNR = (props: PropsI) => {
             <FlexContainer>
                 <Container
                     title="Danh sách sản phẩm"
-                    rightContent={<Filter onSubmit={onSubmit} />}
+                    rightContent={<DynamicFilter onSubmit={onSubmit} />}
                 >
                     <Grid container spacing={4}>
                         {data.map((el, index) => (
                             <Grid item xs={12} sm={12} md={6} lg={4} xl={3} key={index}>
                                 <ContainerProduct>
-                                    <ItemProjectCard
+                                    <DynamicProductCard
                                         src={el.src}
                                         title={el.title}
                                         subTitle={el.subTitle}

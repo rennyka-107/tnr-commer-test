@@ -9,6 +9,7 @@
       "@layouts/*": ["layouts/*"],
       "@HOCs/*": ["HOCs/*"],
       "@context/*": ["context/*"],
+      "@service/*": ["service/*"],
 
     },
     "target": "es5",

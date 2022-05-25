@@ -1,12 +1,13 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { CacheProvider } from '@emotion/react';
-import { ThemeProvider, CssBaseline } from '@mui/material';
+import React from "react";
+import PropTypes from "prop-types";
+import { CacheProvider } from "@emotion/react";
+import { ThemeProvider, CssBaseline } from "@mui/material";
+import { wrapper } from "../store/store";
 
-import createEmotionCache from '../utility/createEmotionCache';
-import lightTheme from '../styles/theme/lightTheme';
-import '../styles/globals.css';
-import AuthContext from '../src/context/AuthContext'
+import createEmotionCache from "../utility/createEmotionCache";
+import lightTheme from "../styles/theme/lightTheme";
+import "../styles/globals.css";
+import AuthContext from "../src/context/AuthContext";
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -25,7 +26,7 @@ const MyApp = (props) => {
   );
 };
 
-export default MyApp;
+export default wrapper.withRedux(MyApp);
 
 MyApp.propTypes = {
   Component: PropTypes.elementType.isRequired,

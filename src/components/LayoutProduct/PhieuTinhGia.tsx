@@ -212,7 +212,7 @@ const ButtonStyled = styled(Button)`
 
 const names = ["Oliver Hansen", "Van Henry", "April Tucker", "Ralph Hubbard"];
 
-export default function PhieuTinhGia() {
+const PhieuTinhGia = () => {
   const theme = useTheme();
   const [personName, setPersonName] = React.useState<string[]>([]);
 
@@ -508,3 +508,4 @@ export default function PhieuTinhGia() {
     </WrapBodyStyped>
   );
 }
+export default PhieuTinhGia;

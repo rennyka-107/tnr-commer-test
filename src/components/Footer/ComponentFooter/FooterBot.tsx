@@ -89,6 +89,10 @@ const FooterBot = (props: Props) => {
             <TitleTypo>Email: {""}</TitleTypo>
             tnrholdings@tnrholdings.com.vn
           </LineInfo>
+		  <LineInfo style={{marginTop: 5}}>
+            <TitleTypo>TNR Version 1.0.2 Copyright © www.example.com {""}</TitleTypo>
+
+          </LineInfo>
         </BlockDiv>
         <BlockDiv
           style={{ display: "flex", gap: ".5em", flexDirection: "column" }}

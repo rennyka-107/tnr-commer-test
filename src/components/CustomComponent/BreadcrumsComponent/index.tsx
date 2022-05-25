@@ -23,7 +23,7 @@ type BreadProps = {
   activePage?: string;
 };
 
-export function BreadcrumsComponent({ breaditem, activePage }: BreadProps) {
+const BreadcrumsComponent = ({ breaditem, activePage }: BreadProps) => {
   return (
     <>
       <Breadcrumbs aria-label="breadcrumb">
@@ -38,3 +38,4 @@ export function BreadcrumsComponent({ breaditem, activePage }: BreadProps) {
     </>
   );
 }
+export default BreadcrumsComponent;

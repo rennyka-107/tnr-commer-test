@@ -1,11 +1,10 @@
-import Page from "@layouts/Page";
-import styled from "@emotion/styled";
-import {
-  FavoriteProducts,
-  HomePage,
-} from "../src/components/LayoutIndex/index";
 
-const Home = () => {
+import Page from "@layouts/Page";
+import dynamic from "next/dynamic";
+const DynamicHome = dynamic(() => import('../src/components/LayoutIndex/HomeComponent/HomePage'),{ loading: () => <p>...</p> })
+
+const Home = (props) => {
+
   return (
     <Page
       meta={{
@@ -13,13 +12,21 @@ const Home = () => {
         description: "TNR Ecommerce",
         isHomePage: true,
       }}
+	//   dataNav={listMenuBarType}
     >
       <div style={{ marginTop: "127px" }}>
-        <HomePage />
+        <DynamicHome />
         {/* <FavoriteProducts /> */}
       </div>
     </Page>
   );
 };
+
+// export const getServerSideProps = wrapper.getServerSideProps(
+//   (store) => async () => {
+//     const response = await getListMenuBarProject();
+//     store.dispatch(getListMenuBarType(response.responseData));
+//   }
+// );
 
 export default Home;

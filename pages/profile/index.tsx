@@ -8,11 +8,36 @@ import IconShield from "@components/Icons/IconShield";
 import styled from "@emotion/styled";
 import WithAuth from "@HOCs/WithAuth";
 import Page from "@layouts/Page";
+import dynamic from "next/dynamic";
 import React, { useMemo, useState } from "react";
-import ChangePassword from "./components/ChangePassword";
-import ContractManage from "./components/ContractManage";
-import EditProfile from "./components/EditProfile";
-import Notification from "./components/Notification";
+
+const DynamicContractManage = dynamic(() =>
+    import("./ContractManage").then(
+        (m) => m.default,
+        (e) => null as never
+    )
+);
+
+const DynamicChangePassword = dynamic(() =>
+    import("./ChangePassword").then(
+        (m) => m.default,
+        (e) => null as never
+    )
+);
+
+const DynamicEditProfile = dynamic(() =>
+    import("./EditProfile").then(
+        (m) => m.default,
+        (e) => null as never
+    )
+);
+
+const DynamicNotification = dynamic(() =>
+    import("./Notification").then(
+        (m) => m.default,
+        (e) => null as never
+    )
+);
 
 const Container = styled.div`
     padding:29px 0px;
@@ -56,13 +81,13 @@ const Profile = () => {
     const renderRightContent = useMemo(() => {
         switch (activeTab) {
             case 'contract':
-                return <ContractManage />
+                return <DynamicContractManage />
             case 'notification':
-                return <Notification />
+                return <DynamicNotification />
             case 'changePassword':
-                return <ChangePassword />
+                return <DynamicChangePassword />
             case 'editProfile':
-                return <EditProfile />
+                return <DynamicEditProfile />
             default:
                 return null;
         }
