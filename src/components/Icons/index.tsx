@@ -42,3 +42,6 @@ export { default as IconDownloadPTG } from "./IconDownloadPTG";
 export { default as IconDownSelect } from "./IconDownSelect";
 export { default as IconTimes } from './IconTimes'
 export { default as IconSetting } from './IconSetting'
+export { default as IconRadio } from './IconRadio'
+export { default as IconEdit } from './IconEdit'
+export { default as IconPlusCircle } from './IconPlusCircle'

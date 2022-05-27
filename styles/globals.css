@@ -115,3 +115,71 @@ a {
   margin-top: -8px;
   left: 1200px !important;
 }
+
+/* handle input text-field quanva@gmail.com */
+
+.custom-wrapper-introducer-code .css-1d3z3hw-MuiOutlinedInput-notchedOutline {
+  display: none;
+}
+.custom-wrapper-introducer-code
+  .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input {
+  padding: 8px 12px;
+  font-size: 18px;
+  font-family: "Roboto";
+  font-style: normal;
+}
+.custom-input-money-inactive
+  .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input {
+  padding: 8px 46px;
+}
+.custom-input-money-inactive
+  .css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root {
+  color: currentColor;
+}
+.custom-input-money-inactive
+  .css-vqmohf-MuiButtonBase-root-MuiRadio-root.Mui-checked {
+  color: #fec83c;
+}
+.custom-card-checkbox-payment
+  .css-vqmohf-MuiButtonBase-root-MuiRadio-root.Mui-checked {
+  color: #fec83c;
+}
+.custom-card-checkbox-payment .css-j204z7-MuiFormControlLabel-root {
+  width: 100%;
+}
+
+.custom-input-base-form-control
+  .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 21px;
+  color: #000;
+}
+
+/* .custom-input-base-form-control
+  .css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root.Mui-focused
+  .MuiOutlinedInput-notchedOutline {
+  border: 1px solid #b8b8b8;
+  border-radius: 8px;
+}
+.custom-input-base-form-control
+  .css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root {
+  border: none;
+  border-radius: 8px;
+}
+
+.custom-input-base-form-control:hover
+  .css-1d3z3hw-MuiOutlinedInput-notchedOutline {
+  border: none;
+  border: 1px solid #b8b8b8;
+  border-radius: 8px;
+} */
+/* .custom-input-base-form-control
+  .css-1d3z3hw-MuiOutlinedInput-notchedOutline:focus
+  .css-1d3z3hw-MuiOutlinedInput-notchedOutline {
+  border: 1px solid #0063f7;
+  box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+} */

@@ -9,8 +9,7 @@
       "@layouts/*": ["layouts/*"],
       "@HOCs/*": ["HOCs/*"],
       "@context/*": ["context/*"],
-      "@service/*": ["service/*"],
-
+      "@service/*": ["service/*"]
     },
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
@@ -28,5 +27,12 @@
     "incremental": true
   },
   "exclude": ["node_modules"],
-  "include": ["next-env.d.ts", "next-custom.d.ts", "**/*.ts", "**/*.tsx", "src/components/Reviews/CompanyInfo/StyledTooltip.js", "src/components/App/HeaderChange/index.jsx"]
+  "include": [
+    "next-env.d.ts",
+    "next-custom.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "src/components/Reviews/CompanyInfo/StyledTooltip.js",
+    "src/components/App/HeaderChange/index.jsx"
+  ]
 }

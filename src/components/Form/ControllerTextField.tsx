@@ -10,11 +10,12 @@ interface Props<T> extends Omit<TextFieldProps, 'name'> {
   label?: string;
   labelColor?: string;
   variant?: "standard" | "filled" | "outlined";
+  width?: number;
 }
 
 const Container = styled.div``;
-const LabelSpan = styled.span<{ color: string }>`
-  margin-bottom:7px;
+const LabelSpan = styled.div<{ color: string }>`
+  margin-bottom: 4px;
   color: ${({ color }) => color ?? "#1B3459"};
   font-family: Roboto;
   font-style: normal;
@@ -29,10 +30,10 @@ const RequiredSpan = styled.span`
 // import { makeStyles } from "@material-ui/core/styles";
 
 const ControllerTextField = <T extends FieldValues>(props: Props<T>) => {
-  const { control, name, label, variant, required, labelColor, ...rest } = props;
+  const { control, name, label, variant, required, labelColor, width, ...rest } = props;
   return (
-    <Container>
-      {label && (<LabelSpan color={labelColor}>{label}{required && <RequiredSpan>*</RequiredSpan>}</LabelSpan>)}
+    <Container style={{ width: width ?? '100%' }}>
+      {label && (<LabelSpan color={labelColor}>{label}&nbsp;{required && <RequiredSpan>*</RequiredSpan>}</LabelSpan>)}
       <Controller
         render={({ field, fieldState: { error } }) => (
           <TextField

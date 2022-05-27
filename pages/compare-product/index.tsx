@@ -8,6 +8,7 @@ import Product1 from "../../public/images/product1.png";
 import styled from "@emotion/styled";
 import { ExpandMore } from "@mui/icons-material";
 import { IconTimes } from "@components/Icons";
+import { useRouter } from "next/router";
 
 const WrapperTitle = styled.div`
   width: 134px;
@@ -102,25 +103,33 @@ const columnsTitle = [
     key: 'direction2'
   }
 ]
-const renderDataChildren = ({ data }) => {
-  return (
-    <>
-      <WrapperText>
-        2
-      </WrapperText>
-      <LineStyle />
-      <WrapperText>
-        <IconTimes style={{ width: 22.5 }} />
-      </WrapperText>
-      <LineStyle />
-      <WrapperText>
-        <IconTimes style={{ width: 22.5 }} />
-      </WrapperText>
-    </>
-  )
-}
+
 
 const CompareProduct = () => {
+  const router = useRouter()
+  const handleClickRouter = (e) => {
+    e.preventDefault()
+    router.push('/payment-cart')
+  }
+
+  const renderDataChildren = ({ data }) => {
+    return (
+      <>
+        <WrapperText>
+          2
+        </WrapperText>
+        <LineStyle />
+        <WrapperText>
+          <IconTimes style={{ width: 22.5 }} />
+        </WrapperText>
+        <LineStyle />
+        <WrapperText>
+          <IconTimes style={{ width: 22.5 }} />
+        </WrapperText>
+      </>
+    )
+  }
+
   return (
     <Page
       meta={{
@@ -144,6 +153,7 @@ const CompareProduct = () => {
                 src={Product1}
                 title="TNR The Nosta"
                 ticketCard="TNR Gold"
+                onClick={handleClickRouter}
               />
               <ItemCompareData />
             </Grid>

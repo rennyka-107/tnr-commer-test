@@ -120,9 +120,7 @@ export const ItemCompareProduct = ({
         </Link>
         <CardActions>
           <ButtonStyled
-            onClick={() => {
-              onClick;
-            }}
+            onClick={onClick}
           >
             Mua Online&nbsp;
             <IconMuaOnline />
