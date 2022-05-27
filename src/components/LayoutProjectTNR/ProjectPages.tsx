@@ -6,8 +6,10 @@ import { Grid } from "@mui/material";
 import { BodyListProjectI } from "@service/ProjectList";
 import useProjectList from "hooks/useProjectList";
 import dynamic from "next/dynamic";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Container from "@components/Container";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../store/store";
 export interface ProjectInforI {
     id: string,
     name: string,
@@ -45,13 +47,24 @@ const ContainerProduct = styled.div`
 
 const ProjectPages = () => {
     const { data, error, loading, changePageNumber, totalPage, changeBody, body, params } = useProjectList();
+	const [titleData, setTitleData] = useState('');
+
+	const { listMenuBarType, listMenuBarProjectType } = useSelector(
+		(state: RootState) => state.menubar
+	  );
+	
+	 
     const onSubmit = (values: BodyListProjectI) => {
         changeBody(values)
     }
+	useEffect(() => {
+		const items = listMenuBarProjectType.find((item) => item.id === body?.projectTypeId)
+		setTitleData(items?.name)
+	},[body])
     return (
         <FlexContainer>
             <Container
-                title="Danh sách dự án"
+                title={titleData ? titleData : 'Tất cả'}
                 rightContent={<DynamicFilter onSubmit={onSubmit} body={body} />}
             >
                 <Grid container spacing={4}>

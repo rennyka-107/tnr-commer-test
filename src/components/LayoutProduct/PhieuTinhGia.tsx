@@ -15,10 +15,11 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { IconDropDown } from "@components/Icons";
-import { PTGResponse } from "interface/product";
+import { PTGResponse, ResponseSearchById } from "interface/product";
 
 interface PhieuTinhGiaProps {
   productItem?: PTGResponse;
+  dataProduct?: ResponseSearchById;
 }
 
 const ITEM_HEIGHT = 48;
@@ -217,8 +218,8 @@ const ButtonStyled = styled(Button)`
 
 const names = ["Oliver Hansen", "Van Henry", "April Tucker", "Ralph Hubbard"];
 
-const PhieuTinhGia = ({ productItem }: PhieuTinhGiaProps) => {
-  console.log(productItem);
+const PhieuTinhGia = ({ productItem,dataProduct }: PhieuTinhGiaProps) => {
+
   const theme = useTheme();
   const [personName, setPersonName] = React.useState<string[]>([]);
 
@@ -236,9 +237,8 @@ const PhieuTinhGia = ({ productItem }: PhieuTinhGiaProps) => {
     if (!num) {
       return;
     }
-    return Number(num)
-      .toFixed(0)
-      .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+    return Number(num).toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+	
   }
   //   const fetchChieuKhau = () => {
   //     return (
@@ -295,12 +295,48 @@ const PhieuTinhGia = ({ productItem }: PhieuTinhGiaProps) => {
       <ContainerLeft>
         <TitleStyled>Thông tin lô đất</TitleStyled>
         <WrapCardItem>
-          {FakeDataTable1.map((table1, index) => (
+          {/* {FakeDataTable1.map((table1, index) => (
             <WrapItemOnCard key={index}>
               <TextLeftOnCardLeft>{table1.title}:</TextLeftOnCardLeft>
               <TextRightOnCardLeft>{table1.value}</TextRightOnCardLeft>
             </WrapItemOnCard>
-          ))}
+          ))} */}
+		  <WrapItemOnCard >
+              <TextLeftOnCardLeft>Dự án:</TextLeftOnCardLeft>
+              <TextRightOnCardLeft>{dataProduct?.thongTinDuAn.name}</TextRightOnCardLeft>
+            </WrapItemOnCard>
+			<WrapItemOnCard >
+              <TextLeftOnCardLeft>Loại bất động sản:</TextLeftOnCardLeft>
+              <TextRightOnCardLeft>{dataProduct?.apartmentModel.name}</TextRightOnCardLeft>
+            </WrapItemOnCard>
+			<WrapItemOnCard >
+              <TextLeftOnCardLeft>Mã lô thương mại:</TextLeftOnCardLeft>
+              <TextRightOnCardLeft>{dataProduct?.lotSymbolCommercial}</TextRightOnCardLeft>
+            </WrapItemOnCard>
+			<WrapItemOnCard >
+              <TextLeftOnCardLeft>Mã lô phê duyệt:</TextLeftOnCardLeft>
+              <TextRightOnCardLeft>{dataProduct?.lotSymbolLegal}</TextRightOnCardLeft>
+            </WrapItemOnCard>
+			<WrapItemOnCard >
+              <TextLeftOnCardLeft>Khối:</TextLeftOnCardLeft>
+              <TextRightOnCardLeft>N/A</TextRightOnCardLeft>
+            </WrapItemOnCard>
+			<WrapItemOnCard >
+              <TextLeftOnCardLeft>Phân Khu:</TextLeftOnCardLeft>
+              <TextRightOnCardLeft>N/A</TextRightOnCardLeft>
+            </WrapItemOnCard>
+			<WrapItemOnCard >
+              <TextLeftOnCardLeft>Diện tích đất:</TextLeftOnCardLeft>
+              <TextRightOnCardLeft>{dataProduct?.clearArea}</TextRightOnCardLeft>
+            </WrapItemOnCard>
+			<WrapItemOnCard >
+              <TextLeftOnCardLeft>Diện tích xây dựng:</TextLeftOnCardLeft>
+              <TextRightOnCardLeft>{dataProduct?.buildArea}</TextRightOnCardLeft>
+            </WrapItemOnCard>
+			<WrapItemOnCard >
+              <TextLeftOnCardLeft>Số tầng:</TextLeftOnCardLeft>
+              <TextRightOnCardLeft>{dataProduct?.floorNum}</TextRightOnCardLeft>
+            </WrapItemOnCard>
         </WrapCardItem>
         <ContainerBottomLeft>
           <div>
@@ -376,7 +412,7 @@ const PhieuTinhGia = ({ productItem }: PhieuTinhGiaProps) => {
                     {item.PromotionName}
                   </TextBoldInWrapBottom>
                   <TextInWrapBottom>
-                    Tỉ lệ chiết khấu: {item.Amount}&nbsp;%
+                    Tỉ lệ chiết khấu: N/A&nbsp;%
                   </TextInWrapBottom>
                 </div>
                 <div style={{ border: "1px solid #E7E9EC" }} />
@@ -418,7 +454,7 @@ const PhieuTinhGia = ({ productItem }: PhieuTinhGiaProps) => {
                   fontWeight: 400,
                 }}
               >
-                {currencyFormat(productItem.LandMoney)}
+                              {currencyFormat(productItem.LandPrice)}
               </TextOnCardRight>
             </div>
             <WrapRightCardText>
@@ -458,7 +494,8 @@ const PhieuTinhGia = ({ productItem }: PhieuTinhGiaProps) => {
                   fontWeight: 400,
                 }}
               >
-                {currencyFormat(productItem.LandPrice)}
+
+				{currencyFormat(productItem.LandMoney)}
               </TextOnCardRight>
             </div>
             <WrapRightCardText>
@@ -534,7 +571,7 @@ const PhieuTinhGia = ({ productItem }: PhieuTinhGiaProps) => {
                   fontWeight: 400,
                 }}
               >
-                {currencyFormat(productItem.BuildPrice)}
+                {currencyFormat(productItem.BuildMoney)}
               </TextOnCardRight>
             </div>
             <WrapRightCardText>
@@ -572,7 +609,7 @@ const PhieuTinhGia = ({ productItem }: PhieuTinhGiaProps) => {
                   fontWeight: "bold",
                 }}
               >
-                {currencyFormat(productItem.BuildPrice)}
+                {currencyFormat(productItem.TotalMoney)}
               </TextOnCardRight>
             </div>
             <WrapRightCardText>
@@ -741,7 +778,7 @@ const PhieuTinhGia = ({ productItem }: PhieuTinhGiaProps) => {
             <TextCenterRight
               style={{ fontSize: 18, margin: "auto", marginRight: 0 }}
             >
-              N/A vnd
+              {currencyFormat(dataProduct?.price)} vnd
             </TextCenterRight>
           </div>
           <div style={{ border: "1px solid #C7C9D9" }} />
@@ -753,7 +790,7 @@ const PhieuTinhGia = ({ productItem }: PhieuTinhGiaProps) => {
               <Typography
                 style={{ fontSize: 18, fontWeight: 700, color: "#EA242A" }}
               >
-                {productItem.TotalMoney} vnd
+                {currencyFormat(productItem.TotalMoney)} vnd
               </Typography>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>

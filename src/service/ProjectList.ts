@@ -17,7 +17,7 @@ export interface BodyListProjectI {
 const LIST_PROJECT = '/api/project/information/search';
 
 export const getListProjectTNR = (params: ParamsListProjectI, body: BodyListProjectI) => {
-    console.log(body, 'body');
+    // console.log(body, 'body');
 
     return HttpClient.post<any, CommonResponse>(`${LIST_PROJECT}${convertToQuery(params)}`, body);
 }

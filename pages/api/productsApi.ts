@@ -12,6 +12,11 @@ export const getListProductApi = async (
     { withToken: false }
   );
 };
+
+export const getProducById = async(id: any) => {
+	return HttpClient.post<any, CommonResponse>(`/api/product/information/${id}`)
+}
+
 export const getProductPtgApi = async (params: PTGType) => {
 	const data = JSON.stringify(params)
   return HttpClient.post<any, CommonResponse>(`/api/v1/landsoft/ptg`, data, {
@@ -25,6 +30,7 @@ export const downloadPhieuTinhGiaAPI = async(data: any) => {
 		withToken: false,
 	  });
 }
+
 // export const getProductPtgApi = async (params: PTGType) => {
 //   return HttpClient.get<CommonResponse>(`/api/v1/landsoft/ptg`, {
 //     params,

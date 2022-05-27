@@ -137,15 +137,15 @@ export default function BodyIndex() {
             priceSub={40580174}
             ticketCard="TRN Gold"
           />
-          <ItemProductCard
+              <ItemProductCard
             src={Product2}
-            title="TNR Stars Lam Sơn"
-            subTitle="90 đường Láng, Thịnh Quang, Đống Đa, Hà Nội"
+            title="TNR AMALUNA - TRÀ VINH - LK.08.32"
+            subTitle="Hải Phòng"
             dataItem={{
-              item1: "02",
-              item2: "02",
-              item3: "80",
-              item4: "Đông Nam",
+              item1: "1",
+              item2: "1",
+              item3: "1",
+              item4: "Tây",
             }}
             priceListed={3018933000}
             priceSub={40580174}

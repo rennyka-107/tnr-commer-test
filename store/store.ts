@@ -27,7 +27,8 @@ const masterReducer = (state, action) => {
       },
 	  products:{
 		listProductResponse: action.payload.products.listProductResponse,
-		productItem: action.payload.products.productItem
+		productItem: action.payload.products.productItem,
+		productByID: action.payload.products.productByID
 	  },
 	  projects: {
 		listProjectResponse: action.payload.projects.listProjectResponse

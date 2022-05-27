@@ -41,7 +41,7 @@ const DynamicBreadcrumsComponent = dynamic(
   
   
 const ProductPages = ({listProducts,listProject}: ProductsProps) => {
-	console.log("listProject",listProject)
+
 	const listBread = [
 		{
 		  id: 1,
@@ -49,7 +49,7 @@ const ProductPages = ({listProducts,listProject}: ProductsProps) => {
 		},
 		{
 		  id: 2,
-		  value: "Sản Phẩm",
+		  value: listProject[0].funcDivision,
 		},
 	  ];
 	return (

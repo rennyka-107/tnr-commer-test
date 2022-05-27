@@ -39,10 +39,12 @@ import { getProductPTG } from "../../../store/productSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../store/store";
 import { ProjectResponse } from "interface/project";
+import { ResponseSearchById } from "interface/product";
 
 interface ProductsProps {
   listProject?: ProjectResponse[];
   navKey: string;
+  dataProduct?: ResponseSearchById;
 }
 
 const DynamicBreadcrumsComponent = dynamic(
@@ -300,7 +302,10 @@ const TextContact = styled(Typography)`
   color: #1b3459;
 `;
 
-const mockDataPhieutinhgia = {
+
+
+const ProductIdpage = ({ navKey,dataProduct }: ProductsProps) => {
+	const mockDataPhieutinhgia = {
   ProjectName: "TNR AMALUNA - TRÀ VINH",
   BlockName: "Liền kề",
   ProductName: "LK.08.32",
@@ -313,20 +318,18 @@ const mockDataPhieutinhgia = {
   ScheduleID: 1900,
 };
 
-export const paramsMock = {
-  ProjectName: "TNR AMALUNA - TRÀ VINH",
-  BlockName: "Liền kề",
-  ProductName: "LK.08.32",
-  DepositDate: "29/04/2022",
-  IsMortgage: true,
-  GroupCusID: 0,
-  ProvinceID: 0,
-  DistrictID: 0,
-  PriceID: 0,
-  ScheduleID: 0,
-};
-
-const ProductIdpage = ({ listProject, navKey }: ProductsProps) => {
+	
+ const paramsMock = {
+	ProjectName: dataProduct?.project.name,
+	BlockName: "Liền kề",
+	ProductName: "LK.08.32",
+	DepositDate: "29/04/2022",
+	IsMortgage: true,
+	GroupCusID: 0,
+	ProvinceID: 0,
+	DistrictID: 0,
+	PriceID: 230896,
+  };
   const listBread = [
     {
       id: 1,
@@ -334,8 +337,12 @@ const ProductIdpage = ({ listProject, navKey }: ProductsProps) => {
     },
     {
       id: 2,
-      value: "Sản Phẩm",
+      value: "Đất nền",
     },
+	{
+		id: 3,
+		value: "Tiểu khu",
+	  },
   ];
   const dispatch = useDispatch();
   const productItem = useSelector(
@@ -402,13 +409,13 @@ const ProductIdpage = ({ listProject, navKey }: ProductsProps) => {
     if (!num) {
       return;
     }
-    return num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+    return Math.round(num).toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
   }
   const fetchPhieuTinhGia = () => {
     return (
       <>
         {!_.isEmpty(productItem) ? (
-          <DynamicPhieuTinhGiaComponent productItem={productItem} />
+          <DynamicPhieuTinhGiaComponent productItem={productItem} dataProduct={dataProduct}/>
         ) : (
           <>
             <div style={{ textAlign: "center", marginTop: 200 }}>
@@ -453,7 +460,7 @@ const ProductIdpage = ({ listProject, navKey }: ProductsProps) => {
           <div>
             <DynamicBreadcrumsComponent
               breaditem={listBread}
-              activePage="Lô A01"
+              activePage={dataProduct?.name}
             />
           </div>
           <div
@@ -466,7 +473,7 @@ const ProductIdpage = ({ listProject, navKey }: ProductsProps) => {
             }}
           >
             <TextHeaderStyled>
-              TNR Stars Lam Sơn - NGUYỆT QUẾ 1
+              {dataProduct?.project.name} - {dataProduct?.lotSymbolLegal}
             </TextHeaderStyled>
           </div>
         </div>
@@ -734,7 +741,7 @@ const ProductIdpage = ({ listProject, navKey }: ProductsProps) => {
             </div>
             <div>
               <WrapRightCard>
-                <TitleRightText>LÔ A06</TitleRightText>
+                <TitleRightText>{dataProduct?.name}</TitleRightText>
                 <div
                   style={{
                     display: "flex",
@@ -743,27 +750,27 @@ const ProductIdpage = ({ listProject, navKey }: ProductsProps) => {
                     marginTop: 20,
                   }}
                 >
-                  <SubRightText>Tòa A</SubRightText>
-                  <SubRightText>Tầng 26</SubRightText>
+                  <SubRightText>Tòa {dataProduct?.lotSymbolCommercial}</SubRightText>
+                  <SubRightText>Tầng {dataProduct?.floorNum}</SubRightText>
                 </div>
                 <div style={{ border: " 1px solid #C7C9D9", width: 262 }}></div>
                 <CenterIntemWrap>
                   <WrapItemCenter>
                     <IconFrame />
 
-                    <TextCenterItem>02</TextCenterItem>
+                    <TextCenterItem>{dataProduct?.landArea}</TextCenterItem>
                   </WrapItemCenter>
                   <WrapItemCenter>
                     <IconBath />
-                    <TextCenterItem>02</TextCenterItem>
+                    <TextCenterItem>{dataProduct?.numBath}</TextCenterItem>
                   </WrapItemCenter>
                   <WrapItemCenter>
                     <IconBedDouble />
-                    <TextCenterItem>80 m²</TextCenterItem>
+                    <TextCenterItem>{dataProduct?.numBed} m²</TextCenterItem>
                   </WrapItemCenter>
                   <WrapItemCenter>
                     <IconCompass />
-                    <TextCenterItem>Đông Nam</TextCenterItem>
+                    <TextCenterItem>{dataProduct?.doorDirection}</TextCenterItem>
                   </WrapItemCenter>
                 </CenterIntemWrap>
                 <div style={{ border: " 1px solid #C7C9D9", width: 262 }}></div>
@@ -773,7 +780,7 @@ const ProductIdpage = ({ listProject, navKey }: ProductsProps) => {
                       Giá niêm yết{" "}
                     </TextBottomStyled>
                     <NumberBottomStyled>
-                      {currencyFormat(3018933000)}đ
+                      {currencyFormat(dataProduct?.price)}đ
                     </NumberBottomStyled>
                   </div>
                   <div style={{ display: "flex" }}>
@@ -781,7 +788,7 @@ const ProductIdpage = ({ listProject, navKey }: ProductsProps) => {
                       Đơn giá thông thuỷ{" "}
                     </TextBottomStyled2>
                     <NumberBottomStyled2>
-                      {currencyFormat(40580174)}đ/m2
+                      {currencyFormat(dataProduct?.unitPrice)}đ/m2
                     </NumberBottomStyled2>
                   </div>
                 </div>

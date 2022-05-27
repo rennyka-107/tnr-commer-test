@@ -8,7 +8,7 @@ const useProjectList = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<any>(null);
     const [totalPage, setTotalPage] = useState(0);
-    const [body, setBody] = useState<BodyListProjectI>({ projectTypeId: type as string ?? '' })
+    const [body, setBody] = useState<BodyListProjectI>()
     const [params, setParams] = useState<ParamsListProjectI>({
         pageNumber: 1,
         pageSize: 10
@@ -24,6 +24,13 @@ const useProjectList = () => {
     }
 
     useEffect(() => {
+        setBody({ ...body, projectTypeId: type as string ?? '' });
+        setParams({ pageNumber: 1, pageSize: 10 });
+
+    }, [type])
+
+    useEffect(() => {
+        if (!body) return;
         const fetch = async () => {
             setLoading(true);
             try {

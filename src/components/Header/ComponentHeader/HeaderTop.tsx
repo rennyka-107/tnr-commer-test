@@ -47,39 +47,39 @@ const HeaderTop = () => {
     <ContainerStyled>
       <WrapContainer>
         <LinkContainer>
-          <Link href="" passHref>
-            <TextLink
-              onClick={() => {
-                Router.push('/aboutAccount');
-              }}
-            >
-              Về tài khoản
-            </TextLink>
-          </Link>
-          <Link href="" passHref>
-            <TextLink
-              onClick={() => {
-                Router.push({ pathname: PathRoute.AboutProcedure });
-              }}
-            >
-              Về quy trình mua BĐS Online
-            </TextLink>
-          </Link>
+          {/* <Link href={`http://localhost:3000${PathRoute.Profile}`} passHref> */}
+          <TextLink
+            onClick={() => {
+              Router.replace(`${PathRoute.Profile}`, undefined, { shallow: true });
+            }}
+          >
+            Về tài khoản
+          </TextLink>
+          {/* </Link> */}
+          {/* <Link href={`http://localhost:3000${PathRoute.BuyingGuide}`} passHref> */}
+          <TextLink
+            onClick={() => {
+              Router.replace(`${PathRoute.BuyingGuide}`, undefined, { shallow: true });
+            }}
+          >
+            Về quy trình mua BĐS Online
+          </TextLink>
+          {/* </Link> */}
           <Link
             href={"https://tnrvietnam.com.vn/sites/tnr/ve-chung-toi/"}
             passHref
           >
             <TextLink target={"_blank"}>Về TNR</TextLink>
           </Link>
-          <Link href="" passHref>
-            <TextLink
-              onClick={() => {
-                Router.push({ pathname: PathRoute.AboutSupport });
-              }}
-            >
-              Về hỗ trợ
-            </TextLink>
-          </Link>
+          {/* <Link href="" passHref > */}
+          <TextLink
+            onClick={() => {
+              Router.replace(`${PathRoute.BuyingGuide}`, undefined, { shallow: true });
+            }}
+          >
+            Về hỗ trợ
+          </TextLink>
+          {/* </Link> */}
         </LinkContainer>
         <IconCountry style={IconCountryStyle} />
       </WrapContainer>

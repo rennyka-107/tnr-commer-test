@@ -107,4 +107,4 @@ const BuyingGuide = () => {
   );
 };
 
-export default WithAuth(BuyingGuide);
+export default BuyingGuide;

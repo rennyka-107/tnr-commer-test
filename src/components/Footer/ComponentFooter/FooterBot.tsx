@@ -90,7 +90,7 @@ const FooterBot = (props: Props) => {
             tnrholdings@tnrholdings.com.vn
           </LineInfo>
 		  <LineInfo style={{marginTop: 5}}>
-            <TitleTypo>TNR Version 1.0.2 Copyright © www.example.com {""}</TitleTypo>
+            <TitleTypo>TNR Version 1.0.4 Copyright © www.example.com {""}</TitleTypo>
 
           </LineInfo>
         </BlockDiv>

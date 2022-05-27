@@ -155,12 +155,7 @@ const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
             <MenuDropdown title={"Loại bất động sản"}
               data={menuDataProject}
               onSelect={(item) => {
-                console.log('Router.beforePopState', Router.pathname);
-                if (Router.pathname == `/${PathRoute.ProjectTNR}`) {
-                  Router.replace(`/${PathRoute.ProjectTNR}?type=${item.id}`)
-                } else {
-                  Router.push(`/${PathRoute.ProjectTNR}?type=${item.id}`)
-                }
+                Router.replace(`/${PathRoute.ProjectTNR}?type=${item.id}`)
               }}
             />
             <MenuDropdown title={"Dự Án"} data={menuData}

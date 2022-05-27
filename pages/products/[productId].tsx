@@ -5,8 +5,9 @@ import dynamic from "next/dynamic";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import { useRouter } from "next/router";
-import { getListProductApi } from "../api/productsApi";
-import { getListProduct } from "../../store/productSlice";
+import { getListProductApi, getProducById } from "../api/productsApi";
+import { getListProduct, getProductById } from "../../store/productSlice";
+import { CircularProgress } from "@mui/material";
 
 const DynamicProductId = dynamic(() =>
   import("../../src/components/LayoutProduct/ProductIdpage"),  { loading: () => <p>...</p> }
@@ -16,15 +17,10 @@ const Product = () => {
 	const dispatch = useDispatch();
 	const router = useRouter();
 	const [navKey, setNavKey] = useState('');
-	
-	const { listProductResponse } = useSelector(
+	const [loading, setLoading] = useState(false);
+	const { productByID } = useSelector(
 		(state: RootState) => state.products
 	  );
-	
-	const { listProjectResponse } = useSelector(
-		(state: RootState) => state.projects
-	  );
-
 	const {productId} = router.query
 	const paramsSearch = {
 		page: 1,
@@ -42,14 +38,35 @@ const Product = () => {
 		  try {
 			const response = await getListProductApi(paramsSearch, searchList);
 			dispatch(getListProduct(response.responseData));
-			// setNavKey(localStorage.getItem('navKey'))
-			console.log(response)
-		  } catch (error) {
+			const responAPIBYID = await getProducById(productId);
+			dispatch(getProductById(responAPIBYID.responseData))
+			if(response.responseCode === '00' && responAPIBYID.responseCode === '00'){
+				setLoading(true)
+			}
+		} catch (error) {
 			console.log(error);
-		  }
-		})();
-	  }, [router, dispatch]);
-	
+		}
+	})();
+}, [router, dispatch]);
+
+	  const fetchComponent = () => {
+		return (
+		  <>
+			{loading === true ? (
+			   <DynamicProductId  navKey={navKey} dataProduct={productByID}/>
+			) : (
+			  <>
+				<div style={{ textAlign: "center", marginTop: 200 }}>
+				  <CircularProgress />
+				</div>
+			  </>
+			)}
+		  </>
+		);
+	  };
+	  useEffect(() => {
+		fetchComponent();
+	  }, [loading]);
   return (
     <Page
       meta={{
@@ -57,7 +74,7 @@ const Product = () => {
         description: "TNR Ecommerce Product ProductName",
       }}
     >
-      <DynamicProductId listProject={listProjectResponse} navKey={navKey}/>
+     {fetchComponent()}
     </Page>
   );
 };

@@ -15,6 +15,7 @@ const ProductWrap = styled.div`
   grid-template-columns: repeat(3, 1fr);
 `;
 const ItemProduct = ({ data }: ProductsProps) => {
+	// console.log(data)
   return (
     <>
       <ProductWrap>
@@ -24,15 +25,15 @@ const ItemProduct = ({ data }: ProductsProps) => {
             id={product.id}
             src={Product2}
             title={product.name}
-            subTitle={product.homeNum}
+            subTitle={product.location}
             dataItem={{
               item1: product.landArea,
               item2: product.numBath,
               item3: product.numBed,
-              item4: product.direction,
+              item4: product.doorDirection,
             }}
             priceListed={product.price}
-            priceSub={40580174}
+            priceSub={product.unitPrice}
             ticketCard="TRN Star"
             activeSoSanh={true}
           />

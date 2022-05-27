@@ -54,7 +54,8 @@ export default function Breadcrumbs({ title }) {
                     <React.Fragment key={index}>
                         <Link href={`/${path}`} passHref>
                             <LinkLabel key={index} href={`/${path}`}>
-                                {Breadscrumb.find((el) => el.path == path)?.title}
+                                {/* {Breadscrumb.find((el) => el.path == path)?.title} */}
+								{title}
                             </LinkLabel>
                         </Link>
                         {index !== paths.length - 1 && <Path>/</Path>}
