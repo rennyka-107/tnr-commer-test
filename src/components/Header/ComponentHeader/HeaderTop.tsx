@@ -50,7 +50,7 @@ const HeaderTop = () => {
           <Link href="" passHref>
             <TextLink
               onClick={() => {
-                Router.push({ pathname: PathRoute.AboutAccount });
+                Router.push('/aboutAccount');
               }}
             >
               Về tài khoản

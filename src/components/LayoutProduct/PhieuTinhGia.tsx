@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Theme, useTheme } from "@mui/material/styles";
 import styled from "@emotion/styled";
 import { Button, Typography } from "@mui/material";
@@ -15,6 +15,11 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { IconDropDown } from "@components/Icons";
+import { PTGResponse } from "interface/product";
+
+interface PhieuTinhGiaProps {
+  productItem?: PTGResponse;
+}
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -212,7 +217,8 @@ const ButtonStyled = styled(Button)`
 
 const names = ["Oliver Hansen", "Van Henry", "April Tucker", "Ralph Hubbard"];
 
-const PhieuTinhGia = () => {
+const PhieuTinhGia = ({ productItem }: PhieuTinhGiaProps) => {
+  console.log(productItem);
   const theme = useTheme();
   const [personName, setPersonName] = React.useState<string[]>([]);
 
@@ -230,8 +236,59 @@ const PhieuTinhGia = () => {
     if (!num) {
       return;
     }
-    return num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+    return Number(num)
+      .toFixed(0)
+      .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
   }
+  //   const fetchChieuKhau = () => {
+  //     return (
+  //       <>
+  //         {productItem?.ListPromotion.map((item, index) => {
+  //           <>
+  // 		  <>fdshkfjdshfkdsj</>
+  //             {/* {console.log("item", productItem.ListPromotion)} */}
+  //             <div
+  //               style={{
+  //                 border: "1px solid #D8D8D8",
+  //                 borderRadius: "20px",
+  //                 display: "flex",
+  //                 gap: 28,
+  //                 padding: "18px 22px 18px 21px",
+  //               }}
+  //               key={index}
+  //             >
+  //               <div
+  //                 style={{
+  //                   display: "flex",
+  //                   flexDirection: "column",
+  //                   gap: 10,
+  //                   width: "50%",
+  //                 }}
+  //               >
+  //                 <TextBoldInWrapBottom>
+  //                   {item.PromotionName}
+  //                 </TextBoldInWrapBottom>
+  //                 <TextInWrapBottom>
+  //                   Tỉ lệ chiết khấu: {item.Amount}&nbsp;%
+  //                 </TextInWrapBottom>
+  //               </div>
+  //               <div style={{ border: "1px solid #E7E9EC" }} />
+  //               <div style={{ margin: "auto" }}>
+  //                     <TextBoldInWrapBottom>
+  //                       {currencyFormat(item.Value)}
+  //                     </TextBoldInWrapBottom>
+  //                   </div>
+  //             </div>
+  //           </>;
+  //         })}
+  //       </>
+  //     );
+  //   };
+
+  //   useEffect(() => {
+  // 	  console.log("action")
+  // 	  fetchChieuKhau()
+  //   },[productItem.ListPromotion])
 
   return (
     <WrapBodyStyped>
@@ -262,7 +319,7 @@ const PhieuTinhGia = () => {
               overflowY: FakeDataTable3.length >= 5 ? "scroll" : "hidden",
             }}
           >
-            {FakeDataTable3.map((item3, index) => (
+            {/* {FakeDataTable3.map((item3, index) => (
               <>
                 <div
                   style={{
@@ -295,6 +352,40 @@ const PhieuTinhGia = () => {
                   </div>
                 </div>
               </>
+            ))} */}
+            {productItem.ListPromotion.map((item, index) => (
+              <div
+                style={{
+                  border: "1px solid #D8D8D8",
+                  borderRadius: "20px",
+                  display: "flex",
+                  gap: 28,
+                  padding: "18px 22px 18px 21px",
+                }}
+                key={index}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 10,
+                    width: "50%",
+                  }}
+                >
+                  <TextBoldInWrapBottom>
+                    {item.PromotionName}
+                  </TextBoldInWrapBottom>
+                  <TextInWrapBottom>
+                    Tỉ lệ chiết khấu: {item.Amount}&nbsp;%
+                  </TextInWrapBottom>
+                </div>
+                <div style={{ border: "1px solid #E7E9EC" }} />
+                <div style={{ margin: "auto" }}>
+                  <TextBoldInWrapBottom>
+                    -{currencyFormat(item.Value)}
+                  </TextBoldInWrapBottom>
+                </div>
+              </div>
             ))}
           </div>
         </ContainerBottomLeft>
@@ -303,45 +394,199 @@ const PhieuTinhGia = () => {
       <ContainerRight>
         <TitleStyled>Giá trị nhà ở</TitleStyled>
         <WrapCardItem>
-          {FakeDataTable2.map((item2,index) => (
-            <WrapItemOnCard key={index}>
-              <div
+          <WrapItemOnCard>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                width: "70%",
+              }}
+            >
+              <TextOnCardRight
                 style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  width: "70%",
+                  color: "#1b3459",
+                  fontWeight: 400,
                 }}
               >
-                <TextOnCardRight
-                  style={{
-                    color: item2.type === "total" ? "red" : "#1b3459",
-                    fontWeight: item2.type === "total" ? "bold" : "400",
-                  }}
-                >
-                  {item2.title}*:
-                </TextOnCardRight>
-                <TextOnCardRight
-                  style={{
-                    color: item2.type === "total" ? "red" : "#1b3459",
-                    fontWeight: item2.type === "total" ? "bold" : "400",
-                  }}
-                >
-                  {currencyFormat(item2.value)}
-                </TextOnCardRight>
-              </div>
-              <WrapRightCardText>
-                <TextOnCardRight
-                  style={{
-                    color: item2.type === "total" ? "red" : "#1b3459",
-                    fontWeight: item2.type === "total" ? "bold" : "400",
-                  }}
-                >
-                  {item2.unit}
-                </TextOnCardRight>
-              </WrapRightCardText>
-            </WrapItemOnCard>
-          ))}
+                Đơn giá QSDĐ*:
+              </TextOnCardRight>
+
+              <TextOnCardRight
+                style={{
+                  color: "#1b3459",
+                  fontWeight: 400,
+                }}
+              >
+                {currencyFormat(productItem.LandMoney)}
+              </TextOnCardRight>
+            </div>
+            <WrapRightCardText>
+
+              <TextOnCardRight
+                style={{
+                  color: "#1b3459",
+                  fontWeight: 400,
+                }}
+              >
+
+                đồng/m2
+              </TextOnCardRight>
+            </WrapRightCardText>
+          </WrapItemOnCard>
+          <WrapItemOnCard>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                width: "70%",
+              }}
+            >
+              <TextOnCardRight
+                style={{
+                  color: "#1b3459",
+                  fontWeight: 400,
+                }}
+              >
+                Tổng giá trị QSDĐ*:
+              </TextOnCardRight>
+
+              <TextOnCardRight
+                style={{
+                  color: "#1b3459",
+                  fontWeight: 400,
+                }}
+              >
+                {currencyFormat(productItem.LandPrice)}
+              </TextOnCardRight>
+            </div>
+            <WrapRightCardText>
+              <TextOnCardRight
+                style={{
+                  color: "#1b3459",
+                  fontWeight: 400,
+                }}
+              >
+                đồng
+              </TextOnCardRight>
+            </WrapRightCardText>
+          </WrapItemOnCard>
+          <WrapItemOnCard>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                width: "70%",
+              }}
+            >
+              <TextOnCardRight
+                style={{
+                  color: "#1b3459",
+                  fontWeight: 400,
+                }}
+              >
+                Đơn giá xây dựng*:
+              </TextOnCardRight>
+
+              <TextOnCardRight
+                style={{
+                  color: "#1b3459",
+                  fontWeight: 400,
+                }}
+              >
+                {currencyFormat(productItem.BuildPrice)}
+              </TextOnCardRight>
+            </div>
+            <WrapRightCardText>
+              <TextOnCardRight
+                style={{
+                  color: "#1b3459",
+                  fontWeight: 400,
+                }}
+              >
+                đồng/m2
+              </TextOnCardRight>
+            </WrapRightCardText>
+          </WrapItemOnCard>
+		  <WrapItemOnCard>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                width: "70%",
+              }}
+            >
+              <TextOnCardRight
+                style={{
+                  color: "#1b3459",
+                  fontWeight: 400,
+                }}
+              >
+                Tổng giá trị xây dựng*:
+              </TextOnCardRight>
+
+              <TextOnCardRight
+                style={{
+                  color: "#1b3459",
+                  fontWeight: 400,
+                }}
+              >
+                {currencyFormat(productItem.BuildPrice)}
+              </TextOnCardRight>
+            </div>
+            <WrapRightCardText>
+              <TextOnCardRight
+                style={{
+                  color: "#1b3459",
+                  fontWeight: 400,
+                }}
+              >
+                đồng
+              </TextOnCardRight>
+            </WrapRightCardText>
+          </WrapItemOnCard>
+          <WrapItemOnCard>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                width: "70%",
+              }}
+            >
+              <TextOnCardRight
+                style={{
+                  color: "red",
+                  fontWeight: "bold",
+                }}
+              >
+                Tổng giá bán nhà ở*:
+              </TextOnCardRight>
+
+              <TextOnCardRight
+                style={{
+                  color: "red",
+                  fontWeight: "bold",
+                }}
+              >
+                {currencyFormat(productItem.BuildPrice)}
+              </TextOnCardRight>
+            </div>
+            <WrapRightCardText>
+              <TextOnCardRight
+                style={{
+                  color: "red",
+                  fontWeight: "bold",
+                }}
+              >
+                đồng
+              </TextOnCardRight>
+            </WrapRightCardText>
+          </WrapItemOnCard>
+
           <div style={{ marginTop: 10 }}>
             <Typography
               style={{ fontSize: 16, fontWeight: 400, fontStyle: "italic" }}
@@ -405,10 +650,10 @@ const PhieuTinhGia = () => {
             style={{
               maxHeight: 535,
               overflowY: FakeDataTable4.length >= 5 ? "scroll" : "hidden",
-			  padding: 20
+              padding: 20,
             }}
           >
-            {FakeDataTable4.map((item4,index) => (
+            {/* {FakeDataTable4.map((item4, index) => (
               <div
                 style={{
                   display: "flex",
@@ -416,7 +661,7 @@ const PhieuTinhGia = () => {
                   gap: 15,
                   marginTop: 20,
                 }}
-				key={index}
+                key={index}
               >
                 <div
                   style={{
@@ -440,7 +685,40 @@ const PhieuTinhGia = () => {
                 </div>
                 <div style={{ border: "1px solid #C7C9D9" }} />
               </div>
-            ))}
+            ))} */}
+			{productItem.ListSchedule.map((item, index) => (
+				<div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 15,
+                  marginTop: 20,
+                }}
+                key={index}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <div>
+                    <TextCenterRight>{item.ScheduleName}</TextCenterRight>
+                    <SubTextCenterRight>Ký hợp đồng mua bán</SubTextCenterRight>
+                  </div>
+                  <div>
+                    <TextCenterRight>
+                      {/* {currencyFormat(item4.value1)} */}N/A
+                    </TextCenterRight>
+                    <SubTextCenterRight>
+                      {/* {item4.value2}% giá trị HĐ */}N/A
+                    </SubTextCenterRight>
+                  </div>
+                </div>
+                <div style={{ border: "1px solid #C7C9D9" }} />
+              </div>
+			))}
           </div>
         </ContainerCenterRight>
         <ContainerCenterRight style={{ padding: 38, gap: 14 }}>
@@ -463,7 +741,7 @@ const PhieuTinhGia = () => {
             <TextCenterRight
               style={{ fontSize: 18, margin: "auto", marginRight: 0 }}
             >
-              4,180,000,000 vnd
+              N/A vnd
             </TextCenterRight>
           </div>
           <div style={{ border: "1px solid #C7C9D9" }} />
@@ -475,7 +753,7 @@ const PhieuTinhGia = () => {
               <Typography
                 style={{ fontSize: 18, fontWeight: 700, color: "#EA242A" }}
               >
-                3,990,000,000 vnd
+                {productItem.TotalMoney} vnd
               </Typography>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -507,5 +785,5 @@ const PhieuTinhGia = () => {
       </ContainerRight>
     </WrapBodyStyped>
   );
-}
+};
 export default PhieuTinhGia;

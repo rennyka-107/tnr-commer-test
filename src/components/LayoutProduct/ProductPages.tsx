@@ -6,8 +6,16 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import styled from "@emotion/styled";
 import dynamic from "next/dynamic";
+import { ProductsResponse } from "interface/product";
+import { ProjectResponse } from "interface/project";
+import { useState } from "react";
 
-
+interface ProductsProps {
+	listProducts?: ProductsResponse[];
+	listProject?: ProjectResponse[];
+  };
+  
+  
 const TextHeaderStyled = styled(Typography)`
   font-family: "Roboto";
   font-style: normal;
@@ -19,16 +27,7 @@ const TextHeaderStyled = styled(Typography)`
 
   color: #1b3459;
 `;
-const listBread = [
-  {
-    id: 1,
-    value: "Trang chủ",
-  },
-  {
-    id: 2,
-    value: "Đất nền",
-  },
-];
+
 
 const DynamicBreadcrumsComponent = dynamic(
 	() =>
@@ -41,7 +40,18 @@ const DynamicBreadcrumsComponent = dynamic(
   );
   
   
-const ProductPages = () => {
+const ProductPages = ({listProducts,listProject}: ProductsProps) => {
+	console.log("listProject",listProject)
+	const listBread = [
+		{
+		  id: 1,
+		  value: "Trang chủ",
+		},
+		{
+		  id: 2,
+		  value: "Sản Phẩm",
+		},
+	  ];
 	return (
 		<FlexContainer>
         <div
@@ -55,7 +65,7 @@ const ProductPages = () => {
           <div>
             <DynamicBreadcrumsComponent
               breaditem={listBread}
-              activePage="Tiểu khu"
+              activePage={listProject[0].name}
             />
           </div>
           <div
@@ -68,35 +78,35 @@ const ProductPages = () => {
             }}
           >
             <TextHeaderStyled>
-              TNR Stars Lam Sơn - NGUYỆT QUẾ 1
+             {listProject[0].name}
             </TextHeaderStyled>
             <div>
               <FormControl style={{ width: 115, marginRight: 10, height: 48 }}>
-                <InputLabel id="demo-simple-select-label">Age</InputLabel>
+                <InputLabel id="demo-simple-select-label">Vị trí</InputLabel>
                 <Select
                   style={{ height: 48 }}
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  value="age"
-                  label="Age"
+                //   value="Vị Trí"
+                //   label="Age"
                   onChange={() => console.log("abc")}
                 >
-                  <MenuItem value={10}>Ten</MenuItem>
-                  <MenuItem value={20}>Twenty</MenuItem>
-                  <MenuItem value={30}>Thirty</MenuItem>
+                  <MenuItem value={10}>Đông Nam</MenuItem>
+                  <MenuItem value={20}>Bắc</MenuItem>
+                  <MenuItem value={30}>Tây</MenuItem>
                 </Select>
               </FormControl>
               <FormControl style={{ width: 115, height: 48 }}>
-                <InputLabel id="demo-simple-select-label">Age</InputLabel>
+                <InputLabel id="demo-simple-select-label">Loại</InputLabel>
                 <Select
                   style={{ height: 48 }}
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  value="age"
-                  label="Age"
+                //   value="age"
+                //   label="Age"
                   onChange={() => console.log("abc")}
                 >
-                  <MenuItem value={10}>Ten</MenuItem>
+                  <MenuItem value={10}>Loại</MenuItem>
                   <MenuItem value={20}>Twenty</MenuItem>
                   <MenuItem value={30}>Thirty</MenuItem>
                 </Select>
@@ -104,7 +114,7 @@ const ProductPages = () => {
             </div>
           </div>
         </div>
-        <DynamicItemProductComponent />
+        <DynamicItemProductComponent data={listProducts}/>
       </FlexContainer>
 	)
 }

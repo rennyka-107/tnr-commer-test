@@ -1,8 +1,14 @@
 import Page from "@layouts/Page";
-
+import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
-import { useEffect } from "react";
-// import { getProductPTG } from "../api/productsApi";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getListProduct } from "../../store/productSlice";
+import { RootState } from "../../store/store";
+import { getListProductApi } from "../api/productsApi";
+import { getListProjectApi } from "../api/projectApi";
+import { CircularProgress } from "@mui/material";
+import { getListProject } from "../../store/projectSlice";
 
 const DynamicPageIndex = dynamic(
   () => import("../../src/components/LayoutProduct/ProductPages"),
@@ -10,26 +16,80 @@ const DynamicPageIndex = dynamic(
 );
 
 const ListProduct = () => {
-// 	const params = {
-// 		ProjectName: "TNR AMALUNA - TRÀ VINH",
-// 		BlockName: "Liền kề",
-// 		ProductName : "LK.08.32",
-// 		DepositeDate: "29/04/2022",
-// 		IsMortgage : true,
-// 		GroupCusID : 0,
-// 		ProvinceID : 0,
-// 		DistrictID : 0,
-// 		PriceID : 230896,
-// 	}
-	
-// useEffect(() => {
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const { idProject } = router.query;
 
-// 	(async () => {
+  const { listProductResponse } = useSelector(
+    (state: RootState) => state.products
+  );
+  const { listProjectResponse } = useSelector(
+    (state: RootState) => state.projects
+  );
+  
+  const paramsSearch = {
+    page: 1,
+    size: 10,
+  };
+  const paramsSearchProject = {
+    page: 1,
+    size: 10,
+  };
+  const searchList = {
+    projectId: idProject,
+    location: "",
+    projectTypeId: "",
+  };
 
-// 		const response = await getProductPTG(params);
-// 		console.log(response)
-// 	})
-// },[])
+  const searchListProject = {
+    projectId: idProject,
+    location: "",
+    projectTypeId: "",
+    fromPrice: 0,
+    toPrice: 0,
+  };
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await getListProductApi(paramsSearch, searchList);
+        dispatch(getListProduct(response.responseData));
+        const responseProject = await getListProjectApi(
+          paramsSearchProject,
+          searchListProject
+        );
+        dispatch(getListProject(responseProject.responseData));
+        if (
+          response.responseCode === "00" &&
+          responseProject.responseCode === "00"
+        ) {
+          setLoading(true);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  }, [router, dispatch]);
+
+  const fetchComponent = () => {
+    return (
+      <>
+        {loading === true ? (
+          <DynamicPageIndex listProducts={listProductResponse} listProject={listProjectResponse}/>
+        ) : (
+          <>
+            <div style={{ textAlign: "center", marginTop: 200 }}>
+              <CircularProgress />
+            </div>
+          </>
+        )}
+      </>
+    );
+  };
+  useEffect(() => {
+    fetchComponent();
+  }, [loading]);
   return (
     <Page
       meta={{
@@ -37,7 +97,8 @@ const ListProduct = () => {
         description: "TNR Ecommerce Product",
       }}
     >
-      <DynamicPageIndex />
+      {" "}
+      {fetchComponent()}
     </Page>
   );
 };

@@ -1,14 +1,33 @@
-import { PTGType } from "interface/product";
-import { CommonResponse } from "type/common";
+import { PTGType, ProductsType, ParamsProducts } from "interface/product";
+import { CommonResponse, ResponseTypeAPI } from "type/common";
 import HttpClient from "utils/HttpClient";
 
+export const getListProductApi = async (
+  params: ParamsProducts,
+  data: any
+) => {
+  return HttpClient.post<ResponseTypeAPI, CommonResponse>(
+    `/api/product/information/search?page=${params.page}&size=${params.size}`,
+    data,
+    { withToken: false }
+  );
+};
+export const getProductPtgApi = async (params: PTGType) => {
+	const data = JSON.stringify(params)
+  return HttpClient.post<any, CommonResponse>(`/api/v1/landsoft/ptg`, data, {
+    withToken: false,
+  });
+};
 
-
-// export const getProductPTG = async (params: PTGType) => {
-// 	console.log(params)
-// 	return HttpClient.get<CommonResponse>(
-// 		`/api/v1/landsoft/ptg`,
-// 		{params}
-// 	);
-//   };
-  
+export const downloadPhieuTinhGiaAPI = async(data: any) => {
+	const body = JSON.stringify(data)
+	return HttpClient.post<any, CommonResponse>(`/api/v1/landsoft/ptg/download`, body, {
+		withToken: false,
+	  });
+}
+// export const getProductPtgApi = async (params: PTGType) => {
+//   return HttpClient.get<CommonResponse>(`/api/v1/landsoft/ptg`, {
+//     params,
+//     withToken: false,
+//   });
+// };

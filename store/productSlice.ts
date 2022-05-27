@@ -1,26 +1,28 @@
-import { createSlice } from '@reduxjs/toolkit'
-import { PTGResponse } from 'interface/product'
-
+import { createSlice } from "@reduxjs/toolkit";
+import { PTGResponse, ProductsResponse } from "../src/interface/product";
 
 interface initialState {
-  productItem: PTGResponse[]
-
+  listProductResponse: ProductsResponse[];
+  productItem: PTGResponse;
 }
 const initialState = {
-	productItem:[],
-
-}
+  listProductResponse: [],
+  productItem: {},
+};
 
 export const productSlice = createSlice({
-  name: 'product',
+  name: "product",
   initialState,
   reducers: {
-	  getProductPTG: (state,action) => {
-		state.productItem= action.payload
-	  },
-  }
-})
+    getListProduct: (state, action) => {
+      state.listProductResponse = action.payload;
+    },
+    getProductPTG: (state, action) => {
+      state.productItem = action.payload;
+    },
+  },
+});
 
-export const { getProductPTG } = productSlice.actions
+export const { getProductPTG,getListProduct } = productSlice.actions;
 
-export default productSlice.reducer
+export default productSlice.reducer;

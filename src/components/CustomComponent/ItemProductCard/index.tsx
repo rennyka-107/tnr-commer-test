@@ -8,6 +8,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import styled from "@emotion/styled";
 import { IconPlusProduct } from "../../Icons/index";
+import Router from 'next/router'
 
 import {
   IconBath,
@@ -20,14 +21,15 @@ import {
 import Link from "next/link";
 
 type Props = {
+	id?:string,
   src?: any;
   title?: string;
   subTitle?: string;
   dataItem?: {
-    item1?: string;
-    item2?: string;
-    item3?: string;
-    item4?: string;
+    item1?: any;
+    item2?: any;
+    item3?: any;
+    item4?: any;
   };
   priceListed?: number;
   priceSub?: number;
@@ -196,6 +198,7 @@ export default function ItemProductCard({
   onClick,
   ticketCard,
   activeSoSanh,
+  id
 }: Props) {
   function currencyFormat(num) {
     if (!num) {
@@ -250,31 +253,31 @@ export default function ItemProductCard({
 
       <CardContentStyled>
         <div style={{ marginBottom: 7 }}>
-          <Link href="/products/1">
+          <span onClick={() => Router.push(`/products/${id}`)}>
             <TextTitleStyled style={{ marginBottom: 9 }}>
               {title}
             </TextTitleStyled>
-          </Link>
-          <TextitleBottom>{subTitle}</TextitleBottom>
+          </span>
+          <TextitleBottom>{subTitle ? subTitle : 'N/A'}</TextitleBottom>
         </div>
         <LineStyled />
         <CenterIntemWrap>
           <WrapItemCenter>
             <IconFrame />
 
-            <TextCenterItem>{dataItem?.item1}</TextCenterItem>
+            <TextCenterItem>{dataItem.item1 ? dataItem?.item1 : 'N/A'}</TextCenterItem>
           </WrapItemCenter>
           <WrapItemCenter>
             <IconBath />
-            <TextCenterItem>{dataItem?.item2}</TextCenterItem>
+            <TextCenterItem>{dataItem.item2 ? dataItem?.item2 : 'N/A'}</TextCenterItem>
           </WrapItemCenter>
           <WrapItemCenter>
             <IconBedDouble />
-            <TextCenterItem>{dataItem?.item3} m²</TextCenterItem>
+            <TextCenterItem>{dataItem.item3 ? dataItem?.item3 : 'N/A'} m²</TextCenterItem>
           </WrapItemCenter>
           <WrapItemCenter>
             <IconCompass />
-            <TextCenterItem>{dataItem?.item4}</TextCenterItem>
+            <TextCenterItem>{dataItem.item4 ? dataItem?.item4 : 'N/A'}</TextCenterItem>
           </WrapItemCenter>
         </CenterIntemWrap>
         <LineStyled />

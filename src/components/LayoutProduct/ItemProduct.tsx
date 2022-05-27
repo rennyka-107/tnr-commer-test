@@ -1,161 +1,45 @@
-// import FlexContainer from "@components/CustomComponent/FlexContainer";
 import ItemProductCard from "@components/CustomComponent/ItemProductCard";
-// import Product1 from "../../../../public/images/product1.png";
 import Product2 from "../../../public/images/product2.png";
-// import Product3 from "../../../../public/images/product3.png";
 import styled from "@emotion/styled";
 import PaddingComponent from "@components/CustomComponent/PagingComponent";
 import Link from "next/link";
+import { ProductsResponse } from "interface/product";
+
+interface ProductsProps {
+  data?: ProductsResponse[];
+}
 
 const ProductWrap = styled.div`
   display: grid;
   gap: 31px;
   grid-template-columns: repeat(3, 1fr);
 `;
-const ItemProduct = () => {
+const ItemProduct = ({ data }: ProductsProps) => {
   return (
     <>
       <ProductWrap>
-		 
-        <ItemProductCard
-          src={Product2}
-          title="TNR Stars Lam Sơn"
-          subTitle="90 đường Láng, Thịnh Quang, Đống Đa, Hà Nội"
-          dataItem={{
-            item1: "02",
-            item2: "02",
-            item3: "80",
-            item4: "Đông Nam",
-          }}
-          priceListed={3018933000}
-          priceSub={40580174}
-          ticketCard="TRN Star"
-		  activeSoSanh={true}
-        />{" "}
-
-        <ItemProductCard
-          src={Product2}
-          title="TNR Stars Lam Sơn"
-          subTitle="90 đường Láng, Thịnh Quang, Đống Đa, Hà Nội"
-          dataItem={{
-            item1: "02",
-            item2: "02",
-            item3: "80",
-            item4: "Đông Nam",
-          }}
-          priceListed={3018933000}
-          priceSub={40580174}
-          ticketCard="TRN Star"
-		  activeSoSanh={true}
-        />
-        <ItemProductCard
-          src={Product2}
-          title="TNR Stars Lam Sơn"
-          subTitle="90 đường Láng, Thịnh Quang, Đống Đa, Hà Nội"
-          dataItem={{
-            item1: "02",
-            item2: "02",
-            item3: "80",
-            item4: "Đông Nam",
-          }}
-          priceListed={3018933000}
-          priceSub={40580174}
-          ticketCard="TRN Star"
-		  activeSoSanh={true}
-        />
-        <ItemProductCard
-          src={Product2}
-          title="TNR Stars Lam Sơn"
-          subTitle="90 đường Láng, Thịnh Quang, Đống Đa, Hà Nội"
-          dataItem={{
-            item1: "02",
-            item2: "02",
-            item3: "80",
-            item4: "Đông Nam",
-          }}
-          priceListed={3018933000}
-          priceSub={40580174}
-          ticketCard="TRN Star"
-		  activeSoSanh={true}
-        />
-        <ItemProductCard
-          src={Product2}
-          title="TNR Stars Lam Sơn"
-          subTitle="90 đường Láng, Thịnh Quang, Đống Đa, Hà Nội"
-          dataItem={{
-            item1: "02",
-            item2: "02",
-            item3: "80",
-            item4: "Đông Nam",
-          }}
-          priceListed={3018933000}
-          priceSub={40580174}
-          ticketCard="TRN Star"
-		  activeSoSanh={true}
-        />
-        <ItemProductCard
-          src={Product2}
-          title="TNR Stars Lam Sơn"
-          subTitle="90 đường Láng, Thịnh Quang, Đống Đa, Hà Nội"
-          dataItem={{
-            item1: "02",
-            item2: "02",
-            item3: "80",
-            item4: "Đông Nam",
-          }}
-          priceListed={3018933000}
-          priceSub={40580174}
-          ticketCard="TRN Star"
-		  activeSoSanh={true}
-        />
-        <ItemProductCard
-          src={Product2}
-          title="TNR Stars Lam Sơn"
-          subTitle="90 đường Láng, Thịnh Quang, Đống Đa, Hà Nội"
-          dataItem={{
-            item1: "02",
-            item2: "02",
-            item3: "80",
-            item4: "Đông Nam",
-          }}
-          priceListed={3018933000}
-          priceSub={40580174}
-          ticketCard="TRN Star"
-		  activeSoSanh={true}
-        />
-        <ItemProductCard
-          src={Product2}
-          title="TNR Stars Lam Sơn"
-          subTitle="90 đường Láng, Thịnh Quang, Đống Đa, Hà Nội"
-          dataItem={{
-            item1: "02",
-            item2: "02",
-            item3: "80",
-            item4: "Đông Nam",
-          }}
-          priceListed={3018933000}
-          priceSub={40580174}
-          ticketCard="TRN Star"
-		  activeSoSanh={true}
-        />
-        <ItemProductCard
-          src={Product2}
-          title="TNR Stars Lam Sơn"
-          subTitle="90 đường Láng, Thịnh Quang, Đống Đa, Hà Nội"
-          dataItem={{
-            item1: "02",
-            item2: "02",
-            item3: "80",
-            item4: "Đông Nam",
-          }}
-          priceListed={3018933000}
-          priceSub={40580174}
-          ticketCard="TRN Star"
-		  activeSoSanh={true}
-        />
+        {data?.map((product, index) => (
+          <ItemProductCard
+            key={index}
+            id={product.id}
+            src={Product2}
+            title={product.name}
+            subTitle={product.homeNum}
+            dataItem={{
+              item1: product.landArea,
+              item2: product.numBath,
+              item3: product.numBed,
+              item4: product.direction,
+            }}
+            priceListed={product.price}
+            priceSub={40580174}
+            ticketCard="TRN Star"
+            activeSoSanh={true}
+          />
+        ))}
       </ProductWrap>
       <PaddingComponent />
     </>
   );
-}
+};
 export default ItemProduct;

@@ -27,4 +27,4 @@ const AboutProcedure = () => {
   );
 };
 
-export default WithAuth(AboutProcedure);
+export default AboutProcedure;

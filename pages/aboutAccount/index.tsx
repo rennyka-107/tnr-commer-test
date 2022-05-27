@@ -27,4 +27,4 @@ const AboutAccount = () => {
   );
 };
 
-export default WithAuth(AboutAccount);
+export default AboutAccount;

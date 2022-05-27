@@ -1,7 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FlexContainer from "@components/CustomComponent/FlexContainer";
+import _ from "lodash";
 
-import { Box, Button, Modal, Typography, Menu, MenuItem } from "@mui/material";
+import {
+  Box,
+  Button,
+  Modal,
+  Typography,
+  Menu,
+  MenuItem,
+  CircularProgress,
+} from "@mui/material";
 import styled from "@emotion/styled";
 import Product1 from "../../../public/images/product1.png";
 import Product2 from "../../../public/images/product2.png";
@@ -22,6 +31,19 @@ import {
 } from "@components/Icons";
 import Image from "next/image";
 import dynamic from "next/dynamic";
+import {
+  downloadPhieuTinhGiaAPI,
+  getProductPtgApi,
+} from "../../../pages/api/productsApi";
+import { getProductPTG } from "../../../store/productSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../../store/store";
+import { ProjectResponse } from "interface/project";
+
+interface ProductsProps {
+  listProject?: ProjectResponse[];
+  navKey: string;
+}
 
 const DynamicBreadcrumsComponent = dynamic(
   () =>
@@ -29,20 +51,24 @@ const DynamicBreadcrumsComponent = dynamic(
   { loading: () => <p>...</p> }
 );
 
-const DynamicBottomProdComponent = dynamic(() =>
-  import("../../../src/components/CustomComponent/BottomProdComponent"),  { loading: () => <p>...</p> }
+const DynamicBottomProdComponent = dynamic(
+  () => import("../../../src/components/CustomComponent/BottomProdComponent"),
+  { loading: () => <p>...</p> }
 );
 
-const DynamicSliderProductComponent = dynamic(() =>
-  import("@components/CustomComponent/SliderProductComponent"),  { loading: () => <p>...</p> }
+const DynamicSliderProductComponent = dynamic(
+  () => import("@components/CustomComponent/SliderProductComponent"),
+  { loading: () => <p>...</p> }
 );
 
-const DynamicTabsComponent = dynamic(() =>
-  import("@components/CustomComponent/TabsComponent"),  { loading: () => <p>...</p> }
+const DynamicTabsComponent = dynamic(
+  () => import("@components/CustomComponent/TabsComponent"),
+  { loading: () => <p>...</p> }
 );
 
-const DynamicPhieuTinhGiaComponent = dynamic(() =>
-  import("@components/LayoutProduct/PhieuTinhGia"),  { loading: () => <p>...</p> }
+const DynamicPhieuTinhGiaComponent = dynamic(
+  () => import("@components/LayoutProduct/PhieuTinhGia"),
+  { loading: () => <p>...</p> }
 );
 
 const dataFake = [
@@ -273,25 +299,52 @@ const TextContact = styled(Typography)`
 
   color: #1b3459;
 `;
-const listBread = [
-  {
-    id: 1,
-    value: "Trang chủ",
-  },
-  {
-    id: 2,
-    value: "Đất nền",
-  },
-  {
-    id: 3,
-    value: "Tiểu khu",
-  },
-];
 
-const ProductIdpage = () => {
+const mockDataPhieutinhgia = {
+  ProjectName: "TNR AMALUNA - TRÀ VINH",
+  BlockName: "Liền kề",
+  ProductName: "LK.08.32",
+  DepositDate: "29/04/2022",
+  IsMortgage: true,
+  GroupCusID: 0,
+  ProvinceID: 0,
+  DistrictID: 0,
+  PriceID: 230896,
+  ScheduleID: 1900,
+};
+
+export const paramsMock = {
+  ProjectName: "TNR AMALUNA - TRÀ VINH",
+  BlockName: "Liền kề",
+  ProductName: "LK.08.32",
+  DepositDate: "29/04/2022",
+  IsMortgage: true,
+  GroupCusID: 0,
+  ProvinceID: 0,
+  DistrictID: 0,
+  PriceID: 0,
+  ScheduleID: 0,
+};
+
+const ProductIdpage = ({ listProject, navKey }: ProductsProps) => {
+  const listBread = [
+    {
+      id: 1,
+      value: "Trang chủ",
+    },
+    {
+      id: 2,
+      value: "Sản Phẩm",
+    },
+  ];
+  const dispatch = useDispatch();
+  const productItem = useSelector(
+    (state: RootState) => state.products.productItem
+  );
   const [tabCardValue, setTabCardValue] = useState(true);
   const [typeBottomShow, setTypeBottomShow] = useState(1);
   const [openModalVideo, setOpenModalVideo] = useState(false);
+  const [callApi, setCallApi] = useState(false);
   const [numberRoom, setNumberRoom] = useState({
     num: "S.202",
     open: false,
@@ -320,10 +373,27 @@ const ProductIdpage = () => {
     }
   };
 
+  useEffect(() => {
+    if (callApi === true) {
+      {
+        (async () => {
+          try {
+            const response = await getProductPtgApi(paramsMock);
+            dispatch(getProductPTG(response.responseData));
+          } catch (error) {
+            console.log(error);
+          }
+        })();
+      }
+    }
+  }, [callApi, dispatch]);
+
   const handlePhieuTinhGia = () => {
     setTabCardValue(false);
     setTypeBottomShow(2);
+    setCallApi(true);
   };
+
   const handleThamQuan = () => {
     setTabCardValue(true);
     setTypeBottomShow(1);
@@ -334,6 +404,41 @@ const ProductIdpage = () => {
     }
     return num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
   }
+  const fetchPhieuTinhGia = () => {
+    return (
+      <>
+        {!_.isEmpty(productItem) ? (
+          <DynamicPhieuTinhGiaComponent productItem={productItem} />
+        ) : (
+          <>
+            <div style={{ textAlign: "center", marginTop: 200 }}>
+              <CircularProgress />
+            </div>
+          </>
+        )}
+      </>
+    );
+  };
+  useEffect(() => {
+    fetchPhieuTinhGia();
+  }, [productItem]);
+
+  const handleDownloadPhieuTinhGia = () => {
+    (async () => {
+      const response: any = await downloadPhieuTinhGiaAPI(mockDataPhieutinhgia);
+      var binaryString = window.atob(response);
+      var binaryLen = binaryString.length;
+      var bytes = new Uint8Array(binaryLen);
+      for (var i = 0; i < binaryLen; i++) {
+        var ascii = binaryString.charCodeAt(i);
+        bytes[i] = ascii;
+      }
+      var blob = new Blob([bytes], { type: "application/pdf" });
+      var link = document.createElement("a");
+      link.href = window.URL.createObjectURL(blob);
+      link.click();
+    })();
+  };
   return (
     <>
       <FlexContainer>
@@ -765,7 +870,9 @@ const ProductIdpage = () => {
                   right: 0,
                   alignItems: "center",
                   marginRight: 46,
+				  cursor: 'pointer'
                 }}
+                onClick={() => handleDownloadPhieuTinhGia()}
               >
                 {" "}
                 <IconDownloadPTG />
@@ -812,9 +919,7 @@ const ProductIdpage = () => {
               </div>
             </>
           ) : (
-            <>
-              <DynamicPhieuTinhGiaComponent />
-            </>
+            <> {fetchPhieuTinhGia()} </>
           )}
           {/* Tab Components */}
         </div>

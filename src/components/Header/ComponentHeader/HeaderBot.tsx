@@ -124,6 +124,8 @@ const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
 
   const menuUser: ItemValueProps[] = [{ id: 'Profile', name: 'Thông tin cá nhân' }, { id: 'logout', name: 'Đăng xuất' }]
   const { logout } = useAuth()
+
+
   const handleNavigateUser = useCallback(
     (value: ItemValueProps) => {
       switch (value.id) {
@@ -139,13 +141,16 @@ const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
       }
 
     }, [])
+
+
+
   return (
     <ContainerNavTop>
       <BodyContainer>
         <WrapMenuItem>
-          <div>
-            <Logo />
-          </div>
+          <Link href="https://tnre-customer-test.vercel.app">
+            <a><Logo /></a>
+          </Link>
           <div style={{ display: 'flex', gap: 35, marginLeft: 38 }}>
             <MenuDropdown title={"Loại bất động sản"}
               data={menuDataProject}
@@ -158,7 +163,10 @@ const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
                 }
               }}
             />
-            <MenuDropdown title={"Dự Án"} data={menuData} />
+            <MenuDropdown title={"Dự Án"} data={menuData}
+			onSelect={(item) => {
+				Router.replace(`/products?idProject=${item.id}`)
+              }} />
             <Button>
               <TextLink>Khuyến mãi</TextLink>
             </Button>
