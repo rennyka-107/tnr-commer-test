@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState } from "react";
-import { LoginParams } from "../../pages/authen/Login";
+import { LoginParams } from "../components/LayoutAuthen/Login";
 import { Login, LoginSuccess } from "@service/auth";
 import SessionStorage from 'utils/SessionStorage';
 import LocalStorage from 'utils/LocalStorage';

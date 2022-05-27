@@ -104,33 +104,33 @@ const Duan = [
   },
 ];
 interface ItemValueUserProps {
-	id: number,
-	value: string
-  }
-  
+  id: number,
+  value: string
+}
+
 
 interface ItemValueProps {
   id: string,
   name: string
 }
 
-interface MenuProps{
-	menuData?: ItemValueProps[];
-	menuDataProject?: ItemValueProps[];
+interface MenuProps {
+  menuData?: ItemValueProps[];
+  menuDataProject?: ItemValueProps[];
 };
 
-const HeaderBot = ({menuDataProject,menuData}: MenuProps) => {
-	const Router = useRouter();
-  
-  const menuUser: ItemValueUserProps[] = [{ id: 1, value: 'Thông tin cá nhân' }, { id: 2, value: 'Đăng xuất' }]
+const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
+  const Router = useRouter();
+
+  const menuUser: ItemValueProps[] = [{ id: 'Profile', name: 'Thông tin cá nhân' }, { id: 'logout', name: 'Đăng xuất' }]
   const { logout } = useAuth()
   const handleNavigateUser = useCallback(
-    (value: ItemValueUserProps) => {
+    (value: ItemValueProps) => {
       switch (value.id) {
-        case 1:
+        case 'Profile':
           Router.push({ pathname: PathRoute.Profile });
           break;
-        case 2:
+        case 'logout':
           logout();
           break;
 
@@ -144,17 +144,17 @@ const HeaderBot = ({menuDataProject,menuData}: MenuProps) => {
       <BodyContainer>
         <WrapMenuItem>
           <div>
-		  <Logo/>
+            <Logo />
           </div>
           <div style={{ display: 'flex', gap: 35, marginLeft: 38 }}>
             <MenuDropdown title={"Loại bất động sản"}
               data={menuDataProject}
               onSelect={(item) => {
                 console.log('Router.beforePopState', Router.pathname);
-                if (Router.pathname == `/${PathRoute.ProjectTNR}/[type]`) {
-                  Router.replace(`/${PathRoute.ProjectTNR}/${item.id}`)
+                if (Router.pathname == `/${PathRoute.ProjectTNR}`) {
+                  Router.replace(`/${PathRoute.ProjectTNR}?type=${item.id}`)
                 } else {
-                  Router.push(`/${PathRoute.ProjectTNR}/${item.id}`)
+                  Router.push(`/${PathRoute.ProjectTNR}?type=${item.id}`)
                 }
               }}
             />
@@ -198,7 +198,7 @@ const HeaderBot = ({menuDataProject,menuData}: MenuProps) => {
                   <IconUser />
                 </span>
               }
-              userData={menuUser}
+              data={menuUser}
               title=""
               onSelect={handleNavigateUser}
             />

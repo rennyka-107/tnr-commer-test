@@ -23,7 +23,7 @@ export const Login = (params: LoginParams) => {
     return HttpClient.post<
         typeof params,
         LoginResponse<LoginSuccess, LoginFailed>
-    >('/auth/realms/tnr-admin/protocol/openid-connect/token',
+    >('http://auth.tnr-online.com:1993/auth/realms/tnr-admin/protocol/openid-connect/token',
         stringify(convertCamelCaseKeysToSnakeCase({
             ...params,
             clientId: 'tnr-admin',

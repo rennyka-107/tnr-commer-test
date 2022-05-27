@@ -8,10 +8,11 @@ import * as React from 'react';
 interface PaginationI {
   count: number;
   onChange?: (event: React.ChangeEvent, page: number) => void;
+  page: number;
 }
 
 export default function PaginationComponent(props: PaginationI) {
-  const { count, onChange } = props
+  const { count, onChange, page } = props
   return (
     <Stack spacing={2}>
       <Pagination
@@ -20,6 +21,7 @@ export default function PaginationComponent(props: PaginationI) {
           return (
             <PaginationItem
               components={{ previous: IconPageBack, next: IconPagForward }}
+              page={page}
               {...item}
             />
           )

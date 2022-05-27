@@ -55,3 +55,15 @@ export function convertCamelCaseKeysToSnakeCase(obj: any) {
   }
   return obj;
 }
+
+
+export function convertToQuery(param: any) {
+  return (
+    "?" +
+    Object.keys(param)
+      .map(function (key) {
+        return encodeURIComponent(key) + "=" + encodeURIComponent(param[key]);
+      })
+      .join("&")
+  );
+}

@@ -3,7 +3,7 @@ import ItemProductCard from "@components/CustomComponent/ItemProductCard";
 import IconArrowLeft from "@components/Icons/IconArrowLeft";
 import styled from "@emotion/styled";
 import { Typography } from "@mui/material";
-import Filter from "../../../../pages/projectTNR/filter";
+import Filter from "../../LayoutProjectTNR/filter";
 import Product1 from "../../../../public/images/product1.png";
 import Product2 from "../../../../public/images/product2.png";
 import Product3 from "../../../../public/images/product3.png";
@@ -47,10 +47,10 @@ const ContentLeftWrapper = styled.div`
 
 
 const DynamicBreadcrumsComponent = dynamic(
-	() =>
-	  import("../../../../src/components/CustomComponent/BreadcrumsComponent"),
-	{ loading: () => <p>...</p> }
-  );
+  () =>
+    import("../../../../src/components/CustomComponent/BreadcrumsComponent"),
+  { loading: () => <p>...</p> }
+);
 
 const listBread = [
   {
