@@ -4,40 +4,38 @@ import styled from "@emotion/styled";
 import { Button, ButtonProps, Menu, MenuItem, Typography } from "@mui/material";
 
 type ItemValueProps = {
-  id: string,
-  name: string
-}
+  id: string;
+  name: string;
+};
 type ItemValuePropsUser = {
-	id: number,
-	value: string
-  }
+  id: number;
+  value: string;
+};
 
 export type DropDownProps = {
   title: string;
   data?: ItemValueProps[];
-  userData?:ItemValuePropsUser[];
+  userData?: ItemValuePropsUser[];
   onSelect?: (data: any) => void;
   customButton?: React.ReactNode;
 };
 
 const MenuItemStyled = styled(MenuItem)`
-	max-height: 300px;
-	height: 53px;
-	border-bottom: 1px solid #F2F2F5;
-`
+  max-height: 300px;
+  height: 53px;
+`;
 const TextInline = styled(Typography)`
-font-family: 'Roboto';
-font-style: normal;
-font-weight: 400;
-font-size: 14px;
-line-height: 16px;
-/* identical to box height */
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16px;
+  /* identical to box height */
 
+  /* Brand */
 
-/* Brand */
-
-color: #1B3459;
-`
+  color: #1b3459;
+`;
 
 const TextButton = styled.span`
   font-family: "Roboto";
@@ -49,7 +47,13 @@ const TextButton = styled.span`
   text-transform: none;
 `;
 
-export default function MenuDropdown({ title, data, onSelect, customButton ,userData}: DropDownProps) {
+export default function MenuDropdown({
+  title,
+  data,
+  onSelect,
+  customButton,
+  userData,
+}: DropDownProps) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -61,7 +65,6 @@ export default function MenuDropdown({ title, data, onSelect, customButton ,user
 
   return (
     <div>
-
       {/* <Button
         id="basic-button"
         aria-controls={open ? "basic-menu" : undefined}
@@ -72,9 +75,7 @@ export default function MenuDropdown({ title, data, onSelect, customButton ,user
         <TextButton>{title}</TextButton> <IconDropDown />
       </Button> */}
       {customButton ? (
-        <span onClick={handleClick}>
-          {customButton}
-        </span>
+        <span onClick={handleClick}>{customButton}</span>
       ) : (
         <Button
           id="basic-button"
@@ -91,18 +92,23 @@ export default function MenuDropdown({ title, data, onSelect, customButton ,user
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
-		style={{maxHeight: 400}}
+        style={{ maxHeight: 400 }}
         MenuListProps={{
           "aria-labelledby": "basic-button",
         }}
       >
-        {data?.map((item,index) => (
+        {data?.map((item, index, row) => (
           <MenuItemStyled
             onClick={() => {
               handleClose();
-              onSelect && onSelect(item)
+              onSelect && onSelect(item);
             }}
-            key={index}>
+            style={{
+              borderBottom:
+                index + 1 === row.length ? "" : " 1px solid #F2F2F5",
+            }}
+            key={index}
+          >
             <TextInline>{item.name}</TextInline>
           </MenuItemStyled>
         ))}

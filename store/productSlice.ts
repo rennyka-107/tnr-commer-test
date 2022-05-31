@@ -1,10 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { PTGResponse, ProductsResponse, ResponseSearchById } from "../src/interface/product";
+import { PTGResponse, ProductsResponse, ResponseSearchById ,TBOUTStanding} from "../src/interface/product";
 
 interface initialState {
   listProductResponse: ProductsResponse[];
   productItem: PTGResponse;
   productByID: ResponseSearchById[];
+  productTopByOutStanding: TBOUTStanding[]
 }
 const initialState = {
   listProductResponse: [],
@@ -108,6 +109,7 @@ const initialState = {
 	idls: null,
 	floor: null
   },
+  productTopByOutStanding:[]
 };
 
 export const productSlice = createSlice({
@@ -122,10 +124,13 @@ export const productSlice = createSlice({
     },
 	getProductById : (state, action) => {
 		state.productByID = action.payload
+	},
+	getListProductTopByOS: (state,action) => {
+		state.productTopByOutStanding = action.payload
 	}
   },
 });
 
-export const { getProductPTG,getListProduct,getProductById } = productSlice.actions;
+export const { getProductPTG,getListProduct,getProductById,getListProductTopByOS } = productSlice.actions;
 
 export default productSlice.reducer;

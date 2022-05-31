@@ -1,16 +1,10 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Theme, useTheme } from "@mui/material/styles";
 import styled from "@emotion/styled";
 import { Button, Typography } from "@mui/material";
 
-import {
-  FakeDataTable1,
-  FakeDataTable2,
-  FakeDataTable3,
-  FakeDataTable4,
-} from "./fakeData";
+import { FakeDataTable3, FakeDataTable4 } from "./fakeData";
 import OutlinedInput from "@mui/material/OutlinedInput";
-import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
@@ -218,8 +212,7 @@ const ButtonStyled = styled(Button)`
 
 const names = ["Oliver Hansen", "Van Henry", "April Tucker", "Ralph Hubbard"];
 
-const PhieuTinhGia = ({ productItem,dataProduct }: PhieuTinhGiaProps) => {
-
+const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
   const theme = useTheme();
   const [personName, setPersonName] = React.useState<string[]>([]);
 
@@ -237,106 +230,60 @@ const PhieuTinhGia = ({ productItem,dataProduct }: PhieuTinhGiaProps) => {
     if (!num) {
       return;
     }
-    return Number(num).toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-	
+    return Number(num)
+      .toFixed(0)
+      .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
   }
-  //   const fetchChieuKhau = () => {
-  //     return (
-  //       <>
-  //         {productItem?.ListPromotion.map((item, index) => {
-  //           <>
-  // 		  <>fdshkfjdshfkdsj</>
-  //             {/* {console.log("item", productItem.ListPromotion)} */}
-  //             <div
-  //               style={{
-  //                 border: "1px solid #D8D8D8",
-  //                 borderRadius: "20px",
-  //                 display: "flex",
-  //                 gap: 28,
-  //                 padding: "18px 22px 18px 21px",
-  //               }}
-  //               key={index}
-  //             >
-  //               <div
-  //                 style={{
-  //                   display: "flex",
-  //                   flexDirection: "column",
-  //                   gap: 10,
-  //                   width: "50%",
-  //                 }}
-  //               >
-  //                 <TextBoldInWrapBottom>
-  //                   {item.PromotionName}
-  //                 </TextBoldInWrapBottom>
-  //                 <TextInWrapBottom>
-  //                   Tỉ lệ chiết khấu: {item.Amount}&nbsp;%
-  //                 </TextInWrapBottom>
-  //               </div>
-  //               <div style={{ border: "1px solid #E7E9EC" }} />
-  //               <div style={{ margin: "auto" }}>
-  //                     <TextBoldInWrapBottom>
-  //                       {currencyFormat(item.Value)}
-  //                     </TextBoldInWrapBottom>
-  //                   </div>
-  //             </div>
-  //           </>;
-  //         })}
-  //       </>
-  //     );
-  //   };
-
-  //   useEffect(() => {
-  // 	  console.log("action")
-  // 	  fetchChieuKhau()
-  //   },[productItem.ListPromotion])
 
   return (
     <WrapBodyStyped>
       <ContainerLeft>
         <TitleStyled>Thông tin lô đất</TitleStyled>
         <WrapCardItem>
-          {/* {FakeDataTable1.map((table1, index) => (
-            <WrapItemOnCard key={index}>
-              <TextLeftOnCardLeft>{table1.title}:</TextLeftOnCardLeft>
-              <TextRightOnCardLeft>{table1.value}</TextRightOnCardLeft>
-            </WrapItemOnCard>
-          ))} */}
-		  <WrapItemOnCard >
-              <TextLeftOnCardLeft>Dự án:</TextLeftOnCardLeft>
-              <TextRightOnCardLeft>{dataProduct?.thongTinDuAn.name}</TextRightOnCardLeft>
-            </WrapItemOnCard>
-			<WrapItemOnCard >
-              <TextLeftOnCardLeft>Loại bất động sản:</TextLeftOnCardLeft>
-              <TextRightOnCardLeft>{dataProduct?.apartmentModel.name}</TextRightOnCardLeft>
-            </WrapItemOnCard>
-			<WrapItemOnCard >
-              <TextLeftOnCardLeft>Mã lô thương mại:</TextLeftOnCardLeft>
-              <TextRightOnCardLeft>{dataProduct?.lotSymbolCommercial}</TextRightOnCardLeft>
-            </WrapItemOnCard>
-			<WrapItemOnCard >
-              <TextLeftOnCardLeft>Mã lô phê duyệt:</TextLeftOnCardLeft>
-              <TextRightOnCardLeft>{dataProduct?.lotSymbolLegal}</TextRightOnCardLeft>
-            </WrapItemOnCard>
-			<WrapItemOnCard >
-              <TextLeftOnCardLeft>Khối:</TextLeftOnCardLeft>
-              <TextRightOnCardLeft>N/A</TextRightOnCardLeft>
-            </WrapItemOnCard>
-			<WrapItemOnCard >
-              <TextLeftOnCardLeft>Phân Khu:</TextLeftOnCardLeft>
-              <TextRightOnCardLeft>N/A</TextRightOnCardLeft>
-            </WrapItemOnCard>
-			<WrapItemOnCard >
-              <TextLeftOnCardLeft>Diện tích đất:</TextLeftOnCardLeft>
-              <TextRightOnCardLeft>{dataProduct?.clearArea}</TextRightOnCardLeft>
-            </WrapItemOnCard>
-			<WrapItemOnCard >
-              <TextLeftOnCardLeft>Diện tích xây dựng:</TextLeftOnCardLeft>
-              <TextRightOnCardLeft>{dataProduct?.buildArea}</TextRightOnCardLeft>
-            </WrapItemOnCard>
-			<WrapItemOnCard >
-              <TextLeftOnCardLeft>Số tầng:</TextLeftOnCardLeft>
-              <TextRightOnCardLeft>{dataProduct?.floorNum}</TextRightOnCardLeft>
-            </WrapItemOnCard>
+          <WrapItemOnCard>
+            <TextLeftOnCardLeft>Dự án:</TextLeftOnCardLeft>
+            <TextRightOnCardLeft>
+              {dataProduct?.thongTinDuAn.name}
+            </TextRightOnCardLeft>
+          </WrapItemOnCard>
+          <WrapItemOnCard>
+            <TextLeftOnCardLeft>Loại bất động sản:</TextLeftOnCardLeft>
+            <TextRightOnCardLeft>
+              {dataProduct?.apartmentModel?.name}
+            </TextRightOnCardLeft>
+          </WrapItemOnCard>
+          <WrapItemOnCard>
+            <TextLeftOnCardLeft>Mã lô thương mại:</TextLeftOnCardLeft>
+            <TextRightOnCardLeft>
+              {dataProduct?.lotSymbolCommercial}
+            </TextRightOnCardLeft>
+          </WrapItemOnCard>
+          <WrapItemOnCard>
+            <TextLeftOnCardLeft>Mã lô phê duyệt:</TextLeftOnCardLeft>
+            <TextRightOnCardLeft>
+              {dataProduct?.lotSymbolLegal}
+            </TextRightOnCardLeft>
+          </WrapItemOnCard>
+          <WrapItemOnCard>
+            <TextLeftOnCardLeft>Khối:</TextLeftOnCardLeft>
+            <TextRightOnCardLeft>N/A</TextRightOnCardLeft>
+          </WrapItemOnCard>
+          <WrapItemOnCard>
+            <TextLeftOnCardLeft>Phân Khu:</TextLeftOnCardLeft>
+            <TextRightOnCardLeft>N/A</TextRightOnCardLeft>
+          </WrapItemOnCard>
+          <WrapItemOnCard>
+            <TextLeftOnCardLeft>Diện tích đất:</TextLeftOnCardLeft>
+            <TextRightOnCardLeft>{dataProduct?.clearArea}</TextRightOnCardLeft>
+          </WrapItemOnCard>
+          <WrapItemOnCard>
+            <TextLeftOnCardLeft>Diện tích xây dựng:</TextLeftOnCardLeft>
+            <TextRightOnCardLeft>{dataProduct?.buildArea}</TextRightOnCardLeft>
+          </WrapItemOnCard>
+          <WrapItemOnCard>
+            <TextLeftOnCardLeft>Số tầng:</TextLeftOnCardLeft>
+            <TextRightOnCardLeft>{dataProduct?.floorNum}</TextRightOnCardLeft>
+          </WrapItemOnCard>
         </WrapCardItem>
         <ContainerBottomLeft>
           <div>
@@ -355,40 +302,6 @@ const PhieuTinhGia = ({ productItem,dataProduct }: PhieuTinhGiaProps) => {
               overflowY: FakeDataTable3.length >= 5 ? "scroll" : "hidden",
             }}
           >
-            {/* {FakeDataTable3.map((item3, index) => (
-              <>
-                <div
-                  style={{
-                    border: "1px solid #D8D8D8",
-                    borderRadius: "20px",
-                    display: "flex",
-                    gap: 28,
-                    padding: "18px 22px 18px 21px",
-                  }}
-				  key={index}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: 10,
-                      width: "50%",
-                    }}
-                  >
-                    <TextBoldInWrapBottom>{item3.title}</TextBoldInWrapBottom>
-                    <TextInWrapBottom>
-                      {item3.subTitle}: {item3.valuechietkhau}&nbsp;%
-                    </TextInWrapBottom>
-                  </div>
-                  <div style={{ border: "1px solid #E7E9EC" }} />
-                  <div style={{ margin: "auto" }}>
-                    <TextBoldInWrapBottom>
-                      {currencyFormat(item3.toalbill)}
-                    </TextBoldInWrapBottom>
-                  </div>
-                </div>
-              </>
-            ))} */}
             {productItem.ListPromotion.map((item, index) => (
               <div
                 style={{
@@ -454,18 +367,16 @@ const PhieuTinhGia = ({ productItem,dataProduct }: PhieuTinhGiaProps) => {
                   fontWeight: 400,
                 }}
               >
-                              {currencyFormat(productItem.LandPrice)}
+                {currencyFormat(dataProduct.lurUnitPrice)}
               </TextOnCardRight>
             </div>
             <WrapRightCardText>
-
               <TextOnCardRight
                 style={{
                   color: "#1b3459",
                   fontWeight: 400,
                 }}
               >
-
                 đồng/m2
               </TextOnCardRight>
             </WrapRightCardText>
@@ -494,8 +405,7 @@ const PhieuTinhGia = ({ productItem,dataProduct }: PhieuTinhGiaProps) => {
                   fontWeight: 400,
                 }}
               >
-
-				{currencyFormat(productItem.LandMoney)}
+                {currencyFormat(dataProduct.lurPrice)}
               </TextOnCardRight>
             </div>
             <WrapRightCardText>
@@ -547,7 +457,7 @@ const PhieuTinhGia = ({ productItem,dataProduct }: PhieuTinhGiaProps) => {
               </TextOnCardRight>
             </WrapRightCardText>
           </WrapItemOnCard>
-		  <WrapItemOnCard>
+          <WrapItemOnCard>
             <div
               style={{
                 display: "flex",
@@ -671,13 +581,13 @@ const PhieuTinhGia = ({ productItem,dataProduct }: PhieuTinhGiaProps) => {
                   },
                 }}
               >
-                {names.map((name) => (
+                {productItem.ListSchedule.map((name, index) => (
                   <MenuItem
-                    key={name}
-                    value={name}
-                    style={getStyles(name, personName, theme)}
+                    key={index}
+                    value={name.ScheduleID}
+                    // style={getStyles(name.ScheduleID, personName, theme)}
                   >
-                    {name}
+                    {name.ScheduleName}
                   </MenuItem>
                 ))}
               </Select>
@@ -690,41 +600,8 @@ const PhieuTinhGia = ({ productItem,dataProduct }: PhieuTinhGiaProps) => {
               padding: 20,
             }}
           >
-            {/* {FakeDataTable4.map((item4, index) => (
+            {productItem.ListSchedule.map((item, index) => (
               <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 15,
-                  marginTop: 20,
-                }}
-                key={index}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <div>
-                    <TextCenterRight>{item4.title}</TextCenterRight>
-                    <SubTextCenterRight>{item4.subTitle}</SubTextCenterRight>
-                  </div>
-                  <div>
-                    <TextCenterRight>
-                      {currencyFormat(item4.value1)}
-                    </TextCenterRight>
-                    <SubTextCenterRight>
-                      {item4.value2}% giá trị HĐ
-                    </SubTextCenterRight>
-                  </div>
-                </div>
-                <div style={{ border: "1px solid #C7C9D9" }} />
-              </div>
-            ))} */}
-			{productItem.ListSchedule.map((item, index) => (
-				<div
                 style={{
                   display: "flex",
                   flexDirection: "column",
@@ -755,7 +632,7 @@ const PhieuTinhGia = ({ productItem,dataProduct }: PhieuTinhGiaProps) => {
                 </div>
                 <div style={{ border: "1px solid #C7C9D9" }} />
               </div>
-			))}
+            ))}
           </div>
         </ContainerCenterRight>
         <ContainerCenterRight style={{ padding: 38, gap: 14 }}>

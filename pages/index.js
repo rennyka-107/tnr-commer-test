@@ -1,9 +1,18 @@
-
 import Page from "@layouts/Page";
 import dynamic from "next/dynamic";
-const DynamicHome = dynamic(() => import('../src/components/LayoutIndex/HomeComponent/HomePage'),{ loading: () => <p>...</p> })
+import { getProductTopByStanding } from "./api/productsApi";
+import { getListProductTopByOS } from "../store/productSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {wrapper} from '../store/store'
+
+const DynamicHome = dynamic(
+  () => import("../src/components/LayoutIndex/HomeComponent/HomePage"),
+  { loading: () => <p>...</p> }
+);
 
 const Home = (props) => {
+  const dispatch = useDispatch();
+
 
   return (
     <Page
@@ -12,21 +21,21 @@ const Home = (props) => {
         description: "TNR Ecommerce",
         isHomePage: true,
       }}
-	//   dataNav={listMenuBarType}
+      //   dataNav={listMenuBarType}
     >
       <div style={{ marginTop: "127px" }}>
-        <DynamicHome />
-        {/* <FavoriteProducts /> */}
+        <DynamicHome/>
       </div>
     </Page>
   );
 };
 
-// export const getServerSideProps = wrapper.getServerSideProps(
-//   (store) => async () => {
-//     const response = await getListMenuBarProject();
-//     store.dispatch(getListMenuBarType(response.responseData));
-//   }
-// );
+export const getServerSideProps = wrapper.getServerSideProps(
+  (store) => async () => {
+    const response = await getProductTopByStanding();
+    store.dispatch(getListProductTopByOS(response.responseData));
+	// console.log(response)
+  }
+);
 
 export default Home;

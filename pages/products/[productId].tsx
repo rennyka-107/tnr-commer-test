@@ -3,70 +3,73 @@ import Page from "@layouts/Page";
 
 import dynamic from "next/dynamic";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store/store";
+import { RootState, wrapper } from "../../store/store";
 import { useRouter } from "next/router";
 import { getListProductApi, getProducById } from "../api/productsApi";
 import { getListProduct, getProductById } from "../../store/productSlice";
 import { CircularProgress } from "@mui/material";
 
-const DynamicProductId = dynamic(() =>
-  import("../../src/components/LayoutProduct/ProductIdpage"),  { loading: () => <p>...</p> }
+const DynamicProductId = dynamic(
+  () => import("../../src/components/LayoutProduct/ProductIdpage"),
+  { loading: () => <p>...</p> }
 );
 
 const Product = () => {
-	const dispatch = useDispatch();
-	const router = useRouter();
-	const [navKey, setNavKey] = useState('');
-	const [loading, setLoading] = useState(false);
-	const { productByID } = useSelector(
-		(state: RootState) => state.products
-	  );
-	const {productId} = router.query
-	const paramsSearch = {
-		page: 1,
-		size: 10,
-	  };
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const [navKey, setNavKey] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { productByID } = useSelector((state: RootState) => state.products);
+  const { productId } = router.query;
 
-	  const searchList = {
-		projectId: productId,
-		location: "",
-		projectTypeId: "",
-	  };
+  const paramsSearch = {
+    page: 1,
+    size: 10,
+  };
 
-	  useEffect(() => {
-		(async () => {
-		  try {
-			const response = await getListProductApi(paramsSearch, searchList);
-			dispatch(getListProduct(response.responseData));
-			const responAPIBYID = await getProducById(productId);
-			dispatch(getProductById(responAPIBYID.responseData))
-			if(response.responseCode === '00' && responAPIBYID.responseCode === '00'){
-				setLoading(true)
-			}
-		} catch (error) {
-			console.log(error);
-		}
-	})();
-}, [router, dispatch]);
+  const searchList = {
+    projectId: productId,
+    location: "",
+    projectTypeId: "",
+  };
 
-	  const fetchComponent = () => {
-		return (
-		  <>
-			{loading === true ? (
-			   <DynamicProductId  navKey={navKey} dataProduct={productByID}/>
-			) : (
-			  <>
-				<div style={{ textAlign: "center", marginTop: 200 }}>
-				  <CircularProgress />
-				</div>
-			  </>
-			)}
-		  </>
-		);
-	  };
-	  useEffect(() => {
-		fetchComponent();
-	  }, [loading]);
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await getListProductApi(paramsSearch, searchList);
+        dispatch(getListProduct(response.responseData));
+        const responAPIBYID = await getProducById(productId);
+        dispatch(getProductById(responAPIBYID.responseData));
+        if (
+          response.responseCode === "00" &&
+          responAPIBYID.responseCode === "00"
+        ) {
+          setLoading(true);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  }, [router, dispatch]);
+
+  const fetchComponent = () => {
+    return (
+      <>
+        {loading === true ? (
+          <DynamicProductId navKey={navKey} dataProduct={productByID} />
+        ) : (
+          <>
+            <div style={{ textAlign: "center", marginTop: 200 }}>
+              <CircularProgress />
+            </div>
+          </>
+        )}
+      </>
+    );
+  };
+  useEffect(() => {
+    fetchComponent();
+  }, [loading]);
   return (
     <Page
       meta={{
@@ -74,9 +77,19 @@ const Product = () => {
         description: "TNR Ecommerce Product ProductName",
       }}
     >
-     {fetchComponent()}
+      {fetchComponent()}
     </Page>
   );
 };
 
+export const getServerSideProps = wrapper.getServerSideProps(
+  (store) => async (context) => {
+    const idProduct = context.params.productId;
+    const response = await getProducById(idProduct);
+    store.dispatch(getProductById(response.responseData));
+    return {
+      props: {},
+    };
+  }
+);
 export default Product;

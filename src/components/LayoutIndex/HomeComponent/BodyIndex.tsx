@@ -6,11 +6,19 @@ import {
   IconChungCu,
   IconKhuDoThi,
 } from "@components/Icons";
+import _ from "lodash";
 import styled from "@emotion/styled";
 import { Typography } from "@mui/material";
+import { TBOUTStanding } from "interface/product";
+import { useSelector } from "react-redux";
 import Product1 from "../../../../public/images/product1.png";
 import Product2 from "../../../../public/images/product2.png";
 import Product3 from "../../../../public/images/product3.png";
+import { RootState } from "../../../../store/store";
+
+interface ProductsIndexProps {
+  listProductOutOfStanding?: TBOUTStanding[];
+}
 
 const WrapContainer = styled.div`
   display: flex;
@@ -77,10 +85,15 @@ const LinkStyled = styled.a`
 const ContainerProduct = styled.div`
   display: flex;
   flex-direction: column;
-  width: 1115px;
+
   height: auto;
 `;
 export default function BodyIndex() {
+  const { productTopByOutStanding } = useSelector(
+    (state: RootState) => state.products
+  );
+
+  const sizeOfArray = _.size(productTopByOutStanding);
   return (
     <FlexContainer>
       <WrapContainer>
@@ -109,35 +122,58 @@ export default function BodyIndex() {
           <TextBottomIcon>Khu đô thị</TextBottomIcon>
         </WrapIconContainer>
       </WrapContainer>
-      <ContainerProduct>
+      <ContainerProduct
+        style={{
+          width: sizeOfArray >= 4 ? "100%" : 1115,
+        }}
+      >
         <div
           style={{
             display: "flex",
             justifyContent: "space-between",
             textAlign: "center",
             marginTop: 75,
-			marginBottom: 33
+            marginBottom: 33,
           }}
-        >
-          <TextBDS>BẤT ĐỘNG SẢN NỔI BẬT</TextBDS>
-          <LinkStyled href="">Xem tất cả</LinkStyled>
-        </div>
-        <div style={{ display: "flex", gap: 31 }}>
-          <ItemProductCard
-            src={Product1}
-            title="TNR The Nosta"
-            subTitle="90 đường Láng, Thịnh Quang, Đống Đa, Hà Nội"
-            dataItem={{
-              item1: "02",
-              item2: "02",
-              item3: "80",
-              item4: "Đông Nam",
+        ></div>
+        <div>
+          <div style={{ display: "flex", justifyContent: "space-around" }}>
+            <TextBDS>BẤT ĐỘNG SẢN NỔI BẬT</TextBDS>
+            <LinkStyled href="">Xem tất cả</LinkStyled>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              gap: 31,
+              justifyContent: sizeOfArray >= 4 ? "center" : "",
             }}
-            priceListed={3018933000}
-            priceSub={40580174}
-            ticketCard="TRN Gold"
-          />
-              <ItemProductCard
+          >
+            {productTopByOutStanding.length > 0 ? (
+              <>
+                {productTopByOutStanding.map((item, index) => (
+                  <ItemProductCard
+                    key={index}
+                    id={item.id}
+                    src={Product1}
+                    title={item.name}
+                    subTitle={item.projectLocation}
+                    dataItem={{
+                      item1: item.landArea,
+                      item2: item.numBath,
+                      item3: item.numBed,
+                      item4: item.doorDirection,
+                    }}
+                    priceListed={item.price}
+                    priceSub={item.unitPrice}
+                    ticketCard="TRN Gold"
+                  />
+                ))}
+              </>
+            ) : (
+              <></>
+            )}
+          </div>
+          {/* <ItemProductCard
             src={Product2}
             title="TNR AMALUNA - TRÀ VINH - LK.08.32"
             subTitle="Hải Phòng"
@@ -164,9 +200,8 @@ export default function BodyIndex() {
             priceListed={3018933000}
             priceSub={40580174}
             ticketCard="TNR Grand Palace"
-          />
+          /> */}
         </div>
-	
       </ContainerProduct>
     </FlexContainer>
   );

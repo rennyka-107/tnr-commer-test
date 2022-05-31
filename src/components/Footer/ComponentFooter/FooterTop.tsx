@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "@emotion/styled";
 import Input from "@mui/material/Input";
 import CustomButton from "@components/CustomComponent/CustomButton";
+import { postEmailRegister } from "../../../../pages/api/emailApi";
 
 const WrapContainerFooterTop = styled.div`
   background: #fec83c;
@@ -65,6 +66,18 @@ const WrapFlexOne = styled.div`
 type Props = {};
 
 const FooterTop = (props: Props) => {
+	const [emailValue, setEmailValue] = useState('');
+
+	const handleChange = (event) => {
+		setEmailValue(event.target.value);
+	  };
+	  const handleSumitEmail = async () => {
+		try {
+            const response = await postEmailRegister(emailValue);
+        } catch (error) {
+            console.log(error, '-------error--------');
+        }
+	  }
   return (
     <WrapContainerFooterTop>
       <ChildWrapFooterTop>
@@ -73,11 +86,11 @@ const FooterTop = (props: Props) => {
             Đăng ký để nhận thông tin dự án sớm nhất
           </RegisterInfoLine>
           <DivInput>
-            <Input sx={{ width: "100%", mb: 2 }} placeholder="Email" />
+            <Input sx={{ width: "100%", mb: 2 }} placeholder="Email" onChange={(e) => handleChange(e)}/>
           </DivInput>
         </WrapFlexOne>
         <DivButton>
-          <CustomButton style={{ width: "100%" }} label="Đăng ký" />
+          <CustomButton style={{ width: "100%" }} label="Đăng ký" onClick={() => handleSumitEmail()}/>
         </DivButton>
       </ChildWrapFooterTop>
     </WrapContainerFooterTop>

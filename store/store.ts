@@ -10,11 +10,13 @@ import { Action } from "redux";
 import menubar from "./menuBarSlice";
 import products from './productSlice';
 import projects from './projectSlice'
+import payments from './paymentSlice'
 
 const combinedReducer = combineReducers({
   menubar,
   products,
-  projects
+  projects,
+  payments
 });
 export type RootState = ReturnType<typeof combinedReducer>
 const masterReducer = (state, action) => {
@@ -28,10 +30,14 @@ const masterReducer = (state, action) => {
 	  products:{
 		listProductResponse: action.payload.products.listProductResponse,
 		productItem: action.payload.products.productItem,
-		productByID: action.payload.products.productByID
+		productByID: action.payload.products.productByID,
+		productTopByOutStanding: action.payload.products.productTopByOutStanding
 	  },
 	  projects: {
 		listProjectResponse: action.payload.projects.listProjectResponse
+	  },
+	  payments:{
+		listPaymentById: action.payload.payments.listPaymentById
 	  }
     };
     return nextState;

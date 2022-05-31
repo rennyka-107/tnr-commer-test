@@ -302,33 +302,32 @@ const TextContact = styled(Typography)`
   color: #1b3459;
 `;
 
+const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
 
 
-const ProductIdpage = ({ navKey,dataProduct }: ProductsProps) => {
-	const mockDataPhieutinhgia = {
-  ProjectName: "TNR AMALUNA - TRÀ VINH",
-  BlockName: "Liền kề",
-  ProductName: "LK.08.32",
-  DepositDate: "29/04/2022",
-  IsMortgage: true,
-  GroupCusID: 0,
-  ProvinceID: 0,
-  DistrictID: 0,
-  PriceID: 230896,
-  ScheduleID: 1900,
-};
+  const mockDataPhieutinhgia = {
+    ProjectName: "TNR AMALUNA - TRÀ VINH",
+    BlockName: "Liền kề",
+    ProductName: "LK.08.32",
+    DepositDate: "29/04/2022",
+    IsMortgage: true,
+    GroupCusID: 0,
+    ProvinceID: 0,
+    DistrictID: 0,
+    PriceID: 230896,
+    ScheduleID: 1900,
+  };
 
-	
- const paramsMock = {
-	ProjectName: dataProduct?.project.name,
-	BlockName: "Liền kề",
-	ProductName: "LK.08.32",
-	DepositDate: "29/04/2022",
-	IsMortgage: true,
-	GroupCusID: 0,
-	ProvinceID: 0,
-	DistrictID: 0,
-	PriceID: 230896,
+  const paramsMock = {
+    ProjectName: dataProduct?.project.name,
+    BlockName: "Liền kề",
+    ProductName: "LK.08.32",
+    DepositDate: "29/04/2022",
+    IsMortgage: true,
+    GroupCusID: 0,
+    ProvinceID: 0,
+    DistrictID: 0,
+    PriceID: 230896,
   };
   const listBread = [
     {
@@ -339,10 +338,10 @@ const ProductIdpage = ({ navKey,dataProduct }: ProductsProps) => {
       id: 2,
       value: "Đất nền",
     },
-	{
-		id: 3,
-		value: "Tiểu khu",
-	  },
+    {
+      id: 3,
+      value: "Tiểu khu",
+    },
   ];
   const dispatch = useDispatch();
   const productItem = useSelector(
@@ -409,13 +408,18 @@ const ProductIdpage = ({ navKey,dataProduct }: ProductsProps) => {
     if (!num) {
       return;
     }
-    return Math.round(num).toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+    return Math.round(num)
+      .toFixed(0)
+      .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
   }
   const fetchPhieuTinhGia = () => {
     return (
       <>
         {!_.isEmpty(productItem) ? (
-          <DynamicPhieuTinhGiaComponent productItem={productItem} dataProduct={dataProduct}/>
+          <DynamicPhieuTinhGiaComponent
+            productItem={productItem}
+            dataProduct={dataProduct}
+          />
         ) : (
           <>
             <div style={{ textAlign: "center", marginTop: 200 }}>
@@ -750,7 +754,9 @@ const ProductIdpage = ({ navKey,dataProduct }: ProductsProps) => {
                     marginTop: 20,
                   }}
                 >
-                  <SubRightText>Tòa {dataProduct?.lotSymbolCommercial}</SubRightText>
+                  <SubRightText>
+                    Tòa {dataProduct?.lotSymbolCommercial}
+                  </SubRightText>
                   <SubRightText>Tầng {dataProduct?.floorNum}</SubRightText>
                 </div>
                 <div style={{ border: " 1px solid #C7C9D9", width: 262 }}></div>
@@ -770,7 +776,9 @@ const ProductIdpage = ({ navKey,dataProduct }: ProductsProps) => {
                   </WrapItemCenter>
                   <WrapItemCenter>
                     <IconCompass />
-                    <TextCenterItem>{dataProduct?.doorDirection}</TextCenterItem>
+                    <TextCenterItem>
+                      {dataProduct?.doorDirection}
+                    </TextCenterItem>
                   </WrapItemCenter>
                 </CenterIntemWrap>
                 <div style={{ border: " 1px solid #C7C9D9", width: 262 }}></div>
@@ -877,7 +885,7 @@ const ProductIdpage = ({ navKey,dataProduct }: ProductsProps) => {
                   right: 0,
                   alignItems: "center",
                   marginRight: 46,
-				  cursor: 'pointer'
+                  cursor: "pointer",
                 }}
                 onClick={() => handleDownloadPhieuTinhGia()}
               >

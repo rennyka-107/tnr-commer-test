@@ -96,6 +96,8 @@ export interface ResponseSearchById {
 			map2: string,
 			name: string,
 		},
+		lurPrice?: string,
+		lurUnitPrice?: string,
 		status: number,
 		apartmentModel: {
 		  id: string,
@@ -184,3 +186,16 @@ export interface ResponseSearchById {
 		idls: string,
 		floor: string
 }
+
+
+///api/product/information/find-top-by-outstanding
+export interface TBOUTStanding {
+	id: string,
+	name: string,
+	landArea: number,
+	numBed: number,
+	numBath: number,
+	projectId: string,
+	projectName: string,
+	projectLocation: string
+  }

@@ -9,6 +9,11 @@ import SliderComponent from "@components/CustomComponent/SliderComponent";
 import { Button } from "@mui/material";
 import { IconSearchAdvan } from "@components/Icons";
 import Slider3dShowBottom from "./Slider3dShowBottom";
+import { TBOUTStanding } from "interface/product";
+
+interface ProductsIndexProps {
+	listProductOutOfStanding?: TBOUTStanding[];
+  };
 
 const SaleWrap = styled.div`
   background: #1b3459;
@@ -67,7 +72,7 @@ const HomePage = () => {
     <>
       <BannerIndex />
       <div style={{ padding: 88 }}>
-        <BodyIndex />
+        <BodyIndex  />
       </div>
 
       <SaleWrap>

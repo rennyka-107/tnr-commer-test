@@ -253,7 +253,7 @@ export default function ItemProductCard({
 
       <CardContentStyled>
         <div style={{ marginBottom: 7 }}>
-          <span onClick={() => Router.push(`/products/adf68c39-c5b3-4a80-b806-a2b8a840d4c4`)}>
+          <span onClick={() => Router.push(`/products/${id ? id : 'adf68c39-c5b3-4a80-b806-a2b8a840d4c4'}`)}>
             <TextTitleStyled style={{ marginBottom: 9 }}>
               {title}
             </TextTitleStyled>
