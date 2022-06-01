@@ -304,7 +304,6 @@ const TextContact = styled(Typography)`
 
 const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
 
-
   const mockDataPhieutinhgia = {
     ProjectName: "TNR AMALUNA - TRÀ VINH",
     BlockName: "Liền kề",
@@ -904,34 +903,7 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
           {typeBottomShow === 1 ? (
             <>
               <DynamicTabsComponent />
-              <div>
-                <div style={{ width: 896, padding: 50 }}>
-                  <li>
-                    Dự án TNR Stars Lam Sơn toạ lạc tại vị trí đắc địa bậc nhất
-                    thị trấn Lam Sơn, giao điểm 2 tuyến đường huyết mạch của
-                    tỉnh Thanh Hoá, tâm điểm kết nối các khu vực trọng điểm kinh
-                    tế như: Khu di tích lịch sử Lam Sơn, Sân bay Thọ Xuân, KCN
-                    Sao Vàng, KCN mía đường Lam Sơn.
-                  </li>
-                  <li>
-                    Thừa hưởng “vượng khí” của vùng đất đã từng là nơi phát tích
-                    của triều đại hưng thịnh bậc nhất đất Việt, với vị trí chiến
-                    lược trọng điểm của tỉnh, giao điểm quốc lộ 47 và đường mòn
-                    Hồ Chí Minh. TNR Stars Lam Sơn được kiến tạo với kỳ vọng tái
-                    hiện một Kinh Đô giao thương sầm uất và thịnh vượng bậc nhất
-                    khu vực.
-                  </li>
-                </div>
-                <Image
-                  src="/images/banner_map_product.png"
-                  width={1108}
-                  height={700}
-                />
-                <DynamicBottomProdComponent
-                  style={{ marginTop: 50, marginBottom: 85 }}
-                  data={dataFake}
-                />
-              </div>
+
             </>
           ) : (
             <> {fetchPhieuTinhGia()} </>

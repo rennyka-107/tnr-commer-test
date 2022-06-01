@@ -8,6 +8,8 @@ import { useRouter } from "next/router";
 import { getListProductApi, getProducById } from "../api/productsApi";
 import { getListProduct, getProductById } from "../../store/productSlice";
 import { CircularProgress } from "@mui/material";
+import { getListTabsProjectApi } from "../api/projectApi";
+import { getListTabsProject } from "../../store/projectSlice";
 
 const DynamicProductId = dynamic(
   () => import("../../src/components/LayoutProduct/ProductIdpage"),
@@ -20,6 +22,7 @@ const Product = () => {
   const [navKey, setNavKey] = useState("");
   const [loading, setLoading] = useState(false);
   const { productByID } = useSelector((state: RootState) => state.products);
+
   const { productId } = router.query;
 
   const paramsSearch = {
@@ -40,6 +43,8 @@ const Product = () => {
         dispatch(getListProduct(response.responseData));
         const responAPIBYID = await getProducById(productId);
         dispatch(getProductById(responAPIBYID.responseData));
+		const responsListTab = await getListTabsProjectApi(productByID.project.id)
+		dispatch(getListTabsProject(responsListTab.responseData));
         if (
           response.responseCode === "00" &&
           responAPIBYID.responseCode === "00"

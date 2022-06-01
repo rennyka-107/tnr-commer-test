@@ -1,3 +1,12 @@
+export interface TabProjectResponse {
+	id: string,
+	name: string,
+	projectId: string,
+	text: string,
+	position: number,
+	updateDate: string
+}
+
 export interface CommonResponse<D = any> {
 	responseData: D | null;
 	responseCode: string;
@@ -11,3 +20,4 @@ export interface ResponseTypeAPI {
     responseMessage: string,
     responseData: any
 }
+

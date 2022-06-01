@@ -1,8 +1,28 @@
-import { IconFacebookCircle, IconInstagramCircle, IconYoutubeCircle, Logo } from "@components/Icons";
+import {
+  IconFacebookCircle,
+  IconInstagramCircle,
+  IconYoutubeCircle,
+  Logo,
+} from "@components/Icons";
 import styled from "@emotion/styled";
 import Image from "next/image";
+import Link from "next/link";
+import Router from "next/router";
 import React from "react";
 
+interface ItemValueUserProps {
+  id: number;
+  value: string;
+}
+
+interface ItemValueProps {
+  id: string;
+  name: string;
+}
+
+interface MenuProps {
+  listMenuBarProjectType?: ItemValueProps[];
+}
 const WrapFooterBot = styled.div`
   min-height: 360px;
   background: #1b3459;
@@ -54,10 +74,11 @@ const LineInfo = styled.p`
   margin: 0;
   line-height: 26px;
 `;
-const LineInfo2 = styled.p`
+const LineInfo2 = styled.a`
   margin: 0;
   font-size: 14px;
   line-height: 26px;
+  cursor: pointer;
 `;
 const LineInfoFirst = styled.p`
   margin-bottom: 0;
@@ -67,10 +88,10 @@ const LineInfoFirst = styled.p`
 const IconsBlock = styled.div`
   display: flex;
   justify-content: space-around;
-`
+`;
 type Props = {};
 
-const FooterBot = (props: Props) => {
+const FooterBot = ({ listMenuBarProjectType }: MenuProps) => {
   return (
     <WrapFooterBot>
       <Logo style={{ width: 148, height: 56, margin: "56px 0 28px 0" }} />
@@ -89,28 +110,39 @@ const FooterBot = (props: Props) => {
             <TitleTypo>Email: {""}</TitleTypo>
             tnrholdings@tnrholdings.com.vn
           </LineInfo>
-		  <LineInfo style={{marginTop: 5}}>
-            <TitleTypo>TNR Version 1.0.5 Copyright © www.example.com {""}</TitleTypo>
-
+          <LineInfo style={{ marginTop: 5 }}>
+            <TitleTypo>
+              TNR Version 1.0.6 Copyright © www.example.com {""}
+            </TitleTypo>
           </LineInfo>
         </BlockDiv>
         <BlockDiv
           style={{ display: "flex", gap: ".5em", flexDirection: "column" }}
         >
           <TitleTypo style={{ fontSize: "18px" }}>Sản phẩm</TitleTypo>
-          <LineInfo2>Chung cư</LineInfo2>
-          <LineInfo2>Căn hộ dịch vụ</LineInfo2>
-          <LineInfo2>Bất động sản nghỉ dưỡng</LineInfo2>
-          <LineInfo2>Đất nền</LineInfo2>
+          {listMenuBarProjectType?.map((item, index) => (
+            <LineInfo2  onClick={() => {
+				Router.replace(`/projectTNR?type=${item.id}`);
+			  }}>{item.name}</LineInfo2>
+
+          ))}
         </BlockDiv>
         <BlockDiv
           style={{ display: "flex", gap: ".5em", flexDirection: "column" }}
         >
           <TitleTypo style={{ fontSize: "18px" }}>Hỗ trợ</TitleTypo>
-          <LineInfo2>Hướng dẫn mua nhà Online</LineInfo2>
-          <LineInfo2>Hướng dẫn mua nhà Offline</LineInfo2>
-          <LineInfo2>Câu hỏi thường gặp</LineInfo2>
-          <LineInfo2>Liên hệ</LineInfo2>
+          <LineInfo2  onClick={() => {
+				Router.replace(`/buyingGuide`);
+			  }}>Hướng dẫn mua nhà Online</LineInfo2>
+          <LineInfo2 onClick={() => {
+				Router.replace(`/buyingGuide`);
+			  }}>Hướng dẫn mua nhà Offline</LineInfo2>
+          <LineInfo2 onClick={() => {
+				Router.replace(`/buyingGuide`);
+			  }}>Câu hỏi thường gặp</LineInfo2>
+          <LineInfo2 onClick={() => {
+				Router.replace(`/buyingGuide`);
+			  }}>Liên hệ</LineInfo2>
         </BlockDiv>
         <BlockDiv
           style={{ display: "flex", gap: "2em", flexDirection: "column" }}
@@ -120,7 +152,12 @@ const FooterBot = (props: Props) => {
             <IconInstagramCircle />
             <IconFacebookCircle />
           </IconsBlock>
-          <Image src="/images/BCT.png" width="135.24px" height="51pxpx" alt="" />
+          <Image
+            src="/images/BCT.png"
+            width="135.24px"
+            height="51pxpx"
+            alt=""
+          />
         </BlockDiv>
       </WrapContent>
     </WrapFooterBot>

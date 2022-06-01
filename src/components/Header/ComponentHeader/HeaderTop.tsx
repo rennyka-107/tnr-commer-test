@@ -50,7 +50,7 @@ const HeaderTop = () => {
           {/* <Link href={`http://localhost:3000${PathRoute.Profile}`} passHref> */}
           <TextLink
             onClick={() => {
-              Router.replace(`${PathRoute.Profile}`, undefined, { shallow: true });
+              Router.replace(`/authen?prePath=%2Fprofile&tabIndex=register`, undefined, { shallow: true });
             }}
           >
             Về tài khoản

@@ -34,7 +34,8 @@ const masterReducer = (state, action) => {
 		productTopByOutStanding: action.payload.products.productTopByOutStanding
 	  },
 	  projects: {
-		listProjectResponse: action.payload.projects.listProjectResponse
+		listProjectResponse: action.payload.projects.listProjectResponse,
+		listTabsProject: action.payload.projects.listTabsProject
 	  },
 	  payments:{
 		listPaymentById: action.payload.payments.listPaymentById

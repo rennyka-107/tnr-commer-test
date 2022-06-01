@@ -1,9 +1,14 @@
 import { IconTabs } from "@components/Icons";
 import { Tab, Tabs } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import React from "react";
+import Image from "next/image";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../store/store";
 
 const TabsComponent = () => {
+  const { listTabsProject } = useSelector((state: RootState) => state.projects);
+
   const useStyles = makeStyles((theme) => ({
     root: {
       "& .MuiTabs-flexContainer": {
@@ -29,9 +34,20 @@ const TabsComponent = () => {
     },
   }));
   const [value, setValue] = React.useState(0);
+  const [itemView, setItemView] = React.useState({
+    id: "",
+    name: "",
+    position: 0,
+    projectId: "",
+    text: "",
+    updateDate: "",
+  });
   const classes = useStyles();
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
+  };
+  const handleChangeTab = (event: any) => {
+    setItemView(event);
   };
 
   return (
@@ -43,28 +59,49 @@ const TabsComponent = () => {
         aria-label="disabled tabs example"
         className={classes.root}
       >
-        <Tab
-          label="Vị trí"
-          icon={value === 0 ? <IconTabs style={{ marginRight: 15 }} /> : <></>}
-          iconPosition="start"
-          classes={{ selected: classes.selected }}
-        />
-
-        <Tab
-          label="Phân Khu"
-          icon={value === 1 ? <IconTabs style={{ marginRight: 15 }} /> : <></>}
-          iconPosition="start"
-          classes={{ selected: classes.selected }}
-        />
-        <Tab
-          label="Tiện ich"
-          icon={value === 2 ? <IconTabs style={{ marginRight: 15 }} /> : <></>}
-          iconPosition="start"
-          classes={{ selected: classes.selected }}
-        />
+        {listTabsProject.map((item, index) => (
+          <Tab
+            label={item.name}
+            icon={
+              value === index ? <IconTabs style={{ marginRight: 15 }} /> : <></>
+            }
+            onClick={() => handleChangeTab(item)}
+            iconPosition="start"
+            classes={{ selected: classes.selected }}
+          />
+        ))}
       </Tabs>
+      {itemView.id === "" ? (
+        <>
+          {" "}
+          <div>
+            <div style={{ width: 896, padding: 50 }}>
+              <div dangerouslySetInnerHTML={{ __html:  listTabsProject[0].text }} />
+            </div>
+            {/* <DynamicBottomProdComponent
+		style={{ marginTop: 50, marginBottom: 85 }}
+		data={dataFake}
+	  /> */}
+          </div>
+        </>
+      ) : (
+        <>
+          <>
+            {" "}
+            <div>
+              <div style={{ width: 896, padding: 50 }}>
+                <div dangerouslySetInnerHTML={{ __html: itemView?.text }} />
+              </div>
+              {/* <DynamicBottomProdComponent
+		style={{ marginTop: 50, marginBottom: 85 }}
+		data={dataFake}
+	  /> */}
+            </div>
+          </>
+        </>
+      )}
     </div>
   );
-}
+};
 
 export default TabsComponent;

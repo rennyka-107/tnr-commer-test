@@ -143,8 +143,9 @@ export default function BodyIndex() {
           </div>
           <div
             style={{
-              display: "flex",
+              display: "grid",
               gap: 31,
+			  gridTemplateColumns:'repeat(4, auto)',
               justifyContent: sizeOfArray >= 4 ? "center" : "",
             }}
           >

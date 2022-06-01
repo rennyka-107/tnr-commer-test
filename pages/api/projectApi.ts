@@ -1,5 +1,5 @@
 import { ParamsProjects } from "interface/project";
-import { CommonResponse, ResponseTypeAPI } from "type/common";
+import { CommonResponse, ResponseTypeAPI ,TabProjectResponse} from "type/common";
 import HttpClient from "utils/HttpClient";
 
 export const getListProjectApi = async (
@@ -12,3 +12,12 @@ export const getListProjectApi = async (
     { withToken: false }
   );
 };
+
+export const getListTabsProjectApi = async (
+		id: string
+  ) => {
+	return HttpClient.post<TabProjectResponse, CommonResponse>(
+	  `/api/project/information/tab/${id}`,
+	  { withToken: false }
+	);
+  };
