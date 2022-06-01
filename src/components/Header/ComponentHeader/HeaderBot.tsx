@@ -3,13 +3,12 @@ import styled from "@emotion/styled";
 import { Route } from "@mui/icons-material";
 import { Button } from "@mui/material";
 import useAuth from "hooks/useAuth";
+import { useScroll } from "hooks/useScroll";
 import MenuDropdown from "ItemComponents/MenuDropdown";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useCallback } from "react";
+import { useCallback, useContext, useEffect } from "react";
 import PathRoute from "utils/PathRoute";
-
-
 
 const ContainerNavTop = styled.div`
   height: 93px;
@@ -73,19 +72,19 @@ const IconAccountWrap = styled.div`
 
 const lbds = [
   {
-    id: '1',
+    id: "1",
     name: "Chung cư",
   },
   {
-    id: '2',
+    id: "2",
     name: "Căn hộ dịch vụ",
   },
   {
-    id: '3',
+    id: "3",
     name: "Bất động sản nghỉ dưỡng",
   },
   {
-    id: '4',
+    id: "4",
     name: "Khu đô thị",
   },
 ];
@@ -104,65 +103,84 @@ const Duan = [
   },
 ];
 interface ItemValueUserProps {
-  id: number,
-  value: string
+  id: number;
+  value: string;
 }
 
-
 interface ItemValueProps {
-  id: string,
-  name: string
+  id: string;
+  name: string;
 }
 
 interface MenuProps {
   menuData?: ItemValueProps[];
   menuDataProject?: ItemValueProps[];
-};
+}
 
 const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
   const Router = useRouter();
 
-  const menuUser: ItemValueProps[] = [{ id: 'Profile', name: 'Thông tin cá nhân' }, { id: 'logout', name: 'Đăng xuất' }]
-  const { logout } = useAuth()
+  const menuUser: ItemValueProps[] = [
+    { id: "Profile", name: "Thông tin cá nhân" },
+    { id: "logout", name: "Đăng xuất" },
+  ];
+  const { logout } = useAuth();
 
+  const handleNavigateUser = useCallback((value: ItemValueProps) => {
+    switch (value.id) {
+      case "Profile":
+        Router.push({ pathname: PathRoute.Profile });
+        break;
+      case "logout":
+        logout();
+        break;
 
-  const handleNavigateUser = useCallback(
-    (value: ItemValueProps) => {
-      switch (value.id) {
-        case 'Profile':
-          Router.push({ pathname: PathRoute.Profile });
-          break;
-        case 'logout':
-          logout();
-          break;
-
-        default:
-          break;
-      }
-
-    }, [])
-
-
+      default:
+        break;
+    }
+  }, []);
+  const scrollView = () => {
+    const mainRoot = document.getElementById("uu-dai");
+    if (mainRoot) {
+      mainRoot.scrollIntoView({ behavior: "smooth", block: "center" });
+    } else {
+      return;
+    }
+  };
+  const handleScrollHuongDan = () => {
+    const mainRoot = document.getElementById("huongdan-online");
+    if (mainRoot) {
+      mainRoot.scrollIntoView({ behavior: "smooth", block: "center" });
+    } else {
+      return;
+    }
+  };
 
   return (
     <ContainerNavTop>
       <BodyContainer>
         <WrapMenuItem>
           <Link href="https://tnre-customer-test.vercel.app">
-            <a><Logo /></a>
+            <a>
+              <Logo />
+            </a>
           </Link>
-          <div style={{ display: 'flex', gap: 35, marginLeft: 38 }}>
-            <MenuDropdown title={"Loại bất động sản"}
+          <div style={{ display: "flex", gap: 35, marginLeft: 38 }}>
+            <MenuDropdown
+              title={"Loại bất động sản"}
               data={menuDataProject}
               onSelect={(item) => {
-                Router.replace(`/${PathRoute.ProjectTNR}?type=${item.id}`)
+                Router.replace(`/${PathRoute.ProjectTNR}?type=${item.id}`);
               }}
             />
-            <MenuDropdown title={"Dự Án"} data={menuData}
-			onSelect={(item) => {
-				Router.replace(`/products?idProject=${item.id}`)
-              }} />
-            <Button>
+            <MenuDropdown
+              title={"Dự Án"}
+              data={menuData}
+              onSelect={(item) => {
+                Router.replace(`/products?idProject=${item.id}`);
+              }}
+            />
+            <Button onClick={() => scrollView()}>
               <TextLink>Khuyến mãi</TextLink>
             </Button>
             <Button>
@@ -176,11 +194,7 @@ const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
           </div>
         </WrapMenuItem>
         <WrapRightItem>
-          <ButtonBuyHelp
-            onClick={() => {
-              Router.push({ pathname: PathRoute.BuyingGuide });
-            }}
-          >
+          <ButtonBuyHelp onClick={() => handleScrollHuongDan()}>
             <span>Hướng dẫn mua online</span>
           </ButtonBuyHelp>
           <IconAccountWrap>

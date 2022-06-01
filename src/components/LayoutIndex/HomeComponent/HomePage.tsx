@@ -10,10 +10,12 @@ import { Button } from "@mui/material";
 import { IconSearchAdvan } from "@components/Icons";
 import Slider3dShowBottom from "./Slider3dShowBottom";
 import { TBOUTStanding } from "interface/product";
+import { useScroll } from "hooks/useScroll";
+import { useContext } from "react";
 
 interface ProductsIndexProps {
-	listProductOutOfStanding?: TBOUTStanding[];
-  };
+  listProductOutOfStanding?: TBOUTStanding[];
+}
 
 const SaleWrap = styled.div`
   background: #1b3459;
@@ -67,15 +69,14 @@ padding: 40px;
 }
 `;
 const HomePage = () => {
-
   return (
     <>
       <BannerIndex />
       <div style={{ padding: 88 }}>
-        <BodyIndex  />
+        <BodyIndex />
       </div>
 
-      <SaleWrap>
+      <SaleWrap id="uu-dai">
         <TitleSlide>CHƯƠNG TRÌNH ƯU ĐÃI</TitleSlide>
         <SliderShowComponent />
       </SaleWrap>
@@ -139,7 +140,7 @@ const HomePage = () => {
           </Button>
         </div>
       </CompareSwap>
-	  <Slider3dShowBottom />
+      <Slider3dShowBottom />
     </>
   );
 };

@@ -62,6 +62,7 @@ const TabsComponent = () => {
         {listTabsProject.map((item, index) => (
           <Tab
             label={item.name}
+			key={index}
             icon={
               value === index ? <IconTabs style={{ marginRight: 15 }} /> : <></>
             }

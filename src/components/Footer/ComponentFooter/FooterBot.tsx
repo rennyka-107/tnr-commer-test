@@ -121,7 +121,7 @@ const FooterBot = ({ listMenuBarProjectType }: MenuProps) => {
         >
           <TitleTypo style={{ fontSize: "18px" }}>Sản phẩm</TitleTypo>
           {listMenuBarProjectType?.map((item, index) => (
-            <LineInfo2  onClick={() => {
+            <LineInfo2 key={index}  onClick={() => {
 				Router.replace(`/projectTNR?type=${item.id}`);
 			  }}>{item.name}</LineInfo2>
 

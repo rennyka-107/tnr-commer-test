@@ -60,7 +60,7 @@ const TextCard = styled(Typography)`
 
 export default function OnlineSupportSale() {
   return (
-	  <>
+	  <div id="huongdan-online">
       <TexTopStyled>HƯỚNG DẪN MUA ONLINE</TexTopStyled>
     <WrapOSS>
       <ContainerOSS>
@@ -91,6 +91,6 @@ export default function OnlineSupportSale() {
         </CardItem>
       </ContainerOSS>
     </WrapOSS>
-   </>
+   </div>
   );
 }

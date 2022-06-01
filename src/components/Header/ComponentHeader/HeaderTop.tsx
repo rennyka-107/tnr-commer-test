@@ -2,6 +2,7 @@ import { IconCountry } from "@components/Icons";
 import styled from "@emotion/styled";
 import Link from "next/link";
 import Router from "next/router";
+import { useContext } from "react";
 import PathRoute from "utils/PathRoute";
 
 const ContainerStyled = styled.div`
@@ -43,6 +44,7 @@ const IconCountryStyle = {
 };
 
 const HeaderTop = () => {
+
   return (
     <ContainerStyled>
       <WrapContainer>

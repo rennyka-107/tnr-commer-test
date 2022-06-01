@@ -1,7 +1,7 @@
-import React, { ReactNode, useEffect } from "react";
+import React, { ReactNode, useContext, useEffect } from "react";
 import { SEOProps } from "@components";
 import dynamic from "next/dynamic";
-import {getListMenuBarProject} from '../../../pages/api/menuBarApi'
+import { getListMenuBarProject } from "../../../pages/api/menuBarApi";
 const DynamicSEOComponent = dynamic(() =>
   import("../../components/SEO").then(
     (m) => m.default,
@@ -32,7 +32,6 @@ type PageProps = {
 };
 
 const Page: React.FC<PageProps> = ({ meta, children, dataNav }) => {
-
   return (
     <>
       <DynamicSEOComponent {...meta} />
