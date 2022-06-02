@@ -62,8 +62,9 @@ const ListProduct = () => {
         dispatch(getListProject(responseProject.responseData));
         if (
           response.responseCode === "00" &&
-          responseProject.responseCode === "00"
+          responseProject.responseCode === "00"&& idProject
         ) {
+			console.log(idProject)
           setLoading(true);
         }
       } catch (error) {

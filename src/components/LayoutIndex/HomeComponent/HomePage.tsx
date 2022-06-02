@@ -1,18 +1,39 @@
-import SliderShowComponent from "@components/CustomComponent/SliderShowComponent";
-import BannerIndex from "./BannerIndex";
-import BodyIndex from "./BodyIndex";
+
 import styled from "@emotion/styled";
-import OnlineSupportSale from "./OnlineSupportSale";
+
 import { Box } from "@mui/system";
 import SelectInputComponent from "@components/CustomComponent/SelectInputComponent";
-import SliderComponent from "@components/CustomComponent/SliderComponent";
 import { Button } from "@mui/material";
 import { IconSearchAdvan } from "@components/Icons";
-import Slider3dShowBottom from "./Slider3dShowBottom";
 import { TBOUTStanding } from "interface/product";
 import { useScroll } from "hooks/useScroll";
 import { useContext } from "react";
+import dynamic from "next/dynamic";
 
+const DynamicBanner = dynamic(
+	() => import("./BannerIndex"),
+	{ loading: () => <p>...</p> }
+  );
+  const DynamicBody = dynamic(
+	() => import("./BodyIndex"),
+	{ loading: () => <p>...</p> }
+  );
+  const DynamicSliderShowComponent = dynamic(
+	() => import("@components/CustomComponent/SliderShowComponent"),
+	{ loading: () => <p>...</p> }
+  );
+  const DynamicOnlineSupportSale = dynamic(
+	() => import("./OnlineSupportSale"),
+	{ loading: () => <p>...</p> }
+  );
+  const DynamicSliderComponent = dynamic(
+	() => import("@components/CustomComponent/SliderComponent"),
+	{ loading: () => <p>...</p> }
+  );
+  const DynamicSlider3dShowBottom = dynamic(
+	() => import("./Slider3dShowBottom"),
+	{ loading: () => <p>...</p> }
+  );
 interface ProductsIndexProps {
   listProductOutOfStanding?: TBOUTStanding[];
 }
@@ -71,17 +92,17 @@ padding: 40px;
 const HomePage = () => {
   return (
     <>
-      <BannerIndex />
+      <DynamicBanner />
       <div style={{ padding: 88 }}>
-        <BodyIndex />
+        <DynamicBody />
       </div>
 
       <SaleWrap id="uu-dai">
         <TitleSlide>CHƯƠNG TRÌNH ƯU ĐÃI</TitleSlide>
-        <SliderShowComponent />
+        <DynamicSliderShowComponent />
       </SaleWrap>
       <div style={{ padding: 88 }}>
-        <OnlineSupportSale />
+        <DynamicOnlineSupportSale />
       </div>
       <CompareSwap>
         <div>
@@ -109,7 +130,7 @@ const HomePage = () => {
           </div>
         </div>
         <div style={{ display: "flex", gap: 65, marginLeft: 54 }}>
-          <SliderComponent
+          <DynamicSliderComponent
             label="khoảng giá"
             numberMin={0}
             numberMax={5}
@@ -140,7 +161,7 @@ const HomePage = () => {
           </Button>
         </div>
       </CompareSwap>
-      <Slider3dShowBottom />
+      <DynamicSlider3dShowBottom />
     </>
   );
 };

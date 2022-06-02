@@ -43,11 +43,10 @@ const Product = () => {
         dispatch(getListProduct(response.responseData));
         const responAPIBYID = await getProducById(productId);
         dispatch(getProductById(responAPIBYID.responseData));
-		const responsListTab = await getListTabsProjectApi(productByID.project.id)
-		dispatch(getListTabsProject(responsListTab.responseData));
+
         if (
           response.responseCode === "00" &&
-          responAPIBYID.responseCode === "00"
+          responAPIBYID.responseCode === "00" && productId
         ) {
           setLoading(true);
         }
@@ -56,6 +55,16 @@ const Product = () => {
       }
     })();
   }, [router, dispatch]);
+
+  useEffect(() => {
+    (async () => {
+      const responsListTab = await getListTabsProjectApi(
+        productByID?.project.id
+      );
+
+      dispatch(getListTabsProject(responsListTab.responseData));
+    })();
+  }, [productByID]);
 
   const fetchComponent = () => {
     return (

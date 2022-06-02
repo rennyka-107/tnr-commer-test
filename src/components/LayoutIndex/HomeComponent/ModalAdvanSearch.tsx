@@ -56,7 +56,7 @@ const TextBannerBottom = styled.span`
   /* Brand/Sub 1 */
 
   color: #fec83c;
-  text-transform: lowercase;
+  text-transform: none;
   margin-left: 13px;
 `;
 const BodyContainer = styled.div`

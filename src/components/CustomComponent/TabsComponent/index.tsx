@@ -1,6 +1,7 @@
 import { IconTabs } from "@components/Icons";
 import { Tab, Tabs } from "@mui/material";
 import { makeStyles } from "@mui/styles";
+import _ from "lodash";
 import Image from "next/image";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
@@ -59,10 +60,10 @@ const TabsComponent = () => {
         aria-label="disabled tabs example"
         className={classes.root}
       >
-        {listTabsProject.map((item, index) => (
+        {listTabsProject?.map((item, index) => (
           <Tab
             label={item.name}
-			key={index}
+            key={index}
             icon={
               value === index ? <IconTabs style={{ marginRight: 15 }} /> : <></>
             }
@@ -77,7 +78,13 @@ const TabsComponent = () => {
           {" "}
           <div>
             <div style={{ width: 896, padding: 50 }}>
-              <div dangerouslySetInnerHTML={{ __html:  listTabsProject[0].text }} />
+              {!_.isEmpty(listTabsProject) ? (
+                <div
+                  dangerouslySetInnerHTML={{ __html: listTabsProject[0]?.text }}
+                />
+              ) : (
+                <></>
+              )}
             </div>
             {/* <DynamicBottomProdComponent
 		style={{ marginTop: 50, marginBottom: 85 }}

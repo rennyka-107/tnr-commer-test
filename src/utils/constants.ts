@@ -4,7 +4,7 @@
 //   : 'http://localhost:3000';
 const baseURL = process.env.REACT_APP_BASE_URL
   ? process.env.REACT_APP_BASE_URL
-  : 'http://210.245.85.229:1999';
+  : ' http://210.245.85.229:1999';
 
 const version = process.env.REACT_APP_VERSION;
 

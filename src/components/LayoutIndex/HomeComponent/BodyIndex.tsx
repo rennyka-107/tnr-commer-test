@@ -8,7 +8,7 @@ import {
 } from "@components/Icons";
 import _ from "lodash";
 import styled from "@emotion/styled";
-import { Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import { TBOUTStanding } from "interface/product";
 import { useSelector } from "react-redux";
 import Product1 from "../../../../public/images/product1.png";
@@ -33,15 +33,19 @@ const WrapIconContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
   max-width: 150px;
 `;
-const WrapIcon = styled.div`
+const WrapIcon = styled(Button)`
   width: 111px;
   height: 111px;
   background: #fec83c;
   border-radius: 20px;
   text-align: center;
   padding: 30px;
+  :hover{
+	background: #1b3459;
+  }
 `;
 
 const TextBottomIcon = styled(Typography)`
@@ -97,27 +101,27 @@ export default function BodyIndex() {
   return (
     <FlexContainer>
       <WrapContainer>
-        <WrapIconContainer>
-          <WrapIcon>
-            <IconChungCu />
+        <WrapIconContainer >
+          <WrapIcon className="icon-chungcu-hover">
+            <IconChungCu className="icon-chungcu-hover" />
           </WrapIcon>
           <TextBottomIcon>Chung cư</TextBottomIcon>
         </WrapIconContainer>
-        <WrapIconContainer>
-          <WrapIcon>
-            <IconCanHo />
+        <WrapIconContainer >
+          <WrapIcon className="icon-canho-hover">
+            <IconCanHo className="icon-canho-hover" />
           </WrapIcon>
           <TextBottomIcon>Căn hộ dịch vụ</TextBottomIcon>
         </WrapIconContainer>
         <WrapIconContainer>
-          <WrapIcon>
-            <IconBatDongSan />
+          <WrapIcon  className="icon-batdongsan-hover">
+            <IconBatDongSan className="icon-batdongsan-hover" />
           </WrapIcon>
           <TextBottomIcon>Bất động sản nghỉ dưỡng</TextBottomIcon>
         </WrapIconContainer>
-        <WrapIconContainer>
-          <WrapIcon>
-            <IconKhuDoThi />
+        <WrapIconContainer >
+          <WrapIcon className="icon-khudothi-hover">
+            <IconKhuDoThi className="icon-khudothi-hover" />
           </WrapIcon>
           <TextBottomIcon>Khu đô thị</TextBottomIcon>
         </WrapIconContainer>
@@ -145,7 +149,7 @@ export default function BodyIndex() {
             style={{
               display: "grid",
               gap: 31,
-			  gridTemplateColumns:'repeat(4, auto)',
+              gridTemplateColumns: "repeat(4, auto)",
               justifyContent: sizeOfArray >= 4 ? "center" : "",
             }}
           >
