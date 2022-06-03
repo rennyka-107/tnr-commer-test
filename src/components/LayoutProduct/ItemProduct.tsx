@@ -4,6 +4,7 @@ import styled from "@emotion/styled";
 import PaddingComponent from "@components/CustomComponent/PagingComponent";
 import Link from "next/link";
 import { ProductsResponse } from "interface/product";
+import Router from "next/router";
 
 interface ProductsProps {
   data?: ProductsResponse[];
@@ -15,7 +16,7 @@ const ProductWrap = styled.div`
   grid-template-columns: repeat(3, 1fr);
 `;
 const ItemProduct = ({ data }: ProductsProps) => {
-	// console.log(data)
+  // console.log(data)
   return (
     <>
       <ProductWrap>
@@ -36,6 +37,9 @@ const ItemProduct = ({ data }: ProductsProps) => {
             priceSub={product.unitPrice}
             ticketCard="TRN Star"
             activeSoSanh={true}
+            onClick={() => {
+              Router.push("/payment-cart/" + product.id)
+            }}
           />
         ))}
       </ProductWrap>

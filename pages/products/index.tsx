@@ -27,7 +27,7 @@ const ListProduct = () => {
   const { listProjectResponse } = useSelector(
     (state: RootState) => state.projects
   );
-  
+
   const paramsSearch = {
     page: 1,
     size: 10,
@@ -62,9 +62,9 @@ const ListProduct = () => {
         dispatch(getListProject(responseProject.responseData));
         if (
           response.responseCode === "00" &&
-          responseProject.responseCode === "00"&& idProject
+          responseProject.responseCode === "00" && idProject
         ) {
-			console.log(idProject)
+          console.log(idProject)
           setLoading(true);
         }
       } catch (error) {
@@ -76,8 +76,8 @@ const ListProduct = () => {
   const fetchComponent = () => {
     return (
       <>
-        {loading === true ? (
-          <DynamicPageIndex listProducts={listProductResponse} listProject={listProjectResponse}/>
+        {loading !== true ? (
+          <DynamicPageIndex listProducts={listProductResponse} listProject={listProjectResponse} />
         ) : (
           <>
             <div style={{ textAlign: "center", marginTop: 200 }}>

@@ -1,45 +1,45 @@
-import {
-  combineReducers,
-  configureStore,
-  ThunkAction,
-  createSlice,
-} from "@reduxjs/toolkit";
-import { HYDRATE, createWrapper } from "next-redux-wrapper";
+import { combineReducers, configureStore, ThunkAction } from "@reduxjs/toolkit";
+import { createWrapper, HYDRATE } from "next-redux-wrapper";
 import { Action } from "redux";
-
 import menubar from "./menuBarSlice";
-import products from './productSlice';
-import projects from './projectSlice'
-import payments from './paymentSlice'
+import payments from "./paymentSlice";
+import products from "./productSlice";
+import projects from "./projectSlice";
+import carts from "./cartSlice";
 
 const combinedReducer = combineReducers({
   menubar,
   products,
   projects,
-  payments
+  payments,
+  carts,
 });
-export type RootState = ReturnType<typeof combinedReducer>
+export type RootState = ReturnType<typeof combinedReducer>;
 const masterReducer = (state, action) => {
   if (action.type === HYDRATE) {
     const nextState = {
       ...state,
       menubar: {
         menubarList: action.payload.menubar.listMenuBarType,
-		menuBarProjectList: action.payload.menubar.listMenuBarProjectType
+        menuBarProjectList: action.payload.menubar.listMenuBarProjectType,
       },
-	  products:{
-		listProductResponse: action.payload.products.listProductResponse,
-		productItem: action.payload.products.productItem,
-		productByID: action.payload.products.productByID,
-		productTopByOutStanding: action.payload.products.productTopByOutStanding
-	  },
-	  projects: {
-		listProjectResponse: action.payload.projects.listProjectResponse,
-		listTabsProject: action.payload.projects.listTabsProject
-	  },
-	  payments:{
-		listPaymentById: action.payload.payments.listPaymentById
-	  }
+      products: {
+        listProductResponse: action.payload.products.listProductResponse,
+        productItem: action.payload.products.productItem,
+        productByID: action.payload.products.productByID,
+        productTopByOutStanding:
+          action.payload.products.productTopByOutStanding,
+      },
+      projects: {
+        listProjectResponse: action.payload.projects.listProjectResponse,
+        listTabsProject: action.payload.projects.listTabsProject,
+      },
+      payments: {
+        listPaymentById: action.payload.payments.listPaymentById,
+      },
+      carts: {
+        getCart: action.payload.carts.getCart,
+      },
     };
     return nextState;
   } else {

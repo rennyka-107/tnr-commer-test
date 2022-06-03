@@ -93,7 +93,7 @@ const ButtonStyled = styled(Button)`
   flex-grow: 0;
 `;
 
-export const ItemCompareProduct = ({
+const ItemCompareProduct = ({
   src,
   title,
   onClick,
@@ -115,7 +115,7 @@ export const ItemCompareProduct = ({
       <CardContentStyled>
         <Link href="/products/1">
           <TextTitleStyled>
-            {title ? title : ''}
+            {title ?? ""}
           </TextTitleStyled>
         </Link>
         <CardActions>
@@ -130,3 +130,5 @@ export const ItemCompareProduct = ({
     </WrapperContent>
   );
 }
+
+export default ItemCompareProduct

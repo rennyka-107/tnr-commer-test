@@ -21,7 +21,7 @@ import {
 import Link from "next/link";
 
 type Props = {
-	id?:string,
+  id?: string,
   src?: any;
   title?: string;
   subTitle?: string;
@@ -308,14 +308,12 @@ export default function ItemProductCard({
             justifyContent: "space-around",
           }}
         >
-          <div style={{ gap: 10, display: "flex", flexDirection: "row",cursor: 'pointer' }} onClick={() => Router.push('/compare-product')} >
+          <div style={{ gap: 10, display: "flex", flexDirection: "row", cursor: 'pointer' }} onClick={() => Router.push('/compare-product')} >
             <IconPlusProduct />
             <TextButtonStyled>So sánh</TextButtonStyled>
           </div>
           <ButtonStyled
-            onClick={() => {
-              onClick;
-            }}
+            onClick={onClick}
           >
             Mua Online&nbsp;
             <IconMuaOnline />
@@ -324,9 +322,7 @@ export default function ItemProductCard({
       ) : (
         <CardActions style={{ flexDirection: "column", marginBottom: 24 }}>
           <ButtonStyled
-            onClick={() => {
-              onClick;
-            }}
+            onClick={onClick}
           >
             Mua Online&nbsp;
             <IconMuaOnline />

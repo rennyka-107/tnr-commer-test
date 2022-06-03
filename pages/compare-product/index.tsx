@@ -1,9 +1,9 @@
 import FlexContainer from "@components/CustomComponent/FlexContainer";
 import Container from "@components/Container";
-import { ItemCompareData, ItemCompareProduct, ItemImportProduct } from "@components/CustomComponent";
+import { ItemCompareData, ItemCompareProduct, ItemImportProduct, ItemProductSeen } from "@components/CustomComponent";
 import Page from "@layouts/Page";
-import { Grid, Accordion, AccordionSummary, AccordionDetails, Typography } from "@mui/material";
-import React from "react";
+import { Button, Grid, Accordion, AccordionSummary, AccordionDetails, Typography, Modal, Box, Select, FormControl, MenuItem } from "@mui/material";
+import React, { useState } from "react";
 import Product1 from "../../public/images/product1.png";
 import styled from "@emotion/styled";
 import { ExpandMore } from "@mui/icons-material";
@@ -77,6 +77,56 @@ const LineStyleCopy = styled.div`
   height: 0px;
   border: 1px solid #dcdcdc;
 `
+const TitleModal = styled(Typography)`
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 26px;
+  color: #000;
+  margin-bottom: 32px;
+  text-align: center;
+`
+const BoxModalStyled = styled(Box)`
+  width: 1275px;
+  min-height: 650px;
+  background: #fff;
+  border: none;
+  box-sizing: border-box;
+  padding: 32px 85px 90px;
+  position: relative;
+`
+const BoxTimes = styled(Button)`
+  position: absolute;
+  top: 22px;
+  right: 22px;
+`
+const BoxSearchModalStyled = styled(Box)`
+  width: 100%;
+  background: #1b3459;
+  height: 170px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0px 145px;
+`
+const ButtonSearchModalStyled = styled(Button)`
+  width: 154px;
+  height: 48px;
+  border-radius: 8px;
+  border: none;
+  background: #d60000;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 19px;
+  color: #fff;
+  &:hover {
+    background: #d60000;
+  }
+`
+
 const columnsTitle = [
   {
     title: 'Giá',
@@ -106,6 +156,8 @@ const columnsTitle = [
 
 
 const CompareProduct = () => {
+  const [open, setOpen] = useState<boolean>(false)
+
   const router = useRouter()
   const handleClickRouter = (e) => {
     e.preventDefault()
@@ -140,6 +192,48 @@ const CompareProduct = () => {
     >
       <FlexContainer>
         <Container title="So sánh bất động sản">
+          <Modal
+            open={open}
+            onClose={() => setOpen(false)}
+            aria-labelledby="modal-title"
+            aria-describedby="modal-content"
+            style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+          >
+            <BoxModalStyled>
+              <BoxTimes onClick={() => setOpen(false)}>
+                <IconTimes />
+              </BoxTimes>
+              <TitleModal>Sản phẩm đã xem gần nhất</TitleModal>
+              <Grid container spacing={3}>
+                <Grid item xs={4}>
+                  <ItemProductSeen src={Product1} />
+                </Grid>
+                <Grid item xs={4}>
+                  <ItemProductSeen src={Product1} />
+                </Grid>
+                <Grid item xs={4}></Grid>
+              </Grid>
+              <TitleModal style={{ marginTop: 33 }}>Hoặc tìm sản phẩm</TitleModal>
+              <FormControl style={{ width: '100%' }}>
+                <BoxSearchModalStyled>
+                  <Select defaultValue={"1"} style={{ background: 'white' }}>
+                    <MenuItem value="1">Dòng sản phầm</MenuItem>
+                    <MenuItem value="2">Dòng sản phầm</MenuItem>
+                  </Select>
+                  <Select defaultValue={"1"} style={{ background: 'white' }}>
+                    <MenuItem value="1">Loại sản phẩm</MenuItem>
+                    <MenuItem value="2">Loại sản phẩm</MenuItem>
+                  </Select>
+                  <Select defaultValue={"1"} style={{ background: 'white' }}>
+                    <MenuItem value="1">Khoảng giá</MenuItem>
+                    <MenuItem value="2">Khoảng giá</MenuItem>
+                    <MenuItem value="3">Khoảng giá</MenuItem>
+                  </Select>
+                  <ButtonSearchModalStyled>So sánh</ButtonSearchModalStyled>
+                </BoxSearchModalStyled>
+              </FormControl>
+            </BoxModalStyled>
+          </Modal>
           <Grid direction={'row'} justifyContent={'center'} container>
             <Grid item style={{ marginTop: 286, marginRight: 56 }}>
               {Array.from(columnsTitle).map(item => (
@@ -166,7 +260,7 @@ const CompareProduct = () => {
               <ItemCompareData />
             </Grid>
             <Grid item>
-              <ItemImportProduct />
+              <ItemImportProduct onClick={() => setOpen(true)} />
               <ItemCompareData />
             </Grid>
           </Grid>

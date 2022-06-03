@@ -3,14 +3,14 @@ import ControllerSelect from '@components/Form/ControllerSelect';
 import ControllerTextField from '@components/Form/ControllerTextField';
 import styled from '@emotion/styled';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Box, Button, CardMedia, Checkbox, FormControl, Step, StepLabel, Stepper } from '@mui/material';
+import { Box, Button, CardMedia, Checkbox, FormControl } from '@mui/material';
 import Link from 'next/link';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { validateLine } from 'utils/constants';
 import * as yup from 'yup';
 import Product1 from "../../../../public/images/product1.png";
-import FormNormalCustom from './FormNormalCustom';
+import FormNormalCustomNoLogin from './FormNormalCustomNoLogin';
 
 interface InformationCustom {
   idUser: string;
@@ -20,8 +20,8 @@ interface InformationCustom {
   addressLL: string;
   tinhTP: string;
   quanH: string;
-  objectCustom: number;
-  nickname: number;
+  objectCustom: string;
+  nickname: string;
   fullName: string;
   birthday: string;
   phoneNumber: string;
@@ -58,7 +58,6 @@ const TitleCheckboxStyled = styled.p`
   line-height: 21px;
   color: #1b3459;
   margin: 0px;
-  cursor: pointer;
 `
 const WrapperCardDetailProduct = styled(Box)`
   border: 1px solid #e4e4e4;
@@ -88,8 +87,8 @@ const TextLinkCardPayment = styled.p`
 `
 const DividerLine = styled.div`
   width: 100%;
-  height: 0;
-  border: 0.5px solid #1b3459;
+  height: 1px;
+  border-top: 1px solid #1b3459;
   margin-bottom: 16px;
 `
 const ButtonStyled = styled(Button)`
@@ -113,9 +112,37 @@ const TextButtonStyled = styled.p`
   line-height: 21px;
   color: #fff;
 `
+const ButtonSmallStyled = styled(Button)`
+  border: none;
+  border-radius: 8px;
+  background: #1b3459;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16px;
+  color: #fff;
+  &: hover {
+    background: #1b3459;
+  }
+`
+const ButtonSaveInfoStyled = styled(Button)`
+  border: 1px solid #c7c9d9;
+  border-radius: 8px;
+  background: #fff;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 21px;
+  color: #1b3459;
+  text-align: center;
+  width: 100%;
+  height: 50px;
+`
 
-const InfoCheckout = ({ setScope }: { setScope: Dispatch<SetStateAction<string>> }) => {
 
+const InfoCustomNoLogin = ({ setScope }: { setScope: Dispatch<SetStateAction<string>> }) => {
   const validationSchema = yup.object().shape({
     idUser: yup.string().trim(validateLine.trim).strict(true).required(validateLine.required).default(''),
     noiCap: yup.string().trim(validateLine.trim).strict(true).required(validateLine.required).default(''),
@@ -138,17 +165,6 @@ const InfoCheckout = ({ setScope }: { setScope: Dispatch<SetStateAction<string>>
     defaultValues: validationSchema.getDefault()
   })
 
-  const steps = [
-    'Ký hợp đồng mua bán',
-    'Thanh toán đợt 2',
-    'Thanh toán đợt 3',
-    'Thanh toán đợt 4',
-    'Thanh toán đợt 5',
-    'Thanh toán đợt 6',
-    'Thanh toán đợt 7',
-    'Bàn giao giấy chứng nhận'
-  ]
-
   const [formCustom, setFormCustom] = useState<string>('normal')
 
   const FormAddCustom = () => (
@@ -160,32 +176,32 @@ const InfoCheckout = ({ setScope }: { setScope: Dispatch<SetStateAction<string>>
         <FormControl style={{ width: '100%' }}>
           <RowStyled>
             <ControllerSelect
+              style={{ width: 317 }}
               label={'Đối tượng khách hàng'}
-              setValue={setValue}
               control={control}
-              dataSelect={[
-                { value: 1, label: "Cá nhân" },
-                { value: 2, label: "Doanh nghiệp" },
-                { value: 3, label: "Nhà nước" },
-              ]}
+              setValue={setValue}
               variant={'outlined'}
+              dataSelect={[
+                { label: "Cá nhân", value: 1 },
+                { label: "Doanh nghiệp", value: 2 },
+                { label: "Nhà nước", value: 3 }
+              ]}
               name={'objectCustom'}
               labelColor={'#1b3459'}
-              style={{ width: 317 }}
             />
             <ControllerSelect
+              style={{ width: 317 }}
               label={'Danh xưng'}
-              control={control}
               setValue={setValue}
+              control={control}
               dataSelect={[
-                { value: 1, label: "Ông" },
-                { value: 2, label: "Bà" },
-                { value: 3, label: "Anh/ chị" },
+                { label: "Ông", value: 1 },
+                { label: "Bà", value: 2 },
+                { label: "Anh/chị", value: 3 }
               ]}
               variant={'outlined'}
               name={'nickname'}
               labelColor={'#1b3459'}
-              style={{ width: 317 }}
             />
           </RowStyled>
           <RowStyled style={{ marginTop: 20 }}>
@@ -227,15 +243,20 @@ const InfoCheckout = ({ setScope }: { setScope: Dispatch<SetStateAction<string>>
 
           <DividerLine style={{ marginTop: 36, borderColor: '#d8d8d8' }} />
 
+          <TitleStyled>Thông tin cá nhân</TitleStyled>
           <RowStyled style={{ marginTop: 8 }}>
             <ControllerTextField
-              label={'CMND/CCCD'}
+              label={'Số CMND'}
               control={control}
               variant={'outlined'}
               name={'idUser'}
               labelColor={'#1b3459'}
               width={317}
             />
+            <RowStyled style={{ maxWidth: 317, height: 55, margin: 'auto 0 0', width: '100%', alignItems: 'center', justifyContent: 'space-between' }}>
+              <TitleCheckboxStyled>Đính kèm giấy CN ĐKDN</TitleCheckboxStyled>
+              <ButtonSmallStyled>Tải lên</ButtonSmallStyled>
+            </RowStyled>
           </RowStyled>
           <RowStyled style={{ marginTop: 20 }}>
             <ControllerTextField
@@ -307,30 +328,14 @@ const InfoCheckout = ({ setScope }: { setScope: Dispatch<SetStateAction<string>>
 
   return (
     <Container title="Thông tin">
-      <Box style={{ marginBottom: 60 }}>
-        <Stepper alternativeLabel activeStep={1}>
-          {steps.map((label, idx) => (
-            <Step key={idx}>
-              <StepLabel>{label}</StepLabel>
-            </Step>
-          ))}
-        </Stepper>
-      </Box>
       <RowStyled style={{ alignItems: 'start', justifyContent: 'center' }}>
 
         {/* {scopeFormCustom(formCustom)} */}
-        {formCustom === 'normal' ? <FormNormalCustom setFormCustom={setFormCustom} /> : <FormAddCustom />}
+        {formCustom === 'normal' ? <FormNormalCustomNoLogin setFormCustom={setFormCustom} /> : <FormAddCustom />}
 
         <Box style={{ marginLeft: 15 }}>
           <WrapperCardDetailProduct>
-            <CardMedia
-              style={{ borderRadius: 15 }}
-              component={'img'}
-              width={325}
-              height={200}
-              image={Product1.src}
-              alt={'Photo product'}
-            />
+            <CardMedia style={{ borderRadius: 15 }} component={'img'} width={325} height={200} image={Product1.src} alt={'Photo product'} />
             <Box style={{ margin: '26px 13px 0px' }}>
               <TitleStyled>LÔ A01</TitleStyled>
               <RowStyled>
@@ -406,11 +411,11 @@ const InfoCheckout = ({ setScope }: { setScope: Dispatch<SetStateAction<string>>
                 </span>
               </TextCardDetailPayment>
             </RowStyled>
-            <ButtonStyled onClick={() => setScope('transaction-message')} disabled={formCustom === 'add'}>
+            <ButtonStyled disabled={formCustom === 'add'}>
               <TextButtonStyled>Tạo phiếu thanh toán</TextButtonStyled>
             </ButtonStyled>
             <RowStyled style={{ justifyContent: 'center', marginTop: 14 }}>
-              <TitleCheckboxStyled>Lưu thông tin</TitleCheckboxStyled>
+              <ButtonSaveInfoStyled onClick={() => setScope('transaction-message')}>Lưu thông tin</ButtonSaveInfoStyled>
             </RowStyled>
           </Box>
         </Box>
@@ -419,4 +424,4 @@ const InfoCheckout = ({ setScope }: { setScope: Dispatch<SetStateAction<string>>
   )
 }
 
-export default InfoCheckout
+export default InfoCustomNoLogin

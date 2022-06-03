@@ -1,6 +1,7 @@
+import QRCode from 'qrcode'
 import Container from '@components/Container'
 import { Box, Typography, Button, CardMedia } from '@mui/material'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from '@emotion/styled'
 import QR_IMG from '../../../../public/images/qr-transaction.png'
 import { useRouter } from 'next/router'
@@ -63,6 +64,13 @@ const ButtonStyled = styled(Button)`
 
 const TransactionMessage = () => {
   const router = useRouter()
+  const [src, setSrc] = useState<string>('')
+
+  useEffect(() => {
+    QRCode.toDataURL("src qr-code").then(setSrc)
+  }, [])
+  console.log(src)
+
   return (
     <Container>
       <BoxTransaction>
@@ -71,7 +79,7 @@ const TransactionMessage = () => {
           Quý khách vui lòng hoàn thiện hồ sơ mua bán trong vòng 12 tiếng
           để được nhận phiếu đặt hàng
         </TextStyled>
-        <CardMedia component={'img'} style={{ width: 92, height: 92, marginBottom: 80 }} src={QR_IMG.src} alt={'qr-transaction-img'} />
+        <CardMedia component={'img'} style={{ width: 92, height: 92, marginBottom: 80 }} src={src || QR_IMG.src} alt={'qr-transaction-img'} />
         <ButtonStyled onClick={() => { router.push('/') }}>Về trang chủ</ButtonStyled>
       </BoxTransaction>
     </Container>

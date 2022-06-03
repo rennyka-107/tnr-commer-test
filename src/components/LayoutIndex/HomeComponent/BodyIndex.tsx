@@ -15,6 +15,7 @@ import Product1 from "../../../../public/images/product1.png";
 import Product2 from "../../../../public/images/product2.png";
 import Product3 from "../../../../public/images/product3.png";
 import { RootState } from "../../../../store/store";
+import Router from "next/router";
 
 interface ProductsIndexProps {
   listProductOutOfStanding?: TBOUTStanding[];
@@ -114,7 +115,7 @@ export default function BodyIndex() {
           <TextBottomIcon>Căn hộ dịch vụ</TextBottomIcon>
         </WrapIconContainer>
         <WrapIconContainer>
-          <WrapIcon  className="icon-batdongsan-hover">
+          <WrapIcon className="icon-batdongsan-hover">
             <IconBatDongSan className="icon-batdongsan-hover" />
           </WrapIcon>
           <TextBottomIcon>Bất động sản nghỉ dưỡng</TextBottomIcon>
@@ -137,7 +138,7 @@ export default function BodyIndex() {
             justifyContent: "space-between",
             textAlign: "center",
             marginTop: 75,
-            marginBottom: 33,
+            marginBottom: 33
           }}
         ></div>
         <div>
@@ -171,6 +172,9 @@ export default function BodyIndex() {
                     priceListed={item.price}
                     priceSub={item.unitPrice}
                     ticketCard="TRN Gold"
+                    onClick={() => {
+                      Router.push('/payment-cart')
+                    }}
                   />
                 ))}
               </>
@@ -191,6 +195,7 @@ export default function BodyIndex() {
             priceListed={3018933000}
             priceSub={40580174}
             ticketCard="TRN Star"
+            onClick={() => Router.push('/payment-cart')}
           />
           <ItemProductCard
             src={Product3}

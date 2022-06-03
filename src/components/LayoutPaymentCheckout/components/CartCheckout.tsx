@@ -1,9 +1,12 @@
 import { Button, Card, CardMedia, Grid, MenuItem, Select, TextField } from '@mui/material'
-import React, { Dispatch, SetStateAction } from 'react'
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import styled from "@emotion/styled"
 import { IconRadio, IconTimes } from '@components/Icons'
 import Product1 from "../../../../public/images/product1.png";
 import Container from '@components/Container';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../../../store/store';
+import { isEmpty } from 'lodash';
 
 const WrapperCardDetail = styled.div`
   display: flex;
@@ -119,6 +122,14 @@ const WrapperCardPayment = styled.div`
 `
 
 const CartCheckout = ({ setScope }: { setScope: Dispatch<SetStateAction<string>> }) => {
+  const { getCart } = useSelector((state: RootState) => state.carts)
+  const [prod, setProd] = useState<object | any>({})
+  useEffect(() => {
+    if (!isEmpty(getCart)) {
+      setProd(getCart)
+    }
+  }, [getCart])
+
   return (
     <Container title="Thanh toán">
       <Grid container alignItems='flex-start' columnSpacing={'31px'} justifyContent="center" style={{ marginBottom: 200 }}>
@@ -131,27 +142,27 @@ const CartCheckout = ({ setScope }: { setScope: Dispatch<SetStateAction<string>>
               <IconRadio style={{ margin: '0px 10px 0px 20px', width: '5em' }} />
               <CardMedia style={{ borderRadius: 15 }} component={'img'} width={308} height={200} image={Product1.src} alt={'Photo product'} />
               <WrapperDetail>
-                <TitleStyled>Căn A01</TitleStyled>
+                <TitleStyled>{prod.name ?? 'N/A'}</TitleStyled>
                 <div style={{ display: 'flex' }}>
-                  <TextStyled>Toà A</TextStyled>
+                  <TextStyled>{prod.homeNul ?? 'N/A'}</TextStyled>{'     '}
                   <TextStyled>Tầng 26</TextStyled>
                 </div>
                 <DividerLine />
                 <WrapperLine>
                   <TextStyled>Diễn tích</TextStyled>
-                  <TextStyled>80 m<sup>2</sup></TextStyled>
+                  <TextStyled>{prod.landArea ?? 'N/A'} m<sup>2</sup></TextStyled>
                 </WrapperLine>
                 <WrapperLine>
                   <TextStyled>Phòng ngủ</TextStyled>
-                  <TextStyled>3</TextStyled>
+                  <TextStyled>{prod.numBed ?? 'N/A'}</TextStyled>
                 </WrapperLine>
                 <WrapperLine>
                   <TextStyled>Phòng tắm</TextStyled>
-                  <TextStyled>2</TextStyled>
+                  <TextStyled>{prod.numBath ?? 'N/A'}</TextStyled>
                 </WrapperLine>
                 <WrapperLine>
                   <TextStyled>Hướng</TextStyled>
-                  <TextStyled>Nam</TextStyled>
+                  <TextStyled>{prod.doorDirection ?? 'N/A'}</TextStyled>
                 </WrapperLine>
               </WrapperDetail>
             </WrapperProduct>
@@ -178,21 +189,21 @@ const CartCheckout = ({ setScope }: { setScope: Dispatch<SetStateAction<string>>
             <TitleStyled>Báo giá</TitleStyled>
             <WrapperLine>
               <TextStyled>Giá BĐS</TextStyled>
-              <TextStyled>2.114.200.000 đ</TextStyled>
+              <TextStyled>{prod.totalPrice ?? 'N/A'} đ</TextStyled>
             </WrapperLine>
             <WrapperLine>
               <TextStyled>Thuế VAT</TextStyled>
-              <TextStyled>0 đ</TextStyled>
+              <TextStyled>{prod.vat ?? 'N/A'} đ</TextStyled>
             </WrapperLine>
             <WrapperLine>
               <TextStyled>Phí bảo trì</TextStyled>
-              <TextStyled>0 đ</TextStyled>
+              <TextStyled>{prod.maintainPrice ?? 'N/A'} đ</TextStyled>
             </WrapperLine>
 
             <DividerLine />
             <WrapperLine>
               <TextStyled>Tổng tiền niêm yết</TextStyled>
-              <TextStyled>2.114.200.000 đ</TextStyled>
+              <TextStyled>{prod.price ?? 'N/A'} đ</TextStyled>
             </WrapperLine>
             <WrapperLine>
               <TextStyled>Giảm giá</TextStyled>
@@ -200,7 +211,9 @@ const CartCheckout = ({ setScope }: { setScope: Dispatch<SetStateAction<string>>
             </WrapperLine>
             <WrapperLine>
               <TextStyled>Tổng tiền mua online</TextStyled>
-              <TextStyled style={{ fontWeight: 500, fontSize: 18, color: '#ea242a', marginTop: -2 }}>2.114.200.000 đ</TextStyled>
+              <TextStyled style={{ fontWeight: 500, fontSize: 18, color: '#ea242a', marginTop: -2 }}>
+                {prod.price ?? 'N/A'} đ
+              </TextStyled>
             </WrapperLine>
 
             <DividerLine />

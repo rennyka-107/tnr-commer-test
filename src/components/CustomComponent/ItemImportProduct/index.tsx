@@ -1,8 +1,7 @@
-import React from 'react'
-import styled from '@emotion/styled'
-import { MouseEventHandler } from 'react'
-import { Card } from '@mui/material';
 import { IconPlusProduct } from '@components/Icons';
+import styled from '@emotion/styled';
+import { Button, Card } from '@mui/material';
+import React, { MouseEventHandler } from 'react';
 
 type Props = {
   onClick?: MouseEventHandler<HTMLButtonElement>;
@@ -15,10 +14,6 @@ const WrapperContent = styled(Card)`
   background: #F2F2F2;
   box-shadow: none;
   border: none;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
 `
 const TextStyled = styled.span`
   margin-top: 20px;
@@ -29,14 +24,26 @@ const TextStyled = styled.span`
   line-height: 16px;
   color: #0E1D34;
 `
+const ButtonStyled = styled(Button)`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`
 
-export const ItemImportProduct = ({ onClick }: Props) => {
+const ItemImportProduct = ({ onClick }: Props) => {
   return (
     <WrapperContent>
-      <IconPlusProduct style={{ width: 46.6, height: 46.6, marginTop: 10 }} />
-      <TextStyled>
-        Thêm sản phầm so sánh
-      </TextStyled>
+      <ButtonStyled onClick={onClick}>
+        <IconPlusProduct style={{ width: 46.6, height: 46.6, marginTop: 10 }} />
+        <TextStyled>
+          Thêm sản phầm so sánh
+        </TextStyled>
+      </ButtonStyled>
     </WrapperContent>
   )
 }
+
+export default ItemImportProduct

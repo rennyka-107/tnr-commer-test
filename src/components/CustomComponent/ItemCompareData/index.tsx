@@ -24,7 +24,7 @@ const styleFirst = {
   lineHeight: '130%'
 }
 
-export const ItemCompareData = () => {
+const ItemCompareData = () => {
   return (
     <WrapperContent>
       {Array.from(Array(6)).map((_, idx) => (
@@ -35,3 +35,5 @@ export const ItemCompareData = () => {
     </WrapperContent>
   )
 }
+
+export default ItemCompareData

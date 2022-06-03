@@ -220,7 +220,11 @@ const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
               onSelect={handleNavigateUser}
             />
             <IconHeart />
-            <IconBag total={10} />
+            <Link href="/payment-cart">
+              <a>
+                <IconBag total={10} />
+              </a>
+            </Link>
           </IconAccountWrap>
         </WrapRightItem>
       </BodyContainer>
