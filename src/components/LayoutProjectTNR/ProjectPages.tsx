@@ -72,6 +72,7 @@ const ProjectPages = () => {
                         <Grid item xs={12} sm={12} md={6} lg={4} xl={3} key={index}>
                             <ContainerProduct>
                                 <DynamicProductCard
+								id={el.id}
                                     src={{ src: '/images/product2.png' }}
                                     title={el.name}
                                     subTitle={el.location}

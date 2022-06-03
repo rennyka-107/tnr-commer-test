@@ -76,7 +76,7 @@ const ListProduct = () => {
   const fetchComponent = () => {
     return (
       <>
-        {loading !== true ? (
+        {loading === true ? (
           <DynamicPageIndex listProducts={listProductResponse} listProject={listProjectResponse} />
         ) : (
           <>

@@ -18,6 +18,7 @@ import * as React from "react";
 import { MouseEventHandler } from "react";
 
 export interface ProjectI {
+	id: string;
     src?: any;
     title?: string;
     subTitle?: string;
@@ -112,6 +113,7 @@ const TextDescription = styled(Typography)`
 `;
 
 export default function ItemProjectCard({
+	id,
     src,
     title,
     subTitle,
@@ -172,7 +174,7 @@ export default function ItemProjectCard({
 
             <CardContentStyled>
                 <div style={{ marginBottom: 7 }}>
-                    <Link href="/products/1">
+                    <Link href={`/products?idProject=${id}`}>
                         <TextTitleStyled style={{ marginBottom: 9 }}>
                             {title}
                         </TextTitleStyled>

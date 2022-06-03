@@ -46,8 +46,9 @@ const Product = () => {
 
         if (
           response.responseCode === "00" &&
-          responAPIBYID.responseCode === "00" && productId
+          responAPIBYID.responseCode === "00"  && productId
         ) {
+			console.log('abc')
           setLoading(true);
         }
       } catch (error) {
