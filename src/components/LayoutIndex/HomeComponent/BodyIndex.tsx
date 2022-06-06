@@ -8,13 +8,17 @@ import {
 } from "@components/Icons";
 import _ from "lodash";
 import styled from "@emotion/styled";
+import { useRouter } from "next/router";
+import PathRoute from "utils/PathRoute";
 import { Button, Typography } from "@mui/material";
 import { TBOUTStanding } from "interface/product";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Product1 from "../../../../public/images/product1.png";
 import Product2 from "../../../../public/images/product2.png";
 import Product3 from "../../../../public/images/product3.png";
 import { RootState } from "../../../../store/store";
+import { getListProductApi } from "../../../../pages/api/productsApi";
+import { getListProduct } from "../../../../store/productSlice";
 import Router from "next/router";
 
 interface ProductsIndexProps {
@@ -44,8 +48,8 @@ const WrapIcon = styled(Button)`
   border-radius: 20px;
   text-align: center;
   padding: 30px;
-  :hover{
-	background: #1b3459;
+  :hover {
+    background: #1b3459;
   }
 `;
 
@@ -94,38 +98,60 @@ const ContainerProduct = styled.div`
   height: auto;
 `;
 export default function BodyIndex() {
+  const dispatch = useDispatch();
+
+  const router = useRouter();
+  const { listMenuBarProjectType } = useSelector(
+    (state: RootState) => state.menubar
+  );
   const { productTopByOutStanding } = useSelector(
     (state: RootState) => state.products
   );
 
   const sizeOfArray = _.size(productTopByOutStanding);
+
+  const onClickProduct = async (projectTypeId) => {
+    const paramsSearch = {
+      page: 1,
+      size: 10,
+    };
+
+    const searchList = {
+      projectId: "",
+      location: "",
+      projectTypeId: projectTypeId,
+    };
+    try {
+      const response = await getListProductApi(paramsSearch, searchList);
+      dispatch(getListProduct(response.responseData));
+
+      if (response.responseCode === "00") {
+        console.log("response", response);
+        router.replace(`/${PathRoute.ProductTNR}?type=${projectTypeId}`);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <FlexContainer>
       <WrapContainer>
-        <WrapIconContainer >
-          <WrapIcon className="icon-chungcu-hover">
-            <IconChungCu className="icon-chungcu-hover" />
-          </WrapIcon>
-          <TextBottomIcon>Chung cư</TextBottomIcon>
-        </WrapIconContainer>
-        <WrapIconContainer >
-          <WrapIcon className="icon-canho-hover">
-            <IconCanHo className="icon-canho-hover" />
-          </WrapIcon>
-          <TextBottomIcon>Căn hộ dịch vụ</TextBottomIcon>
-        </WrapIconContainer>
-        <WrapIconContainer>
-          <WrapIcon className="icon-batdongsan-hover">
-            <IconBatDongSan className="icon-batdongsan-hover" />
-          </WrapIcon>
-          <TextBottomIcon>Bất động sản nghỉ dưỡng</TextBottomIcon>
-        </WrapIconContainer>
-        <WrapIconContainer >
-          <WrapIcon className="icon-khudothi-hover">
-            <IconKhuDoThi className="icon-khudothi-hover" />
-          </WrapIcon>
-          <TextBottomIcon>Khu đô thị</TextBottomIcon>
-        </WrapIconContainer>
+        {(listMenuBarProjectType || []).map((item, index) => {
+          return (
+            <WrapIconContainer
+              key={index}
+              onClick={() => {
+                onClickProduct(item.id);
+              }}
+            >
+              <WrapIcon>
+                <IconChungCu />
+              </WrapIcon>
+              <TextBottomIcon>{item.name}</TextBottomIcon>
+            </WrapIconContainer>
+          );
+        })}
       </WrapContainer>
       <ContainerProduct
         style={{
@@ -138,7 +164,7 @@ export default function BodyIndex() {
             justifyContent: "space-between",
             textAlign: "center",
             marginTop: 75,
-            marginBottom: 33
+            marginBottom: 33,
           }}
         ></div>
         <div>
@@ -173,7 +199,7 @@ export default function BodyIndex() {
                     priceSub={item.unitPrice}
                     ticketCard="TRN Gold"
                     onClick={() => {
-                      Router.push('/payment-cart')
+                      Router.push("/payment-cart");
                     }}
                   />
                 ))}

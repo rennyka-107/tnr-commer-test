@@ -121,12 +121,12 @@ export default function ItemProjectCard({
     ticketCard,
     description
 }: ProjectI) {
-    function currencyFormat(num) {
-        if (!num) {
-            return;
-        }
-        return num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-    }
+    // function currencyFormat(num) {
+    //     if (!num) {
+    //         return;
+    //     }
+    //     return num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+    // }
     return (
         <CardStyled sx={{ maxWidth: 350 }}>
             <IconHeartProduct

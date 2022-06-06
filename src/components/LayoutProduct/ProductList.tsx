@@ -1,14 +1,20 @@
+import Container from "@components/Container";
 import FlexContainer from "@components/CustomComponent/FlexContainer";
-import Typography from "@mui/material/Typography";
+import PaginationComponent from "@components/CustomComponent/PaginationComponent";
+import Row from "@components/CustomComponent/Row";
+import styled from "@emotion/styled";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
-import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import styled from "@emotion/styled";
-import dynamic from "next/dynamic";
+import Select from "@mui/material/Select";
+import Typography from "@mui/material/Typography";
+import useProductList from "hooks/useProductList";
 import { ProductsResponse } from "interface/product";
 import { ProjectResponse } from "interface/project";
-import { useState } from "react";
+import dynamic from "next/dynamic";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../store/store";
 
 interface ProductsProps {
   listProducts?: ProductsResponse[];
@@ -27,6 +33,14 @@ const TextHeaderStyled = styled(Typography)`
   color: #1b3459;
 `;
 
+const HeaderContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 22px;
+  margin-bottom: 52px;
+`;
+
 const DynamicBreadcrumsComponent = dynamic(
   () => import("../../components/CustomComponent/BreadcrumsComponent/index"),
   { loading: () => <p>...</p> }
@@ -36,7 +50,30 @@ const DynamicItemProductComponent = dynamic(
   { loading: () => <p>...</p> }
 );
 
-const ProductPages = ({ listProducts, listProject }: ProductsProps) => {
+const ProductList = ({ listProducts, listProject }: ProductsProps) => {
+  const {
+    data,
+    error,
+    loading,
+    changePageNumber,
+    totalPage,
+    changeBody,
+    body,
+    params,
+  } = useProductList();
+  const [titleData, setTitleData] = useState("");
+
+  const { listMenuBarProjectType } = useSelector(
+    (state: RootState) => state.menubar
+  );
+
+  useEffect(() => {
+    const items = listMenuBarProjectType.find(
+      (item) => item.id === body?.projectTypeId
+    );
+    setTitleData(items?.name);
+  }, [body]);
+
   const listBread = [
     {
       id: 1,
@@ -44,38 +81,16 @@ const ProductPages = ({ listProducts, listProject }: ProductsProps) => {
     },
     {
       id: 2,
-      value: listProject ? listProject[0]?.funcDivision : "",
+      value: titleData,
     },
   ];
+
   return (
     <FlexContainer>
-      <div
-        style={{
-          marginTop: 166,
-          display: "flex",
-          flexDirection: "column",
-          width: "70%",
-        }}
-      >
-        <div>
-          <DynamicBreadcrumsComponent
-            breaditem={listBread}
-            activePage={listProject ? listProject[0]?.name : ""}
-          />
-        </div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            flexDirection: "row",
-            alignItems: "center",
-            marginBottom: 56,
-          }}
-        >
-          <TextHeaderStyled>
-            {listProject ? listProject[0]?.name : ""}
-          </TextHeaderStyled>
-          <div>
+      <Container
+        title={titleData ? titleData : "Tất cả"}
+        rightContent={
+          <div style={{ display: "flex", justifyContent: "end" }}>
             <FormControl style={{ width: 115, marginRight: 10, height: 48 }}>
               <InputLabel id="demo-simple-select-label">Vị trí</InputLabel>
               <Select
@@ -83,7 +98,7 @@ const ProductPages = ({ listProducts, listProject }: ProductsProps) => {
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 //   value="Vị Trí"
-                //   label="Age"
+                label="Vị trí"
                 onChange={() => console.log("abc")}
               >
                 <MenuItem value={10}>Đông Nam</MenuItem>
@@ -98,7 +113,7 @@ const ProductPages = ({ listProducts, listProject }: ProductsProps) => {
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 //   value="age"
-                //   label="Age"
+                label="Loại"
                 onChange={() => console.log("abc")}
               >
                 <MenuItem value={10}>Loại</MenuItem>
@@ -107,11 +122,23 @@ const ProductPages = ({ listProducts, listProject }: ProductsProps) => {
               </Select>
             </FormControl>
           </div>
-        </div>
-      </div>
-      <DynamicItemProductComponent data={listProducts} />
+        }
+      >
+        <>
+          <DynamicItemProductComponent data={data} />
+          <Row customStyle={{ padding: 70, justifyContent: "center" }}>
+            <PaginationComponent
+              count={totalPage}
+              onChange={(event, page) => {
+                changePageNumber(page);
+              }}
+              page={params.pageNumber}
+            />
+          </Row>
+        </>
+      </Container>
     </FlexContainer>
   );
 };
 
-export default ProductPages;
+export default ProductList;

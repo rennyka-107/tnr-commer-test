@@ -7,7 +7,8 @@ let PathRoute = {
     BuyingGuide: '/buyingGuide',
     AboutAccount : '/aboutAccount',
     AboutProcedure: '/aboutProcedure',
-    AboutSupport: '/aboutSupport'
+    AboutSupport: '/aboutSupport',
+    ProductTNR: '/productTNR'
 }
 
 export default PathRoute;

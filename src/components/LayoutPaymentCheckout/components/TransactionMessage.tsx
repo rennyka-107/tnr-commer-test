@@ -1,4 +1,4 @@
-import QRCode from 'qrcode'
+// import QRCode from 'qrcode'
 import Container from '@components/Container'
 import { Box, Typography, Button, CardMedia } from '@mui/material'
 import React, { useEffect, useState } from 'react'
@@ -67,7 +67,7 @@ const TransactionMessage = () => {
   const [src, setSrc] = useState<string>('')
 
   useEffect(() => {
-    QRCode.toDataURL("src qr-code").then(setSrc)
+    // QRCode.toDataURL("src qr-code").then(setSrc)
   }, [])
   console.log(src)
 

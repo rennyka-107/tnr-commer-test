@@ -43,7 +43,6 @@ const ItemProduct = ({ data }: ProductsProps) => {
           />
         ))}
       </ProductWrap>
-      <PaddingComponent />
     </>
   );
 };

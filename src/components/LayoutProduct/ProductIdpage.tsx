@@ -403,14 +403,14 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
     setTabCardValue(true);
     setTypeBottomShow(1);
   };
-  function currencyFormat(num) {
-    if (!num) {
-      return;
-    }
-    return Math.round(num)
-      .toFixed(0)
-      .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-  }
+//   function currencyFormat(num) {
+//     if (!num) {
+//       return;
+//     }
+//     return Math.round(num)
+//       .toFixed(0)
+//       .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+//   }
   const fetchPhieuTinhGia = () => {
     return (
       <>
@@ -787,7 +787,7 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                       Giá niêm yết{" "}
                     </TextBottomStyled>
                     <NumberBottomStyled>
-                      {currencyFormat(dataProduct?.price)}đ
+                      {dataProduct?.price}đ
                     </NumberBottomStyled>
                   </div>
                   <div style={{ display: "flex" }}>
@@ -795,7 +795,7 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                       Đơn giá thông thuỷ{" "}
                     </TextBottomStyled2>
                     <NumberBottomStyled2>
-                      {currencyFormat(dataProduct?.unitPrice)}đ/m2
+                      {dataProduct?.unitPrice}đ/m2
                     </NumberBottomStyled2>
                   </div>
                 </div>

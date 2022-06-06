@@ -1,4 +1,4 @@
-const IconChungCu = ({ style,className }: { style?: React.CSSProperties,className: string }) => {
+const IconChungCu = ({ style,className }: { style?: React.CSSProperties,className?: string }) => {
   return (
     <>
       <svg

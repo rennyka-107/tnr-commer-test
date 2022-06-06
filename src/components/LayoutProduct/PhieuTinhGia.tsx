@@ -226,14 +226,14 @@ const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
     );
   };
 
-  function currencyFormat(num) {
-    if (!num) {
-      return;
-    }
-    return Number(num)
-      .toFixed(0)
-      .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-  }
+//   function currencyFormat(num) {
+//     if (!num) {
+//       return;
+//     }
+//     return Number(num)
+//       .toFixed(0)
+//       .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+//   }
 
   return (
     <WrapBodyStyped>
@@ -331,7 +331,7 @@ const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
                 <div style={{ border: "1px solid #E7E9EC" }} />
                 <div style={{ margin: "auto" }}>
                   <TextBoldInWrapBottom>
-                    -{currencyFormat(item.Value)}
+                    -{item.Value}
                   </TextBoldInWrapBottom>
                 </div>
               </div>
@@ -367,7 +367,7 @@ const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
                   fontWeight: 400,
                 }}
               >
-                {currencyFormat(dataProduct.lurUnitPrice)}
+                {dataProduct.lurUnitPrice}
               </TextOnCardRight>
             </div>
             <WrapRightCardText>
@@ -405,7 +405,7 @@ const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
                   fontWeight: 400,
                 }}
               >
-                {currencyFormat(dataProduct.lurPrice)}
+                {dataProduct.lurPrice}
               </TextOnCardRight>
             </div>
             <WrapRightCardText>
@@ -443,7 +443,7 @@ const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
                   fontWeight: 400,
                 }}
               >
-                {currencyFormat(productItem.BuildPrice)}
+                {productItem.BuildPrice}
               </TextOnCardRight>
             </div>
             <WrapRightCardText>
@@ -481,7 +481,7 @@ const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
                   fontWeight: 400,
                 }}
               >
-                {currencyFormat(productItem.BuildMoney)}
+                {productItem.BuildMoney}
               </TextOnCardRight>
             </div>
             <WrapRightCardText>
@@ -519,7 +519,7 @@ const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
                   fontWeight: "bold",
                 }}
               >
-                {currencyFormat(productItem.TotalMoney)}
+                {productItem.TotalMoney}
               </TextOnCardRight>
             </div>
             <WrapRightCardText>
@@ -655,7 +655,7 @@ const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
             <TextCenterRight
               style={{ fontSize: 18, margin: "auto", marginRight: 0 }}
             >
-              {currencyFormat(dataProduct?.price)} vnd
+              {dataProduct?.price} vnd
             </TextCenterRight>
           </div>
           <div style={{ border: "1px solid #C7C9D9" }} />
@@ -667,7 +667,7 @@ const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
               <Typography
                 style={{ fontSize: 18, fontWeight: 700, color: "#EA242A" }}
               >
-                {currencyFormat(productItem.TotalMoney)} vnd
+                {productItem.TotalMoney} vnd
               </Typography>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
