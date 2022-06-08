@@ -3,7 +3,9 @@ import styled from "@emotion/styled";
 import Link from "next/link";
 import Router from "next/router";
 import { useContext } from "react";
+import LocalStorage from "utils/LocalStorage";
 import PathRoute from "utils/PathRoute";
+import SessionStorage from "utils/SessionStorage";
 
 const ContainerStyled = styled.div`
   height: 34px;
@@ -44,24 +46,46 @@ const IconCountryStyle = {
 };
 
 const HeaderTop = () => {
+  const user = SessionStorage.get("accessToken");
 
   return (
     <ContainerStyled>
       <WrapContainer>
         <LinkContainer>
           {/* <Link href={`http://localhost:3000${PathRoute.Profile}`} passHref> */}
-          <TextLink
-            onClick={() => {
-              Router.replace(`/authen?prePath=%2Fprofile&tabIndex=register`, undefined, { shallow: true });
-            }}
-          >
-            Về tài khoản
-          </TextLink>
+          {user !== null ? (
+                        <TextLink
+						onClick={() => {
+						  Router.replace(
+							`/profile`,
+							undefined,
+							{ shallow: true }
+						  );
+						}}
+					  >
+						Về tài khoản
+					  </TextLink>
+          ) : (
+            <TextLink
+              onClick={() => {
+                Router.replace(
+                  `/authen?prePath=%2Fprofile&tabIndex=register`,
+                  undefined,
+                  { shallow: true }
+                );
+              }}
+            >
+              Về tài khoản
+            </TextLink>
+          )}
+
           {/* </Link> */}
           {/* <Link href={`http://localhost:3000${PathRoute.BuyingGuide}`} passHref> */}
           <TextLink
             onClick={() => {
-              Router.replace(`${PathRoute.BuyingGuide}`, undefined, { shallow: true });
+              Router.replace(`${PathRoute.BuyingGuide}`, undefined, {
+                shallow: true,
+              });
             }}
           >
             Về quy trình mua BĐS Online
@@ -76,7 +100,9 @@ const HeaderTop = () => {
           {/* <Link href="" passHref > */}
           <TextLink
             onClick={() => {
-              Router.replace(`${PathRoute.BuyingGuide}`, undefined, { shallow: true });
+              Router.replace(`${PathRoute.BuyingGuide}`, undefined, {
+                shallow: true,
+              });
             }}
           >
             Về hỗ trợ

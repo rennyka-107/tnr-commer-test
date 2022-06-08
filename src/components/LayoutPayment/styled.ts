@@ -7,9 +7,12 @@ const text_normal = styled(Typography)(
     fontStyle: "normal",
     fontWeight: 400,
     padding: 0,
+    textTransform: "none",
+    // width: "100%",
   },
-  (props: { color?: string }) => ({
+  (props: { color?: string; mw?: number | string }) => ({
     color: props.color ?? "#1b3459",
+    maxWidth: props.mw,
   })
 );
 
@@ -32,17 +35,24 @@ export const ColStyled = styled(Box)(
     width: "100%",
     height: "100%",
   },
-  (props: { jContent?: string; aItems?: string }) => ({
+  (props: { jContent?: string; aItems?: string; mw?: string | number }) => ({
     justifyContent: props.jContent ?? "start",
     alignItems: props.aItems ?? "start",
+    maxWidth: props.mw,
   })
 );
 
-export const LinedStyled = styled.div({
-  width: "100%",
-  height: 1,
-  borderTop: "1px solid #c7c9d9",
-});
+export const LinedStyled = styled.div(
+  {
+    width: "100%",
+    height: 1,
+    borderTop: "1px solid #c7c9d9",
+  },
+  (props: { mw?: string | number; borderColor?: string }) => ({
+    maxWidth: props.mw,
+    borderColor: props.borderColor,
+  })
+);
 
 export const WrapperBoxBorderStyled = styled(Box)(
   {
@@ -114,9 +124,32 @@ export const ButtonStyled = styled(Button)(
     borderRadius: 8,
     textAlign: "center",
   },
-  (props: { border?: string; height?: number; bg?: string }) => ({
+  (props: {
+    border?: string;
+    height?: number;
+    bg?: string;
+    margin?: string | number;
+    mw?: number | string;
+  }) => ({
+    margin: props.margin,
     border: props.border,
     height: props.height ?? 50,
     background: props.bg ?? "#ea242a",
+    maxWidth: props.mw,
   })
 );
+
+export const ButtonNormalStyled = styled(ButtonStyled)`
+  &: hover {
+    background: #1b3459;
+  }
+`;
+
+export const ButtonAction = styled(ButtonStyled)`
+  &: hover {
+    background: #ea242a;
+  }
+  &: disabled {
+    background: #a4a4a4;
+  }
+`;

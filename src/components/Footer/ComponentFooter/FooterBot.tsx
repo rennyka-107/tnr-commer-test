@@ -132,13 +132,13 @@ const FooterBot = ({ listMenuBarProjectType }: MenuProps) => {
         >
           <TitleTypo style={{ fontSize: "18px" }}>Hỗ trợ</TitleTypo>
           <LineInfo2  onClick={() => {
-				Router.replace(`/buyingGuide`);
+				Router.replace(`/buyingGuide?id=4`);
 			  }}>Hướng dẫn mua nhà Online</LineInfo2>
           <LineInfo2 onClick={() => {
-				Router.replace(`/buyingGuide`);
+				Router.replace(`/buyingGuide?id=5`);
 			  }}>Hướng dẫn mua nhà Offline</LineInfo2>
           <LineInfo2 onClick={() => {
-				Router.replace(`/buyingGuide`);
+				Router.replace(`/buyingGuide?id=8`);
 			  }}>Câu hỏi thường gặp</LineInfo2>
           <LineInfo2 onClick={() => {
 				Router.replace(`/buyingGuide`);

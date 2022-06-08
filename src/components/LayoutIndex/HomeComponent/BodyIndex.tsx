@@ -133,7 +133,7 @@ export default function BodyIndex() {
       console.log(error);
     }
   };
-
+  console.log(listMenuBarProjectType)
   return (
     <FlexContainer>
       <WrapContainer>

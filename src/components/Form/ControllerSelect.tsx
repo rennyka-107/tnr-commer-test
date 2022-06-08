@@ -19,12 +19,13 @@ interface Props<T> extends Omit<SelectProps, 'name'> {
     variant?: "standard" | "filled" | "outlined";
     dataSelect: itemSelect[];
     isClear?: boolean;
+    width?: number | string;
 }
 
 const Container = styled.div``;
 
 const LabelSpan = styled.span<{ color: string }>`
-  margin-bottom:7px;
+  margin-bottom: 4px;
   color: ${({ color }) => color ?? "#1B3459"};
   font-family: Roboto;
   font-style: normal;
@@ -46,14 +47,14 @@ const ErrorText = styled(FormHelperText)`
 `
 
 const ControllerSelect = <T extends FieldValues>(props: Props<T>) => {
-    const { control, setValue, name, label, variant, required, labelColor, isClear, dataSelect, displayEmpty, ...rest } = props;
+    const { width, control, setValue, name, label, variant, required, labelColor, isClear, dataSelect, displayEmpty, ...rest } = props;
 
     const clearSelect = () => {
         setValue(name, '');
     }
 
     return (
-        <Container>
+        <Container style={{ width: width ?? '100%' }}>
             {label && (<LabelSpan color={labelColor}>{label}{required && <RequiredSpan>*</RequiredSpan>}</LabelSpan>)}
             <Controller
                 render={({ field, fieldState: { error } }) => (

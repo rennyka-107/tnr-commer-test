@@ -40,6 +40,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../store/store";
 import { ProjectResponse } from "interface/project";
 import { ResponseSearchById } from "interface/product";
+import { useRouter } from "next/router";
 
 interface ProductsProps {
   listProject?: ProjectResponse[];
@@ -303,6 +304,8 @@ const TextContact = styled(Typography)`
 `;
 
 const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
+  const router = useRouter();
+  const id = router.asPath.split("/")[2];
 
   const mockDataPhieutinhgia = {
     ProjectName: "TNR AMALUNA - TRÀ VINH",
@@ -810,13 +813,15 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                   <ButtonStyled
                     onClick={() => {
                       console.log("abc");
+                      // router.push("/compare-product");
                     }}
                   >
                     Giỏ hàng
                   </ButtonStyled>
                   <ButtonStyled
                     onClick={() => {
-                      console.log("abc");
+                      // console.log("abc");
+                      router.push("/payment-cart/" + id);
                     }}
                   >
                     Mua Online
@@ -903,7 +908,6 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
           {typeBottomShow === 1 ? (
             <>
               <DynamicTabsComponent />
-
             </>
           ) : (
             <> {fetchPhieuTinhGia()} </>

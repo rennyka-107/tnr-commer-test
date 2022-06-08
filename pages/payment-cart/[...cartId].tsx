@@ -1,73 +1,68 @@
-import FlexContainer from '@components/CustomComponent/FlexContainer'
-import Page from '@layouts/Page'
-import React, { useEffect, useState } from 'react'
-import { CartCheckout, InfoCheckout, InfoCustomNoLogin, TransactionMessage } from '@components/LayoutPaymentCheckout'
-import { useRouter } from 'next/router'
-import { useDispatch } from 'react-redux'
-import { getProducById } from '../api/productsApi'
-import { getCart } from '../../store/cartSlice'
-// import { ItemDetailCol, PaymentMethods, TableQuote, BillingInfo, BuyerInFoCustomer } from '@components/LayoutPayment'
+import FlexContainer from "@components/CustomComponent/FlexContainer";
+import {
+  LayoutInfoCustom,
+  LayoutPayment,
+  LayoutQRCode,
+} from "@components/LayoutPayment";
+import Page from "@layouts/Page";
+import { useRouter } from "next/router";
+import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { getCart } from "../../store/cartSlice";
+import { getProducById } from "../api/productsApi";
 
-const PaymentLogin = () => {
-  const [scope, setScope] = useState<string>('cart-checkout')
-  // const [billing, setBilling] = useState<number>(1)
-  // const [payMethod, setPayMethod] = useState<number>(1)
+// const DynamicLayoutPayment = dynamic(
+//   () => import("../../src/components/LayoutPayment")
+// );
 
-  const dispatch = useDispatch()
+type Props = {};
 
-  const router = useRouter()
-  const id = router.asPath.split('/')[2]
+const PaymentCart = (props: Props) => {
+  const [scopeRender, setScopeRender] = useState<string>("payment");
+
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const id = router.asPath.split("/")[2];
 
   useEffect(() => {
     (async () => {
       try {
         if (id) {
-          const data = await getProducById(id)
-          dispatch(getCart(data.responseData))
+          const data = await getProducById(id);
+          dispatch(getCart(data.responseData));
         }
       } catch (error) {
         // throw new Error(error)
-        console.log('error', error)
+        console.log("error", error);
       }
     })();
-  }, [dispatch, id])
+  }, [dispatch, id]);
 
-
-  const scopeRender = (_scope) => {
+  const scopePayment = (_scope) => {
     switch (_scope) {
-      case 'cart-checkout':
-        return <CartCheckout setScope={setScope} />
-      case 'cart-info':
-        return <InfoCheckout setScope={setScope} />
-      case 'cart-info-no-login':
-        return <InfoCustomNoLogin setScope={setScope} />
-      case 'transaction-message':
-        return <TransactionMessage />
-      default:
-        return <CartCheckout setScope={setScope} />
+      case "payment":
+        return <LayoutPayment setScopeRender={setScopeRender} />;
+      case "info_custom":
+        return <LayoutInfoCustom setScopeRender={setScopeRender} />;
+      case "transaction_message":
+        return <LayoutQRCode />;
     }
-  }
-  // return (
-  //   <BillingInfo billing={billing} setBilling={setBilling} />
-  // <PaymentMethods payMethod={payMethod} setPayMethod={setPayMethod} />
-  // <TableQuote width={445} urlPayment={'/home'} />
-  // <ItemDetailCol />
-  // <BuyerInFoCustomer />
-  // )
+  };
 
   return (
     <Page
       meta={{
-        title: "TNR Ecommerce Payment",
-        description: "TNR Ecommerce Payment",
-        isHomePage: true
+        title: "TNR E-commerce Payment",
+        description: "TNR E Payment",
+        isHomePage: true,
       }}
     >
       <FlexContainer>
-        {scopeRender(scope)}
+        {scopePayment(scopeRender)}
+        {/* <DynamicLayoutPayment /> */}
       </FlexContainer>
     </Page>
-  )
-}
+  );
+};
 
-export default PaymentLogin
+export default PaymentCart;

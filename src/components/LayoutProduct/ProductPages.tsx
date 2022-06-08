@@ -9,6 +9,8 @@ import dynamic from "next/dynamic";
 import { ProductsResponse } from "interface/product";
 import { ProjectResponse } from "interface/project";
 import { useState } from "react";
+import Container from "@components/Container";
+import ContainerProduct from "@components/Container/ContainerProduct";
 
 interface ProductsProps {
   listProducts?: ProductsResponse[];
@@ -47,69 +49,52 @@ const ProductPages = ({ listProducts, listProject }: ProductsProps) => {
       value: listProject ? listProject[0]?.funcDivision : "",
     },
   ];
+  const fetchRight = () => {
+    return (
+      <>
+ 
+          <FormControl style={{ width: 115, marginRight: 10, height: 48 }}>
+            <InputLabel id="demo-simple-select-label">Vị trí</InputLabel>
+            <Select
+              style={{ height: 48 }}
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              //   value="Vị Trí"
+                label="Vị Trí"
+              onChange={() => console.log("abc")}
+            >
+              <MenuItem value={10}>Đông Nam</MenuItem>
+              <MenuItem value={20}>Bắc</MenuItem>
+              <MenuItem value={30}>Tây</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl style={{ width: 115, height: 48 }}>
+            <InputLabel id="demo-simple-select-label">Loại</InputLabel>
+            <Select
+              style={{ height: 48 }}
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              //   value="age"
+                label="Loại"
+              onChange={() => console.log("abc")}
+            >
+              <MenuItem value={10}>Loại</MenuItem>
+              <MenuItem value={20}>Twenty</MenuItem>
+              <MenuItem value={30}>Thirty</MenuItem>
+            </Select>
+          </FormControl>
+      
+      </>
+    );
+  };
   return (
     <FlexContainer>
-      <div
-        style={{
-          marginTop: 166,
-          display: "flex",
-          flexDirection: "column",
-          width: "70%",
-        }}
+      <ContainerProduct
+        title={listProject ? listProject[0]?.name : ""}
+        rightContent={fetchRight()}
       >
-        <div>
-          <DynamicBreadcrumsComponent
-            breaditem={listBread}
-            activePage={listProject ? listProject[0]?.name : ""}
-          />
-        </div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            flexDirection: "row",
-            alignItems: "center",
-            marginBottom: 56,
-          }}
-        >
-          <TextHeaderStyled>
-            {listProject ? listProject[0]?.name : ""}
-          </TextHeaderStyled>
-          <div>
-            <FormControl style={{ width: 115, marginRight: 10, height: 48 }}>
-              <InputLabel id="demo-simple-select-label">Vị trí</InputLabel>
-              <Select
-                style={{ height: 48 }}
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                //   value="Vị Trí"
-                //   label="Age"
-                onChange={() => console.log("abc")}
-              >
-                <MenuItem value={10}>Đông Nam</MenuItem>
-                <MenuItem value={20}>Bắc</MenuItem>
-                <MenuItem value={30}>Tây</MenuItem>
-              </Select>
-            </FormControl>
-            <FormControl style={{ width: 115, height: 48 }}>
-              <InputLabel id="demo-simple-select-label">Loại</InputLabel>
-              <Select
-                style={{ height: 48 }}
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                //   value="age"
-                //   label="Age"
-                onChange={() => console.log("abc")}
-              >
-                <MenuItem value={10}>Loại</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
-              </Select>
-            </FormControl>
-          </div>
-        </div>
-      </div>
-      <DynamicItemProductComponent data={listProducts} />
+        <DynamicItemProductComponent data={listProducts} />
+      </ContainerProduct>
     </FlexContainer>
   );
 };

@@ -1,26 +1,47 @@
-import { IconInfoCircle } from '@components/Icons'
-import styled from '@emotion/styled'
-import { Box } from '@mui/material'
-import Link from 'next/link'
-import React from 'react'
-import { ButtonStyled, LinedStyled, RowStyled, Text12ItalicStyled, Text14Styled, Text18Styled, Title28Styled, WrapperBoxBorderStyled } from '../styled'
+import { IconInfoCircle } from "@components/Icons";
+import styled from "@emotion/styled";
+import { Box } from "@mui/material";
+import Link from "next/link";
+import { isEmpty } from "lodash";
+import React, { Dispatch, SetStateAction, useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../store/store";
+import {
+  ButtonAction,
+  LinedStyled,
+  RowStyled,
+  Text12ItalicStyled,
+  Text14Styled,
+  Text18Styled,
+  Title28Styled,
+  WrapperBoxBorderStyled,
+} from "../styled";
 
 const BoxDetailInfo = styled(Box)({
-  marginTop: 15
-})
+  marginTop: 15,
+});
 
 const RowStyledAgain = styled(RowStyled)({
-  marginBottom: 10
-})
+  marginBottom: 10,
+});
 
 type Props = {
-  width?: number,
-  urlPayment?: string,
-}
+  width?: number;
+  urlPayment?: string;
+  setScopeRender: Dispatch<SetStateAction<string>>;
+};
 
-const TableQuote = ({ width, urlPayment }: Props) => {
+const TableQuote = ({ width, urlPayment, setScopeRender }: Props) => {
+  const { getCart } = useSelector((state: RootState) => state.carts);
+  const [prod, setProd] = useState<object | any>({});
+  useEffect(() => {
+    if (!isEmpty(getCart)) {
+      setProd(getCart);
+    }
+  }, [getCart]);
+
   return (
-    <WrapperBoxBorderStyled mw={width ?? 350} padding={'20px 20px 25px'}>
+    <WrapperBoxBorderStyled mw={width ?? 350} padding={"20px 20px 25px"}>
       <Title28Styled>Báo giá</Title28Styled>
 
       <BoxDetailInfo>
@@ -55,7 +76,9 @@ const TableQuote = ({ width, urlPayment }: Props) => {
         </RowStyledAgain>
         <RowStyledAgain>
           <Text14Styled>Tổng tiền mua online</Text14Styled>
-          <Text18Styled fw={500} style={{ color: '#ea242a' }}>2.114.200.000 đ</Text18Styled>
+          <Text18Styled fw={500} style={{ color: "#ea242a" }}>
+            2.114.200.000 đ
+          </Text18Styled>
         </RowStyledAgain>
       </BoxDetailInfo>
 
@@ -74,25 +97,28 @@ const TableQuote = ({ width, urlPayment }: Props) => {
 
       {urlPayment && (
         <BoxDetailInfo>
-          <RowStyledAgain justifyContent={'start'}>
-            <IconInfoCircle />&nbsp;
+          <RowStyledAgain justifyContent={"start"}>
+            <IconInfoCircle />
+            &nbsp;
             <Text12ItalicStyled>
-              Nếu đã có tài khoản, vui lòng{' '}
-              <Link href={urlPayment}>
-                <a style={{ color: '#0063F7', textDecoration: 'underline' }}>ĐĂNG NHẬP</a>
-              </Link>
-              {' '}để lưu thông tin thanh toán
+              Nếu đã có tài khoản, vui lòng{" "}
+              <Link href={"/home"}>
+                <a style={{ color: "#0063F7", textDecoration: "underline" }}>
+                  ĐĂNG NHẬP
+                </a>
+              </Link>{" "}
+              để lưu thông tin thanh toán
             </Text12ItalicStyled>
           </RowStyledAgain>
           <RowStyled>
-            <ButtonStyled>
-              <Text18Styled color={'white'}>Tiếp tục thanh toán</Text18Styled>
-            </ButtonStyled>
+            <ButtonAction onClick={() => setScopeRender(urlPayment)}>
+              <Text18Styled color={"white"}>Tiếp tục thanh toán</Text18Styled>
+            </ButtonAction>
           </RowStyled>
         </BoxDetailInfo>
       )}
     </WrapperBoxBorderStyled>
-  )
-}
+  );
+};
 
-export default TableQuote
+export default TableQuote;

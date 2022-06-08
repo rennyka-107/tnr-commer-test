@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import FormGroup from "@components/Form/FormGroup";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useState, Dispatch, SetStateAction } from "react";
 import { useForm } from "react-hook-form";
 import { validateLine } from "utils/constants";
 import * as yup from "yup";
@@ -38,7 +38,9 @@ import TableQuote from "./TableQuote";
 import AddInfoCustom from "./AddInfoCustom";
 import Container from "@components/Container";
 
-type Props = {};
+type Props = {
+  setScopeRender: Dispatch<SetStateAction<string>>;
+};
 
 const BoxInfoUserStyled = styled(Box)({
   borderRadius: 18,
@@ -64,23 +66,23 @@ interface InformationBuyer {
   quanHuyen: string;
 }
 
-const BuyerInfoCustomer = (props: Props) => {
+const LayoutInfoCustom = ({ setScopeRender }: Props) => {
   const validationSchema = yup.object().shape({
-    hoTen: yup.string().required(validateLine.required).default(""),
-    ngaySinh: yup
-      .string()
-      .required(validateLine.required)
-      .trim(validateLine.trim)
-      .default(""),
-    soDienThoai: yup.string().required(validateLine.required).default(""),
-    email: yup.string().trim(validateLine.trim).default(""),
-    soDdcn: yup.string().required(validateLine.required).default(""),
-    noiCap: yup.string().required(validateLine.required).default(""),
-    ngayCap: yup.string().required(validateLine.required).default(""),
-    dcThuongTru: yup.string().required(validateLine.required).default(""),
-    dcLienLac: yup.string().default(""),
-    thanhPho: yup.string().default(""),
-    quanHuyen: yup.string().default(""),
+    // hoTen: yup.string().required(validateLine.required).default(""),
+    // ngaySinh: yup
+    //   .string()
+    //   .required(validateLine.required)
+    //   .trim(validateLine.trim)
+    //   .default(""),
+    // soDienThoai: yup.string().required(validateLine.required).default(""),
+    // email: yup.string().trim(validateLine.trim).default(""),
+    // soDdcn: yup.string().required(validateLine.required).default(""),
+    // noiCap: yup.string().required(validateLine.required).default(""),
+    // ngayCap: yup.string().required(validateLine.required).default(""),
+    // dcThuongTru: yup.string().required(validateLine.required).default(""),
+    // dcLienLac: yup.string().default(""),
+    // thanhPho: yup.string().default(""),
+    // quanHuyen: yup.string().default(""),
   });
 
   const { control, handleSubmit } = useForm<InformationBuyer>({
@@ -107,6 +109,7 @@ const BuyerInfoCustomer = (props: Props) => {
     try {
       console.log("click");
       console.log(values);
+      setScopeRender("transaction_message");
     } catch (error) {
       console.log("=-- error --=\n");
       console.log(error);
@@ -322,7 +325,9 @@ const BuyerInfoCustomer = (props: Props) => {
             <Box>
               <ItemDetailCol />
             </Box>
-            <Box margin={"15px 0px"}>{/* <TableQuote /> */}</Box>
+            <Box margin={"15px 0px"}>
+              <TableQuote setScopeRender={setScopeRender} />
+            </Box>
             <Box width={350}>
               <RowStyled>
                 <Checkbox />
@@ -355,4 +360,4 @@ const BuyerInfoCustomer = (props: Props) => {
   );
 };
 
-export default BuyerInfoCustomer;
+export default LayoutInfoCustom;

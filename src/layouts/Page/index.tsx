@@ -37,7 +37,9 @@ const Page: React.FC<PageProps> = ({ meta, children, dataNav }) => {
       <DynamicSEOComponent {...meta} />
       <main style={{ display: "flex", flexDirection: "column" }}>
         <DynamicHeaderComponent />
-        {children}
+        <div style={{minHeight: 500}}>
+		{children}
+		</div>
         <DynamicFooterComponent />
       </main>
     </>

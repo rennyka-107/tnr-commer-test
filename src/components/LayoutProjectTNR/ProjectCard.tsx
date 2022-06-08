@@ -1,11 +1,9 @@
 import {
-    IconHeartProduct,
-    IconMuaOnline,
-    IconPlusProduct
+  IconHeartProduct,
+  IconMuaOnline,
+  IconPlusProduct,
 } from "@components/Icons";
-import {
-    BoxTextOver
-} from "@components/StyledComponents";
+import { BoxTextOver } from "@components/StyledComponents";
 import styled from "@emotion/styled";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
@@ -18,14 +16,14 @@ import * as React from "react";
 import { MouseEventHandler } from "react";
 
 export interface ProjectI {
-	id: string;
-    src?: any;
-    title?: string;
-    subTitle?: string;
-    onClick?: MouseEventHandler<HTMLButtonElement>;
-    ticketCard?: string;
-    description?: string;
-};
+  id: string;
+  src?: any;
+  title?: string;
+  subTitle?: string;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
+  ticketCard?: string;
+  description?: string;
+}
 
 const CardStyled = styled(Card)`
   background: #ffffff;
@@ -52,16 +50,16 @@ const TextTitleStyled = styled.a`
   color: #1b3459;
 `;
 const TextitleBottom = styled(Typography)`
-width: 85%;
-font-family: 'Roboto';
-font-style: normal;
-font-weight: 400;
-font-size: 14px;
-line-height: 16px;
+  width: 85%;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16px;
 
-/* Brand/Text */
+  /* Brand/Text */
 
-color: #0E1D34;
+  color: #0e1d34;
 `;
 const LineStyled = styled.div`
   width: 302px;
@@ -105,97 +103,97 @@ const TextDescription = styled(Typography)`
   font-weight: 400;
   font-size: 14px;
   line-height: 18.2px;
-  min-height:90px;
-  
+  min-height: 90px;
+
   /* Brand/Text */
 
   color: #0e1d34;
 `;
 
 export default function ItemProjectCard({
-	id,
-    src,
-    title,
-    subTitle,
-    onClick,
-    ticketCard,
-    description
+  id,
+  src,
+  title,
+  subTitle,
+  onClick,
+  ticketCard,
+  description,
 }: ProjectI) {
-    // function currencyFormat(num) {
-    //     if (!num) {
-    //         return;
-    //     }
-    //     return num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-    // }
-    return (
-        <CardStyled sx={{ maxWidth: 350 }}>
-            <IconHeartProduct
-                style={{
-                    cursor: "pointer",
-                    position: "absolute",
-                    right: 0,
-                    margin: 20,
-                }}
-            />
-            <div
-                style={{
-                    background: "#FEC83C",
-                    width: 'auto',
-                    height: 30,
-                    position: "absolute",
-                    marginTop: 160,
-                    right: 0,
-                    padding: 4,
-                    textAlign: "center",
-                }}
-            >
-                <span
-                    style={{
-                        fontFamily: "roboto",
-                        fontStyle: "normal",
-                        fontWeight: 400,
-                        fontSize: 14,
-                        lineHeight: "16px",
-                        color: "#FFFFFF",
-                    }}
-                >
-                    {ticketCard}
-                </span>
-            </div>
-            <CardMedia
-                component="img"
-                height="190"
-                image={src?.src}
-                alt="green iguana"
-                style={{
-                    borderRadius: "20px 20px 0px 0px",
-                }}
-            />
+  // function currencyFormat(num) {
+  //     if (!num) {
+  //         return;
+  //     }
+  //     return num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+  // }
+  return (
+    <CardStyled sx={{ maxWidth: 350 }}>
+      <IconHeartProduct
+        style={{
+          cursor: "pointer",
+          position: "absolute",
+          right: 0,
+          margin: 20,
+        }}
+      />
+      <div
+        style={{
+          background: "#FEC83C",
+          width: "auto",
+          height: 30,
+          position: "absolute",
+          marginTop: 160,
+          right: 0,
+          padding: 4,
+          textAlign: "center",
+        }}
+      >
+        <span
+          style={{
+            fontFamily: "roboto",
+            fontStyle: "normal",
+            fontWeight: 400,
+            fontSize: 14,
+            lineHeight: "16px",
+            color: "#FFFFFF",
+          }}
+        >
+          {ticketCard}
+        </span>
+      </div>
+      <CardMedia
+        component="img"
+        height="190"
+        image={src?.src}
+        alt="green iguana"
+        style={{
+          borderRadius: "20px 20px 0px 0px",
+        }}
+      />
 
-            <CardContentStyled>
-                <div style={{ marginBottom: 7 }}>
-                    <Link href={`/products?idProject=${id}`}>
-                        <TextTitleStyled style={{ marginBottom: 9 }}>
-                            {title}
-                        </TextTitleStyled>
-                    </Link>
-                    <TextitleBottom>{subTitle}</TextitleBottom>
-                </div>
-                <LineStyled />
-                <BoxTextOver numberLine={5}>
-                    <TextDescription aria-multiline>{description}</TextDescription>
-                </BoxTextOver>
-            </CardContentStyled>
-            <CardActions style={{ flexDirection: "column", marginBottom: 24 }}>
-                <ButtonStyled
-                    onClick={() => {
-                        onClick;
-                    }}
-                >
-                    Xem dự án&nbsp;
-                    <IconMuaOnline />
-                </ButtonStyled>
-            </CardActions>
-        </CardStyled>
-    );
+      <CardContentStyled>
+        <div style={{ marginBottom: 7 }}>
+          <Link href={`/products?idProject=${id}`}>
+            <TextTitleStyled style={{ marginBottom: 9 }}>
+              {title}
+            </TextTitleStyled>
+          </Link>
+          <TextitleBottom>{subTitle}</TextitleBottom>
+        </div>
+        <LineStyled />
+        <BoxTextOver numberLine={5}>
+          <TextDescription aria-multiline>{description}</TextDescription>
+        </BoxTextOver>
+      </CardContentStyled>
+      <CardActions style={{ flexDirection: "column", marginBottom: 24 }}>
+        <ButtonStyled
+          onClick={() => {
+            onClick;
+          }}
+        >
+          Xem dự án&nbsp;
+          <IconMuaOnline />
+        </ButtonStyled>
+      </CardActions>
+    </CardStyled>
+  );
 }

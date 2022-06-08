@@ -148,12 +148,17 @@ const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
     }
   };
   const handleScrollHuongDan = () => {
-    const mainRoot = document.getElementById("huongdan-online");
-    if (mainRoot) {
-      mainRoot.scrollIntoView({ behavior: "smooth", block: "center" });
-    } else {
-      return;
-    }
+	  if(Router.pathname === '/'){
+		const mainRoot = document.getElementById("huongdan-online");
+		if (mainRoot) {
+		  mainRoot.scrollIntoView({ behavior: "smooth", block: "center" });
+		} else {
+		  return;
+		}
+	  }else {
+		Router.replace(`/buyingGuide?id=4`);
+	  }
+  
   };
 
   return (

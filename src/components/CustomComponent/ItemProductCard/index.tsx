@@ -8,7 +8,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import styled from "@emotion/styled";
 import { IconPlusProduct } from "../../Icons/index";
-import Router from 'next/router'
+import Router from "next/router";
 
 import {
   IconBath,
@@ -21,7 +21,7 @@ import {
 import Link from "next/link";
 
 type Props = {
-  id?: string,
+  id?: string;
   src?: any;
   title?: string;
   subTitle?: string;
@@ -63,16 +63,16 @@ const TextTitleStyled = styled.a`
   color: #1b3459;
 `;
 const TextitleBottom = styled(Typography)`
-width: 85%;
-font-family: 'Roboto';
-font-style: normal;
-font-weight: 400;
-font-size: 14px;
-line-height: 16px;
+  width: 85%;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16px;
 
-/* Brand/Text */
+  /* Brand/Text */
 
-color: #0E1D34;
+  color: #0e1d34;
 `;
 const LineStyled = styled.div`
   width: 302px;
@@ -198,7 +198,7 @@ export default function ItemProductCard({
   onClick,
   ticketCard,
   activeSoSanh,
-  id
+  id,
 }: Props) {
 //   function currencyFormat(num) {
 //     if (!num) {
@@ -219,7 +219,7 @@ export default function ItemProductCard({
       <div
         style={{
           background: "#FEC83C",
-          width: 'auto',
+          width: "auto",
           height: 30,
           position: "absolute",
           marginTop: 160,
@@ -253,31 +253,45 @@ export default function ItemProductCard({
 
       <CardContentStyled>
         <div style={{ marginBottom: 7 }}>
-          <span onClick={() => Router.push(`/products/${id ? id : 'adf68c39-c5b3-4a80-b806-a2b8a840d4c4'}`)}>
+          <span
+            onClick={() =>
+              Router.push(
+                `/products/${id ? id : "adf68c39-c5b3-4a80-b806-a2b8a840d4c4"}`
+              )
+            }
+          >
             <TextTitleStyled style={{ marginBottom: 9 }}>
               {title}
             </TextTitleStyled>
           </span>
-          <TextitleBottom>{subTitle ? subTitle : 'N/A'}</TextitleBottom>
+          <TextitleBottom>{subTitle ? subTitle : "N/A"}</TextitleBottom>
         </div>
         <LineStyled />
         <CenterIntemWrap>
           <WrapItemCenter>
             <IconFrame />
 
-            <TextCenterItem>{dataItem.item1 ? dataItem?.item1 : 'N/A'}</TextCenterItem>
+            <TextCenterItem>
+              {dataItem.item1 ? dataItem?.item1 : "N/A"}
+            </TextCenterItem>
           </WrapItemCenter>
           <WrapItemCenter>
             <IconBath />
-            <TextCenterItem>{dataItem.item2 ? dataItem?.item2 : 'N/A'}</TextCenterItem>
+            <TextCenterItem>
+              {dataItem.item2 ? dataItem?.item2 : "N/A"}
+            </TextCenterItem>
           </WrapItemCenter>
           <WrapItemCenter>
             <IconBedDouble />
-            <TextCenterItem>{dataItem.item3 ? dataItem?.item3 : 'N/A'} m²</TextCenterItem>
+            <TextCenterItem>
+              {dataItem.item3 ? dataItem?.item3 : "N/A"} m²
+            </TextCenterItem>
           </WrapItemCenter>
           <WrapItemCenter>
             <IconCompass />
-            <TextCenterItem>{dataItem.item4 ? dataItem?.item4 : 'N/A'}</TextCenterItem>
+            <TextCenterItem>
+              {dataItem.item4 ? dataItem?.item4 : "N/A"}
+            </TextCenterItem>
           </WrapItemCenter>
         </CenterIntemWrap>
         <LineStyled />
@@ -308,22 +322,26 @@ export default function ItemProductCard({
             justifyContent: "space-around",
           }}
         >
-          <div style={{ gap: 10, display: "flex", flexDirection: "row", cursor: 'pointer' }} onClick={() => Router.push('/compare-product')} >
+          <div
+            style={{
+              gap: 10,
+              display: "flex",
+              flexDirection: "row",
+              cursor: "pointer",
+            }}
+            onClick={() => Router.push("/compare-product")}
+          >
             <IconPlusProduct />
             <TextButtonStyled>So sánh</TextButtonStyled>
           </div>
-          <ButtonStyled
-            onClick={onClick}
-          >
+          <ButtonStyled onClick={onClick}>
             Mua Online&nbsp;
             <IconMuaOnline />
           </ButtonStyled>
         </CardActions>
       ) : (
         <CardActions style={{ flexDirection: "column", marginBottom: 24 }}>
-          <ButtonStyled
-            onClick={onClick}
-          >
+          <ButtonStyled onClick={onClick}>
             Mua Online&nbsp;
             <IconMuaOnline />
           </ButtonStyled>
