@@ -226,15 +226,12 @@ const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
     );
   };
 
-//   function currencyFormat(num) {
-//     if (!num) {
-//       return;
-//     }
-//     return Number(num)
-//       .toFixed(0)
-//       .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-//   }
-
+  function currencyFormat(num) {
+    if (!num) {
+      return;
+    }
+    return Number(num).toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+  }
   return (
     <WrapBodyStyped>
       <ContainerLeft>
@@ -655,7 +652,7 @@ const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
             <TextCenterRight
               style={{ fontSize: 18, margin: "auto", marginRight: 0 }}
             >
-              {dataProduct?.price} vnd
+              {currencyFormat(dataProduct?.price)} vnd
             </TextCenterRight>
           </div>
           <div style={{ border: "1px solid #C7C9D9" }} />

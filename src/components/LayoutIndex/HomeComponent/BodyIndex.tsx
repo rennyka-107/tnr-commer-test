@@ -20,11 +20,16 @@ import { RootState } from "../../../../store/store";
 import { getListProductApi } from "../../../../pages/api/productsApi";
 import { getListProduct } from "../../../../store/productSlice";
 import Router from "next/router";
+import SliderProductHotComponent from '../../../components/CustomComponent/SliderProductHotComponent'
+import dynamic from "next/dynamic";
 
 interface ProductsIndexProps {
   listProductOutOfStanding?: TBOUTStanding[];
 }
-
+const DynamicSliderHotProduct= dynamic(
+	() => import("../../../components/CustomComponent/SliderProductHotComponent"),
+	{ loading: () => <p>...</p> }
+  );
 const WrapContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -168,21 +173,20 @@ export default function BodyIndex() {
           }}
         ></div>
         <div>
-          <div style={{ display: "flex", justifyContent: "space-around" }}>
-            <TextBDS>BẤT ĐỘNG SẢN NỔI BẬT</TextBDS>
+          <div style={{ display: "flex", justifyContent: "space-around" , marginBottom: 20}}>
+            <TextBDS >BẤT ĐỘNG SẢN NỔI BẬT</TextBDS>
             <LinkStyled href="">Xem tất cả</LinkStyled>
           </div>
           <div
             style={{
               display: "grid",
-              gap: 31,
               gridTemplateColumns: "repeat(4, auto)",
               justifyContent: sizeOfArray >= 4 ? "center" : "",
             }}
           >
             {productTopByOutStanding.length > 0 ? (
               <>
-                {productTopByOutStanding.map((item, index) => (
+                {/* {productTopByOutStanding.map((item, index) => (
                   <ItemProductCard
                     key={index}
                     id={item.id}
@@ -202,7 +206,8 @@ export default function BodyIndex() {
                       Router.push("/payment-cart");
                     }}
                   />
-                ))}
+                ))} */}
+				<DynamicSliderHotProduct />
               </>
             ) : (
               <></>

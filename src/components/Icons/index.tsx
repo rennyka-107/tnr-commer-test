@@ -52,3 +52,6 @@ export { default as IconHomeHover } from './IconHomeHover'
 export { default as IconBussinessAndTradeHover } from './IconBussinessAndTradeHover'
 export {default as IconArrowDown} from './IconArrowDown'
 export {default as IconDauCham} from './IconDauCham'
+export {default as IconCarsouelLeftProduct} from './IconCarsouelLeftProduct'
+export {default as IconCarsouelRightProduct} from './IconCarsouelRightProduct'
+

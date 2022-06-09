@@ -4,13 +4,13 @@ import FormGroup from "@components/Form/FormGroup";
 import PasswordTextField from "@components/Form/PasswordTextField";
 import styled from "@emotion/styled";
 import { yupResolver } from '@hookform/resolvers/yup';
+import { LoginSuccess, ResponseLoginModel } from "@service/auth";
 import useAuth from "hooks/useAuth";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { useForm } from 'react-hook-form';
 import { validateLine } from 'utils/constants';
-import Regexs from "utils/Regexs";
 import * as yup from 'yup';
 
 
@@ -72,9 +72,14 @@ const Login = () => {
 
     const onSubmit = async (values) => {
         try {
-            const response = await login(values);
+            const response: ResponseLoginModel<LoginSuccess> = await login(values);
+            if (!response.responseData.access_token) {
+                alert(response.responseMessage);
+            }
+
         } catch (error) {
-            console.log(error, '-------error--------');
+            const AxiosError: { message: string } = error;
+            alert(AxiosError.message);
         }
 
     }

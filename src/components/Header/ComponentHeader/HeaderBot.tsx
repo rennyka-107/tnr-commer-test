@@ -1,3 +1,4 @@
+import React ,{useState} from 'react'
 import { IconBag, IconHeart, IconUser, Logo } from "@components/Icons";
 import styled from "@emotion/styled";
 import { Route } from "@mui/icons-material";
@@ -119,6 +120,7 @@ interface MenuProps {
 
 const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
   const Router = useRouter();
+  const [checkSale, setCheckSale] = useState(false);
 
   const menuUser: ItemValueProps[] = [
     { id: "Profile", name: "Thông tin cá nhân" },
@@ -140,26 +142,34 @@ const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
     }
   }, []);
   const scrollView = () => {
-    const mainRoot = document.getElementById("uu-dai");
-    if (mainRoot) {
-      mainRoot.scrollIntoView({ behavior: "smooth", block: "center" });
+	  setCheckSale(true);
+	  if (Router.pathname === "/" ) {
+      const mainRoot = document.getElementById("uu-dai");
+      if (mainRoot) {
+        mainRoot.scrollIntoView({ behavior: "smooth", block: "center" });
+      } else {
+        return;
+      }
     } else {
-      return;
+		Router.replace(`/sales`);
+	  }
+  };
+
+
+  const handleScrollHuongDan = () => {
+    if (Router.pathname === "/") {
+      const mainRoot = document.getElementById("huongdan-online");
+      if (mainRoot) {
+        mainRoot.scrollIntoView({ behavior: "smooth", block: "center" });
+      } else {
+        return;
+      }
+    } else {
+      Router.replace(`/buyingGuide?id=4`);
     }
   };
-  const handleScrollHuongDan = () => {
-	  if(Router.pathname === '/'){
-		const mainRoot = document.getElementById("huongdan-online");
-		if (mainRoot) {
-		  mainRoot.scrollIntoView({ behavior: "smooth", block: "center" });
-		} else {
-		  return;
-		}
-	  }else {
-		Router.replace(`/buyingGuide?id=4`);
-	  }
-  
-  };
+
+
 
   return (
     <ContainerNavTop>

@@ -28,12 +28,12 @@ const ContainerProduct: React.FC<Props> = ({ children, title, rightContent }) =>
         <ContainerWrapper>
             <Breadcrumbs title={title} />
             <Row customStyle={{ marginBottom: 52, marginTop: 22 , display: 'flex', justifyContent: 'space-between' }}>
-                <Column customStyle={{ padding: 0, alignItems: "center"}}>
+                <Column customStyle={{ padding: 0, alignItems: "center"}} >
                     {title && <HeaderView>{title}</HeaderView>}
                 </Column>
-                <Column >
+                <div >
                     {rightContent && rightContent}
-                </Column>
+                </div>
             </Row>
             {children}
         </ContainerWrapper>

@@ -56,7 +56,7 @@ const ItemProduct = ({ data }: ProductsProps) => {
         </Grid>
       ) : (
         // </ProductWrap>
-        <div>No Data</div>
+        <div style={{textAlign: 'center'}}>No Data</div>
       )}
     </>
   );

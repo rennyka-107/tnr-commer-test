@@ -200,12 +200,12 @@ export default function ItemProductCard({
   activeSoSanh,
   id,
 }: Props) {
-//   function currencyFormat(num) {
-//     if (!num) {
-//       return;
-//     }
-//     return num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-//   }
+  function currencyFormat(num) {
+    if (!num) {
+      return;
+    }
+    return Number(num).toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+  }
   return (
     <CardStyled sx={{ maxWidth: 350 }}>
       <IconHeartProduct
@@ -220,7 +220,7 @@ export default function ItemProductCard({
         style={{
           background: "#FEC83C",
           width: "auto",
-          height: 30,
+          height: 'auto',
           position: "absolute",
           marginTop: 160,
           right: 0,
@@ -301,7 +301,7 @@ export default function ItemProductCard({
               Giá niêm yết{" "}
             </TextBottomStyled>
             <NumberBottomStyled>
-              {priceListed}đ
+              {currencyFormat(priceListed)}đ
             </NumberBottomStyled>
           </div>
           <div style={{ display: "flex" }}>
@@ -309,7 +309,7 @@ export default function ItemProductCard({
               Đơn giá thông thuỷ{" "}
             </TextBottomStyled2>
             <NumberBottomStyled2>
-              {priceSub}đ/m2
+              {currencyFormat(priceSub)}đ/m2
             </NumberBottomStyled2>
           </div>
         </div>

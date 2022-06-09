@@ -1,9 +1,9 @@
-import React, { createContext, useEffect, useState } from "react";
-import { LoginParams } from "../components/LayoutAuthen/Login";
-import { Login, LoginSuccess } from "@service/auth";
-import SessionStorage from 'utils/SessionStorage';
-import LocalStorage from 'utils/LocalStorage';
+import { Login, LoginSuccess, ResponseLoginModel } from "@service/auth";
 import useForceUpdate from 'hooks/useForceUpdate';
+import React, { createContext, useEffect, useState } from "react";
+import LocalStorage from 'utils/LocalStorage';
+import SessionStorage from 'utils/SessionStorage';
+import { LoginParams } from "../components/LayoutAuthen/Login";
 // import jwtDecode from 'jwt-decode';
 
 interface State {
@@ -21,7 +21,7 @@ type DecodeUserInfo = {
 export interface AuthContextValue extends State {
     login: (
         data: LoginParams
-    ) => void;
+    ) => any;
     logout: () => void;
 }
 
@@ -38,8 +38,8 @@ const AuthContext = ({ children }) => {
 
     const loginRequest = async (params: LoginParams) => {
         const response = await Login(params);
-        if ((response as LoginSuccess).access_token) {
-            const { access_token, refresh_token } = response as LoginSuccess;
+        if ((response as ResponseLoginModel<LoginSuccess>)?.responseData?.access_token) {
+            const { access_token, refresh_token } = (response as ResponseLoginModel<LoginSuccess>).responseData;
             SessionStorage.set('accessToken', access_token, forceUpdate)
             SessionStorage.set('refreshToken', refresh_token);
         }

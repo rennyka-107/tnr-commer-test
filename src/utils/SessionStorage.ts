@@ -13,8 +13,6 @@ class SessionStorage {
     window.sessionStorage.setItem(key, JSON.stringify(value));
     if (callback) {
       callback();
-      console.log('--------log calback');
-
     }
   }
 

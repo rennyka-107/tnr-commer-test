@@ -1,12 +1,9 @@
-import { stringify } from 'querystring';
+import { convertToQuery } from 'utils/helper';
 import HttpClient from 'utils/HttpClient';
-import { convertCamelCaseKeysToSnakeCase } from 'utils/helper';
 export interface LoginParams {
     username: string;
     password: string;
 }
-
-export type LoginResponse<T, D> = T | D;
 
 export interface LoginSuccess {
     access_token: string;
@@ -19,19 +16,12 @@ export interface LoginFailed {
     error_description?: string;
 }
 
+export interface ResponseLoginModel<T> {
+    responseCode: string;
+    responseData: T;
+    responseMessage: string;
+}
+
 export const Login = (params: LoginParams) => {
-    return HttpClient.post<
-        typeof params,
-        LoginResponse<LoginSuccess, LoginFailed>
-    >('http://auth.tnr-online.com:1993/auth/realms/tnr-admin/protocol/openid-connect/token',
-        stringify(convertCamelCaseKeysToSnakeCase({
-            ...params,
-            clientId: 'tnr-admin',
-            grantType: 'password',
-        })),
-        {
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-        })
+    return HttpClient.post<typeof params, any>(`/user/get-token${convertToQuery(params)}`)
 }
