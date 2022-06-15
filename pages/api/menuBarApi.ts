@@ -5,7 +5,7 @@ export const getListMenuBarProject = async () => {
 	return HttpClient.get<CommonResponse>(
 	  `/api/menu/bar/project`,
 	  {withToken: false}
-	);
+	)
   };
   
 export const getListMenuBarProjectTypeApi = async () => {
@@ -15,3 +15,6 @@ export const getListMenuBarProjectTypeApi = async () => {
 	);
   };
   
+  export const getListLocation = async () => {
+	return HttpClient.get<any,any>(`/api/menu/bar/location`, {withToken: false})
+  }

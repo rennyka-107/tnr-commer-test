@@ -54,4 +54,4 @@ export {default as IconArrowDown} from './IconArrowDown'
 export {default as IconDauCham} from './IconDauCham'
 export {default as IconCarsouelLeftProduct} from './IconCarsouelLeftProduct'
 export {default as IconCarsouelRightProduct} from './IconCarsouelRightProduct'
-
+export {default as IconFilterSearch} from './IconFilterSearch'

@@ -6,6 +6,8 @@ import payments from "./paymentSlice";
 import products from "./productSlice";
 import projects from "./projectSlice";
 import carts from "./cartSlice";
+import projectMap from "./projectMapSlice";
+import searchs from "./searchSlice";
 
 const combinedReducer = combineReducers({
   menubar,
@@ -13,6 +15,8 @@ const combinedReducer = combineReducers({
   projects,
   payments,
   carts,
+  projectMap,
+  searchs,
 });
 export type RootState = ReturnType<typeof combinedReducer>;
 const masterReducer = (state, action) => {
@@ -22,6 +26,7 @@ const masterReducer = (state, action) => {
       menubar: {
         menubarList: action.payload.menubar.listMenuBarType,
         menuBarProjectList: action.payload.menubar.listMenuBarProjectType,
+        listMenuLocation: action.payload.menubar.listMenuLocation,
       },
       products: {
         listProductResponse: action.payload.products.listProductResponse,
@@ -39,6 +44,13 @@ const masterReducer = (state, action) => {
       },
       carts: {
         getCart: action.payload.carts.getCart,
+      },
+      projectMap: {
+        ...action.payload.projectMap,
+      },
+      searchs: {
+        SearchHomeLocation: action.payload.searchs.SearchHomeLocation,
+        totalElement: action.payload.searchs.totalElement,
       },
     };
     return nextState;

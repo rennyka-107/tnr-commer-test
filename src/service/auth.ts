@@ -1,4 +1,5 @@
-import { convertToQuery } from 'utils/helper';
+import { stringify } from 'querystring';
+import { convertCamelCaseKeysToSnakeCase, convertToQuery } from 'utils/helper';
 import HttpClient from 'utils/HttpClient';
 export interface LoginParams {
     username: string;
@@ -25,3 +26,21 @@ export interface ResponseLoginModel<T> {
 export const Login = (params: LoginParams) => {
     return HttpClient.post<typeof params, any>(`/user/get-token${convertToQuery(params)}`)
 }
+
+export const refreshAccessToken = async (refreshToken: string) => {
+    return HttpClient.post<string, any>(
+        'http://auth.tnr-online.com:1993/auth/realms/tnr-customersite/protocol/openid-connect/token',
+        stringify(
+            convertCamelCaseKeysToSnakeCase({
+                refreshToken,
+                clientId: 'customer-site',
+                grantType: 'refresh_token',
+            })
+        ),
+        {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+        }
+    );
+};

@@ -3,6 +3,7 @@ import CustomButton from "@components/CustomComponent/CustomButton";
 import FormGroup from "@components/Form/FormGroup";
 import PasswordTextField from "@components/Form/PasswordTextField";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { changePassword } from "@service/Profile";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { InputProps, validateLine } from "utils/constants";
@@ -11,21 +12,21 @@ import * as yup from 'yup';
 
 
 export interface ChangePasswordForm {
-    currentPass: string;
-    newPass: string;
+    oldPassword: string;
+    newPassword: string;
     confirmPass: string;
 }
 
 
 const ChangePassword = () => {
     const validationSchema = yup.object().shape({
-        currentPass: yup
+        oldPassword: yup
             .string()
             .trim(validateLine.trim)
             .strict(true)
             .required(validateLine.required)
             .default(''),
-        newPass: yup
+        newPassword: yup
             .string()
             .trim(validateLine.trim)
             .strict(true)
@@ -39,7 +40,7 @@ const ChangePassword = () => {
             .trim(validateLine.trim)
             .strict(true)
             .required(validateLine.required)
-            .oneOf([yup.ref('newPass'), null], 'Mật khẩu không khớp')
+            .oneOf([yup.ref('newPassword'), null], 'Mật khẩu không khớp')
             .default(''),
     });
     const { control, handleSubmit } = useForm<ChangePasswordForm>({
@@ -48,9 +49,15 @@ const ChangePassword = () => {
         defaultValues: validationSchema.getDefault(),
     });
 
-    const onSubmit = (values) => {
-        console.log(values, '------values------');
+    const updatePassword = async (params) => {
+        const response = await changePassword(params);
+        console.log(response, 'response----------');
+        alert(response.responseMessage)
+    }
 
+    const onSubmit = (values) => {
+        const { confirmPass, ...newValues } = values;
+        updatePassword(newValues);
     }
 
     return (
@@ -58,18 +65,18 @@ const ChangePassword = () => {
             <form onSubmit={handleSubmit((values) => onSubmit(values))}>
                 <FormGroup sx={{ mb: 2, mt: 2 }} fullWidth>
                     <PasswordTextField
-                        name="currentPass"
+                        name="oldPassword"
                         control={control}
                         placeholder="Mật khẩu hiện tại"
                         required
                         fullWidth
-                        label="Tên đăng nhập"
+                        label="Mật khẩu hiện tại"
                         InputProps={InputProps}
                     />
                 </FormGroup>
                 <FormGroup sx={{ mb: 2, mt: 2 }} fullWidth>
                     <PasswordTextField
-                        name="newPass"
+                        name="newPassword"
                         control={control}
                         placeholder="Mật khẩu mới"
                         required

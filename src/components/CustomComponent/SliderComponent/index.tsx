@@ -5,11 +5,13 @@ import styled from "@emotion/styled";
 import { Typography } from "@mui/material";
 
 type Props = {
-	label: string;
-	numberMin: number;
-	numberMax: number;
-	unit: string;
+	label?: string;
+	numberMin?: number;
+	numberMax?: number;
+	unit?: string;
 	style?: React.CSSProperties;
+	onChange?: any;
+	value?: any;
 
   };
 
@@ -51,7 +53,7 @@ const CustomTittle = styled(Typography)`
 
 const minDistance = 10;
 
-export default function SliderComponent({label,numberMin,numberMax,unit}) {
+export default function SliderComponent({label,numberMin,numberMax,unit,onChange,value}) {
   const [value1, setValue1] = React.useState<number[]>([0, 200]);
 
   function valuetext(value: number) {
@@ -79,10 +81,10 @@ export default function SliderComponent({label,numberMin,numberMax,unit}) {
       <CustomTittle>{label}</CustomTittle>
       <SliderSyled
         getAriaLabel={() => "Minimum distance"}
-        value={value1}
+        value={value}
 		min={numberMin}
 		max={numberMax}
-        onChange={handleChange1}
+        onChange={onChange}
         valueLabelDisplay="on"
         valueLabelFormat={valuetext}
         disableSwap

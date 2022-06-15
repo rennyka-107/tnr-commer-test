@@ -1,13 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit'
-import {MenuBar,MenuBarProjectType} from '../src/interface/menuBarList'
+import {MenuBar,MenuBarProjectType,MenuBarLocation} from '../src/interface/menuBarList'
 
 interface initialState {
   listMenuBarType: MenuBar[]
   listMenuBarProjectType: MenuBarProjectType[]
+  listMenuLocation: MenuBarLocation[]
 }
 const initialState = {
 	listMenuBarType:[],
-	listMenuBarProjectType: []
+	listMenuBarProjectType: [],
+	listMenuLocation: []
 }
 
 export const menuBarSlice = createSlice({
@@ -20,9 +22,12 @@ export const menuBarSlice = createSlice({
 	  getListMenuBarProjectType: (state,action) => {
 		state.listMenuBarProjectType= action.payload
 	  },
+	  getListMenuLocation: (state, action) => {
+		state.listMenuLocation = action.payload
+	  }
   }
 })
 
-export const { getListMenuBarType,getListMenuBarProjectType } = menuBarSlice.actions
+export const { getListMenuBarType,getListMenuBarProjectType,getListMenuLocation } = menuBarSlice.actions
 
 export default menuBarSlice.reducer

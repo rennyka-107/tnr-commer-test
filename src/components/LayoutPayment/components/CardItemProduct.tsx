@@ -1,11 +1,16 @@
 import { IconRadio, IconTimes } from "@components/Icons";
 import styled from "@emotion/styled";
 import { Box, CardMedia } from "@mui/material";
-import { isEmpty } from "lodash";
+import isEmpty from "lodash/isEmpty";
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../store/store";
-import { Title28Styled, RowStyled, Text14Styled, LinedStyled } from "../styled";
+import {
+  Title28Styled,
+  RowStyled,
+  Text14Styled,
+  LinedStyled,
+} from "../../StyledLayout/styled";
 
 const WrapperCardStyled = styled(Box)(
   {
@@ -74,9 +79,7 @@ const CardItemProduct = (props: Props) => {
         component={"img"}
         width={308}
         height={200}
-        image={
-          "https://scontent.fhan3-4.fna.fbcdn.net/v/t39.30808-6/283803066_2898236427143591_4882650650208087614_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=5cd70e&_nc_ohc=a5Q9RiaP0dUAX-nkW2V&_nc_ht=scontent.fhan3-4.fna&oh=00_AT8iLApwpKW06ziAQkcFfedbwWBDtc9V3WNyBsZTZdj5vg&oe=62A35F10"
-        }
+        image={"https://picsum.photos/308/200"}
         alt={"photo product"}
       />
       <Box style={{ width: 235, marginLeft: 30 }}>

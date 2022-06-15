@@ -6,14 +6,16 @@ import Typography from "@mui/material/Typography";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import { Theme, useTheme } from "@mui/material/styles";
+import { MenuBar } from "interface/menuBarList";
 
 type Props = {
 	label?: string;
 	style?: React.CSSProperties;
-	data: string[];
+	data: MenuBar[];
 	value: string[];
 	placeholder?: string;
 	onChange?: any;
+	typeOfLocation? : boolean;
   };
 
 const LabelSelectStyled = styled(Typography)`
@@ -52,8 +54,9 @@ const MenuProps = {
   },
 };
 
-export default function SelectInputComponent({label, data, onChange,value,placeholder}: Props) {
+export default function SelectInputComponent({label, data, onChange,value,placeholder,typeOfLocation}: Props) {
 	const theme = useTheme();
+
   return (
     <FormControl sx={{ m: 1, width: 300, mt: 3 }}>
       <LabelSelectStyled>{label}</LabelSelectStyled>
@@ -79,13 +82,13 @@ export default function SelectInputComponent({label, data, onChange,value,placeh
           },
         }}
       >
-        {data?.map((name) => (
+        {data?.map((name,index) => (
           <MenuItem
-            key={name}
-            value={name}
-            style={getStyles(name, value, theme)}
+            key={index}
+            value={name.name}
+            style={getStyles(name.name, value, theme)}
           >
-            {name}
+            {name.name}
           </MenuItem>
         ))}
       </Select>

@@ -3,7 +3,7 @@ import dynamic from "next/dynamic";
 import { getProductTopByStanding } from "./api/productsApi";
 import { getListProductTopByOS } from "../store/productSlice";
 import { useDispatch, useSelector } from "react-redux";
-import {wrapper} from '../store/store'
+import { wrapper } from "../store/store";
 
 const DynamicHome = dynamic(
   () => import("../src/components/LayoutIndex/HomeComponent/HomePage"),
@@ -12,7 +12,6 @@ const DynamicHome = dynamic(
 
 const Home = (props) => {
   const dispatch = useDispatch();
-
 
   return (
     <Page
@@ -24,7 +23,7 @@ const Home = (props) => {
       //   dataNav={listMenuBarType}
     >
       <div style={{ marginTop: "127px" }}>
-        <DynamicHome/>
+        <DynamicHome />
       </div>
     </Page>
   );
@@ -32,9 +31,12 @@ const Home = (props) => {
 
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async () => {
-    const response = await getProductTopByStanding();
-    store.dispatch(getListProductTopByOS(response.responseData));
-	// console.log(response)
+    try {
+      const response = await getProductTopByStanding();
+      store.dispatch(getListProductTopByOS(response.responseData));
+    } catch (err) {
+      console.log(err);
+    }
   }
 );
 

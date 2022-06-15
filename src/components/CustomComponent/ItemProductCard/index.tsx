@@ -35,6 +35,7 @@ type Props = {
   priceSub?: number;
   activeSoSanh?: boolean;
   onClick?: MouseEventHandler<HTMLButtonElement>;
+  onCompare?: MouseEventHandler<HTMLButtonElement>;
   ticketCard?: string;
 };
 
@@ -196,6 +197,7 @@ export default function ItemProductCard({
   priceListed,
   priceSub,
   onClick,
+  onCompare,
   ticketCard,
   activeSoSanh,
   id,
@@ -204,7 +206,9 @@ export default function ItemProductCard({
     if (!num) {
       return;
     }
-    return Number(num).toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+    return Number(num)
+      .toFixed(0)
+      .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
   }
   return (
     <CardStyled sx={{ maxWidth: 350 }}>
@@ -220,7 +224,7 @@ export default function ItemProductCard({
         style={{
           background: "#FEC83C",
           width: "auto",
-          height: 'auto',
+          height: "auto",
           position: "absolute",
           marginTop: 160,
           right: 0,
@@ -329,10 +333,10 @@ export default function ItemProductCard({
               flexDirection: "row",
               cursor: "pointer",
             }}
-            onClick={() => Router.push("/compare-product")}
+            // onClick={() => {}}
           >
             <IconPlusProduct />
-            <TextButtonStyled>So sánh</TextButtonStyled>
+            <TextButtonStyled onClick={onCompare}>So sánh</TextButtonStyled>
           </div>
           <ButtonStyled onClick={onClick}>
             Mua Online&nbsp;

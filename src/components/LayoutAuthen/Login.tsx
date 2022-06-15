@@ -54,8 +54,6 @@ const Login = () => {
     });
 
     useEffect(() => {
-        console.log(isAuthenticated, 'isAuthenticated');
-
         if (isAuthenticated) {
 
             Route.push({
@@ -73,7 +71,7 @@ const Login = () => {
     const onSubmit = async (values) => {
         try {
             const response: ResponseLoginModel<LoginSuccess> = await login(values);
-            if (!response.responseData.access_token) {
+            if (!response?.responseData?.access_token) {
                 alert(response.responseMessage);
             }
 

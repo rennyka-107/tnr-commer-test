@@ -1,8 +1,9 @@
 import BoxContainer from "@components/CustomComponent/BoxContainer";
 import styled from "@emotion/styled";
+import { ContractI, getContractByUser } from "@service/Profile";
 import MenuDropdown from "ItemComponents/MenuDropdown";
 import dynamic from "next/dynamic";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 
 const DynamicProductCard = dynamic(() =>
@@ -26,63 +27,17 @@ const HeaderTitle = styled.span`
     font-size: 28px;
     line-height: 33px;
 `;
-export interface ProductI {
-    id: number,
-    titleRight?: string;
-    titleLeft?: string;
-    codeProduct?: string;
-    customer?: string;
-    code?: string;
-    deposited?: string;
-    payment?: string;
-    res?: string;
-    status?: boolean;
-    timeBooking: string;
-}
 
 const ContractManage = () => {
+    const [contracts, setContracts] = useState<ContractI[]>([])
+    const getContract = async () => {
+        const response = await getContractByUser();
+        setContracts(response?.responseData ?? []);
+    }
 
-    const products: ProductI[] = [
-        {
-            id: 0,
-            titleLeft: "TNR Lam Sơn",
-            titleRight: "Cập nhật: 09:24 | Thứ 2, 09/11/2021",
-            codeProduct: "Lô A06 ",
-            customer: "Nguyễn Văn A",
-            code: "LÔ A06",
-            deposited: "50.000.000 đ ",
-            payment: "50.000.000 đ ",
-            res: "50.000.000 đ ",
-            status: false,
-            timeBooking: " 09:24 | Thứ 2, 09/11/2021",
-        },
-        {
-            id: 1,
-            titleLeft: "TNR Lam Sơn",
-            titleRight: "Cập nhật: 09:24 | Thứ 2, 09/11/2021",
-            codeProduct: "Lô A06 ",
-            customer: "Nguyễn Văn A",
-            code: "LÔ A06",
-            deposited: "50.000.000 đ ",
-            payment: "50.000.000 đ ",
-            res: "50.000.000 đ ",
-            status: false,
-            timeBooking: " 09:24 | Thứ 2, 09/11/2021",
-        }, {
-            id: 2,
-            titleLeft: "TNR Lam Sơn",
-            titleRight: "Cập nhật: 09:24 | Thứ 2, 09/11/2021",
-            codeProduct: "Lô A06 ",
-            customer: "Nguyễn Văn A",
-            code: "LÔ A06",
-            deposited: "50.000.000 đ ",
-            payment: "50.000.000 đ ",
-            res: "50.000.000 đ ",
-            status: true,
-            timeBooking: " 09:24 | Thứ 2, 09/11/2021",
-        }
-    ]
-
+    useEffect(() => {
+        getContract();
+    }, [])
     return (
         <BoxContainer
             HeaderCustom={
@@ -96,7 +51,7 @@ const ContractManage = () => {
             }
             styleCustom={{ padding: "21px 24px" }}
         >
-            {products.map((item: ProductI, index) => <DynamicProductCard item={item} isLast={index == products.length - 1} key={item.id} />)}
+            {(contracts || []).map((item: ContractI, index) => <DynamicProductCard item={item} isLast={index == contracts.length - 1} key={item.id} />)}
         </BoxContainer>
     )
 }

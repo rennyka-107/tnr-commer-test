@@ -1,28 +1,28 @@
 export interface PTGType {
 	ProjectName: string,
 	BlockName: string,
-	ProductName :string,
+	ProductName: string,
 	DepositDate: string,
-	IsMortgage : boolean,
-	GroupCusID : number,
-	ProvinceID : number,
-	DistrictID : number,
-	PriceID : number,
+	IsMortgage: boolean,
+	GroupCusID: number,
+	ProvinceID: number,
+	DistrictID: number,
+	PriceID: number,
 }
 
 interface ListPolicyType {
-	PolicyID?: number,
-	PolicyName?: string,
+  PolicyID?: number;
+  PolicyName?: string;
 }
 interface ListPromotionType {
-	PromotionID?: number,
-	PromotionName?: string,
-	Value?: string,
-	Amount?: string
+  PromotionID?: number;
+  PromotionName?: string;
+  Value?: string;
+  Amount?: string;
 }
 interface ListScheduleType {
-	ScheduleID?: number,
-	ScheduleName?: string
+  ScheduleID?: number;
+  ScheduleName?: string;
 }
 export interface PTGResponse {
 	DepositMoney?: string,
@@ -34,7 +34,7 @@ export interface PTGResponse {
 	BuildMoney?: string,
 	FoundationMoney?: string,
 	TotalMoney?: string,
-	ListDocument?:[],
+	ListDocument?: [],
 	ListPolicy?: ListPolicyType[],
 	ListPromotion?: ListPromotionType[],
 	ListSchedule?: ListScheduleType[]
@@ -45,9 +45,9 @@ export interface PTGResponse {
 export interface ProductsType {
 	projectId: string,
 	location: string,
-	projectTypeId: string,	
+	projectTypeId: string,
 }
-export interface ParamsProducts{
+export interface ParamsProducts {
 	page: number,
 	size: number,
 }
@@ -62,7 +62,7 @@ export interface ProductsResponse {
 	swimmingPool: number,
 	gym: number,
 	projectLevelDetailId: string,
-	
+
 	status: number,
 	apartmentModelId: string,
 	lotSymbolLegal: string,
@@ -80,113 +80,117 @@ export interface ProductsResponse {
 }
 
 export interface ResponseSearchById {
+	id: string,
+	name: string,
+	landArea: number,
+	numBed: number,
+	numBath: number,
+	doorDirection: string,
+	airConditioner: number,
+	swimmingPool: number,
+	gym: number,
+	projectLevelDetail: {
 		id: string,
+		level: string,
+		map1: string,
+		map2: string,
 		name: string,
-		landArea: number,
+	},
+	lurPrice?: string,
+	lurUnitPrice?: string,
+	status: number,
+	apartmentModel: {
+		id: string,
+		project: string,
+		name: string,
 		numBed: number,
 		numBath: number,
-		doorDirection: string,
-		airConditioner: number,
-		swimmingPool: number,
-		gym: number,
-		projectLevelDetail: {
-			id: string,
-			level: string,
-			map1: string,
-			map2: string,
-			name: string,
-		},
-		lurPrice?: string,
-		lurUnitPrice?: string,
-		status: number,
-		apartmentModel: {
-		  id: string,
-		  project: string,
-		  name: string,
-		  numBed:number,
-		  numBath: number,
-		  landArea: number,
-		  unitArea: number,
-		  direction:string,
-		  image: string,
-		  description: string,
-		  dcreatedAt: string,
-		  dupdatedAt: string,
-		  screatedBy: string,
-		  supdatedBy: string,
-		  nstatus: number
-		},
-		lotSymbolLegal: string,
-		lotSymbolCommercial: string,
-		project?: {
-		  id: string,
-		  name: string,
-		  location: string,
-		  constructArea: number,
-		  density: number,
-		  type: string,
-		  scale: string,
-		  funcDivision: string,
-		  ownership: string,
-		  description: string,
-		  avatar: string,
-		  code: string,
-		  tradeName: string,
-		  abbreviationName: string,
-		  status: string,
-		  commune: string,
-		  district: string,
-		  provincial: string,
-		  modifyDate: string,
-		  lsName: string
-		},
-		homeNum: string,
-		wallArea: number,
-		clearArea: number,
-		price: number,
-		unitPrice: number,
-		thongTinDuAn: {
-		  id: string,
-		  name: string,
-		  location: string,
-		  constructArea: number,
-		  density: number,
-		  type: string,
-		  scale: string,
-		  funcDivision: string,
-		  ownership: string,
-		  description: string,
-		  avatar: string,
-		  code: string,
-		  tradeName: string,
-		  abbreviationName: string,
-		  status: string,
-		  commune: string,
-		  district: string,
-		  provincial: string,
-		  modifyDate: string,
-		  lsName: string
-		},
-		outstanding: number,
-		carpetPrice: number,
-		totalVatPrice: number,
-		constructPrice: number,
-		unitVatMaintainPrice: number,
-		totalPrice: number,
-		vat: number,
-		maintainPrice: number,
-		idMapper: number,
-		syncFrom: string,
-		productNo: string,
-		productTypeId: number,
-		balconyDirection: string,
-		buildArea: number,
-		floorNum: number,
-		isCornerApartment: number,
-		idls: string,
-		floor: string
+		landArea: number,
+		unitArea: number,
+		direction: string,
+		image: string,
+		description: string,
+		dcreatedAt: string,
+		dupdatedAt: string,
+		screatedBy: string,
+		supdatedBy: string,
+		nstatus: number
+	},
+	lotSymbolLegal: string,
+	lotSymbolCommercial: string,
+	project?: {
+		id: string,
+		name: string,
+		location: string,
+		constructArea: number,
+		density: number,
+		type: string,
+		scale: string,
+		funcDivision: string,
+		ownership: string,
+		description: string,
+		avatar: string,
+		code: string,
+		tradeName: string,
+		abbreviationName: string,
+		status: string,
+		commune: string,
+		district: string,
+		provincial: string,
+		modifyDate: string,
+		lsName: string,
+		video?: string,
+		hotline?: string,
+	},
+	homeNum: string,
+	wallArea: number,
+	clearArea: number,
+	price: number,
+	unitPrice: number,
+	thongTinDuAn: {
+		id: string,
+		name: string,
+		location: string,
+		constructArea: number,
+		density: number,
+		type: string,
+		scale: string,
+		funcDivision: string,
+		ownership: string,
+		description: string,
+		avatar: string,
+		code: string,
+		tradeName: string,
+		abbreviationName: string,
+		status: string,
+		commune: string,
+		district: string,
+		provincial: string,
+		modifyDate: string,
+		lsName: string
+	},
+	outstanding: number,
+	carpetPrice: number,
+	totalVatPrice: number,
+	constructPrice: number,
+	unitVatMaintainPrice: number,
+	totalPrice: number,
+	vat: number,
+	maintainPrice: number,
+	idMapper: number,
+	syncFrom: string,
+	productNo: string,
+	productTypeId: number,
+	balconyDirection: string,
+	buildArea: number,
+	floorNum: number,
+	isCornerApartment: number,
+	idls: string,
+	floor: string,
+	video?: string,
+	defaultPhoneNumber?: string;
+	isOpeningSale?: boolean;
 }
-
 
 ///api/product/information/find-top-by-outstanding
 export interface TBOUTStanding {
@@ -198,4 +202,4 @@ export interface TBOUTStanding {
 	projectId: string,
 	projectName: string,
 	projectLocation: string
-  }
+}

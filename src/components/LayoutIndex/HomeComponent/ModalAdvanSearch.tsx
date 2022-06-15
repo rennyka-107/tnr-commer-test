@@ -18,6 +18,11 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { Theme, useTheme } from "@mui/material/styles";
 import SliderComponent from "@components/CustomComponent/SliderComponent";
 import SelectInputComponent from "@components/CustomComponent/SelectInputComponent";
+import SliderSearchKhoangGia from "@components/CustomComponent/SliderComponent/SliderSearchKhoangGia";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../store/store";
+import { useRouter } from "next/router";
+import SlectLocation from "@components/CustomComponent/SelectInputComponent/SlectLocation";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 10;
@@ -61,7 +66,7 @@ const TextBannerBottom = styled.span`
 `;
 const BodyContainer = styled.div`
   width: 1115px;
-  height: 318px;
+  height: 350px;
   background: #1b3459;
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.12);
 `;
@@ -80,16 +85,34 @@ function getStyles(name: string, personName: readonly string[], theme: Theme) {
         : theme.typography.fontWeightMedium,
   };
 }
-
+const minDistance = 10;
+const minDistance2 = 1;
 export default function ModalAdvanSearch() {
+  const router = useRouter();
+  const { listMenuBarType, listMenuBarProjectType, listMenuLocation } =
+    useSelector((state: RootState) => state.menubar);
+
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );
   const [open, setOpen] = React.useState(false);
   const [placement, setPlacement] = React.useState<PopperPlacementType>();
-  const theme = useTheme();
-  const [personName, setPersonName] = React.useState<string[]>([]);
 
+  const [productName, setProductName] = React.useState<string[]>([]);
+  const [projectName, setProjectName] = React.useState<string[]>([]);
+  const [location, setLocation] = React.useState<string[]>([]);
+  const [valueDienTich, setValueDientich] = React.useState<number[]>([30, 200]);
+  const [valueKhoanGia, setValueKhoangGia] = React.useState<number[]>([1, 200]);
+
+  const [search, setSearch] = React.useState({
+    provinceId: "",
+    projectTypeId: "",
+    projectId: "",
+    priceFrom: valueKhoanGia[0].toString(),
+    priceTo: valueKhoanGia[1].toString(),
+    areaFrom: valueDienTich[0],
+    areaTo: valueDienTich[1] ,
+  });
   const handleClick =
     (newPlacement: PopperPlacementType) =>
     (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -98,12 +121,90 @@ export default function ModalAdvanSearch() {
       setPlacement(newPlacement);
     };
 
-  const handleChange = (event: SelectChangeEvent<typeof personName>) => {
+  const handleChange = (event: SelectChangeEvent<typeof productName>) => {
     const {
       target: { value },
     } = event;
-    setPersonName(typeof value === "string" ? value.split(",") : value);
+    const data = listMenuBarProjectType.filter((x) => x.name === value);
+    setSearch({ ...search, projectId: data[0].id });
+    setProductName(typeof value === "string" ? value.split(",") : value);
   };
+  const handleChangeProject = (
+    event: SelectChangeEvent<typeof projectName>
+  ) => {
+    const {
+      target: { value },
+    } = event;
+    const data = listMenuBarType.filter((x) => x.name === value);
+    setSearch({ ...search, projectTypeId: data[0].id });
+    setProjectName(typeof value === "string" ? value.split(",") : value);
+  };
+
+  const handleChangeLocation = (
+    event: SelectChangeEvent<typeof projectName>
+  ) => {
+    const {
+      target: { value },
+    } = event;
+    const data = listMenuLocation.filter((x) => x.ProvinceName === value);
+    setSearch({ ...search, provinceId: data[0].ProvinceID });
+    setLocation(typeof value === "string" ? value.split(",") : value);
+  };
+
+  const handleChange1 = (
+    event: Event,
+    newValue: number | number[],
+    activeThumb: number
+  ) => {
+    if (!Array.isArray(newValue)) {
+      return;
+    }
+
+    if (activeThumb === 0) {
+      setValueDientich([
+        Math.min(newValue[0], valueDienTich[1] - minDistance),
+        valueDienTich[1],
+      ]);
+	  setSearch({ ...search, areaFrom:  valueDienTich[0]});
+    } else {
+      setValueDientich([
+        valueDienTich[0],
+        Math.max(newValue[1], valueDienTich[0] + minDistance),
+      ]);
+	  setSearch({ ...search, areaTo :  valueDienTich[1]});
+    }
+  };
+
+  const handleChange2 = (
+    event: Event,
+    newValue: number | number[],
+    activeThumb: number
+  ) => {
+    if (!Array.isArray(newValue)) {
+      return;
+    }
+
+    if (activeThumb === 0) {
+      setValueKhoangGia([
+        Math.min(newValue[0], valueKhoanGia[1] - minDistance2),
+        valueKhoanGia[1],
+      ]);
+      setSearch({ ...search,priceFrom : valueKhoanGia[0].toString() });
+    } else {
+      setValueKhoangGia([
+        valueKhoanGia[0],
+        Math.max(newValue[1], valueKhoanGia[0] + minDistance2),
+      ]);
+      setSearch({ ...search,priceTo : valueKhoanGia[1].toString() });
+    }
+  };
+
+  const handleSearch = () => {
+    router.push(
+      `/search?Type=Advanded&&provinceId=${search.provinceId}&&projectTypeId=${search.projectTypeId}&&projectId=${search.projectId}&&priceTo=${search.priceTo}&&priceFrom=${search.priceFrom}&&areaTo=${search.areaTo}&&areaFrom=${search.areaFrom}`
+    );
+  };
+
   return (
     <div>
       <Button onClick={handleClick("bottom")}>
@@ -117,35 +218,34 @@ export default function ModalAdvanSearch() {
         placement={placement}
         transition
         style={{ zIndex: 1000 }}
-		
       >
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={350}>
             <Paper>
               <BodyContainer>
                 <BoxStyled sx={{ minWidth: 120 }}>
-                  <SelectInputComponent
+                  <SlectLocation
                     label="Vị Trí"
-                    data={names}
-                    value={personName}
-                    onChange={handleChange}
+                    data={listMenuLocation}
+                    value={location}
+                    onChange={handleChangeLocation}
                     placeholder="Chọn vị trí"
                   />
 
                   <SelectInputComponent
                     label="Loại bất động sản"
-                    data={names}
-                    value={personName}
+                    data={listMenuBarProjectType}
+                    value={productName}
                     onChange={handleChange}
                     placeholder="Chọn loại bất động sản"
                   />
 
                   <SelectInputComponent
-                    label="Loại bất động sản"
-                    data={names}
-                    value={personName}
-                    onChange={handleChange}
-                    placeholder="Chọn loại bất động sản"
+                    label="Dự án"
+                    data={listMenuBarType}
+                    value={projectName}
+                    onChange={handleChangeProject}
+                    placeholder="Chọn Dự án"
                   />
                 </BoxStyled>
                 <BoxStyled
@@ -158,14 +258,18 @@ export default function ModalAdvanSearch() {
                   <div style={{ display: "flex", gap: 50 }}>
                     <SliderComponent
                       label="Diện tích (m2)"
+                      onChange={handleChange1}
                       numberMin={30}
                       numberMax={200}
+                      value={valueDienTich}
                       unit="m2"
                     />
-                    <SliderComponent
+                    <SliderSearchKhoangGia
                       label="Khoảng giá"
+                      onChange={handleChange2}
                       numberMin={1}
                       numberMax={20}
+                      value={valueKhoanGia}
                       unit="tỷ"
                     />
                   </div>
@@ -177,6 +281,7 @@ export default function ModalAdvanSearch() {
                         height: 48,
                         borderRadius: 8,
                       }}
+                      onClick={handleSearch}
                     >
                       <span
                         style={{

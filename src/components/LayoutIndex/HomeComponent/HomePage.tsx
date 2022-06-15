@@ -16,23 +16,23 @@ const DynamicBanner = dynamic(
   );
   const DynamicBody = dynamic(
 	() => import("./BodyIndex"),
-	{ loading: () => <p>...</p> }
+	{ loading: () => <p>...</p> , ssr: false}
   );
   const DynamicSliderShowComponent = dynamic(
 	() => import("@components/CustomComponent/SliderShowComponent"),
-	{ loading: () => <p>...</p> }
+	{ loading: () => <p>...</p>, ssr: false }
   );
   const DynamicOnlineSupportSale = dynamic(
 	() => import("./OnlineSupportSale"),
-	{ loading: () => <p>...</p> }
+	{ loading: () => <p>...</p> , ssr: false}
   );
   const DynamicSliderComponent = dynamic(
 	() => import("@components/CustomComponent/SliderComponent"),
-	{ loading: () => <p>...</p> }
+	{ loading: () => <p>...</p> , ssr: false}
   );
   const DynamicSlider3dShowBottom = dynamic(
 	() => import("./Slider3dShowBottom"),
-	{ loading: () => <p>...</p> }
+	{ loading: () => <p>...</p> , ssr: false}
   );
 interface ProductsIndexProps {
   listProductOutOfStanding?: TBOUTStanding[];
@@ -129,7 +129,7 @@ const HomePage = () => {
             </Button>
           </div>
         </div>
-        <div style={{ display: "flex", gap: 65, marginLeft: 54 }}>
+        {/* <div style={{ display: "flex", gap: 65, marginLeft: 54 }}>
           <DynamicSliderComponent
             label="khoảng giá"
             numberMin={0}
@@ -159,7 +159,7 @@ const HomePage = () => {
               So sánh
             </span>
           </Button>
-        </div>
+        </div> */}
       </CompareSwap>
       <DynamicSlider3dShowBottom />
     </>

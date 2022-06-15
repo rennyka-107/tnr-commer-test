@@ -1,4 +1,4 @@
-import React ,{useState} from 'react'
+import React, { useState } from "react";
 import { IconBag, IconHeart, IconUser, Logo } from "@components/Icons";
 import styled from "@emotion/styled";
 import { Route } from "@mui/icons-material";
@@ -142,8 +142,8 @@ const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
     }
   }, []);
   const scrollView = () => {
-	  setCheckSale(true);
-	  if (Router.pathname === "/" ) {
+    setCheckSale(true);
+    if (Router.pathname === "/") {
       const mainRoot = document.getElementById("uu-dai");
       if (mainRoot) {
         mainRoot.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -151,10 +151,9 @@ const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
         return;
       }
     } else {
-		Router.replace(`/sales`);
-	  }
+      Router.replace(`/sales`);
+    }
   };
-
 
   const handleScrollHuongDan = () => {
     if (Router.pathname === "/") {
@@ -168,8 +167,6 @@ const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
       Router.replace(`/buyingGuide?id=4`);
     }
   };
-
-
 
   return (
     <ContainerNavTop>
@@ -192,7 +189,8 @@ const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
               title={"Dự Án"}
               data={menuData}
               onSelect={(item) => {
-                Router.replace(`/products?idProject=${item.id}`);
+                // Router.replace(`/products?idProject=${item.id}`);
+                Router.replace(`/project-detail/${item.id}`);
               }}
             />
             <Button onClick={() => scrollView()}>
@@ -234,7 +232,11 @@ const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
               title=""
               onSelect={handleNavigateUser}
             />
-            <IconHeart />
+            <Link href="/favorite-products">
+              <a>
+                <IconHeart />
+              </a>
+            </Link>
             <Link href="/payment-cart">
               <a>
                 <IconBag total={10} />

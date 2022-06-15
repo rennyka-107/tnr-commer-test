@@ -47,20 +47,20 @@ const ContainerProduct = styled.div`
 
 const ProjectPages = () => {
     const { data, error, loading, changePageNumber, totalPage, changeBody, body, params } = useProjectList();
-	const [titleData, setTitleData] = useState('');
+    const [titleData, setTitleData] = useState('');
 
-	const { listMenuBarType, listMenuBarProjectType } = useSelector(
-		(state: RootState) => state.menubar
-	  );
-	
-	 
+    const { listMenuBarType, listMenuBarProjectType } = useSelector(
+        (state: RootState) => state.menubar
+    );
+
+
     const onSubmit = (values: BodyListProjectI) => {
         changeBody(values)
     }
-	useEffect(() => {
-		const items = listMenuBarProjectType.find((item) => item.id === body?.projectTypeId)
-		setTitleData(items?.name)
-	},[body])
+    useEffect(() => {
+        const items = listMenuBarProjectType.find((item) => item.id === body?.projectTypeId)
+        setTitleData(items?.name)
+    }, [body])
     return (
         <FlexContainer>
             <Container
@@ -72,12 +72,12 @@ const ProjectPages = () => {
                         <Grid item xs={12} sm={12} md={6} lg={4} xl={3} key={index}>
                             <ContainerProduct>
                                 <DynamicProductCard
-								id={el.id}
-                                    src={{ src: '/images/product2.png' }}
-                                    title={el.name}
-                                    subTitle={el.location}
-                                    ticketCard={el.name}
-                                    description={el.description}
+                                    id={el?.id}
+                                    src={{ src: el?.avatar }}
+                                    title={el?.name}
+                                    subTitle={el?.diaChi}
+                                    ticketCard={el?.name}
+                                    description={el?.description}
                                 />
                             </ContainerProduct>
                         </Grid>

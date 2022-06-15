@@ -381,6 +381,9 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
     }
   };
 
+  console.log(dataProduct, '--------dataProduct-------');
+
+
   useEffect(() => {
     if (callApi === true) {
       {
@@ -410,7 +413,9 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
     if (!num) {
       return;
     }
-    return Number(num).toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+    return Number(num)
+      .toFixed(0)
+      .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
   }
   const fetchPhieuTinhGia = () => {
     return (
@@ -430,6 +435,7 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
       </>
     );
   };
+
   useEffect(() => {
     fetchPhieuTinhGia();
   }, [productItem]);
@@ -511,7 +517,7 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                   }}
                 >
                   <iframe
-                    src="https://360riverpark.tnrstars.vn/"
+                    src={dataProduct?.video ?? dataProduct.project.video}
                     style={{ width: "100%", height: "100%" }}
                     frameBorder={"0"}
                     allow="autoplay; encrypted-media"
@@ -810,17 +816,24 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                 >
                   <ButtonStyled
                     onClick={() => {
-                      console.log("abc");
-                      // router.push("/compare-product");
+                      localStorage.setItem(
+                        "cart-id",
+                        JSON.stringify(dataProduct.id)
+                      );
                     }}
+                    disabled={!dataProduct?.isOpeningSale}
                   >
                     Giỏ hàng
                   </ButtonStyled>
                   <ButtonStyled
                     onClick={() => {
-                      // console.log("abc");
-                      router.push("/payment-cart/" + id);
+                      localStorage.setItem(
+                        "cart-id",
+                        JSON.stringify(dataProduct.id)
+                      );
+                      router.push("/payment-cart/" + dataProduct.id);
                     }}
+                    disabled={!dataProduct?.isOpeningSale}
                   >
                     Mua Online
                   </ButtonStyled>
@@ -840,10 +853,10 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                     marginBottom: 24,
                   }}
                 >
-                  <div style={{ textAlign: "center" }}>
+                  <a href={dataProduct.project.hotline ?? dataProduct.defaultPhoneNumber}>
                     <IconHeadSetProduct />
-                    <TextContact>Liên hệ tư vấn viên</TextContact>
-                  </div>
+                    <TextContact>{dataProduct.project.hotline ?? dataProduct.defaultPhoneNumber}</TextContact>
+                  </a>
                   <div style={{ border: "1px solid #1B3459" }} />
                   <div style={{ textAlign: "center" }}>
                     <IconClipboardProduct />

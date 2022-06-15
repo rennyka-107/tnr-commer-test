@@ -1,35 +1,25 @@
 import FlexContainer from "@components/CustomComponent/FlexContainer";
-import ItemProductCard from "@components/CustomComponent/ItemProductCard";
-import {
-  IconBatDongSan,
-  IconCanHo,
-  IconChungCu,
-  IconKhuDoThi,
-} from "@components/Icons";
-import _ from "lodash";
+import { IconChungCu } from "@components/Icons";
 import styled from "@emotion/styled";
-import { useRouter } from "next/router";
-import PathRoute from "utils/PathRoute";
 import { Button, Typography } from "@mui/material";
+import { url } from "inspector";
 import { TBOUTStanding } from "interface/product";
+import _ from "lodash";
+import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
-import Product1 from "../../../../public/images/product1.png";
-import Product2 from "../../../../public/images/product2.png";
-import Product3 from "../../../../public/images/product3.png";
-import { RootState } from "../../../../store/store";
+import PathRoute from "utils/PathRoute";
 import { getListProductApi } from "../../../../pages/api/productsApi";
 import { getListProduct } from "../../../../store/productSlice";
-import Router from "next/router";
-import SliderProductHotComponent from '../../../components/CustomComponent/SliderProductHotComponent'
-import dynamic from "next/dynamic";
+import { RootState } from "../../../../store/store";
 
 interface ProductsIndexProps {
   listProductOutOfStanding?: TBOUTStanding[];
 }
-const DynamicSliderHotProduct= dynamic(
-	() => import("../../../components/CustomComponent/SliderProductHotComponent"),
-	{ loading: () => <p>...</p> }
-  );
+const DynamicSliderHotProduct = dynamic(
+  () => import("../../../components/CustomComponent/SliderProductHotComponent"),
+  { loading: () => <p>...</p> }
+);
 const WrapContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -46,20 +36,21 @@ const WrapIconContainer = styled.div`
   cursor: pointer;
   max-width: 150px;
 `;
-const WrapIcon = styled(Button)`
+const WrapIcon = styled.div`
   width: 111px;
   height: 111px;
-  background: #fec83c;
   border-radius: 20px;
   text-align: center;
   padding: 30px;
+  background-size: contain;
   :hover {
-    background: #1b3459;
+    background-image: url(${(props) => props.theme['icon']}) !important;
+    background-size: contain;
   }
 `;
 
 const TextBottomIcon = styled(Typography)`
-  margin-top: 20px;
+  margin-top: 20px
   font-family: "Roboto";
   font-style: normal;
   font-weight: 400;
@@ -131,14 +122,12 @@ export default function BodyIndex() {
       dispatch(getListProduct(response.responseData));
 
       if (response.responseCode === "00") {
-        console.log("response", response);
         router.replace(`/${PathRoute.ProductTNR}?type=${projectTypeId}`);
       }
     } catch (error) {
       console.log(error);
     }
   };
-  console.log(listMenuBarProjectType)
   return (
     <FlexContainer>
       <WrapContainer>
@@ -150,9 +139,13 @@ export default function BodyIndex() {
                 onClickProduct(item.id);
               }}
             >
-              <WrapIcon>
-                <IconChungCu />
-              </WrapIcon>
+              <WrapIcon
+                theme={{ icon: item?.iconHover }}
+                style={{
+                  backgroundImage: `url(${item?.icon})`,
+                  backgroundSize: "contain",
+                }}
+              ></WrapIcon>
               <TextBottomIcon>{item.name}</TextBottomIcon>
             </WrapIconContainer>
           );
@@ -173,8 +166,14 @@ export default function BodyIndex() {
           }}
         ></div>
         <div>
-          <div style={{ display: "flex", justifyContent: "space-around" , marginBottom: 20}}>
-            <TextBDS >BẤT ĐỘNG SẢN NỔI BẬT</TextBDS>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-around",
+              marginBottom: 20,
+            }}
+          >
+            <TextBDS>BẤT ĐỘNG SẢN NỔI BẬT</TextBDS>
             <LinkStyled href="">Xem tất cả</LinkStyled>
           </div>
           <div
@@ -203,11 +202,12 @@ export default function BodyIndex() {
                     priceSub={item.unitPrice}
                     ticketCard="TRN Gold"
                     onClick={() => {
-                      Router.push("/payment-cart");
+                      localStorage.setItem("cart-id", JSON.stringify(item.id));
+                      Router.push("/payment-cart/" + item.id);
                     }}
                   />
                 ))} */}
-				<DynamicSliderHotProduct />
+                <DynamicSliderHotProduct />
               </>
             ) : (
               <></>

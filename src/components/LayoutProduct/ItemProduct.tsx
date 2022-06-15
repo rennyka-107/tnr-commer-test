@@ -12,8 +12,8 @@ interface ProductsProps {
   data?: ProductsResponse[];
 }
 const ContainerProduct = styled.div`
-    display: flex;
-    justify-content:center;
+  display: flex;
+  justify-content: center;
 `;
 const ProductWrap = styled.div`
   display: grid;
@@ -21,43 +21,49 @@ const ProductWrap = styled.div`
   grid-template-columns: repeat(4, 1fr);
 `;
 const ItemProduct = ({ data }: ProductsProps) => {
-  // console.log(data)
+
   return (
     <>
-      {!_.isEmpty(data) ? (
-        // <ProductWrap>
-        <Grid container spacing={4}>
-          {data?.map((product, index) => (
-            <Grid item xs={12} sm={12} md={6} lg={4} xl={3} key={index}>
-              <ContainerProduct>
-                <ItemProductCard
-                  key={index}
-                  id={product.id}
-                  src={Product2}
-                  title={product.name}
-                  subTitle={product.location}
-                  dataItem={{
-                    item1: product.landArea,
-                    item2: product.numBath,
-                    item3: product.numBed,
-                    item4: product.doorDirection,
-                  }}
-                  priceListed={product.price}
-                  priceSub={product.unitPrice}
-                  ticketCard="TRN Star"
-                  activeSoSanh={true}
-                  onClick={() => {
-                    Router.push("/payment-cart/" + product.id);
-                  }}
-                />
-              </ContainerProduct>
-            </Grid>
-          ))}
-        </Grid>
-      ) : (
-        // </ProductWrap>
-        <div style={{textAlign: 'center'}}>No Data</div>
-      )}
+      <ProductWrap>
+        {data?.map((product, index) => (
+          <ItemProductCard
+            key={index}
+            id={product.id}
+            src={Product2}
+            title={product.name}
+            subTitle={product.location}
+            dataItem={{
+              item1: product.landArea,
+              item2: product.numBath,
+              item3: product.numBed,
+              item4: product.doorDirection,
+            }}
+            priceListed={product.price}
+            priceSub={product.unitPrice}
+            ticketCard="TRN Star"
+            activeSoSanh={true}
+            onCompare={() => {
+              let prods = [];
+              if (typeof window !== "undefined") {
+                const local = localStorage.getItem("compare-item");
+                if (local !== null) {
+                  prods = [...JSON.parse(local)];
+                } else {
+                  localStorage.setItem("compare-item", JSON.stringify(prods));
+                }
+              }
+              prods.unshift(product);
+              if (prods.length > 3) prods.pop();
+              localStorage.setItem("compare-item", JSON.stringify(prods));
+              Router.push("/compare-product");
+            }}
+            onClick={() => {
+              localStorage.setItem("cart-id", JSON.stringify(product.id));
+              Router.push("/payment-cart/" + product.id);
+            }}
+          />
+        ))}
+      </ProductWrap>
     </>
   );
 };

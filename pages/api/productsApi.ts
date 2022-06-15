@@ -40,3 +40,15 @@ export const getProductTopByStanding = async () => {
     }
   );
 };
+
+export const getProductFavorite = async (formData: any) => {
+  return HttpClient.post<ResponseTypeAPI, CommonResponse>(
+    `/api/favourite/search/get-top3-favourite-product`,
+    formData,
+    {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    }
+  );
+};

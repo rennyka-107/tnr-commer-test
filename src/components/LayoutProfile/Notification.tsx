@@ -4,15 +4,12 @@ import IconNotifiType1 from "@components/Icons/IconNotifiType1";
 import IconNotifiType2 from "@components/Icons/IconNotifiType2";
 import IconNotifiType3 from "@components/Icons/IconNotifiType3";
 import styled from "@emotion/styled";
-import React from "react";
+import { getNotificationByUser, NotiI } from "@service/Profile";
+import React, { useEffect, useState } from "react";
+import { convertDateToString } from "utils/helper";
+import FormatFns from 'utils/DateFns';
 
-interface NotiI {
-    id: number;
-    titile?: string;
-    content?: string;
-    time?: string;
-    type: 1 | 2 | 3;
-}
+
 const ItemContainer = styled.div`
     display:flex;
     justify-content:space-between;
@@ -63,31 +60,48 @@ const IconContainer = styled.div`
 
 const Notification = () => {
 
-    const notifications: NotiI[] = [
-        {
-            id: 0,
-            titile: "Hoàn thiện hồ sơ mua bán",
-            content: "Hệ thống ghi nhận bạn chưa hoàn thành hồ sơ mua bán.",
-            time: "09:24 | thứ 2, 09/11",
-            type: 1,
-        },
-        {
-            id: 2,
-            titile: "Hoàn thiện hồ sơ mua bán",
-            content: "Hệ thống ghi nhận bạn chưa hoàn thành hồ sơ mua bán.",
-            time: "09:24 | thứ 2, 09/11",
-            type: 2,
-        },
-        {
-            id: 3,
-            titile: "Hoàn thiện hồ sơ mua bán",
-            content: "Hệ thống ghi nhận bạn chưa hoàn thành hồ sơ mua bán.",
-            time: "09:24 | thứ 2, 09/11",
-            type: 3,
-        },
-    ]
+    // const notifications: NotiI[] = [
+    //     {
+    //         id: 0,
+    //         titile: "Hoàn thiện hồ sơ mua bán",
+    //         content: "Hệ thống ghi nhận bạn chưa hoàn thành hồ sơ mua bán.",
+    //         time: "09:24 | thứ 2, 09/11",
+    //         type: 1,
+    //     },
+    //     {
+    //         id: 2,
+    //         titile: "Hoàn thiện hồ sơ mua bán",
+    //         content: "Hệ thống ghi nhận bạn chưa hoàn thành hồ sơ mua bán.",
+    //         time: "09:24 | thứ 2, 09/11",
+    //         type: 2,
+    //     },
+    //     {
+    //         id: 3,
+    //         titile: "Hoàn thiện hồ sơ mua bán",
+    //         content: "Hệ thống ghi nhận bạn chưa hoàn thành hồ sơ mua bán.",
+    //         time: "09:24 | thứ 2, 09/11",
+    //         type: 3,
+    //     },
+    // ]
 
-    const renderIcon = (type: 1 | 2 | 3) => {
+    const [notifications, setNotifications] = useState<NotiI[]>([]);
+
+
+
+    const getNotifications = async () => {
+        const response = await getNotificationByUser();
+        setNotifications(response.responseData);
+    }
+
+
+    console.log('Notification---', notifications);
+
+
+    useEffect(() => {
+        getNotifications();
+    }, [])
+
+    const renderIcon = (type: number) => {
         switch (type) {
             case 1:
                 return <IconNotifiType1 />;
@@ -105,14 +119,14 @@ const Notification = () => {
             <ItemContainer>
                 <LeftItem>
                     <IconContainer>
-                        {renderIcon(item.type)}
+                        {renderIcon(item.status)}
                     </IconContainer>
                     <ContentContainer>
-                        <TitleItem color="#FFCC00">{item.titile}</TitleItem>
-                        <ContentItem>{item.content}</ContentItem>
+                        <TitleItem color="#FFCC00">{item.status}</TitleItem>
+                        <ContentItem>{item.type}</ContentItem>
                     </ContentContainer>
                 </LeftItem>
-                <RightItem>{item.time}</RightItem>
+                <RightItem>{convertDateToString(new Date(item?.notiTime) ?? new Date())}</RightItem>
             </ItemContainer>
         </BoxContainer>
     )

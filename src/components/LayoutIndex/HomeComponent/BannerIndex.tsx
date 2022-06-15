@@ -1,3 +1,4 @@
+
 import SearchInput from "@components/CustomComponent/SearchInput";
 import styled from "@emotion/styled";
 import { Typography } from "@mui/material";
@@ -40,6 +41,9 @@ const TextBanner = styled(Typography)`
 `;
 
 const BannerIndex = () => {
+
+
+
   return (
     <WrapBanner>
       <ContainerBody>
@@ -47,11 +51,13 @@ const BannerIndex = () => {
           <TextBanner>SỐNG XANH THỊNH VƯỢNG</TextBanner>
           <TextBanner>ĐẤT VÀNG PHỒN VINH</TextBanner>
         </div>
+
         <SearchInput
           placholder="Nhập tên dự án, địa chỉ hoặc thành phố"
           width={723}
           height={60}
         />
+
         <div style={{ marginTop: 19 }}>
           <ModalAdvanSearch />
         </div>

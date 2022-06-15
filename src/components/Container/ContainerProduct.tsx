@@ -8,6 +8,7 @@ interface Props {
     children: React.ReactNode;
     title?: string;
     rightContent?: React.ReactNode;
+	checkBread?: boolean;
 }
 const ContainerWrapper = styled.div`
     padding:29px 164px;
@@ -23,7 +24,7 @@ const HeaderView = styled.div`
     line-height: 33px;
 `;
 
-const ContainerProduct: React.FC<Props> = ({ children, title, rightContent }) => {
+const ContainerProduct: React.FC<Props> = ({ children, title, rightContent,checkBread }) => {
     return (
         <ContainerWrapper>
             <Breadcrumbs title={title} />

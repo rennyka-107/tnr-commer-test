@@ -15,7 +15,7 @@ import {
   Text18Styled,
   Title28Styled,
   WrapperBoxBorderStyled,
-} from "../styled";
+} from "../../StyledLayout/styled";
 
 const BoxDetailInfo = styled(Box)({
   marginTop: 15,
@@ -47,15 +47,15 @@ const TableQuote = ({ width, urlPayment, setScopeRender }: Props) => {
       <BoxDetailInfo>
         <RowStyledAgain>
           <Text14Styled>Giá BĐS</Text14Styled>
-          <Text14Styled>2.114.200.000 đ</Text14Styled>
+          <Text14Styled>{prod.totalVatPrice ?? "N/A"} đ</Text14Styled>
         </RowStyledAgain>
         <RowStyledAgain>
           <Text14Styled>Thuế VAT</Text14Styled>
-          <Text14Styled>0 đ</Text14Styled>
+          <Text14Styled>{prod.vat ?? "N/A"} đ</Text14Styled>
         </RowStyledAgain>
         <RowStyledAgain>
           <Text14Styled>Phí bảo trì</Text14Styled>
-          <Text14Styled>0 đ</Text14Styled>
+          <Text14Styled>{prod.maintainPrice ?? "N/A"} đ</Text14Styled>
         </RowStyledAgain>
       </BoxDetailInfo>
 
@@ -64,7 +64,7 @@ const TableQuote = ({ width, urlPayment, setScopeRender }: Props) => {
       <BoxDetailInfo>
         <RowStyledAgain>
           <Text14Styled>Tổng tiền niêm yết</Text14Styled>
-          <Text14Styled>2.114.200.000 đ</Text14Styled>
+          <Text14Styled>{prod.totalPrice ?? "N/A"} đ</Text14Styled>
         </RowStyledAgain>
         <RowStyledAgain>
           <Text14Styled>Giảm giá</Text14Styled>
@@ -77,7 +77,7 @@ const TableQuote = ({ width, urlPayment, setScopeRender }: Props) => {
         <RowStyledAgain>
           <Text14Styled>Tổng tiền mua online</Text14Styled>
           <Text18Styled fw={500} style={{ color: "#ea242a" }}>
-            2.114.200.000 đ
+            {prod.totalPrice ?? "N/A"} đ
           </Text18Styled>
         </RowStyledAgain>
       </BoxDetailInfo>

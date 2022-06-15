@@ -76,6 +76,7 @@ const Register = () => {
       .trim(validateLine.trim)
       .strict(true)
       .matches(Regexs.phone, "Số điện thoại không đúng")
+      .required(validateLine.required)
       .default(""),
     accept: yup.boolean().default(false),
     email: yup
@@ -177,6 +178,7 @@ const Register = () => {
           fullWidth
           label="Số điện thoại"
           labelColor="#666666"
+          required
         />
       </FormGroup>
       <FormGroup sx={{ mb: 2 }} fullWidth>

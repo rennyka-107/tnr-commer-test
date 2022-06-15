@@ -161,3 +161,9 @@ a {
 .icon-khudothi-hover:hover .icon-kdt-hover {
   fill: #fec83c !important;
 }
+
+#pj-infor:hover {
+  background: #FEC83C;
+  color: #FFFFFF;
+  border: none;
+}

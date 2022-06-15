@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { Typography } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import PropTypes from 'prop-types';
@@ -31,7 +32,13 @@ const Path = styled.span`
     cursor:pointer;
     padding:0px 5px;
 `;
-
+const TypographyStyled = styled(Typography)`
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 19px;
+`;
 export default function Breadcrumbs({ title }) {
     const Router = useRouter();
     const paths = Router.pathname.split('/').filter((path) => !path.includes('[') && !path.includes(']'));
@@ -53,10 +60,11 @@ export default function Breadcrumbs({ title }) {
                 return (
                     <React.Fragment key={index}>
                         <Link href={`/${path}`} passHref>
-                            <LinkLabel key={index} href={`/${path}`}>
+                            {/* <LinkLabel key={index} href={`/${path}`}> */}
                                 {/* {Breadscrumb.find((el) => el.path == path)?.title} */}
-								{title}
-                            </LinkLabel>
+								<TypographyStyled color="inherit">{title}</TypographyStyled>
+								
+                            {/* </LinkLabel> */}
                         </Link>
                         {index !== paths.length - 1 && <Path>/</Path>}
                     </React.Fragment>

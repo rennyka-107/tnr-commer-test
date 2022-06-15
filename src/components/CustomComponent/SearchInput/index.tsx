@@ -1,10 +1,11 @@
-import * as React from "react";
+import React, { useState } from "react";
 import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 import { IconMapSearch, IconSearch } from "@components/Icons";
 import styled from "@emotion/styled";
+import { useRouter } from "next/router";
 
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
   "& .MuiInputBase-input": {
@@ -31,7 +32,19 @@ type Props = {
   // onClick?: MouseEventHandler<HTMLButtonElement>;
 };
 
-export default function SearchInput({ placholder,width,height }: Props) {
+export default function SearchInput({ placholder, width, height }: Props) {
+  const router = useRouter();
+
+  const [textSearch, setTextSearch] = useState("");
+
+  const handleChange = (event: any) => {
+    setTextSearch(event.target.value);
+    // router.push(`/search?textSearch=${event.target.value}`)
+  };
+  const handleSearch = () => {
+    router.push(`/search?textSearch=${textSearch}`);
+  };
+
   return (
     <Paper
       component="form"
@@ -51,8 +64,16 @@ export default function SearchInput({ placholder,width,height }: Props) {
         sx={{ ml: 1, flex: 1 }}
         placeholder={placholder}
         inputProps={{ "aria-label": "Search" }}
+        onChange={handleChange}
+        onKeyPress={(ev) => {
+          if (ev.key === "Enter") {
+            // Do code here
+            router.push(`/search?textSearch=${textSearch}`);
+            ev.preventDefault();
+          }
+        }}
       />
-      <IconButton type="submit" sx={{ p: "10px" }} aria-label="search">
+      <IconButton sx={{ p: "10px" }} aria-label="search" onClick={handleSearch}>
         <IconSearch />
       </IconButton>
     </Paper>

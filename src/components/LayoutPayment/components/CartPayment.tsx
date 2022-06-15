@@ -5,7 +5,7 @@ import {
   RowStyled,
   Text18Styled,
   WrapperBoxBorderStyled,
-} from "../styled";
+} from "../../StyledLayout/styled";
 
 type Props = {};
 

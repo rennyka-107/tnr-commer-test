@@ -16,6 +16,7 @@ export type SEOProps = {
   isHomePage?: boolean;
   isAbout?: boolean;
   isPricing?: boolean;
+  isSearchPage?: boolean
 };
 
 const SEO: React.FC<SEOProps> = ({
@@ -32,6 +33,7 @@ const SEO: React.FC<SEOProps> = ({
   isHomePage,
   isAbout,
   isPricing,
+  isSearchPage
 }) => {
   const pageTitle = title ? `${title.trim()}` : "";
   const router = useRouter();

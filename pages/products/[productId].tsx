@@ -46,9 +46,9 @@ const Product = () => {
 
         if (
           response.responseCode === "00" &&
-          responAPIBYID.responseCode === "00"  && productId
+          responAPIBYID.responseCode === "00" &&
+          productId
         ) {
-			console.log('abc')
           setLoading(true);
         }
       } catch (error) {
@@ -99,9 +99,11 @@ const Product = () => {
 
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (context) => {
-    const idProduct = context.params.productId;
-    const response = await getProducById(idProduct);
-    store.dispatch(getProductById(response.responseData));
+    try {
+      const idProduct = context.params.productId;
+      const response = await getProducById(idProduct);
+      store.dispatch(getProductById(response.responseData));
+    } catch (err) {}
     return {
       props: {},
     };
