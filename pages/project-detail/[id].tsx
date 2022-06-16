@@ -7,14 +7,12 @@ import { RootState } from "../../store/store";
 import { useDispatch, useSelector } from "react-redux";
 import {
   apiGetInformationProject,
-  apiGetListChildMapByIdLevel,
-  apiGetListChildMapByIdParent,
   apiGetListLevelProject,
   apiGetProjectTabs,
 } from "../api/mapProject";
 import isEmpty from "lodash.isempty";
 import {
-  setListChild,
+  setImgMap,
   setListLevel,
   setProjectInfomation,
 } from "../../store/projectMapSlice";
@@ -38,12 +36,8 @@ const ProjectInformation = dynamic(
 const ProjectDetail = () => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const { id } = router.query;
-
-  const GeoJsonData = useSelector(
-    (state: RootState) => state.projectMap.GeoJsonData
-  );
 
   const ListLevel = useSelector(
     (state: RootState) => state.projectMap.ListLevel
@@ -66,30 +60,33 @@ const ProjectDetail = () => {
     dispatch(getListTabsProject(response.responseData));
   }
 
-  async function fetchListChildMap() {
-    if (isEmpty(Target)) {
-      if (!isEmpty(ListLevel) && ListLevel.length > 2) {
-        ListLevel.forEach(async (lv) => {
-          if (lv.level === 1) {
-            const response = await apiGetListChildMapByIdLevel(ListLevel[1].id);
-            dispatch(setListChild(response.responseData));
-          }
-        });
-      }
-    } else {
-      const response = await apiGetListChildMapByIdParent(Target.id);
-      dispatch(setListChild(response.responseData));
-    }
-  }
+  // async function fetchListChildMap() {
+  //   if (isEmpty(Target)) {
+  //     if (!isEmpty(ListLevel) && ListLevel.length > 2) {
+  //       ListLevel.forEach(async (lv) => {
+  //         if (lv.level === 1) {
+  //           const response = await apiGetListChildMapByIdLevel(ListLevel[1].id);
+  //           dispatch(setListChild(response.responseData));
+  //         }
+  //       });
+  //     }
+  //   } else {
+  //     const response = await apiGetListChildMapByIdParent(Target.id);
+  //     dispatch(setListChild(response.responseData));
+  //   }
+  // }
 
   useEffect(() => {
-    (async () => {
-      try {
-        await fetchListChildMap();
-      } catch (err) {
-        console.log(err);
-      }
-    })();
+    // (async () => {
+    //   try {
+    //     await fetchListChildMap();
+    //   } catch (err) {
+    //     console.log(err);
+    //   }
+    // })();
+    if (isEmpty(Target) && !isEmpty(ListLevel)) {
+      dispatch(setImgMap(ListLevel[0]["map"]));
+    }
   }, [ListLevel, Target]);
 
   useEffect(() => {

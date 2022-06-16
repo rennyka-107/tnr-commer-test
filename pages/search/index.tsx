@@ -23,8 +23,7 @@ const Search = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-
-  const { textSearch } = router.query;
+  const [searchAction, setSearchAction] = useState(false);
 
   const {
     Type,
@@ -35,82 +34,67 @@ const Search = () => {
     projectId,
     projectTypeId,
     provinceId,
+    textSearch,
   } = router.query;
   const { SearchHomeLocation, totalElement } = useSelector(
     (state: RootState) => state.searchs
   );
-
+  const [searchBody, setSearchBody] = useState<any>({
+    provinceId: "",
+    projectTypeId: "",
+    projectId: "",
+    priceFrom: "",
+    priceTo: "",
+    areaFrom: null,
+    areaTo: null,
+    textSearch: "",
+  });
   const [search, setSearch] = useState({
     page: 1,
     size: 12,
   });
 
-  const searchList = {
-    projectId: "",
-    textSearch: textSearch,
-    projectTypeId: "",
-    block: "",
-    price: "",
-    room: "",
-    area: "",
-  };
   const pageNumber = Math.ceil(totalElement / search.size);
 
-  const SearchAdvanded = {
-    provinceId: provinceId,
-    projectTypeId: projectTypeId,
-    projectId: projectId,
-    priceFrom: priceFrom,
-    priceTo: priceTo,
-    areaFrom: Number(areaFrom),
-    areaTo: Number(areaTo),
-  };
+  useEffect(() => {
+    setSearchBody({
+      provinceId: provinceId ? provinceId : "",
+      projectTypeId: projectTypeId ? projectTypeId : "",
+      projectId: projectId ? projectId : "",
+      priceFrom: priceFrom ? priceFrom + "000000000" : "",
+      priceTo: priceTo ? priceTo + "000000000" : "",
+      areaFrom: Number(areaFrom),
+      areaTo: Number(areaTo),
+      textSearch: textSearch ? textSearch : "",
+    });
+  }, [router.query]);
 
   const changePage = (e: any) => {
-	setSearch({
-		page: e,
-		size: 12
-	})
-  }
-  const fetchSearchList = async () => {
-    try {
-      setLoading(false)
-      if (textSearch) {
-        const response = await searchLocationHome(searchList, search);
-        dispatch(getSearchHomeLocation(response.responseData));
-        dispatch(getPaggingSearch(response.totalElement));
-        if (response.responseCode === "00") {
-          setLoading(true);
-        }
-      }
-    } catch (err) {
-      console.log(err);
-    }
+    setSearch({
+      page: e,
+      size: 12,
+    });
   };
 
   const fetchAdvandedSearchList = async () => {
+    if (searchBody.provinceId === "1") {
+      setSearchBody({ ...searchBody, provinceId: "" });
+    }
     try {
-      setLoading(false)
-      if (Type) {
-        const response = await searchAdvanded(SearchAdvanded, search);
-        dispatch(getSearchHomeLocation(response.responseData));
-        dispatch(getPaggingSearch(response.totalElement));
-        if (response.responseCode === "00") {
-          setLoading(true);
-        }
+      setLoading(false);
+      const response = await searchAdvanded(searchBody, search);
+      dispatch(getSearchHomeLocation(response.responseData));
+      dispatch(getPaggingSearch(response.totalElement));
+      if (response.responseCode === "00") {
+        setLoading(true);
       }
     } catch (err) {
       console.log(err);
     }
   };
-
   useEffect(() => {
-    if (Type) {
-      fetchAdvandedSearchList();
-    } else {
-      fetchSearchList();
-    }
-  }, [textSearch, search, router]);
+    fetchAdvandedSearchList();
+  }, [searchBody, search.page]);
 
   const fetchComponent = () => {
     return (
@@ -124,6 +108,8 @@ const Search = () => {
                 totalElement={pageNumber}
                 totalTextSearch={totalElement}
                 pageNumber={search.page}
+                setSearchAction={setSearchAction}
+                searchAction={searchAction}
               />
             </FlexContainer>
           </>
@@ -148,15 +134,15 @@ const Search = () => {
       }}
     >
       <div>{fetchComponent()}</div>
-	  <Row customStyle={{ padding: 70, justifyContent: "center" }}>
-          <PaginationComponent
-            count={totalElement}
-            onChange={(event, page) => {
-              changePage(page);
-            }}
-            page={pageNumber}
-          />
-        </Row>
+      <Row customStyle={{ padding: 70, justifyContent: "center" }}>
+        <PaginationComponent
+          count={pageNumber}
+          onChange={(event, page) => {
+            changePage(page);
+          }}
+          page={search.page}
+        />
+      </Row>
     </Page>
   );
 };

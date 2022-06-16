@@ -94,7 +94,11 @@ type Props = {};
 const FooterBot = ({ listMenuBarProjectType }: MenuProps) => {
   return (
     <WrapFooterBot>
-      <Logo style={{ width: 148, height: 56, margin: "56px 0 28px 0" }} />
+      <Link href="https://tnre-customer-test.vercel.app">
+        <a>
+          <Logo style={{ width: 148, height: 56, margin: "56px 0 28px 0" }} />
+        </a>
+      </Link>
       <WrapContent>
         <BlockDiv>
           Công ty Cổ phần Đầu tư Phát triển Bất động sản TNR Holdings Việt Nam
@@ -112,7 +116,7 @@ const FooterBot = ({ listMenuBarProjectType }: MenuProps) => {
           </LineInfo>
           <LineInfo style={{ marginTop: 5 }}>
             <TitleTypo>
-              TNR Version 1.1.1 Copyright © www.example.com {""}
+              TNR Version 1.1.2 Copyright © www.example.com {""}
             </TitleTypo>
           </LineInfo>
         </BlockDiv>
@@ -121,28 +125,48 @@ const FooterBot = ({ listMenuBarProjectType }: MenuProps) => {
         >
           <TitleTypo style={{ fontSize: "18px" }}>Sản phẩm</TitleTypo>
           {listMenuBarProjectType?.map((item, index) => (
-            <LineInfo2 key={index}  onClick={() => {
-				Router.replace(`/projectTNR?type=${item.id}`);
-			  }}>{item.name}</LineInfo2>
-
+            <LineInfo2
+              key={index}
+              onClick={() => {
+                Router.replace(`/projectTNR?type=${item.id}`);
+              }}
+            >
+              {item.name}
+            </LineInfo2>
           ))}
         </BlockDiv>
         <BlockDiv
           style={{ display: "flex", gap: ".5em", flexDirection: "column" }}
         >
           <TitleTypo style={{ fontSize: "18px" }}>Hỗ trợ</TitleTypo>
-          <LineInfo2  onClick={() => {
-				Router.replace(`/buyingGuide?id=4`);
-			  }}>Hướng dẫn mua nhà Online</LineInfo2>
-          <LineInfo2 onClick={() => {
-				Router.replace(`/buyingGuide?id=5`);
-			  }}>Hướng dẫn mua nhà Offline</LineInfo2>
-          <LineInfo2 onClick={() => {
-				Router.replace(`/buyingGuide?id=8`);
-			  }}>Câu hỏi thường gặp</LineInfo2>
-          <LineInfo2 onClick={() => {
-				Router.replace(`/buyingGuide`);
-			  }}>Liên hệ</LineInfo2>
+          <LineInfo2
+            onClick={() => {
+              Router.replace(`/buyingGuide?id=4`);
+            }}
+          >
+            Hướng dẫn mua nhà Online
+          </LineInfo2>
+          <LineInfo2
+            onClick={() => {
+              Router.replace(`/buyingGuide?id=5`);
+            }}
+          >
+            Hướng dẫn mua nhà Offline
+          </LineInfo2>
+          <LineInfo2
+            onClick={() => {
+              Router.replace(`/buyingGuide?id=8`);
+            }}
+          >
+            Câu hỏi thường gặp
+          </LineInfo2>
+          <LineInfo2
+            onClick={() => {
+              Router.replace(`/buyingGuide`);
+            }}
+          >
+            Liên hệ
+          </LineInfo2>
         </BlockDiv>
         <BlockDiv
           style={{ display: "flex", gap: "2em", flexDirection: "column" }}

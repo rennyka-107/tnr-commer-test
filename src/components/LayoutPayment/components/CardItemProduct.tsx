@@ -1,16 +1,17 @@
 import { IconRadio, IconTimes } from "@components/Icons";
 import styled from "@emotion/styled";
 import { Box, CardMedia } from "@mui/material";
-import isEmpty from "lodash/isEmpty";
-import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../store/store";
+import { getCart } from "../../../../store/cartSlice";
 import {
   Title28Styled,
   RowStyled,
   Text14Styled,
   LinedStyled,
 } from "../../StyledLayout/styled";
+import LocalStorage from "utils/LocalStorage";
 
 const WrapperCardStyled = styled(Box)(
   {
@@ -58,17 +59,17 @@ const RowStyledAgain = styled(RowStyled)({ marginTop: 11 });
 type Props = {};
 
 const CardItemProduct = (props: Props) => {
-  const { getCart } = useSelector((state: RootState) => state.carts);
-  const [prod, setProd] = useState<object | any>({});
-  useEffect(() => {
-    if (!isEmpty(getCart)) {
-      setProd(getCart);
-    }
-  }, [getCart]);
+  const { cart } = useSelector((state: RootState) => state.carts);
+  const dispatch = useDispatch();
 
   return (
     <WrapperCardStyled>
-      <BoxIconClose>
+      <BoxIconClose
+        onClick={() => {
+          dispatch(getCart({}));
+          LocalStorage.remove("cart");
+        }}
+      >
         <IconTimes style={{ color: "white", width: 12, height: 12 }} />
       </BoxIconClose>
       <BoxIconRadio>
@@ -79,14 +80,14 @@ const CardItemProduct = (props: Props) => {
         component={"img"}
         width={308}
         height={200}
-        image={"https://picsum.photos/308/200"}
+        image={cart.thumbnail}
         alt={"photo product"}
       />
       <Box style={{ width: 235, marginLeft: 30 }}>
-        <Title28Styled>{prod.name ?? "N/A"}</Title28Styled>
+        <Title28Styled>{cart.name ?? "N/A"}</Title28Styled>
 
         <RowStyledAgain>
-          <Text14Styled>{prod.homeNul ?? "N/A"}</Text14Styled>
+          <Text14Styled>{cart.homeNul ?? "N/A"}</Text14Styled>
           <Text14Styled>Tầng 26</Text14Styled>
         </RowStyledAgain>
 
@@ -94,20 +95,20 @@ const CardItemProduct = (props: Props) => {
         <RowStyledAgain>
           <Text14Styled>Diện tích</Text14Styled>
           <Text14Styled>
-            {prod.landArea ?? "N/A"} m<sup>2</sup>
+            {cart.landArea ?? "N/A"} m<sup>2</sup>
           </Text14Styled>
         </RowStyledAgain>
         <RowStyledAgain>
           <Text14Styled>Phòng ngủ</Text14Styled>
-          <Text14Styled>{prod.numBed ?? "N/A"}</Text14Styled>
+          <Text14Styled>{cart.numBed ?? "N/A"}</Text14Styled>
         </RowStyledAgain>
         <RowStyledAgain>
           <Text14Styled>Phòng tắm</Text14Styled>
-          <Text14Styled>{prod.numBath ?? "N/A"}</Text14Styled>
+          <Text14Styled>{cart.numBath ?? "N/A"}</Text14Styled>
         </RowStyledAgain>
         <RowStyledAgain>
           <Text14Styled>Hướng</Text14Styled>
-          <Text14Styled>{prod.doorDirection ?? "N/A"}</Text14Styled>
+          <Text14Styled>{cart.doorDirection ?? "N/A"}</Text14Styled>
         </RowStyledAgain>
       </Box>
     </WrapperCardStyled>

@@ -164,12 +164,20 @@ export default function ItemProjectCard({
         component="img"
         height="190"
         image={src?.src}
+		
         alt="green iguana"
         style={{
           borderRadius: "20px 20px 0px 0px",
         }}
       />
-
+    {/* <Image
+        src="/static-data/5c979bae-249b-4b0a-880a-9729cb757a50/eccda50b-6c1b-42f4-af84-c6a753a185bd/Project/f6caa857-2d8f-421f-bff9-dc120640e745/anh-dep-thien-nhien-3.jpg"
+        placeholder="blur"
+        blurDataURL="/images/product3.png"
+		width={50}
+		height={190}
+		layout='fixed'
+      /> */}
       <CardContentStyled>
         <div style={{ marginBottom: 7 }}>
           <Link href={`/products?idProject=${id}`}>

@@ -25,6 +25,8 @@ type dataProps = {
   totalElement: number;
   totalTextSearch: number;
   pageNumber: number;
+  setSearchAction?:any;
+  searchAction: boolean;
 };
 
 const ContainerSearchPage = styled.div``;
@@ -56,28 +58,22 @@ const useStyles = makeStyles((theme) => ({
 }));
 const SearchPage = ({
   searchData,
-  setSearch,
-  totalElement,
   totalTextSearch,
-  pageNumber,
+  setSearchAction,
+  searchAction
 }: dataProps) => {
   const classes = useStyles();
 
-  const changePage = (e: any) => {
-    setSearch({
-      page: e,
-      size: 12,
-    });
-  };
-
   const router = useRouter();
-  const [filter, setFilter] = useState<any>({ location: "" });
+
+  const [textSearch, setTextSearch] = useState<any>("");
   const { listMenuBarType, listMenuBarProjectType, listMenuLocation } =
     useSelector((state: RootState) => state.menubar);
   const [location, setLocation] = useState<string[]>([]);
   const [productName, setProductName] = useState<string[]>([]);
   const [projectName, setProjectName] = useState<string[]>([]);
   const [filterSearch, setFilterSearch] = useState({
+	textSearch:"",
     provinceId: "",
     projectTypeId: "",
     projectId: "",
@@ -88,46 +84,37 @@ const SearchPage = ({
   });
 
   useEffect(() => {
-    setFilter({
-      location: router?.query.textSearch,
-    });
-  }, [router.query.textSearch]);
+	const value = router?.query.textSearch;
+	setTextSearch(value)
+}, [router.query.textSearch]);
 
-  useEffect(() => {
-    const data = listMenuLocation.filter(
-      (x) => x.ProvinceName === filter.location
-    );
-    if (!isEmpty(data)) {
-      setFilterSearch({ ...filterSearch, provinceId: data[0].ProvinceID });
-    }
-    const projectIdData = listMenuBarType.filter(
-      (x) => x.id === router.query.projectId
-    );
-    if (!isEmpty(projectIdData)) {
-      // setFilter({ ...filterSearch, projectId: data[0].name });
-      setProductName(
-        typeof projectIdData[0].name === "string"
-          ? projectIdData[0].name.split(",")
-          : projectIdData[0].name
-      );
-    }
-  }, [filter]);
+//   useEffect(() => {
+
+// 	// setFilterSearch({ ...filterSearch, textSearch: textSearch });
+//     const projectIdData = listMenuBarType.filter(
+//       (x) => x.id === router.query.projectId
+//     );
+//     if (!isEmpty(projectIdData)) {
+//       // setFilter({ ...filterSearch, projectId: data[0].name });
+//       setProductName(
+//         typeof projectIdData[0].name === "string"
+//           ? projectIdData[0].name.split(",")
+//           : projectIdData[0].name
+//       );
+//     }
+//   }, [filter]);
 
   const handleChange = (event: any) => {
     const {
       target: { value },
     } = event;
-
-    const data = listMenuLocation.filter((x) => x.ProvinceName === value);
-
-    setFilter({
-      location: value,
-    });
     setFilterSearch({
       ...filterSearch,
-      provinceId: data[0]?.ProvinceID,
+      textSearch: value,
     });
+	setTextSearch(value)
   };
+
   const handleSelectProject = (
     event: SelectChangeEvent<typeof projectName>
   ) => {
@@ -156,14 +143,15 @@ const SearchPage = ({
       target: { value },
     } = event;
     const data = listMenuLocation.filter((x) => x.ProvinceName === value);
-    setSearch({ ...filterSearch, provinceId: data[0].ProvinceID });
+    setFilterSearch({ ...filterSearch, provinceId: data[0].ProvinceID });
     setLocation(typeof value === "string" ? value.split(",") : value);
   };
 
   const handleSearch = () => {
     router.push(
-      `/search?Type=Advanded&&provinceId=${filterSearch.provinceId}&&projectTypeId=${filterSearch.projectTypeId}&&projectId=${filterSearch.projectId}&&priceTo=${filterSearch.priceTo}&&priceFrom=${filterSearch.priceFrom}&&areaTo=${filterSearch.areaTo}&&areaFrom=${filterSearch.areaFrom}`
+      `/search?Type=Advanded&&textSearch=${filterSearch.textSearch}&&provinceId=${filterSearch.provinceId}&&projectTypeId=${filterSearch.projectTypeId}&&projectId=${filterSearch.projectId}&&priceTo=${filterSearch.priceTo}&&priceFrom=${filterSearch.priceFrom}&&areaTo=${filterSearch.areaTo}&&areaFrom=${filterSearch.areaFrom}`
     );
+	setSearchAction(!searchAction)
   };
 
   return (
@@ -178,7 +166,7 @@ const SearchPage = ({
             <FormControl sx={{ m: 1, width: 250, mt: 3 }}>
               <TextField
                 id="outlined-required"
-                value={filter.location ? filter.location : ""}
+                value={textSearch}
                 placeholder="Nhập tên dự án , địa chỉ hoặc thành phố"
                 onChange={handleChange}
                 // style={{borderRadius: '8px !important'}}
@@ -192,7 +180,7 @@ const SearchPage = ({
                 onKeyPress={(ev) => {
                   if (ev.key === "Enter") {
                     // Do code here
-                    router.push(`/search?textSearch=${filter.location}`);
+                    router.push(`/search?textSearch=${textSearch}`);
                     ev.preventDefault();
                   }
                 }}

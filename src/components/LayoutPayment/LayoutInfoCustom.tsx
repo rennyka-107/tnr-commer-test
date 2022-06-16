@@ -107,11 +107,8 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
 
   const handleOnSubmit = (values) => {
     try {
-      console.log("click");
-      console.log(values);
       setScopeRender("transaction_message");
     } catch (error) {
-      console.log("=-- error --=\n");
       console.log(error);
     }
   };

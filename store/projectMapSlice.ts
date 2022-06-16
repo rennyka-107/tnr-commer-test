@@ -11,6 +11,7 @@ interface InitialState {
     type: string;
     features: any[];
   };
+  ImgMap: string | null;
 }
 const initialState: InitialState = {
   ProjectInfomation: {
@@ -23,6 +24,7 @@ const initialState: InitialState = {
     type: "FeatureCollection",
     features: [],
   },
+  ImgMap: null,
 };
 
 export const projectMapSlice = createSlice({
@@ -44,7 +46,9 @@ export const projectMapSlice = createSlice({
     setGeoJsonData: (state, { payload }) => {
       state.GeoJsonData.features = payload;
     },
-   
+    setImgMap: (state, { payload }) => {
+      state.ImgMap = payload;
+    },
   },
 });
 
@@ -54,6 +58,7 @@ export const {
   setTarget,
   setListChild,
   setGeoJsonData,
+  setImgMap,
 } = projectMapSlice.actions;
 
 export default projectMapSlice.reducer;

@@ -112,10 +112,6 @@ export default function MenuDropdown({
             <TextInline>{item.name}</TextInline>
           </MenuItemStyled>
         ))}
-
-        {/* <MenuItemStyled onClick={handleClose}><TextInline>Căn hộ dịch vụ</TextInline></MenuItemStyled>
-        <MenuItemStyled onClick={handleClose}><TextInline>Bất động sản nghỉ dưỡng</TextInline></MenuItemStyled>
-		<MenuItemStyled onClick={handleClose}><TextInline>Khu đô thị</TextInline></MenuItemStyled> */}
       </Menu>
     </div>
   );

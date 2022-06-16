@@ -24,7 +24,7 @@ export interface ResponseLoginModel<T> {
 }
 
 export const Login = (params: LoginParams) => {
-    return HttpClient.post<typeof params, any>(`/user/get-token${convertToQuery(params)}`)
+    return HttpClient.post<typeof params, any>(`/api/user/get-token${convertToQuery(params)}`)
 }
 
 export const refreshAccessToken = async (refreshToken: string) => {

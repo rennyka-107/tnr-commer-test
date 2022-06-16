@@ -6,6 +6,17 @@ type SearchParams = {
   size: number;
 };
 
+type SearchAdvand = {
+  areaFrom: number;
+  areaTo: number;
+  priceFrom: string;
+  priceTo: string;
+  projectId: string;
+  projectTypeId: string;
+  provinceId: string;
+  textSearch: string;
+};
+
 export const searchLocationHome = async (data: any, search: SearchParams) => {
   return HttpClient.post<any, CommonResponse>(
     `api/product/information/home-page/search?page=${search.page}&size=${search.size}`,

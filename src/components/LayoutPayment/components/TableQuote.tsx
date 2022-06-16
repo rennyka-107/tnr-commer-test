@@ -32,13 +32,7 @@ type Props = {
 };
 
 const TableQuote = ({ width, urlPayment, setScopeRender }: Props) => {
-  const { getCart } = useSelector((state: RootState) => state.carts);
-  const [prod, setProd] = useState<object | any>({});
-  useEffect(() => {
-    if (!isEmpty(getCart)) {
-      setProd(getCart);
-    }
-  }, [getCart]);
+  const { cart } = useSelector((state: RootState) => state.carts);
 
   return (
     <WrapperBoxBorderStyled mw={width ?? 350} padding={"20px 20px 25px"}>
@@ -47,15 +41,15 @@ const TableQuote = ({ width, urlPayment, setScopeRender }: Props) => {
       <BoxDetailInfo>
         <RowStyledAgain>
           <Text14Styled>Giá BĐS</Text14Styled>
-          <Text14Styled>{prod.totalVatPrice ?? "N/A"} đ</Text14Styled>
+          <Text14Styled>{cart.totalVatPrice ?? "N/A"} đ</Text14Styled>
         </RowStyledAgain>
         <RowStyledAgain>
           <Text14Styled>Thuế VAT</Text14Styled>
-          <Text14Styled>{prod.vat ?? "N/A"} đ</Text14Styled>
+          <Text14Styled>{cart.vat ?? "N/A"} đ</Text14Styled>
         </RowStyledAgain>
         <RowStyledAgain>
           <Text14Styled>Phí bảo trì</Text14Styled>
-          <Text14Styled>{prod.maintainPrice ?? "N/A"} đ</Text14Styled>
+          <Text14Styled>{cart.maintainPrice ?? "N/A"} đ</Text14Styled>
         </RowStyledAgain>
       </BoxDetailInfo>
 
@@ -64,7 +58,7 @@ const TableQuote = ({ width, urlPayment, setScopeRender }: Props) => {
       <BoxDetailInfo>
         <RowStyledAgain>
           <Text14Styled>Tổng tiền niêm yết</Text14Styled>
-          <Text14Styled>{prod.totalPrice ?? "N/A"} đ</Text14Styled>
+          <Text14Styled>{cart.totalPrice ?? "N/A"} đ</Text14Styled>
         </RowStyledAgain>
         <RowStyledAgain>
           <Text14Styled>Giảm giá</Text14Styled>
@@ -77,7 +71,7 @@ const TableQuote = ({ width, urlPayment, setScopeRender }: Props) => {
         <RowStyledAgain>
           <Text14Styled>Tổng tiền mua online</Text14Styled>
           <Text18Styled fw={500} style={{ color: "#ea242a" }}>
-            {prod.totalPrice ?? "N/A"} đ
+            {cart.totalPrice ?? "N/A"} đ
           </Text18Styled>
         </RowStyledAgain>
       </BoxDetailInfo>

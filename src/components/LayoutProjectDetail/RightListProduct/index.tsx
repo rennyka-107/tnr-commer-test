@@ -1,25 +1,30 @@
-import {
-  Button,
-  CardActions,
-  CardHeader,
-  CardContent,
-  Card,
-  Box,
-  Typography,
-} from "@mui/material";
-import DropDownTargetLevel from "./DropDownTargetLevel";
+import { CardHeader, CardContent, Card, Box, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../store/store";
-import ListProductCard from "./ListProductCard";
-import { ProjectInformation } from "@components/CustomComponent";
+// import ListProductCard from "./ListProductCard";
+import dynamic from "next/dynamic";
+
+const ProjectInformation = dynamic(
+  () => import("@components/CustomComponent/ProjectInformation"),
+  { loading: () => <p>...</p>, ssr: false }
+);
+
+const DropDownTargetLevel = dynamic(
+  () => import("./DropDownTargetLevel"),
+  { loading: () => <p>...</p>, ssr: false }
+);
 
 export default function RightListProduct() {
-  const { listProductResponse } = useSelector(
-    (state: RootState) => state.products
-  );
+  // const { listProductResponse } = useSelector(
+  //   (state: RootState) => state.products
+  // );
 
   const ProjectInfomation = useSelector(
     (state: RootState) => state.projectMap.ProjectInfomation
+  );
+
+  const ListLevel = useSelector(
+    (state: RootState) => state.projectMap.ListLevel
   );
 
   function renderCard() {
@@ -53,7 +58,15 @@ export default function RightListProduct() {
                 {ProjectInfomation.name}
               </Typography>
             }
-            subheader={<DropDownTargetLevel />}
+            subheader={
+              <Box sx={{ mt: 2}}>
+                {ListLevel.map((level, idx) => {
+                  if (idx !== 0 && idx !== ListLevel.length - 1) {
+                    return <DropDownTargetLevel level={level} key={idx}/>;
+                  }
+                })}
+              </Box>
+            }
           />
           <CardContent>
             <ProjectInformation {...ProjectInfomation} />

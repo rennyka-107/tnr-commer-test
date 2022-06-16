@@ -1,15 +1,16 @@
 import React, { useState } from "react";
 import { IconBag, IconHeart, IconUser, Logo } from "@components/Icons";
 import styled from "@emotion/styled";
-import { Route } from "@mui/icons-material";
 import { Button } from "@mui/material";
 import useAuth from "hooks/useAuth";
-import { useScroll } from "hooks/useScroll";
 import MenuDropdown from "ItemComponents/MenuDropdown";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useCallback, useContext, useEffect } from "react";
+import { useCallback } from "react";
 import PathRoute from "utils/PathRoute";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../store/store";
+import isEmpty from "lodash.isempty";
 
 const ContainerNavTop = styled.div`
   height: 93px;
@@ -121,6 +122,7 @@ interface MenuProps {
 const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
   const Router = useRouter();
   const [checkSale, setCheckSale] = useState(false);
+  const { cart } = useSelector((state: RootState) => state.carts);
 
   const menuUser: ItemValueProps[] = [
     { id: "Profile", name: "Thông tin cá nhân" },
@@ -239,7 +241,7 @@ const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
             </Link>
             <Link href="/payment-cart">
               <a>
-                <IconBag total={10} />
+                <IconBag total={!isEmpty(cart) ? 1 : 0} />
               </a>
             </Link>
           </IconAccountWrap>

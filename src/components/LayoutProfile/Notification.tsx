@@ -93,10 +93,6 @@ const Notification = () => {
         setNotifications(response.responseData);
     }
 
-
-    console.log('Notification---', notifications);
-
-
     useEffect(() => {
         getNotifications();
     }, [])

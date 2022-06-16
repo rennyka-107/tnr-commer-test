@@ -41,6 +41,7 @@ import { RootState } from "../../../store/store";
 import { ProjectResponse } from "interface/project";
 import { ResponseSearchById } from "interface/product";
 import { useRouter } from "next/router";
+import useAddToCart from "hooks/useAddToCart";
 
 interface ProductsProps {
   listProject?: ProjectResponse[];
@@ -306,6 +307,7 @@ const TextContact = styled(Typography)`
 const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
   const router = useRouter();
   const id = router.asPath.split("/")[2];
+  const addToCart = useAddToCart();
 
   const mockDataPhieutinhgia = {
     ProjectName: "TNR AMALUNA - TRÀ VINH",
@@ -381,9 +383,6 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
     }
   };
 
-  console.log(dataProduct, '--------dataProduct-------');
-
-
   useEffect(() => {
     if (callApi === true) {
       {
@@ -439,6 +438,7 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
   useEffect(() => {
     fetchPhieuTinhGia();
   }, [productItem]);
+
 
   const handleDownloadPhieuTinhGia = () => {
     (async () => {
@@ -822,18 +822,16 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                       );
                     }}
                     disabled={!dataProduct?.isOpeningSale}
+                    style={{ backgroundColor: !dataProduct?.isOpeningSale ? '#FFFF' : ' #ea242a' }}
                   >
                     Giỏ hàng
                   </ButtonStyled>
                   <ButtonStyled
                     onClick={() => {
-                      localStorage.setItem(
-                        "cart-id",
-                        JSON.stringify(dataProduct.id)
-                      );
-                      router.push("/payment-cart/" + dataProduct.id);
+                      addToCart(id);
                     }}
                     disabled={!dataProduct?.isOpeningSale}
+                    style={{ backgroundColor: !dataProduct?.isOpeningSale ? '#FFFF' : ' #ea242a' }}
                   >
                     Mua Online
                   </ButtonStyled>
@@ -853,9 +851,9 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                     marginBottom: 24,
                   }}
                 >
-                  <a href={dataProduct.project.hotline ?? dataProduct.defaultPhoneNumber}>
+                  <a href={`tel:+${dataProduct.project.hotline ?? dataProduct.defaultPhoneNumber}`} style={{ textAlign: "center" }}>
                     <IconHeadSetProduct />
-                    <TextContact>{dataProduct.project.hotline ?? dataProduct.defaultPhoneNumber}</TextContact>
+                    <TextContact>Liên hệ khách hàng</TextContact>
                   </a>
                   <div style={{ border: "1px solid #1B3459" }} />
                   <div style={{ textAlign: "center" }}>
@@ -925,7 +923,7 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
           )}
           {/* Tab Components */}
         </div>
-      </FlexContainer>
+      </FlexContainer >
     </>
   );
 };

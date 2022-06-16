@@ -26,7 +26,7 @@ export const apiGetListChildMapByIdLevel = async (id: string) => {
 };
 
 export const apiGetListChildMapByIdParent = async (id: string) => {
-  return HttpClient.post<string, CommonResponse>(
+  return HttpClient.get<string, CommonResponse>(
     `/api/customer/project-level-detail/find-by-parent-id/${id}`
   );
 };

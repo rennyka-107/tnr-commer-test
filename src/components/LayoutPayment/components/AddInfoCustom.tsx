@@ -78,10 +78,7 @@ const AddInfoCustom = (props: Props) => {
 
   const handleOnSubmit = (values) => {
     try {
-      console.log("click");
-      console.log(values);
     } catch (error) {
-      console.log("=-- error --=\n");
       console.log(error);
     }
   };

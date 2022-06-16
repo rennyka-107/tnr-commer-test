@@ -8,7 +8,8 @@ let PathRoute = {
     AboutAccount : '/aboutAccount',
     AboutProcedure: '/aboutProcedure',
     AboutSupport: '/aboutSupport',
-    ProductTNR: '/productTNR'
+    ProductTNR: '/productTNR',
+    ForgetPassword: '/forgetPassword',
 }
 
 export default PathRoute;

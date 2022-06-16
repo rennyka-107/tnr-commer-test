@@ -64,7 +64,7 @@ export default function SelectInputComponent({label, data, onChange,value,placeh
         displayEmpty
         value={value}
         onChange={onChange}
-        input={<OutlinedInputStyled />}
+        input={<OutlinedInputStyled style={{borderRadius: 8, height: 54}}/>}
         renderValue={(selected) => {
           if (selected.length === 0) {
             return <span>{placeholder}</span>;

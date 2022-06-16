@@ -18,6 +18,7 @@ const combinedReducer = combineReducers({
   projectMap,
   searchs,
 });
+
 export type RootState = ReturnType<typeof combinedReducer>;
 const masterReducer = (state, action) => {
   if (action.type === HYDRATE) {
@@ -43,7 +44,7 @@ const masterReducer = (state, action) => {
         listPaymentById: action.payload.payments.listPaymentById,
       },
       carts: {
-        getCart: action.payload.carts.getCart,
+        ...action.payload.carts,
       },
       projectMap: {
         ...action.payload.projectMap,

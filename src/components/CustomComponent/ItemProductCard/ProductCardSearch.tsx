@@ -276,7 +276,7 @@ export default function ProductCardSearch({
             <IconFrame />
 
             <TextCenterItem>
-              {dataItem.item1 ? dataItem?.item1 : "N/A"}
+              {dataItem.item1 ? dataItem?.item1 : "N/A"} m²
             </TextCenterItem>
           </WrapItemCenter>
           <WrapItemCenter>
@@ -288,7 +288,7 @@ export default function ProductCardSearch({
           <WrapItemCenter>
             <IconBedDouble />
             <TextCenterItem>
-              {dataItem.item3 ? dataItem?.item3 : "N/A"} m²
+              {dataItem.item3 ? dataItem?.item3 : "N/A"} 
             </TextCenterItem>
           </WrapItemCenter>
           <WrapItemCenter>

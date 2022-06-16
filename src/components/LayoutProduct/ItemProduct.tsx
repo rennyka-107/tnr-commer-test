@@ -7,6 +7,7 @@ import Link from "next/link";
 import { ProductsResponse } from "interface/product";
 import Router from "next/router";
 import { Grid } from "@mui/material";
+import useAddToCart from "hooks/useAddToCart";
 
 interface ProductsProps {
   data?: ProductsResponse[];
@@ -21,7 +22,7 @@ const ProductWrap = styled.div`
   grid-template-columns: repeat(4, 1fr);
 `;
 const ItemProduct = ({ data }: ProductsProps) => {
-
+  const addToCart = useAddToCart();
   return (
     <>
       <ProductWrap>
@@ -57,10 +58,7 @@ const ItemProduct = ({ data }: ProductsProps) => {
               localStorage.setItem("compare-item", JSON.stringify(prods));
               Router.push("/compare-product");
             }}
-            onClick={() => {
-              localStorage.setItem("cart-id", JSON.stringify(product.id));
-              Router.push("/payment-cart/" + product.id);
-            }}
+            onClick={() => addToCart(product.id)}
           />
         ))}
       </ProductWrap>

@@ -1,6 +1,6 @@
 {
   "name": "tnre-fe-cutsomersite",
-  "version": "1.0.3",
+  "version": "1.1.2",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -35,7 +35,9 @@
     "react-hook-form": "^7.30.0",
     "react-leaflet": "^4.0.0",
     "react-leaflet-draw": "^0.19.8",
+    "react-otp-input": "^2.4.0",
     "react-redux": "^8.0.2",
+    "redux-persist": "^6.0.0",
     "swiper": "^8.1.4",
     "yup": "^0.32.11"
   },

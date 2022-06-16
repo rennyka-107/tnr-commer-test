@@ -1,21 +1,16 @@
 import * as React from "react";
 import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import { IconSearchAdvan } from "@components/Icons";
 import styled from "@emotion/styled";
 import {
   Fade,
-  OutlinedInput,
   Paper,
   Popper,
   PopperPlacementType,
-  Slider,
 } from "@mui/material";
 import Box from "@mui/material/Box";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { Theme, useTheme } from "@mui/material/styles";
+import  { SelectChangeEvent } from "@mui/material/Select";
+import { Theme } from "@mui/material/styles";
 import SliderComponent from "@components/CustomComponent/SliderComponent";
 import SelectInputComponent from "@components/CustomComponent/SelectInputComponent";
 import SliderSearchKhoangGia from "@components/CustomComponent/SliderComponent/SliderSearchKhoangGia";
@@ -105,13 +100,14 @@ export default function ModalAdvanSearch() {
   const [valueKhoanGia, setValueKhoangGia] = React.useState<number[]>([1, 200]);
 
   const [search, setSearch] = React.useState({
+	textSearch: "",
     provinceId: "",
     projectTypeId: "",
     projectId: "",
-    priceFrom: valueKhoanGia[0].toString(),
-    priceTo: valueKhoanGia[1].toString(),
-    areaFrom: valueDienTich[0],
-    areaTo: valueDienTich[1] ,
+    priceFrom: '',
+    priceTo: "",
+    areaFrom: null,
+    areaTo: null ,
   });
   const handleClick =
     (newPlacement: PopperPlacementType) =>
@@ -126,7 +122,7 @@ export default function ModalAdvanSearch() {
       target: { value },
     } = event;
     const data = listMenuBarProjectType.filter((x) => x.name === value);
-    setSearch({ ...search, projectId: data[0].id });
+    setSearch({ ...search, projectTypeId: data[0].id });
     setProductName(typeof value === "string" ? value.split(",") : value);
   };
   const handleChangeProject = (
@@ -136,7 +132,7 @@ export default function ModalAdvanSearch() {
       target: { value },
     } = event;
     const data = listMenuBarType.filter((x) => x.name === value);
-    setSearch({ ...search, projectTypeId: data[0].id });
+    setSearch({ ...search, projectId: data[0].id });
     setProjectName(typeof value === "string" ? value.split(",") : value);
   };
 
@@ -159,7 +155,6 @@ export default function ModalAdvanSearch() {
     if (!Array.isArray(newValue)) {
       return;
     }
-
     if (activeThumb === 0) {
       setValueDientich([
         Math.min(newValue[0], valueDienTich[1] - minDistance),
@@ -201,7 +196,7 @@ export default function ModalAdvanSearch() {
 
   const handleSearch = () => {
     router.push(
-      `/search?Type=Advanded&&provinceId=${search.provinceId}&&projectTypeId=${search.projectTypeId}&&projectId=${search.projectId}&&priceTo=${search.priceTo}&&priceFrom=${search.priceFrom}&&areaTo=${search.areaTo}&&areaFrom=${search.areaFrom}`
+      `/search?Type=Advanded&&textSearch=&&provinceId=${search.provinceId}&&projectTypeId=${search.projectTypeId}&&projectId=${search.projectId}&&priceTo=${search.priceTo}&&priceFrom=${search.priceFrom}&&areaTo=${search.areaTo}&&areaFrom=${search.areaFrom}`
     );
   };
 

@@ -1,6 +1,5 @@
 import { CardMedia, Box } from "@mui/material";
-import React, { useState, useEffect } from "react";
-import { isEmpty } from "lodash";
+import React from "react";
 import {
   LinedStyled,
   RowStyled,
@@ -23,13 +22,8 @@ const RowStyledAgain = styled(RowStyled)({
 });
 
 const ItemDetailCol = (props: Props) => {
-  const { getCart } = useSelector((state: RootState) => state.carts);
-  const [prod, setProd] = useState<object | any>({});
-  useEffect(() => {
-    if (!isEmpty(getCart)) {
-      setProd(getCart);
-    }
-  }, [getCart]);
+  const { cart } = useSelector((state: RootState) => state.carts);
+
   return (
     <WrapperBoxBorderStyled mw={349} padding={"15px 12px 3px"}>
       <CardMedia
@@ -42,11 +36,11 @@ const ItemDetailCol = (props: Props) => {
       />
       <BoxDetailStyled>
         <Title28Styled style={{ marginBottom: 15 }}>
-          {prod.name ?? "N/A"}
+          {cart.name ?? "N/A"}
         </Title28Styled>
         <RowStyledAgain jContent={"start"}>
           <Text14Styled style={{ marginRight: 37 }}>
-            {prod.homeNul ?? "N/A"}
+            {cart.homeNul ?? "N/A"}
           </Text14Styled>
           <Text14Styled>Tầng 26</Text14Styled>
         </RowStyledAgain>
@@ -56,20 +50,20 @@ const ItemDetailCol = (props: Props) => {
         <RowStyledAgain>
           <Text14Styled>Diện tích</Text14Styled>
           <Text14Styled>
-            {prod.landArea ?? "N/A"} m<sup>2</sup>
+            {cart.landArea ?? "N/A"} m<sup>2</sup>
           </Text14Styled>
         </RowStyledAgain>
         <RowStyledAgain>
           <Text14Styled>Phòng ngủ</Text14Styled>
-          <Text14Styled>{prod.numBed ?? "N/A"}</Text14Styled>
+          <Text14Styled>{cart.numBed ?? "N/A"}</Text14Styled>
         </RowStyledAgain>
         <RowStyledAgain>
           <Text14Styled>Phòng tắm</Text14Styled>
-          <Text14Styled>{prod.numBath ?? "N/A"}</Text14Styled>
+          <Text14Styled>{cart.numBath ?? "N/A"}</Text14Styled>
         </RowStyledAgain>
         <RowStyledAgain>
           <Text14Styled>Hướng</Text14Styled>
-          <Text14Styled>{prod.doorDirection ?? "N/A"}</Text14Styled>
+          <Text14Styled>{cart.doorDirection ?? "N/A"}</Text14Styled>
         </RowStyledAgain>
       </BoxDetailStyled>
     </WrapperBoxBorderStyled>

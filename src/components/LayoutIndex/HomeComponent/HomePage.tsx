@@ -1,42 +1,42 @@
-
 import styled from "@emotion/styled";
 
 import { Box } from "@mui/system";
 import SelectInputComponent from "@components/CustomComponent/SelectInputComponent";
-import { Button } from "@mui/material";
+import { Button, SelectChangeEvent, Typography } from "@mui/material";
 import { IconSearchAdvan } from "@components/Icons";
 import { TBOUTStanding } from "interface/product";
 import { useScroll } from "hooks/useScroll";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import dynamic from "next/dynamic";
+import SliderComponent from "@components/CustomComponent/SliderComponent";
+import SliderSearchKhoangGia from "@components/CustomComponent/SliderComponent/SliderSearchKhoangGia";
+import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../store/store";
 
-const DynamicBanner = dynamic(
-	() => import("./BannerIndex"),
-	{ loading: () => <p>...</p> }
-  );
-  const DynamicBody = dynamic(
-	() => import("./BodyIndex"),
-	{ loading: () => <p>...</p> , ssr: false}
-  );
-  const DynamicSliderShowComponent = dynamic(
-	() => import("@components/CustomComponent/SliderShowComponent"),
-	{ loading: () => <p>...</p>, ssr: false }
-  );
-  const DynamicOnlineSupportSale = dynamic(
-	() => import("./OnlineSupportSale"),
-	{ loading: () => <p>...</p> , ssr: false}
-  );
-  const DynamicSliderComponent = dynamic(
-	() => import("@components/CustomComponent/SliderComponent"),
-	{ loading: () => <p>...</p> , ssr: false}
-  );
-  const DynamicSlider3dShowBottom = dynamic(
-	() => import("./Slider3dShowBottom"),
-	{ loading: () => <p>...</p> , ssr: false}
-  );
-interface ProductsIndexProps {
-  listProductOutOfStanding?: TBOUTStanding[];
-}
+const DynamicBanner = dynamic(() => import("./BannerIndex"), {
+  loading: () => <p>...</p>,
+});
+const DynamicBody = dynamic(() => import("./BodyIndex"), {
+  loading: () => <p>...</p>,
+  ssr: false,
+});
+const DynamicSliderShowComponent = dynamic(
+  () => import("@components/CustomComponent/SliderShowComponent"),
+  { loading: () => <p>...</p>, ssr: false }
+);
+const DynamicOnlineSupportSale = dynamic(() => import("./OnlineSupportSale"), {
+  loading: () => <p>...</p>,
+  ssr: false,
+});
+const DynamicSliderComponent = dynamic(
+  () => import("@components/CustomComponent/SliderComponent"),
+  { loading: () => <p>...</p>, ssr: false }
+);
+const DynamicSlider3dShowBottom = dynamic(
+  () => import("./Slider3dShowBottom"),
+  { loading: () => <p>...</p>, ssr: false }
+);
 
 const SaleWrap = styled.div`
   background: #1b3459;
@@ -46,22 +46,7 @@ const SaleWrap = styled.div`
   align-items: center;
   flex-direction: column;
 `;
-const TextBannerBottom = styled.span`
-  font-family: "Roboto";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 19px;
-  /* identical to box height */s
 
-  text-align: right;
-
-  /* Brand/Sub 1 */
-
-  color: #fec83c;
-  text-transform: none;
-  margin-left: 13px;
-`;
 const TitleSlide = styled.div`
   margin-bottom: 20px;
   font-family: "Roboto";
@@ -77,10 +62,11 @@ const TitleSlide = styled.div`
 `;
 const CompareSwap = styled.div`
   background: #1b3459;
-  height: 211px;
+  height: 435px;
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 100px;
   flex-direction: row;
 `;
 const BoxStyled = styled(Box)`
@@ -89,7 +75,90 @@ padding: 40px;
     gap: 30px;
 }
 `;
+const minDistance = 10;
+const minDistance2 = 1;
+
 const HomePage = () => {
+  const router = useRouter();
+  const [projectName, setProjectName] = useState<string[]>([]);
+  const [valueDienTich, setValueDientich] = useState<number[]>([30, 200]);
+  const [valueKhoanGia, setValueKhoangGia] = useState<number[]>([1, 200]);
+  const [filterSearch, setFilterSearch] = useState({
+    textSearch: "",
+    provinceId: "",
+    projectTypeId: "",
+    projectId: "",
+    priceFrom: "",
+    priceTo: "",
+    areaFrom: null,
+    areaTo: null,
+  });
+
+  const { listMenuBarType, listMenuBarProjectType, listMenuLocation } =
+    useSelector((state: RootState) => state.menubar);
+
+
+  const handleSelectProject = (
+    event: SelectChangeEvent<typeof projectName>
+  ) => {
+    const {
+      target: { value },
+    } = event;
+    const data = listMenuBarProjectType.filter((x) => x.name === value);
+    setProjectName(typeof value === "string" ? value.split(",") : value);
+    setFilterSearch({ ...filterSearch, projectTypeId: data[0].id });
+  };
+
+  const handleChange1 = (
+    event: Event,
+    newValue: number | number[],
+    activeThumb: number
+  ) => {
+    if (!Array.isArray(newValue)) {
+      return;
+    }
+    if (activeThumb === 0) {
+      setValueDientich([
+        Math.min(newValue[0], valueDienTich[1] - minDistance),
+        valueDienTich[1],
+      ]);
+	  setFilterSearch({ ...filterSearch, areaFrom:  valueDienTich[0]});
+    } else {
+      setValueDientich([
+        valueDienTich[0],
+        Math.max(newValue[1], valueDienTich[0] + minDistance),
+      ]);
+	  setFilterSearch({ ...filterSearch, areaTo :  valueDienTich[1]});
+    }
+  };
+
+  const handleChange2 = (
+    event: Event,
+    newValue: number | number[],
+    activeThumb: number
+  ) => {
+    if (!Array.isArray(newValue)) {
+      return;
+    }
+
+    if (activeThumb === 0) {
+      setValueKhoangGia([
+        Math.min(newValue[0], valueKhoanGia[1] - minDistance2),
+        valueKhoanGia[1],
+      ]);
+      setFilterSearch({ ...filterSearch,priceFrom : valueKhoanGia[0].toString() });
+    } else {
+      setValueKhoangGia([
+        valueKhoanGia[0],
+        Math.max(newValue[1], valueKhoanGia[0] + minDistance2),
+      ]);
+      setFilterSearch({ ...filterSearch,priceTo : valueKhoanGia[1].toString() });
+    }
+  };
+
+  const handleSearchCompare = () => {
+    router.push(`/compare-search?projectTypeId=${filterSearch.projectTypeId}&&priceTo=${filterSearch.priceTo}&&priceFrom=${filterSearch.priceFrom}&&areaTo=${filterSearch.areaTo}&&areaFrom=${filterSearch.areaFrom}`);
+  };
   return (
     <>
       <DynamicBanner />
@@ -105,7 +174,46 @@ const HomePage = () => {
         <DynamicOnlineSupportSale />
       </div>
       <CompareSwap>
-        <div>
+        {/* <div> */}
+        <div style={{ maxWidth: 350, height: "100%" }}>
+          <Typography
+            style={{
+              fontWeight: 500,
+              fontSize: 28,
+              color: "#ffffff",
+              margin: "45px 5px 18px 5px",
+            }}
+          >
+            So sánh
+          </Typography>
+          <Typography
+            style={{
+              fontWeight: 400,
+              fontSize: 16,
+              color: "#ffffff",
+              margin: "5px 5px 28px 5px",
+            }}
+          >
+            So sánh nhanh các sản phẩm theo tiêu chí lựa chọn của bạn giúp cho
+            bạn dễ dàng chọn được sản phẩm ưng ý cho mình
+          </Typography>
+          <SelectInputComponent
+            label="Loại bất động sản"
+            data={listMenuBarProjectType}
+            value={projectName}
+            onChange={handleSelectProject}
+            placeholder="Chọn loại bất động sản"
+            style={{ margin: 0 }}
+          />
+        </div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 42,
+            alignItems: "end",
+          }}
+        >
           <BoxStyled sx={{ minWidth: 120, padding: "0px !important" }}>
             <SelectInputComponent
               label="Dòng sản phẩm"
@@ -122,44 +230,41 @@ const HomePage = () => {
               placeholder="Loại sản phẩm"
             />
           </BoxStyled>
+          <div style={{ display: "flex", gap: 60 }}>
+            <SliderComponent
+              label="Diện tích (m2)"
+              onChange={handleChange1}
+              numberMin={30}
+              numberMax={200}
+              value={valueDienTich}
+              unit="m2"
+            />
+            <SliderSearchKhoangGia
+              label="Khoảng giá"
+              onChange={handleChange2}
+              numberMin={1}
+              numberMax={20}
+              value={valueKhoanGia}
+              unit="tỷ"
+            />
+          </div>
           <div>
-            <Button>
-              <IconSearchAdvan />
-              <TextBannerBottom>So sánh nâng cao</TextBannerBottom>
+            <Button
+              style={{
+                background: "#F2C94C",
+                height: 54,
+                width: 305,
+                marginTop: 10,
+                color: "#000000",
+                textTransform: "none",
+              }}
+              onClick={handleSearchCompare}
+            >
+              So sánh nhanh
             </Button>
           </div>
         </div>
-        {/* <div style={{ display: "flex", gap: 65, marginLeft: 54 }}>
-          <DynamicSliderComponent
-            label="khoảng giá"
-            numberMin={0}
-            numberMax={5}
-            unit="tỷ"
-          />
-          <Button
-            style={{
-              backgroundColor: "#D60000",
-              width: 163,
-              height: 48,
-              borderRadius: 8,
-              marginTop: 10,
-            }}
-          >
-            <span
-              style={{
-                color: "#FFFFFF",
-                fontFamily: "Roboto",
-                fontWeight: 400,
-                fontSize: 16,
-                lineHeight: 19,
-                textTransform: "none",
-              }}
-            >
-              {" "}
-              So sánh
-            </span>
-          </Button>
-        </div> */}
+        {/* </div> */}
       </CompareSwap>
       <DynamicSlider3dShowBottom />
     </>

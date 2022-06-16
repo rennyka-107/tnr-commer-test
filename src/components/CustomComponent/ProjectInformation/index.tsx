@@ -15,6 +15,9 @@ type Props = {
   scale: string;
   funcDivision: string;
   description: string;
+  projectType: string;
+  landArea: string;
+  ownership: string;
 };
 
 const ContainerPJ = styled.div`
@@ -34,20 +37,23 @@ const ProjectInformation = ({
   scale,
   funcDivision,
   description,
+  projectType,
+  landArea,
+  ownership
 }: Props) => {
   function renderList() {
     return [
-      { key: "Vị trí", value: location ?? '' },
-      { key: "Diện tích đất xây dựng", value: constructArea ?? '' },
-      { key: "Mật độ xây dựng", value: density ?? '' },
-      { key: "Loại hình phát triển", value: "Biệt thự, liền kề" },
-      { key: "Quy mô", value: scale ?? '' },
-      { key: "Diện tích sản phẩm", value: "65 m2 - 350 m2" },
+      { key: "Vị trí", value: location ?? "" },
+      { key: "Diện tích đất xây dựng", value: constructArea ?? "" },
+      { key: "Mật độ xây dựng", value: density ?? "" },
+      { key: "Loại hình phát triển", value: projectType ?? "" },
+      { key: "Quy mô", value: scale ?? "" },
+      { key: "Diện tích sản phẩm", value: landArea ?? "" },
       {
         key: "Phân khu chức năng",
-        value: funcDivision ?? '',
+        value: funcDivision ?? "",
       },
-      { key: "Hình thức sở hữu", value: "Sổ đỏ vĩnh viễn" },
+      { key: "Hình thức sở hữu", value: ownership ?? "" },
     ].map(({ key, value }, idx) => (
       <ListItem sx={{ pl: 0 }} key={idx}>
         <ListItemIcon sx={{ minWidth: "30px" }}>
@@ -76,7 +82,7 @@ const ProjectInformation = ({
         >
           Mô tả dự án
         </Typography>
-        <Typography>{description ?? ''}</Typography>
+        <Typography>{description ?? ""}</Typography>
       </Box>
     </ContainerPJ>
   );

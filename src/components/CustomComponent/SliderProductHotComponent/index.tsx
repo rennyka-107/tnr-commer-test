@@ -1,23 +1,20 @@
-import React, { useRef, useState } from "react";
-import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
+import React from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Autoplay, Pagination, Navigation } from "swiper";
 import styled from "@emotion/styled";
 import Product1 from "../../../../public/images/product1.png";
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/autoplay";
-import Image from "next/image";
 import {
-  IconCarouelHLeftArrow,
   IconCarsouelLeftProduct,
   IconCarsouelRightProduct,
 } from "@components/Icons";
-import { IconCarouelHRightArrow } from "@components/Icons";
 import ItemProductCard from "../ItemProductCard";
 import { TBOUTStanding } from "interface/product";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../store/store";
-import { useRouter } from "next/router";
+import useAddToCart from "hooks/useAddToCart";
 
 interface ProductsIndexProps {
   listProductOutOfStanding?: TBOUTStanding[];
@@ -29,7 +26,6 @@ const WrapSlide = styled.div`
   align-items: center;
 `;
 const CardContainer = styled.div`
-
   background-size: cover;
   border-radius: 10px;
 `;
@@ -38,7 +34,7 @@ export default function SliderProductHotComponent() {
   const { productTopByOutStanding } = useSelector(
     (state: RootState) => state.products
   );
-  const Router = useRouter();
+  const addToCart = useAddToCart();
   return (
     <WrapSlide>
       <IconCarsouelLeftProduct style={{ cursor: "pointer" }} />
@@ -64,7 +60,7 @@ export default function SliderProductHotComponent() {
         style={{ width: 1113 }}
       >
         {productTopByOutStanding.map((item, index) => (
-          <SwiperSlide  key={index}>
+          <SwiperSlide key={index}>
             <CardContainer>
               <ItemProductCard
                 key={index}
@@ -81,9 +77,7 @@ export default function SliderProductHotComponent() {
                 priceListed={item.price}
                 priceSub={item.unitPrice}
                 ticketCard="TRN Gold"
-                onClick={() => {
-                  Router.push("/payment-cart");
-                }}
+                onClick={() => addToCart(item.id)}
               />
             </CardContainer>
           </SwiperSlide>

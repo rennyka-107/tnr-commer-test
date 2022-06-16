@@ -1,23 +1,23 @@
 import { createSlice } from "@reduxjs/toolkit";
-
-interface initialState {
-  getCart: {};
+import LocalStorage from "utils/LocalStorage";
+interface InitialState {
+  cart: any;
   codeInfo: string | null;
   codeDiscount?: string[];
 }
 
-const initialState = {
-  getCart: {},
+const initialState: InitialState = {
+  cart: {},
   codeInfo: null,
   codeDiscount: [],
 };
 
 export const cartSlice = createSlice({
-  name: "cart",
+  name: "carts",
   initialState,
   reducers: {
     getCart: (state, action) => {
-      state.getCart = action.payload;
+      state.cart = action.payload;
     },
     getCodeInfo: (state, action) => {
       state.codeInfo = action.payload;

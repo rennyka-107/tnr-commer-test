@@ -3,12 +3,10 @@ import FlexContainer from "@components/CustomComponent/FlexContainer";
 import Page from "@layouts/Page";
 import isEmpty from "lodash/isEmpty";
 import dynamic from "next/dynamic";
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
-import { getCart } from "../../store/cartSlice";
-import { getProducById } from "../api/productsApi";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Typography, Grid } from "@mui/material";
 
 const DynamicLayoutPayment = dynamic(
   () => import("../../src/components/LayoutPayment/LayoutMain"),
@@ -25,27 +23,8 @@ const DynamicLayoutQRCode = dynamic(
 
 const PaymentLogin = () => {
   const [scopeRender, setScopeRender] = useState<string>("payment");
-
-  const dispatch = useDispatch();
-  const { getCart: dataCart } = useSelector((state: RootState) => state.carts);
-  const id =
-    typeof window !== "undefined"
-      ? JSON.parse(localStorage.getItem("cart-id"))
-      : null;
-
-  useEffect(() => {
-    (async () => {
-      try {
-        if (id) {
-          const data = await getProducById(id);
-          dispatch(getCart(data.responseData));
-        }
-      } catch (error) {
-        // throw new Error(error)
-        console.log("error", error);
-      }
-    })();
-  }, [id, dispatch]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const { cart } = useSelector((state: RootState) => state.carts);
 
   const scopePayment = (_scope) => {
     switch (_scope) {
@@ -67,8 +46,25 @@ const PaymentLogin = () => {
       }}
     >
       <FlexContainer>
-        {!isEmpty(dataCart) ? (
-          scopePayment(scopeRender)
+        {!loading ? (
+          !isEmpty(cart) ? (
+            scopePayment(scopeRender)
+          ) : (
+            <Container title={"Giỏ hàng"}>
+              <Grid container columnSpacing={"30px"}>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    fontStyle: "italic",
+                    width: "100%",
+                    textAlign: "center",
+                  }}
+                >
+                  Giỏ hàng đang trống
+                </Typography>
+              </Grid>
+            </Container>
+          )
         ) : (
           <Container title={"Thanh toán"}>
             <div style={{ textAlign: "center", margin: "200px 0px" }}>
