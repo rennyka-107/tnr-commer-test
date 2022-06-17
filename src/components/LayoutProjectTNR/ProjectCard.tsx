@@ -11,9 +11,11 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
+import ImageWithHideOnError from "hooks/ImageWithHideOnError";
 import Link from "next/link";
 import * as React from "react";
 import { MouseEventHandler } from "react";
+import Product3 from '../../../public/images/product3.png';
 
 export interface ProjectI {
   id: string;
@@ -132,7 +134,7 @@ export default function ItemProjectCard({
           cursor: "pointer",
           position: "absolute",
           right: 0,
-          margin: 20,
+          margin: 20,zIndex: 10
         }}
       />
       <div
@@ -145,6 +147,7 @@ export default function ItemProjectCard({
           right: 0,
           padding: 4,
           textAlign: "center",
+		  zIndex: 10
         }}
       >
         <span
@@ -160,16 +163,26 @@ export default function ItemProjectCard({
           {ticketCard}
         </span>
       </div>
-      <CardMedia
+      {/* <CardMedia
         component="img"
         height="190"
-        image={src?.src}
-		
         alt="green iguana"
         style={{
           borderRadius: "20px 20px 0px 0px",
         }}
-      />
+      /> */}
+	   <ImageWithHideOnError
+          className="logo"
+          src={src ? src?.src : Product3}
+          fallbackSrc={Product3}
+          height={190}
+		  width={350}
+          title={'Logo ' }
+          alt={'Logo '}
+          priority
+          unoptimized={true}
+          objectFit="cover"
+        />
     {/* <Image
         src="/static-data/5c979bae-249b-4b0a-880a-9729cb757a50/eccda50b-6c1b-42f4-af84-c6a753a185bd/Project/f6caa857-2d8f-421f-bff9-dc120640e745/anh-dep-thien-nhien-3.jpg"
         placeholder="blur"

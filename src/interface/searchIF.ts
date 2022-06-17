@@ -18,4 +18,5 @@ export interface searchLocationResponse {
   thumbnail: string;
   diaChi: string;
   tongBanGhi: string;
+  projectName: string;
 }

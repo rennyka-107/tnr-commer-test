@@ -5,7 +5,7 @@ export interface BodyRequest {
     projectId: string | null;
     projectTypeId: string | null;
     projectLevel1: string | null;
-    saleProductStatus: number | null;
+    saleProductStatus: (string | number)[] | string;
 }
 
 const LIST_PRODUCT = "/api/board/find-board";

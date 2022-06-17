@@ -8,6 +8,8 @@ import projects from "./projectSlice";
 import carts from "./cartSlice";
 import projectMap from "./projectMapSlice";
 import searchs from "./searchSlice";
+import userManual from './userManualSlice'
+import profile from "./profileSlice";
 
 const combinedReducer = combineReducers({
   menubar,
@@ -17,6 +19,9 @@ const combinedReducer = combineReducers({
   carts,
   projectMap,
   searchs,
+  userManual,
+  profile,
+  
 });
 
 export type RootState = ReturnType<typeof combinedReducer>;
@@ -52,6 +57,14 @@ const masterReducer = (state, action) => {
       searchs: {
         SearchHomeLocation: action.payload.searchs.SearchHomeLocation,
         totalElement: action.payload.searchs.totalElement,
+      },
+	  userManual: {
+		listUserManual: action.payload.userManual.listUserManual,
+		userManualById: action.payload.userManual.userManualById
+	  },
+      profile: {
+        updateInfo: action.payload.profile.updateInfoResponse,
+        userInfo: action.payload.profile.userInfo,
       },
     };
     return nextState;

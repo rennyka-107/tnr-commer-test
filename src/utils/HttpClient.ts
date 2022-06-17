@@ -19,7 +19,6 @@ declare module 'axios' {
   }
 }
 
-
 const headers: AxiosRequestConfig["headers"] = {
   "Content-Type": "application/json",
 };
@@ -36,6 +35,7 @@ class Axios {
     // Request interceptor
     httpInstance.interceptors.request.use(
       (config: AxiosRequestConfig) => {
+        // if (config?.withToken === true) {
         const accessToken =
           LocalStorage.get("accessToken") || SessionStorage.get("accessToken");
         if (config.headers) {
@@ -45,6 +45,7 @@ class Axios {
             delete config.headers.Authorization;
           }
         }
+        // }
         return config;
       },
       (error) => Promise.reject(error)
@@ -52,44 +53,50 @@ class Axios {
 
     // Response interceptor
     httpInstance.interceptors.response.use(
-
       (response: AxiosResponse) => response.data,
       async (error: AxiosError) => {
         if (error.response && error.response.status === 401) {
           const refreshToken =
-            LocalStorage.get('refreshToken') ||
-            SessionStorage.get('refreshToken');
+            LocalStorage.get("refreshToken") ||
+            SessionStorage.get("refreshToken");
           try {
 
             const response = await refreshAccessToken(refreshToken);
             if ((response as LoginSuccess).access_token) {
-              if (!isEmpty(LocalStorage.get('accessToken'))) {
+              if (!isEmpty(LocalStorage.get("accessToken"))) {
                 LocalStorage.set(
-                  'accessToken',
+                  "accessToken",
                   (response as LoginSuccess).access_token
                 );
-                LocalStorage.set('refreshToken', (response as LoginSuccess).refresh_token);
+                LocalStorage.set(
+                  "refreshToken",
+                  (response as LoginSuccess).refresh_token
+                );
               }
-              if (!isEmpty(SessionStorage.get('accessToken'))) {
+              if (!isEmpty(SessionStorage.get("accessToken"))) {
                 SessionStorage.set(
-                  'accessToken',
+                  "accessToken",
                   (response as LoginSuccess).access_token
                 );
-                SessionStorage.set('refreshToken', (response as LoginSuccess).refresh_token);
+                SessionStorage.set(
+                  "refreshToken",
+                  (response as LoginSuccess).refresh_token
+                );
               }
               let newConfig = error.config;
               if (newConfig && newConfig.headers) {
-                newConfig.headers.Authorization = `Bearer ${(response as LoginSuccess).access_token
-                  }`;
+                newConfig.headers.Authorization = `Bearer ${
+                  (response as LoginSuccess).access_token
+                }`;
               }
               return httpInstance(error.config);
             }
 
           } catch (err) {
-            LocalStorage.remove('accessToken');
-            LocalStorage.remove('refreshToken');
-            SessionStorage.remove('accessToken');
-            SessionStorage.remove('refreshToken');
+            LocalStorage.remove("accessToken");
+            LocalStorage.remove("refreshToken");
+            SessionStorage.remove("accessToken");
+            SessionStorage.remove("refreshToken");
             window.location.reload();
           }
         }

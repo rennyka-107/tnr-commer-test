@@ -5,6 +5,8 @@ const baseURL = process.env.REACT_APP_BASE_URL
   ? process.env.REACT_APP_BASE_URL
   : " http://210.245.85.229:1999";
 
+const imageUrl = "http://210.245.85.229:1983"
+
 const version = process.env.REACT_APP_VERSION;
 
 const validateLine = {
@@ -23,4 +25,4 @@ const InputProps = {
   },
 };
 
-export { baseURL, version, validateLine, InputProps };
+export { baseURL, version, validateLine, InputProps, imageUrl };

@@ -1,10 +1,9 @@
-import React, { ReactNode, useContext, useEffect } from "react";
-import { SEOProps } from "@components";
+import { SEOProps } from "@components/SEO";
 import dynamic from "next/dynamic";
-import { getListMenuBarProject } from "../../../pages/api/menuBarApi";
+import React, { ReactNode } from "react";
 
 
-  
+
 const DynamicSEOComponent = dynamic(() =>
   import("../../components/SEO"),
   { loading: () => <p>...</p>, ssr: false }
@@ -16,7 +15,7 @@ const DynamicHeaderComponent = dynamic(() =>
 );
 const DynamicFooterComponent = dynamic(() =>
   import("../../components/Footer/ComponentFooter"),
-  { loading: () => <p>...</p>}
+  { loading: () => <p>...</p> }
 );
 type ItemValueProps = {
   id: string;
@@ -34,10 +33,10 @@ const Page: React.FC<PageProps> = ({ meta, children, dataNav }) => {
     <>
       <DynamicSEOComponent {...meta} />
       <main style={{ display: "flex", flexDirection: "column" }}>
-        <DynamicHeaderComponent/>
-        <div style={{minHeight: 500}}>
-		{children}
-		</div>
+        <DynamicHeaderComponent />
+        <div style={{ minHeight: 500 }}>
+          {children}
+        </div>
         <DynamicFooterComponent />
       </main>
     </>

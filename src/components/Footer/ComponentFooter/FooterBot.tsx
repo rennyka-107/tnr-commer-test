@@ -5,6 +5,7 @@ import {
   Logo,
 } from "@components/Icons";
 import styled from "@emotion/styled";
+import { responseUserManual } from "interface/userManual";
 import Image from "next/image";
 import Link from "next/link";
 import Router from "next/router";
@@ -22,6 +23,7 @@ interface ItemValueProps {
 
 interface MenuProps {
   listMenuBarProjectType?: ItemValueProps[];
+  listUserManual: responseUserManual[];
 }
 const WrapFooterBot = styled.div`
   min-height: 360px;
@@ -91,7 +93,7 @@ const IconsBlock = styled.div`
 `;
 type Props = {};
 
-const FooterBot = ({ listMenuBarProjectType }: MenuProps) => {
+const FooterBot = ({ listMenuBarProjectType, listUserManual }: MenuProps) => {
   return (
     <WrapFooterBot>
       <Link href="https://tnre-customer-test.vercel.app">
@@ -116,7 +118,7 @@ const FooterBot = ({ listMenuBarProjectType }: MenuProps) => {
           </LineInfo>
           <LineInfo style={{ marginTop: 5 }}>
             <TitleTypo>
-              TNR Version 1.1.2 Copyright © www.example.com {""}
+              TNR Version 1.1.3 Copyright © www.example.com {""}
             </TitleTypo>
           </LineInfo>
         </BlockDiv>
@@ -139,34 +141,16 @@ const FooterBot = ({ listMenuBarProjectType }: MenuProps) => {
           style={{ display: "flex", gap: ".5em", flexDirection: "column" }}
         >
           <TitleTypo style={{ fontSize: "18px" }}>Hỗ trợ</TitleTypo>
-          <LineInfo2
-            onClick={() => {
-              Router.replace(`/buyingGuide?id=4`);
-            }}
-          >
-            Hướng dẫn mua nhà Online
-          </LineInfo2>
-          <LineInfo2
-            onClick={() => {
-              Router.replace(`/buyingGuide?id=5`);
-            }}
-          >
-            Hướng dẫn mua nhà Offline
-          </LineInfo2>
-          <LineInfo2
-            onClick={() => {
-              Router.replace(`/buyingGuide?id=8`);
-            }}
-          >
-            Câu hỏi thường gặp
-          </LineInfo2>
-          <LineInfo2
-            onClick={() => {
-              Router.replace(`/buyingGuide`);
-            }}
-          >
-            Liên hệ
-          </LineInfo2>
+          {listUserManual.map((item, index) => (
+            <LineInfo2
+			key={index}
+              onClick={() => {
+                Router.replace(`/buyingGuide?idUserManual=${item.id}&&selected=${index}`);
+              }}
+            >
+             {item.name}
+            </LineInfo2>
+          ))}
         </BlockDiv>
         <BlockDiv
           style={{ display: "flex", gap: "2em", flexDirection: "column" }}

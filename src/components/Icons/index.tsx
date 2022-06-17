@@ -45,6 +45,8 @@ export { default as IconSetting } from './IconSetting'
 export { default as IconRadio } from './IconRadio'
 export { default as IconEdit } from './IconEdit'
 export { default as IconPlusCircle } from './IconPlusCircle'
+export { default as IconEditWhite } from './IconEditWhite'
+
 export { default as IconInfoCircle } from './IconInfoCircle'
 export { default as IconLocationHover } from './IconLocationHover'
 export { default as IconHotelHover } from './IconHotelHover'

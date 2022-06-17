@@ -58,6 +58,13 @@ const ControllerSelect = <T extends FieldValues>(props: Props<T>) => {
         setValue(name, null);
     }
 
+    const renderMultiValue = (arrValues: any[]) => {
+        const arr: string[] = arrValues.map((el) => {
+            return dataSelect.find((item) => item.value == el).label
+        })
+        return <span>{arr.join(',')}</span>
+    }
+
     return (
         <Container style={{ width: width ?? '100%' }}>
             {label && (<LabelSpan color={labelColor}>{label}{required && <RequiredSpan>*</RequiredSpan>}</LabelSpan>)}
@@ -70,6 +77,12 @@ const ControllerSelect = <T extends FieldValues>(props: Props<T>) => {
                                 'aria-label': 'Without label',
                                 ...rest.inputProps,
                             }}
+                            renderValue={(val: any) => {
+                                if (multiple) {
+                                    return renderMultiValue(val)
+                                }
+                                return <span>{dataSelect.find((item) => item?.value == val)?.label ?? ''}</span>
+                            }}
                             displayEmpty
                             multiple={multiple}
                             {...field}
@@ -79,7 +92,7 @@ const ControllerSelect = <T extends FieldValues>(props: Props<T>) => {
                             {dataSelect.map((item) => {
                                 if (renderItemSelect) {
                                     return (
-                                        <MenuItem>{renderItemSelect(item)}</MenuItem>
+                                        <MenuItem value={item.value} key={item.value}>{renderItemSelect(item)}</MenuItem>
                                     )
                                 }
                                 return (

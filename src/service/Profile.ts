@@ -4,7 +4,8 @@ import HttpClient from 'utils/HttpClient';
 
 const GET_CONTRACT = 'api/customer/customer-order/find-by-user';
 const GET_NOTIFICATION = '/api/customer/notification/find-notification-by-user';
-const CHANGE_PASSWORD = '/api/v1/account/change-password';
+const CHANGE_PASSWORD = '/api-account/v1/account/change-password';
+const UPDATE_PROFILE = 'api-profile/profile/update';
 export interface ContractI {
     address: string | null;
     avatar: string | null;
@@ -44,6 +45,24 @@ export interface NotiI {
     userid: string;
 }
 
+export interface ProfileI {
+    customerTypeId: string,
+    appellation: string,
+    fullname: string,
+    birth: string,
+    phone: string,
+    email: string,
+    idNumber: string,
+    idReceivePlace: string,
+    idReceiveDate: string,
+    domicile: string,
+    address: string,
+    district: string,
+    province: string,
+    avatar: string,
+    avatarThumbnailUrl: string,
+    attachPaper: string
+}
 
 export const getContractByUser = () => {
     return HttpClient.get<ResponseTypeAPI, CommonResponse<ContractI[]>>(`${GET_CONTRACT}`);
@@ -55,4 +74,8 @@ export const getNotificationByUser = () => {
 
 export const changePassword = (params: { oldPassword: string, newPassword: string }) => {
     return HttpClient.post<ResponseTypeAPI, any>(`${CHANGE_PASSWORD}${convertToQuery(params)}`);
+}
+
+export const updateProfile = (body: ProfileI) => {
+    return HttpClient.post<ResponseTypeAPI, any>(`${CHANGE_PASSWORD}`, body);
 }

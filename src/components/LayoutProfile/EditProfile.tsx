@@ -3,294 +3,492 @@ import Column from "@components/CustomComponent/Column";
 import CustomButton from "@components/CustomComponent/CustomButton";
 import HorizontalLine from "@components/CustomComponent/HorizontalLine";
 import Row from "@components/CustomComponent/Row";
-import ControllerCheckbox from "@components/Form/ControllerCheckbox";
-import ControllerSelect from "@components/Form/ControllerSelect";
+import ControllerDatePicker from "@components/Form/ControllerDatePicker";
 import ControllerSelectAutoComplete from "@components/Form/ControllerSelectAutoComplete";
 import ControllerTextField from "@components/Form/ControllerTextField";
 import FormGroup from "@components/Form/FormGroup";
+import { IconEditWhite } from "@components/Icons";
 import styled from "@emotion/styled";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { Button } from "@mui/material";
+import axios from "axios";
 import Image from "next/image";
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { InputProps, validateLine } from "utils/constants";
-import * as yup from 'yup';
+import { useDispatch, useSelector } from "react-redux";
+import { imageUrl, InputProps, validateLine } from "utils/constants";
+import Regexs from "utils/Regexs";
+import * as yup from "yup";
+import {
+  getListCustomerType,
+  getUserInfoApi,
+  postChangeInfoApi,
+  postFile,
+  postImage,
+} from "../../../pages/api/profileApi";
+import { changeProfile, getUserInfo } from "../../../store/profileSlice";
+import { RootState } from "../../../store/store";
 
 const AvataContainer = styled.div`
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:47px 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 47px 0px;
+  position: relative;
 `;
 
+const IconWrapper = styled.div`
+  background: blue;
+  padding: 8px;
+  border-radius: 25px;
+  display: flex;
+  align-items: center;
+  position: absolute;
+  bottom: 37px;
+  right: 305px;
+`;
+const AttachWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 33px;
+`;
+
+const UploadButton = styled(Button)`
+  height: 24px;
+  width: 64px;
+  background: #1b3459;
+  border-radius: 10px;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 15px;
+  text-align: center;
+  color: white;
+  text-transform: none;
+
+  :hover {
+    background: #1b3459;
+    color: #ffffff;
+  }
+`;
+
+const FileContainer = styled.div`
+  display: flex;
+  justify-content: end;
+`;
 
 const EditProfile = () => {
-    const validationSchema = yup.object().shape({
-        DanhXung: yup.string().required(validateLine.required),
-        doiTuong: yup.string().required(validateLine.required),
-        quanHuyen: yup.string().required(validateLine.required),
-    });
+  const [createObjectURL, setCreateObjectURL] = useState(null);
+  const [createFileObjectURL, setCreateFileObjectURL] = useState(null);
+  const [customerType, setCustomerType] = useState([]);
+  const [avatar, setAvatar] = useState({ dataUrl: "", thumbnailUrl: "" });
+  const [document, setDocument] = useState({ fileName: "", dataUrl: "" });
 
-    const formControler = useForm<any>({
-        mode: 'onChange',
-        resolver: yupResolver(validationSchema),
-        defaultValues: validationSchema.getDefault(),
-    });
+  console.log("avatar", avatar);
 
-    const { control, handleSubmit } = formControler
+  const dispatch = useDispatch();
 
-    const onSubmit = (FormValues) => {
-        console.log(FormValues, 'FormValues');
+  const validationSchema = yup.object().shape({
+    fullname: yup.string().required(validateLine.required),
+    phone: yup
+      .string()
+      .trim(validateLine.trim)
+      .strict(true)
+      .matches(Regexs.phone, "Số điện thoại không đúng")
+      .required(validateLine.required)
+      .default(""),
+    idNumber: yup.string().required(validateLine.required),
+    email: yup
+      .string()
+      .trim(validateLine.trim)
+      .strict(true)
+      .matches(Regexs.email, "Email không đúng")
+      .default(""),
+  });
+
+  useEffect(() => {
+    (async () => {
+      try {
+        getListCustomerType().then((response) => {
+          if (response.responseCode === "00") {
+            setCustomerType(response.responseData);
+          }
+        });
+        const responseUser = await getUserInfoApi();
+        dispatch(getUserInfo(responseUser.responseData));
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  }, []);
+
+  const convertCustomerType = (customerType || []).map((item) => ({
+    label: item.name,
+    value: item.id,
+  }));
+  const detailUser = useSelector((state: RootState) => state.profile.userInfo);
+
+  const formController = useForm<any>({
+    mode: "onChange",
+    resolver: yupResolver(validationSchema),
+    defaultValues: validationSchema.getDefault(),
+  });
+
+  const { control, handleSubmit, reset } = formController;
+
+  const resetAsyncForm = useCallback(
+    async (data) => {
+      reset({
+        customerTypeId: data.customerTypeId,
+        appellation: data.appellation,
+        fullname: data.fullname,
+        birth: data.birth && data.birth.split("-").reverse().join("-"),
+        phone: data.phone,
+        email: data.email,
+        idNumber: data.idNumber,
+        idReceivePlace: data.idReceivePlace,
+        idReceiveDate:
+          data.idReceiveDate &&
+          data.idReceiveDate.split("-").reverse().join("-"),
+        domicile: data.domicile,
+        address: data.address,
+        avatar: data.avatar,
+        avatarThumbnailUrl: imageUrl + data.avatarThumbnailUrl,
+        attachPaper: imageUrl + data.attachPaper,
+        attachPaperThumbnailUrl: imageUrl + data.attachPaperThumbnailUrl,
+        district: data.district,
+        province: data.province,
+      });
+    },
+    [reset]
+  );
+
+  useEffect(() => {
+    if (detailUser?.email) {
+      resetAsyncForm(detailUser);
     }
+  }, [detailUser]);
 
-    const dataDanhXung = [
-        { label: "lựa chọn 1", value: 1 },
-        { label: "lựa chọn 2", value: 2 },
-        { label: "lựa chọn 3", value: 3 },
-        { label: "lựa chọn 4", value: 4 },
-        { label: "lựa chọn 5", value: 5 },
-        { label: "lựa chọn 6", value: 6 }
-    ];
+  const uploadToClient = async (event) => {
+    if (event.target.files && event.target.files[0]) {
+      const i = event.target.files[0];
+      setCreateObjectURL(URL.createObjectURL(i));
+    }
+    let formData = new FormData();
+    formData.append("file", event.target.files[0]);
+    formData.append("category", "avatar");
 
-    return (
-        <form onSubmit={handleSubmit((values) => onSubmit(values))}>
-            <BoxContainer titleHeader="Chỉnh sửa hồ sơ" styleCustom={{ padding: "21px 24px" }}>
-                <AvataContainer>
-                    <Image src={"/images/avatar.png"} alt="" width={125} height={125} style={{ borderRadius: 20 }} />
-                </AvataContainer>
-                <Row>
-                    <Column>
-                        <FormGroup sx={{ mb: 2 }} fullWidth>
-                            <ControllerSelect
-                                variant="outlined"
-                                name="doiTuong"
-                                label="Đối tượng khách hàng"
-                                control={control}
-                                fullWidth
-                                inputProps={InputProps}
-                                required
-                                setValue={formControler.setValue}
-                                isClear
-                                dataSelect={dataDanhXung}
-                            />
-                        </FormGroup>
-                    </Column>
-                    <Column>
-                        <FormGroup sx={{ mb: 2 }} fullWidth>
-                            <ControllerSelect
-                                variant="outlined"
-                                name="DanhXung"
-                                label="Danh xưng"
-                                control={control}
-                                fullWidth
-                                inputProps={InputProps}
-                                required
-                                setValue={formControler.setValue}
-                                isClear
-                                dataSelect={dataDanhXung}
-                            />
-                        </FormGroup>
-                    </Column>
-                </Row>
-                <Row>
-                    <Column>
-                        <FormGroup sx={{ mb: 2 }} fullWidth>
-                            <ControllerTextField
-                                variant="outlined"
-                                hiddenLabel
-                                name=""
-                                control={control}
-                                placeholder="Họ và tên"
-                                required
-                                fullWidth
-                                label="Họ và tên"
-                                InputProps={InputProps}
-                            />
-                        </FormGroup>
-                    </Column>
-                    <Column>
-                        <FormGroup sx={{ mb: 2 }} fullWidth>
-                            <ControllerTextField
-                                variant="outlined"
-                                hiddenLabel
-                                name=""
-                                control={control}
-                                placeholder="Ngày sinh"
-                                fullWidth
-                                label="Ngày sinh"
-                                InputProps={InputProps}
-                            />
-                        </FormGroup>
-                    </Column>
-                </Row>
-                <Row>
-                    <Column>
-                        <FormGroup fullWidth>
-                            <ControllerTextField
-                                variant="outlined"
-                                hiddenLabel
-                                name=""
-                                control={control}
-                                placeholder="Điện thoại"
-                                required
-                                fullWidth
-                                label="Điện thoại"
-                                InputProps={InputProps}
-                            />
-                        </FormGroup>
-                    </Column>
-                    <Column>
-                        <FormGroup fullWidth>
-                            <ControllerTextField
-                                variant="outlined"
-                                hiddenLabel
-                                name=""
-                                control={control}
-                                placeholder="Email"
-                                fullWidth
-                                label="Email"
-                                InputProps={InputProps}
-                            />
-                        </FormGroup>
-                    </Column>
-                </Row>
-                <Row>
-                    <Column>
-                        <HorizontalLine mb={36} mt={36} />
-                    </Column>
-                </Row>
-                <Row>
-                    <Column>
-                        <FormGroup sx={{ mb: 2 }} fullWidth>
-                            <ControllerTextField
-                                variant="outlined"
-                                hiddenLabel
-                                name=""
-                                control={control}
-                                placeholder="Số CCCD/CMND"
-                                fullWidth
-                                label="Số CCCD/CMND"
-                                InputProps={InputProps}
-                            />
-                        </FormGroup>
-                    </Column>
-                    <Column>
-                        <FormGroup sx={{ mb: 2 }} fullWidth>
-                            <ControllerTextField
-                                variant="outlined"
-                                hiddenLabel
-                                name=""
-                                control={control}
-                                placeholder="Đính kèm"
-                                fullWidth
-                                label="Đính kèm"
-                                InputProps={InputProps}
-                            />
-                        </FormGroup>
-                    </Column>
-                </Row>
-                <Row>
-                    <Column>
-                        <FormGroup sx={{ mb: 2 }} fullWidth>
-                            <ControllerTextField
-                                variant="outlined"
-                                hiddenLabel
-                                name=""
-                                control={control}
-                                placeholder="Nơi cấp"
-                                fullWidth
-                                label="Nơi cấp"
-                                InputProps={InputProps}
-                            />
-                        </FormGroup>
-                    </Column>
-                    <Column>
-                        <FormGroup sx={{ mb: 2 }} fullWidth>
-                            <ControllerTextField
-                                variant="outlined"
-                                hiddenLabel
-                                name=""
-                                control={control}
-                                placeholder="Ngày cấp"
-                                fullWidth
-                                label="Ngày cấp"
-                                InputProps={InputProps}
-                            />
-                        </FormGroup>
-                    </Column>
-                </Row>
-                <Row>
-                    <Column>
-                        <FormGroup sx={{ mb: 2 }} fullWidth>
-                            <ControllerTextField
-                                variant="outlined"
-                                hiddenLabel
-                                name=""
-                                control={control}
-                                placeholder="Địa chỉ thường chú"
-                                fullWidth
-                                label="Địa chỉ thường chú"
-                                InputProps={InputProps}
-                            />
-                        </FormGroup>
-                    </Column>
-                </Row>
-                <Row>
-                    <Column>
-                        <FormGroup sx={{ mb: 2 }} fullWidth>
-                            <ControllerTextField
-                                variant="outlined"
-                                hiddenLabel
-                                name=""
-                                control={control}
-                                placeholder="Địa chỉ liên lạc"
-                                fullWidth
-                                label="Địa chỉ liên lạc"
-                                InputProps={InputProps}
-                            />
-                        </FormGroup>
-                    </Column>
-                </Row>
-                <Row>
-                    <Column>
-                        <FormGroup sx={{ mb: 2 }} fullWidth>
-                            <ControllerTextField
-                                variant="outlined"
-                                hiddenLabel
-                                name=""
-                                control={control}
-                                placeholder="Thành phố/Tỉnh"
-                                fullWidth
-                                label="Thành phố/Tỉnh"
-                                InputProps={InputProps}
-                            />
-                        </FormGroup>
-                    </Column>
-                    <Column>
-                        <FormGroup fullWidth>
-                            <ControllerSelectAutoComplete
-                                variant="outlined"
-                                name="quanHuyen"
-                                control={control}
-                                required
-                                label="Quận/Huyện"
-                                setValue={formControler.setValue}
-                                options={dataDanhXung}
-                            />
-                        </FormGroup>
-                    </Column>
-                </Row>
-                <Row>
-                    <Column>
-                        <CustomButton label="Cập nhật"
-                            style={{ background: "#1B3459", width: 255, marginTop: 57 }}
-                            type="submit"
-                        />
-                    </Column>
-                </Row>
-            </BoxContainer>
-        </form>
-    )
-}
+    postImage(formData)
+      .then((res) => setAvatar(res.responseData))
+      .catch((err) => err);
+  };
+
+  const uploadFile = async (event) => {
+    if (event.target.files && event.target.files[0]) {
+      const i = event.target.files[0];
+      setCreateFileObjectURL(URL.createObjectURL(i));
+    }
+    let formData = new FormData();
+    formData.append("file", event.target.files[0]);
+    formData.append("category", "avatar");
+
+    postFile(formData)
+      .then((res) => {
+        if (res.responseCode === "00") {
+          setDocument(res.responseData);
+        }
+        else{
+          alert("Định dạng File là docx, xlsx hoặc PDF")
+        }
+      })
+      .catch((err) => err);
+  };
+
+  const onSubmit = async (values: any) => {
+    const body = {
+      customerTypeId: values.customerTypeId,
+      appellation: values.appellation,
+      fullname: values.fullname,
+      birth: values.birth && values.birth.split("-").reverse().join("-"),
+      phone: values.phone,
+      email: values.email,
+      idNumber: values.idNumber,
+      idReceivePlace: values.idReceivePlace,
+      idReceiveDate:
+        values.idReceiveDate &&
+        values.idReceiveDate.split("-").reverse().join("-"),
+      domicile: values.domicile,
+      address: values.address,
+      avatar: imageUrl + avatar.dataUrl,
+      avatarThumbnailUrl: imageUrl + avatar.thumbnailUrl,
+      attachPaper: document.dataUrl,
+      district: values.district,
+      province: values.province,
+    };
+
+    (async () => {
+      try {
+        const response = await postChangeInfoApi(body);
+
+        dispatch(changeProfile(response.responseData));
+        if (response.responseCode === "00") {
+          alert("Thay đổi thông tin thành công!");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  };
+
+  return (
+    <form onSubmit={handleSubmit((values) => onSubmit(values))}>
+      <BoxContainer
+        titleHeader="Chỉnh sửa hồ sơ"
+        styleCustom={{ padding: "21px 24px" }}
+      >
+        <AvataContainer>
+          <Image
+            src={createObjectURL || "/images/avatar.png"}
+            alt=""
+            width={125}
+            height={125}
+            style={{ borderRadius: 20 }}
+          />
+          <label htmlFor="image">
+            <IconWrapper>
+              <IconEditWhite />
+            </IconWrapper>
+          </label>
+          <input
+            id="image"
+            type="file"
+            style={{ display: "none" }}
+            onChange={uploadToClient}
+          />
+        </AvataContainer>
+        <Row>
+          <Column>
+            <FormGroup sx={{ mb: 2 }} fullWidth>
+              <ControllerSelectAutoComplete
+                variant="outlined"
+                name="customerTypeId"
+                label="Đối tượng khách hàng"
+                control={control}
+                setValue={formController.setValue}
+                options={convertCustomerType}
+                defaultValue="Cá nhân"
+              />
+            </FormGroup>
+          </Column>
+          <Column>
+            <FormGroup sx={{ mb: 2 }} fullWidth>
+              <ControllerSelectAutoComplete
+                variant="outlined"
+                name="appellation"
+                label="Danh xưng"
+                control={control}
+                setValue={formController.setValue}
+                options={[
+                  { label: "Ông", value: 1 },
+                  { label: "Bà", value: 2 },
+                ]}
+                defaultValue="Ông"
+              />
+            </FormGroup>
+          </Column>
+        </Row>
+        <Row>
+          <Column>
+            <FormGroup sx={{ mb: 2 }} fullWidth>
+              <ControllerTextField
+                variant="outlined"
+                hiddenLabel
+                name="fullname"
+                control={control}
+                fullWidth
+                label="Họ và tên"
+                required
+                InputProps={InputProps}
+              />
+            </FormGroup>
+          </Column>
+          <Column>
+            <FormGroup sx={{ mb: 2 }} fullWidth>
+              <ControllerDatePicker
+                control={control}
+                name="birth"
+                label="Ngày sinh"
+              />
+            </FormGroup>
+          </Column>
+        </Row>
+        <Row>
+          <Column>
+            <FormGroup fullWidth>
+              <ControllerTextField
+                variant="outlined"
+                hiddenLabel
+                name="phone"
+                control={control}
+                required
+                fullWidth
+                label="Điện thoại"
+                InputProps={InputProps}
+              />
+            </FormGroup>
+          </Column>
+          <Column>
+            <FormGroup fullWidth>
+              <ControllerTextField
+                variant="outlined"
+                hiddenLabel
+                name="email"
+                control={control}
+                fullWidth
+                label="Email"
+                InputProps={InputProps}
+              />
+            </FormGroup>
+          </Column>
+        </Row>
+        <Row>
+          <Column>
+            <HorizontalLine mb={36} mt={36} />
+          </Column>
+        </Row>
+        <Row>
+          <Column>
+            <FormGroup sx={{ mb: 2 }} fullWidth>
+              <ControllerTextField
+                variant="outlined"
+                hiddenLabel
+                name="idNumber"
+                required
+                control={control}
+                fullWidth
+                label="Số CCCD/CMND"
+                InputProps={InputProps}
+              />
+            </FormGroup>
+          </Column>
+          <Column>
+            <AttachWrapper>
+              <span>Đính kèm giấy CN ĐKDN</span>
+              <UploadButton>
+                <label htmlFor="file">Tải lên</label>
+                <input
+                  id="file"
+                  type="file"
+                  style={{ display: "none" }}
+                  onChange={uploadFile}
+                />
+              </UploadButton>
+            </AttachWrapper>
+          </Column>
+        </Row>
+        <Row>
+          <Column>
+            <FileContainer>
+              <div>{document.fileName}</div>
+            </FileContainer>
+          </Column>
+        </Row>
+        <Row>
+          <Column>
+            <FormGroup sx={{ mb: 2 }} fullWidth>
+              <ControllerTextField
+                variant="outlined"
+                hiddenLabel
+                name="idReceivePlace"
+                control={control}
+                fullWidth
+                label="Nơi cấp"
+                InputProps={InputProps}
+              />
+            </FormGroup>
+          </Column>
+          <Column>
+            <FormGroup sx={{ mb: 2 }} fullWidth>
+              <ControllerDatePicker
+                control={control}
+                name="idReceiveDate"
+                label="Ngày cấp"
+              />
+            </FormGroup>
+          </Column>
+        </Row>
+        <Row>
+          <Column>
+            <FormGroup sx={{ mb: 2 }} fullWidth>
+              <ControllerTextField
+                variant="outlined"
+                hiddenLabel
+                name="domicile"
+                control={control}
+                fullWidth
+                label="Địa chỉ thường trú"
+                InputProps={InputProps}
+              />
+            </FormGroup>
+          </Column>
+        </Row>
+        <Row>
+          <Column>
+            <FormGroup sx={{ mb: 2 }} fullWidth>
+              <ControllerTextField
+                variant="outlined"
+                hiddenLabel
+                name="address"
+                control={control}
+                fullWidth
+                label="Địa chỉ liên lạc"
+                InputProps={InputProps}
+              />
+            </FormGroup>
+          </Column>
+        </Row>
+        <Row>
+          <Column>
+            <FormGroup sx={{ mb: 2 }} fullWidth>
+              <ControllerTextField
+                variant="outlined"
+                hiddenLabel
+                name="province"
+                control={control}
+                fullWidth
+                label="Thành phố/Tỉnh"
+                InputProps={InputProps}
+              />
+            </FormGroup>
+          </Column>
+          <Column>
+            <FormGroup fullWidth>
+              <ControllerTextField
+                variant="outlined"
+                hiddenLabel
+                name="district"
+                control={control}
+                fullWidth
+                label="Quận/Huyện"
+                InputProps={InputProps}
+              />
+            </FormGroup>
+          </Column>
+        </Row>
+        <Row>
+          <Column>
+            <CustomButton
+              label="Cập nhật"
+              style={{ background: "#1B3459", width: 255, marginTop: 47 }}
+              type="submit"
+            />
+          </Column>
+        </Row>
+      </BoxContainer>
+    </form>
+  );
+};
 
 export default EditProfile;

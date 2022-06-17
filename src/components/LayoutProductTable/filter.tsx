@@ -5,7 +5,7 @@ import IconCommingSale from "@components/Icons/commingSale";
 import IconStopSale from "@components/Icons/stopSale";
 import IconWaitPaymentSale from "@components/Icons/waitPayment";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Grid } from "@mui/material";
+import { Checkbox, Grid } from "@mui/material";
 import { BodyRequest } from "@service/productTable";
 import dynamic from "next/dynamic";
 import { useEffect } from "react";
@@ -19,6 +19,12 @@ interface PropsI {
     body?: BodyRequest;
 }
 
+interface FormI {
+    projectTypeId: string,
+    projectLevel1: string,
+    saleProductStatus: string[],
+    projectId: string
+}
 
 const DynamicMenuDropdown = dynamic(() =>
     import("ItemComponents/MenuDropdown").then(
@@ -34,16 +40,18 @@ const Filter = (props: PropsI) => {
         (state: RootState) => state.menubar
     );
 
-    const formControler = useForm<{ status: string[], khu: string, projectTypeId: string, projectId: string }>({
+    const formControler = useForm<FormI>({
         mode: 'onChange',
         resolver: yupResolver(yup.object().shape({})),
-        defaultValues: { status: [] }
+        defaultValues: { saleProductStatus: [] }
     });
     const { control, handleSubmit, watch, getValues } = formControler
 
     useEffect(() => {
-        onSubmit({ ...body, projectId: getValues('projectId') })
-    }, [watch('projectId')])
+        if (getValues('projectId')) {
+            onSubmit({ ...body, projectId: getValues('projectId'), saleProductStatus: getValues('saleProductStatus') as string[] })
+        }
+    }, [watch('projectId'), watch('saleProductStatus')]);
 
     const statusOptions = [
         { label: "Ngừng bán", value: -1 },
@@ -106,7 +114,7 @@ const Filter = (props: PropsI) => {
                 <FormGroup sx={{ mb: 2, paddingRight: 2 }} fullWidth>
                     <ControllerSelect
                         variant="outlined"
-                        name="khu"
+                        name="projectTypeId"
                         label="Khu"
                         control={control}
                         fullWidth
@@ -122,7 +130,7 @@ const Filter = (props: PropsI) => {
                 <FormGroup sx={{ mb: 2, paddingRight: 2 }} fullWidth>
                     <ControllerSelect
                         variant="outlined"
-                        name="status"
+                        name="saleProductStatus"
                         label="Trạng thái"
                         control={control}
                         fullWidth
@@ -132,14 +140,15 @@ const Filter = (props: PropsI) => {
                         isClear
                         dataSelect={statusOptions}
                         multiple
-                    // renderItemSelect={(item) => {
-                    //     return (
-                    //         <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-                    //             <div>{item.label}</div>
-                    //             <div>{renderIcon(item)}</div>
-                    //         </div>
-                    //     )
-                    // }}
+                        renderItemSelect={(item) => {
+                            return (
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                                    <div><Checkbox checked={(watch('saleProductStatus') as (string | number)[]).includes(item?.value)} /></div>
+                                    <div>{item.label}</div>
+                                    <div>{renderIcon(item)}</div>
+                                </div>
+                            )
+                        }}
                     />
                 </FormGroup>
             </Grid>

@@ -5,8 +5,13 @@ import IconCommingSale from "@components/Icons/commingSale";
 import IconStopSale from "@components/Icons/stopSale";
 import IconWaitPaymentSale from "@components/Icons/waitPayment";
 import styled from "@emotion/styled";
-import { Check } from "@mui/icons-material";
-import { Paper, Table, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import Check from "@mui/icons-material/Check";
+import Table from "@mui/material/Table";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
 import { BodyRequest, getListProductTable } from "@service/productTable";
 import { useEffect, useState } from "react";
 import Filter from "./filter";
@@ -57,32 +62,13 @@ const TextTable = styled.span`
 `
 
 const ProductTablePages = () => {
-
-
-    function createData(
-        name: string,
-        calories: number,
-        fat: number,
-        carbs: number,
-        protein: number,
-    ) {
-        return { name, calories, fat, carbs, protein };
-    }
-
-    const rows = [
-        createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-        createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-        createData('Eclair', 262, 16.0, 24, 6.0),
-        createData('Cupcake', 305, 3.7, 67, 4.3),
-        createData('Gingerbread', 356, 16.0, 49, 3.9),
-    ];
-
     const [body, setBody] = useState<BodyRequest>();
     const [data, setData] = useState<{ lstDetailRow: DetailRowI[], lstProductionRow: ProductionRowI[] }>();
 
     const getProduct = async (body: BodyRequest) => {
+        // const newValues: BodyRequest = { ...body, saleProductStatus: (body.saleProductStatus as string[]).join(',') }
         const response = await getListProductTable(body);
-        setData(response.responseData)
+        setData(response?.responseData ?? [])
     }
 
     useEffect(() => {
@@ -110,7 +96,6 @@ const ProductTablePages = () => {
                     <span onClick={() => { }} style={{ color: 'black', alignItems: 'center', display: 'flex', flexDirection: 'column' }}>
                         <>
                             <IconAvaliableSale />
-                            {console.log(item.price, '-------item.price--------')}
                             {item.price}
                         </>
                     </span>

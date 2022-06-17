@@ -35,10 +35,10 @@ const useProjectList = () => {
             setLoading(true);
             try {
                 const res = await getListProjectTNR(params, body);
-                setData(res.responseData);
+                setData(res?.responseData);
                 let count = 0;
-                if (res.responseData.length > 0) {
-                    count = (Number(res.responseData?.[0].tongBanGhi)) / params.pageSize
+                if (res?.responseData.length > 0) {
+                    count = (Number(res?.responseData?.[0].tongBanGhi)) / params.pageSize
                 }
                 setTotalPage(Math.ceil(count));
             } catch (error) {
