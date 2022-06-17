@@ -44,7 +44,7 @@ export default function SliderProductHotComponent() {
         centeredSlides={false}
         slidesPerView={3}
         autoplay={{
-          delay: 500,
+          delay: 2000,
           disableOnInteraction: false,
         }}
         navigation={{

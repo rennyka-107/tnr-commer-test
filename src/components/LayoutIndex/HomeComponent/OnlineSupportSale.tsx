@@ -128,7 +128,7 @@ export default function OnlineSupportSale() {
       </WrapOSS>
       <div style={{ marginTop: 50 }}>
         <ButtonStyled onClick={() => {
-			Router.replace(`/buyingGuide`)
+			Router.replace(`/buyingGuide?idUserManual=3e63c59e-7995-4f8b-b553-740d131a052f&&selected=0`)
 		}}>
          Xem Chi Tiết&nbsp;&nbsp;&nbsp;
           <IconMuaOnline />

@@ -118,7 +118,7 @@ const FooterBot = ({ listMenuBarProjectType, listUserManual }: MenuProps) => {
           </LineInfo>
           <LineInfo style={{ marginTop: 5 }}>
             <TitleTypo>
-              TNR Version 1.1.3 Copyright © www.example.com {""}
+              TNR Version 1.1.4 Copyright © www.example.com {""}
             </TitleTypo>
           </LineInfo>
         </BlockDiv>

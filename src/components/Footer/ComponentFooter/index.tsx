@@ -20,8 +20,8 @@ const Footer = () => {
     (async () => {
       try {
         const responseList: any = await getListMenuBarProjectTypeApi();
-        dispatch(getListMenuBarProjectType(responseList.responseData));
 		const response = await getListUserManualApi();
+        dispatch(getListMenuBarProjectType(responseList.responseData));
 		dispatch(getListUserManual(response.responseData));
       } catch (error) {
         console.log(error);

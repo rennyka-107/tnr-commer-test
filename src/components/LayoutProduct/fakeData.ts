@@ -85,30 +85,7 @@ export const FakeDataTable3 = [
     valuechietkhau: 0.5,
     toalbill: -10000000,
   },
-  {
-    title: "Chiết khấu cho khách hàng mua sỉ",
-    subTitle: "Tỉ lệ chiết khẩu",
-    valuechietkhau: 0.5,
-    toalbill: -10000000,
-  },
-  {
-    title: "Chiết khấu cho khách hàng mua sỉ",
-    subTitle: "Tỉ lệ chiết khẩu",
-    valuechietkhau: 0.5,
-    toalbill: -10000000,
-  },
-  {
-    title: "Chiết khấu cho khách hàng mua sỉ",
-    subTitle: "Tỉ lệ chiết khẩu",
-    valuechietkhau: 0.5,
-    toalbill: -10000000,
-  },
-  {
-    title: "Chiết khấu cho khách hàng mua sỉ",
-    subTitle: "Tỉ lệ chiết khẩu",
-    valuechietkhau: 0.5,
-    toalbill: -10000000,
-  },
+
   
 ];
 
@@ -120,69 +97,16 @@ export const FakeDataTable4 = [
 	  value2: 1,
 	},
 	{
-		title: "Đợt 1",
+		title: "Đợt 2",
 		subTitle: "Ký hợp đồng mua bán",
 		value1: 2000000000000,
 		value2: 50,
 	},
 	{
-		title: "Đợt 1",
+		title: "Đợt 3",
 		subTitle: "Bàn giao giấy chứng nhận",
 		value1: 1950000000000,
 		value2: 49,
 	},
-	{
-		title: "Đợt 1",
-		subTitle: "Ký hợp đồng mua bán",
-		value1: 50000000,
-		value2: 1,
-	  },
-	  {
-		  title: "Đợt 1",
-		  subTitle: "Ký hợp đồng mua bán",
-		  value1: 2000000000000,
-		  value2: 50,
-	  },
-	  {
-		  title: "Đợt 1",
-		  subTitle: "Bàn giao giấy chứng nhận",
-		  value1: 1950000000000,
-		  value2: 49,
-	  },
-	  {
-		title: "Đợt 1",
-		subTitle: "Ký hợp đồng mua bán",
-		value1: 50000000,
-		value2: 1,
-	  },
-	  {
-		  title: "Đợt 1",
-		  subTitle: "Ký hợp đồng mua bán",
-		  value1: 2000000000000,
-		  value2: 50,
-	  },
-	  {
-		  title: "Đợt 1",
-		  subTitle: "Bàn giao giấy chứng nhận",
-		  value1: 1950000000000,
-		  value2: 49,
-	  },
-	  {
-		  title: "Đợt 1",
-		  subTitle: "Ký hợp đồng mua bán",
-		  value1: 50000000,
-		  value2: 1,
-		},
-		{
-			title: "Đợt 1",
-			subTitle: "Ký hợp đồng mua bán",
-			value1: 2000000000000,
-			value2: 50,
-		},
-		{
-			title: "Đợt 1",
-			subTitle: "Bàn giao giấy chứng nhận",
-			value1: 1950000000000,
-			value2: 49,
-		},
+	
   ];

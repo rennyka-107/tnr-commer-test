@@ -246,13 +246,13 @@ const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
           <WrapItemOnCard>
             <TextLeftOnCardLeft>Loại bất động sản:</TextLeftOnCardLeft>
             <TextRightOnCardLeft>
-              {dataProduct?.apartmentModel?.name}
+              {dataProduct?.apartmentModel?.name ? dataProduct?.apartmentModel?.name : "N/A"}
             </TextRightOnCardLeft>
           </WrapItemOnCard>
           <WrapItemOnCard>
             <TextLeftOnCardLeft>Mã lô thương mại:</TextLeftOnCardLeft>
             <TextRightOnCardLeft>
-              {dataProduct?.lotSymbolCommercial}
+              {dataProduct?.lotSymbolCommercial ? dataProduct?.lotSymbolCommercial : "N/A"}
             </TextRightOnCardLeft>
           </WrapItemOnCard>
           <WrapItemOnCard>
@@ -271,15 +271,15 @@ const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
           </WrapItemOnCard>
           <WrapItemOnCard>
             <TextLeftOnCardLeft>Diện tích đất:</TextLeftOnCardLeft>
-            <TextRightOnCardLeft>{dataProduct?.clearArea}</TextRightOnCardLeft>
+            <TextRightOnCardLeft>{dataProduct?.clearArea ? dataProduct?.clearArea : "N/A"}</TextRightOnCardLeft>
           </WrapItemOnCard>
           <WrapItemOnCard>
             <TextLeftOnCardLeft>Diện tích xây dựng:</TextLeftOnCardLeft>
-            <TextRightOnCardLeft>{dataProduct?.buildArea}</TextRightOnCardLeft>
+            <TextRightOnCardLeft>{dataProduct?.buildArea ? dataProduct?.buildArea : "N/A"}</TextRightOnCardLeft>
           </WrapItemOnCard>
           <WrapItemOnCard>
             <TextLeftOnCardLeft>Số tầng:</TextLeftOnCardLeft>
-            <TextRightOnCardLeft>{dataProduct?.floorNum}</TextRightOnCardLeft>
+            <TextRightOnCardLeft>{dataProduct?.floorNum ? dataProduct?.floorNum : "N/A"}</TextRightOnCardLeft>
           </WrapItemOnCard>
         </WrapCardItem>
         <ContainerBottomLeft>
@@ -299,7 +299,7 @@ const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
               overflowY: FakeDataTable3.length >= 5 ? "scroll" : "hidden",
             }}
           >
-            {productItem.ListPromotion.map((item, index) => (
+            {FakeDataTable3.map((item, index) => (
               <div
                 style={{
                   border: "1px solid #D8D8D8",
@@ -319,16 +319,16 @@ const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
                   }}
                 >
                   <TextBoldInWrapBottom>
-                    {item.PromotionName}
+                    {item.title}
                   </TextBoldInWrapBottom>
                   <TextInWrapBottom>
-                    Tỉ lệ chiết khấu: N/A&nbsp;%
+                    Tỉ lệ chiết khấu: {item.valuechietkhau}&nbsp;%
                   </TextInWrapBottom>
                 </div>
                 <div style={{ border: "1px solid #E7E9EC" }} />
                 <div style={{ margin: "auto" }}>
                   <TextBoldInWrapBottom>
-                    -{item.Value}
+                    {item.toalbill}
                   </TextBoldInWrapBottom>
                 </div>
               </div>
@@ -364,7 +364,7 @@ const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
                   fontWeight: 400,
                 }}
               >
-                {dataProduct.lurUnitPrice}
+                {dataProduct.lurUnitPrice ? dataProduct.lurUnitPrice : "N/A"}
               </TextOnCardRight>
             </div>
             <WrapRightCardText>
@@ -402,7 +402,7 @@ const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
                   fontWeight: 400,
                 }}
               >
-                {dataProduct.lurPrice}
+                {dataProduct.lurPrice ? dataProduct.lurPrice : "N/A"}
               </TextOnCardRight>
             </div>
             <WrapRightCardText>
@@ -440,7 +440,7 @@ const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
                   fontWeight: 400,
                 }}
               >
-                {productItem.BuildPrice}
+                {productItem.BuildPrice ? productItem.BuildPrice : "N/A"}
               </TextOnCardRight>
             </div>
             <WrapRightCardText>
@@ -578,13 +578,13 @@ const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
                   },
                 }}
               >
-                {productItem.ListSchedule.map((name, index) => (
+                {FakeDataTable4.map((name, index) => (
                   <MenuItem
                     key={index}
-                    value={name.ScheduleID}
+                    value={name.value1}
                     // style={getStyles(name.ScheduleID, personName, theme)}
                   >
-                    {name.ScheduleName}
+                    {name.title}
                   </MenuItem>
                 ))}
               </Select>
@@ -597,7 +597,7 @@ const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
               padding: 20,
             }}
           >
-            {productItem.ListSchedule.map((item, index) => (
+            {FakeDataTable4.map((item, index) => (
               <div
                 style={{
                   display: "flex",
@@ -615,15 +615,15 @@ const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
                   }}
                 >
                   <div>
-                    <TextCenterRight>{item.ScheduleName}</TextCenterRight>
-                    <SubTextCenterRight>Ký hợp đồng mua bán</SubTextCenterRight>
+                    <TextCenterRight>{item.title}</TextCenterRight>
+                    <SubTextCenterRight>{item.subTitle}</SubTextCenterRight>
                   </div>
                   <div>
                     <TextCenterRight>
-                      {/* {currencyFormat(item4.value1)} */}N/A
+                      {currencyFormat(item.value1)}
                     </TextCenterRight>
                     <SubTextCenterRight>
-                      {/* {item4.value2}% giá trị HĐ */}N/A
+                      {item.value2}% giá trị HĐ
                     </SubTextCenterRight>
                   </div>
                 </div>

@@ -143,6 +143,7 @@ const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
         break;
     }
   }, []);
+  
   const scrollView = () => {
     setCheckSale(true);
     if (Router.pathname === "/") {
@@ -166,7 +167,7 @@ const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
         return;
       }
     } else {
-      Router.replace(`/buyingGuide?id=4`);
+      Router.replace(`/buyingGuide?idUserManual=3e63c59e-7995-4f8b-b553-740d131a052f&&selected=0`);
     }
   };
 

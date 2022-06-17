@@ -107,7 +107,7 @@ const BuyingGuideComponent = ({ data }: PropsUserManual) => {
     index: number,
     idSelect: string
   ) => {
-    Router.push(`/buyingGuide?idUserManual=${idSelect}&&selected=${index}`);
+	Router.replace(`/buyingGuide?idUserManual=${idSelect}&&selected=${index}`);
     setSelectedIndex(index);
   };
 

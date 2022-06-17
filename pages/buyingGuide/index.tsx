@@ -5,7 +5,8 @@ import dynamic from "next/dynamic";
 import { RootState, wrapper } from "../../store/store";
 import { getListUserManualApi } from "../api/userManualApi";
 import { getListUserManual } from "../../store/userManualSlice";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
 
 const DynamicBuyingGuide = dynamic(
   () => import("../../src/components/BuyingGuide"),
@@ -14,9 +15,26 @@ const DynamicBuyingGuide = dynamic(
 
 const BuyingGuide = () => {
   const Router = useRouter();
+  const dispatch = useDispatch();
   const { listUserManual } = useSelector(
     (state: RootState) => state.userManual  );
   const params = Router.query.id;
+
+
+  const fetchAdvandedSearchList = async () => {
+    try {
+      const response = await getListUserManualApi();
+      dispatch(getListUserManual(response.responseData));
+
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+	fetchAdvandedSearchList()
+  },[Router])
+
   return (
     <Page
       meta={{
@@ -32,18 +50,20 @@ const BuyingGuide = () => {
   );
 };
 
-export const getServerSideProps = wrapper.getServerSideProps(
-  (store) => async () => {
-    try {
-      const response = await getListUserManualApi();
-      store.dispatch(getListUserManual(response.responseData));
-    } catch (err) {
-      console.log(err);
-    }
-    return {
-      props: {},
-    };
-  }
-);
+// export const getServerSideProps = wrapper.getServerSideProps(
+//   (store) => async () => {
+//     try {
+//       const response = await getListUserManualApi();
+//       store.dispatch(getListUserManual(response.responseData));
+//     } catch (err) {
+//       console.log(err);
+//     }
+//     return {
+//       props: {
+		
+// 	  },
+//     };
+//   }
+// );
 
 export default BuyingGuide;

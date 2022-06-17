@@ -31,7 +31,7 @@ export default function SliderShowComponent() {
       <IconCarouelHLeftArrow style={{ cursor: "pointer" }} />
       <Swiper
         spaceBetween={10}
-		speed={1000}
+		speed={5000}
         centeredSlides={true}
         slidesPerView={3}
 		

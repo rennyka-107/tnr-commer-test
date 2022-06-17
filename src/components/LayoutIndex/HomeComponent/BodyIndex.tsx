@@ -35,6 +35,7 @@ const WrapIconContainer = styled.div`
   align-items: center;
   cursor: pointer;
   max-width: 150px;
+  gap: 20px;
 `;
 const WrapIcon = styled.div`
   width: 111px;
@@ -44,7 +45,7 @@ const WrapIcon = styled.div`
   padding: 30px;
   background-size: contain;
   :hover {
-    background-image: url(${(props) => props.theme['icon']}) !important;
+    background-image: url(${(props) => props.theme["icon"]}) !important;
     background-size: contain;
   }
 `;
@@ -131,7 +132,7 @@ export default function BodyIndex() {
   return (
     <FlexContainer>
       <WrapContainer>
-        {(listMenuBarProjectType || []).map((item, index) => {
+        {(listMenuBarProjectType?.slice(0, 6) || []).map((item, index) => {
           return (
             <WrapIconContainer
               key={index}

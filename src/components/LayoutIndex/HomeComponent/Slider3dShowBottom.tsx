@@ -154,7 +154,7 @@ export default function Slider3dShowBottom() {
               prevEl: ".y-left",
             }}
             roundLengths={true}
-            speed={1000}
+            speed={5000}
             effect="coverflow"
             slidesPerView="auto"
             centeredSlides={true}

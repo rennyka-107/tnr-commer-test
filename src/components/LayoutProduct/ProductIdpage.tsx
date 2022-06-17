@@ -770,20 +770,20 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                   <WrapItemCenter>
                     <IconFrame />
 
-                    <TextCenterItem>{dataProduct?.landArea}</TextCenterItem>
+                    <TextCenterItem>{dataProduct?.landArea ? dataProduct?.landArea: "N/A"} m²</TextCenterItem>
                   </WrapItemCenter>
                   <WrapItemCenter>
                     <IconBath />
-                    <TextCenterItem>{dataProduct?.numBath}</TextCenterItem>
+                    <TextCenterItem>{dataProduct?.numBath ? dataProduct?.numBath : "N/A"}</TextCenterItem>
                   </WrapItemCenter>
                   <WrapItemCenter>
                     <IconBedDouble />
-                    <TextCenterItem>{dataProduct?.numBed} m²</TextCenterItem>
+                    <TextCenterItem>{dataProduct?.numBed ? dataProduct?.numBed :"N/A"}</TextCenterItem>
                   </WrapItemCenter>
                   <WrapItemCenter>
                     <IconCompass />
                     <TextCenterItem>
-                      {dataProduct?.doorDirection}
+                      {dataProduct?.doorDirection ? dataProduct?.doorDirection : "N/A"}
                     </TextCenterItem>
                   </WrapItemCenter>
                 </CenterIntemWrap>
@@ -794,7 +794,7 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                       Giá niêm yết{" "}
                     </TextBottomStyled>
                     <NumberBottomStyled>
-                      {currencyFormat(dataProduct?.price)}đ
+                      {dataProduct?.price ? currencyFormat(dataProduct?.price) : "N/A"}đ
                     </NumberBottomStyled>
                   </div>
                   <div style={{ display: "flex" }}>
@@ -802,7 +802,7 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                       Đơn giá thông thuỷ{" "}
                     </TextBottomStyled2>
                     <NumberBottomStyled2>
-                      {currencyFormat(dataProduct?.unitPrice)}đ/m2
+                      {dataProduct?.unitPrice ? currencyFormat(dataProduct?.unitPrice) : "N/A"}đ/m2
                     </NumberBottomStyled2>
                   </div>
                 </div>

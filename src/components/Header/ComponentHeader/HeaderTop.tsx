@@ -83,10 +83,10 @@ const HeaderTop = () => {
           {/* <Link href={`http://localhost:3000${PathRoute.BuyingGuide}`} passHref> */}
           <TextLink
             onClick={() => {
-              Router.replace(`${PathRoute.BuyingGuide}`, undefined, {
-                shallow: true,
-              });
-            }}
+				Router.replace(`${PathRoute.BuyingGuide}?idUserManual=3e63c59e-7995-4f8b-b553-740d131a052f&&selected=0`, undefined, {
+				  shallow: true,
+				});
+			  }}
           >
             Về quy trình mua BĐS Online
           </TextLink>
@@ -100,7 +100,7 @@ const HeaderTop = () => {
           {/* <Link href="" passHref > */}
           <TextLink
             onClick={() => {
-              Router.replace(`${PathRoute.BuyingGuide}`, undefined, {
+              Router.replace(`${PathRoute.BuyingGuide}?idUserManual=3e63c59e-7995-4f8b-b553-740d131a052f&&selected=0`, undefined, {
                 shallow: true,
               });
             }}

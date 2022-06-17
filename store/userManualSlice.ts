@@ -23,7 +23,6 @@ export const userManualSlice = createSlice({
     },
 	getUserManualById: (state, action) => {
 		state.userManualById = action.payload
-		console.log("userManualById",action)
 	}
   },
 });
