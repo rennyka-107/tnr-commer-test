@@ -11,12 +11,12 @@ import { validateLine } from "utils/constants";
 import PathRoute from "utils/PathRoute";
 import Regexs from "utils/Regexs";
 import * as yup from "yup";
-import { forgetPassword } from "../../../pages/api/changePassword";
 import Image from "next/image";
+import { forgetPassword } from "../../../../pages/api/changePassword";
 
 const Form = styled.div`
   margin-top: 10px;
-  border-radius: 10px
+  border-radius: 10px;
 `;
 
 const NewPassword = styled.div`
@@ -44,7 +44,7 @@ const TextNotice = styled.div`
   font-size: 16px;
   line-height: 170%;
   text-align: center;
-  margin: 25px 0
+  margin: 25px 0;
 `;
 
 export interface Param {
@@ -101,7 +101,7 @@ const ChangeNewPass = (props: Props) => {
 
   return (
     <Form>
-      {!!success ? (
+      {!success ? (
         <form onSubmit={handleSubmit((values) => onSubmit(values))}>
           <NewPassword>Mật khẩu mới</NewPassword>
           <TypeConFirm>Mời bạn nhập mật khẩu mới</TypeConFirm>
@@ -118,7 +118,7 @@ const ChangeNewPass = (props: Props) => {
           </FormGroup>
           <FormGroup sx={{ mb: 2, mt: 2 }} fullWidth>
             <PasswordTextField
-              name="password"
+              name="rePassword"
               control={control}
               placeholder="Mật khẩu mới"
               required
@@ -150,10 +150,18 @@ const ChangeNewPass = (props: Props) => {
           </TextNotice>
           <FormGroup sx={{ mb: 2 }} fullWidth>
             <CustomButton
-              label="Tiếp tục"
+              label="Đăng nhập"
               style={{ background: "#D60000" }}
               type="button"
-              onClick={() => Route.push({ pathname: PathRoute.Login })}
+              onClick={() =>
+                Route.push({
+                  pathname: PathRoute.Login,
+                  query: {
+                    prePath: Route.pathname,
+                    tabIndex: "login",
+                  },
+                })
+              }
             />
           </FormGroup>
         </NoticeContainer>

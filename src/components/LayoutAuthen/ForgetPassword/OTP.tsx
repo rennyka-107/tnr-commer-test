@@ -1,27 +1,22 @@
 import CustomButton from "@components/CustomComponent/CustomButton";
 import FormGroup from "@components/Form/FormGroup";
-import { Text18Styled } from "@components/StyledLayout/styled";
 import styled from "@emotion/styled";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { Box, FormControlLabel, Grid, Radio, RadioGroup } from "@mui/material";
-import useAuth from "hooks/useAuth";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
-import { useForm } from "react-hook-form";
 import OtpInput from "react-otp-input";
 import { CommonResponse } from "type/common";
 import HttpClient from "utils/HttpClient";
-import * as yup from "yup";
+import { checkValidOTP } from "../../../../pages/api/changePassword";
 
 const Form = styled.div`
   margin-top: 10px;
 `;
-const LabelInput = styled.div`
+const Label = styled.div`
   color: #48576d;
   font-weight: 700;
   font-size: 26px;
   line-height: 30px;
-  margin: 30px 0px;
+  margin-bottom: 30px;
 `;
 const Content = styled.div`
   font-weight: 400;
@@ -57,7 +52,6 @@ export interface Props {
 
 const OTP = (props: Props) => {
   const [OTP, setOTP] = useState("");
-  const Route = useRouter();
 
   const [checked, setChecked] = useState(true);
   const [time, setTime] = useState<number>(120);
@@ -85,9 +79,7 @@ const OTP = (props: Props) => {
   }, []);
 
   const checkOTP = () => {
-    HttpClient.get<any, CommonResponse>(
-      `/api/v1/verify/check-otp-valid?username=${props.username}&otp=${OTP}`
-    ).then((response) => {
+    checkValidOTP(props.username, OTP).then((response) => {
       if (response.responseCode === "00" && response.responseData) {
         props.next();
       } else {
@@ -97,23 +89,17 @@ const OTP = (props: Props) => {
   };
 
   const reSend = () => {
-    HttpClient.post<any, CommonResponse>(
-      `/api-account/v1/account/forget-password?username=${props.username}`,
-      {},
-      {
-        withToken: false,
-      }
-    ).then((response) => {
+    checkValidOTP(props.username, OTP).then((response) => {
       if (response.responseCode === "00") {
         setTime(120);
-        countDown()
+        countDown();
       }
     });
   };
 
   return (
     <Form>
-      <LabelInput>Nhập mã xác thực</LabelInput>
+      <Label>Nhập mã xác thực</Label>
       <OtpInput
         value={OTP}
         onChange={(otp) => setOTP(otp)}
@@ -132,13 +118,7 @@ const OTP = (props: Props) => {
             time ? ` Vui lòng nhấn nhận mã xác thực sau ${time}s` : ""
           }`}
           <br />
-          {time ? (
-            ""
-          ) : (
-            <Send onClick={reSend}>
-              <a>Gửi lại mã xác thực</a>
-            </Send>
-          )}
+          {time ? "" : <Send onClick={reSend}>Gửi lại mã xác thực</Send>}
         </Content>
       ) : (
         <NotiFailed>Mã xác thực không chính xác</NotiFailed>
@@ -146,8 +126,6 @@ const OTP = (props: Props) => {
       <FormGroup sx={{ mb: 2 }} fullWidth>
         <CustomButton
           label="Tiếp tục"
-          // disabled={OTP.length !== 6}
-          // disabled={true}
           style={{ background: "#D60000" }}
           type="button"
           onClick={checkOTP}

@@ -12,14 +12,14 @@ const DynamicLogin = dynamic(() =>
 );
 
 const DynamicRegister = dynamic(() =>
-  import("./Reigster").then(
+  import("./Register/index").then(
     (m) => m.default,
     (e) => null as never
   )
 );
 
-const Dynamicforgetpassword = dynamic(() =>
-  import("./ForgetPassword").then(
+const DynamicForgetPassword = dynamic(() =>
+  import("./ForgetPassword/index").then(
     (m) => m.default,
     (e) => null as never
   )
@@ -103,9 +103,9 @@ const LinkLabel = styled.a`
 `;
 
 const AuthenPages = () => {
-  const [tab, setTab] = useState<"login" | "register" | "forgetPassword">(
-    "register"
-  );
+  const [tab, setTab] = useState<
+    "login" | "register" | "forgetPassword" | "confirm"
+  >("register");
   const { tabIndex } = useRouter().query;
   const { query } = useRouter();
   const renderTab = useMemo(() => {
@@ -115,7 +115,10 @@ const AuthenPages = () => {
       case "register":
         return <DynamicRegister />;
       case "forgetPassword":
-        return <Dynamicforgetpassword />;
+        return <DynamicForgetPassword />;
+      case "confirm":
+        return <DynamicRegister />;
+
       default:
         return null;
     }
@@ -125,8 +128,14 @@ const AuthenPages = () => {
     if (!!query.tabIndex && query.tabIndex == "login") {
       setTab("login");
     }
+    if (!!query.tabIndex && query.tabIndex == "register") {
+      setTab("register");
+    }
     if (!!query.tabIndex && query.tabIndex == "forgetPassword") {
       setTab("forgetPassword");
+    }
+    if (!!query.tabIndex && query.tabIndex == "confirm") {
+      setTab("confirm");
     }
   }, [query]);
   return (
@@ -141,31 +150,7 @@ const AuthenPages = () => {
       </ItemLeft>
       <ItemRight>
         <ContainForm>
-          {tab === "forgetPassword" ? (
-            <>
-              {/* <OTP /> */}
-              {/* <Tabs
-                        value={tab}
-                        onChange={(event, value) => {
-                            if (tab !== value) {
-                                setTab(value)
-                            }
-                        }}
-                        indicatorColor="secondary"
-                        TabIndicatorProps={{ style: { background: '#FEC83C' } }}
-                        scrollButtons
-                        allowScrollButtonsMobile
-                    >
-                        <Tab value="forgetPassword"
-                        label="Quên mật khẩu"
-                        style={{
-                            fontSize: 20,
-                            color: tab == "forgetPassword" ? '#48576D' : '#8190A7',
-    
-                        }} />
-                    </Tabs> */}
-            </>
-          ) : (
+          {tab === "forgetPassword" || tab === "confirm" ? null : (
             <Tabs
               value={tab}
               onChange={(event, value) => {

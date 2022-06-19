@@ -2,9 +2,11 @@ import Page from "@layouts/Page";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
-import { Box, CircularProgress } from "@mui/material";
+import { Box, Button, CircularProgress } from "@mui/material";
 import { RootState } from "../../store/store";
 import { useDispatch, useSelector } from "react-redux";
+import Container from "@components/Container";
+import { Grid } from "@mui/material";
 import {
   apiGetInformationProject,
   apiGetListLevelProject,
@@ -12,9 +14,10 @@ import {
 } from "../api/mapProject";
 import isEmpty from "lodash.isempty";
 import {
+  resetProjectMap,
   setImgMap,
   setListLevel,
-  setProjectInfomation,
+  setProjectInformation,
 } from "../../store/projectMapSlice";
 import { getListTabsProject } from "../../store/projectSlice";
 
@@ -28,7 +31,7 @@ const RightListProduct = dynamic(
   { loading: () => <p>...</p> }
 );
 
-const ProjectInformation = dynamic(
+const DynamicProjectInformation = dynamic(
   () => import("@components/LayoutProjectDetail/ProjectInformation"),
   { loading: () => <p>...</p> }
 );
@@ -43,6 +46,10 @@ const ProjectDetail = () => {
     (state: RootState) => state.projectMap.ListLevel
   );
 
+  const ProjectInformation = useSelector(
+    (state: RootState) => state.projectMap.ProjectInformation
+  );
+
   const Target = useSelector((state: RootState) => state.projectMap.Target);
 
   async function fetchListLevelProject() {
@@ -52,7 +59,7 @@ const ProjectDetail = () => {
 
   async function fetchProjectInformation() {
     const response = await apiGetInformationProject(id as string);
-    dispatch(setProjectInfomation(response.responseData));
+    dispatch(setProjectInformation(response.responseData));
   }
 
   async function fetchProjectTabs() {
@@ -60,50 +67,30 @@ const ProjectDetail = () => {
     dispatch(getListTabsProject(response.responseData));
   }
 
-  // async function fetchListChildMap() {
-  //   if (isEmpty(Target)) {
-  //     if (!isEmpty(ListLevel) && ListLevel.length > 2) {
-  //       ListLevel.forEach(async (lv) => {
-  //         if (lv.level === 1) {
-  //           const response = await apiGetListChildMapByIdLevel(ListLevel[1].id);
-  //           dispatch(setListChild(response.responseData));
-  //         }
-  //       });
-  //     }
-  //   } else {
-  //     const response = await apiGetListChildMapByIdParent(Target.id);
-  //     dispatch(setListChild(response.responseData));
-  //   }
-  // }
-
   useEffect(() => {
-    // (async () => {
-    //   try {
-    //     await fetchListChildMap();
-    //   } catch (err) {
-    //     console.log(err);
-    //   }
-    // })();
     if (isEmpty(Target) && !isEmpty(ListLevel)) {
       dispatch(setImgMap(ListLevel[0]["map"]));
     }
   }, [ListLevel, Target]);
 
-  useEffect(() => {
+  async function initialProjectMap() {
     if (!isEmpty(id)) {
-      (async () => {
-        try {
-          setLoading(true);
-          await fetchListLevelProject();
-          await fetchProjectInformation();
-          await fetchProjectTabs();
-          setLoading(false);
-        } catch (err) {
-          setLoading(false);
-          console.log(err);
-        }
-      })();
+      dispatch(resetProjectMap());
+      try {
+        setLoading(true);
+        await fetchListLevelProject();
+        await fetchProjectInformation();
+        await fetchProjectTabs();
+        setLoading(false);
+      } catch (err) {
+        setLoading(false);
+        console.log(err);
+      }
     }
+  }
+
+  useEffect(() => {
+    initialProjectMap();
   }, [router, id]);
 
   const fetchComponent = () => {
@@ -113,7 +100,6 @@ const ProjectDetail = () => {
           <>
             <Box
               sx={{
-                mt: "125px",
                 mb: "100px",
                 width: "100vw",
                 display: "flex",
@@ -122,15 +108,15 @@ const ProjectDetail = () => {
             >
               <Box
                 sx={{
-                  width: "65vw",
-                  height: "65vw",
+                  width: "50vw",
+                  height: "50vw",
                 }}
               >
                 <DynamicMap />
               </Box>
               <RightListProduct />
             </Box>
-            <ProjectInformation />
+            <DynamicProjectInformation />
           </>
         ) : (
           <>
@@ -150,7 +136,20 @@ const ProjectDetail = () => {
         description: "TNR Ecommerce Product",
       }}
     >
-      {fetchComponent()}
+      <Container title={`${ProjectInformation.name ?? ""}`}>
+        {!isEmpty(Target) ? (
+          <Button
+            sx={{ pt: 0 }}
+            onClick={initialProjectMap}
+            size="small"
+          >
+            Bản đồ dự án
+          </Button>
+        ) : (
+          ""
+        )}
+        <Grid>{fetchComponent()}</Grid>
+      </Container>
     </Page>
   );
 };

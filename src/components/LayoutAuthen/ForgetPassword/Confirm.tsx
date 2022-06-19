@@ -3,7 +3,7 @@ import ControllerRadio from "@components/Form/ControllerRadio";
 import FormGroup from "@components/Form/FormGroup";
 import styled from "@emotion/styled";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Box, Grid, RadioGroup } from "@mui/material";
+import { Grid, RadioGroup } from "@mui/material";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { CommonResponse } from "type/common";
@@ -14,7 +14,6 @@ import * as yup from "yup";
 const Form = styled.div`
   margin-top: 10px;
 `;
-
 const ConFirm = styled.div`
   font-weight: 700;
   font-size: 26px;
@@ -29,36 +28,17 @@ const TypeConFirm = styled.div`
   color: #48576d;
   margin-bottom: 30px;
 `;
-const BoxInputStyled = styled(Box)(
-  {
-    width: "100%",
-    height: 44,
-    borderRadius: 8,
-    padding: "10px 46px",
-    marginTop: 3,
-    marginBottom: 16,
-  },
-  (props: { color?: string }) => ({
-    color: props.color ?? "#B8B8B8",
-    border: `1px solid ${props.color ?? "#b8b8b8"}`,
-  })
-);
 
 export interface Param {
   confirm: string;
 }
 export interface Props {
-  username: String;
-  next: () => void;
+  username?: String;
+  next?: () => void;
 }
 
-const ConfirmOTP = (props: Props) => {
-  // const [colorActive, setColorActive] = useState<string[]>([
-  //   "#FCB715",
-  //   "#C7C9D9",
-  // ]);
-  // const { login, isAuthenticated } = useAuth();
-  // const Route = useRouter();
+const Confirm = (props: Props) => {
+
   const validationSchema = yup.object().shape({
     confirm: yup
       .string()
@@ -107,7 +87,7 @@ const ConfirmOTP = (props: Props) => {
         <FormGroup sx={{ mb: 2 }} fullWidth>
           <CustomButton
             label="Tiếp tục"
-            style={{ background: "#D60000", marginTop: 30 }}
+            style={{ background: "#D60000" , marginTop: 30}}
             type="submit"
           />
         </FormGroup>
@@ -115,4 +95,4 @@ const ConfirmOTP = (props: Props) => {
     </Form>
   );
 };
-export default ConfirmOTP;
+export default Confirm;

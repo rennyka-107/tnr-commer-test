@@ -14,8 +14,8 @@ export default function ProjectInformation() {
     <Box
       sx={{
         backgroundColor: open ? "rgba(0,0,0,0.4)" : "#FFFFFF",
-        width: "100vw",
-        height: "66vw",
+        width: "80vw",
+        height: "50vw",
         position: "absolute",
         overflow: "hidden",
         top: 0,

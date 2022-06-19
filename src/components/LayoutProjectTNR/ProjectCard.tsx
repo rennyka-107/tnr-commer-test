@@ -1,7 +1,6 @@
 import {
   IconHeartProduct,
   IconMuaOnline,
-  IconPlusProduct,
 } from "@components/Icons";
 import { BoxTextOver } from "@components/StyledComponents";
 import styled from "@emotion/styled";
@@ -13,6 +12,7 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import ImageWithHideOnError from "hooks/ImageWithHideOnError";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import * as React from "react";
 import { MouseEventHandler } from "react";
 import Product3 from '../../../public/images/product3.png';
@@ -121,6 +121,7 @@ export default function ItemProjectCard({
   ticketCard,
   description,
 }: ProjectI) {
+  const router = useRouter();
   // function currencyFormat(num) {
   //     if (!num) {
   //         return;
@@ -208,7 +209,10 @@ export default function ItemProjectCard({
       <CardActions style={{ flexDirection: "column", marginBottom: 24 }}>
         <ButtonStyled
           onClick={() => {
-            onClick;
+            // onClick;
+            router.push(
+              `/project-detail/${id}`
+            );
           }}
         >
           Xem dự án&nbsp;

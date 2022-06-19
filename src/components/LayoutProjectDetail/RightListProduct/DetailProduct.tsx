@@ -1,0 +1,273 @@
+import {
+  Box,
+  Button,
+  CardMedia,
+  Grid,
+  IconButton,
+  Typography,
+} from "@mui/material";
+import React, { MouseEventHandler } from "react";
+import styled from "@emotion/styled";
+import {
+  IconBath,
+  IconBedDouble,
+  IconCompass,
+  IconFrame,
+  IconMuaOnline,
+  IconPlusCircle,
+} from "@components/Icons";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import { RootState } from "../../../../store/store";
+import { useSelector } from "react-redux";
+
+type Props = {
+  onBack?: Function;
+};
+
+const WrapperContent = styled(Box)`
+  width: 500px;
+  height: 100%;
+  background: #fff;
+  box-shadow: none;
+  padding: 0 16px;
+  margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+const WrapperImg = styled(Box)`
+  width: 100%;
+  position: relative;
+  margin-bottom: 1rem;
+`;
+const TitleStyled = styled(Typography)`
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 22px;
+  line-height: 26px;
+  color: #1b3459;
+`;
+const TextStyled = styled(Typography)`
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16px;
+  color: #1b3459;
+`;
+const DividerLine = styled.div`
+  width: 100%;
+  height: 0px;
+  border: 0.5px solid #c7c9d9;
+  margin-bottom: 15px;
+`;
+const TicketTag = styled(Box)`
+  padding: 7px 14px;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  background: #fec83c;
+  color: white;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16px;
+`;
+
+const TextBottomStyled = styled(Typography)`
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16px;
+
+  /* Brand */
+
+  color: #1b3459;
+`;
+const NumberBottomStyled = styled(Typography)`
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 21px;
+  /* identical to box height */
+
+  color: #d60000;
+`;
+const TextBottomStyled2 = styled(Typography)`
+  font-family: "Roboto";
+  font-style: italic;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 14px;
+  /* identical to box height */
+
+  /* Brand */
+
+  color: #1b3459;
+`;
+const NumberBottomStyled2 = styled(Typography)`
+  font-family: "Roboto";
+  font-style: italic;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 14px;
+  /* identical to box height */
+
+  color: #d60000;
+`;
+
+const ButtonStyled1 = styled(Button)`
+  width: 9rem;
+  height: 48px;
+  margin-top: 2rem;
+  background: #ffffff;
+  border-radius: 60px;
+  border: 1px solid #1b3459;
+  :hover {
+    background: #ea242a;
+    box-shadow: 4px 8px 24px #f2f2f5;
+    border: 1px solid #48576d;
+    border-radius: 60px;
+    color: #ffffff;
+    border: unset;
+  }
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 19px;
+  text-align: center;
+  color: #48576d;
+  text-transform: none;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+`;
+
+const ButtonStyled2 = styled(Button)`
+  width: 9rem;
+  height: 48px;
+  margin-top: 2rem;
+  background: #ea242a;
+  border-radius: 60px;
+  :hover {
+    background: #ffffff;
+    box-shadow: 4px 8px 24px #f2f2f5;
+    border: 1px solid #48576d;
+    border-radius: 60px;
+    color: #48576d;
+  }
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 19px;
+  text-align: center;
+  color: #ffffff;
+  text-transform: none;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+`;
+
+const DetailProduct = ({ onBack }: Props) => {
+  const Target = useSelector((state: RootState) => state.projectMap.Target);
+  function currencyFormat(num) {
+    if (!num) {
+      return;
+    }
+    return Number(num)
+      .toFixed(0)
+      .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+  }
+  return (
+    <WrapperContent>
+      <WrapperImg>
+        <CardMedia
+          component="img"
+          height={250}
+          image="https://dulichvietnam.com.vn/data/toa-nha-dep-nhat-viet-nam-8_5.jpg"
+          alt="img product"
+        />
+        <TicketTag>TNR Gold</TicketTag>
+      </WrapperImg>
+      <Box sx={{ width: "80%" }}>
+        <Box
+          sx={{ display: "flex", marginLeft: `-13.5%`, alignItems: "center" }}
+        >
+          <IconButton onClick={() => onBack()}>
+            <ArrowBackIosIcon />
+          </IconButton>
+          <TitleStyled>Lô A01</TitleStyled>
+        </Box>
+
+        <TextStyled style={{ margin: "10px auto" }}>Tòa A - Tầng 26</TextStyled>
+        <DividerLine />
+        <Grid sx={{ pb: 2 }} container rowSpacing={1}>
+          <Grid item xs={6} display={"flex"} alignItems={"center"}>
+            <IconBedDouble />
+            &nbsp;&nbsp;<TextStyled>02</TextStyled>
+          </Grid>
+          <Grid item xs={6} display={"flex"} alignItems={"center"}>
+            <IconFrame />
+            &nbsp;&nbsp;
+            <TextStyled>
+              80 m<sup>2</sup>
+            </TextStyled>
+          </Grid>
+          <Grid item xs={6} display={"flex"} alignItems={"center"}>
+            <IconBath />
+            &nbsp;&nbsp;<TextStyled>02</TextStyled>
+          </Grid>
+          <Grid item xs={6} display={"flex"} alignItems={"center"}>
+            <IconCompass />
+            &nbsp;&nbsp;<TextStyled>Đông nam</TextStyled>
+          </Grid>
+        </Grid>
+
+        <div style={{ marginTop: 12 }}>
+          <div style={{ display: "flex", marginBottom: 14 }}>
+            <TextBottomStyled style={{ marginRight: 40 }}>
+              Giá niêm yết{" "}
+            </TextBottomStyled>
+            <NumberBottomStyled>
+              {currencyFormat(3018933000)}đ
+            </NumberBottomStyled>
+          </div>
+          <div style={{ display: "flex" }}>
+            <TextBottomStyled2 style={{ marginRight: 19 }}>
+              Đơn giá thông thuỷ{" "}
+            </TextBottomStyled2>
+            <NumberBottomStyled2>
+              {currencyFormat(40580174)}đ/m2
+            </NumberBottomStyled2>
+          </div>
+        </div>
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <ButtonStyled1
+            onClick={() => {
+              console.log("so sanh");
+            }}
+            startIcon={<IconPlusCircle style={{ width: 16, height: 16 }} />}
+          >
+            So sánh
+          </ButtonStyled1>
+          <ButtonStyled2
+            onClick={() => {
+              console.log("Xem chi tiet");
+            }}
+            endIcon={<IconMuaOnline />}
+          >
+            Xem Chi Tiết
+          </ButtonStyled2>
+        </Box>
+      </Box>
+    </WrapperContent>
+  );
+};
+
+export default DetailProduct;

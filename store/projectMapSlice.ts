@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 interface InitialState {
-  ProjectInfomation: any & {
+  ProjectInformation: any & {
     id: string;
   };
   ListLevel: any[];
@@ -12,9 +12,10 @@ interface InitialState {
     features: any[];
   };
   ImgMap: string | null;
+  TargetShape: any;
 }
 const initialState: InitialState = {
-  ProjectInfomation: {
+  ProjectInformation: {
     id: "",
   },
   ListLevel: [],
@@ -25,17 +26,18 @@ const initialState: InitialState = {
     features: [],
   },
   ImgMap: null,
+  TargetShape: null,
 };
 
 export const projectMapSlice = createSlice({
   name: "projectMap",
-  initialState,
+  initialState: initialState,
   reducers: {
     setListLevel: (state, { payload }) => {
       state.ListLevel = payload;
     },
-    setProjectInfomation: (state, { payload }) => {
-      state.ProjectInfomation = payload;
+    setProjectInformation: (state, { payload }) => {
+      state.ProjectInformation = payload;
     },
     setTarget: (state, { payload }) => {
       state.Target = payload;
@@ -49,16 +51,24 @@ export const projectMapSlice = createSlice({
     setImgMap: (state, { payload }) => {
       state.ImgMap = payload;
     },
+    resetProjectMap: (state) => {
+      Object.assign(state, initialState);
+    },
+    setTargetShape: (state, { payload }) => {
+      state.TargetShape = payload;
+    },
   },
 });
 
 export const {
   setListLevel,
-  setProjectInfomation,
+  setProjectInformation,
   setTarget,
   setListChild,
   setGeoJsonData,
   setImgMap,
+  resetProjectMap,
+  setTargetShape
 } = projectMapSlice.actions;
 
 export default projectMapSlice.reducer;

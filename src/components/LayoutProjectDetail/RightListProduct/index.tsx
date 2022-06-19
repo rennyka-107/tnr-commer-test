@@ -1,26 +1,48 @@
-import { CardHeader, CardContent, Card, Box, Typography } from "@mui/material";
-import { useSelector } from "react-redux";
+import {
+  CardHeader,
+  CardContent,
+  Card,
+  Box,
+  CardActions,
+  Button,
+} from "@mui/material";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../../../store/store";
-// import ListProductCard from "./ListProductCard";
 import dynamic from "next/dynamic";
+import isEmpty from "lodash.isempty";
+import { useState } from "react";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { setTargetShape } from "../../../../store/projectMapSlice";
 
-const ProjectInformation = dynamic(
+const DynamicProjectInformation = dynamic(
   () => import("@components/CustomComponent/ProjectInformation"),
   { loading: () => <p>...</p>, ssr: false }
 );
 
-const DropDownTargetLevel = dynamic(
-  () => import("./DropDownTargetLevel"),
-  { loading: () => <p>...</p>, ssr: false }
-);
+const DropDownTargetLevel = dynamic(() => import("./DropDownTargetLevel"), {
+  loading: () => <p>...</p>,
+  ssr: false,
+});
+
+const ListProductCard = dynamic(() => import("./ListProductCard"), {
+  loading: () => <p>...</p>,
+  ssr: false,
+});
+
+const DetailProduct = dynamic(() => import("./DetailProduct"), {
+  loading: () => <p>...</p>,
+  ssr: false,
+});
 
 export default function RightListProduct() {
-  // const { listProductResponse } = useSelector(
-  //   (state: RootState) => state.products
-  // );
-
-  const ProjectInfomation = useSelector(
-    (state: RootState) => state.projectMap.ProjectInfomation
+  const [expandMore, setExpandMore] = useState(false);
+  const dispatch = useDispatch();
+  const ListChild = useSelector(
+    (state: RootState) => state.projectMap.ListChild
+  );
+  const Target = useSelector((state: RootState) => state.projectMap.Target);
+  const ProjectInformation = useSelector(
+    (state: RootState) => state.projectMap.ProjectInformation
   );
 
   const ListLevel = useSelector(
@@ -31,11 +53,12 @@ export default function RightListProduct() {
     return (
       <Box
         sx={{
-          width: "35vw",
-          height: "65vw",
+          width: expandMore ? "80vw" : "30vw",
+          height: "50vw",
           borderRadius: "8px 0px 0px 8px",
-          position: "relative",
+          position: "absolute",
           zIndex: 999,
+          left: expandMore ? 0 : "unset",
         }}
       >
         <Card
@@ -44,41 +67,56 @@ export default function RightListProduct() {
             height: "100%",
             pl: 4,
             pr: 4,
+            boxShadow: "unset",
           }}
         >
           <CardHeader
-            title={
-              <Typography
-                sx={{
-                  fontSize: "28px",
-                  fontWeight: "400",
-                  lineHeight: "32.81px",
-                }}
-              >
-                {ProjectInfomation.name}
-              </Typography>
-            }
+            sx={{ pt: 0 }}
+            title=""
             subheader={
-              <Box sx={{ mt: 2}}>
+              <Box>
                 {ListLevel.map((level, idx) => {
                   if (idx !== 0 && idx !== ListLevel.length - 1) {
-                    return <DropDownTargetLevel level={level} key={idx}/>;
+                    return <DropDownTargetLevel level={level} key={idx} />;
                   }
                 })}
               </Box>
             }
           />
-          <CardContent>
-            <ProjectInformation {...ProjectInfomation} />
-          </CardContent>
-          {/* <CardContent>
-            <ListProductCard data={listProductResponse} />
-          </CardContent>
-          <CardActions disableSpacing>
-            <Button onClick={() => console.log("xemthem")} size="small">
-              Xem thêm
-            </Button>
-          </CardActions> */}
+          {!isEmpty(Target) && Target.level === ListLevel.length - 1 ? (
+            <DetailProduct
+              onBack={() =>
+                dispatch(
+                  setTargetShape({
+                    id: Target.parentId,
+                    level: Target.level - 1,
+                  })
+                )
+              }
+            />
+          ) : !isEmpty(ListChild) ? (
+            <>
+              <CardContent sx={{ pt: 0 }}>
+                <ListProductCard data={ListChild} />
+              </CardContent>
+              <CardActions sx={{ pt: 0 }} disableSpacing>
+                <Button
+                  startIcon={
+                    <ArrowBackIcon
+                      sx={{ transform: expandMore ? "rotate(180deg)" : "" }}
+                    />
+                  }
+                  sx={{ pt: 0 }}
+                  onClick={() => setExpandMore(!expandMore)}
+                  size="small"
+                >
+                  {expandMore ? "Thu gọn" : "Xem thêm"}
+                </Button>
+              </CardActions>
+            </>
+          ) : (
+            <DynamicProjectInformation {...ProjectInformation} />
+          )}
         </Card>
       </Box>
     );

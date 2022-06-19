@@ -3,6 +3,12 @@ import HttpClient from "utils/HttpClient";
 
 export const forgetPassword = async (username: any, password: any) => {
   return HttpClient.get<any, CommonResponse>(
-    `/​api-account​/v1​/account​/reset-password?username=${username}&password=${password}`
+    `/api-account/v1/account/reset-password?username=${username}&password=${password}`
+  );
+};
+
+export const checkValidOTP = async (username: any, OTP: any) => {
+  return HttpClient.get<any, CommonResponse>(
+    `/api-account/v1/account/forget-password?username=${username}&otp=${OTP}`
   );
 };

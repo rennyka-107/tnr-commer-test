@@ -1,26 +1,54 @@
 import styled from "@emotion/styled";
 import { ProductsResponse } from "interface/product";
-import { Grid } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import { ItemProductMap } from "@components/CustomComponent";
-import isEmpty from 'lodash.isempty';
+import isEmpty from "lodash.isempty";
+import { useDispatch } from "react-redux";
+import { setTarget } from "../../../../store/projectMapSlice";
 
 interface ProductsProps {
   data?: ProductsResponse[];
 }
 const ContainerProduct = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
 `;
 
 const ListProductCard = ({ data }: ProductsProps) => {
+  const dispatch = useDispatch();
   return (
-    <>
+    <Box
+      sx={{
+        width: "100%",
+      }}
+    >
       {!isEmpty(data) ? (
-        <Grid container spacing={4}>
-          {data?.map((product, index) => (
-            <Grid item xs={12} sm={12} md={6} lg={4} xl={6} key={index}>
+        <Grid
+          container
+          spacing={{ xs: 2, md: 3 }}
+          sx={{
+            pt: 0,
+            display: "grid",
+            gridAutoColumns: "23rem",
+            gridTemplateRows: "2fr",
+            overflowX: "auto",
+          }}
+        >
+          {data.map((product, index) => (
+            <Grid
+              sx={{
+                gridRow:
+                  index < data.length / 2
+                    ? "1"
+                    : "2",
+                gridColumn: "auto",
+              }}
+              item
+              key={index}
+            >
               <ContainerProduct>
                 <ItemProductMap
+                onClick={()=>{dispatch(setTarget(product))}}
                   src={{
                     src: "https://dulichvietnam.com.vn/data/toa-nha-dep-nhat-viet-nam-8_5.jpg",
                   }}
@@ -32,7 +60,7 @@ const ListProductCard = ({ data }: ProductsProps) => {
       ) : (
         <div style={{ textAlign: "center" }}>No Data</div>
       )}
-    </>
+    </Box>
   );
 };
 export default ListProductCard;

@@ -26,6 +26,7 @@ const ContainerPJ = styled.div`
   padding: 31px 31px 0 31px;
   border: 1px solid #c7c9d9;
   border-radius: 20px;
+  margin-top: 1rem;
 `;
 
 const bold = { fontWeight: "500" };

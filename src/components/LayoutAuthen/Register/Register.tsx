@@ -11,11 +11,15 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { validateLine } from "utils/constants";
+import PathRoute from "utils/PathRoute";
 import Regexs from "utils/Regexs";
 import * as yup from "yup";
-import { registerApi } from "../../../pages/api/registerApi";
-import { registerAcc } from "../../../store/registerSlice";
+import { registerApi } from "../../../../pages/api/registerApi";
+import { registerAcc } from "../../../../store/registerSlice";
 
+const Form = styled.div`
+  margin-top: 10px;
+`;
 const SpanHeaderForm = styled.span`
   font-weight: 400;
   font-size: 14px;
@@ -39,17 +43,23 @@ const LinkLabel = styled.a`
 `;
 
 export interface RegisterParam {
-  username: string;
+  fullName: string;
   password: string;
   rePassword: string;
   phoneNumber: string;
   accept: boolean;
   email: string;
 }
+export interface Props {
+  setUserId?: (value: string) => void;
+  setKey?: (value: string) => void;
+  next?: () => void;
+}
 
-const Register = () => {
+const Index = (props: Props) => {
+  const Route = useRouter();
   const validationSchema = yup.object().shape({
-    username: yup
+    fullName: yup
       .string()
       .trim(validateLine.trim)
       .strict(true)
@@ -87,13 +97,10 @@ const Register = () => {
       .matches(Regexs.email, "Email không đúng")
       .default(""),
   });
-  const Router = useRouter();
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
   const [checked, setChecked] = useState(false);
-  const [openModal, setOpenModal] = useState(false);
 
-  const { control, handleSubmit, reset } = useForm<RegisterParam>({
+  const { control, handleSubmit, reset, getValues } = useForm<RegisterParam>({
     mode: "onChange",
     resolver: yupResolver(validationSchema),
     defaultValues: validationSchema.getDefault(),
@@ -102,12 +109,10 @@ const Register = () => {
   const onSubmit = async (data: any) => {
     const body = {
       id: null,
-      username: data.username,
+      fullName: data.fullName,
       password: data.password,
       email: data.email,
       phone: data.phoneNumber,
-      firstName: "",
-      lastName: "",
     };
     (async () => {
       try {
@@ -119,9 +124,19 @@ const Register = () => {
           alert(
             "Đăng ký tài khoản thành công. Vui lòng truy cập vào Gmail để kích hoạt tài khoản!"
           );
+          props.setUserId(response.responseData?.id);
+          props.setKey(response.responseData?.keycloakId);
+          props.next();
+          Route.push({
+            pathname: PathRoute.Login,
+            query: {
+              prePath: Route.pathname,
+              tabIndex: "confirm",
+            },
+          });
         } else {
           alert(
-            "Tên đăng nhập hoặc Email đã được sử dụng. Vui lòng thay đổi để tiếp tục!"
+            "Email hoặc số điện thoại đã được sử dụng. Vui lòng thay đổi để tiếp tục!"
           );
         }
       } catch (error) {
@@ -146,12 +161,12 @@ const Register = () => {
         <ControllerTextField
           variant="outlined"
           hiddenLabel
-          name="username"
+          name="fullName"
           control={control}
-          placeholder="Tên đăng nhập"
+          placeholder="Họ và tên"
           required
           fullWidth
-          label="Tên đăng nhập"
+          label="Họ và tên"
           labelColor="#666666"
         />
       </FormGroup>
@@ -221,7 +236,7 @@ const Register = () => {
       </FormGroup>
       <div style={{ width: "100%" }}>
         <CustomButton
-          label="Đăng ký"
+          label="Tiếp tục"
           style={{ background: !checked ? "#D6000080" : "#D60000" }}
           type="submit"
           disabled={!checked}
@@ -231,4 +246,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Index;
