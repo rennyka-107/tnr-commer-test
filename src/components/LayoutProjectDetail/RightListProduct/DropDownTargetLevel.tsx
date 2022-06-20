@@ -37,23 +37,30 @@ export default function DropDownTargetLevel({ level }: any) {
   const [label, setLabel] = useState("");
 
   useEffect(() => {
-    if (!isEmpty(value) && !isEmpty(value.imgMap) && value.type === "1") {
-      let newArray = [];
-      const existValue = ArrayImgMap.find((vl) => vl.level === value.level);
-      if (!isEmpty(existValue)) {
-        newArray = ArrayImgMap.map((vl) => {
-          if (vl.level === value.level) {
-            return { ...vl, imgMap: value.imgMap };
-          }
-          return vl;
-        });
+    if (!isEmpty(value)) {
+      if (!isEmpty(value.imgMap) && value.type === "1") {
+        let newArray = [];
+        const existValue = ArrayImgMap.find((vl) => vl.level === value.level);
+        if (!isEmpty(existValue)) {
+          newArray = ArrayImgMap.map((vl) => {
+            if (vl.level === value.level) {
+              return { ...vl, imgMap: value.imgMap };
+            }
+            return vl;
+          });
+        } else {
+          newArray = [
+            ...ArrayImgMap,
+            { level: value.level, imgMap: value.imgMap },
+          ];
+        }
+        dispatch(setArrayImgMap(newArray));
       } else {
-        newArray = [
-          ...ArrayImgMap,
-          { level: value.level, imgMap: value.imgMap },
-        ];
+        const formatArray = ArrayImgMap.filter(
+          (vl) => vl.level !== value.level
+        );
+        dispatch(setArrayImgMap(formatArray));
       }
-      dispatch(setArrayImgMap(newArray));
     }
   }, [value]);
 
