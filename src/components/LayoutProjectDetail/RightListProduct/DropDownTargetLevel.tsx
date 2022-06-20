@@ -24,7 +24,7 @@ export default function DropDownTargetLevel({ level }: any) {
   const TargetShape = useSelector(
     (state: RootState) => state.projectMap.TargetShape
   );
-  
+
   const ListLevel = useSelector(
     (state: RootState) => state.projectMap.ListLevel
   );
@@ -56,6 +56,7 @@ export default function DropDownTargetLevel({ level }: any) {
 
   function fetData(datas: any[]) {
     const geojsonArray = [];
+    setValue(null);
     setFormatList(
       datas.map((data) => {
         if (!isEmpty(data.map)) {
