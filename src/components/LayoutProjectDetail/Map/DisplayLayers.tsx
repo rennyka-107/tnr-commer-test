@@ -100,7 +100,7 @@ const DisplayLayers = ({ data, layerParent }: Props) => {
         : new L.Polygon(newLatLng as LatLngExpression[]);
 
       ref?.current?.addLayer(newLayer);
-      map.fitBounds(newLayer.getBounds() as LatLngBoundsExpression);
+      map.fitBounds(newLayer.getBounds() as L.LatLngBoundsExpression);
       newLayer.setStyle({
         stroke: true,
         fillOpacity: 0,

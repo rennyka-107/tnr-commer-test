@@ -13,6 +13,7 @@ interface InitialState {
   };
   ImgMap: string | null;
   TargetShape: any;
+  ArrayImgMap: any[]
 }
 const initialState: InitialState = {
   ProjectInformation: {
@@ -27,6 +28,7 @@ const initialState: InitialState = {
   },
   ImgMap: null,
   TargetShape: null,
+  ArrayImgMap: []
 };
 
 export const projectMapSlice = createSlice({
@@ -57,6 +59,9 @@ export const projectMapSlice = createSlice({
     setTargetShape: (state, { payload }) => {
       state.TargetShape = payload;
     },
+    setArrayImgMap: (state, { payload }) => {
+      state.ArrayImgMap = payload;
+    },
   },
 });
 
@@ -68,7 +73,8 @@ export const {
   setGeoJsonData,
   setImgMap,
   resetProjectMap,
-  setTargetShape
+  setTargetShape,
+  setArrayImgMap
 } = projectMapSlice.actions;
 
 export default projectMapSlice.reducer;

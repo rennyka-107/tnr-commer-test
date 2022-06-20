@@ -20,8 +20,8 @@ const CustomMap = ({ children, bounds, style }: Props) => {
       minZoom={-2}
       style={style}
       maxBounds={[
-        [1.3*window.innerWidth, 1.3*window.innerWidth],
-        [-1.3*window.innerWidth, -1.3*window.innerWidth],
+        [window.innerWidth, window.innerWidth],
+        [-window.innerWidth, -window.innerWidth],
       ]}
       scrollWheelZoom={false}
     >

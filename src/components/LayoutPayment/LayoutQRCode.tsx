@@ -31,7 +31,7 @@ const LayoutQRCode = () => {
         <Title28Styled>Tạo giao dịch thành công</Title28Styled>
         <CardMedia
           component={"img"}
-          style={{ width: 92, height: 92, margin: "14px 0px 20px" }}
+          style={{ width: 150, height: 150, margin: "14px 0px 20px" }}
           src={
             "https://vi.qr-code-generator.com/wp-content/themes/qr/new_structure/markets/basic_market/generator/dist/generator/assets/images/websiteQRCode_noFrame.png"
           }

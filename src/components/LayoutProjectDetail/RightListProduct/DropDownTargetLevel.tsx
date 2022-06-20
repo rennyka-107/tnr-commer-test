@@ -9,6 +9,7 @@ import {
   setListChild,
   setTarget,
   setImgMap,
+  setArrayImgMap,
 } from "../../../../store/projectMapSlice";
 import isEmpty from "lodash.isempty";
 import {
@@ -24,22 +25,44 @@ export default function DropDownTargetLevel({ level }: any) {
   const TargetShape = useSelector(
     (state: RootState) => state.projectMap.TargetShape
   );
-
   const ListLevel = useSelector(
     (state: RootState) => state.projectMap.ListLevel
+  );
+  const ArrayImgMap = useSelector(
+    (state: RootState) => state.projectMap.ArrayImgMap
   );
   const [formatList, setFormatList] = useState<any[]>([]);
   const [value, setValue] = useState<any>(null);
   const dispatch = useDispatch();
   const [label, setLabel] = useState("");
-  const ref = useRef<any>(null);
+
+  useEffect(() => {
+    if (!isEmpty(value) && !isEmpty(value.imgMap) && value.type === "1") {
+      let newArray = [];
+      const existValue = ArrayImgMap.find((vl) => vl.level === value.level);
+      if (!isEmpty(existValue)) {
+        newArray = ArrayImgMap.map((vl) => {
+          if (vl.level === value.level) {
+            return { ...vl, imgMap: value.imgMap };
+          }
+          return vl;
+        });
+      } else {
+        newArray = [
+          ...ArrayImgMap,
+          { level: value.level, imgMap: value.imgMap },
+        ];
+      }
+      dispatch(setArrayImgMap(newArray));
+    }
+  }, [value]);
 
   useEffect(() => {
     if (!isEmpty(TargetShape) && TargetShape.level === level.level) {
       const newTarget = formatList.find((data) => data.id === TargetShape.id);
-      if (!isEmpty(newTarget) && !isEmpty(ref?.current)) {
+      if (!isEmpty(newTarget)) {
         dispatch(setTarget(newTarget));
-        if (!isEmpty(newTarget.imgMap)) {
+        if (!isEmpty(newTarget.imgMap) && newTarget.type === "1") {
           dispatch(setImgMap(newTarget.imgMap));
         }
         setValue(newTarget);
@@ -48,14 +71,17 @@ export default function DropDownTargetLevel({ level }: any) {
       if (!isEmpty(TargetShape) && TargetShape.level === ListLevel.length - 1) {
         const newTarget = ListChild.find((data) => data.id === TargetShape.id);
         dispatch(setTarget(newTarget));
-        dispatch(setImgMap(newTarget.imgMap));
-        dispatch(setGeoJsonData([]));
+        if (!isEmpty(newTarget.imgMap) && newTarget.type === "1") {
+          dispatch(setImgMap(newTarget.imgMap));
+          dispatch(setGeoJsonData([]));
+        }
       }
     }
   }, [TargetShape]);
 
   function fetData(datas: any[]) {
     const geojsonArray = [];
+    dispatch(setListChild([]));
     setValue(null);
     setFormatList(
       datas.map((data) => {
@@ -81,10 +107,20 @@ export default function DropDownTargetLevel({ level }: any) {
       if (Target.type === "1" && !isEmpty(Target.imgMap)) {
         dispatch(setImgMap(Target.imgMap));
       } else {
-        if (Target.level === level.level - 1) {
-          const parent = formatList.find((item) => item.id === Target.parentId);
-          if (!isEmpty(parent) && !isEmpty(parent.imgMap)) {
-            dispatch(setImgMap(parent.imgMap));
+        if (Target.level === level.level) {
+          if (!isEmpty(ArrayImgMap)) {
+            const sortArray = [...ArrayImgMap];
+            sortArray.sort((a, b) => a.level - b.level);
+            const filterArray = sortArray.filter(
+              (vl) => vl.level < Target.level
+            );
+            if (!isEmpty(filterArray)) {
+              dispatch(
+                setImgMap(filterArray[filterArray.length - 1]["imgMap"])
+              );
+            } else {
+              dispatch(setImgMap(ListLevel[0]["map"]));
+            }
           } else {
             dispatch(setImgMap(ListLevel[0]["map"]));
           }
@@ -153,7 +189,6 @@ export default function DropDownTargetLevel({ level }: any) {
 
   return !isEmpty(formatList) ? (
     <Autocomplete
-      ref={ref}
       value={value}
       disablePortal
       disableClearable

@@ -23,7 +23,7 @@ const MapImage = ({ url }: Props) => {
       map.fitBounds(originBound);
     }
   }, [url, originBound]);
-
+  
   if (!isEmpty(originBound)) {
     return <ImageOverlay bounds={originBound} url={url} />;
   }

@@ -37,6 +37,8 @@ import PaymentMethods from "./components/PaymentMethods";
 import TableQuote from "./components/TableQuote";
 import AddInfoCustom from "./components/AddInfoCustom";
 import Container from "@components/Container";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../store/store";
 
 type Props = {
   setScopeRender: Dispatch<SetStateAction<string>>;
@@ -66,24 +68,25 @@ interface InformationBuyer {
   quanHuyen: string;
 }
 
+const validationSchema = yup.object().shape({
+  hoTen: yup.string().required(validateLine.required).default(""),
+  ngaySinh: yup
+    .string()
+    .required(validateLine.required)
+    .trim(validateLine.trim)
+    .default(""),
+  soDienThoai: yup.string().required(validateLine.required).default(""),
+  email: yup.string().trim(validateLine.trim).default(""),
+  soDdcn: yup.string().required(validateLine.required).default(""),
+  noiCap: yup.string().required(validateLine.required).default(""),
+  ngayCap: yup.string().required(validateLine.required).default(""),
+  dcThuongTru: yup.string().required(validateLine.required).default(""),
+  dcLienLac: yup.string().default(""),
+  thanhPho: yup.string().default(""),
+  quanHuyen: yup.string().default(""),
+});
+
 const LayoutInfoCustom = ({ setScopeRender }: Props) => {
-  const validationSchema = yup.object().shape({
-    hoTen: yup.string().required(validateLine.required).default(""),
-    ngaySinh: yup
-      .string()
-      .required(validateLine.required)
-      .trim(validateLine.trim)
-      .default(""),
-    soDienThoai: yup.string().required(validateLine.required).default(""),
-    email: yup.string().trim(validateLine.trim).default(""),
-    soDdcn: yup.string().required(validateLine.required).default(""),
-    noiCap: yup.string().required(validateLine.required).default(""),
-    ngayCap: yup.string().required(validateLine.required).default(""),
-    dcThuongTru: yup.string().required(validateLine.required).default(""),
-    dcLienLac: yup.string().default(""),
-    thanhPho: yup.string().default(""),
-    quanHuyen: yup.string().default(""),
-  });
 
   const { control, handleSubmit } = useForm<InformationBuyer>({
     mode: "onChange",
@@ -104,13 +107,15 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
   const [payMethod, setPayMethod] = useState<number>(1);
   const [billing, setBilling] = useState<number>(1);
   const [formInfo, setFormInfo] = useState<boolean>(false);
+  const { cart } = useSelector((state: RootState) => state.carts);
 
   const handleOnSubmit = (values) => {
-    try {
-      setScopeRender("transaction_message");
-    } catch (error) {
-      console.log(error);
-    }
+    console.log(values,cart, "123123123")
+    // try {
+    //   setScopeRender("transaction_message");
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
 
   return (
@@ -340,12 +345,12 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
               <ButtonAction
                 disabled={formInfo}
                 margin={"12px auto"}
-                type={"submit"}
+                // type={"submit"}
               >
                 <Text18Styled color={"#fff"}>Tạo phiếu thanh toán</Text18Styled>
               </ButtonAction>
               {!formInfo && (
-                <ButtonStyled bg={"white"} border={"1px solid #c7c9d9"}>
+                <ButtonStyled type="submit" bg={"white"} border={"1px solid #c7c9d9"}>
                   <Text18Styled>Lưu thông tin</Text18Styled>
                 </ButtonStyled>
               )}

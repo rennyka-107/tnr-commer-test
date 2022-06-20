@@ -2,8 +2,7 @@ import { IconInfoCircle } from "@components/Icons";
 import styled from "@emotion/styled";
 import { Box } from "@mui/material";
 import Link from "next/link";
-import { isEmpty } from "lodash";
-import React, { Dispatch, SetStateAction, useState, useEffect } from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../store/store";
 import {
@@ -42,15 +41,21 @@ const TableQuote = ({ width, urlPayment, setScopeRender }: Props) => {
       <BoxDetailInfo>
         <RowStyledAgain>
           <Text14Styled>Giá BĐS</Text14Styled>
-          <Text14Styled>{cart.totalVatPrice ? currencyFormat(cart.totalVatPrice) : "N/A"} đ</Text14Styled>
+          <Text14Styled>
+            {cart.totalVatPrice ? currencyFormat(cart.totalVatPrice) : "N/A"} đ
+          </Text14Styled>
         </RowStyledAgain>
         <RowStyledAgain>
           <Text14Styled>Thuế VAT</Text14Styled>
-          <Text14Styled>{cart.vat ? currencyFormat(cart.vat) : "N/A"} đ</Text14Styled>
+          <Text14Styled>
+            {cart.vat ? currencyFormat(cart.vat) : "N/A"} đ
+          </Text14Styled>
         </RowStyledAgain>
         <RowStyledAgain>
           <Text14Styled>Phí bảo trì</Text14Styled>
-          <Text14Styled>{cart.maintainPrice ? currencyFormat(cart.maintainPrice) : "N/A"} đ</Text14Styled>
+          <Text14Styled>
+            {cart.maintainPrice ? currencyFormat(cart.maintainPrice) : "N/A"} đ
+          </Text14Styled>
         </RowStyledAgain>
       </BoxDetailInfo>
 
@@ -59,7 +64,9 @@ const TableQuote = ({ width, urlPayment, setScopeRender }: Props) => {
       <BoxDetailInfo>
         <RowStyledAgain>
           <Text14Styled>Tổng tiền niêm yết</Text14Styled>
-          <Text14Styled>{cart.totalPrice ? currencyFormat(cart.totalPrice) : "N/A"} đ</Text14Styled>
+          <Text14Styled>
+            {cart.totalPrice ? currencyFormat(cart.totalPrice) : "N/A"} đ
+          </Text14Styled>
         </RowStyledAgain>
         <RowStyledAgain>
           <Text14Styled>Giảm giá</Text14Styled>
