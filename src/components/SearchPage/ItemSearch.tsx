@@ -26,7 +26,7 @@ const ItemSearch = ({ data }: searchProps) => {
             key={index}
             id={product.productId}
             src={Product2}
-            title={product.projectName}
+            title={product.name}
             subTitle={product.location}
             dataItem={{
               item1: product.landArea,
@@ -36,6 +36,7 @@ const ItemSearch = ({ data }: searchProps) => {
             }}
 			priceListed={product.totalPrice}
             priceSub={product.unitPrice}
+			ticketCard={product.category}
           />
         ))}
       </ProductWrap>

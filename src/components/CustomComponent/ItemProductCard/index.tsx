@@ -31,7 +31,7 @@ type Props = {
     item3?: any;
     item4?: any;
   };
-  priceListed?: number;
+  priceListed?: string;
   priceSub?: number;
   activeSoSanh?: boolean;
   onClick?: MouseEventHandler<HTMLButtonElement>;
@@ -228,7 +228,7 @@ export default function ItemProductCard({
           position: "absolute",
           marginTop: 160,
           right: 0,
-          padding: 4,
+          padding: 3,
           textAlign: "center",
         }}
       >
@@ -276,7 +276,7 @@ export default function ItemProductCard({
             <IconFrame />
 
             <TextCenterItem>
-              {dataItem.item1 ? dataItem?.item1 : "N/A"}
+              {dataItem.item1 ? dataItem?.item1 : "N/A"} m²
             </TextCenterItem>
           </WrapItemCenter>
           <WrapItemCenter>
@@ -288,7 +288,7 @@ export default function ItemProductCard({
           <WrapItemCenter>
             <IconBedDouble />
             <TextCenterItem>
-              {dataItem.item3 ? dataItem?.item3 : "N/A"} m²
+              {dataItem.item3 ? dataItem?.item3 : "N/A"}
             </TextCenterItem>
           </WrapItemCenter>
           <WrapItemCenter>
@@ -318,7 +318,7 @@ export default function ItemProductCard({
           </div>
         </div>
       </CardContentStyled>
-      {activeSoSanh === true ? (
+      {/* {activeSoSanh === true ? (
         <CardActions
           style={{
             flexDirection: "row",
@@ -343,14 +343,14 @@ export default function ItemProductCard({
             <IconMuaOnline />
           </ButtonStyled>
         </CardActions>
-      ) : (
+      ) : ( */}
         <CardActions style={{ flexDirection: "column", marginBottom: 24 }}>
           <ButtonStyled onClick={onClick}>
             Mua Online&nbsp;
             <IconMuaOnline />
           </ButtonStyled>
         </CardActions>
-      )}
+      {/* )} */}
     </CardStyled>
   );
 }

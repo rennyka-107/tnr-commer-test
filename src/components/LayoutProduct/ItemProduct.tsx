@@ -23,6 +23,7 @@ const ProductWrap = styled.div`
 `;
 const ItemProduct = ({ data }: ProductsProps) => {
   const addToCart = useAddToCart();
+  console.log(data)
   return (
     <>
       <ProductWrap>
@@ -32,16 +33,16 @@ const ItemProduct = ({ data }: ProductsProps) => {
             id={product.id}
             src={Product2}
             title={product.name}
-            subTitle={product.location}
+            subTitle={product.diaChi}
             dataItem={{
               item1: product.landArea,
               item2: product.numBath,
               item3: product.numBed,
               item4: product.doorDirection,
             }}
-            priceListed={product.price}
+            priceListed={product.totalPrice}
             priceSub={product.unitPrice}
-            ticketCard="TRN Star"
+            ticketCard={product.category}
             activeSoSanh={true}
             onCompare={() => {
               let prods = [];

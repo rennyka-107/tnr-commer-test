@@ -21,7 +21,6 @@ export interface RegisterParam {
 
 const Index = () => {
   const Route = useRouter();
-
   const [type, setType] = useState("register");
   const [key, setKey] = useState("");
   const [userId, setUserId] = useState("");

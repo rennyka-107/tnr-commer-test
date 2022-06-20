@@ -228,7 +228,7 @@ export default function ItemCompareSearch({
           position: "absolute",
           marginTop: 160,
           right: 0,
-          padding: 4,
+          padding: 3,
           textAlign: "center",
         }}
       >

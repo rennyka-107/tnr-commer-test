@@ -62,7 +62,7 @@ export interface ProductsResponse {
 	swimmingPool: number,
 	gym: number,
 	projectLevelDetailId: string,
-
+	diaChi? : string,
 	status: number,
 	apartmentModelId: string,
 	lotSymbolLegal: string,
@@ -76,7 +76,9 @@ export interface ProductsResponse {
 	price: 10.0,
 	unitPrice: number,
 	nameProjectType: string,
-	tongBanGhi: string
+	tongBanGhi: string,
+	totalPrice: string,
+	category: string,
 }
 
 export interface ResponseSearchById {

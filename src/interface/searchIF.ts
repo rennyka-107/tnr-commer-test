@@ -19,4 +19,6 @@ export interface searchLocationResponse {
   diaChi: string;
   tongBanGhi: string;
   projectName: string;
+  category: string;
+  name: string;
 }

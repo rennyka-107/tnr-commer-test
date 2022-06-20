@@ -90,7 +90,7 @@ const FavoriteProducts = () => {
               item3: "80",
               item4: "Đông Nam",
             }}
-            priceListed={3018933000}
+            priceListed={"3018933000"}
             priceSub={40580174}
             ticketCard="TRN Gold"
           />
@@ -104,7 +104,7 @@ const FavoriteProducts = () => {
               item3: "80",
               item4: "Đông Nam",
             }}
-            priceListed={3018933000}
+            priceListed={"3018933000"}
             priceSub={40580174}
             ticketCard="TRN Star"
           />
@@ -118,7 +118,7 @@ const FavoriteProducts = () => {
               item3: "80",
               item4: "Đông Nam",
             }}
-            priceListed={3018933000}
+            priceListed={"3018933000"}
             priceSub={40580174}
             ticketCard="TNR Grand Palace"
           />

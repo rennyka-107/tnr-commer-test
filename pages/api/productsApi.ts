@@ -10,6 +10,17 @@ export const getListProductApi = async (params: ParamsProducts, data: any) => {
   );
 };
 
+export const searchListProductByProjectIdApi = async (
+  params: ParamsProducts,
+  data: any
+) => {
+  return HttpClient.post<any, any>(
+    `/api/product/information/advance/search?page=${params.page}&size=${params.size}`,
+    data,
+    { withToken: false }
+  );
+};
+
 export const getProducById = async (id: any) => {
   return HttpClient.post<any, CommonResponse>(`/api/product/information/${id}`);
 };
@@ -41,7 +52,7 @@ export const getProductTopByStanding = async () => {
   );
 };
 
-export const getProductFavorite = async (formData: any) => {
+export const getProductFavoriteApi = async (formData: any) => {
   return HttpClient.post<ResponseTypeAPI, CommonResponse>(
     `/api/favourite/search/get-top3-favourite-product`,
     formData,
@@ -50,5 +61,20 @@ export const getProductFavorite = async (formData: any) => {
         "content-type": "multipart/form-data",
       },
     }
+  );
+};
+export const getProductTypeApi = async () => {
+  return HttpClient.get<ResponseTypeAPI, CommonResponse>(
+    `/api/favourite/search/get-list-product-type`
+  );
+};
+export const getProductLocationApi = async () => {
+  return HttpClient.get<ResponseTypeAPI, CommonResponse>(
+    `/api/favourite/search/get-list-product-location`
+  );
+};
+export const getProductOrderConditionApi = async () => {
+  return HttpClient.get<ResponseTypeAPI, CommonResponse>(
+    `api/favourite/search/get-list-order-condition`
   );
 };

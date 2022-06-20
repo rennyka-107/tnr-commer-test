@@ -16,6 +16,7 @@ import {
   Title28Styled,
   WrapperBoxBorderStyled,
 } from "../../StyledLayout/styled";
+import { currencyFormat } from "utils/helper";
 
 const BoxDetailInfo = styled(Box)({
   marginTop: 15,
@@ -41,15 +42,15 @@ const TableQuote = ({ width, urlPayment, setScopeRender }: Props) => {
       <BoxDetailInfo>
         <RowStyledAgain>
           <Text14Styled>Giá BĐS</Text14Styled>
-          <Text14Styled>{cart.totalVatPrice ?? "N/A"} đ</Text14Styled>
+          <Text14Styled>{cart.totalVatPrice ? currencyFormat(cart.totalVatPrice) : "N/A"} đ</Text14Styled>
         </RowStyledAgain>
         <RowStyledAgain>
           <Text14Styled>Thuế VAT</Text14Styled>
-          <Text14Styled>{cart.vat ?? "N/A"} đ</Text14Styled>
+          <Text14Styled>{cart.vat ? currencyFormat(cart.vat) : "N/A"} đ</Text14Styled>
         </RowStyledAgain>
         <RowStyledAgain>
           <Text14Styled>Phí bảo trì</Text14Styled>
-          <Text14Styled>{cart.maintainPrice ?? "N/A"} đ</Text14Styled>
+          <Text14Styled>{cart.maintainPrice ? currencyFormat(cart.maintainPrice) : "N/A"} đ</Text14Styled>
         </RowStyledAgain>
       </BoxDetailInfo>
 
@@ -58,7 +59,7 @@ const TableQuote = ({ width, urlPayment, setScopeRender }: Props) => {
       <BoxDetailInfo>
         <RowStyledAgain>
           <Text14Styled>Tổng tiền niêm yết</Text14Styled>
-          <Text14Styled>{cart.totalPrice ?? "N/A"} đ</Text14Styled>
+          <Text14Styled>{cart.totalPrice ? currencyFormat(cart.totalPrice) : "N/A"} đ</Text14Styled>
         </RowStyledAgain>
         <RowStyledAgain>
           <Text14Styled>Giảm giá</Text14Styled>
@@ -71,7 +72,7 @@ const TableQuote = ({ width, urlPayment, setScopeRender }: Props) => {
         <RowStyledAgain>
           <Text14Styled>Tổng tiền mua online</Text14Styled>
           <Text18Styled fw={500} style={{ color: "#ea242a" }}>
-            {cart.totalPrice ?? "N/A"} đ
+            {cart.totalPrice ? currencyFormat(cart.totalPrice) : "N/A"} đ
           </Text18Styled>
         </RowStyledAgain>
       </BoxDetailInfo>

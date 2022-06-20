@@ -770,7 +770,7 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                   <WrapItemCenter>
                     <IconFrame />
 
-                    <TextCenterItem>{dataProduct?.landArea ? dataProduct?.landArea: "N/A"} m²</TextCenterItem>
+                    <TextCenterItem>{dataProduct?.landArea ? dataProduct?.landArea : "N/A"} m²</TextCenterItem>
                   </WrapItemCenter>
                   <WrapItemCenter>
                     <IconBath />
@@ -778,7 +778,7 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                   </WrapItemCenter>
                   <WrapItemCenter>
                     <IconBedDouble />
-                    <TextCenterItem>{dataProduct?.numBed ? dataProduct?.numBed :"N/A"}</TextCenterItem>
+                    <TextCenterItem>{dataProduct?.numBed ? dataProduct?.numBed : "N/A"}</TextCenterItem>
                   </WrapItemCenter>
                   <WrapItemCenter>
                     <IconCompass />
@@ -851,7 +851,7 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                     marginBottom: 24,
                   }}
                 >
-                  <a href={`tel:+${dataProduct.project.hotline ?? dataProduct.defaultPhoneNumber}`} style={{ textAlign: "center" }}>
+                  <a href={`tel:+84${(dataProduct?.project.hotline ?? dataProduct?.defaultPhoneNumber ?? '0123456789')?.substring(1)}`} style={{ textAlign: "center" }}>
                     <IconHeadSetProduct />
                     <TextContact>Liên hệ khách hàng</TextContact>
                   </a>

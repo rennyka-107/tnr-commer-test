@@ -33,7 +33,7 @@ const BuyingGuide = () => {
 
   useEffect(() => {
 	fetchAdvandedSearchList()
-  },[Router])
+  },[])
 
   return (
     <Page

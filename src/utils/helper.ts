@@ -106,3 +106,12 @@ export const convertDateToString = (date: Date) => {
   const dateOfWeek = date.getDay();
   return house + ' | ' + dayOfWeekToString(dateOfWeek) + ',' + day;
 }
+
+export function currencyFormat(num) {
+  if (!num) {
+    return;
+  }
+  return Number(num)
+    .toFixed(0)
+    .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+}

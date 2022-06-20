@@ -17,7 +17,6 @@ const DisplayLayers = ({ data, layerParent }: Props) => {
   const ref = useRef<any>();
   const dispatch = useDispatch();
   const Target = useSelector((state: RootState) => state.projectMap.Target);
-
   function fetchLayer() {
     ref?.current?.clearLayers();
     fetchLayerParent();
@@ -41,6 +40,7 @@ const DisplayLayers = ({ data, layerParent }: Props) => {
             (layer.feature.properties.radius * 0.5 * window.innerWidth) / 700
           )
         : new L.Polygon(newLatLng as LatLngExpression[]);
+
       ref?.current?.addLayer(newLayer);
       newLayer.setStyle({
         stroke: false,

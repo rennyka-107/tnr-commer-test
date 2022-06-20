@@ -54,10 +54,10 @@ const Filter = (props: PropsI) => {
     }, [watch('projectId'), watch('saleProductStatus')]);
 
     const statusOptions = [
-        { label: "Ngừng bán", value: -1 },
-        { label: "Sắp mở bán", value: 0 },
-        { label: "Còn hàng", value: 1 },
-        { label: "Chờ thanh toán", value: 2 },
+        { label: "Ngừng bán", value: 2 },
+        { label: "Sắp mở bán", value: null },
+        { label: "Còn hàng", value: 0 },
+        { label: "Chờ thanh toán", value: 1 },
     ];
 
 

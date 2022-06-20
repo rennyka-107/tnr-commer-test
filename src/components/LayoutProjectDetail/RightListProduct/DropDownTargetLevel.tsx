@@ -24,6 +24,7 @@ export default function DropDownTargetLevel({ level }: any) {
   const TargetShape = useSelector(
     (state: RootState) => state.projectMap.TargetShape
   );
+  
   const ListLevel = useSelector(
     (state: RootState) => state.projectMap.ListLevel
   );
@@ -38,6 +39,9 @@ export default function DropDownTargetLevel({ level }: any) {
       const newTarget = formatList.find((data) => data.id === TargetShape.id);
       if (!isEmpty(newTarget) && !isEmpty(ref?.current)) {
         dispatch(setTarget(newTarget));
+        if (!isEmpty(newTarget.imgMap)) {
+          dispatch(setImgMap(newTarget.imgMap));
+        }
         setValue(newTarget);
       }
     } else {

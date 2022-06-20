@@ -40,6 +40,7 @@ const masterReducer = (state, action) => {
         productByID: action.payload.products.productByID,
         productTopByOutStanding:
           action.payload.products.productTopByOutStanding,
+		  totalElement: action.payload.searchs.totalElement,
       },
       projects: {
         listProjectResponse: action.payload.projects.listProjectResponse,
