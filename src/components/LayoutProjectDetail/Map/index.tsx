@@ -35,13 +35,14 @@ const Map = (props: Props) => {
 
   const [layerParent, setLayerParent] = useState<any>(null);
   const imgMap = useSelector((state: RootState) => state.projectMap.ImgMap);
+  const ListLevel = useSelector((state: RootState) => state.projectMap.ListLevel);
   const GeoJsonData = useSelector(
     (state: RootState) => state.projectMap.GeoJsonData
   );
   const Target = useSelector((state: RootState) => state.projectMap.Target);
 
   useEffect(() => {
-    if (!isEmpty(Target) && !isEmpty(Target.map)) {
+    if (!isEmpty(Target) && !isEmpty(Target.map) && Target.level !== ListLevel.length - 1) {
       const formatmap = JSON.parse(Target.map);
       const features = [];
       features.push(formatmap);

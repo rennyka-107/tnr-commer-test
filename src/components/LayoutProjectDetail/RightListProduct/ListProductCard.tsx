@@ -3,8 +3,9 @@ import { ProductsResponse } from "interface/product";
 import { Box, Grid } from "@mui/material";
 import { ItemProductMap } from "@components/CustomComponent";
 import isEmpty from "lodash.isempty";
-import { useDispatch } from "react-redux";
-import { setTarget } from "../../../../store/projectMapSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { setTargetShape } from "../../../../store/projectMapSlice";
+import { RootState } from "../../../../store/store";
 
 interface ProductsProps {
   data?: ProductsResponse[];
@@ -16,6 +17,9 @@ const ContainerProduct = styled.div`
 
 const ListProductCard = ({ data }: ProductsProps) => {
   const dispatch = useDispatch();
+  const ListLevel = useSelector(
+    (state: RootState) => state.projectMap.ListLevel
+  );
   return (
     <Box
       sx={{
@@ -37,10 +41,7 @@ const ListProductCard = ({ data }: ProductsProps) => {
           {data.map((product, index) => (
             <Grid
               sx={{
-                gridRow:
-                  index < data.length / 2
-                    ? "1"
-                    : "2",
+                gridRow: index < data.length / 2 ? "1" : "2",
                 gridColumn: "auto",
               }}
               item
@@ -48,7 +49,14 @@ const ListProductCard = ({ data }: ProductsProps) => {
             >
               <ContainerProduct>
                 <ItemProductMap
-                onClick={()=>{dispatch(setTarget(product))}}
+                  onClick={() => {
+                    dispatch(
+                      setTargetShape({
+                        id: product.id,
+                        level: ListLevel.length - 1,
+                      })
+                    );
+                  }}
                   src={{
                     src: "https://dulichvietnam.com.vn/data/toa-nha-dep-nhat-viet-nam-8_5.jpg",
                   }}

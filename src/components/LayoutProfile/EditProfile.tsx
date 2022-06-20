@@ -6,12 +6,18 @@ import Row from "@components/CustomComponent/Row";
 import ControllerDatePicker from "@components/Form/ControllerDatePicker";
 import ControllerSelectAutoComplete from "@components/Form/ControllerSelectAutoComplete";
 import ControllerTextField from "@components/Form/ControllerTextField";
+import DistricSelect from "@components/Form/DistrictSelect";
 import FormGroup from "@components/Form/FormGroup";
-import { IconEditWhite } from "@components/Icons";
+import { IconDownloadPTG, IconEditWhite } from "@components/Icons";
 import styled from "@emotion/styled";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Button } from "@mui/material";
+import { ProfileI } from "@service/Profile";
 import axios from "axios";
+import ImageWithHideOnError from "hooks/ImageWithHideOnError";
+import useCustomType from "hooks/useCustomtype";
+import useForceUpdate from "hooks/useForceUpdate";
+import useProvinces from "hooks/useProvinces";
 import Image from "next/image";
 import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -51,12 +57,22 @@ const AttachWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 33px;
+  // margin-top: 33px;
 `;
+
+const TextFileUpload = styled.span`
+  margin-bottom: 4px;
+  color: #1B3459;
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 21.09px;
+`
 
 const UploadButton = styled(Button)`
   height: 24px;
-  width: 64px;
+  width: auto;
   background: #1b3459;
   border-radius: 10px;
   font-family: "Roboto";
@@ -76,17 +92,23 @@ const UploadButton = styled(Button)`
 
 const FileContainer = styled.div`
   display: flex;
-  justify-content: end;
+  justify-content: start;
 `;
 
 const EditProfile = () => {
-  const [createObjectURL, setCreateObjectURL] = useState(null);
-  const [createFileObjectURL, setCreateFileObjectURL] = useState(null);
-  const [customerType, setCustomerType] = useState([]);
-  const [avatar, setAvatar] = useState({ dataUrl: "", thumbnailUrl: "" });
   const [document, setDocument] = useState({ fileName: "", dataUrl: "" });
-
-  console.log("avatar", avatar);
+  const [rerender, forceUpdate] = useForceUpdate();
+  const { dataCustomType } = useCustomType();
+  const { dataProvinces } = useProvinces();
+  const [loadingImg, setLoadingImg] = useState(false);
+  const convertProvinType = (dataProvinces || []).map((item) => ({
+    label: item.ProvinceName,
+    value: item.ProvinceID,
+  }));
+  const convertCustomerType = (dataCustomType || []).map((item) => ({
+    label: item.name,
+    value: item.id,
+  }));
 
   const dispatch = useDispatch();
 
@@ -111,32 +133,24 @@ const EditProfile = () => {
   useEffect(() => {
     (async () => {
       try {
-        getListCustomerType().then((response) => {
-          if (response.responseCode === "00") {
-            setCustomerType(response.responseData);
-          }
-        });
         const responseUser = await getUserInfoApi();
         dispatch(getUserInfo(responseUser.responseData));
       } catch (error) {
         console.log(error);
       }
     })();
-  }, []);
+  }, [rerender, dispatch]);
 
-  const convertCustomerType = (customerType || []).map((item) => ({
-    label: item.name,
-    value: item.id,
-  }));
-  const detailUser = useSelector((state: RootState) => state.profile.userInfo);
 
-  const formController = useForm<any>({
+  const detailUser = useSelector((state: RootState) => state?.profile?.userInfo);
+
+  const formController = useForm<ProfileI>({
     mode: "onChange",
     resolver: yupResolver(validationSchema),
     defaultValues: validationSchema.getDefault(),
   });
 
-  const { control, handleSubmit, reset } = formController;
+  const { control, handleSubmit, reset, setValue, watch, getValues } = formController;
 
   const resetAsyncForm = useCallback(
     async (data) => {
@@ -158,12 +172,16 @@ const EditProfile = () => {
         avatarThumbnailUrl: imageUrl + data.avatarThumbnailUrl,
         attachPaper: imageUrl + data.attachPaper,
         attachPaperThumbnailUrl: imageUrl + data.attachPaperThumbnailUrl,
-        district: data.district,
-        province: data.province,
+        district: data?.district ? Number(data?.district) : '',
+        province: data?.province ? Number(data?.province) : '',
+        businessRegistration: data?.businessRegistration
       });
     },
+
     [reset]
   );
+
+
 
   useEffect(() => {
     if (detailUser?.email) {
@@ -172,36 +190,23 @@ const EditProfile = () => {
   }, [detailUser]);
 
   const uploadToClient = async (event) => {
-    if (event.target.files && event.target.files[0]) {
-      const i = event.target.files[0];
-      setCreateObjectURL(URL.createObjectURL(i));
-    }
     let formData = new FormData();
     formData.append("file", event.target.files[0]);
     formData.append("category", "avatar");
-
+    setLoadingImg(true);
     postImage(formData)
-      .then((res) => setAvatar(res.responseData))
-      .catch((err) => err);
+      .then((res) => (setValue('avatar', imageUrl + res?.responseData?.dataUrl)))
+      .catch((err) => err).finally(() => { setLoadingImg(false) });
   };
 
-  const uploadFile = async (event) => {
-    if (event.target.files && event.target.files[0]) {
-      const i = event.target.files[0];
-      setCreateFileObjectURL(URL.createObjectURL(i));
-    }
-    let formData = new FormData();
-    formData.append("file", event.target.files[0]);
-    formData.append("category", "avatar");
-
-    postFile(formData)
+  const uploadFile = async (file) => {
+    if (!file) { alert('File không tồn tại') }
+    let formDataFile = new FormData();
+    formDataFile.append("imageFile", file);
+    postFile(formDataFile)
       .then((res) => {
-        if (res.responseCode === "00") {
-          setDocument(res.responseData);
-        }
-        else{
-          alert("Định dạng File là docx, xlsx hoặc PDF")
-        }
+        alert(res.responseMessage);
+        forceUpdate();
       })
       .catch((err) => err);
   };
@@ -221,8 +226,8 @@ const EditProfile = () => {
         values.idReceiveDate.split("-").reverse().join("-"),
       domicile: values.domicile,
       address: values.address,
-      avatar: imageUrl + avatar.dataUrl,
-      avatarThumbnailUrl: imageUrl + avatar.thumbnailUrl,
+      avatar: values.avatar,
+      avatarThumbnailUrl: values.avatarThumbnailUrl,
       attachPaper: document.dataUrl,
       district: values.district,
       province: values.province,
@@ -231,16 +236,21 @@ const EditProfile = () => {
     (async () => {
       try {
         const response = await postChangeInfoApi(body);
-
         dispatch(changeProfile(response.responseData));
         if (response.responseCode === "00") {
           alert("Thay đổi thông tin thành công!");
+          forceUpdate();
         }
       } catch (error) {
         console.log(error);
       }
     })();
   };
+
+  const getNameFile = (urlString: string) => {
+    const arrString = urlString.split('/');
+    return arrString?.[arrString.length - 1];
+  }
 
   return (
     <form onSubmit={handleSubmit((values) => onSubmit(values))}>
@@ -249,13 +259,16 @@ const EditProfile = () => {
         styleCustom={{ padding: "21px 24px" }}
       >
         <AvataContainer>
-          <Image
-            src={createObjectURL || "/images/avatar.png"}
-            alt=""
-            width={125}
+          {loadingImg ? <span>....Loading</span> : <ImageWithHideOnError
+            className="logo"
+            src={watch('avatar') ?? '/images/avatar.png'}
+            fallbackSrc={'/images/avatar.png'}
             height={125}
-            style={{ borderRadius: 20 }}
-          />
+            width={125}
+            priority
+            unoptimized={true}
+            objectFit="cover"
+          />}
           <label htmlFor="image">
             <IconWrapper>
               <IconEditWhite />
@@ -278,7 +291,6 @@ const EditProfile = () => {
                 control={control}
                 setValue={formController.setValue}
                 options={convertCustomerType}
-                defaultValue="Cá nhân"
               />
             </FormGroup>
           </Column>
@@ -294,7 +306,6 @@ const EditProfile = () => {
                   { label: "Ông", value: 1 },
                   { label: "Bà", value: 2 },
                 ]}
-                defaultValue="Ông"
               />
             </FormGroup>
           </Column>
@@ -374,25 +385,36 @@ const EditProfile = () => {
             </FormGroup>
           </Column>
           <Column>
-            <AttachWrapper>
-              <span>Đính kèm giấy CN ĐKDN</span>
-              <UploadButton>
-                <label htmlFor="file">Tải lên</label>
-                <input
-                  id="file"
-                  type="file"
-                  style={{ display: "none" }}
-                  onChange={uploadFile}
-                />
-              </UploadButton>
-            </AttachWrapper>
-          </Column>
-        </Row>
-        <Row>
-          <Column>
-            <FileContainer>
-              <div>{document.fileName}</div>
-            </FileContainer>
+            <FormGroup sx={{ mb: 2 }} fullWidth>
+              <TextFileUpload>Đính kèm giấy CN ĐKDN</TextFileUpload>
+              <AttachWrapper>
+                {!!getValues('businessRegistration') &&
+                  <a href={getValues('businessRegistration')} target="_blank" rel="noopener noreferrer" download>
+                    <UploadButton>
+                      {getNameFile(getValues('businessRegistration'))}&nbsp;&nbsp;
+                      <IconDownloadPTG />
+                    </UploadButton>
+                  </a>}
+                {/* {!!getValues('fileImages') &&
+                  <a href={getValues('businessRegistration')} target="_blank" rel="noopener noreferrer" download>
+                    <UploadButton>
+                      {getValues('fileImages')?.name}&nbsp;&nbsp;
+                    </UploadButton>
+                  </a>} */}
+                <UploadButton>
+                  <label htmlFor="file">Tải lên</label>
+                  <input
+                    id="file"
+                    type="file"
+                    style={{ display: "none" }}
+                    onChange={(event) => {
+                      setValue('fileImages', event?.target?.files?.[0]);
+                      uploadFile(event?.target?.files?.[0]);
+                    }}
+                  />
+                </UploadButton>
+              </AttachWrapper>
+            </FormGroup>
           </Column>
         </Row>
         <Row>
@@ -452,27 +474,25 @@ const EditProfile = () => {
         <Row>
           <Column>
             <FormGroup sx={{ mb: 2 }} fullWidth>
-              <ControllerTextField
+              <ControllerSelectAutoComplete
                 variant="outlined"
-                hiddenLabel
                 name="province"
-                control={control}
-                fullWidth
                 label="Thành phố/Tỉnh"
-                InputProps={InputProps}
+                control={control}
+                setValue={setValue}
+                options={convertProvinType}
+                onChangeExtra={() => { setValue('district', '') }}
               />
             </FormGroup>
           </Column>
           <Column>
             <FormGroup fullWidth>
-              <ControllerTextField
-                variant="outlined"
-                hiddenLabel
+              <DistricSelect
                 name="district"
-                control={control}
-                fullWidth
                 label="Quận/Huyện"
-                InputProps={InputProps}
+                control={control}
+                setValue={setValue}
+                idProvince={Number(watch('province'))}
               />
             </FormGroup>
           </Column>

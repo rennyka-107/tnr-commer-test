@@ -10,7 +10,7 @@ interface itemSelect {
     value: string | number;
 }
 
-interface Props<T> extends Omit<UseAutocompleteProps<itemSelect, undefined, undefined, undefined>, 'name'> {
+interface Props<T> {
     control: Control<T>;
     setValue: SetFieldValue<T>;
     name: FieldPath<T>;
@@ -18,6 +18,8 @@ interface Props<T> extends Omit<UseAutocompleteProps<itemSelect, undefined, unde
     labelColor?: string;
     variant?: "standard" | "filled" | "outlined";
     required?: boolean;
+    onChangeExtra?: (data: itemSelect) => void;
+    options: itemSelect[];
 }
 
 const Container = styled.div``;
@@ -40,7 +42,7 @@ const ErrorText = styled(FormHelperText)`
 `
 
 const ControllerSelectAutoComplete = <T extends FieldValues>(props: Props<T>) => {
-    const { control, setValue, name, label, required, variant, labelColor, ...res } = props;
+    const { control, setValue, name, label, required, variant, labelColor, options, onChangeExtra, ...res } = props;
 
     return (
         <Container>
@@ -49,14 +51,17 @@ const ControllerSelectAutoComplete = <T extends FieldValues>(props: Props<T>) =>
                 render={({ field, fieldState: { error } }) => (
                     <FormControl fullWidth>
                         <Autocomplete
+                            value={options.find((item) => item?.value == field?.value)?.label ?? ''}
                             disablePortal
                             id={name}
-                            onChange={(e, item: itemSelect) => { setValue(name, item?.value) }}
+                            onChange={(e, item: itemSelect) => {
+                                setValue(field?.name, item?.value);
+                                onChangeExtra && onChangeExtra(item);
+                            }}
                             renderInput={(params) => {
                                 return (
                                     <TextField
                                         {...params}
-                                        {...field}
                                         hiddenLabel
                                         fullWidth
                                         InputProps={{
@@ -71,7 +76,9 @@ const ControllerSelectAutoComplete = <T extends FieldValues>(props: Props<T>) =>
                                 )
                             }
                             }
+                            options={options}
                             clearIcon={<IconCircleClose />}
+                            disableClearable={!field?.value}
                             {...res}
                         />
                         {error?.message && <ErrorText>{error?.message && error.message}</ErrorText>}

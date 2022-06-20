@@ -18,6 +18,9 @@ import {
 
 export default function DropDownTargetLevel({ level }: any) {
   const Target = useSelector((state: RootState) => state.projectMap.Target);
+  const ListChild = useSelector(
+    (state: RootState) => state.projectMap.ListChild
+  );
   const TargetShape = useSelector(
     (state: RootState) => state.projectMap.TargetShape
   );
@@ -36,6 +39,13 @@ export default function DropDownTargetLevel({ level }: any) {
       if (!isEmpty(newTarget) && !isEmpty(ref?.current)) {
         dispatch(setTarget(newTarget));
         setValue(newTarget);
+      }
+    } else {
+      if (!isEmpty(TargetShape) && TargetShape.level === ListLevel.length - 1) {
+        const newTarget = ListChild.find((data) => data.id === TargetShape.id);
+        dispatch(setTarget(newTarget));
+        dispatch(setImgMap(newTarget.imgMap));
+        dispatch(setGeoJsonData([]));
       }
     }
   }, [TargetShape]);
@@ -105,14 +115,29 @@ export default function DropDownTargetLevel({ level }: any) {
           ) {
             apiGetListChildMapByIdParent(Target.id)
               .then((response) => {
+                const geojsonArray = [];
                 dispatch(
                   setListChild(
-                    response.responseData.map((data) => ({
-                      ...data,
-                      level: ListLevel.length - 1,
-                    }))
+                    response.responseData.map((data) => {
+                      if (!isEmpty(data.map)) {
+                        const geodata = JSON.parse(data.map);
+                        geojsonArray.push({
+                          ...geodata,
+                          properties: {
+                            ...geodata.properties,
+                            lock: data.status === "1",
+                            id: data.id,
+                          },
+                        });
+                      }
+                      return {
+                        ...data,
+                        level: ListLevel.length - 1,
+                      };
+                    })
                   )
                 );
+                dispatch(setGeoJsonData(geojsonArray));
               })
               .catch((err) => console.log(err));
           }

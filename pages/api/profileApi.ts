@@ -1,5 +1,7 @@
 import { CommonResponse } from "type/common";
+import { convertToQuery } from "utils/helper";
 import HttpClient from "utils/HttpClient";
+import FormatFns from 'utils/DateFns';
 
 export const getListCustomerType = async () => {
   return HttpClient.post<any, CommonResponse>(
@@ -30,13 +32,18 @@ export const postImage = async (formData: any) => {
   );
 };
 export const postFile = async (formData: any) => {
-  return HttpClient.post<any, CommonResponse>(
-    `/api-profile/upload/document`,
-    formData,
-    {
-      headers: {
-        "content-type": "multipart/form-data",
-      },
-    }
-  );
+  try {
+    return HttpClient.post<any, CommonResponse>(
+      `api-profile/upload/business-registration${convertToQuery({ businessRegistrationDate: FormatFns.formatDateTime(new Date, 'yyyy/MM/dd HH:ss') })}`,
+      formData,
+      {
+        headers: {
+          "content-type": "multipart/form-data",
+        },
+      }
+    );
+  } catch (error) {
+    return error;
+  }
+
 };

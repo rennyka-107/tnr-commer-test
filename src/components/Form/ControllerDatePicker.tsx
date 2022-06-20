@@ -4,6 +4,7 @@ import TextField from "@mui/material/TextField";
 import { Dispatch, SetStateAction } from "react";
 import type { Control, FieldPath, FieldValues } from "react-hook-form";
 import { Controller } from "react-hook-form";
+import { InputProps } from "utils/constants";
 
 interface Props<T> extends Omit<TextFieldProps | any, "name"> {
   control: Control<T>;
@@ -62,6 +63,13 @@ const ControllerDatePicker = <T extends FieldValues>(props: Props<T>) => {
             fullWidth
             InputLabelProps={{
               shrink: true,
+            }}
+            InputProps={{
+              style: {
+                ...InputProps.style,
+                paddingTop: 0,
+                paddingBottom: 0
+              }
             }}
             onChange={onChange}
             error={Boolean(error)}

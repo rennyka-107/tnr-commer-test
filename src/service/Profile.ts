@@ -57,11 +57,14 @@ export interface ProfileI {
     idReceiveDate: string,
     domicile: string,
     address: string,
-    district: string,
-    province: string,
+    district: string | number,
+    province: string | number,
     avatar: string,
     avatarThumbnailUrl: string,
-    attachPaper: string
+    attachPaperThumbnailUrl?: string,
+    attachPaper: string,
+    fileImages?: any,
+    businessRegistration?: any;
 }
 
 export const getContractByUser = () => {
@@ -77,5 +80,5 @@ export const changePassword = (params: { oldPassword: string, newPassword: strin
 }
 
 export const updateProfile = (body: ProfileI) => {
-    return HttpClient.post<ResponseTypeAPI, any>(`${CHANGE_PASSWORD}`, body);
+    return HttpClient.post<ResponseTypeAPI, any>(`${UPDATE_PROFILE}`, body);
 }
