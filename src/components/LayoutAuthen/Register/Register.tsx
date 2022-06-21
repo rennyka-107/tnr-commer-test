@@ -6,11 +6,13 @@ import PasswordTextField from "@components/Form/PasswordTextField";
 import styled from "@emotion/styled";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { CheckCircleOutline, CircleOutlined } from "@mui/icons-material";
+import isEmpty from "lodash.isempty";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { validateLine } from "utils/constants";
+import { validateVietnameseName } from "utils/helper";
 import PathRoute from "utils/PathRoute";
 import Regexs from "utils/Regexs";
 import * as yup from "yup";
@@ -63,22 +65,26 @@ const Index = (props: Props) => {
       .string()
       .trim(validateLine.trim)
       .strict(true)
-      .max(255)
       .required(validateLine.required)
+      .min(3, "Họ tên không được chứa ít hơn 3 ký tự")
+      .matches(validateVietnameseName(),'Họ và tên không đúng định dạng')
+      .max(255)
       .default(""),
     password: yup
       .string()
       .trim(validateLine.trim)
       .strict(true)
+      .required(validateLine.required)
       .min(8, "Mật khẩu không được chứa ít hơn 8 ký tự")
       .max(255, "Mật khẩu không được chứa quá 255 ký tự")
       .matches(Regexs.password, validateLine.regexPassword)
-      .required(validateLine.required)
+      // .test('passwords-match', 'Mật khẩu không khớp', function (value) {       return this.parent?.rePassword === value     }) 
       .default(""),
     rePassword: yup
       .string()
       .trim(validateLine.trim)
       .strict(true)
+      .required(validateLine.required)
       .oneOf([yup.ref("password"), null], "Mật khẩu không khớp")
       .default(""),
     phoneNumber: yup
@@ -100,11 +106,34 @@ const Index = (props: Props) => {
   const dispatch = useDispatch();
   const [checked, setChecked] = useState(false);
 
-  const { control, handleSubmit, reset, getValues } = useForm<RegisterParam>({
+  const {
+    control,
+    handleSubmit,
+    reset,
+    getValues,
+    formState: { errors },
+    watch,
+  } = useForm<RegisterParam>({
     mode: "onChange",
     resolver: yupResolver(validationSchema),
     defaultValues: validationSchema.getDefault(),
   });
+
+  const checkField = useMemo(() => {
+    return (
+      !!getValues("fullName") &&
+      !!getValues("phoneNumber") &&
+      !!getValues("email") &&
+      !!getValues("password") &&
+      !!getValues("rePassword")
+    );
+  }, [
+    watch("email"),
+    watch("fullName"),
+    watch("phoneNumber"),
+    watch("password"),
+    watch("rePassword"),
+  ]);
 
   const onSubmit = async (data: any) => {
     const body = {
@@ -237,9 +266,14 @@ const Index = (props: Props) => {
       <div style={{ width: "100%" }}>
         <CustomButton
           label="Tiếp tục"
-          style={{ background: !checked ? "#D6000080" : "#D60000" }}
+          style={{
+            background:
+              !checked || !isEmpty(errors) || !checkField
+                ? "#D6000080"
+                : "#D60000",
+          }}
           type="submit"
-          disabled={!checked}
+          disabled={!checked || !isEmpty(errors)|| !checkField}
         />
       </div>
     </form>

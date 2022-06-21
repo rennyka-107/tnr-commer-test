@@ -14,6 +14,18 @@ const toCamel = (s: string) => {
   });
 };
 
+export function validateVietnameseName(){
+  var firstLetter="[A-EGHIK-VXYÂĐỔÔÚỨ]".normalize("NFC"),
+      otherLetters="[a-eghik-vxyàáâãèéêìíòóôõùúýỳỹỷỵựửữừứưụủũợởỡờớơộổỗồốọỏịỉĩệểễềếẹẻẽặẳẵằắăậẩẫầấạảđ₫]".normalize("NFC"),
+      regexString="^"
+                 +firstLetter+otherLetters+"+\\s"
+                 +"("+firstLetter+otherLetters+"+\\s)*"
+                 +firstLetter+otherLetters+"+$"
+  return RegExp(regexString)
+  //     regexPattern=RegExp(regexString);
+  // return regexPattern.test(value.normalize("NFC"))
+}
+
 // export function convertKeysToCamel(o: any) {
 //   if (isObject(o)) {
 //     const n = {};

@@ -40,14 +40,14 @@ const Search = () => {
     (state: RootState) => state.searchs
   );
   const [searchBody, setSearchBody] = useState<any>({
-    provinceId: "",
-    projectTypeId: "",
-    projectId: "",
-    priceFrom: "",
-    priceTo: "",
-    areaFrom: null,
-    areaTo: null,
-    textSearch: "",
+    provinceId: provinceId ? provinceId : "",
+    projectTypeId: projectTypeId ? projectTypeId : "",
+    projectId: projectId ? projectId : "",
+    priceFrom: priceFrom ? priceFrom + "000000000" : "",
+    priceTo: priceTo ? priceTo + "000000000" : "",
+    areaFrom: Number(areaFrom),
+    areaTo: Number(areaTo),
+    textSearch: textSearch ? textSearch : "",
   });
   const [search, setSearch] = useState({
     page: 1,
@@ -94,7 +94,7 @@ const Search = () => {
   };
   useEffect(() => {
     fetchAdvandedSearchList();
-  }, [searchBody, search.page]);
+  }, [search.page, searchBody]);
 
   const fetchComponent = () => {
     return (

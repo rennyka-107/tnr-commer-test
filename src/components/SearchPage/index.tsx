@@ -25,7 +25,7 @@ type dataProps = {
   totalElement: number;
   totalTextSearch: number;
   pageNumber: number;
-  setSearchAction?:any;
+  setSearchAction?: any;
   searchAction: boolean;
 };
 
@@ -60,12 +60,10 @@ const SearchPage = ({
   searchData,
   totalTextSearch,
   setSearchAction,
-  searchAction
+  searchAction,
 }: dataProps) => {
   const classes = useStyles();
-
   const router = useRouter();
-
   const [textSearch, setTextSearch] = useState<any>("");
   const { listMenuBarType, listMenuBarProjectType, listMenuLocation } =
     useSelector((state: RootState) => state.menubar);
@@ -73,7 +71,7 @@ const SearchPage = ({
   const [productName, setProductName] = useState<string[]>([]);
   const [projectName, setProjectName] = useState<string[]>([]);
   const [filterSearch, setFilterSearch] = useState({
-	textSearch:"",
+    textSearch: "",
     provinceId: "",
     projectTypeId: "",
     projectId: "",
@@ -83,26 +81,18 @@ const SearchPage = ({
     areaTo: null,
   });
 
+  const { provinceId } = router.query;
+
   useEffect(() => {
-	const value = router?.query.textSearch;
-	setTextSearch(value)
-}, [router.query.textSearch]);
+    const value = router?.query.textSearch;
+    setTextSearch(value);
+    // setLocation()
 
-//   useEffect(() => {
+    const dataLocation = listMenuLocation.filter(
+		(x) => x.ProvinceID === Number(provinceId)
+		);
 
-// 	// setFilterSearch({ ...filterSearch, textSearch: textSearch });
-//     const projectIdData = listMenuBarType.filter(
-//       (x) => x.id === router.query.projectId
-//     );
-//     if (!isEmpty(projectIdData)) {
-//       // setFilter({ ...filterSearch, projectId: data[0].name });
-//       setProductName(
-//         typeof projectIdData[0].name === "string"
-//           ? projectIdData[0].name.split(",")
-//           : projectIdData[0].name
-//       );
-//     }
-//   }, [filter]);
+  }, [router.query]);
 
   const handleChange = (event: any) => {
     const {
@@ -112,7 +102,7 @@ const SearchPage = ({
       ...filterSearch,
       textSearch: value,
     });
-	setTextSearch(value)
+    setTextSearch(value);
   };
 
   const handleSelectProject = (
@@ -151,7 +141,7 @@ const SearchPage = ({
     router.push(
       `/search?Type=Advanded&&textSearch=${filterSearch.textSearch}&&provinceId=${filterSearch.provinceId}&&projectTypeId=${filterSearch.projectTypeId}&&projectId=${filterSearch.projectId}&&priceTo=${filterSearch.priceTo}&&priceFrom=${filterSearch.priceFrom}&&areaTo=${filterSearch.areaTo}&&areaFrom=${filterSearch.areaFrom}`
     );
-	setSearchAction(!searchAction)
+    setSearchAction(!searchAction);
   };
 
   return (
@@ -212,14 +202,14 @@ const SearchPage = ({
               placeholder="Chọn dự án"
               style={{ width: 150 }}
             />
-            <SelectSeach
+            {/* <SelectSeach
               label="Block/ Khu"
               data={[]}
               value={[]}
               onChange={() => console.log("abc")}
               placeholder="Block/ Khu"
               style={{ width: 150 }}
-            />
+            /> */}
             <SelectSeach
               label="Khoảng giá"
               data={[]}
@@ -228,14 +218,14 @@ const SearchPage = ({
               placeholder="Khoảng giá"
               style={{ width: 150 }}
             />
-            <SelectSeach
+            {/* <SelectSeach
               label="Phòng"
               data={[]}
               value={[]}
               onChange={() => console.log("abc")}
               placeholder="Phòng"
               style={{ width: 150 }}
-            />
+            /> */}
             <SelectSeach
               label="Diên tích..."
               data={[]}

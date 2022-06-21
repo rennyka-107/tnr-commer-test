@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IconBag, IconHeart, IconUser, Logo } from "@components/Icons";
 import styled from "@emotion/styled";
 import { Button } from "@mui/material";
@@ -8,9 +8,14 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useCallback } from "react";
 import PathRoute from "utils/PathRoute";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../store/store";
 import isEmpty from "lodash.isempty";
+import {
+  setShortcut,
+  shortcut,
+  typeShortcut,
+} from "../../../../store/shortcut";
 
 const ContainerNavTop = styled.div`
   height: 93px;
@@ -123,6 +128,10 @@ const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
   const Router = useRouter();
   const [checkSale, setCheckSale] = useState(false);
   const { cart } = useSelector((state: RootState) => state.carts);
+  const dispatch=useDispatch();
+  const { title, typeAction } = useSelector(
+    (state: RootState) => state?.shortcut
+  );
 
   const menuUser: ItemValueProps[] = [
     { id: "Profile", name: "Thông tin cá nhân" },
@@ -143,7 +152,7 @@ const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
         break;
     }
   }, []);
-  
+
   const scrollView = () => {
     setCheckSale(true);
     if (Router.pathname === "/") {
@@ -167,7 +176,23 @@ const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
         return;
       }
     } else {
-      Router.replace(`/buyingGuide?idUserManual=3e63c59e-7995-4f8b-b553-740d131a052f&&selected=0`);
+      Router.replace(
+        `/buyingGuide?idUserManual=3e63c59e-7995-4f8b-b553-740d131a052f&&selected=0`
+      );
+    }
+  };
+
+  const pressShortcut = (type: typeShortcut) => {
+    switch (type) {
+      case "BANG_HANG":
+        Router.replace('/productTable');
+        break;
+      case "HUONG_DAN_OL":
+        handleScrollHuongDan()
+        break;
+
+      default:
+        break;
     }
   };
 
@@ -210,8 +235,8 @@ const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
           </div>
         </WrapMenuItem>
         <WrapRightItem>
-          <ButtonBuyHelp onClick={() => handleScrollHuongDan()}>
-            <span>Hướng dẫn mua online</span>
+          <ButtonBuyHelp onClick={() => pressShortcut(typeAction)}>
+            <span>{title}</span>
           </ButtonBuyHelp>
           <IconAccountWrap>
             {/* <span

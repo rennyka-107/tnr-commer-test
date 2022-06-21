@@ -10,6 +10,7 @@ import projectMap from "./projectMapSlice";
 import searchs from "./searchSlice";
 import userManual from "./userManualSlice";
 import profile from "./profileSlice";
+import shortcut from "./shortcut";
 import infoCms from "./infoCmsSlice";
 
 const combinedReducer = combineReducers({
@@ -22,7 +23,7 @@ const combinedReducer = combineReducers({
   searchs,
   userManual,
   profile,
-
+  shortcut,
   infoCms,
 });
 
@@ -72,6 +73,9 @@ const masterReducer = (state, action) => {
           saveInfo: action.payload.saveInfo,
           getCodeQR: action.payload.getCodeQR,
         },
+      },
+      shortcut: {
+       ...action.payload.shortcut
       },
     };
     return nextState;

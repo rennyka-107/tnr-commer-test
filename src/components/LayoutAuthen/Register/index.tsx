@@ -22,13 +22,12 @@ export interface RegisterParam {
 
 const Index = () => {
   const Route = useRouter();
-  const [type, setType] = useState<any>("");
+  const [type, setType] = useState<any>("register");
   const [key, setKey] = useState("");
   const [userId, setUserId] = useState("");
   const [paramsEndcode, setParamsEndcode] = useState({
 	key: '',
 	OTP: '',
-
   })
   const { tabIndex } = Route.query;
   
@@ -44,17 +43,17 @@ const Index = () => {
 	}
   }, [Route]);
 
-  useEffect(() => {
-    if(tabIndex === 'register'){
-      Route.push({
-        pathname: PathRoute.Login,
-        query: {
-          prePath: Route.pathname,
-          tabIndex: "register",
-        },
-      });
-    }
-  }, [Route]);
+//   useEffect(() => {
+//     if(tabIndex === 'register'){
+//       Route.push({
+//         pathname: PathRoute.Login,
+//         query: {
+//           prePath: Route.pathname,
+//           tabIndex: "register",
+//         },
+//       });
+//     }
+//   }, [Route]);
 
   const render = useMemo(() => {
     switch (type) {

@@ -1,9 +1,11 @@
 import CustomButton from "@components/CustomComponent/CustomButton";
+import ControllerCheckbox from "@components/Form/ControllerCheckbox";
 import ControllerTextField from "@components/Form/ControllerTextField";
 import FormGroup from "@components/Form/FormGroup";
 import PasswordTextField from "@components/Form/PasswordTextField";
 import styled from "@emotion/styled";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { CheckCircleOutline, CircleOutlined } from "@mui/icons-material";
 import { LoginSuccess, ResponseLoginModel } from "@service/auth";
 import useAuth from "hooks/useAuth";
 import Link from "next/link";
@@ -26,9 +28,16 @@ const LinkLabel = styled.a`
   text-decoration: underline;
 `;
 
+const SpanRadio = styled.span`
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16px;
+`;
+
 export interface LoginParams {
   username: string;
   password: string;
+  remember?:any;
 }
 
 const Login = () => {
@@ -39,7 +48,7 @@ const Login = () => {
       .string()
       .trim(validateLine.trim)
       .strict(true)
-      .max(255)
+      .max(255, "Tài khoản không được chứa quá 255 ký tự")
       .required(validateLine.required)
       .default(""),
     password: yup
@@ -51,11 +60,10 @@ const Login = () => {
       // .matches(Regexs.password, validateLine.regexPassword)
       .required(validateLine.required)
       .default(""),
+      remember:yup.boolean().default(false)
   });
 
   useEffect(() => {
-    console.log(isAuthenticated, "isAuthenticated");
-
     if (isAuthenticated) {
       Route.push({
         pathname: Route.query?.prePath?.toString() || "/",
@@ -72,7 +80,7 @@ const Login = () => {
     try {
       const response: ResponseLoginModel<LoginSuccess> = await login(values);
       if (!response?.responseData?.access_token) {
-        alert(response.responseMessage);
+        alert(response?.responseMessage??'Có một số lỗi sảy ra');
       }
     } catch (error) {
       const AxiosError: { message: string } = error;
@@ -121,6 +129,16 @@ const Login = () => {
             label="Đăng nhập"
             style={{ background: "#D60000" }}
             type="submit"
+          />
+        </FormGroup>
+        <FormGroup sx={{ mb: 2 }} fullWidth>
+          <ControllerCheckbox
+            name="remember"
+            control={control}
+            labelCustom={<SpanRadio>Ghi nhớ đăng nhâp</SpanRadio>}
+            label=""
+            icon={<CircleOutlined />}
+            checkedIcon={<CheckCircleOutline />}
           />
         </FormGroup>
         <FormGroup sx={{ mb: 2 }} fullWidth style={{ alignItems: "center" }}>
