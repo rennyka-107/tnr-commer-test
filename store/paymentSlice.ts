@@ -1,24 +1,28 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { PaymentListResponse } from "interface/payment";
 
-interface initialState {
-  listPaymentById: PaymentListResponse[];
+interface InitialState {
+  listPayment: any[];
+  qrCode: string;
 
 }
-const initialState = {
-	listPaymentById: [],
+const initialState: InitialState = {
+	listPayment: [],
+  qrCode: ""
 };
 
 export const paymentSlice = createSlice({
-  name: "payment",
+  name: "payments",
   initialState,
   reducers: {
-    getListPayment: (state, action) => {
-      state.listPaymentById = action.payload;
+    setListPayment: (state, action) => {
+      state.listPayment = action.payload;
+    },
+    setQrCode: (state, action) => {
+      state.qrCode = action.payload;
     },
   },
 });
 
-export const { getListPayment } = paymentSlice.actions;
+export const { setListPayment, setQrCode } = paymentSlice.actions;
 
 export default paymentSlice.reducer;

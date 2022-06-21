@@ -40,20 +40,23 @@ export { default as IconTabs } from "./IconTabs";
 export { default as IconReceiptDisabled } from "./IconReceiptDisabled";
 export { default as IconDownloadPTG } from "./IconDownloadPTG";
 export { default as IconDownSelect } from "./IconDownSelect";
-export { default as IconTimes } from './IconTimes'
-export { default as IconSetting } from './IconSetting'
-export { default as IconRadio } from './IconRadio'
-export { default as IconEdit } from './IconEdit'
-export { default as IconPlusCircle } from './IconPlusCircle'
-export { default as IconEditWhite } from './IconEditWhite'
+export { default as IconTimes } from "./IconTimes";
+export { default as IconSetting } from "./IconSetting";
+export { default as IconRadio } from "./IconRadio";
+export { default as IconEdit } from "./IconEdit";
+export { default as IconPlusCircle } from "./IconPlusCircle";
+export { default as IconEditWhite } from "./IconEditWhite";
 
-export { default as IconInfoCircle } from './IconInfoCircle'
-export { default as IconLocationHover } from './IconLocationHover'
-export { default as IconHotelHover } from './IconHotelHover'
-export { default as IconHomeHover } from './IconHomeHover'
-export { default as IconBussinessAndTradeHover } from './IconBussinessAndTradeHover'
-export {default as IconArrowDown} from './IconArrowDown'
-export {default as IconDauCham} from './IconDauCham'
-export {default as IconCarsouelLeftProduct} from './IconCarsouelLeftProduct'
-export {default as IconCarsouelRightProduct} from './IconCarsouelRightProduct'
-export {default as IconFilterSearch} from './IconFilterSearch'
+export { default as IconInfoCircle } from "./IconInfoCircle";
+export { default as IconLocationHover } from "./IconLocationHover";
+export { default as IconHotelHover } from "./IconHotelHover";
+export { default as IconHomeHover } from "./IconHomeHover";
+export { default as IconBussinessAndTradeHover } from "./IconBussinessAndTradeHover";
+export { default as IconArrowDown } from "./IconArrowDown";
+export { default as IconDauCham } from "./IconDauCham";
+export { default as IconCarsouelLeftProduct } from "./IconCarsouelLeftProduct";
+export { default as IconCarsouelRightProduct } from "./IconCarsouelRightProduct";
+export { default as IconFilterSearch } from "./IconFilterSearch";
+
+export { default as IconAttach } from "./IconAttach";
+export { default as IconRemove } from "./IconRemove";

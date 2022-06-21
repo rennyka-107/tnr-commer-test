@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import FormGroup from "@components/Form/FormGroup";
 import Link from "next/link";
-import React, { useState, Dispatch, SetStateAction } from "react";
+import React, { useState, Dispatch, SetStateAction, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { validateLine } from "utils/constants";
 import * as yup from "yup";
@@ -34,11 +34,19 @@ import {
 import BillingInfo from "./components/BillingInfo";
 import ItemDetailCol from "./components/ItemDetailCol";
 import PaymentMethods from "./components/PaymentMethods";
+import FileUpload from "./components/FileUpload";
 import TableQuote from "./components/TableQuote";
 import AddInfoCustom from "./components/AddInfoCustom";
 import Container from "@components/Container";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../store/store";
+import {
+  apiGetQrCode,
+  apiSavePaymentInformation,
+  getListPaymenListById,
+} from "../../../pages/api/paymentApi";
+import isEmpty from "lodash.isempty";
+import { setListPayment } from "../../../store/paymentSlice";
 
 type Props = {
   setScopeRender: Dispatch<SetStateAction<string>>;
@@ -55,39 +63,38 @@ const BoxInfoUserStyled = styled(Box)({
 });
 
 interface InformationBuyer {
-  hoTen: string;
-  ngaySinh: string;
-  soDienThoai: string;
+  fullname: string;
+  dob: string;
+  phoneNumber: string;
   email: string;
-  soDdcn: string;
-  noiCap: string;
-  ngayCap: string;
-  dcThuongTru: string;
-  dcLienLac: string;
-  thanhPho: string;
-  quanHuyen: string;
+  idNumber: string;
+  issuePlace: string;
+  issueDate: string;
+  permanentAddress: string;
+  contactAddress: string;
+  province: string;
+  district: string;
 }
 
 const validationSchema = yup.object().shape({
-  hoTen: yup.string().required(validateLine.required).default(""),
-  ngaySinh: yup
+  fullname: yup.string().required(validateLine.required).default(""),
+  dob: yup
     .string()
     .required(validateLine.required)
     .trim(validateLine.trim)
     .default(""),
-  soDienThoai: yup.string().required(validateLine.required).default(""),
+  phoneNumber: yup.string().required(validateLine.required).default(""),
   email: yup.string().trim(validateLine.trim).default(""),
-  soDdcn: yup.string().required(validateLine.required).default(""),
-  noiCap: yup.string().required(validateLine.required).default(""),
-  ngayCap: yup.string().required(validateLine.required).default(""),
-  dcThuongTru: yup.string().required(validateLine.required).default(""),
-  dcLienLac: yup.string().default(""),
-  thanhPho: yup.string().default(""),
-  quanHuyen: yup.string().default(""),
+  idNumber: yup.string().required(validateLine.required).default(""),
+  issuePlace: yup.string().required(validateLine.required).default(""),
+  issueDate: yup.string().required(validateLine.required).default(""),
+  permanentAddress: yup.string().required(validateLine.required).default(""),
+  contactAddress: yup.string().default(""),
+  province: yup.string().default(""),
+  district: yup.string().default(""),
 });
 
 const LayoutInfoCustom = ({ setScopeRender }: Props) => {
-
   const { control, handleSubmit } = useForm<InformationBuyer>({
     mode: "onChange",
     resolver: yupResolver(validationSchema),
@@ -104,18 +111,117 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
     "Bàn giao giấy chứng nhận",
   ];
 
-  const [payMethod, setPayMethod] = useState<number>(1);
+  const [payMethod, setPayMethod] = useState<string>("");
   const [billing, setBilling] = useState<number>(1);
   const [formInfo, setFormInfo] = useState<boolean>(false);
   const { cart } = useSelector((state: RootState) => state.carts);
+  const { listPayment } = useSelector((state: RootState) => state.payments);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (!isEmpty(listPayment)) {
+      setPayMethod(listPayment[0]["id"]);
+    }
+  }, [listPayment]);
+
+  async function fetchPaymentMethod() {
+    try {
+      const res = await getListPaymenListById();
+      if (!isEmpty(res.responseData)) {
+        dispatch(setListPayment(res.responseData));
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(() => {
+    fetchPaymentMethod();
+  }, []);
 
   const handleOnSubmit = (values) => {
-    console.log(values,cart, "123123123")
-    // try {
-    //   setScopeRender("transaction_message");
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    // console.log(values, cart, payMethod, "123123123");
+    const {
+      vat,
+      totalVatPrice,
+      maintainPrice,
+      minEarnestMoney,
+      regulationOrderPrice,
+      totalPrice,
+      id: productId,
+    } = cart;
+    const {
+      fullname,
+      dob,
+      phoneNumber,
+      email,
+      idNumber,
+      issueDate,
+      issuePlace,
+      permanentAddress,
+      contactAddress,
+      province,
+      district,
+    } = values;
+    const formatData = {
+      productId,
+      paymentMethodId: payMethod,
+      paymentIdentityInfos: [
+        {
+          fullname,
+          dob,
+          phoneNumber,
+          email,
+          idNumber,
+          issueDate,
+          issuePlace,
+          permanentAddress,
+          contactAddress,
+          province,
+          district,
+        },
+      ],
+      quotationRealt: {
+        landPrice: totalVatPrice,
+        vat,
+        maintainPrice,
+        totalPrice,
+        sales: "0",
+        nppDiscount: "0",
+        totalOnlinePrice: totalPrice,
+        minEarnestMoney,
+        regulationOrderPrice,
+      },
+      deposite: billing === 1 ? minEarnestMoney : null,
+      totalDeposite: billing !== 1 ? regulationOrderPrice : null,
+      paymentFlag: 0,
+    };
+    try {
+      apiSavePaymentInformation(formatData)
+        .then((res) => {
+          console.log(res);
+          if (!isEmpty(res.responseData)) {
+            if (
+              !isEmpty(
+                res.responseData?.paymentInformation?.transactionCodeObject
+                  ?.code
+              )
+            ) {
+              apiGetQrCode(
+                res.responseData?.paymentInformation?.transactionCodeObject
+                  ?.code
+              )
+                .then((res) => {
+                  console.log(res, "333333");
+                  setScopeRender("transaction_message");
+                })
+                .catch((err) => console.log(err));
+            }
+          }
+        })
+        .catch((err) => console.log(err));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -131,7 +237,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
           </Stepper>
         </Box>
       )} */}
-      <form onSubmit={handleSubmit((values) => handleOnSubmit(values))}>
+      <form onSubmit={handleSubmit(handleOnSubmit)}>
         <Grid container columnSpacing={"30px"} justifyContent={"center"}>
           <Grid item>
             {formInfo ? (
@@ -174,7 +280,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                             label={"Họ và tên"}
                             control={control}
                             variant={"outlined"}
-                            name={"hoTen"}
+                            name={"fullname"}
                             required
                           />
                         </FormGroup>
@@ -185,7 +291,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                             label={"Ngày sinh"}
                             control={control}
                             variant={"outlined"}
-                            name={"ngaySinh"}
+                            name={"dob"}
                             required
                           />
                         </FormGroup>
@@ -197,7 +303,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                             label={"Số điện thoại"}
                             control={control}
                             variant={"outlined"}
-                            name={"soDienThoai"}
+                            name={"phoneNumber"}
                             required
                           />
                         </FormGroup>
@@ -231,7 +337,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                             label={"CCCD/CMND"}
                             control={control}
                             variant={"outlined"}
-                            name={"soDdcn"}
+                            name={"idNumber"}
                             required
                             width={317}
                           />
@@ -244,7 +350,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                             label={"Nơi cấp"}
                             control={control}
                             variant={"outlined"}
-                            name={"noiCap"}
+                            name={"issuePlace"}
                             required
                           />
                         </FormGroup>
@@ -255,7 +361,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                             label={"Ngày cấp"}
                             control={control}
                             variant={"outlined"}
-                            name={"ngayCap"}
+                            name={"issueDate"}
                             required
                           />
                         </FormGroup>
@@ -266,7 +372,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                             label={"Địa chỉ thường trú"}
                             control={control}
                             variant={"outlined"}
-                            name={"dcThuongTru"}
+                            name={"permanentAddress"}
                             required
                             fullWidth
                           />
@@ -279,7 +385,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                             label={"Địa chỉ liên lạc"}
                             control={control}
                             variant={"outlined"}
-                            name={"dcLienLac"}
+                            name={"contactAddress"}
                             fullWidth
                           />
                         </FormGroup>
@@ -291,7 +397,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                             label={"Thành phố/Tỉnh"}
                             control={control}
                             variant={"outlined"}
-                            name={"thanhPho"}
+                            name={"province"}
                           />
                         </FormGroup>
                       </Grid>
@@ -301,7 +407,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                             label={"Quận/Huyện"}
                             control={control}
                             variant={"outlined"}
-                            name={"quanHuyen"}
+                            name={"district"}
                           />
                         </FormGroup>
                       </Grid>
@@ -318,6 +424,9 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                     payMethod={payMethod}
                     setPayMethod={setPayMethod}
                   />
+                </Box>
+                <Box>
+                  <FileUpload />
                 </Box>
               </>
             )}
@@ -350,7 +459,11 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                 <Text18Styled color={"#fff"}>Tạo phiếu thanh toán</Text18Styled>
               </ButtonAction>
               {!formInfo && (
-                <ButtonStyled type="submit" bg={"white"} border={"1px solid #c7c9d9"}>
+                <ButtonStyled
+                  type="submit"
+                  bg={"white"}
+                  border={"1px solid #c7c9d9"}
+                >
                   <Text18Styled>Lưu thông tin</Text18Styled>
                 </ButtonStyled>
               )}

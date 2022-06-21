@@ -8,8 +8,9 @@ import projects from "./projectSlice";
 import carts from "./cartSlice";
 import projectMap from "./projectMapSlice";
 import searchs from "./searchSlice";
-import userManual from './userManualSlice'
+import userManual from "./userManualSlice";
 import profile from "./profileSlice";
+import infoCms from "./infoCmsSlice";
 
 const combinedReducer = combineReducers({
   menubar,
@@ -21,7 +22,8 @@ const combinedReducer = combineReducers({
   searchs,
   userManual,
   profile,
-  
+
+  infoCms,
 });
 
 export type RootState = ReturnType<typeof combinedReducer>;
@@ -47,7 +49,7 @@ const masterReducer = (state, action) => {
         listTabsProject: action.payload.projects.listTabsProject,
       },
       payments: {
-        listPaymentById: action.payload.payments.listPaymentById,
+        ...action.payload.payments
       },
       carts: {
         ...action.payload.carts,
@@ -59,13 +61,17 @@ const masterReducer = (state, action) => {
         SearchHomeLocation: action.payload.searchs.SearchHomeLocation,
         totalElement: action.payload.searchs.totalElement,
       },
-	  userManual: {
-		listUserManual: action.payload.userManual.listUserManual,
-		userManualById: action.payload.userManual.userManualById
-	  },
+      userManual: {
+        listUserManual: action.payload.userManual.listUserManual,
+        userManualById: action.payload.userManual.userManualById,
+      },
       profile: {
         updateInfo: action.payload.profile.updateInfoResponse,
         userInfo: action.payload.profile.userInfo,
+        infoCms: {
+          saveInfo: action.payload.saveInfo,
+          getCodeQR: action.payload.getCodeQR,
+        },
       },
     };
     return nextState;

@@ -5,6 +5,7 @@ import PathRoute from "utils/PathRoute";
 import Confirm from "./Confirm";
 import OTP from "./OTP";
 import Register from "./Register";
+import { Base64 } from "js-base64";
 
 const Form = styled.div`
   margin-top: 10px;
@@ -21,11 +22,30 @@ export interface RegisterParam {
 
 const Index = () => {
   const Route = useRouter();
-  const [type, setType] = useState("register");
+  const [type, setType] = useState<any>("");
   const [key, setKey] = useState("");
   const [userId, setUserId] = useState("");
+  const [paramsEndcode, setParamsEndcode] = useState({
+	key: '',
+	OTP: '',
+
+  })
+  const { tabIndex } = Route.query;
+  
   useEffect(() => {
-    if(type==='register'){
+	  setType(tabIndex);
+	if(Route.query.key !== undefined && Route.query.otp !== undefined){
+		const key = Base64.decode(Route.query.key as string)
+		const otp = Base64.decode(Route.query.otp as string)
+		setParamsEndcode({
+			key: key,
+			OTP: otp
+		})
+	}
+  }, [Route]);
+
+  useEffect(() => {
+    if(tabIndex === 'register'){
       Route.push({
         pathname: PathRoute.Login,
         query: {
@@ -34,7 +54,7 @@ const Index = () => {
         },
       });
     }
-  }, [type]);
+  }, [Route]);
 
   const render = useMemo(() => {
     switch (type) {
@@ -67,6 +87,8 @@ const Index = () => {
         return (
           <OTP
             keycloakId={key}
+			paramsEndcode={paramsEndcode.OTP}
+			keyWidthOTPParams={paramsEndcode.key}
             userId={userId}
             back={() => setType("confirm")}
             next={() => setType("ChangeNewPass")}

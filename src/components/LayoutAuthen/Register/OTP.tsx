@@ -63,7 +63,7 @@ const TextNotice = styled.div`
   line-height: 170%;
   text-align: center;
   margin: 25px 0;
-  width: 330px
+  width: 330px;
 `;
 export interface Param {
   username: string;
@@ -72,6 +72,8 @@ export interface Param {
 export interface Props {
   keycloakId?: String;
   userId?: String;
+  paramsEndcode?: string;
+  keyWidthOTPParams?: string;
   back?: () => void;
   next?: () => void;
 }
@@ -79,6 +81,8 @@ export interface Props {
 const OTP = (props: Props) => {
   const [OTP, setOTP] = useState("");
   const Route = useRouter();
+  const paramsOTP = props.paramsEndcode;
+  const keyWidthOTP = props.keyWidthOTPParams;
 
   const [checked, setChecked] = useState(true);
   const [time, setTime] = useState<number>(120);
@@ -88,6 +92,11 @@ const OTP = (props: Props) => {
   useEffect(() => {
     countDown();
   }, []);
+  useEffect(() => {
+    if (paramsOTP !== "") {
+      setOTP(paramsOTP);
+    }
+  }, [paramsOTP]);
 
   const countDown = () => {
     interval.current = setInterval(() => {
@@ -107,13 +116,24 @@ const OTP = (props: Props) => {
   }, []);
 
   const checkOTP = () => {
-    activeAccount(props.keycloakId, OTP).then((response) => {
-      if (response.responseCode === "00" && response.responseData) {
-        setSuccess(true);
-      } else {
-        setChecked(false);
-      }
-    });
+	if(keyWidthOTP !== ""){
+		activeAccount(keyWidthOTP, OTP).then((response) => {
+			if (response.responseCode === "00" && response.responseData) {
+			  setSuccess(true);
+			} else {
+			  setChecked(false);
+			}
+		  });
+	}else {
+		activeAccount(props.keycloakId, OTP).then((response) => {
+			if (response.responseCode === "00" && response.responseData) {
+			  setSuccess(true);
+			} else {
+			  setChecked(false);
+			}
+		  });
+	}
+
   };
 
   const reSend = () => {

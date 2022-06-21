@@ -10,6 +10,7 @@ import {
   setTarget,
   setImgMap,
   setArrayImgMap,
+  setListTarget,
 } from "../../../../store/projectMapSlice";
 import isEmpty from "lodash.isempty";
 import {
@@ -31,6 +32,9 @@ export default function DropDownTargetLevel({ level }: any) {
   const ArrayImgMap = useSelector(
     (state: RootState) => state.projectMap.ArrayImgMap
   );
+  const ListTarget = useSelector(
+    (state: RootState) => state.projectMap.ListTarget
+  );
   const [formatList, setFormatList] = useState<any[]>([]);
   const [value, setValue] = useState<any>(null);
   const dispatch = useDispatch();
@@ -38,6 +42,28 @@ export default function DropDownTargetLevel({ level }: any) {
 
   useEffect(() => {
     if (!isEmpty(value)) {
+      let newListTarget = [];
+      if (!isEmpty(ListTarget)) {
+        const existLevelValue = ListTarget.find(
+          (tg) => tg.level === value.level
+        );
+        if (!isEmpty(existLevelValue)) {
+          newListTarget = ListTarget.map((tg) => {
+            if (tg.level === level.level) {
+              return { name: value.name, level: value.level, levelName: level.name };
+            }
+            return tg;
+          });
+        } else {
+          newListTarget = [
+            ...ListTarget,
+            { name: value.name, level: value.level, levelName: level.name },
+          ];
+        }
+        dispatch(setListTarget(newListTarget));
+      } else {
+        dispatch(setListTarget([{ name: value.name, level: value.level, levelName: level.name }]));
+      }
       if (!isEmpty(value.imgMap) && value.type === "1") {
         let newArray = [];
         const existValue = ArrayImgMap.find((vl) => vl.level === value.level);

@@ -20,6 +20,7 @@ const ListProductCard = ({ data }: ProductsProps) => {
   const ListLevel = useSelector(
     (state: RootState) => state.projectMap.ListLevel
   );
+
   return (
     <Box
       sx={{
@@ -49,6 +50,7 @@ const ListProductCard = ({ data }: ProductsProps) => {
             >
               <ContainerProduct>
                 <ItemProductMap
+                  data={product}
                   onClick={() => {
                     dispatch(
                       setTargetShape({
@@ -57,9 +59,9 @@ const ListProductCard = ({ data }: ProductsProps) => {
                       })
                     );
                   }}
-                  src={{
-                    src: "https://dulichvietnam.com.vn/data/toa-nha-dep-nhat-viet-nam-8_5.jpg",
-                  }}
+                  // src={{
+                  //   src: "https://dulichvietnam.com.vn/data/toa-nha-dep-nhat-viet-nam-8_5.jpg",
+                  // }}
                 />
               </ContainerProduct>
             </Grid>

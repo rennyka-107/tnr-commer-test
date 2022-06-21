@@ -77,7 +77,7 @@ const ButtonStyled = styled(Button)`
   white-space: pre;
 `;
 
-const ItemProductSeen = ({ src, onClick, data }: Props) => {
+const ItemSeen = ({ src, onClick, data }: Props) => {
   return (
     <WrapperContent>
       <WrapperImg>
@@ -126,4 +126,4 @@ const ItemProductSeen = ({ src, onClick, data }: Props) => {
   );
 };
 
-export default ItemProductSeen;
+export default ItemSeen;

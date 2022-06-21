@@ -13,7 +13,8 @@ interface InitialState {
   };
   ImgMap: string | null;
   TargetShape: any;
-  ArrayImgMap: any[]
+  ArrayImgMap: any[];
+  ListTarget: any[];
 }
 const initialState: InitialState = {
   ProjectInformation: {
@@ -28,7 +29,8 @@ const initialState: InitialState = {
   },
   ImgMap: null,
   TargetShape: null,
-  ArrayImgMap: []
+  ArrayImgMap: [],
+  ListTarget: [],
 };
 
 export const projectMapSlice = createSlice({
@@ -62,6 +64,9 @@ export const projectMapSlice = createSlice({
     setArrayImgMap: (state, { payload }) => {
       state.ArrayImgMap = payload;
     },
+    setListTarget: (state, { payload }) => {
+      state.ListTarget = payload;
+    },
   },
 });
 
@@ -74,7 +79,8 @@ export const {
   setImgMap,
   resetProjectMap,
   setTargetShape,
-  setArrayImgMap
+  setArrayImgMap,
+  setListTarget,
 } = projectMapSlice.actions;
 
 export default projectMapSlice.reducer;

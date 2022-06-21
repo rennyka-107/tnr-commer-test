@@ -103,6 +103,7 @@ const LinkLabel = styled.a`
 `;
 
 const AuthenPages = () => {
+	const Route = useRouter();
   const [tab, setTab] = useState<
     "login" | "register" | "forgetPassword" | "confirm"
   >("register");
@@ -138,6 +139,15 @@ const AuthenPages = () => {
       setTab("confirm");
     }
   }, [query]);
+
+  const handleChangeTab = (value: any) => {
+	if(value === 'register'){
+		Route.replace(`/authen?prePath=%2Fprofile&tabIndex=register`)
+	}else if(value === 'login'){
+		Route.replace(`/authen?prePath=%2Fprofile&tabIndex=login`)
+	}
+	setTab(value)
+  }
   return (
     <ContainerRegister>
       <ItemLeft>
@@ -155,7 +165,7 @@ const AuthenPages = () => {
               value={tab}
               onChange={(event, value) => {
                 if (tab !== value) {
-                  setTab(value);
+					handleChangeTab(value);
                 }
               }}
               indicatorColor="secondary"

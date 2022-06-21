@@ -7,10 +7,11 @@ import {
   IconCompass,
   IconFrame,
 } from "@components/Icons";
+import { currencyFormat } from "utils/helper";
 
 interface Props {
   src?: any;
-  data?: object;
+  data?: any;
   onClick?: MouseEventHandler<HTMLDivElement>;
 }
 
@@ -70,43 +71,80 @@ const TicketTag = styled(Box)`
   line-height: 16px;
 `;
 
-const ItemProductMap = ({ src, onClick, data }: Props) => {
+const TextBottomStyled = styled(Typography)`
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 21px;
+
+  /* Brand */
+
+  color: #1b3459;
+`;
+
+const NumberBottomStyled = styled(Typography)`
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 21px;
+  /* identical to box height */
+
+  color: #d60000;
+`;
+
+const ItemProductMap = ({ onClick, data }: Props) => {
   return (
-    <WrapperContent  onClick={onClick}>
+    <WrapperContent onClick={onClick}>
       <WrapperImg>
         <CardMedia
           component="img"
           height={195}
-          image={src?.src ?? ""}
+          image={
+            data.thumbnail
+              ? data.thumbnail
+              : "https://dulichvietnam.com.vn/data/toa-nha-dep-nhat-viet-nam-8_5.jpg"
+          }
           alt="img product"
           style={{ borderRadius: "20px 20px 0px 0px" }}
         />
       </WrapperImg>
       <TicketTag>TNR Gold</TicketTag>
-      <TitleStyled>Lô A01</TitleStyled>
+      <TitleStyled>{data.name ?? "N/A"}</TitleStyled>
+      <div
+        style={{ display: "flex", margin: "14px 0", alignItems: "flex-end" }}
+      >
+        <TextBottomStyled style={{ marginRight: 40 }}>
+          Giá niêm yết{" "}
+        </TextBottomStyled>
+        <NumberBottomStyled>
+          {currencyFormat(data.price ?? 0)}đ
+        </NumberBottomStyled>
+      </div>
       <TextStyled style={{ margin: "10px auto" }}>
-        TNR The Nosta 90 đường Láng, Thịnh Quang, Đống Đa, Hà Nội
+        {data.location ?? "N/A"}
       </TextStyled>
       <DividerLine />
       <Grid sx={{ pb: 2 }} container rowSpacing={1}>
         <Grid item xs={6} display={"flex"} alignItems={"center"}>
           <IconBedDouble />
-          &nbsp;&nbsp;<TextStyled>02</TextStyled>
+          &nbsp;&nbsp;<TextStyled>{data.numBed ?? "N/A"}</TextStyled>
         </Grid>
         <Grid item xs={6} display={"flex"} alignItems={"center"}>
           <IconFrame />
           &nbsp;&nbsp;
           <TextStyled>
-            80 m<sup>2</sup>
+            {data.landArea ?? "N/A"} m<sup>2</sup>
           </TextStyled>
         </Grid>
         <Grid item xs={6} display={"flex"} alignItems={"center"}>
           <IconBath />
-          &nbsp;&nbsp;<TextStyled>02</TextStyled>
+          &nbsp;&nbsp;<TextStyled>{data.numBath ?? "N/A"}</TextStyled>
         </Grid>
         <Grid item xs={6} display={"flex"} alignItems={"center"}>
           <IconCompass />
-          &nbsp;&nbsp;<TextStyled>Đông nam</TextStyled>
+          &nbsp;&nbsp;<TextStyled>{data.doorDirection ?? "N/A"}</TextStyled>
         </Grid>
       </Grid>
     </WrapperContent>

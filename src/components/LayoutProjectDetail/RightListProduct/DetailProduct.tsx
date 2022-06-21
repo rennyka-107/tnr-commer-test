@@ -6,7 +6,7 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import React, { MouseEventHandler } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import {
   IconBath,
@@ -19,6 +19,7 @@ import {
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { RootState } from "../../../../store/store";
 import { useSelector } from "react-redux";
+import isEmpty from "lodash.isempty";
 
 type Props = {
   onBack?: Function;
@@ -176,6 +177,27 @@ const ButtonStyled2 = styled(Button)`
 
 const DetailProduct = ({ onBack }: Props) => {
   const Target = useSelector((state: RootState) => state.projectMap.Target);
+  const ListTarget = useSelector(
+    (state: RootState) => state.projectMap.ListTarget
+  );
+  const [stringNameParent, setStringNameParent] = useState("N/A");
+
+  useEffect(() => {
+    if (!isEmpty(ListTarget)) {
+      let nameParents = "";
+      const arrayTarget = [...ListTarget];
+      arrayTarget.sort((a, b) => a.level - b.level);
+      arrayTarget.forEach((tg, idx) => {
+        if (idx === 0) {
+          nameParents = tg.levelName + " " + tg.name;
+        } else {
+          nameParents = nameParents + " - " + tg.levelName + " " + tg.name;
+        }
+      });
+      setStringNameParent(nameParents);
+    }
+  }, [ListTarget]);
+
   function currencyFormat(num) {
     if (!num) {
       return;
@@ -190,7 +212,7 @@ const DetailProduct = ({ onBack }: Props) => {
         <CardMedia
           component="img"
           height={250}
-          image="https://dulichvietnam.com.vn/data/toa-nha-dep-nhat-viet-nam-8_5.jpg"
+          image={Target.thumbnail ? Target.thumbnail : "https://dulichvietnam.com.vn/data/toa-nha-dep-nhat-viet-nam-8_5.jpg"}
           alt="img product"
         />
         <TicketTag>TNR Gold</TicketTag>
@@ -202,10 +224,12 @@ const DetailProduct = ({ onBack }: Props) => {
           <IconButton onClick={() => onBack()}>
             <ArrowBackIosIcon />
           </IconButton>
-          <TitleStyled>Lô A01</TitleStyled>
+          <TitleStyled>{Target.name ?? "N/A"}</TitleStyled>
         </Box>
 
-        <TextStyled style={{ margin: "10px auto" }}>Tòa A - Tầng 26</TextStyled>
+        <TextStyled style={{ margin: "10px auto" }}>
+          {stringNameParent}
+        </TextStyled>
         <DividerLine />
         <Grid sx={{ pb: 2 }} container rowSpacing={1}>
           <Grid item xs={6} display={"flex"} alignItems={"center"}>
