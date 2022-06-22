@@ -74,6 +74,7 @@ const ListProduct = () => {
 
   const fetchData = async () => {
     try {
+		// setLoading(false);
       const responseProject = await getListProjectApi(
         paramsSearchProject,
         searchListProject

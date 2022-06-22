@@ -44,7 +44,7 @@ const DynamicItemProductComponent = dynamic(
 const ProductPages = ({ listProducts, listProject }: ProductsProps) => {
   const Router = useRouter();
   const { idProject, provinceId, projectTypeId } = Router.query;
-  const fetchRight = () => {
+
     const { listMenuBarProjectType, listMenuLocation } = useSelector(
       (state: RootState) => state.menubar
     );
@@ -120,7 +120,7 @@ const ProductPages = ({ listProducts, listProject }: ProductsProps) => {
         `/products?idProject=${filterSearch.idProject}&&provinceId=${filterSearch.provinceId}&&projectTypeId=${filterSearch.projectTypeId}`
       );
     }, [filterSearch]);
-
+	const fetchRight = () => {
     return (
       <>
         <FormControl style={{ width: 155, marginRight: 10, height: 48 }}>
@@ -146,6 +146,7 @@ const ProductPages = ({ listProducts, listProject }: ProductsProps) => {
       </>
     );
   };
+  
   return (
     <FlexContainer>
       <ContainerProduct
