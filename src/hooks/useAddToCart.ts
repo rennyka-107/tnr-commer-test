@@ -11,11 +11,13 @@ const useAddToCart = () => {
 
   function handleAddToCart(idProduct?: string, redirect: boolean = true) {
     const id = idProduct ? idProduct : LocalStorage.get("cart");
-    
     if (!isEmpty(id)) {
       getProducById(id)
         .then((res) => {
-          if (!isEmpty(res.responseData)) {
+          if (
+            !isEmpty(res.responseData) &&
+            res.responseData?.paymentStatus === 2
+          ) {
             dispatch(getCart(res.responseData));
             if (LocalStorage.get("cart") !== res.responseData.id) {
               LocalStorage.set("cart", res.responseData.id);

@@ -2,7 +2,7 @@ import ControllerSelect from "@components/Form/ControllerSelect";
 import ControllerDatePicker from "@components/Form/ControllerDatePicker";
 import FormGroup from "@components/Form/FormGroup";
 import { Button, FormControl, Grid, Box } from "@mui/material";
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {
   LinedStyled,
   RowStyled,
@@ -16,71 +16,96 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import ControllerTextField from "@components/Form/ControllerTextField";
-import styled from "@emotion/styled";
-
-const ButtonUploadStyled = styled(Button)`
-  background: #1b3459;
-  border-radius: 10px;
-  width: 64px;
-  height: 24px;
-  font-family: "Roboto";
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 14px;
-  text-align: center;
-  color: white;
-  text-transform: none;
-`;
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../../../store/store";
+import isEmpty from "lodash.isempty";
+import { setData } from "../../../../store/paymentSlice";
 
 type Props = {
-  setFormInfo: Dispatch<SetStateAction<boolean>>;
+  onClose: Function;
+  idNumber?: string;
+  listCustomerType: any[];
 };
 
 interface InformationCustom {
-  doiTuongKhachHang: string | number;
-  dx: string;
-  hoTen: string;
-  ngaySinh: string;
-  soDienThoai: string;
+  customerTypeId: string;
+  vocativeId: string;
+  fullname: string;
+  dob: string;
+  phoneNumber: string;
   email: string;
-  soDdcn: string;
-  noiCap: string;
-  ngayCap: string;
-  dcThuongTru: string;
-  dcLienLac: string;
-  thanhPho: string;
-  quanHuyen: string;
+  idNumber: string;
+  issuePlace: string;
+  issueDate: string;
+  permanentAddress: string;
+  contactAddress: string;
+  province: string;
+  district: string;
 }
 
-const AddInfoCustom = (props: Props) => {
-  const { setFormInfo } = props;
-  const validationSchema = yup.object().shape({
-    doiTuongKhachHang: yup.string().default("ca_nhan"),
-    dx: yup.string().default("ong"),
-    hoTen: yup.string().default(""),
-    ngaySinh: yup.string().default(""),
-    soDienThoai: yup.string().default(""),
-    email: yup.string().default(""),
-    soDncn: yup.string().default(""),
-    noiCap: yup.string().default(""),
-    ngayCap: yup.string().default(""),
-    dcThuongTru: yup.string().default(""),
-    dcLienLac: yup.string().default(""),
-    thanhPho: yup.string().default(""),
-    quanHuyen: yup.string().default(""),
-  });
+const validationSchema = yup.object().shape({
+  customerTypeId: yup.string().default(""),
+  vocativeId: yup.string().default(""),
+  fullname: yup.string().default(""),
+  dob: yup.string().default(""),
+  phoneNumber: yup.string().default(""),
+  email: yup.string().default(""),
+  idNumber: yup.string().default(""),
+  issuePlace: yup.string().default(""),
+  issueDate: yup.string().default(""),
+  permanentAddress: yup.string().default(""),
+  contactAddress: yup.string().default(""),
+  province: yup.string().default(""),
+  district: yup.string().default(""),
+});
 
-  const { control, handleSubmit, setValue } = useForm<InformationCustom>({
-    mode: "onChange",
-    resolver: yupResolver(validationSchema),
-    defaultValues: validationSchema.getDefault(),
-  });
+const AddInfoCustom = (props: Props) => {
+  const { onClose, idNumber, listCustomerType } = props;
+  const data = useSelector((state: RootState) => state.payments.data);
+  const dispatch = useDispatch();
+  const { control, handleSubmit, setValue, reset, watch } =
+    useForm<InformationCustom>({
+      mode: "onChange",
+      resolver: yupResolver(validationSchema),
+      defaultValues: validationSchema.getDefault(),
+    });
+
+  useEffect(() => {
+    if (idNumber) {
+      const listInfos = data.paymentIdentityInfos;
+      if (!isEmpty(listInfos) && listInfos.length >= 2) {
+        const info = listInfos.find((item) => item.idNumber === idNumber);
+        if (!isEmpty(info)) {
+          reset({ ...info });
+        }
+      }
+    }
+  }, [data, idNumber]);
 
   const handleOnSubmit = (values) => {
-    try {
-    } catch (error) {
-      console.log(error);
+    const { paymentIdentityInfos } = data;
+    if (!isEmpty(idNumber)) {
+      const formatArray = paymentIdentityInfos.map((info) => {
+        if (info.idNumber === idNumber) {
+          return { ...values };
+        }
+        return info;
+      });
+      dispatch(
+        setData({
+          paymentIdentityInfos: formatArray,
+          ...data,
+        })
+      );
+    } else {
+      dispatch(
+        setData({
+          ...data,
+          paymentIdentityInfos: [...paymentIdentityInfos, values],
+        })
+      );
     }
+    onClose();
   };
 
   return (
@@ -97,12 +122,11 @@ const AddInfoCustom = (props: Props) => {
                     control={control}
                     setValue={setValue}
                     variant={"outlined"}
-                    dataSelect={[
-                      { label: "Cá nhân", value: "ca_nhan" },
-                      { label: "Doanh nghiệp", value: "doanh_nghiep" },
-                      { label: "Nhà nước", value: "nha_nuoc" },
-                    ]}
-                    name={"doiTuongKhachHang"}
+                    dataSelect={listCustomerType.map((ct) => ({
+                      label: ct.name,
+                      value: ct.id,
+                    }))}
+                    name={"customerTypeId"}
                     labelColor={"#1b3459"}
                   />
                 </FormGroup>
@@ -115,11 +139,16 @@ const AddInfoCustom = (props: Props) => {
                     setValue={setValue}
                     variant={"outlined"}
                     dataSelect={[
-                      { label: "Ông", value: "ong" },
-                      { label: "Bà", value: "ba" },
-                      { label: "Anh/Chị", value: "anh_chi" },
+                      {
+                        label: "Ông",
+                        value: "02334B87-1F9F-4EAC-9B4C-C63s58E01842",
+                      },
+                      {
+                        label: "Bà",
+                        value: "02334B87-1F9F-4EAC-9B4C-C6HG84701842",
+                      },
                     ]}
-                    name={"dx"}
+                    name={"vocativeId"}
                     labelColor={"#1b3459"}
                   />
                 </FormGroup>
@@ -131,7 +160,7 @@ const AddInfoCustom = (props: Props) => {
                     label={"Họ và tên"}
                     control={control}
                     variant={"outlined"}
-                    name={"hoTen"}
+                    name={"fullname"}
                   />
                 </FormGroup>
               </Grid>
@@ -141,7 +170,7 @@ const AddInfoCustom = (props: Props) => {
                     label={"Ngày sinh"}
                     control={control}
                     variant={"outlined"}
-                    name={"ngaySinh"}
+                    name={"dob"}
                   />
                 </FormGroup>
               </Grid>
@@ -152,7 +181,7 @@ const AddInfoCustom = (props: Props) => {
                     label={"Số điện thoại"}
                     control={control}
                     variant={"outlined"}
-                    name={"soDienThoai"}
+                    name={"phoneNumber"}
                   />
                 </FormGroup>
               </Grid>
@@ -180,24 +209,17 @@ const AddInfoCustom = (props: Props) => {
                     label={"Số CMNSD"}
                     control={control}
                     variant={"outlined"}
-                    name={"soDdcn"}
+                    name={"idNumber"}
                   />
                 </FormGroup>
               </Grid>
-              <Grid item xs={6}>
-                <RowStyled aItems={"center"} style={{ paddingTop: 25 }}>
-                  <Text18Styled>Đính kèm giấy CN ĐKDN</Text18Styled>
-                  <ButtonUploadStyled>Tải lên</ButtonUploadStyled>
-                </RowStyled>
-              </Grid>
-
               <Grid item xs={6}>
                 <FormGroup>
                   <ControllerTextField
                     label={"Nơi cấp"}
                     control={control}
                     variant={"outlined"}
-                    name={"noiCap"}
+                    name={"issuePlace"}
                   />
                 </FormGroup>
               </Grid>
@@ -208,7 +230,7 @@ const AddInfoCustom = (props: Props) => {
                     label={"Ngày cấp"}
                     control={control}
                     variant={"outlined"}
-                    name={"ngayCap"}
+                    name={"issueDate"}
                   />
                 </FormGroup>
               </Grid>
@@ -219,7 +241,7 @@ const AddInfoCustom = (props: Props) => {
                     label={"Địa chỉ thường trú"}
                     control={control}
                     variant={"outlined"}
-                    name={"dcThuongTru"}
+                    name={"permanentAddress"}
                     fullWidth
                   />
                 </FormGroup>
@@ -231,7 +253,7 @@ const AddInfoCustom = (props: Props) => {
                     label={"Địa chỉ liên lạc"}
                     control={control}
                     variant={"outlined"}
-                    name={"dcLienLac"}
+                    name={"contactAddress"}
                     fullWidth
                   />
                 </FormGroup>
@@ -243,7 +265,7 @@ const AddInfoCustom = (props: Props) => {
                     label={"Thành phố/Tỉnh"}
                     control={control}
                     variant={"outlined"}
-                    name={"thanhPho"}
+                    name={"province"}
                   />
                 </FormGroup>
               </Grid>
@@ -253,7 +275,7 @@ const AddInfoCustom = (props: Props) => {
                     label={"Quận/Huyện"}
                     control={control}
                     variant={"outlined"}
-                    name={"quanHuyen"}
+                    name={"district"}
                   />
                 </FormGroup>
               </Grid>
@@ -270,16 +292,18 @@ const AddInfoCustom = (props: Props) => {
             bg={"white"}
             border={"1px solid #c7c9d9"}
             style={{ width: 225, marginRight: 35 }}
+            onClick={() => onClose()}
           >
             <Text18Styled>Huỷ</Text18Styled>
           </ButtonStyled>
           <ButtonNormalStyled
             bg={"#1b3459"}
             style={{ width: 225, marginRight: 35 }}
-            // type={"submit"}
-            onClick={() => setFormInfo(false)}
+            onClick={() => handleOnSubmit(watch())}
           >
-            <Text18Styled color={"#fff"}>Lưu thông tin</Text18Styled>
+            <Text18Styled color={"#fff"}>
+              {!isEmpty(idNumber) ? "Lưu" : "Thêm người mua"}
+            </Text18Styled>
           </ButtonNormalStyled>
         </RowStyled>
       </form>

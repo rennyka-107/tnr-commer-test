@@ -11,6 +11,7 @@ import {
   Stepper,
   Step,
   StepLabel,
+  IconButton,
 } from "@mui/material";
 import FormGroup from "@components/Form/FormGroup";
 import Link from "next/link";
@@ -41,12 +42,20 @@ import Container from "@components/Container";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../store/store";
 import {
+  apiGetCustomerType,
+  apiGetPaymentInformation,
   apiGetQrCode,
   apiSavePaymentInformation,
   getListPaymenListById,
 } from "../../../pages/api/paymentApi";
 import isEmpty from "lodash.isempty";
-import { setListPayment, setQrCode } from "../../../store/paymentSlice";
+import {
+  setData,
+  setListPayment,
+  setQrCode,
+} from "../../../store/paymentSlice";
+import { useRouter } from "next/router";
+import useAddToCart from "hooks/useAddToCart";
 
 type Props = {
   setScopeRender: Dispatch<SetStateAction<string>>;
@@ -95,11 +104,12 @@ const validationSchema = yup.object().shape({
 });
 
 const LayoutInfoCustom = ({ setScopeRender }: Props) => {
-  const { control, handleSubmit, watch } = useForm<InformationBuyer>({
+  const { control, handleSubmit, watch, reset } = useForm<InformationBuyer>({
     mode: "onChange",
     resolver: yupResolver(validationSchema),
     defaultValues: validationSchema.getDefault(),
   });
+
   const steps = [
     "Ký hợp đồng mua bán",
     "Thanh toán đợt 2",
@@ -113,15 +123,51 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
 
   const [payMethod, setPayMethod] = useState<string>("");
   const [billing, setBilling] = useState<number>(1);
-  const [formInfo, setFormInfo] = useState<boolean>(false);
+  const [formInfo, setFormInfo] = useState<{ open: boolean; idNumber: string }>(
+    { open: false, idNumber: "" }
+  );
+  const [listCustomerType, setListCustomerType] = useState<any>([]);
   const { cart } = useSelector((state: RootState) => state.carts);
   const { listPayment } = useSelector((state: RootState) => state.payments);
+  const [acceptPolicy, setAcceptPolicy] = useState<boolean>(false);
+  const data = useSelector((state: RootState) => state.payments.data);
   const dispatch = useDispatch();
+  const addToCart = useAddToCart();
+  const {
+    query: { transactionCode },
+  } = useRouter();
+
+  useEffect(() => {
+    if (!isEmpty(transactionCode)) {
+      fetchData();
+    }
+  }, [transactionCode]);
+
+  async function fetchData() {
+    const res = await apiGetPaymentInformation(transactionCode as string);
+    if (!isEmpty(res)) {
+      dispatch(setData(res.responseData));
+    }
+  }
+
+  useEffect(() => {
+    data.paymentIdentityInfos.forEach((info) => {
+      if (isEmpty(info.vocativeId) && isEmpty(info.customerTypeId)) {
+        reset({ ...info });
+      }
+    });
+  }, [data]);
+
   useEffect(() => {
     if (!isEmpty(listPayment)) {
       setPayMethod(listPayment[0]["id"]);
     }
   }, [listPayment]);
+
+  async function getCustomerTypes() {
+    const res = await apiGetCustomerType();
+    if (!isEmpty(res.responseData)) setListCustomerType(res.responseData);
+  }
 
   async function fetchPaymentMethod() {
     try {
@@ -133,6 +179,10 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
       console.log(err);
     }
   }
+
+  useEffect(() => {
+    getCustomerTypes();
+  }, []);
 
   useEffect(() => {
     fetchPaymentMethod();
@@ -161,11 +211,9 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
       province,
       district,
     } = values;
-    const formatData = {
-      productId,
-      paymentMethodId: payMethod,
-      paymentIdentityInfos: [
-        {
+    const formatInfos = data.paymentIdentityInfos.map((info) => {
+      if (info.idNumber === idNumber || isEmpty(info.idNumber)) {
+        return {
           fullname,
           dob,
           phoneNumber,
@@ -177,8 +225,14 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
           contactAddress,
           province,
           district,
-        },
-      ],
+        };
+      }
+      return info;
+    });
+    const formatData = {
+      productId,
+      paymentMethodId: payMethod,
+      paymentIdentityInfos: formatInfos,
       quotationRealt: {
         landPrice: totalVatPrice,
         vat,
@@ -198,6 +252,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
       apiSavePaymentInformation(formatData)
         .then((res) => {
           if (!isEmpty(res.responseData)) {
+            addToCart();
             if (
               !isEmpty(res.responseData?.transactionCode) &&
               paymentFlag === 0
@@ -225,6 +280,83 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
     }
   };
 
+  function removeCustomer(id: string) {
+    const paymentIdentityInfos = [...data.paymentIdentityInfos];
+    const infos = paymentIdentityInfos.filter((info) => info.idNumber !== id);
+    dispatch(
+      setData({
+        ...data,
+        paymentIdentityInfos: infos,
+      })
+    );
+  }
+
+  function renderListCustomer() {
+    const arrayInfos = [...data.paymentIdentityInfos];
+    const mainCustomer = arrayInfos.find(
+      (info) => isEmpty(info.vocativeId) && isEmpty(info.customerTypeId)
+    );
+    let paymentIdentityInfos = [];
+    if (!isEmpty(transactionCode)) {
+      const infosExceptMainCustomer = arrayInfos.filter(
+        (info) => !isEmpty(info.vocativeId) && !isEmpty(info.customerTypeId)
+      );
+      infosExceptMainCustomer.unshift(mainCustomer);
+      paymentIdentityInfos = [...infosExceptMainCustomer];
+    }
+    const numberRow = (paymentIdentityInfos.length - 1) / 2;
+    const arrayElements = [];
+    if (numberRow > 0) {
+      for (let i = 0; i < numberRow; i++) {
+        const ele1 = paymentIdentityInfos.pop();
+        const ele2 =
+          paymentIdentityInfos.length >= 2 ? paymentIdentityInfos.pop() : null;
+        arrayElements.push(
+          <RowStyled key={ele1.idNumber + "1023"}>
+            <BoxInfoUserStyled style={{ cursor: "pointer" }}>
+              <RowStyled>
+                <Text18Styled
+                  onClick={() => {
+                    setFormInfo({ open: true, idNumber: ele1.idNumber });
+                  }}
+                  maxWidth={133}
+                  color={"black"}
+                >
+                  {ele1.fullname}
+                </Text18Styled>
+                <IconButton onClick={() => removeCustomer(ele1.idNumber)}>
+                  <IconPlusCircle style={{ transform: "rotate(45deg)" }} />
+                </IconButton>
+              </RowStyled>
+            </BoxInfoUserStyled>
+            {!isEmpty(ele2) && (
+              <BoxInfoUserStyled style={{ cursor: "pointer" }}>
+                <RowStyled>
+                  <Text18Styled
+                    onClick={() => {
+                      setFormInfo({ open: true, idNumber: ele2.idNumber });
+                    }}
+                    maxWidth={133}
+                    color={"black"}
+                  >
+                    {ele2.fullname}
+                  </Text18Styled>
+                  <IconButton onClick={() => removeCustomer(ele2.idNumber)}>
+                    <IconPlusCircle style={{ transform: "rotate(45deg)" }} />
+                  </IconButton>
+                </RowStyled>
+              </BoxInfoUserStyled>
+            )}
+          </RowStyled>
+        );
+      }
+    }
+    if (!isEmpty(arrayElements)) {
+      return arrayElements.map((ele) => ele);
+    }
+    return <></>;
+  }
+
   return (
     <Container title={"Thông tin"}>
       {/* {!formInfo && (
@@ -241,8 +373,12 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
       <form onSubmit={handleSubmit((values) => handleOnSubmit(values))}>
         <Grid container columnSpacing={"30px"} justifyContent={"center"}>
           <Grid item>
-            {formInfo ? (
-              <AddInfoCustom setFormInfo={setFormInfo} />
+            {formInfo.open ? (
+              <AddInfoCustom
+                listCustomerType={listCustomerType}
+                onClose={() => setFormInfo({ open: false, idNumber: "" })}
+                idNumber={formInfo.idNumber}
+              />
             ) : (
               <>
                 <WrapperBoxBorderStyled padding={"20px 30px 10px"}>
@@ -251,7 +387,9 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                     <BoxInfoUserStyled>
                       <ColStyled jContent={"center"}>
                         <Title22Styled style={{ marginBottom: 8 }}>
-                          Khác hàng vãng lai
+                          {!isEmpty(transactionCode)
+                            ? watch("fullname")
+                            : "Khác hàng vãng lai"}
                         </Title22Styled>
                         <Text14Styled color={"#5a5a5a"}>
                           Vui lòng điền đầy đủ thông tin bên dưới để tiến hành
@@ -262,7 +400,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                     <BoxInfoUserStyled
                       style={{ cursor: "pointer" }}
                       onClick={() => {
-                        setFormInfo(true);
+                        setFormInfo({ open: true, idNumber: "" });
                       }}
                     >
                       <RowStyled>
@@ -273,6 +411,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                       </RowStyled>
                     </BoxInfoUserStyled>
                   </RowStyled>
+                  {renderListCustomer()}
                   <FormControl fullWidth style={{ margin: "25px 0px" }}>
                     <Grid container rowSpacing={"20px"} columnSpacing={"37px"}>
                       <Grid item xs={6}>
@@ -435,14 +574,26 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
 
           <Grid item>
             <Box>
-              <ItemDetailCol />
+              <ItemDetailCol
+                item={!isEmpty(data.production) ? data.production : null}
+              />
             </Box>
             <Box margin={"15px 0px"}>
-              <TableQuote setScopeRender={setScopeRender} />
+              <TableQuote
+                item={
+                  !isEmpty(data.quotationRealt) ? data.quotationRealt : null
+                }
+                setScopeRender={setScopeRender}
+              />
             </Box>
             <Box width={350}>
               <RowStyled>
-                <Checkbox />
+                <Checkbox
+                  value={acceptPolicy}
+                  onChange={(e, checked) => {
+                    setAcceptPolicy(checked);
+                  }}
+                />
                 <Text14Styled>
                   Ấn “Thanh toán” đồng nghĩa với việc bạn đồng ý tuân theo&nbsp;
                   <span
@@ -453,14 +604,13 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                 </Text14Styled>
               </RowStyled>
               <ButtonAction
-                disabled={formInfo}
+                disabled={formInfo.open || !acceptPolicy}
                 margin={"12px auto"}
                 onClick={() => handleOnSubmit(watch(), 1)}
-                // type={"submit"}
               >
                 <Text18Styled color={"#fff"}>Tạo phiếu thanh toán</Text18Styled>
               </ButtonAction>
-              {!formInfo && (
+              {!formInfo.open && (
                 <ButtonStyled
                   type="submit"
                   bg={"white"}

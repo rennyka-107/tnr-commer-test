@@ -16,6 +16,7 @@ import {
   WrapperBoxBorderStyled,
 } from "../../StyledLayout/styled";
 import { currencyFormat } from "utils/helper";
+import { isEmpty } from "lodash";
 
 const BoxDetailInfo = styled(Box)({
   marginTop: 15,
@@ -29,9 +30,10 @@ type Props = {
   width?: number;
   urlPayment?: string;
   setScopeRender: Dispatch<SetStateAction<string>>;
+  item?: any;
 };
 
-const TableQuote = ({ width, urlPayment, setScopeRender }: Props) => {
+const TableQuote = ({ width, urlPayment, setScopeRender, item }: Props) => {
   const { cart } = useSelector((state: RootState) => state.carts);
 
   return (
@@ -42,19 +44,26 @@ const TableQuote = ({ width, urlPayment, setScopeRender }: Props) => {
         <RowStyledAgain>
           <Text14Styled>Giá BĐS</Text14Styled>
           <Text14Styled>
-            {cart.totalVatPrice ? currencyFormat(cart.totalVatPrice) : "N/A"} đ
+            {(!isEmpty(item) && item.landPrice
+              ? currencyFormat(item.landPrice)
+              : currencyFormat(cart.totalVatPrice)) ?? "0"}
+            đ
           </Text14Styled>
         </RowStyledAgain>
         <RowStyledAgain>
           <Text14Styled>Thuế VAT</Text14Styled>
           <Text14Styled>
-            {cart.vat ? currencyFormat(cart.vat) : "N/A"} đ
+            {(!isEmpty(item) && item.vat
+              ? currencyFormat(item.vat)
+              : currencyFormat(cart.vat)) ?? "N/A"}
           </Text14Styled>
         </RowStyledAgain>
         <RowStyledAgain>
           <Text14Styled>Phí bảo trì</Text14Styled>
           <Text14Styled>
-            {cart.maintainPrice ? currencyFormat(cart.maintainPrice) : "N/A"} đ
+            {(!isEmpty(item) && item.maintainPrice
+              ? currencyFormat(item.maintainPrice)
+              : currencyFormat(cart.maintainPrice)) ?? "0"}
           </Text14Styled>
         </RowStyledAgain>
       </BoxDetailInfo>
@@ -65,21 +74,36 @@ const TableQuote = ({ width, urlPayment, setScopeRender }: Props) => {
         <RowStyledAgain>
           <Text14Styled>Tổng tiền niêm yết</Text14Styled>
           <Text14Styled>
-            {cart.totalPrice ? currencyFormat(cart.totalPrice) : "N/A"} đ
+            {(!isEmpty(item) && item.totalPrice
+              ? currencyFormat(item.totalPrice)
+              : currencyFormat(cart.totalPrice)) ?? "0"}
           </Text14Styled>
         </RowStyledAgain>
         <RowStyledAgain>
           <Text14Styled>Giảm giá</Text14Styled>
-          <Text14Styled>0 đ</Text14Styled>
+          <Text14Styled>
+            {(!isEmpty(item) && item.sales
+              ? currencyFormat(item.sales)
+              : currencyFormat(cart.sales)) ?? "0"}
+            đ
+          </Text14Styled>
         </RowStyledAgain>
         <RowStyledAgain>
           <Text14Styled>Chiết khấu NPP</Text14Styled>
-          <Text14Styled>0 đ</Text14Styled>
+          <Text14Styled>
+            {(!isEmpty(item) && item.nppDiscount
+              ? currencyFormat(item.nppDiscount)
+              : currencyFormat(cart.nppDiscount)) ?? "0"}
+            đ
+          </Text14Styled>
         </RowStyledAgain>
         <RowStyledAgain>
           <Text14Styled>Tổng tiền mua online</Text14Styled>
           <Text18Styled fw={500} style={{ color: "#ea242a" }}>
-            {cart.totalPrice ? currencyFormat(cart.totalPrice) : "N/A"} đ
+            {(!isEmpty(item) && item.totalOnlinePrice
+              ? currencyFormat(item.totalOnlinePrice)
+              : currencyFormat(cart.totalPrice)) ?? "0"}
+            đ
           </Text18Styled>
         </RowStyledAgain>
       </BoxDetailInfo>
@@ -89,11 +113,21 @@ const TableQuote = ({ width, urlPayment, setScopeRender }: Props) => {
       <BoxDetailInfo>
         <RowStyledAgain>
           <Text14Styled>Tiền đặt chỗ tối thiểu</Text14Styled>
-          <Text14Styled fw={500}>1.000.000 đ</Text14Styled>
+          <Text14Styled fw={500}>
+            {!isEmpty(item) && item.totalOnlinePrice
+              ? currencyFormat(item.totalOnlinePrice)
+              : "1.000.000"}
+            đ
+          </Text14Styled>
         </RowStyledAgain>
         <RowStyled>
           <Text14Styled>Tiền đặt hàng quy định</Text14Styled>
-          <Text14Styled fw={500}>50.000.000 đ</Text14Styled>
+          <Text14Styled fw={500}>
+            {!isEmpty(item) && item.totalOnlinePrice
+              ? currencyFormat(item.totalOnlinePrice)
+              : "50.000.000"}{" "}
+            đ
+          </Text14Styled>
         </RowStyled>
       </BoxDetailInfo>
 

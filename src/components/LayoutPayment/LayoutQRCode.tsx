@@ -37,9 +37,9 @@ const LayoutQRCode = () => {
           src={qrCode ? `data:image/png;base64, ${qrCode}` : ""}
           alt={"qr-transaction-img"}
         />
-        <Text18Styled style={{ marginBottom: 18 }}>
+        {/* <Text18Styled style={{ marginBottom: 18 }}>
           Mã giao dịch: 123#456
-        </Text18Styled>
+        </Text18Styled> */}
         <Text18ItalicStyled color={"#FEC83C"} mw={600} textAlign={"center"}>
           Quý khách vui lòng hoàn thiện hồ sơ mua bán trong vòng 12 tiếng để
           được nhận phiếu đặt hàng

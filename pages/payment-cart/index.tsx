@@ -3,10 +3,11 @@ import FlexContainer from "@components/CustomComponent/FlexContainer";
 import Page from "@layouts/Page";
 import isEmpty from "lodash/isEmpty";
 import dynamic from "next/dynamic";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import { CircularProgress, Typography, Grid } from "@mui/material";
+import { useRouter } from "next/router";
 
 const DynamicLayoutPayment = dynamic(
   () => import("../../src/components/LayoutPayment/LayoutMain"),
@@ -22,9 +23,18 @@ const DynamicLayoutQRCode = dynamic(
 );
 
 const PaymentLogin = () => {
+  const {
+    query: { transactionCode },
+  } = useRouter();
   const [scopeRender, setScopeRender] = useState<string>("payment");
   const [loading, setLoading] = useState<boolean>(false);
   const { cart } = useSelector((state: RootState) => state.carts);
+  
+  useEffect(() => {
+    if (!isEmpty(transactionCode)) {
+      setScopeRender("info_custom");
+    }
+  }, [transactionCode]);
 
   const scopePayment = (_scope) => {
     switch (_scope) {

@@ -11,8 +11,11 @@ import Product1 from "../../../../public/images/product1.png";
 import styled from "@emotion/styled";
 import { RootState } from "../../../../store/store";
 import { useSelector } from "react-redux";
+import { isEmpty } from "lodash";
 
-type Props = {};
+type Props = {
+  item?: any
+};
 
 const BoxDetailStyled = styled(Box)({
   margin: "10px 12px",
@@ -21,7 +24,7 @@ const RowStyledAgain = styled(RowStyled)({
   marginBottom: 10,
 });
 
-const ItemDetailCol = (props: Props) => {
+const ItemDetailCol = ({item}: Props) => {
   const { cart } = useSelector((state: RootState) => state.carts);
 
   return (
@@ -31,16 +34,16 @@ const ItemDetailCol = (props: Props) => {
         component={"img"}
         width={325}
         height={200}
-        image={Product1.src}
+        image={(!isEmpty(item) ? item.thumbnail : cart.thumbnail)}
         alt={"Product photo"}
       />
       <BoxDetailStyled>
         <Title28Styled style={{ marginBottom: 15 }}>
-          {cart.name ?? "N/A"}
+          {(!isEmpty(item) ? item.name : cart.name) ?? "N/A"}
         </Title28Styled>
         <RowStyledAgain jContent={"start"}>
           <Text14Styled style={{ marginRight: 37 }}>
-            {cart.homeNul ?? "N/A"}
+            {(!isEmpty(item) ? item.homeNul : cart.homeNul) ?? "N/A"}
           </Text14Styled>
           <Text14Styled>Tầng 26</Text14Styled>
         </RowStyledAgain>
@@ -50,20 +53,20 @@ const ItemDetailCol = (props: Props) => {
         <RowStyledAgain>
           <Text14Styled>Diện tích</Text14Styled>
           <Text14Styled>
-            {cart.landArea ?? "N/A"} m<sup>2</sup>
+            {(!isEmpty(item) ? item.landArea : cart.landArea) ?? "N/A"} m<sup>2</sup>
           </Text14Styled>
         </RowStyledAgain>
         <RowStyledAgain>
           <Text14Styled>Phòng ngủ</Text14Styled>
-          <Text14Styled>{cart.numBed ?? "N/A"}</Text14Styled>
+          <Text14Styled>{(!isEmpty(item) ? item.numBed : cart.numBed) ?? "N/A"}</Text14Styled>
         </RowStyledAgain>
         <RowStyledAgain>
           <Text14Styled>Phòng tắm</Text14Styled>
-          <Text14Styled>{cart.numBath ?? "N/A"}</Text14Styled>
+          <Text14Styled>{(!isEmpty(item) ? item.numBath : cart.numBath) ?? "N/A"}</Text14Styled>
         </RowStyledAgain>
         <RowStyledAgain>
           <Text14Styled>Hướng</Text14Styled>
-          <Text14Styled>{cart.doorDirection ?? "N/A"}</Text14Styled>
+          <Text14Styled>{(!isEmpty(item) ? item.doorDirection : cart.doorDirection) ?? "N/A"}</Text14Styled>
         </RowStyledAgain>
       </BoxDetailStyled>
     </WrapperBoxBorderStyled>
