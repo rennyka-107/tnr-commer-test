@@ -2,7 +2,6 @@ import Page from "@layouts/Page";
 import dynamic from "next/dynamic";
 import { getProductTopByStanding } from "./api/productsApi";
 import { getListProductTopByOS } from "../store/productSlice";
-import { useDispatch, useSelector } from "react-redux";
 import { wrapper } from "../store/store";
 
 const DynamicHome = dynamic(
@@ -10,8 +9,7 @@ const DynamicHome = dynamic(
   { loading: () => <p>...</p> }
 );
 
-const Home = (props) => {
-  const dispatch = useDispatch();
+const Home = () => {
 
   return (
     <Page

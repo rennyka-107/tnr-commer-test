@@ -8,7 +8,7 @@ import {
   Snackbar,
   Typography,
 } from "@mui/material";
-import type { FC } from "react";
+import type { FC, ReactNode } from "react";
 import {
   createContext,
   forwardRef,
@@ -16,7 +16,6 @@ import {
   useCallback,
   useState,
 } from "react";
-import type { PickUnion } from "types";
 import IconWarning from "@components/Icons/IconWarning";
 import IconError from "@components/Icons/IconError";
 import IconSuccess from "@components/Icons/IconSuccess";
@@ -44,14 +43,14 @@ const AlertMessage = forwardRef<HTMLDivElement, AlertProps>((props, ref) => {
   );
 });
 interface Config {
-  message: string | null;
-  error: string | null;
+  message?: string | null;
+  error?: string | null;
   severity?: AlertProps["severity"];
   onUndo?: () => Promise<void>;
   title?: string;
 }
 
-export type ContextValue = (config: PickUnion<Config>) => void;
+export type ContextValue = (config: Config) => void;
 
 export const NotificationContext = createContext<ContextValue | null>(null);
 
@@ -65,7 +64,7 @@ const defaultConfigs: Config = {
   title: "",
 };
 
-const NotificationProvider: FC = ({ children }) => {
+const NotificationProvider: FC = ({ children }: { children: ReactNode }) => {
   const [open, setOpen] = useState<boolean>(false);
   const [config, setConfig] = useState<Config>(defaultConfigs);
 
@@ -75,7 +74,7 @@ const NotificationProvider: FC = ({ children }) => {
     setConfig(defaultConfigs);
   };
 
-  const setNotification = useCallback((config: PickUnion<Config>) => {
+  const setNotification = useCallback((config: Config) => {
     setConfig((state) => ({
       ...state,
       ...config,
@@ -128,7 +127,7 @@ const NotificationProvider: FC = ({ children }) => {
               lineHeight: "16.41px",
             }}
           >
-            {title}
+            {title ?? ""}
           </Typography>
           <Typography>{error || message}</Typography>
         </Box>

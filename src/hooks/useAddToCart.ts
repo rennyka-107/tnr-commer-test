@@ -28,8 +28,8 @@ const useAddToCart = () => {
               notification({
                 severity: "success",
                 title: "Giỏ hàng",
-                message: "Thêm vào giỏ hàng thành công"
-              })
+                message: "Thêm vào giỏ hàng thành công",
+              });
               Router.push("/payment-cart");
             }
           } else {
