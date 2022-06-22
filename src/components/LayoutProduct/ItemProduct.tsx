@@ -23,14 +23,13 @@ const ProductWrap = styled.div`
 `;
 const ItemProduct = ({ data }: ProductsProps) => {
   const addToCart = useAddToCart();
-  console.log(data)
   return (
     <>
       <ProductWrap>
         {data?.map((product, index) => (
           <ItemProductCard
             key={index}
-            id={product.id}
+            id={product.productId}
             src={Product2}
             title={product.name}
             subTitle={product.diaChi}

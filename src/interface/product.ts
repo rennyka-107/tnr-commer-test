@@ -79,6 +79,7 @@ export interface ProductsResponse {
 	tongBanGhi: string,
 	totalPrice: string,
 	category: string,
+	productId?: string,
 }
 
 export interface ResponseSearchById {

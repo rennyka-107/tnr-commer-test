@@ -194,7 +194,7 @@ export default function ItemProjectCard({
       /> */}
       <CardContentStyled>
         <div style={{ marginBottom: 7 }}>
-          <Link href={`/products?idProject=${id}`}>
+          <Link href={`/products?idProject=${id}&&provinceId=&&projectTypeId=`}>
             <TextTitleStyled style={{ marginBottom: 9 }}>
               {title}
             </TextTitleStyled>

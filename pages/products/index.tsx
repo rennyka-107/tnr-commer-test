@@ -1,7 +1,7 @@
 import Page from "@layouts/Page";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getListProduct,
@@ -24,10 +24,9 @@ const DynamicPageIndex = dynamic(
 );
 
 const ListProduct = () => {
-  const dispatch = useDispatch();
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
-  const { idProject } = router.query;
+  const dispatch = useDispatch();
+  const { idProject, projectTypeId, provinceId } = router.query;
 
   const { listProductResponse, totalElement } = useSelector(
     (state: RootState) => state.products
@@ -44,16 +43,15 @@ const ListProduct = () => {
     page: 1,
     size: 12,
   };
-  const searchList = {
+  const [searchList, setSearchList] = useState<any>({
     projectId: idProject,
-  };
+    projectTypeId: projectTypeId,
+    provinceId: provinceId,
+  });
+  const [loading, setLoading] = useState(false);
 
   const searchListProject = {
     projectId: idProject,
-    location: "",
-    projectTypeId: "",
-    fromPrice: 0,
-    toPrice: 0,
   };
 
   const changePage = (e: any) => {
@@ -64,34 +62,42 @@ const ListProduct = () => {
   };
   const pageNumber = Math.ceil(totalElement / paramsSearch.size);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        if (idProject && idProject !== '') {
-          const response = await searchListProductByProjectIdApi(
-            paramsSearch,
-            searchList
-          );
-          const responseProject = await getListProjectApi(
-            paramsSearchProject,
-            searchListProject
-          );
-          dispatch(getListProduct(response.responseData));
-          dispatch(getListProject(responseProject.responseData));
-          dispatch(getPaggingProductSearch(response.totalElement));
-          if (
-            response.responseCode === "00" &&
-            responseProject.responseCode === "00" &&
-            idProject
-          ) {
-            setLoading(true);
-          }
-        }
-      } catch (error) {
-        console.log(error);
+    useMemo(() => {
+      if (router.isReady === true) {
+        setSearchList({
+          provinceId: provinceId ? provinceId : "",
+          projectTypeId: projectTypeId ? projectTypeId : "",
+          projectId: idProject ? idProject : "",
+        });
       }
-    })();
-  }, [router, dispatch,paramsSearch]);
+    }, [router.query]);
+
+  const fetchData = async () => {
+    try {
+      const responseProject = await getListProjectApi(
+        paramsSearchProject,
+        searchListProject
+      );
+      const response = await searchListProductByProjectIdApi(
+        paramsSearch,
+        searchList
+      );
+      if (response.responseCode === "00") {
+        setLoading(true);
+      }
+      dispatch(getListProject(responseProject.responseData));
+      dispatch(getListProduct(response.responseData));
+      dispatch(getPaggingProductSearch(response.totalElement));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (router.isReady === true) {
+      fetchData();
+    }
+  }, [searchList, paramsSearch.page]);
 
   const fetchComponent = () => {
     return (
@@ -100,6 +106,7 @@ const ListProduct = () => {
           <DynamicPageIndex
             listProducts={listProductResponse}
             listProject={listProjectResponse}
+			
           />
         ) : (
           <>
@@ -111,9 +118,11 @@ const ListProduct = () => {
       </>
     );
   };
+
   useEffect(() => {
     fetchComponent();
   }, [loading]);
+
   return (
     <Page
       meta={{
