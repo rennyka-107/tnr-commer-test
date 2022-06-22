@@ -1,8 +1,10 @@
 import useAddToCart from "hooks/useAddToCart";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 
 const CartProvider = ({ children }) => {
   const addToCart = useAddToCart();
+  const router = useRouter();
   useEffect(() => {
     addToCart();
     const listenChangeStorage = ({ newValue, oldValue, key }) => {
@@ -18,7 +20,7 @@ const CartProvider = ({ children }) => {
     return () => {
       window.removeEventListener("storage", listenChangeStorage);
     };
-  }, []);
+  }, [router.pathname === "/"]);
 
   return children;
 };

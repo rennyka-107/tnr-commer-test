@@ -128,7 +128,6 @@ const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
   const Router = useRouter();
   const [checkSale, setCheckSale] = useState(false);
   const { cart } = useSelector((state: RootState) => state.carts);
-  const dispatch=useDispatch();
   const { title, typeAction } = useSelector(
     (state: RootState) => state?.shortcut
   );
@@ -200,7 +199,7 @@ const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
     <ContainerNavTop>
       <BodyContainer>
         <WrapMenuItem>
-          <Link href="https://tnre-customer-test.vercel.app">
+          <Link href="/">
             <a>
               <Logo />
             </a>

@@ -12,6 +12,7 @@ import {
   Step,
   StepLabel,
   IconButton,
+  CircularProgress,
 } from "@mui/material";
 import FormGroup from "@components/Form/FormGroup";
 import Link from "next/link";
@@ -56,6 +57,7 @@ import {
 } from "../../../store/paymentSlice";
 import { useRouter } from "next/router";
 import useAddToCart from "hooks/useAddToCart";
+import useNotification from "hooks/useNotification";
 
 type Props = {
   setScopeRender: Dispatch<SetStateAction<string>>;
@@ -126,6 +128,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
   const [formInfo, setFormInfo] = useState<{ open: boolean; idNumber: string }>(
     { open: false, idNumber: "" }
   );
+  const [loading, setLoading] = useState<boolean>(false);
   const [listCustomerType, setListCustomerType] = useState<any>([]);
   const { cart } = useSelector((state: RootState) => state.carts);
   const { listPayment } = useSelector((state: RootState) => state.payments);
@@ -133,6 +136,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
   const data = useSelector((state: RootState) => state.payments.data);
   const dispatch = useDispatch();
   const addToCart = useAddToCart();
+  const notification = useNotification();
   const {
     query: { transactionCode },
   } = useRouter();
@@ -189,6 +193,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
   }, []);
 
   const handleOnSubmit = (values, paymentFlag = 0) => {
+    setLoading(true);
     const {
       vat,
       totalVatPrice,
@@ -252,6 +257,11 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
       apiSavePaymentInformation(formatData)
         .then((res) => {
           if (!isEmpty(res.responseData)) {
+            notification({
+              message: "Lưu thông tin hồ sơ mua bán thành công!",
+              severity: "success",
+              title: "Hoàn thiện hồ sơ mua bán",
+            });
             addToCart();
             if (
               !isEmpty(res.responseData?.transactionCode) &&
@@ -272,11 +282,29 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
             ) {
               window.location.href = res.responseData?.msbRedirectLink;
             }
+          } else {
+            notification({
+              error: res.responseMessage,
+              title: "Hoàn thiện hồ sơ mua bán",
+            });
           }
+          setLoading(false);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          notification({
+            error: "Có lỗi xảy ra!",
+            title: "Hoàn thiện hồ sơ mua bán",
+          });
+          setLoading(false);
+        });
     } catch (error) {
-      console.log(error);
+      {
+        notification({
+          error: "Có lỗi xảy ra!",
+          title: "Hoàn thiện hồ sơ mua bán",
+        });
+        setLoading(false);
+      }
     }
   };
 
@@ -303,8 +331,12 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
       );
       infosExceptMainCustomer.unshift(mainCustomer);
       paymentIdentityInfos = [...infosExceptMainCustomer];
+    } else {
+      paymentIdentityInfos = arrayInfos.filter(
+        (info) => !isEmpty(info.vocativeId) && !isEmpty(info.customerTypeId)
+      );
     }
-    const numberRow = (paymentIdentityInfos.length - 1) / 2;
+    const numberRow = paymentIdentityInfos.length / 2;
     const arrayElements = [];
     if (numberRow > 0) {
       for (let i = 0; i < numberRow; i++) {
@@ -604,21 +636,40 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                 </Text14Styled>
               </RowStyled>
               <ButtonAction
-                disabled={formInfo.open || !acceptPolicy}
+                disabled={formInfo.open || !acceptPolicy || loading}
                 margin={"12px auto"}
                 onClick={() => handleOnSubmit(watch(), 1)}
               >
-                <Text18Styled color={"#fff"}>Tạo phiếu thanh toán</Text18Styled>
+                {loading ? (
+                  <CircularProgress />
+                ) : (
+                  <Text18Styled color={"#fff"}>
+                    Tạo phiếu thanh toán
+                  </Text18Styled>
+                )}
               </ButtonAction>
               {!formInfo.open && (
                 <ButtonStyled
                   type="submit"
                   bg={"white"}
                   border={"1px solid #c7c9d9"}
+                  disabled={loading}
                 >
-                  <Text18Styled>Lưu thông tin</Text18Styled>
+                  {loading ? (
+                    <CircularProgress />
+                  ) : (
+                    <Text18Styled>Lưu thông tin</Text18Styled>
+                  )}
                 </ButtonStyled>
               )}
+              <ButtonStyled
+                sx={{ marginTop: "12px" }}
+                bg={"white"}
+                border={"1px solid #c7c9d9"}
+                onClick={() => setScopeRender("payment")}
+              >
+                <Text18Styled>Quay lại giỏ hàng</Text18Styled>
+              </ButtonStyled>
             </Box>
           </Grid>
         </Grid>

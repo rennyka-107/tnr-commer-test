@@ -138,7 +138,7 @@ const TableQuote = ({ width, urlPayment, setScopeRender, item }: Props) => {
             &nbsp;
             <Text12ItalicStyled>
               Nếu đã có tài khoản, vui lòng{" "}
-              <Link href={"/home"}>
+              <Link href={"/authen?prePath=payment-cart&tabIndex=login"}>
                 <a style={{ color: "#0063F7", textDecoration: "underline" }}>
                   ĐĂNG NHẬP
                 </a>

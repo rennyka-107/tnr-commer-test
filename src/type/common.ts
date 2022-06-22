@@ -9,6 +9,7 @@ export interface TabProjectResponse {
 
 export interface CommonResponse<D = any> {
 	responseData: D | null;
+	responseMessage: string;
 	responseCode: string;
 	httpStatusCode: number;
 	success: boolean;

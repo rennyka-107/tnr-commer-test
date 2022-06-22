@@ -7,7 +7,8 @@ import createEmotionCache from "../utility/createEmotionCache";
 import lightTheme from "../styles/theme/lightTheme";
 import "../styles/globals.css";
 import AuthContext from "../src/context/AuthContext";
-import CartProvider from "./../src/context/CartProvider"
+import CartProvider from "./../src/context/CartProvider";
+import { NotificationProvider } from '../src/context/NotificationContext';
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -17,12 +18,14 @@ const MyApp = (props) => {
   return (
     <CacheProvider value={emotionCache}>
       <ThemeProvider theme={lightTheme}>
-        <CssBaseline />
-        <AuthContext>
-          <CartProvider>
-            <Component {...pageProps} />
-          </CartProvider>
-        </AuthContext>
+        <NotificationProvider>
+          <CssBaseline />
+          <AuthContext>
+            <CartProvider>
+              <Component {...pageProps} />
+            </CartProvider>
+          </AuthContext>
+        </NotificationProvider>
       </ThemeProvider>
     </CacheProvider>
   );
