@@ -108,7 +108,9 @@ const AuthenPages = () => {
     "login" | "register" | "forgetPassword" | "confirm"
   >("register");
   const { tabIndex } = useRouter().query;
+  
   const { query } = useRouter();
+
   const renderTab = useMemo(() => {
     switch (tab) {
       case "login":

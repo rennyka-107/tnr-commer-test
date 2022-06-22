@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Page from "@layouts/Page";
 import { RootState, wrapper } from "../../store/store";
 import FlexContainer from "@components/CustomComponent/FlexContainer";
@@ -22,9 +22,6 @@ const DynamicSearchPages = dynamic(
 const Search = () => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
-  const [searchAction, setSearchAction] = useState(false);
-
   const {
     Type,
     areaFrom,
@@ -36,19 +33,24 @@ const Search = () => {
     provinceId,
     textSearch,
   } = router.query;
+
   const { SearchHomeLocation, totalElement } = useSelector(
     (state: RootState) => state.searchs
   );
+
   const [searchBody, setSearchBody] = useState<any>({
-    provinceId: provinceId ? provinceId : "",
-    projectTypeId: projectTypeId ? projectTypeId : "",
-    projectId: projectId ? projectId : "",
-    priceFrom: priceFrom ? priceFrom + "000000000" : "",
-    priceTo: priceTo ? priceTo + "000000000" : "",
+    provinceId: provinceId,
+    projectTypeId: projectTypeId,
+    projectId: projectId,
+    priceFrom: priceFrom,
+    priceTo: priceTo,
     areaFrom: Number(areaFrom),
     areaTo: Number(areaTo),
-    textSearch: textSearch ? textSearch : "",
+    textSearch: textSearch,
   });
+  const [loading, setLoading] = useState(false);
+  const [searchAction, setSearchAction] = useState(false);
+
   const [search, setSearch] = useState({
     page: 1,
     size: 12,
@@ -56,18 +58,20 @@ const Search = () => {
 
   const pageNumber = Math.ceil(totalElement / search.size);
 
-  useEffect(() => {
-    setSearchBody({
-      provinceId: provinceId ? provinceId : "",
-      projectTypeId: projectTypeId ? projectTypeId : "",
-      projectId: projectId ? projectId : "",
-      priceFrom: priceFrom ? priceFrom + "000000000" : "",
-      priceTo: priceTo ? priceTo + "000000000" : "",
-      areaFrom: Number(areaFrom),
-      areaTo: Number(areaTo),
-      textSearch: textSearch ? textSearch : "",
-    });
-  }, [router.query]);
+  useMemo(() => {
+    if (router.isReady === true) {
+      setSearchBody({
+        provinceId: provinceId ? provinceId : "",
+        projectTypeId: projectTypeId ? projectTypeId : "",
+        projectId: projectId ? projectId : "",
+        priceFrom: priceFrom ? priceFrom + "000000000" : "",
+        priceTo: priceTo ? priceTo + "000000000" : "",
+        areaFrom: Number(areaFrom),
+        areaTo: Number(areaTo),
+        textSearch: textSearch ? textSearch : "",
+      });
+    }
+  }, [router]);
 
   const changePage = (e: any) => {
     setSearch({
@@ -81,20 +85,25 @@ const Search = () => {
       setSearchBody({ ...searchBody, provinceId: "" });
     }
     try {
-      setLoading(false);
-      const response = await searchAdvanded(searchBody, search);
-      dispatch(getSearchHomeLocation(response.responseData));
-      dispatch(getPaggingSearch(response.totalElement));
-      if (response.responseCode === "00") {
-        setLoading(true);
+      if (router.isReady === true) {
+        setLoading(false);
+        const response = await searchAdvanded(searchBody, search);
+        dispatch(getSearchHomeLocation(response.responseData));
+        dispatch(getPaggingSearch(response.totalElement));
+        if (response.responseCode === "00") {
+          setLoading(true);
+        }
       }
     } catch (err) {
       console.log(err);
     }
   };
+
   useEffect(() => {
-    fetchAdvandedSearchList();
-  }, [search.page, searchBody]);
+    if (router.isReady === true) {
+      fetchAdvandedSearchList();
+    }
+  }, [searchBody, search.page]);
 
   const fetchComponent = () => {
     return (

@@ -6,15 +6,16 @@ import Typography from "@mui/material/Typography";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import { Theme, useTheme } from "@mui/material/styles";
-import { MenuBar, MenuBarLocation } from "interface/menuBarList";
+import { MenuBar } from "interface/menuBarList";
 
 type Props = {
 	label?: string;
 	style?: React.CSSProperties;
-	data: MenuBarLocation[];
-	value: string[];
+	data: any[];
+	value: any[];
 	placeholder?: string;
 	onChange?: any;
+	setDataKhoangGia?: any;
   };
 
 
@@ -24,7 +25,6 @@ const OutlinedInputStyled = styled(OutlinedInput)`
 
 function getStyles(name: string, value: readonly string[], theme: Theme) {
   return {
-
     fontWeight:
 	value.indexOf(name) === -1
         ? theme.typography.fontWeightRegular
@@ -40,14 +40,15 @@ const MenuProps = {
     style: {
       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
 	  height: 40,
-      width: 250,
+      width: 350,
 	  borderRadius: 8
     },
   },
 };
 
-export default function SelectLocationSearch({label, data, onChange,value,placeholder, style}: Props) {
+export default function SelectDienTich({label, data, onChange,value,placeholder, style,setDataKhoangGia}: Props) {
 	const theme = useTheme();
+
   return (
     <FormControl sx={{ m: 1, width: 300, mt: 3 }} style={style}>
 
@@ -57,11 +58,10 @@ export default function SelectLocationSearch({label, data, onChange,value,placeh
         onChange={onChange}
         input={<OutlinedInputStyled style={{borderRadius: 8, height: 40}}/>}
         renderValue={(selected) => {
-          if (selected.length === 0) {
+          if (selected.length === 0 && selected[0] === 'null' || selected[1] === 'null') {
             return <span>{placeholder}</span>;
           }
-
-          return selected.join(", ");
+          return `${selected[0]} m2 - ${selected[1]} m2`;
         }}
 
         inputProps={{ "aria-label": "Without label" }}
@@ -73,15 +73,14 @@ export default function SelectLocationSearch({label, data, onChange,value,placeh
 			
           },
         }}
-
       >
-         {data?.map((name,index) => (
+        {data?.map((name,index) => (
           <MenuItem
             key={index}
-            value={name.ProvinceName}
-            style={getStyles(name.ProvinceName, value, theme)}
+            value={name.value}
+            style={getStyles(name.name, value, theme)}
           >
-            {name.ProvinceName}
+            {name.name}
           </MenuItem>
         ))}
       </Select>

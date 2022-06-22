@@ -46,7 +46,7 @@ import {
   getListPaymenListById,
 } from "../../../pages/api/paymentApi";
 import isEmpty from "lodash.isempty";
-import { setListPayment } from "../../../store/paymentSlice";
+import { setListPayment, setQrCode } from "../../../store/paymentSlice";
 
 type Props = {
   setScopeRender: Dispatch<SetStateAction<string>>;
@@ -95,7 +95,7 @@ const validationSchema = yup.object().shape({
 });
 
 const LayoutInfoCustom = ({ setScopeRender }: Props) => {
-  const { control, handleSubmit } = useForm<InformationBuyer>({
+  const { control, handleSubmit, watch } = useForm<InformationBuyer>({
     mode: "onChange",
     resolver: yupResolver(validationSchema),
     defaultValues: validationSchema.getDefault(),
@@ -138,8 +138,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
     fetchPaymentMethod();
   }, []);
 
-  const handleOnSubmit = (values) => {
-    // console.log(values, cart, payMethod, "123123123");
+  const handleOnSubmit = (values, paymentFlag = 0) => {
     const {
       vat,
       totalVatPrice,
@@ -193,28 +192,30 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
       },
       deposite: billing === 1 ? minEarnestMoney : null,
       totalDeposite: billing !== 1 ? regulationOrderPrice : null,
-      paymentFlag: 0,
+      paymentFlag: paymentFlag,
     };
     try {
       apiSavePaymentInformation(formatData)
         .then((res) => {
-          console.log(res);
           if (!isEmpty(res.responseData)) {
             if (
-              !isEmpty(
-                res.responseData?.paymentInformation?.transactionCodeObject
-                  ?.code
-              )
+              !isEmpty(res.responseData?.transactionCode) &&
+              paymentFlag === 0
             ) {
-              apiGetQrCode(
-                res.responseData?.paymentInformation?.transactionCodeObject
-                  ?.code
-              )
+              apiGetQrCode(res.responseData?.transactionCode)
                 .then((res) => {
-                  console.log(res, "333333");
-                  setScopeRender("transaction_message");
+                  if (!isEmpty(res.responseData)) {
+                    dispatch(setQrCode(res.responseData));
+                    setScopeRender("transaction_message");
+                  }
                 })
                 .catch((err) => console.log(err));
+            }
+            if (
+              !isEmpty(res.responseData?.msbRedirectLink) &&
+              paymentFlag !== 0
+            ) {
+              window.location.href = res.responseData?.msbRedirectLink;
             }
           }
         })
@@ -237,7 +238,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
           </Stepper>
         </Box>
       )} */}
-      <form onSubmit={handleSubmit(handleOnSubmit)}>
+      <form onSubmit={handleSubmit((values) => handleOnSubmit(values))}>
         <Grid container columnSpacing={"30px"} justifyContent={"center"}>
           <Grid item>
             {formInfo ? (
@@ -454,6 +455,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
               <ButtonAction
                 disabled={formInfo}
                 margin={"12px auto"}
+                onClick={() => handleOnSubmit(watch(), 1)}
                 // type={"submit"}
               >
                 <Text18Styled color={"#fff"}>Tạo phiếu thanh toán</Text18Styled>

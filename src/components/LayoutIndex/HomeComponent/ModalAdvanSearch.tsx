@@ -160,7 +160,7 @@ export default function ModalAdvanSearch() {
         Math.min(newValue[0], valueDienTich[1] - minDistance),
         valueDienTich[1],
       ]);
-	  setSearch({ ...search, areaFrom:  valueDienTich[0]});
+	  setSearch({ ...search, areaFrom:  valueDienTich[0], areaTo :  valueDienTich[1]});
     } else {
       setValueDientich([
         valueDienTich[0],
@@ -184,7 +184,7 @@ export default function ModalAdvanSearch() {
         Math.min(newValue[0], valueKhoanGia[1] - minDistance2),
         valueKhoanGia[1],
       ]);
-      setSearch({ ...search,priceFrom : valueKhoanGia[0].toString() });
+      setSearch({ ...search,priceFrom : valueKhoanGia[0].toString(),priceTo : valueKhoanGia[1].toString()  });
     } else {
       setValueKhoangGia([
         valueKhoanGia[0],
@@ -196,7 +196,7 @@ export default function ModalAdvanSearch() {
 
   const handleSearch = () => {
     router.push(
-      `/search?Type=Advanded&&textSearch=&&provinceId=${search.provinceId}&&projectTypeId=${search.projectTypeId}&&projectId=${search.projectId}&&priceTo=${search.priceTo}&&priceFrom=${search.priceFrom}&&areaTo=${search.areaTo}&&areaFrom=${search.areaFrom}`
+      `/search?Type=Advanded&&textSearch=&&provinceId=${search.provinceId}&&projectTypeId=${search.projectTypeId}&&projectId=${search.projectId}&&priceFrom=${search.priceFrom}&&priceTo=${search.priceTo}&&areaFrom=${search.areaFrom}&&areaTo=${search.areaTo}`
     );
   };
 

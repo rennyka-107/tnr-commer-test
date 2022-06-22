@@ -70,8 +70,10 @@ export default function SliderComponent({label,numberMin,numberMax,unit,onChange
 
     if (activeThumb === 0) {
       setValue1([Math.min(newValue[0], value1[1] - minDistance), value1[1]]);
+	  console.log(value1)
     } else {
       setValue1([value1[0], Math.max(newValue[1], value1[0] + minDistance)]);
+	  console.log(value1)
     }
   };
 

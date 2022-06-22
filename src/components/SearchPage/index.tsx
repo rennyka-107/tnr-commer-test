@@ -18,6 +18,9 @@ import SelectSeach from "@components/CustomComponent/SelectInputComponent/Select
 import { IconFilterSearch } from "@components/Icons";
 import { isEmpty } from "lodash";
 import SelectLocationSearch from "@components/CustomComponent/SelectInputComponent/SelectLocationSearch";
+import { MenuBarLocation } from "interface/menuBarList";
+import SelectKhoanGia from "@components/CustomComponent/SelectInputComponent/SelectKhoanGia";
+import SelectDienTich from "@components/CustomComponent/SelectInputComponent/SelectDienTich";
 
 type dataProps = {
   searchData: searchLocationResponse[];
@@ -64,35 +67,116 @@ const SearchPage = ({
 }: dataProps) => {
   const classes = useStyles();
   const router = useRouter();
-  const [textSearch, setTextSearch] = useState<any>("");
+  const [textSearchValue, setTextSearchValue] = useState<any>("");
   const { listMenuBarType, listMenuBarProjectType, listMenuLocation } =
     useSelector((state: RootState) => state.menubar);
+  const {
+    textSearch,
+    provinceId,
+    projectId,
+    projectTypeId,
+    priceFrom,
+    priceTo,
+    areaFrom,
+    areaTo,
+  } = router.query;
+
   const [location, setLocation] = useState<string[]>([]);
   const [productName, setProductName] = useState<string[]>([]);
   const [projectName, setProjectName] = useState<string[]>([]);
+  const [valueKhoangGia, setValueKhoangGia] = useState([
+    {
+      name: "1 Tỷ - 10 Tỷ",
+      value: [1, 10],
+    },
+    {
+      name: "10 Tỷ - 20 Tỷ",
+      value: [10, 20],
+    },
+    {
+      name: "20 Tỷ - 40 Tỷ",
+      value: [20, 40],
+    },
+  ]);
+  const [valueDienTich, setValueDienTich] = useState([
+    {
+      name: "30 m2 - 50 m2",
+      value: [30, 50],
+    },
+    {
+      name: "50 m2 - 100 m2",
+      value: [50, 100],
+    },
+    {
+      name: "100 m2 - 150 m2",
+      value: [100, 150],
+    },
+    {
+      name: "150 m2 - 200 m2",
+      value: [150, 200],
+    },
+  ]);
+  const [dataKhoangGia, setDataKhoangGia] = useState<any[]>([]);
+  const [dataDienTich, setDataDienTich] = useState<any[]>([]);
+
   const [filterSearch, setFilterSearch] = useState({
-    textSearch: "",
-    provinceId: "",
-    projectTypeId: "",
-    projectId: "",
-    priceFrom: "",
-    priceTo: "",
-    areaFrom: null,
-    areaTo: null,
+    textSearch: textSearch,
+    provinceId: provinceId,
+    projectTypeId: projectTypeId,
+    projectId: projectId,
+    priceFrom: priceFrom,
+    priceTo: priceTo,
+    areaFrom: areaFrom,
+    areaTo: areaTo,
   });
 
-  const { provinceId } = router.query;
-
   useEffect(() => {
-    const value = router?.query.textSearch;
-    setTextSearch(value);
-    // setLocation()
-
     const dataLocation = listMenuLocation.filter(
-		(x) => x.ProvinceID === Number(provinceId)
-		);
+      (x) => x.ProvinceID === Number(provinceId)
+    );
+    if (!isEmpty(dataLocation)) {
+      setLocation([dataLocation[0].ProvinceName]);
+    }
 
-  }, [router.query]);
+    const dataProject = listMenuBarProjectType.filter(
+      (x) => x.id === projectTypeId
+    );
+    if (!isEmpty(dataProject)) {
+      setProjectName(
+        typeof dataProject[0].name === "string"
+          ? dataProject[0].name.split(",")
+          : dataProject[0].name
+      );
+    }
+    const dataProduct = listMenuBarType.filter((x) => x.id === projectId);
+    if (!isEmpty(dataProduct)) {
+      setProductName(
+        typeof dataProduct[0].name === "string"
+          ? dataProduct[0].name.split(",")
+          : dataProduct[0].name
+      );
+    }
+    if (areaFrom !== null || areaTo !== null) {
+      setDataDienTich([areaFrom, areaTo]);
+    }
+    if (priceFrom !== "" || priceTo !== "") {
+      setDataKhoangGia([priceFrom, priceTo]);
+    }
+    if (textSearch !== "") {
+      setTextSearchValue(textSearch);
+    }
+  }, [
+    provinceId,
+    projectId,
+    projectTypeId,
+    areaFrom,
+    areaTo,
+    priceFrom,
+    priceTo,
+    listMenuBarType,
+    listMenuBarProjectType,
+    listMenuLocation,
+  ]);
 
   const handleChange = (event: any) => {
     const {
@@ -102,7 +186,7 @@ const SearchPage = ({
       ...filterSearch,
       textSearch: value,
     });
-    setTextSearch(value);
+    setTextSearchValue(value);
   };
 
   const handleSelectProject = (
@@ -113,7 +197,7 @@ const SearchPage = ({
     } = event;
     const data = listMenuBarProjectType.filter((x) => x.name === value);
     setProjectName(typeof value === "string" ? value.split(",") : value);
-    setFilterSearch({ ...filterSearch, projectId: data[0].id });
+    setFilterSearch({ ...filterSearch, projectTypeId: data[0].id });
   };
   const handleSelectProduct = (
     event: SelectChangeEvent<typeof productName>
@@ -136,30 +220,47 @@ const SearchPage = ({
     setFilterSearch({ ...filterSearch, provinceId: data[0].ProvinceID });
     setLocation(typeof value === "string" ? value.split(",") : value);
   };
-
+  const handleChangeKhoangGia = (event: any) => {
+    const {
+      target: { value },
+    } = event;
+    setDataKhoangGia(value);
+    setFilterSearch({
+      ...filterSearch,
+      priceFrom: value[0].toString(),
+      priceTo: value[1].toString(),
+    });
+  };
+  const handleChangeDienTich = (event: any) => {
+    const {
+      target: { value },
+    } = event;
+    setDataDienTich(value);
+    setFilterSearch({
+      ...filterSearch,
+      areaFrom: value[0],
+      areaTo: value[1],
+    });
+  };
+  console.log(filterSearch);
   const handleSearch = () => {
     router.push(
-      `/search?Type=Advanded&&textSearch=${filterSearch.textSearch}&&provinceId=${filterSearch.provinceId}&&projectTypeId=${filterSearch.projectTypeId}&&projectId=${filterSearch.projectId}&&priceTo=${filterSearch.priceTo}&&priceFrom=${filterSearch.priceFrom}&&areaTo=${filterSearch.areaTo}&&areaFrom=${filterSearch.areaFrom}`
+      `/search?Type=Advanded&&textSearch=${filterSearch.textSearch}&&provinceId=${filterSearch.provinceId}&&projectTypeId=${filterSearch.projectTypeId}&&projectId=${filterSearch.projectId}&&priceFrom=${filterSearch.priceFrom}&&priceTo=${filterSearch.priceTo}&&areaFrom=${filterSearch.areaFrom}&&areaTo=${filterSearch.areaTo}`
     );
     setSearchAction(!searchAction);
   };
 
   return (
-    <ContainerSearch
-      title={"Kết quả tìm kiếm"}
-      checkBread={true}
-      // rightContent={fetchRight()}
-    >
+    <ContainerSearch title={"Kết quả tìm kiếm"} checkBread={true}>
       <ContainerSearchPage>
         <div style={{ display: "flex", marginBottom: 31 }}>
           <div>
             <FormControl sx={{ m: 1, width: 250, mt: 3 }}>
               <TextField
                 id="outlined-required"
-                value={textSearch}
+                value={textSearchValue}
                 placeholder="Nhập tên dự án , địa chỉ hoặc thành phố"
                 onChange={handleChange}
-                // style={{borderRadius: '8px !important'}}
                 className={classes.root}
                 sx={{
                   input: {
@@ -169,7 +270,6 @@ const SearchPage = ({
                 }}
                 onKeyPress={(ev) => {
                   if (ev.key === "Enter") {
-                    // Do code here
                     router.push(`/search?textSearch=${textSearch}`);
                     ev.preventDefault();
                   }
@@ -210,11 +310,12 @@ const SearchPage = ({
               placeholder="Block/ Khu"
               style={{ width: 150 }}
             /> */}
-            <SelectSeach
+            <SelectKhoanGia
               label="Khoảng giá"
-              data={[]}
-              value={[]}
-              onChange={() => console.log("abc")}
+              data={valueKhoangGia}
+              value={dataKhoangGia}
+              setDataKhoangGia={setDataKhoangGia}
+              onChange={handleChangeKhoangGia}
               placeholder="Khoảng giá"
               style={{ width: 150 }}
             />
@@ -226,13 +327,14 @@ const SearchPage = ({
               placeholder="Phòng"
               style={{ width: 150 }}
             /> */}
-            <SelectSeach
-              label="Diên tích..."
-              data={[]}
-              value={[]}
-              onChange={() => console.log("abc")}
-              placeholder="Diên tích..."
-              style={{ width: 150 }}
+            <SelectDienTich
+              label="Diên tích (m2)"
+              data={valueDienTich}
+              value={dataDienTich}
+              setDataKhoangGia={setDataDienTich}
+              onChange={handleChangeDienTich}
+              placeholder="Diên tích (m2)"
+              style={{ width: 200 }}
             />
           </div>
           <div>

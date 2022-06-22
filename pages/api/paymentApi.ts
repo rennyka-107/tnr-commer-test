@@ -10,5 +10,5 @@ export const apiSavePaymentInformation = async(data: any) => {
 }
 
 export const apiGetQrCode = async(code: any) => {
-	return HttpClient.post<any, CommonResponse>(`api/v1/payment/get-qrcode/${code}`)
+	return HttpClient.get<any, CommonResponse>(`api/v1/payment/get-qrcode/${code}`)
 }

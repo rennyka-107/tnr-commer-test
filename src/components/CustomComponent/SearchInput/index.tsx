@@ -42,7 +42,7 @@ export default function SearchInput({ placholder, width, height }: Props) {
     // router.push(`/search?textSearch=${event.target.value}`)
   };
   const handleSearch = () => {
-    router.push(`/search?textSearch=${textSearch}`);
+    router.push(`/search?Type=Advanded&&textSearch=${textSearch}&&provinceId=&&projectTypeId=&&projectId=&&priceFrom=&&priceTo=&&areaFrom=null&&areaTo=null`);
   };
 
   return (
@@ -68,7 +68,7 @@ export default function SearchInput({ placholder, width, height }: Props) {
         onKeyPress={(ev) => {
           if (ev.key === "Enter") {
             // Do code here
-            router.push(`/search?textSearch=${textSearch}`);
+            router.push(`/search?Type=Advanded&&textSearch=${textSearch}&&provinceId=&&projectTypeId=&&projectId=&&priceFrom=&&priceTo=&&areaFrom=null&&areaTo=null`);
             ev.preventDefault();
           }
         }}
