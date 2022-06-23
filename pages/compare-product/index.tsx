@@ -5,7 +5,7 @@ import React from "react";
 
 const DynamicLayoutCompare = dynamic(
   () => import("../../src/components/LayoutCompare"),
-  { loading: () => <p>...</p> }
+  { loading: () => <p>...</p>, ssr: false }
 );
 
 const CompareProduct = () => {

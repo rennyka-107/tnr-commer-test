@@ -101,7 +101,7 @@ const ProjectDetail = () => {
             <Box
               sx={{
                 mb: "100px",
-                width: "100vw",
+                width: "100%",
                 display: "flex",
                 position: "relative",
               }}

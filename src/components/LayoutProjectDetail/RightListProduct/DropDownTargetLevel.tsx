@@ -126,6 +126,7 @@ export default function DropDownTargetLevel({ level }: any) {
               ...geodata.properties,
               lock: data.status === "1",
               id: data.id,
+              name: data.name
             },
           });
         }
@@ -201,6 +202,7 @@ export default function DropDownTargetLevel({ level }: any) {
                             ...geodata.properties,
                             lock: data.status === "1",
                             id: data.id,
+                            name: data.name
                           },
                         });
                       }

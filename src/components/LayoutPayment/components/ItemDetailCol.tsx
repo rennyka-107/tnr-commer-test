@@ -34,7 +34,7 @@ const ItemDetailCol = ({item}: Props) => {
         component={"img"}
         width={325}
         height={200}
-        image={(!isEmpty(item) ? item.thumbnail : cart.thumbnail)}
+        image={(!isEmpty(item) ? item.thumbnail : cart.thumbnail) ?? "images/product_1.png"}
         alt={"Product photo"}
       />
       <BoxDetailStyled>

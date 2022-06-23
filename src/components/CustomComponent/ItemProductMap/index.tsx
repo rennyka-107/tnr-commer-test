@@ -57,19 +57,19 @@ const DividerLine = styled.div`
   border: 0.5px solid #c7c9d9;
   margin-bottom: 15px;
 `;
-const TicketTag = styled(Box)`
-  padding: 7px 14px;
-  position: absolute;
-  top: 150px;
-  right: 0px;
-  background: #fec83c;
-  color: white;
-  font-family: "Roboto";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 16px;
-`;
+// const TicketTag = styled(Box)`
+//   padding: 7px 14px;
+//   position: absolute;
+//   top: 150px;
+//   right: 0px;
+//   background: #fec83c;
+//   color: white;
+//   font-family: "Roboto";
+//   font-style: normal;
+//   font-weight: 400;
+//   font-size: 14px;
+//   line-height: 16px;
+// `;
 
 const TextBottomStyled = styled(Typography)`
   font-family: "Roboto";
@@ -101,16 +101,11 @@ const ItemProductMap = ({ onClick, data }: Props) => {
         <CardMedia
           component="img"
           height={195}
-          image={
-            data.thumbnail
-              ? data.thumbnail
-              : "/images/product_1.png"
-          }
+          image={data.thumbnail ? data.thumbnail : "/images/product_1.png"}
           alt="img product"
           style={{ borderRadius: "20px 20px 0px 0px" }}
         />
       </WrapperImg>
-      <TicketTag>TNR Gold</TicketTag>
       <TitleStyled>{data.name ?? "N/A"}</TitleStyled>
       <div
         style={{ display: "flex", margin: "14px 0", alignItems: "flex-end" }}
@@ -122,15 +117,14 @@ const ItemProductMap = ({ onClick, data }: Props) => {
           {currencyFormat(data.price ?? 0)}đ
         </NumberBottomStyled>
       </div>
-      <TextStyled style={{ margin: "10px auto" }}>
-        {data.location ?? "N/A"}
-      </TextStyled>
       <DividerLine />
       <Grid sx={{ pb: 2 }} container rowSpacing={1}>
-        <Grid item xs={6} display={"flex"} alignItems={"center"}>
-          <IconBedDouble />
-          &nbsp;&nbsp;<TextStyled>{data.numBed ?? "N/A"}</TextStyled>
-        </Grid>
+        {data.type === "1" && (
+          <Grid item xs={6} display={"flex"} alignItems={"center"}>
+            <IconBedDouble />
+            &nbsp;&nbsp;<TextStyled>{data.numBed ?? "N/A"}</TextStyled>
+          </Grid>
+        )}
         <Grid item xs={6} display={"flex"} alignItems={"center"}>
           <IconFrame />
           &nbsp;&nbsp;
@@ -138,10 +132,12 @@ const ItemProductMap = ({ onClick, data }: Props) => {
             {data.landArea ?? "N/A"} m<sup>2</sup>
           </TextStyled>
         </Grid>
-        <Grid item xs={6} display={"flex"} alignItems={"center"}>
-          <IconBath />
-          &nbsp;&nbsp;<TextStyled>{data.numBath ?? "N/A"}</TextStyled>
-        </Grid>
+        {data.type === "1" && (
+          <Grid item xs={6} display={"flex"} alignItems={"center"}>
+            <IconBath />
+            &nbsp;&nbsp;<TextStyled>{data.numBath ?? "N/A"}</TextStyled>
+          </Grid>
+        )}
         <Grid item xs={6} display={"flex"} alignItems={"center"}>
           <IconCompass />
           &nbsp;&nbsp;<TextStyled>{data.doorDirection ?? "N/A"}</TextStyled>

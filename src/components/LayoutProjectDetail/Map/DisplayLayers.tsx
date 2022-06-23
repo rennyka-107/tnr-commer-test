@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { FeatureGroup, useMap } from "react-leaflet";
-import L, { LatLngBoundsExpression, LatLngExpression } from "leaflet";
+import L, { LatLngExpression } from "leaflet";
 import isEmpty from "lodash.isempty";
 import { createLockIcon, getBoundsLockIcon } from "utils/leafletHelper";
 import { RootState } from "../../../../store/store";
@@ -53,25 +53,32 @@ const DisplayLayers = ({ data, layerParent }: Props) => {
           getBoundsLockIcon(newLayer)
         );
       }
+     
       newLayer.on("click", function (e: any) {
-        dispatch(
-          setTargetShape({
-            id: layer.feature.properties.id,
-            level: !isEmpty(Target) ? Target.level + 1 : 1,
-          })
-        );
+        if (!layer.feature.properties.lock) {
+          dispatch(
+            setTargetShape({
+              id: layer.feature.properties.id,
+              level: !isEmpty(Target) ? Target.level + 1 : 1,
+            })
+          );
+        }
       });
       newLayer.on("mouseover", function (e: any) {
         newLayer.setStyle({
           stroke: true,
           color: layer.feature.properties.lock ? "#1B3459" : "#24FF54",
         });
-        if (!isEmpty(svgIconLayer)) ref?.current?.addLayer(svgIconLayer);
+        newLayer.bindPopup(layer.feature.properties.name).openPopup()
+        if (!isEmpty(svgIconLayer)) {
+          ref?.current?.addLayer(svgIconLayer);
+        }
       });
       newLayer.on("mouseout", function (e: any) {
         newLayer.setStyle({
           stroke: false,
         });
+        newLayer.closePopup();
         if (!isEmpty(svgIconLayer)) ref?.current?.removeLayer(svgIconLayer);
       });
     });

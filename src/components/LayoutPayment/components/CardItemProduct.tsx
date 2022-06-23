@@ -80,7 +80,7 @@ const CardItemProduct = (props: Props) => {
         component={"img"}
         width={308}
         height={200}
-        image={cart.thumbnail ?? "images/product1.png"}
+        image={cart.thumbnail ?? "images/product_1.png"}
         alt={"photo product"}
       />
       <Box style={{ width: 235, marginLeft: 30 }}>

@@ -21,6 +21,8 @@ import { RootState } from "../../../../store/store";
 import { useSelector } from "react-redux";
 import isEmpty from "lodash.isempty";
 import { useRouter } from "next/router";
+import { getProducById } from "../../../../pages/api/productsApi";
+import LocalStorage from "utils/LocalStorage";
 
 type Props = {
   onBack?: Function;
@@ -64,19 +66,19 @@ const DividerLine = styled.div`
   border: 0.5px solid #c7c9d9;
   margin-bottom: 15px;
 `;
-const TicketTag = styled(Box)`
-  padding: 7px 14px;
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  background: #fec83c;
-  color: white;
-  font-family: "Roboto";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 16px;
-`;
+// const TicketTag = styled(Box)`
+//   padding: 7px 14px;
+//   position: absolute;
+//   right: 0;
+//   bottom: 0;
+//   background: #fec83c;
+//   color: white;
+//   font-family: "Roboto";
+//   font-style: normal;
+//   font-weight: 400;
+//   font-size: 14px;
+//   line-height: 16px;
+// `;
 
 const TextBottomStyled = styled(Typography)`
   font-family: "Roboto";
@@ -214,14 +216,9 @@ const DetailProduct = ({ onBack }: Props) => {
         <CardMedia
           component="img"
           height={250}
-          image={
-            Target.thumbnail
-              ? Target.thumbnail
-              : "/images/product_1.png"
-          }
+          image={Target.thumbnail ? Target.thumbnail : "/images/product_1.png"}
           alt="img product"
         />
-        <TicketTag>TNR Gold</TicketTag>
       </WrapperImg>
       <Box sx={{ width: "80%" }}>
         <Box
@@ -280,7 +277,7 @@ const DetailProduct = ({ onBack }: Props) => {
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
           <ButtonStyled1
             onClick={() => {
-              console.log("so sanh");
+              router.push(`/compare-product?idCompare=${Target.id}`);
             }}
             startIcon={<IconPlusCircle style={{ width: 16, height: 16 }} />}
           >
