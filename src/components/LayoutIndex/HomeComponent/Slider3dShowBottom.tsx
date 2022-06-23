@@ -18,6 +18,7 @@ import { IconEye, IconMuaOnline } from "@components/Icons";
 import IconSliderYellowLeft from "@components/Icons/IconSliderYellowLeft";
 import IconSliderYellowRight from "@components/Icons/IconSliderYellowRight";
 import useProjectRecenly from "hooks/useProjectRecenly";
+import isEmpty from "lodash.isempty";
 
 const TextLeftStyled = styled(Typography)`
   font-family: "Roboto";
@@ -110,30 +111,32 @@ export default function Slider3dShowBottom() {
   console.log(dataProductRecenly, "dataProductRecenly");
 
   const renderItems = useMemo(() => {
-    return dataProductRecenly.map((el) => (
-      <SwiperSlide
-        className="swiper-3d"
-        style={{
-          width: "241px !important",
-          height: 342,
-          backgroundImage: `url(${el?.avatar})`,
-          cursor: "pointer",
-          position: "relative",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundAttachment: "fixed",
-          backgroundRepeat: "no-repeat",
-          filter: "brightness(0.7)",
-        }}
-        key={el.id}
-      >
-        <WrapTopItem>
-          <IconEye style={{ zIndex: 1000 }} />
-          <TextInsideNumber>{el?.viewNum}</TextInsideNumber>
-        </WrapTopItem>
-        <TextInside>{el.name}</TextInside>
-      </SwiperSlide>
-    ));
+    if (!isEmpty(dataProductRecenly)) {
+      return dataProductRecenly.map((el) => (
+        <SwiperSlide
+          className="swiper-3d"
+          style={{
+            width: "241px !important",
+            height: 342,
+            backgroundImage: `url(${el?.avatar})`,
+            cursor: "pointer",
+            position: "relative",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundAttachment: "fixed",
+            backgroundRepeat: "no-repeat",
+            filter: "brightness(0.7)",
+          }}
+          key={el.id}
+        >
+          <WrapTopItem>
+            <IconEye style={{ zIndex: 1000 }} />
+            <TextInsideNumber>{el?.viewNum}</TextInsideNumber>
+          </WrapTopItem>
+          <TextInside>{el.name}</TextInside>
+        </SwiperSlide>
+      ));
+    }
   }, [dataProductRecenly]);
 
   return (
