@@ -62,7 +62,9 @@ export default function SelectKhoanGia({label, data, onChange,value,placeholder,
           if (selected.length === 0) {
             return <span>{placeholder}</span>;
           }
-
+		  if (selected[0] === 0 && selected[1] === 0 || selected[0] === '0' && selected[1] === '0') {
+            return <span>Tất Cả</span>;
+          }
           return `${selected[0]} Tỷ - ${selected[1]} Tỷ`;
         }}
 

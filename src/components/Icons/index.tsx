@@ -60,3 +60,4 @@ export { default as IconFilterSearch } from "./IconFilterSearch";
 
 export { default as IconAttach } from "./IconAttach";
 export { default as IconRemove } from "./IconRemove";
+export {default as IconResetFilter} from "./IconResetFilter"

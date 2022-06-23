@@ -48,7 +48,6 @@ const MenuProps = {
 
 export default function SelectDienTich({label, data, onChange,value,placeholder, style,setDataKhoangGia}: Props) {
 	const theme = useTheme();
-
   return (
     <FormControl sx={{ m: 1, width: 300, mt: 3 }} style={style}>
 
@@ -60,6 +59,9 @@ export default function SelectDienTich({label, data, onChange,value,placeholder,
         renderValue={(selected) => {
           if (selected.length === 0 && selected[0] === 'null' || selected[1] === 'null') {
             return <span>{placeholder}</span>;
+          }
+		  if (selected.length === 0 || selected[0] === '' || selected[1] === '') {
+            return <span>Tất Cả</span>;
           }
           return `${selected[0]} m2 - ${selected[1]} m2`;
         }}

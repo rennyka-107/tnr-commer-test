@@ -81,9 +81,6 @@ const Search = () => {
   };
 
   const fetchAdvandedSearchList = async () => {
-    if (searchBody.provinceId === "1") {
-      setSearchBody({ ...searchBody, provinceId: "" });
-    }
     try {
       if (router.isReady === true) {
         setLoading(false);
@@ -114,6 +111,7 @@ const Search = () => {
               <DynamicSearchPages
                 searchData={SearchHomeLocation}
                 setSearch={setSearch}
+				setSearchBody={setSearchBody}
                 totalElement={pageNumber}
                 totalTextSearch={totalElement}
                 pageNumber={search.page}

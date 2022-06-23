@@ -32,10 +32,6 @@ const TextHeaderStyled = styled(Typography)`
   color: #1b3459;
 `;
 
-const DynamicBreadcrumsComponent = dynamic(
-  () => import("../../components/CustomComponent/BreadcrumsComponent/index"),
-  { loading: () => <p>...</p> }
-);
 const DynamicItemProductComponent = dynamic(
   () => import("@components/LayoutProduct/ItemProduct"),
   { loading: () => <p>...</p> }
@@ -96,6 +92,7 @@ const ProductPages = ({ listProducts, listProject }: ProductsProps) => {
       }
         // Router.replace(`/products?idProject=${filterSearch.idProject}&&provinceId=${filterSearch.provinceId}&&projectTypeId=${filterSearch.projectTypeId}`)
     };
+	
     const handleChangeType = (event: any) => {
       const {
         target: { value },
@@ -112,7 +109,7 @@ const ProductPages = ({ listProducts, listProject }: ProductsProps) => {
           projectTypeId: dataType[0].id,
         });
       }
-    //   Router.replace(`/products?idProject=${filterSearch.idProject}&&provinceId=${filterSearch.provinceId}&&projectTypeId=${filterSearch.projectTypeId}`)
+    //   Router.push(`/products?idProject=${filterSearch.idProject}&&provinceId=${filterSearch.provinceId}&&projectTypeId=${filterSearch.projectTypeId}`)
     };
 
     useEffect(() => {
@@ -120,6 +117,7 @@ const ProductPages = ({ listProducts, listProject }: ProductsProps) => {
         `/products?idProject=${filterSearch.idProject}&&provinceId=${filterSearch.provinceId}&&projectTypeId=${filterSearch.projectTypeId}`
       );
     }, [filterSearch]);
+
 	const fetchRight = () => {
     return (
       <>

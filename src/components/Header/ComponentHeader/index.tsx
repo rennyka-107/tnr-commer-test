@@ -26,6 +26,9 @@ const Header = () => {
     (state: RootState) => state.menubar
   );
 
+  const menuBarProjectType = listMenuBarProjectType?.filter((item) => item.id !== '1');
+  const menuBarType = listMenuBarType?.filter((item) => item.id !== '1');
+
   useEffect(() => {
     (async () => {
       try {
@@ -45,8 +48,8 @@ const Header = () => {
     <div style={{ position: "fixed", width: "100%", zIndex: 1000 }}>
       <HeaderTop />
       <HeaderBot
-        menuDataProject={listMenuBarProjectType}
-        menuData={listMenuBarType}
+        menuDataProject={menuBarProjectType}
+        menuData={menuBarType}
       />
       {/* {meta?.isSearchPage && <HeaderNavSearch />} */}
     </div>

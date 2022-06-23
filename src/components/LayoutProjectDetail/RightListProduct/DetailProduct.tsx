@@ -20,6 +20,7 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { RootState } from "../../../../store/store";
 import { useSelector } from "react-redux";
 import isEmpty from "lodash.isempty";
+import { useRouter } from "next/router";
 
 type Props = {
   onBack?: Function;
@@ -181,6 +182,7 @@ const DetailProduct = ({ onBack }: Props) => {
     (state: RootState) => state.projectMap.ListTarget
   );
   const [stringNameParent, setStringNameParent] = useState("N/A");
+  const router = useRouter();
 
   useEffect(() => {
     if (!isEmpty(ListTarget)) {
@@ -212,7 +214,11 @@ const DetailProduct = ({ onBack }: Props) => {
         <CardMedia
           component="img"
           height={250}
-          image={Target.thumbnail ? Target.thumbnail : "https://dulichvietnam.com.vn/data/toa-nha-dep-nhat-viet-nam-8_5.jpg"}
+          image={
+            Target.thumbnail
+              ? Target.thumbnail
+              : "/images/product_1.png"
+          }
           alt="img product"
         />
         <TicketTag>TNR Gold</TicketTag>
@@ -282,7 +288,7 @@ const DetailProduct = ({ onBack }: Props) => {
           </ButtonStyled1>
           <ButtonStyled2
             onClick={() => {
-              console.log("Xem chi tiet");
+              router.push(`/products/${Target.id}`);
             }}
             endIcon={<IconMuaOnline />}
           >

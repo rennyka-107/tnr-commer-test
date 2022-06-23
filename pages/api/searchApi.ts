@@ -28,9 +28,20 @@ export const searchLocationHome = async (data: any, search: SearchParams) => {
 };
 
 export const searchAdvanded = async (data: any, search: SearchParams) => {
+  const newDataSearch = {
+    areaFrom: data.areaFrom === 0 ? null : data.areaFrom,
+    areaTo: data.areaTo === 0 ? null : data.areaTo,
+    priceFrom: data.priceFrom === "0000000000" ? "" : data.priceFrom,
+    priceTo: data.priceTo === "0000000000" ? "" : data.priceTo,
+    projectId: data.projectId === "1" ? "" : data.projectId,
+    projectTypeId: data.projectTypeId === "1" ? "" : data.projectTypeId,
+    provinceId: data.provinceId === "1" ? "" : data.provinceId,
+    textSearch: data.textSearch,
+  };
+
   return HttpClient.post<any, CommonResponse>(
     `api/product/information/advance/search?page=${search.page}&size=${search.size}`,
-    data,
+    newDataSearch,
     {
       withToken: false,
     }

@@ -104,7 +104,7 @@ const ItemProductMap = ({ onClick, data }: Props) => {
           image={
             data.thumbnail
               ? data.thumbnail
-              : "https://dulichvietnam.com.vn/data/toa-nha-dep-nhat-viet-nam-8_5.jpg"
+              : "/images/product_1.png"
           }
           alt="img product"
           style={{ borderRadius: "20px 20px 0px 0px" }}

@@ -21,6 +21,7 @@ import SelectLocationSearch from "@components/CustomComponent/SelectInputCompone
 import { MenuBarLocation } from "interface/menuBarList";
 import SelectKhoanGia from "@components/CustomComponent/SelectInputComponent/SelectKhoanGia";
 import SelectDienTich from "@components/CustomComponent/SelectInputComponent/SelectDienTich";
+import IconResetFilter from "@components/Icons/IconResetFilter";
 
 type dataProps = {
   searchData: searchLocationResponse[];
@@ -30,6 +31,7 @@ type dataProps = {
   pageNumber: number;
   setSearchAction?: any;
   searchAction: boolean;
+  setSearchBody?: any;
 };
 
 const ContainerSearchPage = styled.div``;
@@ -64,6 +66,7 @@ const SearchPage = ({
   totalTextSearch,
   setSearchAction,
   searchAction,
+  setSearchBody,
 }: dataProps) => {
   const classes = useStyles();
   const router = useRouter();
@@ -86,6 +89,10 @@ const SearchPage = ({
   const [projectName, setProjectName] = useState<string[]>([]);
   const [valueKhoangGia, setValueKhoangGia] = useState([
     {
+      name: "Tất cả",
+      value: [0,0],
+    },
+    {
       name: "1 Tỷ - 10 Tỷ",
       value: [1, 10],
     },
@@ -99,6 +106,10 @@ const SearchPage = ({
     },
   ]);
   const [valueDienTich, setValueDienTich] = useState([
+    {
+      name: "Tất Cả",
+      value: [],
+    },
     {
       name: "30 m2 - 50 m2",
       value: [30, 50],
@@ -224,30 +235,65 @@ const SearchPage = ({
     const {
       target: { value },
     } = event;
-    setDataKhoangGia(value);
-    setFilterSearch({
-      ...filterSearch,
-      priceFrom: value[0].toString(),
-      priceTo: value[1].toString(),
-    });
+    // if (value.length === 0) {
+    //   setDataKhoangGia(value);
+    //   setFilterSearch({
+    //     ...filterSearch,
+    //     priceFrom: "",
+    //     priceTo: "",
+    //   });
+    // } else {
+      setDataKhoangGia(value);
+      setFilterSearch({
+        ...filterSearch,
+        priceFrom: value[0].toString(),
+        priceTo: value[1].toString(),
+      });
+    // }
   };
+
   const handleChangeDienTich = (event: any) => {
     const {
       target: { value },
     } = event;
-    setDataDienTich(value);
-    setFilterSearch({
-      ...filterSearch,
-      areaFrom: value[0],
-      areaTo: value[1],
-    });
+
+    if (value.length === 0) {
+      setDataDienTich(value);
+      setFilterSearch({
+        ...filterSearch,
+        areaFrom: "",
+        areaTo: "",
+      });
+    } else {
+      setDataDienTich(value);
+      setFilterSearch({
+        ...filterSearch,
+        areaFrom: value[0],
+        areaTo: value[1],
+      });
+    }
   };
-  console.log(filterSearch);
+
   const handleSearch = () => {
     router.push(
       `/search?Type=Advanded&&textSearch=${filterSearch.textSearch}&&provinceId=${filterSearch.provinceId}&&projectTypeId=${filterSearch.projectTypeId}&&projectId=${filterSearch.projectId}&&priceFrom=${filterSearch.priceFrom}&&priceTo=${filterSearch.priceTo}&&areaFrom=${filterSearch.areaFrom}&&areaTo=${filterSearch.areaTo}`
     );
     setSearchAction(!searchAction);
+  };
+  const handleResetFilter = () => {
+    setSearchBody({
+      textSearch: "",
+      provinceId: "",
+      projectTypeId: "",
+      projectId: "",
+      priceFrom: "",
+      priceTo: "",
+      areaFrom: null,
+      areaTo: null,
+    });
+    router.push(
+      `/search?Type=Advanded&&textSearch=&&provinceId=&&projectTypeId=&&projectId=&&priceFrom=&&priceTo=&&areaFrom=null&&areaTo=null`
+    );
   };
 
   return (
@@ -255,7 +301,7 @@ const SearchPage = ({
       <ContainerSearchPage>
         <div style={{ display: "flex", marginBottom: 31 }}>
           <div>
-            <FormControl sx={{ m: 1, width: 250, mt: 3 }}>
+            <FormControl sx={{ m: 1, width: 150, mt: 3 }}>
               <TextField
                 id="outlined-required"
                 value={textSearchValue}
@@ -270,7 +316,9 @@ const SearchPage = ({
                 }}
                 onKeyPress={(ev) => {
                   if (ev.key === "Enter") {
-                    router.push(`/search?textSearch=${textSearch}`);
+                    router.push(
+                      `/search?Type=Advanded&&textSearch=${filterSearch.textSearch}&&provinceId=${filterSearch.provinceId}&&projectTypeId=${filterSearch.projectTypeId}&&projectId=${filterSearch.projectId}&&priceFrom=${filterSearch.priceFrom}&&priceTo=${filterSearch.priceTo}&&areaFrom=${filterSearch.areaFrom}&&areaTo=${filterSearch.areaTo}`
+                    );
                     ev.preventDefault();
                   }
                 }}
@@ -300,7 +348,7 @@ const SearchPage = ({
               value={productName}
               onChange={handleSelectProduct}
               placeholder="Chọn dự án"
-              style={{ width: 150 }}
+              style={{ width: 150, height: 40 }}
             />
             {/* <SelectSeach
               label="Block/ Khu"
@@ -317,7 +365,7 @@ const SearchPage = ({
               setDataKhoangGia={setDataKhoangGia}
               onChange={handleChangeKhoangGia}
               placeholder="Khoảng giá"
-              style={{ width: 150 }}
+              style={{ width: 150, height: 40 }}
             />
             {/* <SelectSeach
               label="Phòng"
@@ -334,10 +382,10 @@ const SearchPage = ({
               setDataKhoangGia={setDataDienTich}
               onChange={handleChangeDienTich}
               placeholder="Diên tích (m2)"
-              style={{ width: 200 }}
+              style={{ width: 150, height: 40 }}
             />
           </div>
-          <div>
+          <div style={{ display: "flex", gap: 10 }}>
             <Button
               style={{
                 background: "#1B3459",
@@ -357,6 +405,27 @@ const SearchPage = ({
                 }}
               >
                 Lọc
+              </span>
+            </Button>
+            <Button
+              style={{
+                background: "#1B3459",
+                width: 125,
+                marginTop: 24,
+                borderRadius: 8,
+                height: 40,
+              }}
+              onClick={handleResetFilter}
+            >
+              <IconResetFilter />
+              <span
+                style={{
+                  color: "#ffffff",
+                  textTransform: "none",
+                  marginLeft: 5,
+                }}
+              >
+                Reset filter
               </span>
             </Button>
           </div>

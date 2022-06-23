@@ -45,6 +45,7 @@ import { RootState } from "../../../store/store";
 import {
   apiGetCustomerType,
   apiGetPaymentInformation,
+  apiGetProfileInformation,
   apiGetQrCode,
   apiSavePaymentInformation,
   getListPaymenListById,
@@ -58,6 +59,8 @@ import {
 import { useRouter } from "next/router";
 import useAddToCart from "hooks/useAddToCart";
 import useNotification from "hooks/useNotification";
+import useAuth from "hooks/useAuth";
+import { format, parse, parseISO } from "date-fns"
 
 type Props = {
   setScopeRender: Dispatch<SetStateAction<string>>;
@@ -134,24 +137,84 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
   const { listPayment } = useSelector((state: RootState) => state.payments);
   const [acceptPolicy, setAcceptPolicy] = useState<boolean>(false);
   const data = useSelector((state: RootState) => state.payments.data);
+  const { isAuthenticated } = useAuth();
   const dispatch = useDispatch();
   const addToCart = useAddToCart();
   const notification = useNotification();
+  const router = useRouter();
   const {
     query: { transactionCode },
   } = useRouter();
 
+  async function getInformationUser() {
+    try {
+      const res = await apiGetProfileInformation();
+      if (!isEmpty(res.responseData)) {
+        const {
+          fullname,
+          birth: dob,
+          phone: phoneNumber,
+          email,
+          idNumber,
+          idReceiveDate: issueDate,
+          idReceivePlace: issuePlace,
+          address: permanentAddress,
+        } = res.responseData;
+        dispatch(
+          setData({
+            ...data,
+            paymentIdentityInfos: [
+              {
+                fullname,
+                dob: format(parse(dob, "dd-MM-yyyy", new Date()), "yyyy-MM-dd"),
+                phoneNumber,
+                email,
+                idNumber,
+                issueDate: format(parse(issueDate, "dd-MM-yyyy", new Date()), "yyyy-MM-dd"),
+                issuePlace,
+                permanentAddress,
+                contactAddress: "",
+                province: "",
+                district: "",
+              },
+            ],
+          })
+        );
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   useEffect(() => {
     if (!isEmpty(transactionCode)) {
       fetchData();
+    } else {
+      if (isAuthenticated) getInformationUser();
     }
-  }, [transactionCode]);
+  }, [transactionCode, isAuthenticated]);
 
   async function fetchData() {
-    const res = await apiGetPaymentInformation(transactionCode as string);
-    if (!isEmpty(res)) {
-      dispatch(setData(res.responseData));
+    try {
+      const res = await apiGetPaymentInformation(transactionCode as string);
+      if (!isEmpty(res.responseData)) {
+        dispatch(setData(res.responseData));
+      } else {
+        notification({
+          severity: "error",
+          title: `Thông tin mã giao dịch ${transactionCode}`,
+          message: res.responseMessage
+        })
+        router.push("/404")
+      }
+    } catch(err) {
+      notification({
+        severity: "error",
+        title: `Thông tin mã giao dịch ${transactionCode}`,
+        message: "Có lỗi xảy ra"
+      })
     }
+    
   }
 
   useEffect(() => {
@@ -252,6 +315,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
       deposite: billing === 1 ? minEarnestMoney : null,
       totalDeposite: billing !== 1 ? regulationOrderPrice : null,
       paymentFlag: paymentFlag,
+      tnrUserId: null,
     };
     try {
       apiSavePaymentInformation(formatData)
@@ -420,6 +484,8 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                       <ColStyled jContent={"center"}>
                         <Title22Styled style={{ marginBottom: 8 }}>
                           {!isEmpty(transactionCode)
+                            ? watch("fullname")
+                            : isAuthenticated
                             ? watch("fullname")
                             : "Khác hàng vãng lai"}
                         </Title22Styled>

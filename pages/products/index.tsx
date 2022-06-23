@@ -62,19 +62,19 @@ const ListProduct = () => {
   };
   const pageNumber = Math.ceil(totalElement / paramsSearch.size);
 
-    useMemo(() => {
-      if (router.isReady === true) {
-        setSearchList({
-          provinceId: provinceId ? provinceId : "",
-          projectTypeId: projectTypeId ? projectTypeId : "",
-          projectId: idProject ? idProject : "",
-        });
-      }
-    }, [router.query]);
+  useMemo(() => {
+    if (router.isReady === true) {
+      setSearchList({
+        provinceId: provinceId ? provinceId : "",
+        projectTypeId: projectTypeId ? projectTypeId : "",
+        projectId: idProject ? idProject : "",
+      });
+    }
+  }, [router.query]);
 
   const fetchData = async () => {
     try {
-		// setLoading(false);
+      // setLoading(false);
       const responseProject = await getListProjectApi(
         paramsSearchProject,
         searchListProject
@@ -107,7 +107,6 @@ const ListProduct = () => {
           <DynamicPageIndex
             listProducts={listProductResponse}
             listProject={listProjectResponse}
-			
           />
         ) : (
           <>

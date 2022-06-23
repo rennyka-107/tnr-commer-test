@@ -26,8 +26,14 @@ export const apiGetPaymentInformation = async (transactionCode: string) => {
   );
 };
 
-export const apiGetCustomerType = async ()=> {
-	return HttpClient.get<any, CommonResponse>(
-		`api/v1/payment/get-customer-type`
-	  );
-}
+export const apiGetCustomerType = async () => {
+  return HttpClient.get<any, CommonResponse>(
+    `api/v1/payment/get-customer-type`
+  );
+};
+
+export const apiGetProfileInformation = async () => {
+  return HttpClient.get<any, CommonResponse>(
+    `api-profile/profile/get-info`
+  );
+};
