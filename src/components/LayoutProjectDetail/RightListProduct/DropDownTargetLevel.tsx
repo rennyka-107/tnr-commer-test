@@ -3,7 +3,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../store/store";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   setGeoJsonData,
   setListChild,

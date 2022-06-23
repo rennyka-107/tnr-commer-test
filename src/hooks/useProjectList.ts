@@ -10,7 +10,7 @@ const useProjectList = () => {
     const [totalPage, setTotalPage] = useState(0);
     const [body, setBody] = useState<BodyListProjectI>()
     const [params, setParams] = useState<ParamsListProjectI>({
-        pageNumber: 1,
+        pageNumber: 0,
         pageSize: 10
     })
 

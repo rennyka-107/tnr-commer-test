@@ -28,8 +28,7 @@ const PaymentLogin = () => {
   } = useRouter();
   const [scopeRender, setScopeRender] = useState<string>("payment");
   const [loading, setLoading] = useState<boolean>(false);
-  const { cart } = useSelector((state: RootState) => state.carts);
-  
+
   useEffect(() => {
     if (!isEmpty(transactionCode)) {
       setScopeRender("info_custom");
@@ -57,24 +56,7 @@ const PaymentLogin = () => {
     >
       <FlexContainer>
         {!loading ? (
-          !isEmpty(cart) ? (
-            scopePayment(scopeRender)
-          ) : (
-            <Container title={"Giỏ hàng"}>
-              <Grid container columnSpacing={"30px"}>
-                <Typography
-                  variant="h6"
-                  sx={{
-                    fontStyle: "italic",
-                    width: "100%",
-                    textAlign: "center",
-                  }}
-                >
-                  Giỏ hàng đang trống
-                </Typography>
-              </Grid>
-            </Container>
-          )
+          scopePayment(scopeRender)
         ) : (
           <Container title={"Thanh toán"}>
             <div style={{ textAlign: "center", margin: "200px 0px" }}>

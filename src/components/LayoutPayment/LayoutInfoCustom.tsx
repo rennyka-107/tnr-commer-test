@@ -60,7 +60,7 @@ import { useRouter } from "next/router";
 import useAddToCart from "hooks/useAddToCart";
 import useNotification from "hooks/useNotification";
 import useAuth from "hooks/useAuth";
-import { format, parse } from "date-fns"
+import { format, parse } from "date-fns";
 
 type Props = {
   setScopeRender: Dispatch<SetStateAction<string>>;
@@ -91,25 +91,26 @@ interface InformationBuyer {
 }
 
 const validationSchema = yup.object().shape({
-  fullname: yup.string().required(validateLine.required).default(""),
-  dob: yup
-    .string()
-    .required(validateLine.required)
-    .trim(validateLine.trim)
-    .default(""),
-  phoneNumber: yup.string().required(validateLine.required).default(""),
-  email: yup.string().trim(validateLine.trim).default(""),
-  idNumber: yup.string().required(validateLine.required).default(""),
-  issuePlace: yup.string().required(validateLine.required).default(""),
-  issueDate: yup.string().required(validateLine.required).default(""),
-  permanentAddress: yup.string().required(validateLine.required).default(""),
+  fullname: yup.string().required(validateLine.required),
+  dob: yup.string().required(validateLine.required).trim(validateLine.trim),
+  phoneNumber: yup.string().required(validateLine.required),
+  email: yup.string().required(validateLine.required).trim(validateLine.trim),
+  idNumber: yup.string().required(validateLine.required),
+  issuePlace: yup.string().required(validateLine.required),
+  issueDate: yup.string().required(validateLine.required),
+  permanentAddress: yup.string().required(validateLine.required),
   contactAddress: yup.string().default(""),
-  province: yup.string().default(""),
-  district: yup.string().default(""),
+  province: yup.string(),
+  district: yup.string(),
 });
 
 const LayoutInfoCustom = ({ setScopeRender }: Props) => {
-  const { control, handleSubmit, watch, reset } = useForm<InformationBuyer>({
+  const {
+    control,
+    handleSubmit,
+    watch,
+    reset,
+  } = useForm<InformationBuyer>({
     mode: "onChange",
     resolver: yupResolver(validationSchema),
     defaultValues: validationSchema.getDefault(),
@@ -160,18 +161,25 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
           idReceivePlace: issuePlace,
           address: permanentAddress,
         } = res.responseData;
-       
+
         dispatch(
           setData({
             ...data,
             paymentIdentityInfos: [
               {
                 fullname,
-                dob: !isEmpty(dob) ? format(parse(dob, "dd-MM-yyyy", new Date()), "yyyy-MM-dd") : null,
+                dob: !isEmpty(dob)
+                  ? format(parse(dob, "dd-MM-yyyy", new Date()), "yyyy-MM-dd")
+                  : null,
                 phoneNumber,
                 email,
                 idNumber,
-                issueDate: !isEmpty(issueDate) ? format(parse(issueDate, "dd-MM-yyyy", new Date()), "yyyy-MM-dd") : null,
+                issueDate: !isEmpty(issueDate)
+                  ? format(
+                      parse(issueDate, "dd-MM-yyyy", new Date()),
+                      "yyyy-MM-dd"
+                    )
+                  : null,
                 issuePlace,
                 permanentAddress,
                 contactAddress: "",
@@ -186,8 +194,6 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
       console.log(err);
     }
   }
-
-  console.log(data,"data")
 
   useEffect(() => {
     if (!isEmpty(transactionCode)) {
@@ -206,18 +212,17 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
         notification({
           severity: "error",
           title: `Thông tin mã giao dịch ${transactionCode}`,
-          message: res.responseMessage
-        })
-        router.push("/404")
+          message: res.responseMessage,
+        });
+        router.push("/404");
       }
-    } catch(err) {
+    } catch (err) {
       notification({
         severity: "error",
         title: `Thông tin mã giao dịch ${transactionCode}`,
-        message: "Có lỗi xảy ra"
-      })
+        message: "Có lỗi xảy ra",
+      });
     }
-    
   }
 
   useEffect(() => {
@@ -323,6 +328,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
     try {
       apiSavePaymentInformation(formatData)
         .then((res) => {
+          console.log(res);
           if (!isEmpty(res.responseData)) {
             notification({
               message: "Lưu thông tin hồ sơ mua bán thành công!",
@@ -556,6 +562,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                             control={control}
                             variant={"outlined"}
                             name={"email"}
+                            required
                           />
                         </FormGroup>
                       </Grid>
@@ -707,7 +714,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
               <ButtonAction
                 disabled={formInfo.open || !acceptPolicy || loading}
                 margin={"12px auto"}
-                onClick={() => handleOnSubmit(watch(), 1)}
+                onClick={handleSubmit((values) => handleOnSubmit(values, 1))}
               >
                 {loading ? (
                   <CircularProgress />

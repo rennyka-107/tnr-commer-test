@@ -1,6 +1,9 @@
 import Container from "@components/Container";
-import { Grid } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
+import isEmpty from "lodash.isempty";
 import React, { Dispatch, SetStateAction } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../store/store";
 import CardItemProduct from "./components/CardItemProduct";
 import CartPayment from "./components/CartPayment";
 import TableQuote from "./components/TableQuote";
@@ -10,7 +13,24 @@ type Props = {
 };
 
 const LayoutPayment = ({ setScopeRender }: Props) => {
-  return (
+  const { cart } = useSelector((state: RootState) => state.carts);
+
+  return isEmpty(cart) ? (
+    <Container title={"Giỏ hàng"}>
+      <Grid container columnSpacing={"30px"}>
+        <Typography
+          variant="h6"
+          sx={{
+            fontStyle: "italic",
+            width: "100%",
+            textAlign: "center",
+          }}
+        >
+          Giỏ hàng đang trống
+        </Typography>
+      </Grid>
+    </Container>
+  ) : (
     <Container title={"Thanh toán"}>
       <Grid container columnSpacing={"30px"}>
         <Grid

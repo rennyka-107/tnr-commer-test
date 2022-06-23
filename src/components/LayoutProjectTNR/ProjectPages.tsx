@@ -84,7 +84,7 @@ const ProjectPages = () => {
                     ))}
                 </Grid>
                 <Row customStyle={{ marginTop: 84, justifyContent: 'center' }}>
-                    <PaginationComponent count={totalPage} onChange={(event, page) => { changePageNumber(page) }} page={params.pageNumber} />
+                    <PaginationComponent count={totalPage} onChange={(event, page) => { changePageNumber(page - 1) }} page={params.pageNumber + 1} />
                 </Row>
             </Container>
         </FlexContainer>

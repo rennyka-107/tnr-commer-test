@@ -9,3 +9,14 @@ export interface RegisterResponse {
   createdDate: Date;
   phone: string;
 }
+export interface BodySalePolicy {
+	id: string,
+	name: string,
+	project: any,
+	projectId: string,
+	content: string
+  }
+
+export interface BodyResponseSalePolicy {
+	content: BodyResponseSalePolicy[]
+}

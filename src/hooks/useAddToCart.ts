@@ -1,6 +1,6 @@
-import useNotification from 'hooks/useNotification';
+import useNotification from "hooks/useNotification";
 import LocalStorage from "utils/LocalStorage";
-import isEmpty from "lodash/isEmpty";
+import isEmpty from "lodash.isempty";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { getProducById } from "../../pages/api/productsApi";
@@ -33,26 +33,31 @@ const useAddToCart = () => {
               Router.push("/payment-cart");
             }
           } else {
-            if(isEmpty(res.responseData)) {
+            if (isEmpty(res.responseData)) {
               notification({
                 error: res.responseData,
                 title: "Giỏ hàng",
-              })
+              });
+              LocalStorage.remove("cart");
             }
-            if(res.responseData?.paymentStatus !== 2) {
+            if (res.responseData?.paymentStatus !== 2) {
               notification({
                 error: "Sản phẩm này đang bị khóa hoặc đã hết",
                 title: "Giỏ hàng",
-              })
-            } 
+              });
+              LocalStorage.remove("cart");
+            }
           }
         })
-        .catch((err) => notification({
-          error: "Có lỗi xảy ra",
-          title: "Giỏ hàng",
-        }));
+        .catch((err) =>
+          notification({
+            error: "Có lỗi xảy ra",
+            title: "Giỏ hàng",
+          })
+        );
     } else {
       dispatch(getCart({}));
+      LocalStorage.remove("cart");
     }
   }
   return handleAddToCart;

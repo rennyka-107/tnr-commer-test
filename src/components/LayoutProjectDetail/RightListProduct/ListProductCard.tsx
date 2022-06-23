@@ -59,9 +59,6 @@ const ListProductCard = ({ data }: ProductsProps) => {
                       })
                     );
                   }}
-                  // src={{
-                  //   src: "https://dulichvietnam.com.vn/data/toa-nha-dep-nhat-viet-nam-8_5.jpg",
-                  // }}
                 />
               </ContainerProduct>
             </Grid>

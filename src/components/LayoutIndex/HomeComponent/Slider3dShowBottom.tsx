@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, {
   Navigation,
@@ -17,6 +17,7 @@ import styled from "@emotion/styled";
 import { IconEye, IconMuaOnline } from "@components/Icons";
 import IconSliderYellowLeft from "@components/Icons/IconSliderYellowLeft";
 import IconSliderYellowRight from "@components/Icons/IconSliderYellowRight";
+import useProjectRecenly from "hooks/useProjectRecenly";
 
 const TextLeftStyled = styled(Typography)`
   font-family: "Roboto";
@@ -89,7 +90,7 @@ const TextInside = styled(Typography)`
   position: absolute;
 `;
 const TextInsideNumber = styled(Typography)`
-z-index: 1000;
+  z-index: 1000;
   font-family: "Roboto";
   font-style: normal;
   font-weight: 400;
@@ -105,6 +106,36 @@ z-index: 1000;
 `;
 SwiperCore.use([Navigation, Pagination, EffectCoverflow, Autoplay]);
 export default function Slider3dShowBottom() {
+  const { dataProductRecenly } = useProjectRecenly();
+  console.log(dataProductRecenly, "dataProductRecenly");
+
+  const renderItems = useMemo(() => {
+    return dataProductRecenly.map((el) => (
+      <SwiperSlide
+        className="swiper-3d"
+        style={{
+          width: "241px !important",
+          height: 342,
+          backgroundImage: `url(${el?.avatar})`,
+          cursor: "pointer",
+          position: "relative",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundAttachment: "fixed",
+          backgroundRepeat: "no-repeat",
+          filter: "brightness(0.7)",
+        }}
+        key={el.id}
+      >
+        <WrapTopItem>
+          <IconEye style={{ zIndex: 1000 }} />
+          <TextInsideNumber>{el?.viewNum}</TextInsideNumber>
+        </WrapTopItem>
+        <TextInside>{el.name}</TextInside>
+      </SwiperSlide>
+    ));
+  }, [dataProductRecenly]);
+
   return (
     <div style={{ marginTop: 101, marginBottom: 130, marginLeft: 337 }}>
       <div>
@@ -181,154 +212,7 @@ export default function Slider3dShowBottom() {
             //   },
             // }}
           >
-            <SwiperSlide
-              className="swiper-3d"
-              style={{
-                width: "241px !important",
-                height: 342,
-                backgroundImage: "url(/images/slider-1-cover.jpeg)",
-                cursor: "pointer",
-                position: "relative",
-				backgroundSize: 'cover',
-				backgroundPosition: 'center',
-				backgroundAttachment: 'fixed',
-				backgroundRepeat: 'no-repeat',
-				filter: 'brightness(0.7)'
-				
-              }}
-            >
-              <WrapTopItem>
-                <IconEye style={{zIndex: 1000}}/>
-                <TextInsideNumber>1827</TextInsideNumber>
-              </WrapTopItem>
-              <TextInside>TNR Grand Palace Cao Bằng</TextInside>
-            </SwiperSlide>
-            <SwiperSlide
-              className="swiper-3d"
-              style={{
-                width: "241px !important",
-                height: 342,
-                backgroundImage: "url(/images/slider-2-cover.jpeg)",
-                cursor: "pointer",
-				backgroundSize: 'cover',
-				backgroundPosition: 'center',
-				backgroundAttachment: 'fixed',
-				backgroundRepeat: 'no-repeat',
-				filter: 'brightness(0.7)'
-              }}
-            >
-              <WrapTopItem>
-                <IconEye style={{zIndex: 1000}} />
-                <TextInsideNumber>1827</TextInsideNumber>
-              </WrapTopItem>
-              <TextInside>TNR Grand Palace Cao Bằng</TextInside>
-            </SwiperSlide>
-
-            <SwiperSlide
-              className="swiper-3d"
-              style={{
-                width: "241px !important",
-                height: 342,
-                backgroundImage: "url(/images/slider-3-cover.jpeg)",
-                cursor: "pointer",
-				backgroundSize: 'cover',
-				backgroundPosition: 'center',
-				backgroundAttachment: 'fixed',
-				backgroundRepeat: 'no-repeat',
-				filter: 'brightness(0.7)'
-              }}
-            >
-              {" "}
-              <WrapTopItem>
-                <IconEye style={{zIndex: 1000}} />
-                <TextInsideNumber>1827</TextInsideNumber>
-              </WrapTopItem>
-              <TextInside>TNR Grand Palace Cao Bằng</TextInside>
-            </SwiperSlide>
-            <SwiperSlide
-              className="swiper-3d"
-              style={{
-                width: "241px !important",
-                height: 342,
-                backgroundImage: "url(/images/slider-4-cover.jpeg)",
-                cursor: "pointer",
-				backgroundSize: 'cover',
-				backgroundPosition: 'center',
-				backgroundAttachment: 'fixed',
-				backgroundRepeat: 'no-repeat',
-				filter: 'brightness(0.7)'
-              }}
-            >
-              {" "}
-              <WrapTopItem>
-                <IconEye  style={{zIndex: 1000}}/>
-                <TextInsideNumber>1827</TextInsideNumber>
-              </WrapTopItem>
-              <TextInside>TNR Grand Palace Cao Bằng</TextInside>
-            </SwiperSlide>
-            <SwiperSlide
-              className="swiper-3d"
-              style={{
-                width: "241px !important",
-                height: 342,
-                backgroundImage: "url(/images/slider-5-cover.jpeg)",
-                cursor: "pointer",
-				backgroundSize: 'cover',
-				backgroundPosition: 'center',
-				backgroundAttachment: 'fixed',
-				backgroundRepeat: 'no-repeat',
-				filter: 'brightness(0.7)'
-              }}
-            >
-              {" "}
-              <WrapTopItem>
-                <IconEye style={{zIndex: 1000}} />
-                <TextInsideNumber>1827</TextInsideNumber>
-              </WrapTopItem>
-              <TextInside>TNR Grand Palace Cao Bằng</TextInside>
-            </SwiperSlide>
-			<SwiperSlide
-              className="swiper-3d"
-              style={{
-                width: "241px !important",
-                height: 342,
-                backgroundImage: "url(/images/slider-6-cover.jpeg)",
-                cursor: "pointer",
-				backgroundSize: 'cover',
-				backgroundPosition: 'center',
-				backgroundAttachment: 'fixed',
-				backgroundRepeat: 'no-repeat',
-				filter: 'brightness(0.7)'
-              }}
-            >
-              {" "}
-              <WrapTopItem>
-                <IconEye style={{zIndex: 1000}}/>
-                <TextInsideNumber>1827</TextInsideNumber>
-              </WrapTopItem>
-              <TextInside>TNR Grand Palace Cao Bằng</TextInside>
-            </SwiperSlide>
-			<SwiperSlide
-              className="swiper-3d"
-              style={{
-                width: "241px !important",
-                height: 342,
-                backgroundImage: "url(/images/slider-7-cover.jpeg)",
-                cursor: "pointer",
-				backgroundSize: 'cover',
-				backgroundPosition: 'center',
-				backgroundAttachment: 'fixed',
-				backgroundRepeat: 'no-repeat',
-				filter: 'brightness(0.7)'
-              }}
-            >
-              {" "}
-              <WrapTopItem>
-                <IconEye style={{zIndex: 1000}}/>
-                <TextInsideNumber>1827</TextInsideNumber>
-              </WrapTopItem>
-              <TextInside>TNR Grand Palace Cao Bằng</TextInside>
-            </SwiperSlide>
+            {renderItems}
           </Swiper>
           <IconSliderYellowRight
             className="y-right"
@@ -338,7 +222,6 @@ export default function Slider3dShowBottom() {
               right: "-18px",
               top: "42%",
               cursor: "pointer",
-			  
             }}
           />
         </div>

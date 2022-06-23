@@ -47,3 +47,10 @@ export const postFile = async (formData: any) => {
   }
 
 };
+
+export const getProjectRecenly = async () => {
+  return HttpClient.get<any, CommonResponse>(
+    `api-project/recently-viewed`,
+    {}
+  );
+};

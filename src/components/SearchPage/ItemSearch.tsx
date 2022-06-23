@@ -4,6 +4,7 @@ import Product2 from "../../../public/images/product2.png";
 import styled from "@emotion/styled";
 import { searchLocationResponse } from "interface/searchIF";
 import ProductCardSearch from "@components/CustomComponent/ItemProductCard/ProductCardSearch";
+import useAddToCart from "hooks/useAddToCart";
 
 interface searchProps {
   data?: searchLocationResponse[];
@@ -18,11 +19,13 @@ const ProductWrap = styled.div`
   grid-template-columns: repeat(4, 1fr);
 `;
 const ItemSearch = ({ data }: searchProps) => {
+  const addToCart = useAddToCart();
   return (
     <>
       <ProductWrap>
         {data?.map((product, index) => (
           <ProductCardSearch
+            onClick={() => addToCart(product.productId)}
             key={index}
             id={product.productId}
             src={Product2}
@@ -34,9 +37,9 @@ const ItemSearch = ({ data }: searchProps) => {
               item3: product.numBed,
               item4: product.doorDirection,
             }}
-			priceListed={product.totalPrice}
+            priceListed={product.totalPrice}
             priceSub={product.unitPrice}
-			ticketCard={product.category}
+            ticketCard={product.category}
           />
         ))}
       </ProductWrap>

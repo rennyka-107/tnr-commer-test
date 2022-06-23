@@ -6,7 +6,7 @@ import {
   Text18Styled,
 } from "@components/StyledLayout/styled";
 import { Box, Typography } from "@mui/material";
-import { isEmpty } from "lodash";
+import isEmpty from "lodash.isempty";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 

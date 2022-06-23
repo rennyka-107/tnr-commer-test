@@ -856,10 +856,10 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                     <TextContact>Liên hệ khách hàng</TextContact>
                   </a>
                   <div style={{ border: "1px solid #1B3459" }} />
-                  <div style={{ textAlign: "center" }}>
+				  <a href={`/policySale/${dataProduct.project.id}`} style={{ textAlign: "center" }}>
                     <IconClipboardProduct />
                     <TextContact>Chính sách bán hàng</TextContact>
-                  </div>
+                  </a>
                 </div>
               </div>
             </div>

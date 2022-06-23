@@ -36,11 +36,11 @@ const ListProduct = () => {
   );
 
   const [paramsSearch, setParamsSearch] = useState({
-    page: 1,
+    page: 0,
     size: 12,
   });
   const paramsSearchProject = {
-    page: 1,
+    page: 0,
     size: 12,
   };
   const [searchList, setSearchList] = useState<any>({
@@ -136,9 +136,9 @@ const ListProduct = () => {
         <PaginationComponent
           count={pageNumber}
           onChange={(event, page) => {
-            changePage(page);
+            changePage(page -1 );
           }}
-          page={paramsSearch.page}
+          page={paramsSearch.page +1}
         />
       </Row>
     </Page>

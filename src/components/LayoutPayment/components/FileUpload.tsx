@@ -9,6 +9,7 @@ import styled from "@emotion/styled";
 import { Box, Grid } from "@mui/material";
 import Image from "next/image";
 import React, { useState } from "react";
+import { apiUploadFile } from "../../../../pages/api/cartApi";
 
 type Props = {};
 const WrapperBoxStyled = styled(Box)({
@@ -60,7 +61,15 @@ const FileUpload = (props: Props) => {
         setUrlPhoto(urls);
       }
     };
+
+    // upload file
+    const data = new FormData();
+    data.append("multipartFileList", tarFile);
+    data.append("paymentCode", "126XJ50383534440");
+
+    apiUploadFile(data).then((response) => console.log(response));
   };
+
   const onRemoveFile = (url) => {
     const files = [...urlPhoto];
     const result = files.map((item) => {

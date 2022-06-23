@@ -18,3 +18,17 @@ export const zenCodeQrAPI = async (id: string) => {
     { withToken: false }
   );
 };
+
+export const apiUploadFile = async (data: any) => {
+  return HttpClient.post<any, CommonResponse>(
+    `/api/v1/payment/upload-payment-certification`,
+    data,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withToken: false,
+    }
+  );
+};

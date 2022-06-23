@@ -52,7 +52,7 @@ const Search = () => {
   const [searchAction, setSearchAction] = useState(false);
 
   const [search, setSearch] = useState({
-    page: 1,
+    page: 0,
     size: 12,
   });
 
@@ -145,9 +145,9 @@ const Search = () => {
         <PaginationComponent
           count={pageNumber}
           onChange={(event, page) => {
-            changePage(page);
+            changePage(page -1);
           }}
-          page={search.page}
+          page={search.page +1}
         />
       </Row>
     </Page>

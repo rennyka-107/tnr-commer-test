@@ -12,6 +12,7 @@ import userManual from "./userManualSlice";
 import profile from "./profileSlice";
 import shortcut from "./shortcut";
 import infoCms from "./infoCmsSlice";
+import salePolicy from './salePolicySlice';
 
 const combinedReducer = combineReducers({
   menubar,
@@ -25,6 +26,7 @@ const combinedReducer = combineReducers({
   profile,
   shortcut,
   infoCms,
+  salePolicy
 });
 
 export type RootState = ReturnType<typeof combinedReducer>;
@@ -77,6 +79,9 @@ const masterReducer = (state, action) => {
       shortcut: {
        ...action.payload.shortcut
       },
+	  salePolicy: {
+		...action.payload.salePolicy,
+	  }
     };
     return nextState;
   } else {

@@ -21,8 +21,6 @@ import { RootState } from "../../../../store/store";
 import { useSelector } from "react-redux";
 import isEmpty from "lodash.isempty";
 import { useRouter } from "next/router";
-import { getProducById } from "../../../../pages/api/productsApi";
-import LocalStorage from "utils/LocalStorage";
 
 type Props = {
   onBack?: Function;
