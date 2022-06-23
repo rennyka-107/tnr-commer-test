@@ -60,7 +60,7 @@ import { useRouter } from "next/router";
 import useAddToCart from "hooks/useAddToCart";
 import useNotification from "hooks/useNotification";
 import useAuth from "hooks/useAuth";
-import { format, parse, parseISO } from "date-fns"
+import { format, parse } from "date-fns"
 
 type Props = {
   setScopeRender: Dispatch<SetStateAction<string>>;
@@ -160,17 +160,18 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
           idReceivePlace: issuePlace,
           address: permanentAddress,
         } = res.responseData;
+       
         dispatch(
           setData({
             ...data,
             paymentIdentityInfos: [
               {
                 fullname,
-                dob: format(parse(dob, "dd-MM-yyyy", new Date()), "yyyy-MM-dd"),
+                dob: !isEmpty(dob) ? format(parse(dob, "dd-MM-yyyy", new Date()), "yyyy-MM-dd") : null,
                 phoneNumber,
                 email,
                 idNumber,
-                issueDate: format(parse(issueDate, "dd-MM-yyyy", new Date()), "yyyy-MM-dd"),
+                issueDate: !isEmpty(issueDate) ? format(parse(issueDate, "dd-MM-yyyy", new Date()), "yyyy-MM-dd") : null,
                 issuePlace,
                 permanentAddress,
                 contactAddress: "",
@@ -185,6 +186,8 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
       console.log(err);
     }
   }
+
+  console.log(data,"data")
 
   useEffect(() => {
     if (!isEmpty(transactionCode)) {

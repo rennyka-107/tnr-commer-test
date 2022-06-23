@@ -115,15 +115,15 @@ const EditProfile = () => {
   const validationSchema = yup.object().shape({
     fullname: yup.string().required(validateLine.required),
     phone: yup
-      .string()
+      .string().nullable()
       .trim(validateLine.trim)
       .strict(true)
       .matches(Regexs.phone, "Số điện thoại không đúng")
       .required(validateLine.required)
       .default(""),
-    idNumber: yup.string().required(validateLine.required),
+    idNumber: yup.string().required(validateLine.required).nullable(),
     email: yup
-      .string()
+      .string().nullable()
       .trim(validateLine.trim)
       .strict(true)
       .matches(Regexs.email, "Email không đúng")

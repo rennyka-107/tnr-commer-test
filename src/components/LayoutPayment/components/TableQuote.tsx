@@ -89,15 +89,6 @@ const TableQuote = ({ width, urlPayment, setScopeRender, item }: Props) => {
           </Text14Styled>
         </RowStyledAgain>
         <RowStyledAgain>
-          <Text14Styled>Chiết khấu NPP</Text14Styled>
-          <Text14Styled>
-            {(!isEmpty(item) && item.nppDiscount
-              ? currencyFormat(item.nppDiscount)
-              : currencyFormat(cart.nppDiscount)) ?? "0"}
-            đ
-          </Text14Styled>
-        </RowStyledAgain>
-        <RowStyledAgain>
           <Text14Styled>Tổng tiền mua online</Text14Styled>
           <Text18Styled fw={500} style={{ color: "#ea242a" }}>
             {(!isEmpty(item) && item.totalOnlinePrice
