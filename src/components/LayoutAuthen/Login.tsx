@@ -8,6 +8,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { CheckCircleOutline, CircleOutlined } from "@mui/icons-material";
 import { LoginSuccess, ResponseLoginModel } from "@service/auth";
 import useAuth from "hooks/useAuth";
+import useNotification from "hooks/useNotification";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
@@ -70,7 +71,7 @@ const Login = () => {
       });
     }
   }, [isAuthenticated, Route]);
-
+  const notification = useNotification();
   const { control, handleSubmit } = useForm<LoginParams>({
     mode: "onChange",
     resolver: yupResolver(validationSchema),
@@ -80,11 +81,25 @@ const Login = () => {
     try {
       const response: ResponseLoginModel<LoginSuccess> = await login(values);
       if (!response?.responseData?.access_token) {
-        alert(response?.responseMessage??'Có một số lỗi sảy ra');
-      }
+		notification({
+			severity: "error",
+			title: `Login Fail`,
+			message: `${response?.responseMessage}`,
+		  });
+      }else {
+		notification({
+			message:  "Đăng nhập thành công!",
+			severity: "success",
+			title: "Đăng Nhập",
+		  });
+	  }
     } catch (error) {
       const AxiosError: { message: string } = error;
-      alert(AxiosError.message);
+	  notification({
+        severity: "error",
+        title: `Login Fail`,
+        message: "Có lỗi xảy ra",
+      });
     }
   };
   // const onSubmit = async (values) => {

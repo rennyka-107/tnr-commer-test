@@ -6,6 +6,7 @@ import PasswordTextField from "@components/Form/PasswordTextField";
 import styled from "@emotion/styled";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { CheckCircleOutline, CircleOutlined } from "@mui/icons-material";
+import useNotification from "hooks/useNotification";
 import isEmpty from "lodash.isempty";
 import { useRouter } from "next/router";
 import React, { useMemo, useState } from "react";
@@ -105,7 +106,7 @@ const Index = (props: Props) => {
   });
   const dispatch = useDispatch();
   const [checked, setChecked] = useState(false);
-
+  const notification = useNotification();
   const {
     control,
     handleSubmit,
@@ -150,9 +151,6 @@ const Index = (props: Props) => {
         dispatch(registerAcc(response.responseData));
         if (response.responseCode === "00") {
           reset();
-          alert(
-            "Đăng ký tài khoản thành công. Vui lòng truy cập vào Gmail để kích hoạt tài khoản!"
-          );
           props.setUserId(response.responseData?.id);
           props.setKey(response.responseData?.keycloakId);
           props.next();
@@ -163,10 +161,17 @@ const Index = (props: Props) => {
               tabIndex: "confirm",
             },
           });
+		  notification({
+			message:  "Đăng ký tài khoản thành công. Vui lòng chọn phương thức xác thực!",
+			severity: "success",
+			title: "Đăng ký tài khoản",
+		  });
         } else {
-          alert(
-            "Email hoặc số điện thoại đã được sử dụng. Vui lòng thay đổi để tiếp tục!"
-          );
+		  notification({
+			severity: "error",
+			title: `Đăng ký thất bại`,
+			message:  "Email hoặc số điện thoại đã được sử dụng. Vui lòng thay đổi để tiếp tục!",
+		  });
         }
       } catch (error) {
         console.log(error);
