@@ -29,10 +29,13 @@ const CompareSearch = () => {
     page: 1,
     size: 12,
   });
-  const { areaFrom, areaTo, priceFrom, priceTo, projectTypeId } = router.query;
+  const { areaFrom, areaTo, priceFrom, priceTo, projectTypeId, projectId,categoryId } =
+    router.query;
   const pageNumber = Math.ceil(totalElement / search.size);
   const [searchBody, setSearchBody] = useState<any>({
     projectTypeId: projectTypeId ? projectTypeId : "",
+    projectId: projectId ? projectId : "",
+	categoryId: categoryId ? categoryId : "",
     priceFrom: priceFrom ? priceFrom + "000000000" : "",
     priceTo: priceTo ? priceTo + "000000000" : "",
     areaFrom: Number(areaFrom),
@@ -49,6 +52,8 @@ const CompareSearch = () => {
       projectTypeId: projectTypeId ? projectTypeId : "",
       priceFrom: priceFrom ? priceFrom + "000000000" : "",
       priceTo: priceTo ? priceTo + "000000000" : "",
+      projectId: projectId ? projectId : "",
+	  categoryId: categoryId ? categoryId : "",
       areaFrom: Number(areaFrom),
       areaTo: Number(areaTo),
     });
@@ -56,12 +61,14 @@ const CompareSearch = () => {
 
   const fetchAdvandedSearchListCompare = async () => {
     try {
-      setLoading(false);
-      const response = await searchAdvanded(searchBody, search);
-      dispatch(getSearchHomeLocation(response.responseData));
-      dispatch(getPaggingSearch(response.totalElement));
-      if (response.responseCode === "00") {
-        setLoading(true);
+      if (router.isReady === true) {
+        setLoading(false);
+        const response = await searchAdvanded(searchBody, search);
+        dispatch(getSearchHomeLocation(response.responseData));
+        dispatch(getPaggingSearch(response.totalElement));
+        if (response.responseCode === "00") {
+          setLoading(true);
+        }
       }
     } catch (err) {
       console.log(err);
@@ -70,6 +77,7 @@ const CompareSearch = () => {
   useEffect(() => {
     fetchAdvandedSearchListCompare();
   }, [searchBody, search.page]);
+
   const fetchComponent = () => {
     return (
       <>

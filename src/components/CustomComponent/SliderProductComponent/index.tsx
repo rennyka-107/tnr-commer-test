@@ -1,7 +1,8 @@
-import React, { useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
 import SwiperCore,{ Autoplay, Pagination, Navigation } from "swiper";
 import styled from "@emotion/styled";
+import DefaultImage from "../../../../public/images/product_1.png"
 
 
 // Import Swiper styles
@@ -9,6 +10,7 @@ import "swiper/css";
 import "swiper/css/autoplay";
 import Image from "next/image";
 import { IconPrevProduct,IconNextProduct } from "@components/Icons";
+import ImageWithHideOnError from "hooks/ImageWithHideOnError";
 
 const WrapSlide = styled.div`
   display: flex;
@@ -23,8 +25,25 @@ const CardContainer = styled.div`
 `;
 
 SwiperCore.use([ Autoplay,Pagination,Navigation ]);
-const SliderProductComponent = () => {
-
+const SliderProductComponent = ({data}:{data?:string[]}) => {
+const renderItems=useMemo(()=>{
+  return data?.map((el,index)=>(
+    <SwiperSlide key={index}>
+        <CardContainer style={{backgroundColor:'red'}}>
+          <ImageWithHideOnError
+            className="logo"
+            src={el??DefaultImage}
+            fallbackSrc={DefaultImage}
+            width={703}
+            height={381}
+            priority
+            layout="fill"
+            unoptimized={true}
+          />
+        </CardContainer>
+      </SwiperSlide>
+  ))
+},[data])
   return (
     <WrapSlide>
       <IconPrevProduct style={{ cursor: "pointer" ,position: 'absolute', zIndex: 10, marginLeft: 10}} />
@@ -43,42 +62,10 @@ const SliderProductComponent = () => {
         observeParents={true}
         // modules={[Autoplay, Pagination, Navigation]}
         className="mySwiper"
-        style={{ width: 703 ,height: 381}}
+        style={{ width: '100%' ,height: 381}}
 		
       >
-        <SwiperSlide>
-          <CardContainer>
-            <Image
-              src="/images/product_1.png"
-              alt="Picture of the author"
-              width={703}
-              height={381}
-			  layout="fixed"
-            />
-          </CardContainer>
-        </SwiperSlide>
-		<SwiperSlide>
-		<CardContainer>
-            <Image
-              src="/images/product_1.png"
-              alt="Picture of the author"
-              width={703}
-              height={381}
-			  layout="fixed"
-            />
-          </CardContainer>
-        </SwiperSlide>
-		<SwiperSlide>
-		<CardContainer>
-            <Image
-              src="/images/product_1.png"
-              alt="Picture of the author"
-              width={703}
-              height={381}
-			  layout="fixed"
-            />
-          </CardContainer>
-        </SwiperSlide>
+        {renderItems}
       </Swiper>
       <IconNextProduct style={{ cursor: "pointer",position: 'absolute', zIndex: 10 , right: 0, marginRight: 10}} />
     </WrapSlide>

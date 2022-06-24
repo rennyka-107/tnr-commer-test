@@ -98,7 +98,7 @@ const SearchCompare = ({
       (x) => x.ProvinceName === filter.location
     );
     if (!isEmpty(data)) {
-      setFilterSearch({ ...filterSearch, provinceId: data[0].ProvinceID });
+      setFilterSearch({ ...filterSearch, provinceId: data[0].ProvinceID.toString() });
     }
     const projectIdData = listMenuBarType.filter(
       (x) => x.id === router.query.projectId
@@ -125,7 +125,7 @@ const SearchCompare = ({
     });
     setFilterSearch({
       ...filterSearch,
-      provinceId: data[0]?.ProvinceID,
+      provinceId: data[0]?.ProvinceID.toString(),
     });
   };
   const handleSelectProject = (

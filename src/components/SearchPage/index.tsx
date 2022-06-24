@@ -228,7 +228,7 @@ const SearchPage = ({
       target: { value },
     } = event;
     const data = listMenuLocation.filter((x) => x.ProvinceName === value);
-    setFilterSearch({ ...filterSearch, provinceId: data[0].ProvinceID });
+    setFilterSearch({ ...filterSearch, provinceId: data[0].ProvinceID.toString() });
     setLocation(typeof value === "string" ? value.split(",") : value);
   };
   const handleChangeKhoangGia = (event: any) => {

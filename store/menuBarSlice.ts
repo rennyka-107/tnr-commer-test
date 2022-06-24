@@ -3,17 +3,20 @@ import {
   MenuBar,
   MenuBarProjectType,
   MenuBarLocation,
+  CategoryResponse,
 } from "../src/interface/menuBarList";
 
-interface initialState {
+interface InitialState {
   listMenuBarType: MenuBar[];
   listMenuBarProjectType: MenuBarProjectType[];
   listMenuLocation: MenuBarLocation[];
+  listCategory: CategoryResponse[];
 }
-const initialState = {
+const initialState: InitialState = {
   listMenuBarType: [],
   listMenuBarProjectType: [],
   listMenuLocation: [],
+  listCategory: [],
 };
 
 export const menuBarSlice = createSlice({
@@ -27,7 +30,7 @@ export const menuBarSlice = createSlice({
           name: "Tất cả dự án",
         },
       ];
-	  const newDataProject = dataProject.concat(action.payload)
+      const newDataProject = dataProject.concat(action.payload);
       state.listMenuBarType = newDataProject;
     },
     getListMenuBarProjectType: (state, action) => {
@@ -61,6 +64,17 @@ export const menuBarSlice = createSlice({
       const newData = dataLocation.concat(splice);
       state.listMenuLocation = newData;
     },
+    getListCategory: (state, action) => {
+      const dataCategory = [
+        {
+          id: "1",
+          code: "All",
+          name: "Tất cả",
+        },
+      ];
+	  const spliceCategory = dataCategory.concat(action.payload);
+	  state.listCategory = spliceCategory;
+    },
   },
 });
 
@@ -68,6 +82,7 @@ export const {
   getListMenuBarType,
   getListMenuBarProjectType,
   getListMenuLocation,
+  getListCategory
 } = menuBarSlice.actions;
 
 export default menuBarSlice.reducer;

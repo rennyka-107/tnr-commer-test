@@ -80,9 +80,12 @@ const minDistance2 = 1;
 
 const HomePage = () => {
   const router = useRouter();
+  const [projectTypeName, setProjectTypeName] = useState<string[]>([]);
+  const [categoryName, setCategoryName] = useState<string[]>([]);
   const [projectName, setProjectName] = useState<string[]>([]);
   const [valueDienTich, setValueDientich] = useState<number[]>([30, 200]);
   const [valueKhoanGia, setValueKhoangGia] = useState<number[]>([1, 200]);
+  
   const [filterSearch, setFilterSearch] = useState({
     textSearch: "",
     provinceId: "",
@@ -90,25 +93,45 @@ const HomePage = () => {
     projectId: "",
     priceFrom: "",
     priceTo: "",
+	categoryId: "",
     areaFrom: null,
     areaTo: null,
   });
 
-  const { listMenuBarType, listMenuBarProjectType, listMenuLocation } =
+  const { listMenuBarType, listMenuBarProjectType, listMenuLocation,listCategory } =
     useSelector((state: RootState) => state.menubar);
 
 
   const handleSelectProject = (
-    event: SelectChangeEvent<typeof projectName>
+    event: SelectChangeEvent<typeof projectTypeName>
   ) => {
     const {
       target: { value },
     } = event;
     const data = listMenuBarProjectType.filter((x) => x.name === value);
-    setProjectName(typeof value === "string" ? value.split(",") : value);
+    setProjectTypeName(typeof value === "string" ? value.split(",") : value);
     setFilterSearch({ ...filterSearch, projectTypeId: data[0].id });
   };
-
+  const handleSelectCategory = (
+    event: SelectChangeEvent<typeof categoryName>
+  ) => {
+    const {
+      target: { value },
+    } = event;
+    const data = listCategory.filter((x) => x.name === value);
+    setCategoryName(typeof value === "string" ? value.split(",") : value);
+    setFilterSearch({ ...filterSearch, categoryId: data[0].id });
+  };
+  const handleSelectProjectName = (
+    event: SelectChangeEvent<typeof projectName>
+  ) => {
+    const {
+      target: { value },
+    } = event;
+    const data = listMenuBarType.filter((x) => x.name === value);
+    setProjectName(typeof value === "string" ? value.split(",") : value);
+    setFilterSearch({ ...filterSearch, projectId: data[0].id });
+  };
   const handleChange1 = (
     event: Event,
     newValue: number | number[],
@@ -157,7 +180,7 @@ const HomePage = () => {
   };
 
   const handleSearchCompare = () => {
-    router.push(`/compare-search?projectTypeId=${filterSearch.projectTypeId}&&priceTo=${filterSearch.priceTo}&&priceFrom=${filterSearch.priceFrom}&&areaTo=${filterSearch.areaTo}&&areaFrom=${filterSearch.areaFrom}`);
+    router.push(`/compare-search?projectId=${filterSearch.projectId}&&projectTypeId=${filterSearch.projectTypeId}&&priceTo=${filterSearch.priceTo}&&priceFrom=${filterSearch.priceFrom}&&areaTo=${filterSearch.areaTo}&&areaFrom=${filterSearch.areaFrom}&&categoryId=${filterSearch.categoryId}`);
   };
   return (
     <>
@@ -200,7 +223,7 @@ const HomePage = () => {
           <SelectInputComponent
             label="Loại bất động sản"
             data={listMenuBarProjectType}
-            value={projectName}
+            value={projectTypeName}
             onChange={handleSelectProject}
             placeholder="Chọn loại bất động sản"
             style={{ margin: 0 }}
@@ -217,17 +240,17 @@ const HomePage = () => {
           <BoxStyled sx={{ minWidth: 120, padding: "0px !important" }}>
             <SelectInputComponent
               label="Dòng sản phẩm"
-              data={[]}
-              value={[]}
-              onChange={() => console.log("abc")}
-              placeholder="TNR The Nosta"
+              data={listCategory}
+              value={categoryName}
+              onChange={handleSelectCategory}
+              placeholder="Chọn dòng sản phẩm"
             />
             <SelectInputComponent
-              label="Loại sản phẩm"
-              data={[]}
-              value={[]}
-              onChange={() => console.log("abc")}
-              placeholder="Loại sản phẩm"
+              label="Dự án"
+              data={listMenuBarType}
+              value={projectName}
+              onChange={handleSelectProjectName}
+              placeholder="Chọn dự án"
             />
           </BoxStyled>
           <div style={{ display: "flex", gap: 60 }}>

@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from "react";
 import Page from "@layouts/Page";
+import { useEffect, useState } from "react";
 
-import dynamic from "next/dynamic";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState, wrapper } from "../../store/store";
-import { useRouter } from "next/router";
-import { getListProductApi, getProducById } from "../api/productsApi";
-import { getListProduct, getProductById } from "../../store/productSlice";
 import { CircularProgress } from "@mui/material";
-import { getListTabsProjectApi } from "../api/projectApi";
+import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
+import { useDispatch, useSelector } from "react-redux";
+import LocalStorage from "utils/LocalStorage";
+import SessionStorage from "utils/SessionStorage";
+import { getListProduct, getProductById } from "../../store/productSlice";
 import { getListTabsProject } from "../../store/projectSlice";
+import { RootState, wrapper } from "../../store/store";
+import { getListProductApi, getProducById, updateViewProduct } from "../api/productsApi";
+import { getListTabsProjectApi } from "../api/projectApi";
 
 const DynamicProductId = dynamic(
   () => import("../../src/components/LayoutProduct/ProductIdpage"),
@@ -22,9 +24,7 @@ const Product = () => {
   const [navKey, setNavKey] = useState("");
   const [loading, setLoading] = useState(false);
   const { productByID } = useSelector((state: RootState) => state.products);
-
   const { productId } = router.query;
-
   const paramsSearch = {
     page: 1,
     size: 10,
@@ -42,6 +42,11 @@ const Product = () => {
         const response = await getListProductApi(paramsSearch, searchList);
         dispatch(getListProduct(response.responseData));
         const responAPIBYID = await getProducById(productId);
+        const accessToken =
+          LocalStorage.get("accessToken") || SessionStorage.get("accessToken");
+        if(!!responAPIBYID?.responseData?.id&&accessToken){
+          const response=updateViewProduct(responAPIBYID?.responseData?.id);
+        }
         dispatch(getProductById(responAPIBYID.responseData));
 
         if (

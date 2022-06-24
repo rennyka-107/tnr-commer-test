@@ -8,7 +8,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import styled from "@emotion/styled";
 import { IconPlusProduct } from "../../Icons/index";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 
 import {
   IconBath,
@@ -202,6 +202,8 @@ export default function ItemCompareSearch({
   activeSoSanh,
   id,
 }: Props) {
+	const router = useRouter();
+
   function currencyFormat(num) {
     if (!num) {
       return;
@@ -333,7 +335,9 @@ export default function ItemCompareSearch({
               flexDirection: "row",
               cursor: "pointer",
             }}
-            // onClick={() => {}}
+			onClick={() => {
+				router.push(`/compare-product?idCompare=${id}`);
+			  }}
           >
             <IconPlusProduct />
             <TextButtonStyled style={{color: '#0063F7'}} onClick={onCompare}>Thêm sản phẩm so sánh</TextButtonStyled>

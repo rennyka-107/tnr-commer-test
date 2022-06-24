@@ -42,7 +42,7 @@ const AuthContext = ({ children }) => {
     ) {
       const { access_token, refresh_token } = (
         response as ResponseLoginModel<LoginSuccess>
-      ).responseData;
+      )?.responseData;
       if (!!remember) {
         LocalStorage.set("accessToken", access_token, forceUpdate);
         LocalStorage.set("refreshToken", refresh_token);
@@ -53,7 +53,7 @@ const AuthContext = ({ children }) => {
       SessionStorage.set("accessToken", access_token, forceUpdate);
       SessionStorage.set("refreshToken", refresh_token);
     }
-    console.log(response,'------responseresponseresponse-----');
+    // console.log(response,'------responseresponseresponse-----');
     
     return response;
   };

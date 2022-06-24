@@ -36,6 +36,7 @@ export const searchAdvanded = async (data: any, search: SearchParams) => {
     projectId: data.projectId === "1" ? "" : data.projectId,
     projectTypeId: data.projectTypeId === "1" ? "" : data.projectTypeId,
     provinceId: data.provinceId === "1" ? "" : data.provinceId,
+	categoryId: data.categoryId === "1" ? "" : data.categoryId,
     textSearch: data.textSearch,
   };
 

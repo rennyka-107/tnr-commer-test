@@ -1,47 +1,42 @@
-import React, { useEffect, useState } from "react";
 import FlexContainer from "@components/CustomComponent/FlexContainer";
 import _ from "lodash";
+import { useEffect, useState } from "react";
 
-import {
-  Box,
-  Button,
-  Modal,
-  Typography,
-  Menu,
-  MenuItem,
-  CircularProgress,
-} from "@mui/material";
-import styled from "@emotion/styled";
-import Product1 from "../../../public/images/product1.png";
-import Product2 from "../../../public/images/product2.png";
-import Product3 from "../../../public/images/product3.png";
 import {
   Icon360,
   IconBath,
   IconBedDouble,
   IconClipboardProduct,
-  IconCompass,
-  IconFrame,
+  IconCompass, IconDownloadPTG, IconFrame,
   IconHeadSetProduct,
   IconNhaMau,
   IconPhieuTinhGia,
-  IconReceiptDisabled,
-  IconDownloadPTG,
-  IconSetting,
+  IconReceiptDisabled, IconSetting
 } from "@components/Icons";
-import Image from "next/image";
+import IconInfor from "@components/Icons/IconInfor";
+import styled from "@emotion/styled";
+import {
+  Box,
+  Button, CircularProgress, Menu,
+  MenuItem, Modal,
+  Typography
+} from "@mui/material";
+import useAddToCart from "hooks/useAddToCart";
+import { ResponseSearchById } from "interface/product";
+import { ProjectResponse } from "interface/project";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
+import { useDispatch, useSelector } from "react-redux";
 import {
   downloadPhieuTinhGiaAPI,
-  getProductPtgApi,
+  getProductPtgApi
 } from "../../../pages/api/productsApi";
+import Product1 from "../../../public/images/product1.png";
+import Product2 from "../../../public/images/product2.png";
+import Product3 from "../../../public/images/product3.png";
 import { getProductPTG } from "../../../store/productSlice";
-import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../store/store";
-import { ProjectResponse } from "interface/project";
-import { ResponseSearchById } from "interface/product";
-import { useRouter } from "next/router";
-import useAddToCart from "hooks/useAddToCart";
+import ModalRegister from "./ModalRegister";
 
 interface ProductsProps {
   listProject?: ProjectResponse[];
@@ -256,6 +251,15 @@ const ButtonYellowStyled = styled(Button)`
   border-radius: 8px;
   padding: 20px 29px 14px 20px;
 `;
+
+const ButtonDisbledStyled = styled(Button)`
+  height: 68px;
+  width: auto;
+  border: 2px solid #F3F4F6;
+  border-radius: 8px;
+  padding: 20px 29px 14px 20px;
+  background-color:#F3F4F6;
+`;
 const ButtonYellowStyledDisbaled = styled(Button)`
   height: 68px;
   width: auto;
@@ -354,6 +358,7 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
   const [tabCardValue, setTabCardValue] = useState(true);
   const [typeBottomShow, setTypeBottomShow] = useState(1);
   const [openModalVideo, setOpenModalVideo] = useState(false);
+  const [openModalRegister, setOpenModalRegister] = useState(false);
   const [callApi, setCallApi] = useState(false);
   const [numberRoom, setNumberRoom] = useState({
     num: "S.202",
@@ -406,6 +411,7 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
 
   const handleThamQuan = () => {
     setTabCardValue(true);
+    setOpenModalRegister(true);
     setTypeBottomShow(1);
   };
   function currencyFormat(num) {
@@ -464,7 +470,7 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
             marginTop: 166,
             display: "flex",
             flexDirection: "column",
-            width: "70%",
+            width: "84%",
           }}
         >
           <div>
@@ -497,7 +503,8 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
             }}
           >
             <div>
-              <DynamicSliderProductComponent />
+              <DynamicSliderProductComponent data={dataProduct?.apartmentModelPhotos??[dataProduct?.thumbnail]??['/images/product_1.png']}/>
+              <ModalRegister isOpen={openModalRegister} onClose={()=>setOpenModalRegister(!openModalRegister)}/>
               <Modal
                 open={openModalVideo}
                 onClose={() => setOpenModalVideo(false)}
@@ -721,17 +728,29 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                 </Box>
               </Modal>
               <div style={{ display: "flex", gap: 19, marginTop: 24 }}>
+              {typeBottomShow !== 1  ? (
+                  <ButtonYellowStyled onClick={() => {
+                    setTypeBottomShow(1);
+                    if(!tabCardValue){setTabCardValue(!tabCardValue)}
+                  }}>
+                    <IconInfor />
+                    <TextInSideButtonYellow>
+                      Thông tin
+                    </TextInSideButtonYellow>
+                  </ButtonYellowStyled>
+                ) : (
+                  <ButtonYellowStyledDisbaled disabled>
+                    <IconInfor disabled/>
+                    <TextInSideButtonYellowDisabled>
+                      Thông tin
+                    </TextInSideButtonYellowDisabled>
+                  </ButtonYellowStyledDisbaled>
+                )}
                 <ButtonYellowStyled onClick={() => setOpenModalVideo(true)}>
                   <Icon360 />
                   <TextInSideButtonYellow> Video tour</TextInSideButtonYellow>
                 </ButtonYellowStyled>
-                <ButtonYellowStyled onClick={() => handleThamQuan()}>
-                  <IconNhaMau />
-                  <TextInSideButtonYellow>
-                    {" "}
-                    Tham quan nhà mẫu
-                  </TextInSideButtonYellow>
-                </ButtonYellowStyled>
+                
                 {tabCardValue === true ? (
                   <ButtonYellowStyled onClick={() => handlePhieuTinhGia()}>
                     <IconPhieuTinhGia />
@@ -747,6 +766,13 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                     </TextInSideButtonYellowDisabled>
                   </ButtonYellowStyledDisbaled>
                 )}
+                <ButtonYellowStyled onClick={() => handleThamQuan()}>
+                  <IconNhaMau />
+                  <TextInSideButtonYellow>
+                    {" "}
+                    Tham quan nhà mẫu
+                  </TextInSideButtonYellow>
+                </ButtonYellowStyled>
               </div>
             </div>
             <div>

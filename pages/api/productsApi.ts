@@ -78,3 +78,7 @@ export const getProductOrderConditionApi = async () => {
     `api/favourite/search/get-list-order-condition`
   );
 };
+
+export const updateViewProduct = async (id: any) => {
+  return HttpClient.post<any, CommonResponse>(`api-product-view/${id}`);
+};

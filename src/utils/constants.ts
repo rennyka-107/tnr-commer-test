@@ -2,6 +2,8 @@ const baseURL = process.env.REACT_APP_BASE_URL
   ? process.env.REACT_APP_BASE_URL
   : " http://210.245.85.229:1999";
 
+// const baseURL="http://192.168.1.49:8082"
+
 const imageUrl = "http://210.245.85.229:1983"
 
 const version = process.env.REACT_APP_VERSION;

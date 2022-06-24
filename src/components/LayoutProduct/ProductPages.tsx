@@ -87,7 +87,7 @@ const ProductPages = ({ listProducts, listProject }: ProductsProps) => {
       if (!isEmpty(dataLocation)) {
         setFilterSearch({
           ...filterSearch,
-          provinceId: dataLocation[0].ProvinceID,
+          provinceId: dataLocation[0].ProvinceID.toString(),
         });
       }
         // Router.replace(`/products?idProject=${filterSearch.idProject}&&provinceId=${filterSearch.provinceId}&&projectTypeId=${filterSearch.projectTypeId}`)

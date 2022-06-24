@@ -193,6 +193,8 @@ export interface ResponseSearchById {
 	video?: string,
 	defaultPhoneNumber?: string;
 	isOpeningSale?: boolean;
+	apartmentModelPhotos?:string[]|null;
+	thumbnail?:string|null;
 }
 
 ///api/product/information/find-top-by-outstanding

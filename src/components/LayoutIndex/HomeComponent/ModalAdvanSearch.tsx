@@ -143,7 +143,7 @@ export default function ModalAdvanSearch() {
       target: { value },
     } = event;
     const data = listMenuLocation.filter((x) => x.ProvinceName === value);
-    setSearch({ ...search, provinceId: data[0].ProvinceID });
+    setSearch({ ...search, provinceId: data[0].ProvinceID.toString() });
     setLocation(typeof value === "string" ? value.split(",") : value);
   };
 

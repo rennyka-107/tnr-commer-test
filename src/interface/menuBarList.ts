@@ -5,7 +5,9 @@ export interface MenuBar {
 
 export interface MenuBarProjectType {
 	id: string,
-	name: string
+	name: string,
+	iconHover: string,
+	icon: string,
 }
 
 export interface MenuBarLocation {
@@ -13,4 +15,10 @@ export interface MenuBarLocation {
 	syncDate: string,
 	ProvinceID: number,
 	ProvinceName: string
+}
+
+export interface CategoryResponse {
+	id: string,
+	code: string,
+	name: string,
 }

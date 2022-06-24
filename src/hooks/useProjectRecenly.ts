@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getProjectRecenly } from "../../pages/api/profileApi";
 
-interface ProductRecenlyI {
+export interface ProductRecenlyI {
   abbreviationName: null;
   avatar: string|null;
   code: string|null;

@@ -106,13 +106,18 @@ const TextInsideNumber = styled(Typography)`
   color: #ffffff;
 `;
 SwiperCore.use([Navigation, Pagination, EffectCoverflow, Autoplay]);
+const dataFake=[1,2,3,4,5,6].map((el)=>{return {
+    avatar:'/images/product_1.png',
+    viewNum:127,
+    name:'Dự án Thiện Long',
+    id:el,
+}})
+
 export default function Slider3dShowBottom() {
   const { dataProductRecenly } = useProjectRecenly();
-  console.log(dataProductRecenly, "dataProductRecenly");
-
   const renderItems = useMemo(() => {
-    if (!isEmpty(dataProductRecenly)) {
-      return dataProductRecenly.map((el) => (
+    // if (!isEmpty(dataProductRecenly)) {
+      return (isEmpty(dataProductRecenly)?dataFake:dataProductRecenly)?.map((el) => (
         <SwiperSlide
           className="swiper-3d"
           style={{
@@ -136,7 +141,7 @@ export default function Slider3dShowBottom() {
           <TextInside>{el.name}</TextInside>
         </SwiperSlide>
       ));
-    }
+    // }
   }, [dataProductRecenly]);
 
   return (

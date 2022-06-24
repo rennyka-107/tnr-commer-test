@@ -13,6 +13,7 @@ import {
   StepLabel,
   IconButton,
   CircularProgress,
+  Backdrop,
 } from "@mui/material";
 import FormGroup from "@components/Form/FormGroup";
 import Link from "next/link";
@@ -94,7 +95,11 @@ const validationSchema = yup.object().shape({
   fullname: yup.string().required(validateLine.required),
   dob: yup.string().required(validateLine.required).trim(validateLine.trim),
   phoneNumber: yup.string().required(validateLine.required),
-  email: yup.string().required(validateLine.required).trim(validateLine.trim),
+  email: yup
+    .string()
+    .email()
+    .required(validateLine.required)
+    .trim(validateLine.trim),
   idNumber: yup.string().required(validateLine.required),
   issuePlace: yup.string().required(validateLine.required),
   issueDate: yup.string().required(validateLine.required),
@@ -105,12 +110,7 @@ const validationSchema = yup.object().shape({
 });
 
 const LayoutInfoCustom = ({ setScopeRender }: Props) => {
-  const {
-    control,
-    handleSubmit,
-    watch,
-    reset,
-  } = useForm<InformationBuyer>({
+  const { control, handleSubmit, watch, reset } = useForm<InformationBuyer>({
     mode: "onChange",
     resolver: yupResolver(validationSchema),
     defaultValues: validationSchema.getDefault(),
@@ -324,6 +324,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
       totalDeposite: billing !== 1 ? regulationOrderPrice : null,
       paymentFlag: paymentFlag,
       tnrUserId: null,
+      transactionCode: !isEmpty(transactionCode) ? transactionCode : null,
     };
     try {
       apiSavePaymentInformation(formatData)
@@ -475,6 +476,12 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
           </Stepper>
         </Box>
       )} */}
+      <Backdrop
+        sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <form onSubmit={handleSubmit((values) => handleOnSubmit(values))}>
         <Grid container columnSpacing={"30px"} justifyContent={"center"}>
           <Grid item>
@@ -499,8 +506,11 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                             : "Khác hàng vãng lai"}
                         </Title22Styled>
                         <Text14Styled color={"#5a5a5a"}>
-                          Vui lòng điền đầy đủ thông tin bên dưới để tiến hành
-                          giao dịch.
+                          {!isEmpty(transactionCode)
+                            ? "Số điện thoại: " + watch("phoneNumber")
+                            : isAuthenticated
+                            ? "Số điện thoại: " + watch("phoneNumber")
+                            : "Vui lòng điền đầy đủ thông tin bên dưới để tiến hành giao dịch."}
                         </Text14Styled>
                       </ColStyled>
                     </BoxInfoUserStyled>
@@ -712,30 +722,19 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                 </Text14Styled>
               </RowStyled>
               <ButtonAction
-                disabled={formInfo.open || !acceptPolicy || loading}
+                disabled={formInfo.open || !acceptPolicy}
                 margin={"12px auto"}
                 onClick={handleSubmit((values) => handleOnSubmit(values, 1))}
               >
-                {loading ? (
-                  <CircularProgress />
-                ) : (
-                  <Text18Styled color={"#fff"}>
-                    Tạo phiếu thanh toán
-                  </Text18Styled>
-                )}
+                <Text18Styled color={"#fff"}>Tạo phiếu thanh toán</Text18Styled>
               </ButtonAction>
               {!formInfo.open && (
                 <ButtonStyled
                   type="submit"
                   bg={"white"}
                   border={"1px solid #c7c9d9"}
-                  disabled={loading}
                 >
-                  {loading ? (
-                    <CircularProgress />
-                  ) : (
-                    <Text18Styled>Lưu thông tin</Text18Styled>
-                  )}
+                  <Text18Styled>Lưu thông tin</Text18Styled>
                 </ButtonStyled>
               )}
               <ButtonStyled
