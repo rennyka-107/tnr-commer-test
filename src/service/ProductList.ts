@@ -2,17 +2,17 @@ import HttpClient from "utils/HttpClient";
 import { CommonResponse } from "type/common";
 import { convertToQuery } from "utils/helper";
 export interface ParamsListProductI {
-  pageNumber: number;
-  pageSize: number;
+  page: number;
+  size: number;
 }
 
 export interface BodyListProductI {
-  projectId: string;
-  location: string;
-  projectTypeId: string;
+	projectTypeId: any;
+	provinceId:any;
+
 }
 
-const LIST_PRODUCT = "/api/product/information/search";
+const LIST_PRODUCT = "/api/product/information/advance/search";
 
 export const getListProductTNR = (
   params: ParamsListProductI,

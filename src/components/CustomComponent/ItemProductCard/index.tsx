@@ -37,6 +37,7 @@ type Props = {
   onClick?: MouseEventHandler<HTMLButtonElement>;
   onCompare?: MouseEventHandler<HTMLButtonElement>;
   ticketCard?: string;
+  buyDisabled?:boolean;
 };
 
 const CardStyled = styled(Card)`
@@ -201,6 +202,7 @@ export default function ItemProductCard({
   ticketCard,
   activeSoSanh,
   id,
+  buyDisabled,
 }: Props) {
   function currencyFormat(num) {
     if (!num) {
@@ -210,6 +212,7 @@ export default function ItemProductCard({
       .toFixed(0)
       .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
   }
+
   return (
     <CardStyled sx={{ maxWidth: 350 }}>
       <IconHeartProduct
@@ -260,7 +263,7 @@ export default function ItemProductCard({
           <span
             onClick={() =>
               Router.push(
-                `/products/${id ? id : "adf68c39-c5b3-4a80-b806-a2b8a840d4c4"}`
+                `/products/${id}`
               )
             }
           >
@@ -345,7 +348,7 @@ export default function ItemProductCard({
         </CardActions>
       ) : ( */}
         <CardActions style={{ flexDirection: "column", marginBottom: 24 }}>
-          <ButtonStyled onClick={onClick}>
+          <ButtonStyled onClick={onClick} disabled={buyDisabled}  style={{ backgroundColor: buyDisabled? '#FFFF' : ' #ea242a' }}>
             Mua Online&nbsp;
             <IconMuaOnline />
           </ButtonStyled>

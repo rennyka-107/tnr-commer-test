@@ -847,8 +847,8 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                         JSON.stringify(dataProduct.id)
                       );
                     }}
-                    disabled={!dataProduct?.isOpeningSale}
-                    style={{ backgroundColor: !dataProduct?.isOpeningSale ? '#FFFF' : ' #ea242a' }}
+                    disabled={dataProduct?.paymentStatus!==2}
+                    style={{ backgroundColor: dataProduct?.paymentStatus!==2 ? '#FFFF' : ' #ea242a' }}
                   >
                     Giỏ hàng
                   </ButtonStyled>
@@ -856,8 +856,8 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                     onClick={() => {
                       addToCart(id);
                     }}
-                    disabled={!dataProduct?.isOpeningSale}
-                    style={{ backgroundColor: !dataProduct?.isOpeningSale ? '#FFFF' : ' #ea242a' }}
+                    disabled={dataProduct?.paymentStatus!==2}
+                    style={{ backgroundColor: dataProduct?.paymentStatus!==2 ? '#FFFF' : ' #ea242a' }}
                   >
                     Mua Online
                   </ButtonStyled>

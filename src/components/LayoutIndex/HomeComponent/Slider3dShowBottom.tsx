@@ -173,7 +173,7 @@ export default function Slider3dShowBottom() {
             <IconMuaOnline />
           </ButtonStyled>
         </div>
-        <div style={{ width: 1087, height: 470, position: "relative" }}>
+        <div style={{ width: '100%', height: 470, position: "relative" }}>
           <IconSliderYellowLeft
             className="y-left"
             style={{
@@ -197,7 +197,7 @@ export default function Slider3dShowBottom() {
             effect="coverflow"
             slidesPerView="auto"
             centeredSlides={true}
-            style={{ height: "470px", width: "1300px" }}
+            style={{ height: "470px", width: "100%" }}
             coverflowEffect={{
               rotate: 0,
               stretch: 10,
@@ -227,7 +227,7 @@ export default function Slider3dShowBottom() {
             style={{
               zIndex: 10,
               position: "absolute",
-              right: "-18px",
+              right: "0px",
               top: "42%",
               cursor: "pointer",
             }}

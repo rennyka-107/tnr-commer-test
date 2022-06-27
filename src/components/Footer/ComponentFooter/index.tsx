@@ -15,7 +15,9 @@ const Footer = () => {
   );
   const { listUserManual } = useSelector(
     (state: RootState) => state.userManual  );
-
+	const menuBarProjectType = listMenuBarProjectType?.filter(
+		(item) => item.id !== "1"
+	  );
   useEffect(() => {
     (async () => {
       try {
@@ -31,7 +33,7 @@ const Footer = () => {
   return (
     <>
       <FooterTop />
-      <FooterBot listMenuBarProjectType={listMenuBarProjectType} listUserManual={listUserManual}/>
+      <FooterBot listMenuBarProjectType={menuBarProjectType} listUserManual={listUserManual}/>
     </>
   );
 };

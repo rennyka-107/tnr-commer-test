@@ -61,3 +61,6 @@ export { default as IconFilterSearch } from "./IconFilterSearch";
 export { default as IconAttach } from "./IconAttach";
 export { default as IconRemove } from "./IconRemove";
 export {default as IconResetFilter} from "./IconResetFilter"
+
+export {default as PhoneIconPage} from './phonePage';
+export {default as UpIconPage} from './upPage';

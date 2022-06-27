@@ -195,6 +195,7 @@ export interface ResponseSearchById {
 	isOpeningSale?: boolean;
 	apartmentModelPhotos?:string[]|null;
 	thumbnail?:string|null;
+	paymentStatus?:string|number|null;
 }
 
 ///api/product/information/find-top-by-outstanding

@@ -25,6 +25,7 @@ export interface ProductRecenlyI {
   tradeName: string|null;
   type: string|null;
   viewNum: number|null;
+  paymentStatus?:string|number|null;
 }
 
 const useProjectRecenly = () => {

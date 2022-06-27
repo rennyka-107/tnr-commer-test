@@ -23,7 +23,7 @@ const PolicyDetail = () => {
 
   const { policyById } = useSelector((state: RootState) => state.salePolicy);
   const [loading, setLoading] = useState(false);
-  console.log(policyById);
+
 
   const fetchAdvandedSearchList = async () => {
     try {

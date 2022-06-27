@@ -1,22 +1,24 @@
 import { SEOProps } from "@components/SEO";
+import { positions } from "@mui/system";
 import dynamic from "next/dynamic";
 import React, { ReactNode } from "react";
 
+const DynamicSEOComponent = dynamic(() => import("../../components/SEO"), {
+  loading: () => <p>...</p>,
+  ssr: false,
+});
 
-
-const DynamicSEOComponent = dynamic(() =>
-  import("../../components/SEO"),
+const DynamicHeaderComponent = dynamic(
+  () => import("../../components/Header/ComponentHeader"),
   { loading: () => <p>...</p>, ssr: false }
 );
-
-const DynamicHeaderComponent = dynamic(() =>
-  import("../../components/Header/ComponentHeader"),
-  { loading: () => <p>...</p>, ssr: false }
-);
-const DynamicFooterComponent = dynamic(() =>
-  import("../../components/Footer/ComponentFooter"),
+const DynamicFooterComponent = dynamic(
+  () => import("../../components/Footer/ComponentFooter"),
   { loading: () => <p>...</p> }
 );
+const DynamicScrollPage = dynamic(() => import("../../components/ScrollPage"), {
+  loading: () => <p>...</p>,
+});
 type ItemValueProps = {
   id: string;
   name: string;
@@ -28,13 +30,13 @@ type PageProps = {
 };
 
 const Page: React.FC<PageProps> = ({ meta, children, dataNav }) => {
-
   return (
     <>
       <DynamicSEOComponent {...meta} />
       <main style={{ display: "flex", flexDirection: "column" }}>
         <DynamicHeaderComponent />
         <div style={{ minHeight: 500 }}>
+          <DynamicScrollPage />
           {children}
         </div>
         <DynamicFooterComponent />

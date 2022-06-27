@@ -8,6 +8,7 @@ import useAddToCart from "hooks/useAddToCart";
 
 interface searchProps {
   data?: searchLocationResponse[];
+  buyDisabled?:boolean;
 }
 const ContainerProduct = styled.div`
   display: flex;
@@ -18,8 +19,9 @@ const ProductWrap = styled.div`
   gap: 31px;
   grid-template-columns: repeat(4, 1fr);
 `;
-const ItemSearch = ({ data }: searchProps) => {
+const ItemSearch = ({ data ,buyDisabled}: searchProps) => {
   const addToCart = useAddToCart();
+
   return (
     <>
       <ProductWrap>
@@ -40,6 +42,7 @@ const ItemSearch = ({ data }: searchProps) => {
             priceListed={product.totalPrice}
             priceSub={product.unitPrice}
             ticketCard={product.category}
+            buyDisabled={product?.paymentStatus!==2}
           />
         ))}
       </ProductWrap>

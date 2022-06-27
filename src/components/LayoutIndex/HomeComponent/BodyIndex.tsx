@@ -9,7 +9,7 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import PathRoute from "utils/PathRoute";
-import { getListProductApi } from "../../../../pages/api/productsApi";
+import { getListProductApi, searchListProductByProjectIdApi } from "../../../../pages/api/productsApi";
 import { getListProduct } from "../../../../store/productSlice";
 import { RootState } from "../../../../store/store";
 
@@ -111,25 +111,25 @@ export default function BodyIndex() {
 
   const onClickProduct = async (projectTypeId) => {
     const paramsSearch = {
-      page: 1,
+      page: 0,
       size: 10,
     };
 
     const searchList = {
       projectId: "",
-      location: "",
+	  provinceId: "",
       projectTypeId: projectTypeId,
     };
-    try {
-      const response = await getListProductApi(paramsSearch, searchList);
-      dispatch(getListProduct(response.responseData));
+    // try {
+    //   const response = await searchListProductByProjectIdApi(paramsSearch, searchList);
+    //   dispatch(getListProduct(response.responseData));
 
-      if (response.responseCode === "00") {
-        router.replace(`/${PathRoute.ProductTNR}?type=${projectTypeId}`);
-      }
-    } catch (error) {
-      console.log(error);
-    }
+    //   if (response.responseCode === "00") {
+        router.replace(`/productTNR?provinceId=&&projectTypeId=${projectTypeId}`);
+    //   }
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
   return (
     <FlexContainer>

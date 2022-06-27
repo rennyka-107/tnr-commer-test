@@ -49,6 +49,7 @@ const ProductPages = ({ listProducts, listProject }: ProductsProps) => {
       provinceId: provinceId,
       idProject: idProject,
     });
+	
 
     const [valueLocation, setValueLocation] = useState<string[]>([]);
     const [valueType, setValueType] = useState<string[]>([]);
@@ -113,9 +114,13 @@ const ProductPages = ({ listProducts, listProject }: ProductsProps) => {
     };
 
     useEffect(() => {
-      Router.replace(
-        `/products?idProject=${filterSearch.idProject}&&provinceId=${filterSearch.provinceId}&&projectTypeId=${filterSearch.projectTypeId}`
-      );
+		// if(filterSearch.idProject !== idProject || filterSearch.projectTypeId !== projectTypeId){
+			Router.replace(
+				`/products?idProject=${filterSearch.idProject}&&provinceId=${filterSearch.provinceId}&&projectTypeId=${filterSearch.projectTypeId}`
+			  );
+	
+		// }
+    
     }, [filterSearch]);
 
 	const fetchRight = () => {

@@ -1,7 +1,7 @@
 import Page from "@layouts/Page";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect,  useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getListProduct,
@@ -9,14 +9,14 @@ import {
 } from "../../store/productSlice";
 import { RootState } from "../../store/store";
 import {
-  getListProductApi,
-  searchListProductByProjectIdApi,
+  searchListProductByProjectIdApiII,
 } from "../api/productsApi";
 import { getListProjectApi } from "../api/projectApi";
-import { CircularProgress } from "@mui/material";
+import CircularProgress from '@mui/material/CircularProgress';
 import { getListProject } from "../../store/projectSlice";
 import PaginationComponent from "@components/CustomComponent/PaginationComponent";
 import Row from "@components/CustomComponent/Row";
+import isEmpty from "lodash/isEmpty";
 
 const DynamicPageIndex = dynamic(
   () => import("../../src/components/LayoutProduct/ProductPages"),
@@ -25,8 +25,8 @@ const DynamicPageIndex = dynamic(
 
 const ListProduct = () => {
   const router = useRouter();
-  const dispatch = useDispatch();
   const { idProject, projectTypeId, provinceId } = router.query;
+  const dispatch = useDispatch();
 
   const { listProductResponse, totalElement } = useSelector(
     (state: RootState) => state.products
@@ -62,26 +62,26 @@ const ListProduct = () => {
   };
   const pageNumber = Math.ceil(totalElement / paramsSearch.size);
 
-  useMemo(() => {
-    if (router.isReady === true) {
+  useEffect(() => {
+    if (!isEmpty(router.query)) {
       setSearchList({
-        provinceId: provinceId ? provinceId : "",
-        projectTypeId: projectTypeId ? projectTypeId : "",
-        projectId: idProject ? idProject : "",
+        provinceId: provinceId,
+        projectTypeId: projectTypeId,
+        projectId: idProject,
       });
     }
-  }, [router.query]);
+    setParamsSearch({ page: 0, size: 12 });
+  }, [idProject, projectTypeId, provinceId]);
 
   const fetchData = async () => {
     try {
-      // setLoading(false);
+      const response = await searchListProductByProjectIdApiII(
+        paramsSearch,
+        searchList
+      );
       const responseProject = await getListProjectApi(
         paramsSearchProject,
         searchListProject
-      );
-      const response = await searchListProductByProjectIdApi(
-        paramsSearch,
-        searchList
       );
       if (response.responseCode === "00") {
         setLoading(true);
@@ -89,6 +89,8 @@ const ListProduct = () => {
       dispatch(getListProject(responseProject.responseData));
       dispatch(getListProduct(response.responseData));
       dispatch(getPaggingProductSearch(response.totalElement));
+
+      // }
     } catch (error) {
       console.log(error);
     }
@@ -98,7 +100,8 @@ const ListProduct = () => {
     if (router.isReady === true) {
       fetchData();
     }
-  }, [searchList, paramsSearch.page]);
+  }, [paramsSearch]);
+
 
   const fetchComponent = () => {
     return (
@@ -136,9 +139,9 @@ const ListProduct = () => {
         <PaginationComponent
           count={pageNumber}
           onChange={(event, page) => {
-            changePage(page -1 );
+            changePage(page - 1);
           }}
-          page={paramsSearch.page +1}
+          page={paramsSearch.page + 1}
         />
       </Row>
     </Page>

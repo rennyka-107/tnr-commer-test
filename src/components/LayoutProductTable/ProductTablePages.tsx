@@ -152,7 +152,11 @@ const ProductTablePages = () => {
         );
 
       default:
-        return <IconStyled>{item.paymentStatus}</IconStyled>;
+        return (
+          <IconStyled>
+            <IconCommingSale />
+          </IconStyled>
+        );
     }
   };
 

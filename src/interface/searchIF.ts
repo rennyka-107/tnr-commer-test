@@ -21,4 +21,5 @@ export interface searchLocationResponse {
   projectName: string;
   category: string;
   name: string;
+  paymentStatus?:string|number|null;
 }

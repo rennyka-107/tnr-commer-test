@@ -1,7 +1,11 @@
 import { PTGType, ProductsType, ParamsProducts } from "interface/product";
 import { CommonResponse, ResponseTypeAPI } from "type/common";
 import HttpClient from "utils/HttpClient";
-
+export interface BodyListProductII {
+	projectTypeId: any;
+	provinceId:any;
+	projectId: any;
+}
 export const getListProductApi = async (params: ParamsProducts, data: any) => {
   return HttpClient.post<ResponseTypeAPI, CommonResponse>(
     `/api/product/information/search?page=${params.page}&size=${params.size}`,
@@ -14,12 +18,36 @@ export const searchListProductByProjectIdApi = async (
   params: ParamsProducts,
   data: any
 ) => {
-  return HttpClient.post<any, any>(
-    `/api/product/information/advance/search?page=${params.page}&size=${params.size}`,
-    data,
-    { withToken: false }
-  );
+	console.log(data)
+	const newDataSearch = {
+		
+		projectTypeId: data.projectTypeId === "1" ? "" : data.projectTypeId,
+		provinceId: data.provinceId === "1" ? "" : data.provinceId,
+	  };
+    return HttpClient.post<any, any>(
+      `/api/product/information/advance/search?page=${params.page}&size=${params.size}`,
+      newDataSearch,
+      { withToken: false }
+    );
 };
+
+export const searchListProductByProjectIdApiII = async (
+	params: ParamsProducts,
+	data: any
+  ) => {
+	const newDataSearch = {
+		projectId: data.projectId,
+		projectTypeId: data.projectTypeId === "1" ? "" : data.projectTypeId,
+		provinceId: data.provinceId === "1" ? "" : data.provinceId,
+	  };
+	  return HttpClient.post<any, any>(
+		`/api/product/information/advance/search?page=${params.page}&size=${params.size}`,
+		newDataSearch,
+		{ withToken: false }
+	  );
+  };
+  
+
 
 export const getProducById = async (id: any) => {
   return HttpClient.post<any, CommonResponse>(`/api/product/information/${id}`);
