@@ -6,7 +6,7 @@ import { Box, Button, CircularProgress } from "@mui/material";
 import { RootState } from "../../store/store";
 import { useDispatch, useSelector } from "react-redux";
 import Container from "@components/Container";
-import { Grid } from "@mui/material";
+import  Grid  from "@mui/material/Grid";
 import {
   apiGetInformationProject,
   apiGetListLevelProject,

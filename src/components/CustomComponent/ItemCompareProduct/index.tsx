@@ -7,10 +7,11 @@ import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
+import ImageWithHideOnError from "hooks/ImageWithHideOnError";
 import Link from "next/link";
 import * as React from "react";
 import { MouseEventHandler } from "react";
+import Product3 from '../../../../public/images/product3.png';
 
 type Props = {
   src?: any;
@@ -104,11 +105,17 @@ const ItemCompareProduct = ({
     <WrapperContent>
       <IconHeartProduct style={{ position: 'absolute', top: 0, right: 14.5, zIndex: 9 }} />
       <WrapperImg>
-        <CardMedia
-          component="img"
-          height="160px"
-          image={src.src}
-          alt="green iguana"
+	  <ImageWithHideOnError
+          className="logo"
+          src={src}
+          fallbackSrc={Product3}
+          height={190}
+		  width={350}
+          title={'Logo ' }
+          alt={'Logo '}
+          priority
+          unoptimized={true}
+          objectFit="cover"
         />
       </WrapperImg>
       <TicketTag>{ticketCard}</TicketTag>

@@ -69,7 +69,7 @@ const SearchCompare = ({
       size: 12,
     });
   };
-  console.log(searchData)
+  
   const router = useRouter();
   const [filter, setFilter] = useState<any>({ location: "" });
   const { listMenuBarType, listMenuBarProjectType, listMenuLocation } =

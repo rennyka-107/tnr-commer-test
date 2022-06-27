@@ -1,4 +1,3 @@
-import Container from "@components/Container";
 import ContainerProduct from "@components/Container/ContainerProduct";
 import FlexContainer from "@components/CustomComponent/FlexContainer";
 import PaginationComponent from "@components/CustomComponent/PaginationComponent";
@@ -8,49 +7,16 @@ import SelectTypeProductPage from "@components/CustomComponent/SelectInputCompon
 import styled from "@emotion/styled";
 import { CircularProgress } from "@mui/material";
 import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
 import Typography from "@mui/material/Typography";
 import useProductList from "hooks/useProductList";
-import { ProductsResponse } from "interface/product";
-import { ProjectResponse } from "interface/project";
-import { isEmpty } from "lodash";
+import isEmpty from "lodash/isEmpty";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../store/store";
 
-interface ProductsProps {
-  listProducts?: ProductsResponse[];
-  listProject?: ProjectResponse[];
-}
 
-const TextHeaderStyled = styled(Typography)`
-  font-family: "Roboto";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 28px;
-  line-height: 33px;
-
-  /* Brand */
-
-  color: #1b3459;
-`;
-
-const HeaderContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 22px;
-  margin-bottom: 52px;
-`;
-
-const DynamicBreadcrumsComponent = dynamic(
-  () => import("../../components/CustomComponent/BreadcrumsComponent/index"),
-  { loading: () => <p>...</p> }
-);
 const DynamicItemProductComponent = dynamic(
   () => import("@components/LayoutProduct/ItemProduct"),
   { loading: () => <p>...</p> }
@@ -110,10 +76,10 @@ const ProductList = () => {
   
   useEffect(() => {
     const items = listMenuBarProjectType?.find(
-      (item) => item.id === body?.projectTypeId
+      (item) => item.id === projectTypeId
     );
     setTitleData(items?.name);
-  }, [listMenuBarProjectType]);
+  }, [listMenuBarProjectType,projectTypeId]);
 
   const handleChangeLocation = (event: any) => {
     const {

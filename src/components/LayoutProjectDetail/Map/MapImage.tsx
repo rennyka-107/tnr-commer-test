@@ -1,6 +1,9 @@
+import L, { LatLngBoundsExpression } from "leaflet";
 import isEmpty from "lodash.isempty";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ImageOverlay, useMap } from "react-leaflet";
+import { useDispatch } from "react-redux";
+import { setResize } from "../../../../store/projectMapSlice";
 
 type Props = {
   url: string;
@@ -9,10 +12,27 @@ type Props = {
 const MapImage = ({ url }: Props) => {
   const map = useMap();
   const [originBound, setOriginBound] = useState<any>(null);
+  const ref = useRef<any>();
+  const dispatch = useDispatch();
+
+  function handleResizeMap() {
+    const bound = L.latLngBounds(
+      [window.innerWidth, window.innerWidth],
+      [-window.innerWidth, -window.innerWidth]
+    );
+    setOriginBound(bound);
+    dispatch(setResize(`resize ${window.innerWidth}`));
+  }
+
   useEffect(() => {
-    if (isEmpty(originBound)) {
-      setOriginBound(map.getBounds());
-    }
+    window.addEventListener("resize", handleResizeMap);
+    return () => {
+      window.removeEventListener("resize", handleResizeMap);
+    };
+  }, []);
+
+  useEffect(() => {
+    setOriginBound(map.getBounds());
     map.doubleClickZoom.disable();
     map.scrollWheelZoom.disable();
     map.zoomControl.remove();
@@ -23,9 +43,9 @@ const MapImage = ({ url }: Props) => {
       map.fitBounds(originBound);
     }
   }, [url, originBound]);
-  
+
   if (!isEmpty(originBound)) {
-    return <ImageOverlay bounds={originBound} url={url} />;
+    return <ImageOverlay ref={ref} bounds={originBound} url={url} />;
   }
 
   return <></>;

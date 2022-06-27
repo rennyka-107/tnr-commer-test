@@ -1,6 +1,6 @@
 import Head from "next/head";
 import React from "react";
-import { useRouter } from "next/router";
+
 
 export type SEOProps = {
   children?: any;
@@ -23,20 +23,10 @@ const SEO: React.FC<SEOProps> = ({
   title,
   description,
   children,
-  about,
-  nameCompany,
-  reviewCount,
-  Rating,
-  iSReview,
   canonical,
   urlimage,
-  isHomePage,
-  isAbout,
-  isPricing,
-  isSearchPage
 }) => {
   const pageTitle = title ? `${title.trim()}` : "";
-  const router = useRouter();
   const pageDescription = description || "";
 
   return (

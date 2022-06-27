@@ -79,6 +79,7 @@ export interface ProductsResponse {
 	tongBanGhi: string,
 	totalPrice: string,
 	category: string,
+	thumbnail?: string,
 	productId?: string,
 }
 

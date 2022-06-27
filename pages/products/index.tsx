@@ -1,22 +1,19 @@
 import Page from "@layouts/Page";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
-import { useEffect,  useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getListProduct,
   getPaggingProductSearch,
 } from "../../store/productSlice";
 import { RootState } from "../../store/store";
-import {
-  searchListProductByProjectIdApiII,
-} from "../api/productsApi";
+import { searchListProductByProjectIdApiII } from "../api/productsApi";
 import { getListProjectApi } from "../api/projectApi";
-import CircularProgress from '@mui/material/CircularProgress';
+import { CircularProgress } from "@mui/material";
 import { getListProject } from "../../store/projectSlice";
 import PaginationComponent from "@components/CustomComponent/PaginationComponent";
 import Row from "@components/CustomComponent/Row";
-import isEmpty from "lodash/isEmpty";
 
 const DynamicPageIndex = dynamic(
   () => import("../../src/components/LayoutProduct/ProductPages"),
@@ -43,11 +40,6 @@ const ListProduct = () => {
     page: 0,
     size: 12,
   };
-  const [searchList, setSearchList] = useState<any>({
-    projectId: idProject,
-    projectTypeId: projectTypeId,
-    provinceId: provinceId,
-  });
   const [loading, setLoading] = useState(false);
 
   const searchListProject = {
@@ -62,35 +54,36 @@ const ListProduct = () => {
   };
   const pageNumber = Math.ceil(totalElement / paramsSearch.size);
 
-  useEffect(() => {
-    if (!isEmpty(router.query)) {
-      setSearchList({
-        provinceId: provinceId,
-        projectTypeId: projectTypeId,
-        projectId: idProject,
-      });
-    }
-    setParamsSearch({ page: 0, size: 12 });
-  }, [idProject, projectTypeId, provinceId]);
-
   const fetchData = async () => {
     try {
-      const response = await searchListProductByProjectIdApiII(
-        paramsSearch,
-        searchList
-      );
+      if (provinceId || projectTypeId || idProject) {
+        setLoading(false);
+        const paramNew = {
+          provinceId: provinceId,
+          projectTypeId: projectTypeId,
+          projectId: idProject,
+        };
+        const response = await searchListProductByProjectIdApiII(
+          paramsSearch,
+          paramNew
+        );
+        if (response.responseCode === "00") {
+          setLoading(true);
+        }
+        dispatch(getListProduct(response.responseData));
+        dispatch(getPaggingProductSearch(response.totalElement));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const fetchDataProject = async () => {
+    try {
       const responseProject = await getListProjectApi(
         paramsSearchProject,
         searchListProject
       );
-      if (response.responseCode === "00") {
-        setLoading(true);
-      }
       dispatch(getListProject(responseProject.responseData));
-      dispatch(getListProduct(response.responseData));
-      dispatch(getPaggingProductSearch(response.totalElement));
-
-      // }
     } catch (error) {
       console.log(error);
     }
@@ -100,9 +93,11 @@ const ListProduct = () => {
     if (router.isReady === true) {
       fetchData();
     }
-  }, [paramsSearch]);
+  }, [provinceId, projectTypeId, idProject, paramsSearch]);
 
-
+  useEffect(() => {
+    fetchDataProject();
+  }, []);
   const fetchComponent = () => {
     return (
       <>

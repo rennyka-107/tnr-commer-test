@@ -1,4 +1,3 @@
-import WithAuth from "@HOCs/WithAuth";
 import Page from "@layouts/Page";
 import styled from "@emotion/styled";
 import FlexContainer from "@components/CustomComponent/FlexContainer";

@@ -27,9 +27,9 @@ const ItemSearch = ({ data }: searchProps) => {
           <ItemCompareSearch
             key={index}
             id={product.productId}
-            src={Product2}
+            src={product.thumbnail}
             title={product.name}
-            subTitle={product.diaChi}
+            subTitle={product.location}
             dataItem={{
               item1: product.landArea,
               item2: product.numBath,

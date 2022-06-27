@@ -23,7 +23,6 @@ const ProductWrap = styled.div`
 `;
 const ItemProduct = ({ data }: ProductsProps) => {
   const addToCart = useAddToCart();
-
   return (
     <>
       <ProductWrap>
@@ -31,7 +30,7 @@ const ItemProduct = ({ data }: ProductsProps) => {
           <ItemProductCard
             key={index}
             id={product.productId}
-            src={Product2}
+            src={product.thumbnail}
             title={product.name}
             subTitle={product.location}
             dataItem={{

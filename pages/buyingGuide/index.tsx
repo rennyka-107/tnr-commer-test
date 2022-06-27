@@ -2,7 +2,7 @@ import FlexContainer from "@components/CustomComponent/FlexContainer";
 import Page from "@layouts/Page";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
-import { RootState, wrapper } from "../../store/store";
+import { RootState } from "../../store/store";
 import { getListUserManualApi } from "../api/userManualApi";
 import { getListUserManual } from "../../store/userManualSlice";
 import { useDispatch, useSelector } from "react-redux";

@@ -15,6 +15,7 @@ interface InitialState {
   TargetShape: any;
   ArrayImgMap: any[];
   ListTarget: any[];
+  Resize: string;
 }
 const initialState: InitialState = {
   ProjectInformation: {
@@ -31,6 +32,7 @@ const initialState: InitialState = {
   TargetShape: null,
   ArrayImgMap: [],
   ListTarget: [],
+  Resize: ""
 };
 
 export const projectMapSlice = createSlice({
@@ -67,6 +69,9 @@ export const projectMapSlice = createSlice({
     setListTarget: (state, { payload }) => {
       state.ListTarget = payload;
     },
+    setResize: (state, { payload }) => {
+      state.Resize = payload;
+    },
   },
 });
 
@@ -81,6 +86,7 @@ export const {
   setTargetShape,
   setArrayImgMap,
   setListTarget,
+  setResize
 } = projectMapSlice.actions;
 
 export default projectMapSlice.reducer;

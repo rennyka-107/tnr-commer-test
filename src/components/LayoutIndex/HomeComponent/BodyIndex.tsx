@@ -1,21 +1,13 @@
 import FlexContainer from "@components/CustomComponent/FlexContainer";
-import { IconChungCu } from "@components/Icons";
 import styled from "@emotion/styled";
-import { Button, Typography } from "@mui/material";
-import { url } from "inspector";
+import {  Typography } from "@mui/material";
 import { TBOUTStanding } from "interface/product";
 import _ from "lodash";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
-import PathRoute from "utils/PathRoute";
-import { getListProductApi, searchListProductByProjectIdApi } from "../../../../pages/api/productsApi";
-import { getListProduct } from "../../../../store/productSlice";
 import { RootState } from "../../../../store/store";
 
-interface ProductsIndexProps {
-  listProductOutOfStanding?: TBOUTStanding[];
-}
 const DynamicSliderHotProduct = dynamic(
   () => import("../../../components/CustomComponent/SliderProductHotComponent"),
   { loading: () => <p>...</p> }
@@ -114,7 +106,7 @@ export default function BodyIndex() {
       page: 0,
       size: 10,
     };
-
+	
     const searchList = {
       projectId: "",
 	  provinceId: "",

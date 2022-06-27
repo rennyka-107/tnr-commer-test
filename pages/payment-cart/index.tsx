@@ -4,9 +4,7 @@ import Page from "@layouts/Page";
 import isEmpty from "lodash/isEmpty";
 import dynamic from "next/dynamic";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "../../store/store";
-import { CircularProgress, Typography, Grid } from "@mui/material";
+import { CircularProgress} from "@mui/material";
 import { useRouter } from "next/router";
 
 const DynamicLayoutPayment = dynamic(

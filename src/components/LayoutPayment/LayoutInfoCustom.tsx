@@ -147,6 +147,8 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
     query: { transactionCode },
   } = useRouter();
 
+  console.log(format(parse("29-05-2022", "dd-MM-yyyy", new Date()), "yyyy-MM-dd"), "dob")
+
   async function getInformationUser() {
     try {
       const res = await apiGetProfileInformation();
@@ -170,7 +172,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                 fullname,
                 dob: !isEmpty(dob)
                   ? format(parse(dob, "dd-MM-yyyy", new Date()), "yyyy-MM-dd")
-                  : null,
+                  : "",
                 phoneNumber,
                 email,
                 idNumber,
@@ -179,7 +181,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                       parse(issueDate, "dd-MM-yyyy", new Date()),
                       "yyyy-MM-dd"
                     )
-                  : null,
+                  : "",
                 issuePlace,
                 permanentAddress,
                 contactAddress: "",
@@ -291,11 +293,14 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
       if (info.idNumber === idNumber || isEmpty(info.idNumber)) {
         return {
           fullname,
-          dob,
+          dob: format(parse(dob, "yyyy-MM-dd", new Date()), "dd-MM-yyyy"),
           phoneNumber,
           email,
           idNumber,
-          issueDate,
+          issueDate: format(
+            parse(issueDate, "yyyy-MM-dd", new Date()),
+            "dd-MM-yyyy"
+          ),
           issuePlace,
           permanentAddress,
           contactAddress,
@@ -303,7 +308,14 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
           district,
         };
       }
-      return info;
+      return {
+        ...info,
+        dob: format(parse(info.dob, "yyyy-MM-dd", new Date()), "dd-MM-yyyy"),
+        issueDate: format(
+          parse(info.issueDate, "yyyy-MM-dd", new Date()),
+          "dd-MM-yyyy"
+        ),
+      };
     });
     const formatData = {
       productId,
@@ -410,6 +422,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
         (info) => !isEmpty(info.vocativeId) && !isEmpty(info.customerTypeId)
       );
     }
+    console.log(paymentIdentityInfos.length, "123");
     const numberRow = paymentIdentityInfos.length / 2;
     const arrayElements = [];
     if (numberRow > 0) {
@@ -419,22 +432,24 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
           paymentIdentityInfos.length >= 2 ? paymentIdentityInfos.pop() : null;
         arrayElements.push(
           <RowStyled key={ele1.idNumber + "1023"}>
-            <BoxInfoUserStyled style={{ cursor: "pointer" }}>
-              <RowStyled>
-                <Text18Styled
-                  onClick={() => {
-                    setFormInfo({ open: true, idNumber: ele1.idNumber });
-                  }}
-                  maxWidth={133}
-                  color={"black"}
-                >
-                  {ele1.fullname}
-                </Text18Styled>
-                <IconButton onClick={() => removeCustomer(ele1.idNumber)}>
-                  <IconPlusCircle style={{ transform: "rotate(45deg)" }} />
-                </IconButton>
-              </RowStyled>
-            </BoxInfoUserStyled>
+            {ele1.idNumber == !watch("idNumber") && (
+              <BoxInfoUserStyled style={{ cursor: "pointer" }}>
+                <RowStyled>
+                  <Text18Styled
+                    onClick={() => {
+                      setFormInfo({ open: true, idNumber: ele1.idNumber });
+                    }}
+                    maxWidth={133}
+                    color={"black"}
+                  >
+                    {ele1.fullname}
+                  </Text18Styled>
+                  <IconButton onClick={() => removeCustomer(ele1.idNumber)}>
+                    <IconPlusCircle style={{ transform: "rotate(45deg)" }} />
+                  </IconButton>
+                </RowStyled>
+              </BoxInfoUserStyled>
+            )}
             {!isEmpty(ele2) && (
               <BoxInfoUserStyled style={{ cursor: "pointer" }}>
                 <RowStyled>
@@ -722,7 +737,11 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                 </Text14Styled>
               </RowStyled>
               <ButtonAction
-                disabled={formInfo.open || !acceptPolicy}
+                disabled={
+                  formInfo.open ||
+                  !acceptPolicy ||
+                  (data.paymentStatus && data.paymentStatus !== 0)
+                }
                 margin={"12px auto"}
                 onClick={handleSubmit((values) => handleOnSubmit(values, 1))}
               >

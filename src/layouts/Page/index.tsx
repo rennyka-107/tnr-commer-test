@@ -1,5 +1,4 @@
 import { SEOProps } from "@components/SEO";
-import { positions } from "@mui/system";
 import dynamic from "next/dynamic";
 import React, { ReactNode } from "react";
 

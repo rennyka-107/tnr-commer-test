@@ -7,7 +7,7 @@ import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import styled from "@emotion/styled";
-import { IconPlusProduct } from "../../Icons/index";
+import Product3 from "../../../../public/images/product3.png";
 import Router from "next/router";
 
 import {
@@ -19,6 +19,7 @@ import {
   IconMuaOnline,
 } from "@components/Icons";
 import Link from "next/link";
+import ImageWithHideOnError from "hooks/ImageWithHideOnError";
 
 type Props = {
   id?: string;
@@ -37,7 +38,7 @@ type Props = {
   onClick?: MouseEventHandler<HTMLButtonElement>;
   onCompare?: MouseEventHandler<HTMLButtonElement>;
   ticketCard?: string;
-  buyDisabled?:boolean;
+  buyDisabled?: boolean;
 };
 
 const CardStyled = styled(Card)`
@@ -212,7 +213,7 @@ export default function ItemProductCard({
       .toFixed(0)
       .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
   }
-
+ 
   return (
     <CardStyled sx={{ maxWidth: 350 }}>
       <IconHeartProduct
@@ -223,50 +224,55 @@ export default function ItemProductCard({
           margin: 20,
         }}
       />
-      <div
-        style={{
-          background: "#FEC83C",
-          width: "auto",
-          height: "auto",
-          position: "absolute",
-          marginTop: 160,
-          right: 0,
-          padding: 3,
-          textAlign: "center",
-        }}
-      >
-        <span
-          style={{
-            fontFamily: "roboto",
-            fontStyle: "normal",
-            fontWeight: 400,
-            fontSize: 14,
-            lineHeight: "16px",
-            color: "#FFFFFF",
-          }}
-        >
-          {ticketCard}
-        </span>
-      </div>
-      <CardMedia
-        component="img"
-        height="190"
-        image={src.src}
-        alt="green iguana"
-        style={{
-          borderRadius: "20px 20px 0px 0px",
-        }}
+      {ticketCard ? (
+        <>
+          <div
+            style={{
+              background: "#FEC83C",
+              width: "auto",
+              height: "auto",
+              position: "absolute",
+              marginTop: 160,
+              right: 0,
+              padding: 3,
+              textAlign: "center",
+			  zIndex: 10
+            }}
+          >
+            <span
+              style={{
+                fontFamily: "roboto",
+                fontStyle: "normal",
+                fontWeight: 400,
+                fontSize: 14,
+                lineHeight: "16px",
+                color: "#FFFFFF",
+              }}
+            >
+              {ticketCard}
+            </span>
+          </div>
+        </>
+      ) : (
+        <></>
+      )}
+
+      <ImageWithHideOnError
+        className="logo"
+        src={src}
+        fallbackSrc={Product3}
+        height={190}
+        width={350}
+        title={"Logo "}
+        alt={"Logo "}
+        priority
+        unoptimized={true}
+        objectFit="cover"
       />
 
       <CardContentStyled>
         <div style={{ marginBottom: 7 }}>
-          <span
-            onClick={() =>
-              Router.push(
-                `/products/${id}`
-              )
-            }
-          >
+          <span onClick={() => Router.push(`/products/${id}`)}>
             <TextTitleStyled style={{ marginBottom: 9 }}>
               {title}
             </TextTitleStyled>
@@ -347,12 +353,16 @@ export default function ItemProductCard({
           </ButtonStyled>
         </CardActions>
       ) : ( */}
-        <CardActions style={{ flexDirection: "column", marginBottom: 24 }}>
-          <ButtonStyled onClick={onClick} disabled={buyDisabled}  style={{ backgroundColor: buyDisabled? '#FFFF' : ' #ea242a' }}>
-            Mua Online&nbsp;
-            <IconMuaOnline />
-          </ButtonStyled>
-        </CardActions>
+      <CardActions style={{ flexDirection: "column", marginBottom: 24 }}>
+        <ButtonStyled
+          onClick={onClick}
+          disabled={buyDisabled}
+          style={{ backgroundColor: buyDisabled ? "#FFFF" : " #ea242a" }}
+        >
+          Mua Online&nbsp;
+          <IconMuaOnline />
+        </ButtonStyled>
+      </CardActions>
       {/* )} */}
     </CardStyled>
   );

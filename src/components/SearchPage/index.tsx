@@ -1,13 +1,13 @@
 import styled from "@emotion/styled";
 import { searchLocationResponse } from "interface/searchIF";
 import ItemSearch from "./ItemSearch";
-import {
-  Button,
-  FormControl,
-  SelectChangeEvent,
-  TextField,
-  Typography,
+import { SelectChangeEvent,
 } from "@mui/material";
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
+import FormControl from '@mui/material/FormControl';
+import Button from '@mui/material/Button';
+
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -16,9 +16,9 @@ import ContainerSearch from "@components/Container/ContainerSearch";
 import { makeStyles } from "@mui/styles";
 import SelectSeach from "@components/CustomComponent/SelectInputComponent/SelectSeach";
 import { IconFilterSearch } from "@components/Icons";
-import { isEmpty } from "lodash";
+import  isEmpty  from "lodash/isEmpty";
 import SelectLocationSearch from "@components/CustomComponent/SelectInputComponent/SelectLocationSearch";
-import { MenuBarLocation } from "interface/menuBarList";
+
 import SelectKhoanGia from "@components/CustomComponent/SelectInputComponent/SelectKhoanGia";
 import SelectDienTich from "@components/CustomComponent/SelectInputComponent/SelectDienTich";
 import IconResetFilter from "@components/Icons/IconResetFilter";

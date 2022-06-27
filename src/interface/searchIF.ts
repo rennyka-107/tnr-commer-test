@@ -22,4 +22,5 @@ export interface searchLocationResponse {
   category: string;
   name: string;
   paymentStatus?:string|number|null;
+  
 }

@@ -17,6 +17,7 @@ const DisplayLayers = ({ data, layerParent }: Props) => {
   const ref = useRef<any>();
   const dispatch = useDispatch();
   const Target = useSelector((state: RootState) => state.projectMap.Target);
+  const Resize = useSelector((state: RootState) => state.projectMap.Resize);
   function fetchLayer() {
     ref?.current?.clearLayers();
     fetchLayerParent();
@@ -53,13 +54,17 @@ const DisplayLayers = ({ data, layerParent }: Props) => {
           getBoundsLockIcon(newLayer)
         );
       }
-     
+
       newLayer.on("click", function (e: any) {
         if (!layer.feature.properties.lock) {
           dispatch(
             setTargetShape({
               id: layer.feature.properties.id,
-              level: !isEmpty(Target) ? Target.level + 1 : 1,
+              level: !isEmpty(Target)
+                ? !isEmpty(Target.productionId)
+                  ? Target.level
+                  : Target.level + 1
+                : 1,
             })
           );
         }
@@ -69,7 +74,7 @@ const DisplayLayers = ({ data, layerParent }: Props) => {
           stroke: true,
           color: layer.feature.properties.lock ? "#1B3459" : "#24FF54",
         });
-        newLayer.bindPopup(layer.feature.properties.name).openPopup()
+        newLayer.bindPopup(layer.feature.properties.name).openPopup();
         if (!isEmpty(svgIconLayer)) {
           ref?.current?.addLayer(svgIconLayer);
         }
@@ -83,7 +88,6 @@ const DisplayLayers = ({ data, layerParent }: Props) => {
       });
     });
   }
-
   function fetchLayerParent() {
     if (!isEmpty(layerParent)) {
       const oldLatLng = layerParent.feature.properties.radius
@@ -123,7 +127,7 @@ const DisplayLayers = ({ data, layerParent }: Props) => {
       ref?.current?.clearLayers();
       fetchLayerParent();
     }
-  }, [data, map, layerParent]);
+  }, [data, map, layerParent, Resize]);
 
   return <FeatureGroup ref={ref} />;
 };

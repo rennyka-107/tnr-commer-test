@@ -1,12 +1,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import {
-  BodyListProductI,
-  getListProductTNR,
-  ParamsListProductI,
-} from "@service/ProductList";
+import { BodyListProductI, ParamsListProductI } from "@service/ProductList";
 import { searchListProductByProjectIdApi } from "../../pages/api/productsApi";
-import { isEmpty } from "lodash";
+import isEmpty from "lodash/isEmpty";
 
 const useProductList = () => {
   const Router = useRouter();
@@ -33,7 +29,6 @@ const useProductList = () => {
     setBody({ ...values });
     setParams({ page: 0, size: 12 });
   };
-  
 
   useEffect(() => {
     if (!isEmpty(Router.query) && Router.isReady === true) {
@@ -45,18 +40,15 @@ const useProductList = () => {
 
       setParams({ page: 0, size: 12 });
     }
-}, [projectTypeId, provinceId]);
+  }, [projectTypeId, provinceId]);
 
   useEffect(() => {
     if (!body) return;
     const fetch = async () => {
       setLoading(true);
-	
+
       try {
-        if (
-          typeof body.provinceId === "string" &&
-          typeof body.projectTypeId === "string"
-        ) {
+        if (provinceId || projectTypeId) {
           const res = await searchListProductByProjectIdApi(params, body);
           setData(res.responseData);
           let count = 0;

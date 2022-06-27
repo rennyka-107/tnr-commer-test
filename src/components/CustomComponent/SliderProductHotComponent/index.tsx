@@ -16,9 +16,6 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../../store/store";
 import useAddToCart from "hooks/useAddToCart";
 
-interface ProductsIndexProps {
-  listProductOutOfStanding?: TBOUTStanding[];
-}
 
 const WrapSlide = styled.div`
   width: 1245px;
@@ -35,6 +32,7 @@ export default function SliderProductHotComponent() {
     (state: RootState) => state.products
   );
   const addToCart = useAddToCart();
+	
   return (
     <WrapSlide>
       <IconCarsouelLeftProduct style={{ cursor: "pointer" }} />
@@ -65,7 +63,7 @@ export default function SliderProductHotComponent() {
               <ItemProductCard
                 key={index}
                 id={item.id}
-                src={Product1}
+                src={item.avatar}
                 title={item.name}
                 subTitle={item.projectLocation}
                 dataItem={{
@@ -76,7 +74,7 @@ export default function SliderProductHotComponent() {
                 }}
                 priceListed={item.price}
                 priceSub={item.unitPrice}
-                ticketCard="TRN Gold"
+                ticketCard={item.category}
                 onClick={() => addToCart(item.id)}
               />
             </CardContainer>

@@ -1,4 +1,3 @@
-import WithAuth from "@HOCs/WithAuth";
 import Page from "@layouts/Page";
 import styled from "@emotion/styled";
 import FlexContainer from "@components/CustomComponent/FlexContainer";
@@ -8,7 +7,7 @@ import { useEffect, useState } from "react";
 import { getListSalePolicyById } from "../api/salePolicyApi";
 import { useDispatch, useSelector } from "react-redux";
 import { getListSalePolicy } from "../../store/salePolicySlice";
-import { RootState, wrapper } from "../../store/store";
+import { RootState } from "../../store/store";
 import { CircularProgress } from "@mui/material";
 
 const Container = styled.div`

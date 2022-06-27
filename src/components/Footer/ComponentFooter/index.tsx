@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getListMenuBarProject, getListMenuBarProjectTypeApi } from "../../../../pages/api/menuBarApi";
+import {  getListMenuBarProjectTypeApi } from "../../../../pages/api/menuBarApi";
 import { getListUserManualApi } from "../../../../pages/api/userManualApi";
 import { getListMenuBarProjectType } from "../../../../store/menuBarSlice";
-import { RootState, wrapper } from "../../../../store/store";
+import { RootState } from "../../../../store/store";
 import { getListUserManual } from "../../../../store/userManualSlice";
 import FooterBot from "./FooterBot";
 import FooterTop from "./FooterTop";

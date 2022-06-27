@@ -178,6 +178,9 @@ const ButtonStyled2 = styled(Button)`
 
 const DetailProduct = ({ onBack }: Props) => {
   const Target = useSelector((state: RootState) => state.projectMap.Target);
+  const ListLevel = useSelector(
+    (state: RootState) => state.projectMap.ListLevel
+  );
   const ListTarget = useSelector(
     (state: RootState) => state.projectMap.ListTarget
   );
@@ -227,34 +230,41 @@ const DetailProduct = ({ onBack }: Props) => {
           </IconButton>
           <TitleStyled>{Target.name ?? "N/A"}</TitleStyled>
         </Box>
-
+        {ListLevel.length > 0 && (
+          <TextStyled style={{ margin: "10px auto" }}>
+            {ListLevel[0].name}
+          </TextStyled>
+        )}
         <TextStyled style={{ margin: "10px auto" }}>
-          {stringNameParent}
+          {/* {stringNameParent} */}
+          {Target.location ? Target.location : "N/A"}
         </TextStyled>
         <DividerLine />
         <Grid sx={{ pb: 2 }} container rowSpacing={1}>
           <Grid item xs={6} display={"flex"} alignItems={"center"}>
             <IconBedDouble />
-            &nbsp;&nbsp;<TextStyled>02</TextStyled>
+            &nbsp;&nbsp;<TextStyled>{Target.numBed ?? "N/A"}</TextStyled>
           </Grid>
           <Grid item xs={6} display={"flex"} alignItems={"center"}>
             <IconFrame />
             &nbsp;&nbsp;
             <TextStyled>
-              80 m<sup>2</sup>
+              {Target.landArea ?? "N/A"} m<sup>2</sup>
             </TextStyled>
           </Grid>
           <Grid item xs={6} display={"flex"} alignItems={"center"}>
             <IconBath />
-            &nbsp;&nbsp;<TextStyled>02</TextStyled>
+            &nbsp;&nbsp;<TextStyled>{Target.numBath ?? "N/A"}</TextStyled>
           </Grid>
           <Grid item xs={6} display={"flex"} alignItems={"center"}>
             <IconCompass />
-            &nbsp;&nbsp;<TextStyled>Đông nam</TextStyled>
+            &nbsp;&nbsp;
+            <TextStyled>
+              {Target.doorDirection ? Target.doorDirection : "N/A"}
+            </TextStyled>
           </Grid>
         </Grid>
-
-        <div style={{ marginTop: 12 }}>
+        {/* <div style={{ marginTop: 12 }}>
           <div style={{ display: "flex", marginBottom: 14 }}>
             <TextBottomStyled style={{ marginRight: 40 }}>
               Giá niêm yết{" "}
@@ -271,7 +281,7 @@ const DetailProduct = ({ onBack }: Props) => {
               {currencyFormat(40580174)}đ/m2
             </NumberBottomStyled2>
           </div>
-        </div>
+        </div> */}
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
           <ButtonStyled1
             onClick={() => {

@@ -18,7 +18,7 @@ export const searchListProductByProjectIdApi = async (
   params: ParamsProducts,
   data: any
 ) => {
-	console.log(data)
+
 	const newDataSearch = {
 		
 		projectTypeId: data.projectTypeId === "1" ? "" : data.projectTypeId,

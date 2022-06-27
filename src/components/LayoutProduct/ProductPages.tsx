@@ -1,17 +1,14 @@
 import FlexContainer from "@components/CustomComponent/FlexContainer";
-import Typography from "@mui/material/Typography";
 import FormControl from "@mui/material/FormControl";
 import isEmpty from "lodash/isEmpty";
-import styled from "@emotion/styled";
 import dynamic from "next/dynamic";
 import { ProductsResponse } from "interface/product";
 import { ProjectResponse } from "interface/project";
 import { useSelector } from "react-redux";
 import ContainerProduct from "@components/Container/ContainerProduct";
 import { RootState } from "../../../store/store";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import SelectLocationProductPage from "@components/CustomComponent/SelectInputComponent/SelectLocationProductPage";
-import SelectLocationSearch from "@components/CustomComponent/SelectInputComponent/SelectLocationSearch";
 import SelectTypeProductPage from "@components/CustomComponent/SelectInputComponent/SelectTypeProductPage";
 import { useRouter } from "next/router";
 
@@ -20,17 +17,6 @@ interface ProductsProps {
   listProject?: ProjectResponse[];
 }
 
-const TextHeaderStyled = styled(Typography)`
-  font-family: "Roboto";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 28px;
-  line-height: 33px;
-
-  /* Brand */
-
-  color: #1b3459;
-`;
 
 const DynamicItemProductComponent = dynamic(
   () => import("@components/LayoutProduct/ItemProduct"),

@@ -1,8 +1,3 @@
-import SelectSearchInputComponent from "@components/CustomComponent/SelectInputComponent/SelectSearchInputComponent";
-import { SEOProps } from "@components/SEO";
-import { FormControl, TextField } from "@mui/material";
-import { display } from "@mui/system";
-import { AxiosResponse } from "axios";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -20,11 +15,10 @@ import {
 import { RootState } from "../../../../store/store";
 import HeaderBot from "./HeaderBot";
 import HeaderTop from "./HeaderTop";
-import HeaderNavSearch from "./HedaerNavSearch";
 
 const Header = () => {
   const dispatch = useDispatch();
-  const { listMenuBarType, listMenuBarProjectType, listMenuLocation } =
+  const { listMenuBarType, listMenuBarProjectType } =
     useSelector((state: RootState) => state.menubar);
 
   const menuBarProjectType = listMenuBarProjectType?.filter(

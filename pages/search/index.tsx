@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import Page from "@layouts/Page";
-import { RootState, wrapper } from "../../store/store";
+import { RootState } from "../../store/store";
 import FlexContainer from "@components/CustomComponent/FlexContainer";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
-import { searchAdvanded, searchLocationHome } from "../api/searchApi";
+import { searchAdvanded } from "../api/searchApi";
 import {
   getPaggingSearch,
   getSearchHomeLocation,

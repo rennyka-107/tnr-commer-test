@@ -22,6 +22,7 @@ interface InitialState {
     totalDeposite: string | null;
     paymentFlag: number;
     production: any;
+    paymentStatus: number;
   };
 }
 const initialState: InitialState = {
@@ -62,6 +63,7 @@ const initialState: InitialState = {
     totalDeposite: null,
     paymentFlag: 0,
     production: null,
+    paymentStatus: 0
   },
 };
 

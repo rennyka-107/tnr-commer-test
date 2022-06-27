@@ -3,12 +3,12 @@ import { MouseEventHandler } from "react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import styled from "@emotion/styled";
 import { IconPlusProduct } from "../../Icons/index";
 import Router, { useRouter } from "next/router";
+import Product3 from "../../../../public/images/product3.png";
 
 import {
   IconBath,
@@ -16,9 +16,8 @@ import {
   IconCompass,
   IconFrame,
   IconHeartProduct,
-  IconMuaOnline,
 } from "@components/Icons";
-import Link from "next/link";
+import ImageWithHideOnError from "hooks/ImageWithHideOnError";
 
 type Props = {
   id?: string;
@@ -202,7 +201,7 @@ export default function ItemCompareSearch({
   activeSoSanh,
   id,
 }: Props) {
-	const router = useRouter();
+  const router = useRouter();
 
   function currencyFormat(num) {
     if (!num) {
@@ -222,39 +221,46 @@ export default function ItemCompareSearch({
           margin: 20,
         }}
       />
-      <div
-        style={{
-          background: "#FEC83C",
-          width: "auto",
-          height: "auto",
-          position: "absolute",
-          marginTop: 160,
-          right: 0,
-          padding: 3,
-          textAlign: "center",
-        }}
-      >
-        <span
+      {ticketCard ? (
+        <div
           style={{
-            fontFamily: "roboto",
-            fontStyle: "normal",
-            fontWeight: 400,
-            fontSize: 14,
-            lineHeight: "16px",
-            color: "#FFFFFF",
+            background: "#FEC83C",
+            width: "auto",
+            height: "auto",
+            position: "absolute",
+            marginTop: 160,
+            right: 0,
+            padding: 3,
+            textAlign: "center",
           }}
         >
-          {ticketCard}
-        </span>
-      </div>
-      <CardMedia
-        component="img"
-        height="190"
-        image={src.src}
-        alt="green iguana"
-        style={{
-          borderRadius: "20px 20px 0px 0px",
-        }}
+          <span
+            style={{
+              fontFamily: "roboto",
+              fontStyle: "normal",
+              fontWeight: 400,
+              fontSize: 14,
+              lineHeight: "16px",
+              color: "#FFFFFF",
+            }}
+          >
+            {ticketCard}
+          </span>
+        </div>
+      ) : (
+        <></>
+      )}
+    <ImageWithHideOnError
+        className="logo"
+        src={src}
+        fallbackSrc={Product3}
+        height={190}
+        width={350}
+        title={"Logo "}
+        alt={"Logo "}
+        priority
+        unoptimized={true}
+        objectFit="cover"
       />
 
       <CardContentStyled>
@@ -321,29 +327,30 @@ export default function ItemCompareSearch({
         </div>
       </CardContentStyled>
       {/* {activeSoSanh === true ? ( */}
-        <CardActions
+      <CardActions
+        style={{
+          flexDirection: "column",
+          marginBottom: 24,
+          justifyContent: "space-around",
+        }}
+      >
+        <div
           style={{
-            flexDirection: "column",
-            marginBottom: 24,
-            justifyContent: "space-around",
+            gap: 10,
+            display: "flex",
+            flexDirection: "row",
+            cursor: "pointer",
+          }}
+          onClick={() => {
+            router.push(`/compare-product?idCompare=${id}`);
           }}
         >
-          <div
-            style={{
-              gap: 10,
-              display: "flex",
-              flexDirection: "row",
-              cursor: "pointer",
-            }}
-			onClick={() => {
-				router.push(`/compare-product?idCompare=${id}`);
-			  }}
-          >
-            <IconPlusProduct />
-            <TextButtonStyled style={{color: '#0063F7'}} onClick={onCompare}>Thêm sản phẩm so sánh</TextButtonStyled>
-          </div>
-          
-        </CardActions>
+          <IconPlusProduct />
+          <TextButtonStyled style={{ color: "#0063F7" }} onClick={onCompare}>
+            Thêm sản phẩm so sánh
+          </TextButtonStyled>
+        </div>
+      </CardActions>
       {/* ) : (
         <CardActions style={{ flexDirection: "column", marginBottom: 24 }}>
           <ButtonStyled onClick={onClick}>
