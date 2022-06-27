@@ -20,12 +20,12 @@ const useProjectList = () => {
 
     const changeBody = (values: BodyListProjectI) => {
         setBody({ ...values });
-        setParams({ pageNumber: 1, pageSize: 10 });
+        setParams({ pageNumber: 0, pageSize: 10 });
     }
 
     useEffect(() => {
         setBody({ ...body, projectTypeId: type as string ?? '' });
-        setParams({ pageNumber: 1, pageSize: 10 });
+        setParams({ pageNumber: 0, pageSize: 10 });
 
     }, [type])
 

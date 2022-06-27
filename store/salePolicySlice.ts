@@ -1,24 +1,35 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { BodyResponseSalePolicy } from "interface/register";
+import { BodyResponseSalePolicy, BodySalePolicy } from "interface/register";
 
 interface InitialState {
-	listSalePolicy : BodyResponseSalePolicy[]
+  listSalePolicy: BodyResponseSalePolicy[];
+  policyById: BodySalePolicy;
 }
 
-const initialState : InitialState = {
-	listSalePolicy: [],
-}
+const initialState: InitialState = {
+  listSalePolicy: [],
+  policyById: {
+    id: "",
+    name: "",
+    project: "",
+    projectId: "",
+    content: "",
+  },
+};
 
 export const salePolicySlice = createSlice({
-	name: 'salePolicy',
-	initialState,
-	reducers: {
-		getListSalePolicy: (state,action) => {
-			state.listSalePolicy = action.payload;
-		},
-	},
+  name: "salePolicy",
+  initialState,
+  reducers: {
+    getListSalePolicy: (state, action) => {
+      state.listSalePolicy = action.payload.content;
+    },
+	getPolicyById: (state, action) => {
+		state.policyById = action.payload;
+	}
+  },
 });
 
-export const {getListSalePolicy} = salePolicySlice.actions;
+export const { getListSalePolicy,getPolicyById } = salePolicySlice.actions;
 
 export default salePolicySlice.reducer;

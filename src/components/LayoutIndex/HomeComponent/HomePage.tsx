@@ -145,7 +145,7 @@ const HomePage = () => {
         Math.min(newValue[0], valueDienTich[1] - minDistance),
         valueDienTich[1],
       ]);
-	  setFilterSearch({ ...filterSearch, areaFrom:  valueDienTich[0]});
+	  setFilterSearch({ ...filterSearch, areaFrom:  valueDienTich[0], areaTo : valueDienTich[1]});
     } else {
       setValueDientich([
         valueDienTich[0],
@@ -169,7 +169,7 @@ const HomePage = () => {
         Math.min(newValue[0], valueKhoanGia[1] - minDistance2),
         valueKhoanGia[1],
       ]);
-      setFilterSearch({ ...filterSearch,priceFrom : valueKhoanGia[0].toString() });
+      setFilterSearch({ ...filterSearch,priceFrom : valueKhoanGia[0].toString(),priceTo : valueKhoanGia[1].toString() });
     } else {
       setValueKhoangGia([
         valueKhoanGia[0],

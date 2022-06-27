@@ -104,7 +104,9 @@ export default function BodyIndex() {
   const { productTopByOutStanding } = useSelector(
     (state: RootState) => state.products
   );
-
+  const menuBarProjectType = listMenuBarProjectType?.filter(
+    (item) => item.id !== "1"
+  );
   const sizeOfArray = _.size(productTopByOutStanding);
 
   const onClickProduct = async (projectTypeId) => {
@@ -132,7 +134,7 @@ export default function BodyIndex() {
   return (
     <FlexContainer>
       <WrapContainer>
-        {(listMenuBarProjectType?.slice(0, 6) || []).map((item, index) => {
+        {(menuBarProjectType?.slice(0, 7) || []).map((item, index) => {
           return (
             <WrapIconContainer
               key={index}
