@@ -26,7 +26,7 @@ const CompareSearch = () => {
   );
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState({
-    page: 1,
+    page: 0,
     size: 12,
   });
   const { areaFrom, areaTo, priceFrom, priceTo, projectTypeId, projectId,categoryId } =
@@ -115,9 +115,9 @@ const CompareSearch = () => {
         <PaginationComponent
           count={pageNumber}
           onChange={(event, page) => {
-            changePage(page);
+            changePage(page - 1);
           }}
-          page={search.page}
+          page={search.page + 1}
         />
       </Row>
     </Page>
