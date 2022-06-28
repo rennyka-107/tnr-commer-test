@@ -43,12 +43,11 @@ const useProjectList = () => {
 
   useEffect(() => {
     if (!body) return;
-    console.log(body);
     const fetch = async () => {
       setLoading(true);
 
       try {
-        if (type && typeof type !== undefined) {
+        if (type && typeof body.projectTypeId !== undefined) {
           const res = await getListProjectTNR(params, body);
           setData(res?.responseData);
           let count = 0;

@@ -232,6 +232,7 @@ export default function ItemCompareSearch({
             right: 0,
             padding: 3,
             textAlign: "center",
+			zIndex: 10
           }}
         >
           <span
@@ -247,7 +248,7 @@ export default function ItemCompareSearch({
             {ticketCard}
           </span>
         </div>
-      ) : (
+      ) : ( 
         <></>
       )}
     <ImageWithHideOnError

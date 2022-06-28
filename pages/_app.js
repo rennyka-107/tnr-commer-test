@@ -9,6 +9,7 @@ import "../styles/globals.css";
 import AuthContext from "../src/context/AuthContext";
 import CartProvider from "./../src/context/CartProvider";
 import { NotificationProvider } from '../src/context/NotificationContext';
+import "react-datepicker/dist/react-datepicker.css";
 
 const clientSideEmotionCache = createEmotionCache();
 

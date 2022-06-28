@@ -3,7 +3,7 @@ import { MouseEventHandler } from "react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
+import Product3 from '../../../../public/images/product3.png';
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import styled from "@emotion/styled";
@@ -19,6 +19,7 @@ import {
   IconMuaOnline,
 } from "@components/Icons";
 import Link from "next/link";
+import ImageWithHideOnError from "hooks/ImageWithHideOnError";
 
 type Props = {
   id?: string;
@@ -212,6 +213,7 @@ export default function ProductCardSearch({
       .toFixed(0)
       .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
   }
+
   return (
     <CardStyled sx={{ maxWidth: 350 }}>
       <IconHeartProduct
@@ -222,7 +224,8 @@ export default function ProductCardSearch({
           margin: 20,
         }}
       />
-      <div
+      {ticketCard ? (
+		<div
         style={{
           background: "#FEC83C",
           width: "auto",
@@ -232,6 +235,7 @@ export default function ProductCardSearch({
           right: 0,
           padding: 3,
           textAlign: "center",
+		  zIndex: 10
         }}
       >
         <span
@@ -247,16 +251,19 @@ export default function ProductCardSearch({
           {ticketCard}
         </span>
       </div>
-      <CardMedia
-        component="img"
-        height="190"
-        image={src.src}
-        alt="green iguana"
-        style={{
-          borderRadius: "20px 20px 0px 0px",
-        }}
-      />
-
+	  ):(<></>)}
+      <ImageWithHideOnError
+          className="logo"
+          src={src ? src : Product3}
+          fallbackSrc={Product3}
+          height={190}
+		  width={350}
+          title={'Logo ' }
+          alt={'Logo '}
+          priority
+          unoptimized={true}
+          objectFit="cover"
+        />
       <CardContentStyled>
         <div style={{ marginBottom: 7 }}>
           <span

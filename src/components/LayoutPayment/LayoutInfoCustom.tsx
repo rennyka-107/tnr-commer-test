@@ -61,7 +61,7 @@ import { useRouter } from "next/router";
 import useAddToCart from "hooks/useAddToCart";
 import useNotification from "hooks/useNotification";
 import useAuth from "hooks/useAuth";
-import { format, parse } from "date-fns";
+import ControllerReactDatePicker from "@components/Form/ControllerReactDatePicker";
 
 type Props = {
   setScopeRender: Dispatch<SetStateAction<string>>;
@@ -79,12 +79,12 @@ const BoxInfoUserStyled = styled(Box)({
 
 interface InformationBuyer {
   fullname: string;
-  dob: string;
+  dob: string | Date;
   phoneNumber: string;
   email: string;
   idNumber: string;
   issuePlace: string;
-  issueDate: string;
+  issueDate: string | Date;
   permanentAddress: string;
   contactAddress: string;
   province: string;
@@ -92,21 +92,26 @@ interface InformationBuyer {
 }
 
 const validationSchema = yup.object().shape({
-  fullname: yup.string().required(validateLine.required),
-  dob: yup.string().required(validateLine.required).trim(validateLine.trim),
-  phoneNumber: yup.string().required(validateLine.required),
+  fullname: yup.string().required(validateLine.required).default(""),
+  dob: yup
+    .string()
+    .required(validateLine.required)
+    .trim(validateLine.trim)
+    .default(""),
+  phoneNumber: yup.string().required(validateLine.required).default(""),
   email: yup
     .string()
     .email()
     .required(validateLine.required)
-    .trim(validateLine.trim),
-  idNumber: yup.string().required(validateLine.required),
-  issuePlace: yup.string().required(validateLine.required),
-  issueDate: yup.string().required(validateLine.required),
-  permanentAddress: yup.string().required(validateLine.required),
+    .trim(validateLine.trim)
+    .default(""),
+  idNumber: yup.string().required(validateLine.required).default(""),
+  issuePlace: yup.string().required(validateLine.required).default(""),
+  issueDate: yup.string().required(validateLine.required).default(""),
+  permanentAddress: yup.string().required(validateLine.required).default(""),
   contactAddress: yup.string().default(""),
-  province: yup.string(),
-  district: yup.string(),
+  province: yup.string().default(""),
+  district: yup.string().default(""),
 });
 
 const LayoutInfoCustom = ({ setScopeRender }: Props) => {
@@ -168,18 +173,11 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
             paymentIdentityInfos: [
               {
                 fullname,
-                dob: !isEmpty(dob)
-                  ? format(parse(dob, "dd-MM-yyyy", new Date()), "yyyy-MM-dd")
-                  : "",
+                dob: !isEmpty(dob) ? dob : "",
                 phoneNumber,
                 email,
                 idNumber,
-                issueDate: !isEmpty(issueDate)
-                  ? format(
-                      parse(issueDate, "dd-MM-yyyy", new Date()),
-                      "yyyy-MM-dd"
-                    )
-                  : "",
+                issueDate: !isEmpty(issueDate) ? issueDate : "",
                 issuePlace,
                 permanentAddress,
                 contactAddress: "",
@@ -228,7 +226,11 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
   useEffect(() => {
     data.paymentIdentityInfos.forEach((info) => {
       if (isEmpty(info.vocativeId) && isEmpty(info.customerTypeId)) {
-        reset({ ...info });
+        reset({
+          ...info,
+          dob: !isEmpty(info.dob) ? info.dob : "",
+          issueDate: !isEmpty(info.issueDate) ? info.issueDate : "",
+        });
       }
     });
   }, [data]);
@@ -291,15 +293,10 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
       if (info.idNumber === idNumber || isEmpty(info.idNumber)) {
         return {
           fullname,
-          // dob: format(parse(dob, "yyyy-MM-dd", new Date()), "dd-MM-yyyy"),
           dob,
           phoneNumber,
           email,
           idNumber,
-          // issueDate: format(
-          //   parse(issueDate, "yyyy-MM-dd", new Date()),
-          //   "dd-MM-yyyy"
-          // ),
           issueDate,
           issuePlace,
           permanentAddress,
@@ -310,30 +307,37 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
       }
       return {
         ...info,
-        dob: format(parse(info.dob, "yyyy-MM-dd", new Date()), "dd-MM-yyyy"),
-        issueDate: format(
-          parse(info.issueDate, "yyyy-MM-dd", new Date()),
-          "dd-MM-yyyy"
-        ),
       };
     });
     const formatData = {
-      productId,
+      productId: !isEmpty(transactionCode) ? data.productId : productId,
       paymentMethodId: payMethod,
       paymentIdentityInfos: formatInfos,
-      quotationRealt: {
-        landPrice: totalVatPrice,
-        vat,
-        maintainPrice,
-        totalPrice,
-        sales: "0",
-        nppDiscount: "0",
-        totalOnlinePrice: totalPrice,
-        minEarnestMoney,
-        regulationOrderPrice,
-      },
-      deposite: billing === 1 ? minEarnestMoney : null,
-      totalDeposite: billing !== 1 ? regulationOrderPrice : null,
+      quotationRealt: !isEmpty(transactionCode)
+        ? data.quotationRealt
+        : {
+            landPrice: totalVatPrice,
+            vat,
+            maintainPrice,
+            totalPrice,
+            sales: "0",
+            nppDiscount: "0",
+            totalOnlinePrice: totalPrice,
+            minEarnestMoney,
+            regulationOrderPrice,
+          },
+      deposite:
+        billing === 1
+          ? !isEmpty(transactionCode)
+            ? data.quotationRealt.minEarnestMoney
+            : minEarnestMoney
+          : null,
+      totalDeposite:
+        billing !== 1
+          ? !isEmpty(transactionCode)
+            ? data.quotationRealt.regulationOrderPrice
+            : regulationOrderPrice
+          : null,
       paymentFlag: paymentFlag,
       tnrUserId: null,
       transactionCode: !isEmpty(transactionCode) ? transactionCode : null,
@@ -341,7 +345,6 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
     try {
       apiSavePaymentInformation(formatData)
         .then((res) => {
-          console.log(res);
           if (!isEmpty(res.responseData)) {
             notification({
               message: "Lưu thông tin hồ sơ mua bán thành công!",
@@ -422,7 +425,6 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
         (info) => !isEmpty(info.vocativeId) && !isEmpty(info.customerTypeId)
       );
     }
-    console.log(paymentIdentityInfos.length, "123");
     const numberRow = paymentIdentityInfos.length / 2;
     const arrayElements = [];
     if (numberRow > 0) {
@@ -559,12 +561,12 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                       </Grid>
                       <Grid item xs={6}>
                         <FormGroup>
-                          <ControllerDatePicker
+                          <ControllerReactDatePicker
                             label={"Ngày sinh"}
                             control={control}
-                            variant={"outlined"}
                             name={"dob"}
                             required
+                            maxDate={new Date()}
                           />
                         </FormGroup>
                       </Grid>
@@ -630,12 +632,13 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                       </Grid>
                       <Grid item xs={6}>
                         <FormGroup>
-                          <ControllerDatePicker
+                          <ControllerReactDatePicker
                             label={"Ngày cấp"}
                             control={control}
                             variant={"outlined"}
                             name={"issueDate"}
                             required
+                            maxDate={new Date()}
                           />
                         </FormGroup>
                       </Grid>

@@ -30,7 +30,7 @@ const ItemSearch = ({ data ,buyDisabled}: searchProps) => {
             onClick={() => addToCart(product.productId)}
             key={index}
             id={product.productId}
-            src={Product2}
+            src={product.thumbnail}
             title={product.name}
             subTitle={product.location}
             dataItem={{
