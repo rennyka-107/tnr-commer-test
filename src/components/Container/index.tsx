@@ -32,20 +32,30 @@ const Container: React.FC<Props> = ({
   style,
 }) => {
   return (
-    <ContainerWrapper>
-      <Breadcrumbs title={title} />
-      <Row customStyle={{ marginBottom: 52, marginTop: 22 }}>
-        <Column
-          customStyle={{ padding: 0, alignItems: "center", display: "flex" }}
-        >
-          {title && <HeaderView>{title}</HeaderView>}
-        </Column>
-        <Column customStyle={{ padding: 0 }}>
-          {rightContent && rightContent}
-        </Column>
-      </Row>
-      <Box style={style}>{children}</Box>
-    </ContainerWrapper>
+    <>
+      {typeof title !== undefined && (
+        <>
+          <ContainerWrapper>
+            <Breadcrumbs title={title} />
+            <Row customStyle={{ marginBottom: 52, marginTop: 22 }}>
+              <Column
+                customStyle={{
+                  padding: 0,
+                  alignItems: "center",
+                  display: "flex",
+                }}
+              >
+                {title && <HeaderView>{title}</HeaderView>}
+              </Column>
+              <Column customStyle={{ padding: 0 }}>
+                {rightContent && rightContent}
+              </Column>
+            </Row>
+            <Box style={style}>{children}</Box>
+          </ContainerWrapper>
+        </>
+      )}
+    </>
   );
 };
 

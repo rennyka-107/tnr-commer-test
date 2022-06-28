@@ -122,7 +122,7 @@ export default function ItemProjectCard({
   description,
 }: ProjectI) {
   const router = useRouter();
-  console.log(id)
+
   // function currencyFormat(num) {
   //     if (!num) {
   //         return;

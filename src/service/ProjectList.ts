@@ -7,9 +7,9 @@ export interface ParamsListProjectI {
 }
 
 export interface BodyListProjectI {
-    projectId?: string,
-    location?: string,
-    projectTypeId?: string,
+    projectId?: any,
+    location?: any,
+    projectTypeId?: any,
     fromPrice?: 0,
     toPrice?: 0
 }

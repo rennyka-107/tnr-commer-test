@@ -51,7 +51,7 @@ const ChangePassword = () => {
 
     const updatePassword = async (params) => {
         const response = await changePassword(params);
-        console.log(response, 'response----------');
+        // console.log(response, 'response----------');
         alert(response?.responseMessage ?? response?.responseData)
     }
 

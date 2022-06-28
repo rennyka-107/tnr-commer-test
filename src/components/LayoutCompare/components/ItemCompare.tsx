@@ -84,8 +84,10 @@ const ItemCompare = ({ onClick, data }: Props) => {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
+              backgroundColor: data?.paymentStatus!==2 ? "#FFFF" : " #ea242a"
             }}
             onClick={onClick}
+            disabled={data?.paymentStatus!==2}
           >
             <Text16Styled color={"white"}>Mua Online</Text16Styled>
             <Box width={19} height={19}>

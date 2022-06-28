@@ -64,3 +64,10 @@ export {default as IconResetFilter} from "./IconResetFilter"
 
 export {default as PhoneIconPage} from './phonePage';
 export {default as UpIconPage} from './upPage';
+
+export {default as IconCanGoc} from './CanGoc';
+export {default as IconNumberRoom} from './NumberRoom';
+export {default as IconNumberRoomSleep} from './NumberRoomSleep';
+export {default as IconBedProductTable} from './IconBedProductTable';
+export {default as IconHuongProductTable} from './IconHuongProductTable';
+export {default as IconDienTichProductTable} from './IconDienTichProductTable';

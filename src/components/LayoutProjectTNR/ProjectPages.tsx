@@ -10,6 +10,7 @@ import React, { useEffect, useState } from "react";
 import Container from "@components/Container";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../store/store";
+import { useRouter } from "next/router";
 export interface ProjectInforI {
   id: string;
   name: string;
@@ -45,6 +46,8 @@ const ContainerProduct = styled.div`
 `;
 
 const ProjectPages = () => {
+  const router = useRouter();
+  const { type } = router.query;
   const {
     data,
     error,
@@ -56,13 +59,11 @@ const ProjectPages = () => {
     params,
   } = useProjectList();
 
-  const [titleData, setTitleData] = useState("");
+  const [titleData, setTitleData] = useState<string>("");
 
   const { listMenuBarType, listMenuBarProjectType } = useSelector(
     (state: RootState) => state.menubar
   );
-
-
 
   const onSubmit = (values: BodyListProjectI) => {
     changeBody(values);
@@ -72,7 +73,7 @@ const ProjectPages = () => {
       (item) => item.id === body?.projectTypeId
     );
     setTitleData(items?.name);
-  }, [body]);
+  }, [body, type, listMenuBarProjectType]);
 
   const fetchComponent = () => {
     return (
@@ -85,50 +86,48 @@ const ProjectPages = () => {
           </>
         ) : (
           <>
-            <Grid container spacing={4}>
-              {data?.map((el, index) => (
-                <Grid item xs={12} sm={12} md={6} lg={4} xl={3} key={index}>
-                  <ContainerProduct>
-                    <DynamicProductCard
-                      id={el.id}
-                      src={{ src: el?.avatar }}
-                      title={el?.name}
-                      subTitle={el?.location}
-                      ticketCard={el?.name}
-                      description={el?.description}
-                    />
-                  </ContainerProduct>
-                </Grid>
-              ))}
-            </Grid>
+            <Container
+              title={titleData ? titleData : "Tất cả"}
+              rightContent={<DynamicFilter onSubmit={onSubmit} body={body} />}
+            >
+              <Grid container spacing={4}>
+                {data?.map((el, index) => (
+                  <Grid item xs={12} sm={12} md={6} lg={4} xl={3} key={index}>
+                    <ContainerProduct>
+                      <DynamicProductCard
+                        id={el.id}
+                        src={{ src: el?.avatar }}
+                        title={el?.name}
+                        subTitle={el?.location}
+                        ticketCard={el?.name}
+                        description={el?.description}
+                      />
+                    </ContainerProduct>
+                  </Grid>
+                ))}
+              </Grid>
+              <Row customStyle={{ marginTop: 84, justifyContent: "center" }}>
+                <PaginationComponent
+                  count={totalPage}
+                  onChange={(event, page) => {
+                    changePageNumber(page - 1);
+                  }}
+                  page={params.pageNumber + 1}
+                />
+              </Row>
+            </Container>
           </>
         )}
       </>
     );
   };
   useEffect(() => {
-    fetchComponent();
-  }, [loading]);
+    if (typeof titleData === "string") {
+      fetchComponent();
+    }
+  }, [loading, titleData]);
 
-  return (
-    <FlexContainer>
-      <Container
-        title={titleData ? titleData : "Tất cả"}
-        rightContent={<DynamicFilter onSubmit={onSubmit} body={body} />}
-      >
-        <>{fetchComponent()}</>
-        <Row customStyle={{ marginTop: 84, justifyContent: "center" }}>
-          <PaginationComponent
-            count={totalPage}
-            onChange={(event, page) => {
-              changePageNumber(page - 1);
-            }}
-            page={params.pageNumber + 1}
-          />
-        </Row>
-      </Container>
-    </FlexContainer>
-  );
+  return <FlexContainer>{fetchComponent()}</FlexContainer>;
 };
 
 export default ProjectPages;

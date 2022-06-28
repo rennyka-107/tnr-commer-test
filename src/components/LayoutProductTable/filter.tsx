@@ -32,7 +32,9 @@ const Filter = (props: PropsI) => {
   const { listMenuBarProjectType, listMenuBarType } = useSelector(
     (state: RootState) => state.menubar
   );
-
+  const menuBarProjectType = listMenuBarType?.filter(
+    (item) => item.id !== "1"
+  );
   const formControler = useForm<FormI>({
     mode: "onChange",
     resolver: yupResolver(yup.object().shape({})),
@@ -92,7 +94,7 @@ const Filter = (props: PropsI) => {
             required
             setValue={formControler.setValue}
             isClear
-            dataSelect={listMenuBarType?.map((el) => {
+            dataSelect={menuBarProjectType?.map((el) => {
               return { label: el?.name, value: el?.id };
             })??[]}
             onClick={() => {
@@ -137,7 +139,6 @@ const Filter = (props: PropsI) => {
             control={control}
             fullWidth
             inputProps={InputProps}
-            required
             setValue={formControler.setValue}
             isClear
             dataSelect={statusOptions}

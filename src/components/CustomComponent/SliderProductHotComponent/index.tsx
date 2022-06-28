@@ -76,6 +76,7 @@ export default function SliderProductHotComponent() {
                 priceSub={item.unitPrice}
                 ticketCard={item.category}
                 onClick={() => addToCart(item.id)}
+                buyDisabled={item?.paymentStatus!==2}
               />
             </CardContainer>
           </SwiperSlide>

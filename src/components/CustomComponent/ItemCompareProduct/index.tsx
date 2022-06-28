@@ -18,6 +18,7 @@ type Props = {
   title?: string;
   ticketCard?: string;
   onClick?: MouseEventHandler<HTMLButtonElement>;
+  disabledBuy?:boolean;
 };
 
 const WrapperContent = styled.div`
@@ -98,7 +99,8 @@ const ItemCompareProduct = ({
   src,
   title,
   onClick,
-  ticketCard
+  ticketCard,
+  disabledBuy,
 }: Props) => {
 
   return (
@@ -128,6 +130,10 @@ const ItemCompareProduct = ({
         <CardActions>
           <ButtonStyled
             onClick={onClick}
+            style={{
+              backgroundColor: !!disabledBuy ? "#FFFF" : " #ea242a"
+            }}
+            disabled={!!disabledBuy}
           >
             Mua Online&nbsp;
             <IconMuaOnline />

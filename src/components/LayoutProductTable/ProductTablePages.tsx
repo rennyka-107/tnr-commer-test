@@ -17,6 +17,14 @@ import { useEffect, useState } from "react";
 import Filter from "./filter";
 import { useRouter } from "next/router";
 import axios from "axios";
+import {
+  IconBedProductTable,
+  IconCanGoc,
+  IconDienTichProductTable,
+  IconHuongProductTable,
+  IconNumberRoom,
+  IconNumberRoomSleep,
+} from "@components/Icons";
 
 type DetailRowI = {
   countRemaining: number;
@@ -32,7 +40,7 @@ type ProductionRowI = {
   numBath: number;
   numBed: number;
   price: string;
-  paymentStatus: 2| 3 | 4 | null; // 2 mở bán (còn hàng), null sắp mở bán, 4 ngừng bán (đã bán), 3 đang chờ thanh toán
+  paymentStatus: 2 | 3 | 4 | 99; // 2 mở bán (còn hàng), null sắp mở bán, 4 ngừng bán (đã bán), 3 đang chờ thanh toán
   productionId: string;
   productionName: string;
   projectLevelDetailId: string;
@@ -64,13 +72,25 @@ const TextRemainCount = styled.span`
   font-size: 28px;
   line-height: 36.4px;
 `;
-const TextTable = styled.span`
-  // color:#0000;
+const TextRemainCountZero = styled.span`
+  color: #c7c9d9;
   font-family: Roboto;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 36.4px;
+`;
+const TextTable = styled.span`
+  font-family: "Roboto";
   font-style: normal;
   font-weight: 500;
   font-size: 14px;
-  line-height: 18px;
+  line-height: 130%;
+  /* or 18px */
+
+  text-align: center;
+
+  color: #000000;
 `;
 const LabelContainer = styled.div`
   width: 150px;
@@ -84,6 +104,20 @@ const IconStyled = styled.span`
   // background-color:red;
   width: 70px;
 `;
+const PriceStyled = styled.span`
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 130%;
+  /* or 18px */
+
+  text-align: center;
+
+  /* System/Success */
+
+  color: #06c270;
+`;
 
 const ProductTablePages = () => {
   const [body, setBody] = useState<BodyRequest>();
@@ -94,8 +128,9 @@ const ProductTablePages = () => {
   const router = useRouter();
   const getProduct = async (body: BodyRequest, cancelToken: any) => {
     // const newValues: BodyRequest = { ...body, saleProductStatus: (body.saleProductStatus as string[]).join(',') }
-    const response = await getListProductTable(body,cancelToken);
+    const response = await getListProductTable(body, cancelToken);
     setData(response?.responseData ?? []);
+	console.log(response)
   };
 
   useEffect(() => {
@@ -108,6 +143,14 @@ const ProductTablePages = () => {
     };
   }, [body]);
 
+  function formatCurrency(x) {
+    const itemFormat = Number(x).toLocaleString("vi", {
+      style: "currency",
+      currency: "VND",
+    });
+    return itemFormat.substring(0, 4);
+  }
+
   const renderAction = (item: ProductionRowI) => {
     switch (item.paymentStatus) {
       case 4:
@@ -116,7 +159,7 @@ const ProductTablePages = () => {
             <IconStopSale />
           </IconStyled>
         );
-      case null:
+      case 99:
         return (
           <IconStyled>
             <IconCommingSale />
@@ -139,7 +182,7 @@ const ProductTablePages = () => {
                   width: "100%",
                 }}
               >
-                {item.price}
+                <PriceStyled>{formatCurrency(item.price) + "Tỷ"}</PriceStyled>
               </div>
             </>
           </IconStyled>
@@ -174,7 +217,18 @@ const ProductTablePages = () => {
             <TableHead style={{ backgroundColor: "#1B3459", color: "#FFFF" }}>
               <TableRow>
                 <TableCellStyled align="left">
-                  <LabelContainer>Thứ tự căn</LabelContainer>
+                  <LabelContainer>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                      }}
+                    >
+                      {" "}
+                      <IconNumberRoom /> &nbsp; Thứ tự căn
+                    </div>
+                  </LabelContainer>
                 </TableCellStyled>
                 {data?.lstProductionRow?.map((el, index) => (
                   <TableCellContent align="center" key={index}>
@@ -183,7 +237,17 @@ const ProductTablePages = () => {
                 ))}
               </TableRow>
               <TableRow>
-                <TableCellStyled align="left">Số phòng ngủ</TableCellStyled>
+                <TableCellStyled align="left">
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    <IconNumberRoomSleep /> &nbsp; Số phòng ngủ
+                  </div>
+                </TableCellStyled>
                 {data?.lstProductionRow?.map((el, index) => (
                   <TableCellContent align="center" key={index}>
                     {el?.numBed ?? "no bed"}
@@ -191,7 +255,17 @@ const ProductTablePages = () => {
                 ))}
               </TableRow>
               <TableRow>
-                <TableCellStyled align="left">Số phòng vệ sinh</TableCellStyled>
+                <TableCellStyled align="left">
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    <IconBedProductTable /> &nbsp; Số phòng vệ sinh
+                  </div>
+                </TableCellStyled>
                 {data?.lstProductionRow?.map((el, index) => (
                   <TableCellContent align="center" key={index}>
                     {el?.numBath ?? 0}
@@ -199,7 +273,17 @@ const ProductTablePages = () => {
                 ))}
               </TableRow>
               <TableRow>
-                <TableCellStyled align="left">Hướng logia</TableCellStyled>
+                <TableCellStyled align="left">
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    <IconHuongProductTable /> &nbsp; Hướng logia
+                  </div>
+                </TableCellStyled>
                 {data?.lstProductionRow?.map((el, index) => (
                   <TableCellContent align="center" key={index}>
                     {el?.doorDirection ?? "no direction"}
@@ -207,7 +291,35 @@ const ProductTablePages = () => {
                 ))}
               </TableRow>
               <TableRow>
-                <TableCellStyled align="left">Căn góc</TableCellStyled>
+                <TableCellStyled align="left">
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    <IconDienTichProductTable /> &nbsp; Diện tích (m2)
+                  </div>
+                </TableCellStyled>
+                {data?.lstProductionRow?.map((el, index) => (
+                  <TableCellContent align="center" key={index}>
+                    {el.landArea ? <Check /> : ""}
+                  </TableCellContent>
+                ))}
+              </TableRow>
+              <TableRow>
+                <TableCellStyled align="left">
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    <IconCanGoc /> &nbsp; Căn góc
+                  </div>
+                </TableCellStyled>
                 {data?.lstProductionRow?.map((el, index) => (
                   <TableCellContent align="center" key={index}>
                     {el.isCornerApartment ? <Check /> : ""}
@@ -233,7 +345,13 @@ const ProductTablePages = () => {
                     </div>
                     <div style={{ textAlign: "center", flex: 1 }}>
                       <div>
-                        <TextRemainCount>{el.countRemaining}</TextRemainCount>
+                        {el.countRemaining === 0 ? (
+                          <TextRemainCountZero>
+                            {el.countRemaining}
+                          </TextRemainCountZero>
+                        ) : (
+                          <TextRemainCount>{el.countRemaining}</TextRemainCount>
+                        )}
                       </div>
                       <div>Còn lại</div>
                     </div>
@@ -241,7 +359,11 @@ const ProductTablePages = () => {
                 </TableCell>
                 {data?.lstProductionRow?.map((element, index) => (
                   <CellContent align="center" key={index}>
-                    {element.lotCode == el.lotCode ? renderAction(element) : <IconStyled/>}
+                    {element.lotCode == el.lotCode ? (
+                      renderAction(element)
+                    ) : (
+                      <IconStyled />
+                    )}
                   </CellContent>
                 ))}
               </TableRow>
