@@ -147,8 +147,6 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
     query: { transactionCode },
   } = useRouter();
 
-  console.log(format(parse("29-05-2022", "dd-MM-yyyy", new Date()), "yyyy-MM-dd"), "dob")
-
   async function getInformationUser() {
     try {
       const res = await apiGetProfileInformation();
@@ -293,14 +291,16 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
       if (info.idNumber === idNumber || isEmpty(info.idNumber)) {
         return {
           fullname,
-          dob: format(parse(dob, "yyyy-MM-dd", new Date()), "dd-MM-yyyy"),
+          // dob: format(parse(dob, "yyyy-MM-dd", new Date()), "dd-MM-yyyy"),
+          dob,
           phoneNumber,
           email,
           idNumber,
-          issueDate: format(
-            parse(issueDate, "yyyy-MM-dd", new Date()),
-            "dd-MM-yyyy"
-          ),
+          // issueDate: format(
+          //   parse(issueDate, "yyyy-MM-dd", new Date()),
+          //   "dd-MM-yyyy"
+          // ),
+          issueDate,
           issuePlace,
           permanentAddress,
           contactAddress,
@@ -738,9 +738,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
               </RowStyled>
               <ButtonAction
                 disabled={
-                  formInfo.open ||
-                  !acceptPolicy ||
-                  (data.paymentStatus && data.paymentStatus !== 0)
+                  formInfo.open || !acceptPolicy || data.paymentStatus !== 0
                 }
                 margin={"12px auto"}
                 onClick={handleSubmit((values) => handleOnSubmit(values, 1))}
