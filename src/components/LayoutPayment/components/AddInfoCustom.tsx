@@ -20,6 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../store/store";
 import isEmpty from "lodash.isempty";
 import { setData } from "../../../../store/paymentSlice";
+import ControllerReactDatePicker from "@components/Form/ControllerReactDatePicker";
 
 type Props = {
   onClose: Function;
@@ -128,6 +129,7 @@ const AddInfoCustom = (props: Props) => {
                     }))}
                     name={"customerTypeId"}
                     labelColor={"#1b3459"}
+                    required
                   />
                 </FormGroup>
               </Grid>
@@ -150,6 +152,7 @@ const AddInfoCustom = (props: Props) => {
                     ]}
                     name={"vocativeId"}
                     labelColor={"#1b3459"}
+                    required
                   />
                 </FormGroup>
               </Grid>
@@ -161,16 +164,19 @@ const AddInfoCustom = (props: Props) => {
                     control={control}
                     variant={"outlined"}
                     name={"fullname"}
+                    required
                   />
                 </FormGroup>
               </Grid>
               <Grid item xs={6}>
                 <FormGroup>
-                  <ControllerDatePicker
+                  <ControllerReactDatePicker
                     label={"Ngày sinh"}
                     control={control}
                     variant={"outlined"}
                     name={"dob"}
+                    required
+                    maxDate={new Date()}
                   />
                 </FormGroup>
               </Grid>
@@ -182,6 +188,7 @@ const AddInfoCustom = (props: Props) => {
                     control={control}
                     variant={"outlined"}
                     name={"phoneNumber"}
+                    required
                   />
                 </FormGroup>
               </Grid>
@@ -192,6 +199,7 @@ const AddInfoCustom = (props: Props) => {
                     control={control}
                     variant={"outlined"}
                     name={"email"}
+                    required
                   />
                 </FormGroup>
               </Grid>
@@ -210,6 +218,7 @@ const AddInfoCustom = (props: Props) => {
                     control={control}
                     variant={"outlined"}
                     name={"idNumber"}
+                    required
                   />
                 </FormGroup>
               </Grid>
@@ -220,17 +229,20 @@ const AddInfoCustom = (props: Props) => {
                     control={control}
                     variant={"outlined"}
                     name={"issuePlace"}
+                    required
                   />
                 </FormGroup>
               </Grid>
 
               <Grid item xs={6}>
                 <FormGroup>
-                  <ControllerDatePicker
+                  <ControllerReactDatePicker
                     label={"Ngày cấp"}
                     control={control}
                     variant={"outlined"}
                     name={"issueDate"}
+                    required
+                    maxDate={new Date()}
                   />
                 </FormGroup>
               </Grid>
@@ -243,6 +255,7 @@ const AddInfoCustom = (props: Props) => {
                     variant={"outlined"}
                     name={"permanentAddress"}
                     fullWidth
+                    required
                   />
                 </FormGroup>
               </Grid>
