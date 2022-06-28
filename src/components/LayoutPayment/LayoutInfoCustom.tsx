@@ -14,6 +14,7 @@ import {
   IconButton,
   CircularProgress,
   Backdrop,
+  Typography,
 } from "@mui/material";
 import FormGroup from "@components/Form/FormGroup";
 import Link from "next/link";
@@ -62,15 +63,17 @@ import useAddToCart from "hooks/useAddToCart";
 import useNotification from "hooks/useNotification";
 import useAuth from "hooks/useAuth";
 import ControllerReactDatePicker from "@components/Form/ControllerReactDatePicker";
+import isEqual from "lodash.isequal";
+import IconWarning from "@components/Icons/IconWarning";
 
 type Props = {
   setScopeRender: Dispatch<SetStateAction<string>>;
 };
 
 const BoxInfoUserStyled = styled(Box)({
+  background: "#f3f4f6",
   borderRadius: 18,
   padding: "0px 20px",
-  background: "#f3f4f6",
   width: "100%",
   maxWidth: "317px",
   height: 100,
@@ -151,6 +154,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
   const {
     query: { transactionCode },
   } = useRouter();
+  const [initialValue, setInitialValue] = useState<any>(null);
 
   async function getInformationUser() {
     try {
@@ -166,32 +170,39 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
           idReceivePlace: issuePlace,
           address: permanentAddress,
         } = res.responseData;
-
-        dispatch(
-          setData({
-            ...data,
-            paymentIdentityInfos: [
-              {
-                fullname,
-                dob: !isEmpty(dob) ? dob : "",
-                phoneNumber,
-                email,
-                idNumber,
-                issueDate: !isEmpty(issueDate) ? issueDate : "",
-                issuePlace,
-                permanentAddress,
-                contactAddress: "",
-                province: "",
-                district: "",
-              },
-            ],
-          })
-        );
+        if (isEmpty(transactionCode)) {
+          dispatch(
+            setData({
+              ...data,
+              paymentIdentityInfos: [
+                {
+                  fullname,
+                  dob,
+                  phoneNumber,
+                  email,
+                  idNumber,
+                  issueDate,
+                  issuePlace,
+                  permanentAddress,
+                  contactAddress: "",
+                  province: "",
+                  district: "",
+                },
+              ],
+            })
+          );
+        }
       }
     } catch (err) {
       console.log(err);
     }
   }
+
+  console.log(
+    initialValue?.paymentIdentityInfos,
+    data.paymentIdentityInfos,
+    "so sanh"
+  );
 
   useEffect(() => {
     if (!isEmpty(transactionCode)) {
@@ -206,6 +217,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
       const res = await apiGetPaymentInformation(transactionCode as string);
       if (!isEmpty(res.responseData)) {
         dispatch(setData(res.responseData));
+        setInitialValue(res.responseData);
       } else {
         notification({
           severity: "error",
@@ -226,11 +238,46 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
   useEffect(() => {
     data.paymentIdentityInfos.forEach((info) => {
       if (isEmpty(info.vocativeId) && isEmpty(info.customerTypeId)) {
-        reset({
-          ...info,
-          dob: !isEmpty(info.dob) ? info.dob : "",
-          issueDate: !isEmpty(info.issueDate) ? info.issueDate : "",
-        });
+        if (
+          !isEmpty(watch("idNumber")) &&
+          !isEqual(
+            {
+              fullname: watch("fullname"),
+              dob: watch("dob"),
+              phoneNumber: watch("phoneNumber"),
+              email: watch("email"),
+              idNumber: watch("idNumber"),
+              issueDate: watch("issueDate"),
+              issuePlace: watch("issuePlace"),
+              permanentAddress: watch("permanentAddress"),
+              contactAddress: watch("contactAddress"),
+              province: watch("province"),
+              district: watch("district"),
+            },
+            {
+              fullname: info.fullname,
+              phoneNumber: info.phoneNumber,
+              email: info.email,
+              idNumber: info.idNumber,
+              issuePlace: info.issuePlace,
+              permanentAddress: info.permanentAddress,
+              contactAddress: info.contactAddress,
+              province: info.province,
+              district: info.district,
+              dob: info.dob,
+              issueDate: info.issueDate,
+            }
+          )
+        ) {
+          reset({
+            ...info,
+            ...watch(),
+          });
+        } else {
+          reset({
+            ...info,
+          });
+        }
       }
     });
   }, [data]);
@@ -259,9 +306,6 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
 
   useEffect(() => {
     getCustomerTypes();
-  }, []);
-
-  useEffect(() => {
     fetchPaymentMethod();
   }, []);
 
@@ -407,51 +451,37 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
       })
     );
   }
-
   function renderListCustomer() {
     const arrayInfos = [...data.paymentIdentityInfos];
-    const mainCustomer = arrayInfos.find(
-      (info) => isEmpty(info.vocativeId) && isEmpty(info.customerTypeId)
+    let paymentIdentityInfos: any[] = [];
+    paymentIdentityInfos = arrayInfos.filter(
+      (info) => !isEmpty(info.vocativeId) && !isEmpty(info.customerTypeId)
     );
-    let paymentIdentityInfos = [];
-    if (!isEmpty(transactionCode)) {
-      const infosExceptMainCustomer = arrayInfos.filter(
-        (info) => !isEmpty(info.vocativeId) && !isEmpty(info.customerTypeId)
-      );
-      infosExceptMainCustomer.unshift(mainCustomer);
-      paymentIdentityInfos = [...infosExceptMainCustomer];
-    } else {
-      paymentIdentityInfos = arrayInfos.filter(
-        (info) => !isEmpty(info.vocativeId) && !isEmpty(info.customerTypeId)
-      );
-    }
     const numberRow = paymentIdentityInfos.length / 2;
     const arrayElements = [];
     if (numberRow > 0) {
       for (let i = 0; i < numberRow; i++) {
         const ele1 = paymentIdentityInfos.pop();
         const ele2 =
-          paymentIdentityInfos.length >= 2 ? paymentIdentityInfos.pop() : null;
+          paymentIdentityInfos.length >= 1 ? paymentIdentityInfos.pop() : null;
         arrayElements.push(
           <RowStyled key={ele1.idNumber + "1023"}>
-            {ele1.idNumber == !watch("idNumber") && (
-              <BoxInfoUserStyled style={{ cursor: "pointer" }}>
-                <RowStyled>
-                  <Text18Styled
-                    onClick={() => {
-                      setFormInfo({ open: true, idNumber: ele1.idNumber });
-                    }}
-                    maxWidth={133}
-                    color={"black"}
-                  >
-                    {ele1.fullname}
-                  </Text18Styled>
-                  <IconButton onClick={() => removeCustomer(ele1.idNumber)}>
-                    <IconPlusCircle style={{ transform: "rotate(45deg)" }} />
-                  </IconButton>
-                </RowStyled>
-              </BoxInfoUserStyled>
-            )}
+            <BoxInfoUserStyled style={{ cursor: "pointer" }}>
+              <RowStyled>
+                <Text18Styled
+                  onClick={() => {
+                    setFormInfo({ open: true, idNumber: ele1.idNumber });
+                  }}
+                  maxWidth={133}
+                  color={"black"}
+                >
+                  {ele1.fullname}
+                </Text18Styled>
+                <IconButton onClick={() => removeCustomer(ele1.idNumber)}>
+                  <IconPlusCircle style={{ transform: "rotate(45deg)" }} />
+                </IconButton>
+              </RowStyled>
+            </BoxInfoUserStyled>
             {!isEmpty(ele2) && (
               <BoxInfoUserStyled style={{ cursor: "pointer" }}>
                 <RowStyled>
@@ -479,7 +509,6 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
     }
     return <></>;
   }
-
   return (
     <Container title={"Thông tin"}>
       {/* {!formInfo && (
@@ -512,8 +541,53 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
               <>
                 <WrapperBoxBorderStyled padding={"20px 30px 10px"}>
                   <Title28Styled>Thông tin bên mua</Title28Styled>
+                  {!isEmpty(transactionCode) && data.paymentStatus !== 0 && (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        border: "1px solid #C7C9D9",
+                        p: 2,
+                        borderRadius: "8px",
+                        mt: 1,
+                      }}
+                    >
+                      <IconWarning />
+                      <Box>
+                        <Typography
+                          sx={{
+                            fontWeight: 500,
+                            fontSize: "14px",
+                            lineHeight: "16.41px",
+                            color: "#1B3459",
+                          }}
+                        >
+                          Thông tin đăng ký tài khoản
+                        </Typography>
+                        <Typography
+                          sx={{
+                            fontWeight: 400,
+                            fontSize: "12px",
+                            lineHeight: "14.84px",
+                            color: "#0E1D34",
+                          }}
+                        >
+                          Thông tin người mua đầu tiên dưới đây sẽ được sử dụng
+                          để đăng ký tài khoản sau khi đặt cọc thành công
+                        </Typography>
+                      </Box>
+                    </Box>
+                  )}
                   <RowStyled>
-                    <BoxInfoUserStyled>
+                    <BoxInfoUserStyled
+                      sx={{
+                        background:
+                          !isEmpty(transactionCode) && data.paymentStatus !== 0
+                            ? "#FFCC00 !important"
+                            : "#f3f4f6",
+                      }}
+                    >
                       <ColStyled jContent={"center"}>
                         <Title22Styled style={{ marginBottom: 8 }}>
                           {!isEmpty(transactionCode)
@@ -548,64 +622,78 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                   {renderListCustomer()}
                   <FormControl fullWidth style={{ margin: "25px 0px" }}>
                     <Grid container rowSpacing={"20px"} columnSpacing={"37px"}>
-                      <Grid item xs={6}>
-                        <FormGroup>
-                          <ControllerTextField
-                            label={"Họ và tên"}
-                            control={control}
-                            variant={"outlined"}
-                            name={"fullname"}
-                            required
-                          />
-                        </FormGroup>
-                      </Grid>
-                      <Grid item xs={6}>
-                        <FormGroup>
-                          <ControllerReactDatePicker
-                            label={"Ngày sinh"}
-                            control={control}
-                            name={"dob"}
-                            required
-                            maxDate={new Date()}
-                          />
-                        </FormGroup>
-                      </Grid>
+                      {(isEmpty(transactionCode) ||
+                        data.paymentStatus === 0) && (
+                        <Grid item xs={6}>
+                          <FormGroup>
+                            <ControllerTextField
+                              label={"Họ và tên"}
+                              control={control}
+                              variant={"outlined"}
+                              name={"fullname"}
+                              required
+                            />
+                          </FormGroup>
+                        </Grid>
+                      )}
 
-                      <Grid item xs={6}>
-                        <FormGroup>
-                          <ControllerTextField
-                            label={"Số điện thoại"}
-                            control={control}
-                            variant={"outlined"}
-                            name={"phoneNumber"}
-                            required
-                          />
-                        </FormGroup>
-                      </Grid>
-                      <Grid item xs={6}>
-                        <FormGroup>
-                          <ControllerTextField
-                            label={"Email"}
-                            control={control}
-                            variant={"outlined"}
-                            name={"email"}
-                            required
-                          />
-                        </FormGroup>
-                      </Grid>
+                      {(isEmpty(transactionCode) ||
+                        data.paymentStatus === 0) && (
+                        <Grid item xs={6}>
+                          <FormGroup>
+                            <ControllerReactDatePicker
+                              label={"Ngày sinh"}
+                              control={control}
+                              name={"dob"}
+                              required
+                              maxDate={new Date()}
+                            />
+                          </FormGroup>
+                        </Grid>
+                      )}
 
-                      <Grid item xs={12}>
-                        <RowStyled aItems={"baseline"} width={670}>
-                          <Title20Styled
-                            // mw={175}
-                            style={{ whiteSpace: "nowrap" }}
-                          >
-                            Thông tin giấy tờ
-                          </Title20Styled>
-                          <LinedStyled mw={500} />
-                        </RowStyled>
-                      </Grid>
-
+                      {(isEmpty(transactionCode) ||
+                        data.paymentStatus === 0) && (
+                        <Grid item xs={6}>
+                          <FormGroup>
+                            <ControllerTextField
+                              label={"Số điện thoại"}
+                              control={control}
+                              variant={"outlined"}
+                              name={"phoneNumber"}
+                              required
+                            />
+                          </FormGroup>
+                        </Grid>
+                      )}
+                      {(isEmpty(transactionCode) ||
+                        data.paymentStatus === 0) && (
+                        <Grid item xs={6}>
+                          <FormGroup>
+                            <ControllerTextField
+                              label={"Email"}
+                              control={control}
+                              variant={"outlined"}
+                              name={"email"}
+                              required
+                            />
+                          </FormGroup>
+                        </Grid>
+                      )}
+                      {(isEmpty(transactionCode) ||
+                        data.paymentStatus === 0) && (
+                        <Grid item xs={12}>
+                          <RowStyled aItems={"baseline"} width={670}>
+                            <Title20Styled
+                              // mw={175}
+                              style={{ whiteSpace: "nowrap" }}
+                            >
+                              Thông tin giấy tờ
+                            </Title20Styled>
+                            <LinedStyled mw={500} />
+                          </RowStyled>
+                        </Grid>
+                      )}
                       <Grid item xs={12}>
                         <FormGroup>
                           <ControllerTextField
@@ -615,10 +703,27 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                             name={"idNumber"}
                             required
                             width={317}
+                            disabled={
+                              !isEmpty(transactionCode) &&
+                              data.paymentStatus !== 0
+                            }
                           />
                         </FormGroup>
                       </Grid>
-
+                      {!isEmpty(transactionCode) && data.paymentStatus !== 0 && (
+                        <Grid item xs={6}>
+                          <FormGroup>
+                            <ControllerTextField
+                              label={"Email"}
+                              control={control}
+                              variant={"outlined"}
+                              name={"email"}
+                              required
+                              disabled
+                            />
+                          </FormGroup>
+                        </Grid>
+                      )}
                       <Grid item xs={6}>
                         <FormGroup>
                           <ControllerTextField
@@ -627,6 +732,10 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                             variant={"outlined"}
                             name={"issuePlace"}
                             required
+                            disabled={
+                              !isEmpty(transactionCode) &&
+                              data.paymentStatus !== 0
+                            }
                           />
                         </FormGroup>
                       </Grid>
@@ -639,6 +748,10 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                             name={"issueDate"}
                             required
                             maxDate={new Date()}
+                            disabled={
+                              !isEmpty(transactionCode) &&
+                              data.paymentStatus !== 0
+                            }
                           />
                         </FormGroup>
                       </Grid>
@@ -651,6 +764,10 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                             name={"permanentAddress"}
                             required
                             fullWidth
+                            disabled={
+                              !isEmpty(transactionCode) &&
+                              data.paymentStatus !== 0
+                            }
                           />
                         </FormGroup>
                       </Grid>
@@ -663,6 +780,10 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                             variant={"outlined"}
                             name={"contactAddress"}
                             fullWidth
+                            disabled={
+                              !isEmpty(transactionCode) &&
+                              data.paymentStatus !== 0
+                            }
                           />
                         </FormGroup>
                       </Grid>
@@ -674,6 +795,10 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                             control={control}
                             variant={"outlined"}
                             name={"province"}
+                            disabled={
+                              !isEmpty(transactionCode) &&
+                              data.paymentStatus !== 0
+                            }
                           />
                         </FormGroup>
                       </Grid>
@@ -684,6 +809,10 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                             control={control}
                             variant={"outlined"}
                             name={"district"}
+                            disabled={
+                              !isEmpty(transactionCode) &&
+                              data.paymentStatus !== 0
+                            }
                           />
                         </FormGroup>
                       </Grid>
@@ -739,20 +868,38 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                   </span>
                 </Text14Styled>
               </RowStyled>
-              <ButtonAction
-                disabled={
-                  formInfo.open || !acceptPolicy || data.paymentStatus !== 0
-                }
-                margin={"12px auto"}
-                onClick={handleSubmit((values) => handleOnSubmit(values, 1))}
-              >
-                <Text18Styled color={"#fff"}>Tạo phiếu thanh toán</Text18Styled>
-              </ButtonAction>
+              {(isEmpty(transactionCode) || data.paymentStatus === 0) && (
+                <ButtonAction
+                  disabled={
+                    formInfo.open || !acceptPolicy || data.paymentStatus !== 0
+                  }
+                  margin={"12px auto"}
+                  onClick={handleSubmit((values) => handleOnSubmit(values, 1))}
+                >
+                  <Text18Styled color={"#fff"}>
+                    Tạo phiếu thanh toán
+                  </Text18Styled>
+                </ButtonAction>
+              )}
               {!formInfo.open && (
                 <ButtonStyled
                   type="submit"
                   bg={"white"}
                   border={"1px solid #c7c9d9"}
+                  disabled={
+                    isEqual(
+                      initialValue?.paymentIdentityInfos,
+                      data.paymentIdentityInfos
+                    ) &&
+                    isEqual(
+                      initialValue.paymentIdentityInfos.find(
+                        (info) =>
+                          isEmpty(info.vocativeId) &&
+                          isEmpty(info.customerTypeId)
+                      ),
+                      { ...watch() }
+                    )
+                  }
                 >
                   <Text18Styled>Lưu thông tin</Text18Styled>
                 </ButtonStyled>

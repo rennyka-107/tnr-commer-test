@@ -1,24 +1,26 @@
-
 import SearchInput from "@components/CustomComponent/SearchInput";
 import styled from "@emotion/styled";
 import { Typography } from "@mui/material";
+import Image from "next/image";
 import ModalAdvanSearch from "./ModalAdvanSearch";
-
+import Banner from "../../../../public/images/GMC.jpeg";
 const WrapBanner = styled.div`
-  width: auto;
-  height: 644px;
+position: absolute;
+width: 100%;
+height: 644px;
   background: linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0) 0%,
-      rgba(2, 14, 22, 0.486) 43.23%,
-      rgba(3, 6, 9, 0.729) 100%
-    ),
-    url("images/GMC.jpeg");
+    180deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(2, 14, 22, 0.486) 43.23%,
+    rgba(3, 6, 9, 0.729) 100%
+  );
+
   background-size: cover;
   display: flex;
   flex-direction: column;
   justify-content: center;
 `;
+
 const ContainerBody = styled.div`
   display: flex;
   flex-direction: column;
@@ -41,28 +43,28 @@ const TextBanner = styled(Typography)`
 `;
 
 const BannerIndex = () => {
-
-
-
   return (
-    <WrapBanner>
-      <ContainerBody>
-        <div style={{ marginBottom: 20 }}>
-          <TextBanner>SỐNG XANH THỊNH VƯỢNG</TextBanner>
-          <TextBanner>ĐẤT VÀNG PHỒN VINH</TextBanner>
-        </div>
+    <div style={{ width: "100%", height: 644, position: 'relative' }}>
+      <Image src={Banner} width={1200} height={644} layout="fill" objectFit="cover" />
+      <WrapBanner>
+        <ContainerBody>
+          <div style={{ marginBottom: 20 }}>
+            <TextBanner>SỐNG XANH THỊNH VƯỢNG</TextBanner>
+            <TextBanner>ĐẤT VÀNG PHỒN VINH</TextBanner>
+          </div>
 
-        <SearchInput
-          placholder="Nhập tên dự án, địa chỉ hoặc thành phố"
-          width={723}
-          height={60}
-        />
+          <SearchInput
+            placholder="Nhập tên dự án, địa chỉ hoặc thành phố"
+            width={723}
+            height={60}
+          />
 
-        <div style={{ marginTop: 19 }}>
-          <ModalAdvanSearch />
-        </div>
-      </ContainerBody>
-    </WrapBanner>
+          <div style={{ marginTop: 19 }}>
+            <ModalAdvanSearch />
+          </div>
+        </ContainerBody>
+      </WrapBanner>
+    </div>
   );
 };
 export default BannerIndex;

@@ -21,9 +21,9 @@ const Footer = () => {
   useEffect(() => {
     (async () => {
       try {
-        const responseList: any = await getListMenuBarProjectTypeApi();
+        // const responseList: any = await getListMenuBarProjectTypeApi();
 		const response = await getListUserManualApi();
-        dispatch(getListMenuBarProjectType(responseList.responseData));
+        // dispatch(getListMenuBarProjectType(responseList.responseData));
 		dispatch(getListUserManual(response.responseData));
       } catch (error) {
         console.log(error);

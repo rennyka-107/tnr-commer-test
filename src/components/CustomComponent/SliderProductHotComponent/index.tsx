@@ -2,7 +2,6 @@ import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Autoplay, Pagination, Navigation } from "swiper";
 import styled from "@emotion/styled";
-import Product1 from "../../../../public/images/product1.png";
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/autoplay";
@@ -11,7 +10,6 @@ import {
   IconCarsouelRightProduct,
 } from "@components/Icons";
 import ItemProductCard from "../ItemProductCard";
-import { TBOUTStanding } from "interface/product";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../store/store";
 import useAddToCart from "hooks/useAddToCart";

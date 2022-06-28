@@ -1,12 +1,8 @@
 import styled from "@emotion/styled";
-
 import { Box } from "@mui/system";
 import SelectInputComponent from "@components/CustomComponent/SelectInputComponent";
 import { Button, SelectChangeEvent, Typography } from "@mui/material";
-import { IconSearchAdvan } from "@components/Icons";
-import { TBOUTStanding } from "interface/product";
-import { useScroll } from "hooks/useScroll";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import dynamic from "next/dynamic";
 import SliderComponent from "@components/CustomComponent/SliderComponent";
 import SliderSearchKhoangGia from "@components/CustomComponent/SliderComponent/SliderSearchKhoangGia";
@@ -29,10 +25,6 @@ const DynamicOnlineSupportSale = dynamic(() => import("./OnlineSupportSale"), {
   loading: () => <p>...</p>,
   ssr: false,
 });
-const DynamicSliderComponent = dynamic(
-  () => import("@components/CustomComponent/SliderComponent"),
-  { loading: () => <p>...</p>, ssr: false }
-);
 const DynamicSlider3dShowBottom = dynamic(
   () => import("./Slider3dShowBottom"),
   { loading: () => <p>...</p>, ssr: false }

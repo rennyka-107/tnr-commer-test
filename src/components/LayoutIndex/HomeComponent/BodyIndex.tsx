@@ -1,6 +1,6 @@
 import FlexContainer from "@components/CustomComponent/FlexContainer";
 import styled from "@emotion/styled";
-import {  Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { TBOUTStanding } from "interface/product";
 import _ from "lodash";
 import dynamic from "next/dynamic";
@@ -106,10 +106,10 @@ export default function BodyIndex() {
       page: 0,
       size: 10,
     };
-	
+
     const searchList = {
       projectId: "",
-	  provinceId: "",
+      provinceId: "",
       projectTypeId: projectTypeId,
     };
     // try {
@@ -117,7 +117,7 @@ export default function BodyIndex() {
     //   dispatch(getListProduct(response.responseData));
 
     //   if (response.responseCode === "00") {
-        router.replace(`/productTNR?provinceId=&&projectTypeId=${projectTypeId}`);
+    router.replace(`/productTNR?provinceId=&&projectTypeId=${projectTypeId}`);
     //   }
     // } catch (error) {
     //   console.log(error);
@@ -180,28 +180,6 @@ export default function BodyIndex() {
           >
             {productTopByOutStanding.length > 0 ? (
               <>
-                {/* {productTopByOutStanding.map((item, index) => (
-                  <ItemProductCard
-                    key={index}
-                    id={item.id}
-                    src={Product1}
-                    title={item.name}
-                    subTitle={item.projectLocation}
-                    dataItem={{
-                      item1: item.landArea,
-                      item2: item.numBath,
-                      item3: item.numBed,
-                      item4: item.doorDirection,
-                    }}
-                    priceListed={item.price}
-                    priceSub={item.unitPrice}
-                    ticketCard="TRN Gold"
-                    onClick={() => {
-                      localStorage.setItem("cart-id", JSON.stringify(item.id));
-                      Router.push("/payment-cart/" + item.id);
-                    }}
-                  />
-                ))} */}
                 <DynamicSliderHotProduct />
               </>
             ) : (

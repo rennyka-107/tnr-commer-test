@@ -3,7 +3,6 @@ import { MouseEventHandler } from "react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import styled from "@emotion/styled";
@@ -14,11 +13,10 @@ import {
   IconBath,
   IconBedDouble,
   IconCompass,
-  IconFrame,
+  IconDienTichProductTable,
   IconHeartProduct,
   IconMuaOnline,
 } from "@components/Icons";
-import Link from "next/link";
 import ImageWithHideOnError from "hooks/ImageWithHideOnError";
 
 type Props = {
@@ -277,12 +275,12 @@ export default function ItemProductCard({
               {title}
             </TextTitleStyled>
           </span>
-          <TextitleBottom>{subTitle ? subTitle : "N/A"}</TextitleBottom>
+          <TextitleBottom>{subTitle ? subTitle : "N/A"}</TextitleBottom> 
         </div>
         <LineStyled />
         <CenterIntemWrap>
           <WrapItemCenter>
-            <IconFrame />
+		  <IconDienTichProductTable />
 
             <TextCenterItem>
               {dataItem.item1 ? dataItem?.item1 : "N/A"} m²

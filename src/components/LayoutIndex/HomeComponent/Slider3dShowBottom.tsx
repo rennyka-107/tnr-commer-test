@@ -6,7 +6,7 @@ import SwiperCore, {
   EffectCoverflow,
   Autoplay,
 } from "swiper";
-
+import DefaultImage from "../../../../public/images/product_1.png"
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/navigation";
@@ -19,6 +19,7 @@ import IconSliderYellowLeft from "@components/Icons/IconSliderYellowLeft";
 import IconSliderYellowRight from "@components/Icons/IconSliderYellowRight";
 import useProjectRecenly from "hooks/useProjectRecenly";
 import isEmpty from "lodash.isempty";
+import ImageWithHideOnError from "hooks/ImageWithHideOnError";
 
 const TextLeftStyled = styled(Typography)`
   font-family: "Roboto";
@@ -116,14 +117,13 @@ const dataFake=[1,2,3,4,5,6].map((el)=>{return {
 export default function Slider3dShowBottom() {
   const { dataProductRecenly } = useProjectRecenly();
   const renderItems = useMemo(() => {
-    // if (!isEmpty(dataProductRecenly)) {
-      return (isEmpty(dataProductRecenly)?dataFake:dataProductRecenly)?.map((el) => (
+
+      return (isEmpty(dataProductRecenly)?dataFake:dataProductRecenly)?.map((el: any) => (
         <SwiperSlide
           className="swiper-3d"
           style={{
             width: "241px !important",
             height: 342,
-            backgroundImage: `url(${el?.avatar})`,
             cursor: "pointer",
             position: "relative",
             backgroundSize: "cover",
@@ -135,13 +135,22 @@ export default function Slider3dShowBottom() {
           key={el.id}
         >
           <WrapTopItem>
+		  <ImageWithHideOnError
+            className="logo"
+            src={el.avatar ? el.avatar : DefaultImage}
+            fallbackSrc={DefaultImage}
+            width={241}
+            height={342}
+            priority
+            layout="fill"
+            unoptimized={true}
+          />
             <IconEye style={{ zIndex: 1000 }} />
             <TextInsideNumber>{el?.viewNum}</TextInsideNumber>
           </WrapTopItem>
           <TextInside>{el.name}</TextInside>
         </SwiperSlide>
       ));
-    // }
   }, [dataProductRecenly]);
 
   return (

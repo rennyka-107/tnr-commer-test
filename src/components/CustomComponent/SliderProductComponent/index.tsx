@@ -8,7 +8,6 @@ import DefaultImage from "../../../../public/images/product_1.png"
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/autoplay";
-import Image from "next/image";
 import { IconPrevProduct,IconNextProduct } from "@components/Icons";
 import ImageWithHideOnError from "hooks/ImageWithHideOnError";
 

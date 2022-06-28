@@ -6,10 +6,14 @@ import {
 } from "@service/ProjectList";
 import { useRouter } from "next/router";
 import isEmpty from "lodash.isempty";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store";
 
 const useProjectList = () => {
   const router = useRouter();
   const { type } = router.query;
+  const { listMenuBarType } = useSelector((state: RootState) => state.menubar);
+
   const [data, setData] = useState<any[]>();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<any>(null);
@@ -45,25 +49,28 @@ const useProjectList = () => {
     if (!body) return;
     const fetch = async () => {
       setLoading(true);
-
-      try {
-        if (type && typeof body.projectTypeId !== undefined) {
-          const res = await getListProjectTNR(params, body);
-          setData(res?.responseData);
-          let count = 0;
-          if (res?.responseData.length > 0) {
-            count = Number(res?.responseData?.[0].tongBanGhi) / params.pageSize;
+      if (!isEmpty(listMenuBarType)) {
+        try {
+          if (typeof body.projectTypeId === "string") {
+            const res = await getListProjectTNR(params, body);
+            setData(res?.responseData);
+            let count = 0;
+            if (res?.responseData.length > 0) {
+              count =
+                Number(res?.responseData?.[0].tongBanGhi) / params.pageSize;
+            }
+            setTotalPage(Math.ceil(count));
+            if (res?.responseCode === "00") {
+              setLoading(false);
+            }
           }
-          setTotalPage(Math.ceil(count));
+        } catch (error) {
+          setError(error?.response);
         }
-      } catch (error) {
-        setError(error?.response);
-      } finally {
-        setLoading(false);
       }
     };
     fetch();
-  }, [body]);
+  }, [body,listMenuBarType]);
 
   return {
     data,

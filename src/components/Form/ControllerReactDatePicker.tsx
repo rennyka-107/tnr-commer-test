@@ -15,6 +15,7 @@ interface Props<T> extends Omit<TextFieldProps | any, "name"> {
   labelColor?: string;
   variant?: "standard" | "filled" | "outlined";
   width?: number;
+  maxDate?: Date;
 }
 
 const Container = styled.div``;
@@ -40,6 +41,7 @@ const ControllerReactDatePicker = <T extends FieldValues>(props: Props<T>) => {
     required,
     labelColor,
     width,
+    maxDate,
     ...rest
   } = props;
 
@@ -85,6 +87,7 @@ const ControllerReactDatePicker = <T extends FieldValues>(props: Props<T>) => {
               onChange(value ? format(value, "dd-MM-yyyy") : "")
             }
             dateFormat="dd-MM-yyyy"
+            maxDate={maxDate}
             {...rest}
           />
         )}

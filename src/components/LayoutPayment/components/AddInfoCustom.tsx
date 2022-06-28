@@ -1,8 +1,7 @@
 import ControllerSelect from "@components/Form/ControllerSelect";
-import ControllerDatePicker from "@components/Form/ControllerDatePicker";
 import FormGroup from "@components/Form/FormGroup";
-import { Button, FormControl, Grid, Box } from "@mui/material";
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { FormControl, Grid, Box } from "@mui/material";
+import React, { useEffect, useState } from "react";
 import {
   LinedStyled,
   RowStyled,
@@ -21,6 +20,8 @@ import { RootState } from "../../../../store/store";
 import isEmpty from "lodash.isempty";
 import { setData } from "../../../../store/paymentSlice";
 import ControllerReactDatePicker from "@components/Form/ControllerReactDatePicker";
+import { validateLine } from "utils/constants";
+import isEqual from "lodash.isequal";
 
 type Props = {
   onClose: Function;
@@ -45,16 +46,16 @@ interface InformationCustom {
 }
 
 const validationSchema = yup.object().shape({
-  customerTypeId: yup.string().default(""),
-  vocativeId: yup.string().default(""),
-  fullname: yup.string().default(""),
-  dob: yup.string().default(""),
-  phoneNumber: yup.string().default(""),
-  email: yup.string().default(""),
-  idNumber: yup.string().default(""),
-  issuePlace: yup.string().default(""),
-  issueDate: yup.string().default(""),
-  permanentAddress: yup.string().default(""),
+  customerTypeId: yup.string().required(validateLine.required).default(""),
+  vocativeId: yup.string().required(validateLine.required).default(""),
+  fullname: yup.string().required(validateLine.required).default(""),
+  dob: yup.string().required(validateLine.required).default(""),
+  phoneNumber: yup.string().required(validateLine.required).default(""),
+  email: yup.string().required(validateLine.required).default(""),
+  idNumber: yup.string().required(validateLine.required).default(""),
+  issuePlace: yup.string().required(validateLine.required).default(""),
+  issueDate: yup.string().required(validateLine.required).default(""),
+  permanentAddress: yup.string().required(validateLine.required).default(""),
   contactAddress: yup.string().default(""),
   province: yup.string().default(""),
   district: yup.string().default(""),
@@ -64,6 +65,9 @@ const AddInfoCustom = (props: Props) => {
   const { onClose, idNumber, listCustomerType } = props;
   const data = useSelector((state: RootState) => state.payments.data);
   const dispatch = useDispatch();
+  const [initialValue, setInitialValue] = useState<any>(
+    validationSchema.getDefault()
+  );
   const { control, handleSubmit, setValue, reset, watch } =
     useForm<InformationCustom>({
       mode: "onChange",
@@ -78,24 +82,24 @@ const AddInfoCustom = (props: Props) => {
         const info = listInfos.find((item) => item.idNumber === idNumber);
         if (!isEmpty(info)) {
           reset({ ...info });
+          setInitialValue({ ...info });
         }
       }
     }
   }, [data, idNumber]);
-
   const handleOnSubmit = (values) => {
     const { paymentIdentityInfos } = data;
     if (!isEmpty(idNumber)) {
       const formatArray = paymentIdentityInfos.map((info) => {
         if (info.idNumber === idNumber) {
-          return { ...values };
+          return { ...info, ...values };
         }
         return info;
       });
       dispatch(
         setData({
-          paymentIdentityInfos: formatArray,
           ...data,
+          paymentIdentityInfos: formatArray,
         })
       );
     } else {
@@ -310,9 +314,10 @@ const AddInfoCustom = (props: Props) => {
             <Text18Styled>Huỷ</Text18Styled>
           </ButtonStyled>
           <ButtonNormalStyled
+            disabled={!isEmpty(idNumber) && isEqual(initialValue, watch())}
             bg={"#1b3459"}
             style={{ width: 225, marginRight: 35 }}
-            onClick={() => handleOnSubmit(watch())}
+            onClick={handleSubmit((value) => handleOnSubmit(value))}
           >
             <Text18Styled color={"#fff"}>
               {!isEmpty(idNumber) ? "Lưu" : "Thêm người mua"}

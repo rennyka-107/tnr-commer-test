@@ -59,6 +59,7 @@ const ItemProduct = ({ data }: ProductsProps) => {
               Router.push("/compare-product");
             }}
             onClick={() => addToCart(product.id)}
+            buyDisabled={product.paymentStatus!==2}
           />
         ))}
       </ProductWrap>

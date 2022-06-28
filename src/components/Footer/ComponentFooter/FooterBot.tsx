@@ -118,7 +118,7 @@ const FooterBot = ({ listMenuBarProjectType, listUserManual }: MenuProps) => {
           </LineInfo>
           <LineInfo style={{ marginTop: 5 }}>
             <TitleTypo>
-              TNR Version 1.2.3 Copyright © www.example.com {""}
+              TNR Version 1.2.4 Copyright © www.example.com {""}
             </TitleTypo>
           </LineInfo>
         </BlockDiv>
@@ -162,9 +162,10 @@ const FooterBot = ({ listMenuBarProjectType, listUserManual }: MenuProps) => {
           </IconsBlock>
           <Image
             src="/images/BCT.png"
-            width="135.24px"
-            height="51pxpx"
-            alt=""
+            width={135}
+            height={51}
+            alt="image-thuong-hieu"
+			objectFit="cover"
           />
         </BlockDiv>
       </WrapContent>

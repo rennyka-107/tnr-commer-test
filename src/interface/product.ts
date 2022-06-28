@@ -81,6 +81,7 @@ export interface ProductsResponse {
 	category: string,
 	thumbnail?: string,
 	productId?: string,
+	paymentStatus?:number|string|null;
 }
 
 export interface ResponseSearchById {

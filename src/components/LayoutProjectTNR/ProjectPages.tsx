@@ -11,6 +11,7 @@ import Container from "@components/Container";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../store/store";
 import { useRouter } from "next/router";
+import  isEmpty  from "lodash.isempty";
 export interface ProjectInforI {
   id: string;
   name: string;
@@ -76,9 +77,10 @@ const ProjectPages = () => {
   }, [body, type, listMenuBarProjectType]);
 
   const fetchComponent = () => {
+
     return (
       <>
-        {loading === true ? (
+        {isEmpty(listMenuBarType) ? (
           <>
             <div style={{ textAlign: "center", marginTop: 300 }}>
               <CircularProgress />
@@ -87,7 +89,7 @@ const ProjectPages = () => {
         ) : (
           <>
             <Container
-              title={titleData ? titleData : "Tất cả"}
+              title={titleData}
               rightContent={<DynamicFilter onSubmit={onSubmit} body={body} />}
             >
               <Grid container spacing={4}>
@@ -122,10 +124,10 @@ const ProjectPages = () => {
     );
   };
   useEffect(() => {
-    if (typeof titleData === "string") {
+	if (!isEmpty(listMenuBarType)) {
       fetchComponent();
     }
-  }, [loading, titleData]);
+  }, [loading, listMenuBarType]);
 
   return <FlexContainer>{fetchComponent()}</FlexContainer>;
 };
