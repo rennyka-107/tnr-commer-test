@@ -69,7 +69,7 @@ const LayoutResultPayment = (props: Props) => {
         <ButtonNormalStyled
           bg={"#1b3459"}
           style={{ width: 225, marginBottom: 30 }}
-          // onClick={() => handleOnSubmit(watch())}
+          onClick={() => router.push("/")}
         >
           <Text18Styled color={"#fff"}>Về trang chủ</Text18Styled>
         </ButtonNormalStyled>
