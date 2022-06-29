@@ -192,7 +192,7 @@ const ProductCard = (props: Props) => {
         </Row>
         <DynamicHorizontalLine />
         {item?.status === "Đặt chỗ thành công" ||
-        item?.status === "Đang chờ thanh toán" ? (
+        item?.status === "Đang chờ thanh toán" || item?.status === "Đã hoàn thiện hồ sơ" ? (
           <>
             <Row>
               <Column col={1} customStyle={{ paddingLeft: 0 }}>
@@ -289,15 +289,30 @@ const ProductCard = (props: Props) => {
                 </div>
                 Hết thời gian thanh toán
               </TextProduct>
-            ) : (
+            ) : item?.status === "Chưa hoàn thành hồ sơ" ? (
               <TextProduct color="#FF3B3B">
                 <div style={{ marginRight: 10 }}>
                   {" "}
                   <IconCircleClose />
                 </div>
-                Chưa hoàn thiện hồ sơ mua bán
+                Chưa hoàn thành hồ sơ mua bán
               </TextProduct>
-            )}
+            ): item?.status === "Đặt chỗ thành công" ? (
+				<TextProduct color="#06C270">
+				  {" "}
+				  <div style={{ marginRight: 10 }}>
+					<IconCircleChecked />
+				  </div>
+				  Đặt chỗ thành công
+				</TextProduct>
+			  ) : (
+				<TextProduct color="#06C270">
+				  {" "}
+				  <div style={{ marginRight: 10 }}>
+					<IconCircleChecked />
+				  </div>
+				  Đã hoàn thiện hồ sơ
+				</TextProduct>)}
           </Column>
         </Row>
       </ContentProduct>

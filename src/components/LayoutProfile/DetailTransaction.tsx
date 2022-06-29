@@ -232,10 +232,10 @@ const DetailTransaction = () => {
                     )}
                   </TextLeftTop>
                   {data.transactionCodeObject.orderList.status ===
-                  "Đặt chỗ thành công" ? (
+                  "Chưa hoàn thành hồ sơ" ? (
                     <>
-                      <TextLeftTop>
-                        {data.transactionCodeObject.orderList.status}
+                      <TextLeftTop style={{color: '#EA242A', fontWeight: 700}}>
+                       Chưa hoàn thiện hồ sơ mua bán
                       </TextLeftTop>
                       <Button
                         style={{
