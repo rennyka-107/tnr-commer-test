@@ -43,9 +43,9 @@ const ItemDetailCol = ({item}: Props) => {
         </Title28Styled>
         <RowStyledAgain jContent={"start"}>
           <Text14Styled style={{ marginRight: 37 }}>
-            {(!isEmpty(item) ? item.homeNul : cart.homeNul) ?? "N/A"}
+            {(!isEmpty(item) ? item.lot_code : cart.lot_code) ?? "N/A"}
           </Text14Styled>
-          <Text14Styled>Tầng 26</Text14Styled>
+          <Text14Styled>{(!isEmpty(item) ? item.code : cart.code) ?? "N/A"}</Text14Styled>
         </RowStyledAgain>
 
         <LinedStyled style={{ margin: "5px 0px 20px" }} />

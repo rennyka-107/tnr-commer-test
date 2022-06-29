@@ -87,8 +87,8 @@ const CardItemProduct = (props: Props) => {
         <Title28Styled>{cart.name ?? "N/A"}</Title28Styled>
 
         <RowStyledAgain>
-          <Text14Styled>{cart.homeNul ?? "N/A"}</Text14Styled>
-          <Text14Styled>Tầng 26</Text14Styled>
+          <Text14Styled>{cart.lotCode ?? "N/A"}</Text14Styled>
+          <Text14Styled>{cart.code}</Text14Styled>
         </RowStyledAgain>
 
         <LinedStyled borderColor={"#1b3459"} style={{ marginTop: 15 }} />

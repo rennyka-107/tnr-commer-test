@@ -8,6 +8,7 @@ import {
 import styled from "@emotion/styled";
 import { Box, Grid } from "@mui/material";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { apiUploadFile } from "../../../../pages/api/cartApi";
 
@@ -31,12 +32,11 @@ const InputUpload = styled.input({
 
 const FileUpload = (props: Props) => {
   const [urlPhoto, setUrlPhoto] = useState([]);
-
+  const { query: {transactionCode} } = useRouter();
   const onFileDrop = (e) => {
     const reader = new FileReader();
     const tarFile = e.target.files[0];
     reader.readAsDataURL(tarFile);
-    // console.log(tarFile);
     if (urlPhoto.length > 0) {
       const resetUrls = [...urlPhoto];
       const checkUrl = resetUrls.find((item) => item.name === tarFile?.name);
@@ -65,7 +65,7 @@ const FileUpload = (props: Props) => {
     // upload file
     const data = new FormData();
     data.append("multipartFileList", tarFile);
-    data.append("paymentCode", "126XJ50383534440");
+    data.append("paymentCode", transactionCode as string);
 
     apiUploadFile(data).then((response) => console.log(response));
   };

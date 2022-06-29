@@ -151,7 +151,6 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
   const dispatch = useDispatch();
   const addToCart = useAddToCart();
   const notification = useNotification();
-  const router = useRouter();
   const {
     query: { transactionCode },
   } = useRouter();
@@ -224,7 +223,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
           title: `Thông tin mã giao dịch ${transactionCode}`,
           message: res.responseMessage,
         });
-        router.push("/404");
+        // router.push("/404");
       }
     } catch (err) {
       notification({
@@ -678,7 +677,6 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                           </FormGroup>
                         </Grid>
                       )}
-
                       {!disabledEditMainUser && (
                         <Grid item xs={6}>
                           <FormGroup>
@@ -887,7 +885,24 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
               {!formInfo.open && (
                 <ButtonStyled
                   type="submit"
-                  bg={"white"}
+                  bg={
+                    !isEmpty(transactionCode) && data.paymentStatus !== 0
+                      ? isEqual(
+                          initialValue?.paymentIdentityInfos,
+                          data.paymentIdentityInfos
+                        ) &&
+                        isEqual(
+                          initialValue.paymentIdentityInfos.find(
+                            (info) =>
+                              isEmpty(info.vocativeId) &&
+                              isEmpty(info.customerTypeId)
+                          ),
+                          { ...watch() }
+                        )
+                        ? "#E7E9EC"
+                        : "red"
+                      : "white"
+                  }
                   border={"1px solid #c7c9d9"}
                   disabled={
                     isEqual(
@@ -904,17 +919,21 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                     )
                   }
                 >
-                  <Text18Styled>Lưu thông tin</Text18Styled>
+                  <Text18Styled>
+                    {!isEmpty(transactionCode) && data.paymentStatus !== 0
+                      ? "Hoàn thành hồ sơ"
+                      : "Lưu thông tin"}
+                  </Text18Styled>
                 </ButtonStyled>
               )}
-              <ButtonStyled
+              {/* <ButtonStyled
                 sx={{ marginTop: "12px" }}
                 bg={"white"}
                 border={"1px solid #c7c9d9"}
                 onClick={() => setScopeRender("payment")}
               >
                 <Text18Styled>Quay lại giỏ hàng</Text18Styled>
-              </ButtonStyled>
+              </ButtonStyled> */}
             </Box>
           </Grid>
         </Grid>
