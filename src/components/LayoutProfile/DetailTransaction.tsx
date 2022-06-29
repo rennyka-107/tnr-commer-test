@@ -1,6 +1,7 @@
 import BoxContainer from "@components/CustomComponent/BoxContainer";
 import LoadingComponent from "@components/LoadingComponent";
 import styled from "@emotion/styled";
+import { Button } from "@mui/material";
 import {
   ContractI,
   getContractByUser,
@@ -15,7 +16,7 @@ import React, { useEffect, useState } from "react";
 import FormatFns from "utils/DateFns";
 import { dayOfWeekToString, getDateFromStringDMY } from "utils/helper";
 interface Props {
-	item: ContractI;
+  item: ContractI;
 }
 const HeaderContainer = styled.div`
   display: flex;
@@ -70,17 +71,17 @@ const TitleCenterStyled = styled.span`
 `;
 
 const TextBottomTable = styled.span`
-background: #FFFFFF;
-font-family: 'Roboto';
-font-style: normal;
-font-weight: 400;
-font-size: 14px;
-line-height: 16px;
+  background: #ffffff;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16px;
 
-/* Brand */
+  /* Brand */
 
-color: #1B3459;
-`
+  color: #1b3459;
+`;
 
 const DetailTransaction = () => {
   const router = useRouter();
@@ -99,7 +100,6 @@ const DetailTransaction = () => {
     fetchById(transCode);
   }, [router]);
 
-
   const convertDateToString = (date: Date) => {
     const house = FormatFns.format(date, "HH:mm");
     const day = FormatFns.format(date, "dd/MM/yyyy");
@@ -115,7 +115,6 @@ const DetailTransaction = () => {
       .toFixed(0)
       .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
   }
-
 
   const fecthComponent = () => {
     return (
@@ -223,6 +222,7 @@ const DetailTransaction = () => {
                     gap: 10,
                     marginTop: 15,
                     textAlign: "right",
+					alignItems: "end"
                   }}
                 >
                   <TextLeftTop>{data.billNumber}</TextLeftTop>
@@ -231,7 +231,34 @@ const DetailTransaction = () => {
                       getDateFromStringDMY(data.createdAt) ?? new Date()
                     )}
                   </TextLeftTop>
-                  <TextLeftTop>Tình trạng đặt chỗ</TextLeftTop>
+                  {data.transactionCodeObject.orderList.status ===
+                  "Đặt chỗ thành công" ? (
+                    <>
+                      <TextLeftTop>
+                        {data.transactionCodeObject.orderList.status}
+                      </TextLeftTop>
+                      <Button
+                        style={{
+                          height: 30,
+                          width: 130,
+                          background: "#FEC83C",
+                          textTransform: "none",
+                          color: "#0E1D34",
+                          fontSize: 12,
+                          borderRadius: 8,
+                        }}
+						onClick={() => router.push(`/payment-cart?transactionCode=${data.transactionCodeObject.code}`)}
+                      >
+                        Hoàn Thiện
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <TextLeftTop>
+                        {data.transactionCodeObject.orderList.status}
+                      </TextLeftTop>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
@@ -311,13 +338,25 @@ const DetailTransaction = () => {
                     textAlign: "right",
                   }}
                 >
-                  <TextLeftTop>{currencyFormat(data.quotationRealt.landPrice)} đ</TextLeftTop>
-                  <TextLeftTop>{currencyFormat(data.quotationRealt.vat)} đ</TextLeftTop>
-                  <TextLeftTop>{currencyFormat(data.quotationRealt.maintainPrice)} đ</TextLeftTop>
+                  <TextLeftTop>
+                    {currencyFormat(data.quotationRealt.landPrice)} đ
+                  </TextLeftTop>
+                  <TextLeftTop>
+                    {currencyFormat(data.quotationRealt.vat)} đ
+                  </TextLeftTop>
+                  <TextLeftTop>
+                    {currencyFormat(data.quotationRealt.maintainPrice)} đ
+                  </TextLeftTop>
                 </div>
               </div>
             </div>
-            <div style={{ border: "1px solid #C7C9D9",marginTop: 20, marginBottom: 20 }} />
+            <div
+              style={{
+                border: "1px solid #C7C9D9",
+                marginTop: 20,
+                marginBottom: 20,
+              }}
+            />
             <div>
               <div
                 style={{
@@ -347,15 +386,25 @@ const DetailTransaction = () => {
                     textAlign: "right",
                   }}
                 >
-                  <TextLeftTop>{currencyFormat(data.quotationRealt.totalPrice)} đ</TextLeftTop>
-                  <TextLeftTop>{currencyFormat(data.quotationRealt.sales)} đ</TextLeftTop>
+                  <TextLeftTop>
+                    {currencyFormat(data.quotationRealt.totalPrice)} đ
+                  </TextLeftTop>
+                  <TextLeftTop>
+                    {currencyFormat(data.quotationRealt.sales)} đ
+                  </TextLeftTop>
                   <TextLeftTop>
                     {currencyFormat(data.quotationRealt.totalOnlinePrice)} đ
                   </TextLeftTop>
                 </div>
               </div>
             </div>
-            <div style={{ border: "1px solid #C7C9D9", marginTop: 20, marginBottom: 20 }} />
+            <div
+              style={{
+                border: "1px solid #C7C9D9",
+                marginTop: 20,
+                marginBottom: 20,
+              }}
+            />
             <div>
               <div
                 style={{
@@ -425,26 +474,68 @@ const DetailTransaction = () => {
                     textAlign: "right",
                   }}
                 >
-                  <TextLeftTop>{currencyFormat(data.quotationRealt.landPrice)} đ</TextLeftTop>
-                  <TextLeftTop>{currencyFormat(data.quotationRealt.vat)} đ</TextLeftTop>
-                  <TextLeftTop>{currencyFormat(data.quotationRealt.maintainPrice)} đ</TextLeftTop>
+                  <TextLeftTop>
+                    {currencyFormat(
+                      data.transactionCodeObject.orderList.deposite
+                    )}{" "}
+                    đ
+                  </TextLeftTop>
+                  <TextLeftTop>
+                    {currencyFormat(data.transactionCodeObject.orderList.paid)}{" "}
+                    đ
+                  </TextLeftTop>
+                  <TextLeftTop>
+                    {currencyFormat(
+                      data.transactionCodeObject.orderList.deposite
+                    )}{" "}
+                    đ
+                  </TextLeftTop>
                 </div>
               </div>
             </div>
-            <div style={{display: 'flex', flexDirection: 'column', borderRadius: '10px', background:'#F3F4F6', gap: 10, height: 76, marginTop: 25}}>
-              <div style={{ display: "flex", flexDirection: "row", gap: 80, padding: '10px 10px 0px 10px' }}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                borderRadius: "10px",
+                background: "#F3F4F6",
+                gap: 10,
+                height: 76,
+                marginTop: 25,
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  gap: 80,
+                  padding: "10px 10px 0px 10px",
+                }}
+              >
                 <TextLeftTop>Mã TT</TextLeftTop>
                 <TextLeftTop>Ngày TT</TextLeftTop>
                 <TextLeftTop>Số tiền</TextLeftTop>
                 <TextLeftTop>Hình thức</TextLeftTop>
                 <TextLeftTop>Trạng thái</TextLeftTop>
               </div>
-              <div style={{ display: "flex", flexDirection: "row" , gap: 80 ,background:'#ffffff', height:34, padding: 10}}>
-                <TextBottomTable>Mã TT</TextBottomTable>
-                <TextBottomTable>Ngày TT</TextBottomTable>
-                <TextBottomTable>Số tiền</TextBottomTable>
-                <TextBottomTable>Hình thức</TextBottomTable>
-                <TextBottomTable>Trạng thái</TextBottomTable>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  gap: 20,
+                  background: "#ffffff",
+                  height: 34,
+                  padding: 10,
+                }}
+              >
+                <TextBottomTable style={{fontSize: 12, maxWidth: 150}} >{data.billNumber}</TextBottomTable>
+                <TextBottomTable style={{fontSize: 12, maxWidth: 200}}> {convertDateToString(
+                      getDateFromStringDMY(data.createdAt) ?? new Date()
+                    )}</TextBottomTable>
+                <TextBottomTable style={{fontSize: 12, maxWidth: 150}} >{currencyFormat(data.deposite)}{" "}
+                    đ</TextBottomTable>
+                <TextBottomTable style={{fontSize: 12, maxWidth: 150}} >{data.paymentMethod.name}</TextBottomTable>
+                <TextBottomTable style={{fontSize: 12, maxWidth: 150}} >Chờ duyệt</TextBottomTable>
               </div>
             </div>
           </div>
