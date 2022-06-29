@@ -25,10 +25,11 @@ const CardContainer = styled.div`
 
 SwiperCore.use([ Autoplay,Pagination,Navigation ]);
 const SliderProductComponent = ({data}:{data?:string[]}) => {
+  
 const renderItems=useMemo(()=>{
   return data?.map((el,index)=>(
     <SwiperSlide key={index}>
-        <CardContainer style={{backgroundColor:'red'}}>
+        <CardContainer>
           <ImageWithHideOnError
             className="logo"
             src={el??DefaultImage}

@@ -5,7 +5,7 @@ import styled from "@emotion/styled";
 const ContainerStyled = styled.div`
   margin: 0px auto;
   max-width: 500px;
-  animation: zoom-in-zoom-out 2s ease infinite;
+  animation: zoom-in-zoom-out 10s ease infinite;
   @keyframes zoom-in-zoom-out {
     0% {
       transform: scale(1, 1);

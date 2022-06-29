@@ -34,6 +34,16 @@ type DetailRowI = {
   lotCode: string;
 };
 
+type ListProductData = {
+  lotCode: string;
+  paymentStatus: number;
+  price: string;
+  productionId: string;
+  productionName: string;
+  projectLevelDetailId: string;
+  projectLevelDetailName: string;
+};
+
 type ProductionRowI = {
   doorDirection: string;
   isCornerApartment: number;
@@ -48,6 +58,7 @@ type ProductionRowI = {
   projectLevelDetailName: string;
   code: string;
   lotCode: string;
+  lstProductData: ListProductData[];
 };
 
 const TableCellStyled = styled(TableCell)`
@@ -98,7 +109,6 @@ const LabelContainer = styled.div`
 `;
 
 const IconStyled = styled.span`
-
   color: black;
   align-items: center;
   display: flex;
@@ -132,7 +142,6 @@ const ProductTablePages = () => {
     // const newValues: BodyRequest = { ...body, saleProductStatus: (body.saleProductStatus as string[]).join(',') }
     const response = await getListProductTable(body, cancelToken);
     setData(response?.responseData ?? []);
-    console.log(response);
   };
 
   useEffect(() => {
@@ -152,8 +161,30 @@ const ProductTablePages = () => {
     });
     return itemFormat.substring(0, 4);
   }
-  console.log("list Rows",data?.lstProductionRow)
-  const renderAction = (item: ProductionRowI) => {
+
+  const fetchComponent = (el: any) => {
+    return (
+      <>
+        {data?.lstProductionRow?.map((element, index) => (
+          <>
+            <CellContent align="center" key={index}>
+              {element.lstProductData.map((data, i) => (
+                <>
+                  {data.lotCode == el.lotCode ? (
+                    renderAction(data)
+                  ) : (
+                    <IconStyled />
+                  )}
+                </>
+              ))}
+            </CellContent>
+          </>
+        ))}
+      </>
+    );
+  };
+
+  const renderAction = (item: ListProductData) => {
 
     switch (item.paymentStatus) {
       case 4:
@@ -179,7 +210,7 @@ const ProductTablePages = () => {
               onClick={() => {
                 router.push(`/products/${item.productionId}`);
               }}
-			  style={{  cursor: 'pointer'}}
+              style={{ cursor: "pointer" }}
             >
               <>
                 <IconAvaliableSale />
@@ -318,7 +349,7 @@ const ProductTablePages = () => {
                 </TableCellStyled>
                 {data?.lstProductionRow?.map((el, index) => (
                   <TableCellContent align="center" key={index}>
-                    {el.landArea ? <Check /> : ""}
+                    {el.landArea ? el.landArea : ""}
                   </TableCellContent>
                 ))}
               </TableRow>
@@ -371,15 +402,7 @@ const ProductTablePages = () => {
                     </div>
                   </div>
                 </TableCell>
-                {data?.lstProductionRow?.map((element, index) => (
-                  <CellContent align="center" key={index}>
-                    {element.lotCode == el.lotCode ? (
-                      renderAction(element)
-                    ) : (
-                      <IconStyled />
-                    )}
-                  </CellContent>
-                ))}
+                {fetchComponent(el)}
               </TableRow>
             ))}
           </Table>

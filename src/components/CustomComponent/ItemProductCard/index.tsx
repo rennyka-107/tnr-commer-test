@@ -14,6 +14,7 @@ import {
   IconBedDouble,
   IconCompass,
   IconDienTichProductTable,
+  IconFrame,
   IconHeartProduct,
   IconMuaOnline,
 } from "@components/Icons";
@@ -280,7 +281,7 @@ export default function ItemProductCard({
         <LineStyled />
         <CenterIntemWrap>
           <WrapItemCenter>
-		  <IconDienTichProductTable />
+		  <IconFrame />
 
             <TextCenterItem>
               {dataItem.item1 ? dataItem?.item1 : "N/A"} m²

@@ -3,15 +3,32 @@ import ControllerTextField from "@components/Form/ControllerTextField";
 import FormGroup from "@components/Form/FormGroup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Box, Modal } from "@mui/material";
+import useNotification from "hooks/useNotification";
+import { ResponseSearchById } from "interface/product";
 import isEmpty from "lodash.isempty";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
+import { saveInforVisitApament } from "../../../pages/api/visitAparmentFormApi";
 interface PropsI {
   isOpen: boolean;
   onClose?: () => void;
+  product:ResponseSearchById;
+  toggle:Function;
+}
+
+interface FormVisitI {
+  projectId: string;
+  productionId: string;
+  apartmentModelId: string|number;
+  fullname: string;
+  email: string;
+  phone: string|number;
+
 }
 const ModalRegister = (props: PropsI) => {
-  const { isOpen, onClose } = props;
+  const { isOpen, onClose,product,toggle } = props;
+  const notification = useNotification();
   const {
     control,
     handleSubmit,
@@ -19,11 +36,44 @@ const ModalRegister = (props: PropsI) => {
     getValues,
     formState: { errors },
     watch,
-  } = useForm<any>({
-    mode: "onChange",
+  } = useForm<FormVisitI>({
+    mode: 'onChange',
     resolver: yupResolver(yup.object().shape({})),
-    defaultValues: {},
+    defaultValues: {
+      projectId: product.project?.id,
+      productionId: product?.id,
+      apartmentModelId: product?.apartmentModel?.id,
+      fullname: "",
+      email: "",
+      phone: "",
+    },
   });
+
+  useEffect(()=>{
+    if(!isOpen){
+      reset();
+    }
+  },[isOpen])
+
+  const submitForm=async(values)=>{
+    const response=await saveInforVisitApament(values);
+    // console.log(response,'response');
+    if(response?.responseCode=='00'){
+      notification({
+        severity: "success",
+        title: `Đặt lịch`,
+        message:'Đặt lịch thành công'
+      });
+      toggle();
+    }else{
+      notification({
+        severity: "error",
+        title: `Đặt lịch`,
+        message:response?.responseMessage??'Có một số lỗi xảy ra'
+      });
+    }
+    
+  }
   return (
     <Modal
       open={isOpen}
@@ -46,7 +96,7 @@ const ModalRegister = (props: PropsI) => {
           padding:"20px 50px"
         }}
       >
-        <form noValidate onSubmit={() => {}} autoComplete="off">
+        <form noValidate onSubmit={handleSubmit((values)=>submitForm(values))} autoComplete="off">
           <div>
             <span>Đăt lịch xem nhà mẫu</span>
           </div>
@@ -54,7 +104,7 @@ const ModalRegister = (props: PropsI) => {
             <ControllerTextField
               variant="outlined"
               hiddenLabel
-              name="fullName"
+              name="fullname"
               control={control}
               placeholder="Họ và tên"
               required
@@ -80,7 +130,7 @@ const ModalRegister = (props: PropsI) => {
             <ControllerTextField
               variant="outlined"
               hiddenLabel
-              name="phoneNumber"
+              name="phone"
               control={control}
               placeholder="Số điện thoại"
               fullWidth

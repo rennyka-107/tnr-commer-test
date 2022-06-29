@@ -174,6 +174,7 @@ const HomePage = () => {
   const handleSearchCompare = () => {
     router.push(`/compare-search?projectId=${filterSearch.projectId}&&projectTypeId=${filterSearch.projectTypeId}&&priceTo=${filterSearch.priceTo}&&priceFrom=${filterSearch.priceFrom}&&areaTo=${filterSearch.areaTo}&&areaFrom=${filterSearch.areaFrom}&&categoryId=${filterSearch.categoryId}`);
   };
+
   return (
     <>
       <DynamicBanner />

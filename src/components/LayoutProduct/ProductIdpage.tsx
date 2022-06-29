@@ -1,5 +1,5 @@
 import FlexContainer from "@components/CustomComponent/FlexContainer";
-import _ from "lodash";
+import isEmpty from "lodash.isempty";
 import { useEffect, useState } from "react";
 
 import {
@@ -7,19 +7,25 @@ import {
   IconBath,
   IconBedDouble,
   IconClipboardProduct,
-  IconCompass, IconDownloadPTG, IconFrame,
+  IconCompass,
+  IconDownloadPTG,
+  IconFrame,
   IconHeadSetProduct,
   IconNhaMau,
   IconPhieuTinhGia,
-  IconReceiptDisabled, IconSetting
+  IconReceiptDisabled,
+  IconSetting,
 } from "@components/Icons";
 import IconInfor from "@components/Icons/IconInfor";
 import styled from "@emotion/styled";
 import {
   Box,
-  Button, CircularProgress, Menu,
-  MenuItem, Modal,
-  Typography
+  Button,
+  CircularProgress,
+  Menu,
+  MenuItem,
+  Modal,
+  Typography,
 } from "@mui/material";
 import useAddToCart from "hooks/useAddToCart";
 import { ResponseSearchById } from "interface/product";
@@ -29,7 +35,7 @@ import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import {
   downloadPhieuTinhGiaAPI,
-  getProductPtgApi
+  getProductPtgApi,
 } from "../../../pages/api/productsApi";
 import Product1 from "../../../public/images/product1.png";
 import Product2 from "../../../public/images/product2.png";
@@ -255,10 +261,10 @@ const ButtonYellowStyled = styled(Button)`
 const ButtonDisbledStyled = styled(Button)`
   height: 68px;
   width: auto;
-  border: 2px solid #F3F4F6;
+  border: 2px solid #f3f4f6;
   border-radius: 8px;
   padding: 20px 29px 14px 20px;
-  background-color:#F3F4F6;
+  background-color: #f3f4f6;
 `;
 const ButtonYellowStyledDisbaled = styled(Button)`
   height: 68px;
@@ -425,7 +431,7 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
   const fetchPhieuTinhGia = () => {
     return (
       <>
-        {!_.isEmpty(productItem) ? (
+        {!isEmpty(productItem) ? (
           <DynamicPhieuTinhGiaComponent
             productItem={productItem}
             dataProduct={dataProduct}
@@ -444,7 +450,6 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
   useEffect(() => {
     fetchPhieuTinhGia();
   }, [productItem]);
-
 
   const handleDownloadPhieuTinhGia = () => {
     (async () => {
@@ -503,8 +508,19 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
             }}
           >
             <div>
-              <DynamicSliderProductComponent data={dataProduct?.apartmentModelPhotos??[dataProduct?.thumbnail]??['/images/product_1.png']}/>
-              <ModalRegister isOpen={openModalRegister} onClose={()=>setOpenModalRegister(!openModalRegister)}/>
+              <DynamicSliderProductComponent
+                data={
+                  !isEmpty(dataProduct?.apartmentModelPhotos)
+                    ? dataProduct?.apartmentModelPhotos
+                    : [dataProduct?.thumbnail] ?? ["/images/product_1.png"]
+                }
+              />
+              <ModalRegister
+                isOpen={openModalRegister}
+                onClose={() => setOpenModalRegister(!openModalRegister)}
+                product={dataProduct}
+                toggle={() => setOpenModalRegister(!openModalRegister)}
+              />
               <Modal
                 open={openModalVideo}
                 onClose={() => setOpenModalVideo(false)}
@@ -728,19 +744,21 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                 </Box>
               </Modal>
               <div style={{ display: "flex", gap: 19, marginTop: 24 }}>
-              {typeBottomShow !== 1  ? (
-                  <ButtonYellowStyled onClick={() => {
-                    setTypeBottomShow(1);
-                    if(!tabCardValue){setTabCardValue(!tabCardValue)}
-                  }}>
+                {typeBottomShow !== 1 ? (
+                  <ButtonYellowStyled
+                    onClick={() => {
+                      setTypeBottomShow(1);
+                      if (!tabCardValue) {
+                        setTabCardValue(!tabCardValue);
+                      }
+                    }}
+                  >
                     <IconInfor />
-                    <TextInSideButtonYellow>
-                      Thông tin
-                    </TextInSideButtonYellow>
+                    <TextInSideButtonYellow>Thông tin</TextInSideButtonYellow>
                   </ButtonYellowStyled>
                 ) : (
                   <ButtonYellowStyledDisbaled disabled>
-                    <IconInfor disabled/>
+                    <IconInfor disabled />
                     <TextInSideButtonYellowDisabled>
                       Thông tin
                     </TextInSideButtonYellowDisabled>
@@ -750,7 +768,7 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                   <Icon360 />
                   <TextInSideButtonYellow> Video tour</TextInSideButtonYellow>
                 </ButtonYellowStyled>
-                
+
                 {tabCardValue === true ? (
                   <ButtonYellowStyled onClick={() => handlePhieuTinhGia()}>
                     <IconPhieuTinhGia />
@@ -796,20 +814,28 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                   <WrapItemCenter>
                     <IconFrame />
 
-                    <TextCenterItem>{dataProduct?.landArea ? dataProduct?.landArea : "N/A"} m²</TextCenterItem>
+                    <TextCenterItem>
+                      {dataProduct?.landArea ? dataProduct?.landArea : "N/A"} m²
+                    </TextCenterItem>
                   </WrapItemCenter>
                   <WrapItemCenter>
                     <IconBath />
-                    <TextCenterItem>{dataProduct?.numBath ? dataProduct?.numBath : "N/A"}</TextCenterItem>
+                    <TextCenterItem>
+                      {dataProduct?.numBath ? dataProduct?.numBath : "N/A"}
+                    </TextCenterItem>
                   </WrapItemCenter>
                   <WrapItemCenter>
                     <IconBedDouble />
-                    <TextCenterItem>{dataProduct?.numBed ? dataProduct?.numBed : "N/A"}</TextCenterItem>
+                    <TextCenterItem>
+                      {dataProduct?.numBed ? dataProduct?.numBed : "N/A"}
+                    </TextCenterItem>
                   </WrapItemCenter>
                   <WrapItemCenter>
                     <IconCompass />
                     <TextCenterItem>
-                      {dataProduct?.doorDirection ? dataProduct?.doorDirection : "N/A"}
+                      {dataProduct?.doorDirection
+                        ? dataProduct?.doorDirection
+                        : "N/A"}
                     </TextCenterItem>
                   </WrapItemCenter>
                 </CenterIntemWrap>
@@ -820,7 +846,10 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                       Giá niêm yết{" "}
                     </TextBottomStyled>
                     <NumberBottomStyled>
-                      {dataProduct?.price ? currencyFormat(dataProduct?.price) : "N/A"}đ
+                      {dataProduct?.price
+                        ? currencyFormat(dataProduct?.price)
+                        : "N/A"}
+                      đ
                     </NumberBottomStyled>
                   </div>
                   <div style={{ display: "flex" }}>
@@ -828,7 +857,10 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                       Đơn giá thông thuỷ{" "}
                     </TextBottomStyled2>
                     <NumberBottomStyled2>
-                      {dataProduct?.unitPrice ? currencyFormat(dataProduct?.unitPrice) : "N/A"}đ/m2
+                      {dataProduct?.unitPrice
+                        ? currencyFormat(dataProduct?.unitPrice)
+                        : "N/A"}
+                      đ/m2
                     </NumberBottomStyled2>
                   </div>
                 </div>
@@ -847,8 +879,11 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                         JSON.stringify(dataProduct.id)
                       );
                     }}
-                    disabled={dataProduct?.paymentStatus!==2}
-                    style={{ backgroundColor: dataProduct?.paymentStatus!==2 ? '#FFFF' : ' #ea242a' }}
+                    disabled={dataProduct?.paymentStatus !== 2}
+                    style={{
+                      backgroundColor:
+                        dataProduct?.paymentStatus !== 2 ? "#FFFF" : " #ea242a",
+                    }}
                   >
                     Giỏ hàng
                   </ButtonStyled>
@@ -856,8 +891,11 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                     onClick={() => {
                       addToCart(id);
                     }}
-                    disabled={dataProduct?.paymentStatus!==2}
-                    style={{ backgroundColor: dataProduct?.paymentStatus!==2 ? '#FFFF' : ' #ea242a' }}
+                    disabled={dataProduct?.paymentStatus !== 2}
+                    style={{
+                      backgroundColor:
+                        dataProduct?.paymentStatus !== 2 ? "#FFFF" : " #ea242a",
+                    }}
                   >
                     Mua Online
                   </ButtonStyled>
@@ -877,12 +915,22 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                     marginBottom: 24,
                   }}
                 >
-                  <a href={`tel:+84${(dataProduct?.project.hotline ?? dataProduct?.defaultPhoneNumber ?? '0123456789')?.substring(1)}`} style={{ textAlign: "center" }}>
+                  <a
+                    href={`tel:+84${(
+                      dataProduct?.project.hotline ??
+                      dataProduct?.defaultPhoneNumber ??
+                      "0123456789"
+                    )?.substring(1)}`}
+                    style={{ textAlign: "center" }}
+                  >
                     <IconHeadSetProduct />
                     <TextContact>Liên hệ khách hàng</TextContact>
                   </a>
                   <div style={{ border: "1px solid #1B3459" }} />
-				  <a href={`/policySale/${dataProduct.project.id}`} style={{ textAlign: "center" }}>
+                  <a
+                    href={`/policySale/${dataProduct.project.id}`}
+                    style={{ textAlign: "center" }}
+                  >
                     <IconClipboardProduct />
                     <TextContact>Chính sách bán hàng</TextContact>
                   </a>
@@ -949,7 +997,7 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
           )}
           {/* Tab Components */}
         </div>
-      </FlexContainer >
+      </FlexContainer>
     </>
   );
 };

@@ -76,6 +76,7 @@ const masterReducer = (state, action) => {
           saveInfo: action.payload.saveInfo,
           getCodeQR: action.payload.getCodeQR,
         },
+		transationList: action.payload.transationList
       },
       shortcut: {
        ...action.payload.shortcut

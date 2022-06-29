@@ -1,12 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { UpdateInfoResponse } from "interface/infoCustomer";
+import { ResponseTrans, UpdateInfoResponse } from "interface/infoCustomer";
 
 interface initialState {
   updateInfoResponse: UpdateInfoResponse[];
   userInfo: UpdateInfoResponse;
+  transationList: ResponseTrans[];
 }
 const initialState = {
   updateInfoResponse: [],
+  transationList: [],
   userInfo: {
     customerTypeId: "",
     appellation: "",
@@ -38,9 +40,12 @@ export const changeInfoSlice = createSlice({
     getUserInfo: (state, action) => {
       state.userInfo = action.payload;
     },
+    getTransactionByUser: (state, action) => {
+      state.transationList = action.payload;
+    },
   },
 });
 
-export const { changeProfile, getUserInfo } = changeInfoSlice.actions;
+export const { changeProfile, getUserInfo,getTransactionByUser } = changeInfoSlice.actions;
 
 export default changeInfoSlice.reducer;
