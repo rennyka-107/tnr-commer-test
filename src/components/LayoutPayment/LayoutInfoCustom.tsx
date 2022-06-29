@@ -1,6 +1,6 @@
 import ControllerDatePicker from "@components/Form/ControllerDatePicker";
 import ControllerTextField from "@components/Form/ControllerTextField";
-import { IconPlusCircle } from "@components/Icons";
+import { IconEdit, IconPlusCircle } from "@components/Icons";
 import styled from "@emotion/styled";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
@@ -156,6 +156,8 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
     query: { transactionCode },
   } = useRouter();
   const [initialValue, setInitialValue] = useState<any>(null);
+  const [disabledEditMainUser, setDisabledEditMainUser] =
+    useState<boolean>(false);
 
   async function getInformationUser() {
     try {
@@ -209,11 +211,13 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
   }, [transactionCode, isAuthenticated]);
 
   async function fetchData() {
+    setLoading(true);
     try {
       const res = await apiGetPaymentInformation(transactionCode as string);
       if (!isEmpty(res.responseData)) {
         dispatch(setData(res.responseData));
         setInitialValue(res.responseData);
+        setDisabledEditMainUser(true);
       } else {
         notification({
           severity: "error",
@@ -229,6 +233,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
         message: "Có lỗi xảy ra",
       });
     }
+    setLoading(false);
   }
 
   useEffect(() => {
@@ -554,52 +559,52 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
               <>
                 <WrapperBoxBorderStyled padding={"20px 30px 10px"}>
                   <Title28Styled>Thông tin bên mua</Title28Styled>
-                  {!isEmpty(transactionCode) &&
-                    data.paymentStatus !== 0 &&
-                    !isAuthenticated && (
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                          border: "1px solid #C7C9D9",
-                          p: 2,
-                          borderRadius: "8px",
-                          mt: 1,
-                        }}
-                      >
-                        <IconWarning />
-                        <Box>
-                          <Typography
-                            sx={{
-                              fontWeight: 500,
-                              fontSize: "14px",
-                              lineHeight: "16.41px",
-                              color: "#1B3459",
-                            }}
-                          >
-                            Thông tin đăng ký tài khoản
-                          </Typography>
-                          <Typography
-                            sx={{
-                              fontWeight: 400,
-                              fontSize: "12px",
-                              lineHeight: "14.84px",
-                              color: "#0E1D34",
-                            }}
-                          >
-                            Thông tin người mua đầu tiên dưới đây sẽ được sử
-                            dụng để đăng ký tài khoản sau khi đặt cọc thành công
-                          </Typography>
-                        </Box>
+                  {!isEmpty(transactionCode) && !isAuthenticated && (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        border: "1px solid #C7C9D9",
+                        p: 2,
+                        borderRadius: "8px",
+                        mt: 1,
+                      }}
+                    >
+                      <IconWarning />
+                      <Box>
+                        <Typography
+                          sx={{
+                            fontWeight: 500,
+                            fontSize: "14px",
+                            lineHeight: "16.41px",
+                            color: "#1B3459",
+                          }}
+                        >
+                          Thông tin đăng ký tài khoản
+                        </Typography>
+                        <Typography
+                          sx={{
+                            fontWeight: 400,
+                            fontSize: "12px",
+                            lineHeight: "14.84px",
+                            color: "#0E1D34",
+                          }}
+                        >
+                          Thông tin người mua đầu tiên dưới đây sẽ được sử dụng
+                          để đăng ký tài khoản sau khi đặt cọc thành công
+                        </Typography>
                       </Box>
-                    )}
+                    </Box>
+                  )}
                   <RowStyled>
                     <BoxInfoUserStyled
                       sx={{
                         background: !isEmpty(transactionCode)
                           ? "#FFCC00 !important"
                           : "#f3f4f6",
+                        display: "flex",
+                        alignItems: "center",
                       }}
                     >
                       <ColStyled jContent={"center"}>
@@ -614,6 +619,20 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                             : "Vui lòng điền đầy đủ thông tin bên dưới để tiến hành giao dịch."}
                         </Text14Styled>
                       </ColStyled>
+                      {!isEmpty(transactionCode) && (
+                        <IconButton
+                          sx={{
+                            width: "30px",
+                            height: "30px",
+                            display: "inline-block",
+                          }}
+                          onClick={() =>
+                            setDisabledEditMainUser(!disabledEditMainUser)
+                          }
+                        >
+                          <IconEdit style={{ width: "30px", height: "30px" }} />
+                        </IconButton>
+                      )}
                     </BoxInfoUserStyled>
                     <BoxInfoUserStyled
                       style={{ cursor: "pointer" }}
@@ -632,8 +651,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                   {renderListCustomer()}
                   <FormControl fullWidth style={{ margin: "25px 0px" }}>
                     <Grid container rowSpacing={"20px"} columnSpacing={"37px"}>
-                      {(isEmpty(transactionCode) ||
-                        data.paymentStatus === 0) && (
+                      {!disabledEditMainUser && (
                         <Grid item xs={6}>
                           <FormGroup>
                             <ControllerTextField
@@ -647,8 +665,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                         </Grid>
                       )}
 
-                      {(isEmpty(transactionCode) ||
-                        data.paymentStatus === 0) && (
+                      {!disabledEditMainUser && (
                         <Grid item xs={6}>
                           <FormGroup>
                             <ControllerReactDatePicker
@@ -662,8 +679,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                         </Grid>
                       )}
 
-                      {(isEmpty(transactionCode) ||
-                        data.paymentStatus === 0) && (
+                      {!disabledEditMainUser && (
                         <Grid item xs={6}>
                           <FormGroup>
                             <ControllerTextField
@@ -676,8 +692,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                           </FormGroup>
                         </Grid>
                       )}
-                      {(isEmpty(transactionCode) ||
-                        data.paymentStatus === 0) && (
+                      {!disabledEditMainUser && (
                         <Grid item xs={6}>
                           <FormGroup>
                             <ControllerTextField
@@ -690,8 +705,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                           </FormGroup>
                         </Grid>
                       )}
-                      {(isEmpty(transactionCode) ||
-                        data.paymentStatus === 0) && (
+                      {!disabledEditMainUser && (
                         <Grid item xs={12}>
                           <RowStyled aItems={"baseline"} width={670}>
                             <Title20Styled
@@ -704,7 +718,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                           </RowStyled>
                         </Grid>
                       )}
-                      <Grid item xs={12}>
+                      <Grid item xs={disabledEditMainUser ? 6 : 12}>
                         <FormGroup>
                           <ControllerTextField
                             label={"CCCD/CMND"}
@@ -713,14 +727,11 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                             name={"idNumber"}
                             required
                             width={317}
-                            disabled={
-                              !isEmpty(transactionCode) &&
-                              data.paymentStatus !== 0
-                            }
+                            disabled={disabledEditMainUser}
                           />
                         </FormGroup>
                       </Grid>
-                      {!isEmpty(transactionCode) && data.paymentStatus !== 0 && (
+                      {disabledEditMainUser && (
                         <Grid item xs={6}>
                           <FormGroup>
                             <ControllerTextField
@@ -742,10 +753,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                             variant={"outlined"}
                             name={"issuePlace"}
                             required
-                            disabled={
-                              !isEmpty(transactionCode) &&
-                              data.paymentStatus !== 0
-                            }
+                            disabled={disabledEditMainUser}
                           />
                         </FormGroup>
                       </Grid>
@@ -758,10 +766,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                             name={"issueDate"}
                             required
                             maxDate={new Date()}
-                            disabled={
-                              !isEmpty(transactionCode) &&
-                              data.paymentStatus !== 0
-                            }
+                            disabled={disabledEditMainUser}
                           />
                         </FormGroup>
                       </Grid>
@@ -774,10 +779,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                             name={"permanentAddress"}
                             required
                             fullWidth
-                            disabled={
-                              !isEmpty(transactionCode) &&
-                              data.paymentStatus !== 0
-                            }
+                            disabled={disabledEditMainUser}
                           />
                         </FormGroup>
                       </Grid>
@@ -790,10 +792,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                             variant={"outlined"}
                             name={"contactAddress"}
                             fullWidth
-                            disabled={
-                              !isEmpty(transactionCode) &&
-                              data.paymentStatus !== 0
-                            }
+                            disabled={disabledEditMainUser}
                           />
                         </FormGroup>
                       </Grid>
@@ -805,10 +804,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                             control={control}
                             variant={"outlined"}
                             name={"province"}
-                            disabled={
-                              !isEmpty(transactionCode) &&
-                              data.paymentStatus !== 0
-                            }
+                            disabled={disabledEditMainUser}
                           />
                         </FormGroup>
                       </Grid>
@@ -819,10 +815,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                             control={control}
                             variant={"outlined"}
                             name={"district"}
-                            disabled={
-                              !isEmpty(transactionCode) &&
-                              data.paymentStatus !== 0
-                            }
+                            disabled={disabledEditMainUser}
                           />
                         </FormGroup>
                       </Grid>
