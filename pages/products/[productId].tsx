@@ -1,7 +1,6 @@
 import Page from "@layouts/Page";
 import { useEffect, useState } from "react";
 
-import { CircularProgress } from "@mui/material";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,6 +11,7 @@ import { getListTabsProject } from "../../store/projectSlice";
 import { RootState, wrapper } from "../../store/store";
 import { getListProductApi, getProducById, updateViewProduct } from "../api/productsApi";
 import { getListTabsProjectApi } from "../api/projectApi";
+import LoadingComponent from "@components/LoadingComponent";
 
 const DynamicProductId = dynamic(
   () => import("../../src/components/LayoutProduct/ProductIdpage"),
@@ -80,7 +80,7 @@ const Product = () => {
         ) : (
           <>
             <div style={{ textAlign: "center", marginTop: 200 }}>
-              <CircularProgress />
+              <LoadingComponent />
             </div>
           </>
         )}

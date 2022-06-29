@@ -10,9 +10,9 @@ import {
   getPaggingSearch,
   getSearchHomeLocation,
 } from "../../store/searchSlice";
-import { CircularProgress } from "@mui/material";
 import PaginationComponent from "@components/CustomComponent/PaginationComponent";
 import Row from "@components/CustomComponent/Row";
+import LoadingComponent from "@components/LoadingComponent";
 
 const DynamicSearchPages = dynamic(
   () => import("../../src/components/SearchPage"),
@@ -107,23 +107,21 @@ const Search = () => {
       <>
         {loading === true ? (
           <>
-            <FlexContainer>
-              <DynamicSearchPages
-                searchData={SearchHomeLocation}
-                setSearch={setSearch}
-				setSearchBody={setSearchBody}
-                totalElement={pageNumber}
-                totalTextSearch={totalElement}
-                pageNumber={search.page}
-                setSearchAction={setSearchAction}
-                searchAction={searchAction}
-              />
-            </FlexContainer>
+            <DynamicSearchPages
+              searchData={SearchHomeLocation}
+              setSearch={setSearch}
+              setSearchBody={setSearchBody}
+              totalElement={pageNumber}
+              totalTextSearch={totalElement}
+              pageNumber={search.page}
+              setSearchAction={setSearchAction}
+              searchAction={searchAction}
+            />
           </>
         ) : (
           <>
             <div style={{ textAlign: "center", marginTop: 300 }}>
-              <CircularProgress />
+              <LoadingComponent />
             </div>
           </>
         )}
@@ -140,14 +138,14 @@ const Search = () => {
         description: "TNR Ecommerce Search",
       }}
     >
-      <div>{fetchComponent()}</div>
+      <FlexContainer>{fetchComponent()} </FlexContainer>
       <Row customStyle={{ padding: 70, justifyContent: "center" }}>
         <PaginationComponent
           count={pageNumber}
           onChange={(event, page) => {
-            changePage(page -1);
+            changePage(page - 1);
           }}
-          page={search.page +1}
+          page={search.page + 1}
         />
       </Row>
     </Page>

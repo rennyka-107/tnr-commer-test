@@ -1,5 +1,4 @@
 import Page from "@layouts/Page";
-import { CircularProgress } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,6 +9,7 @@ import { RootState } from "../../store/store";
 import dynamic from "next/dynamic";
 import FlexContainer from "@components/CustomComponent/FlexContainer";
 import Container from "@components/Container";
+import LoadingComponent from "@components/LoadingComponent";
 
 const DynamicDetailPolicySaleId = dynamic(
   () => import("../../src/components/PolicySales/detailPolicy"),
@@ -46,7 +46,7 @@ const PolicyDetail = () => {
       <>
         {loading === true ? (
           <div style={{ textAlign: "center", marginTop: 150 }}>
-            <CircularProgress />
+            <LoadingComponent />
           </div>
         ) : (
           <DynamicDetailPolicySaleId detailData={policyById} />

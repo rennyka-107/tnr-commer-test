@@ -2,7 +2,7 @@ import Page from "@layouts/Page";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
-import { Box, Button, CircularProgress } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { RootState } from "../../store/store";
 import { useDispatch, useSelector } from "react-redux";
 import Container from "@components/Container";
@@ -20,6 +20,7 @@ import {
   setProjectInformation,
 } from "../../store/projectMapSlice";
 import { getListTabsProject } from "../../store/projectSlice";
+import LoadingComponent from "@components/LoadingComponent";
 
 const DynamicMap = dynamic(
   () => import("@components/LayoutProjectDetail/Map"),
@@ -121,7 +122,7 @@ const ProjectDetail = () => {
         ) : (
           <>
             <div style={{ textAlign: "center", marginTop: 200 }}>
-              <CircularProgress />
+              <LoadingComponent />
             </div>
           </>
         )}

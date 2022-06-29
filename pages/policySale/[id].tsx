@@ -8,7 +8,7 @@ import { getListSalePolicyById } from "../api/salePolicyApi";
 import { useDispatch, useSelector } from "react-redux";
 import { getListSalePolicy } from "../../store/salePolicySlice";
 import { RootState } from "../../store/store";
-import { CircularProgress } from "@mui/material";
+import LoadingComponent from "@components/LoadingComponent";
 
 const Container = styled.div`
   padding: 29px 0px;
@@ -53,7 +53,7 @@ const PolicySale = () => {
       <>
         {loading === true ? (
           <div style={{ textAlign: "center", marginTop: 150 }}>
-            <CircularProgress />
+            <LoadingComponent />
           </div>
         ) : (
           <DynamicPolicySaleId listSalePolicy={listSalePolicy} idPolicy={id}/>

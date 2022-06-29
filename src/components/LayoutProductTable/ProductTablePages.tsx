@@ -25,6 +25,7 @@ import {
   IconNumberRoom,
   IconNumberRoomSleep,
 } from "@components/Icons";
+import { Tooltip } from "@mui/material";
 
 type DetailRowI = {
   countRemaining: number;
@@ -97,6 +98,7 @@ const LabelContainer = styled.div`
 `;
 
 const IconStyled = styled.span`
+
   color: black;
   align-items: center;
   display: flex;
@@ -130,7 +132,7 @@ const ProductTablePages = () => {
     // const newValues: BodyRequest = { ...body, saleProductStatus: (body.saleProductStatus as string[]).join(',') }
     const response = await getListProductTable(body, cancelToken);
     setData(response?.responseData ?? []);
-	console.log(response)
+    console.log(response);
   };
 
   useEffect(() => {
@@ -150,55 +152,67 @@ const ProductTablePages = () => {
     });
     return itemFormat.substring(0, 4);
   }
-
+  console.log("list Rows",data?.lstProductionRow)
   const renderAction = (item: ProductionRowI) => {
+
     switch (item.paymentStatus) {
       case 4:
         return (
-          <IconStyled>
-            <IconStopSale />
-          </IconStyled>
+          <Tooltip title={item.productionName} placement="top">
+            <IconStyled>
+              <IconStopSale />
+            </IconStyled>
+          </Tooltip>
         );
       case 99:
         return (
-          <IconStyled>
-            <IconCommingSale />
-          </IconStyled>
+          <Tooltip title={item.productionName} placement="top">
+            <IconStyled>
+              <IconCommingSale />
+            </IconStyled>
+          </Tooltip>
         );
       case 2:
         return (
-          <IconStyled
-            onClick={() => {
-              router.push(`/products/${item.productionId}`);
-            }}
-          >
-            <>
-              <IconAvaliableSale />
-              <div
-                style={{
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  whiteSpace: "nowrap",
-                  width: "100%",
-                }}
-              >
-                <PriceStyled>{formatCurrency(item.price) + "Tỷ"}</PriceStyled>
-              </div>
-            </>
-          </IconStyled>
+          <Tooltip title={item.productionName} placement="top">
+            <IconStyled
+              onClick={() => {
+                router.push(`/products/${item.productionId}`);
+              }}
+			  style={{  cursor: 'pointer'}}
+            >
+              <>
+                <IconAvaliableSale />
+                <div
+                  style={{
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                    width: "100%",
+                  }}
+                >
+                  <PriceStyled>{formatCurrency(item.price) + "Tỷ"}</PriceStyled>
+                </div>
+              </>
+            </IconStyled>
+          </Tooltip>
         );
       case 3:
         return (
-          <IconStyled>
-            <IconWaitPaymentSale />
-          </IconStyled>
+          <Tooltip title={item.productionName} placement="top">
+            <IconStyled>
+              <IconWaitPaymentSale />
+            </IconStyled>
+          </Tooltip>
         );
 
       default:
         return (
-          <IconStyled>
-            <IconCommingSale />
-          </IconStyled>
+          <Tooltip title={item.productionName} placement="top">
+            <IconStyled>
+              <IconCommingSale />
+            </IconStyled>
+          </Tooltip>
         );
     }
   };

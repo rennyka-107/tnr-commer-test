@@ -10,10 +10,10 @@ import {
 import { RootState } from "../../store/store";
 import { searchListProductByProjectIdApiII } from "../api/productsApi";
 import { getListProjectApi } from "../api/projectApi";
-import { CircularProgress } from "@mui/material";
 import { getListProject } from "../../store/projectSlice";
 import PaginationComponent from "@components/CustomComponent/PaginationComponent";
 import Row from "@components/CustomComponent/Row";
+import LoadingComponent from "@components/LoadingComponent";
 
 const DynamicPageIndex = dynamic(
   () => import("../../src/components/LayoutProduct/ProductPages"),
@@ -109,7 +109,7 @@ const ListProduct = () => {
         ) : (
           <>
             <div style={{ textAlign: "center", marginTop: 200 }}>
-              <CircularProgress />
+              <LoadingComponent />
             </div>
           </>
         )}

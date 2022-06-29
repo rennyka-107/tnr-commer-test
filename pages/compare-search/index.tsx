@@ -1,8 +1,8 @@
 import FlexContainer from "@components/CustomComponent/FlexContainer";
 import PaginationComponent from "@components/CustomComponent/PaginationComponent";
 import Row from "@components/CustomComponent/Row";
+import LoadingComponent from "@components/LoadingComponent";
 import Page from "@layouts/Page";
-import { CircularProgress } from "@mui/material";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -29,13 +29,20 @@ const CompareSearch = () => {
     page: 0,
     size: 12,
   });
-  const { areaFrom, areaTo, priceFrom, priceTo, projectTypeId, projectId,categoryId } =
-    router.query;
+  const {
+    areaFrom,
+    areaTo,
+    priceFrom,
+    priceTo,
+    projectTypeId,
+    projectId,
+    categoryId,
+  } = router.query;
   const pageNumber = Math.ceil(totalElement / search.size);
   const [searchBody, setSearchBody] = useState<any>({
     projectTypeId: projectTypeId ? projectTypeId : "",
     projectId: projectId ? projectId : "",
-	categoryId: categoryId ? categoryId : "",
+    categoryId: categoryId ? categoryId : "",
     priceFrom: priceFrom ? priceFrom + "000000000" : "",
     priceTo: priceTo ? priceTo + "000000000" : "",
     areaFrom: Number(areaFrom),
@@ -53,7 +60,7 @@ const CompareSearch = () => {
       priceFrom: priceFrom ? priceFrom + "000000000" : "",
       priceTo: priceTo ? priceTo + "000000000" : "",
       projectId: projectId ? projectId : "",
-	  categoryId: categoryId ? categoryId : "",
+      categoryId: categoryId ? categoryId : "",
       areaFrom: Number(areaFrom),
       areaTo: Number(areaTo),
     });
@@ -83,17 +90,15 @@ const CompareSearch = () => {
       <>
         {loading === true ? (
           <>
-            <FlexContainer>
-              <DynamicSearchPagesCompare
-                searchData={SearchHomeLocation}
-                totalElement={pageNumber}
-              />
-            </FlexContainer>
+            <DynamicSearchPagesCompare
+              searchData={SearchHomeLocation}
+              totalElement={pageNumber}
+            />
           </>
         ) : (
           <>
             <div style={{ textAlign: "center", marginTop: 300 }}>
-              <CircularProgress />
+              <LoadingComponent />
             </div>
           </>
         )}
@@ -110,7 +115,7 @@ const CompareSearch = () => {
         description: "TNR Ecommerce Search Compare Product",
       }}
     >
-      <div>{fetchComponent()}</div>
+      <FlexContainer>{fetchComponent()} </FlexContainer>
       <Row customStyle={{ padding: 70, justifyContent: "center" }}>
         <PaginationComponent
           count={pageNumber}

@@ -4,6 +4,7 @@ import PaginationComponent from "@components/CustomComponent/PaginationComponent
 import Row from "@components/CustomComponent/Row";
 import SelectLocationProductPage from "@components/CustomComponent/SelectInputComponent/SelectLocationProductPage";
 import SelectTypeProductPage from "@components/CustomComponent/SelectInputComponent/SelectTypeProductPage";
+import LoadingComponent from "@components/LoadingComponent";
 import styled from "@emotion/styled";
 import { CircularProgress } from "@mui/material";
 import FormControl from "@mui/material/FormControl";
@@ -161,7 +162,7 @@ const ProductList = () => {
         {loading === true ? (
           <>
             <div style={{ textAlign: "center", marginTop: 300 }}>
-              <CircularProgress />
+              <LoadingComponent />
             </div>
           </>
         ) : (

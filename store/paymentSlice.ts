@@ -23,6 +23,7 @@ interface InitialState {
     paymentFlag: number;
     production: any;
     paymentStatus: number;
+    listUserIdDelete: string[]
   };
 }
 const initialState: InitialState = {
@@ -33,6 +34,7 @@ const initialState: InitialState = {
     paymentMethodId: "",
     paymentIdentityInfos: [
       {
+        mainUser: 1,
         customerTypeId: "",
         vocativeId: "",
         fullname: "",
@@ -63,7 +65,8 @@ const initialState: InitialState = {
     totalDeposite: null,
     paymentFlag: 0,
     production: null,
-    paymentStatus: 0
+    paymentStatus: 0,
+    listUserIdDelete: []
   },
 };
 

@@ -169,7 +169,7 @@ export default function BodyIndex() {
             }}
           >
             <TextBDS>BẤT ĐỘNG SẢN NỔI BẬT</TextBDS>
-            <LinkStyled href="">Xem tất cả</LinkStyled>
+            <LinkStyled href="/hot-products">Xem tất cả</LinkStyled>
           </div>
           <div
             style={{

@@ -12,6 +12,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../store/store";
 import { useRouter } from "next/router";
 import  isEmpty  from "lodash.isempty";
+import LoadingComponent from "@components/LoadingComponent";
 export interface ProjectInforI {
   id: string;
   name: string;
@@ -83,7 +84,7 @@ const ProjectPages = () => {
         {isEmpty(listMenuBarType) ? (
           <>
             <div style={{ textAlign: "center", marginTop: 300 }}>
-              <CircularProgress />
+              <LoadingComponent />
             </div>
           </>
         ) : (

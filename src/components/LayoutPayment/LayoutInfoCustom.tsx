@@ -65,6 +65,7 @@ import useAuth from "hooks/useAuth";
 import ControllerReactDatePicker from "@components/Form/ControllerReactDatePicker";
 import isEqual from "lodash.isequal";
 import IconWarning from "@components/Icons/IconWarning";
+import LocalStorage from "utils/LocalStorage";
 
 type Props = {
   setScopeRender: Dispatch<SetStateAction<string>>;
@@ -187,6 +188,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                   contactAddress: "",
                   province: "",
                   district: "",
+                  mainUser: 1,
                 },
               ],
             })
@@ -197,12 +199,6 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
       console.log(err);
     }
   }
-
-  console.log(
-    initialValue?.paymentIdentityInfos,
-    data.paymentIdentityInfos,
-    "so sanh"
-  );
 
   useEffect(() => {
     if (!isEmpty(transactionCode)) {
@@ -237,7 +233,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
 
   useEffect(() => {
     data.paymentIdentityInfos.forEach((info) => {
-      if (isEmpty(info.vocativeId) && isEmpty(info.customerTypeId)) {
+      if (info.mainUser && info.mainUser === 1) {
         if (
           !isEmpty(watch("idNumber")) &&
           !isEqual(
@@ -332,6 +328,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
       contactAddress,
       province,
       district,
+      id,
     } = values;
     const formatInfos = data.paymentIdentityInfos.map((info) => {
       if (info.idNumber === idNumber || isEmpty(info.idNumber)) {
@@ -347,6 +344,8 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
           contactAddress,
           province,
           district,
+          mainUser: 1,
+          id,
         };
       }
       return {
@@ -385,6 +384,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
       paymentFlag: paymentFlag,
       tnrUserId: null,
       transactionCode: !isEmpty(transactionCode) ? transactionCode : null,
+      listUserIdDelete: data.listUserIdDelete,
     };
     try {
       apiSavePaymentInformation(formatData)
@@ -396,6 +396,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
               title: "Hoàn thiện hồ sơ mua bán",
             });
             addToCart();
+            LocalStorage.remove("cart");
             if (
               !isEmpty(res.responseData?.transactionCode) &&
               paymentFlag === 0
@@ -444,19 +445,27 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
   function removeCustomer(id: string) {
     const paymentIdentityInfos = [...data.paymentIdentityInfos];
     const infos = paymentIdentityInfos.filter((info) => info.idNumber !== id);
+    const deleteInfo = paymentIdentityInfos.find(
+      (info) => info.idNumber === id
+    );
+    const arrayDelete = !isEmpty(data.listUserIdDelete)
+      ? [...data.listUserIdDelete]
+      : [];
+    if (!isEmpty(deleteInfo.id)) {
+      arrayDelete.push(deleteInfo.id);
+    }
     dispatch(
       setData({
         ...data,
         paymentIdentityInfos: infos,
+        listUserIdDelete: arrayDelete,
       })
     );
   }
   function renderListCustomer() {
     const arrayInfos = [...data.paymentIdentityInfos];
     let paymentIdentityInfos: any[] = [];
-    paymentIdentityInfos = arrayInfos.filter(
-      (info) => !isEmpty(info.vocativeId) && !isEmpty(info.customerTypeId)
-    );
+    paymentIdentityInfos = arrayInfos.filter((info) => info.mainUser !== 1);
     const numberRow = paymentIdentityInfos.length / 2;
     const arrayElements = [];
     if (numberRow > 0) {
@@ -466,38 +475,42 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
           paymentIdentityInfos.length >= 1 ? paymentIdentityInfos.pop() : null;
         arrayElements.push(
           <RowStyled key={ele1.idNumber + "1023"}>
-            <BoxInfoUserStyled style={{ cursor: "pointer" }}>
-              <RowStyled>
+            <BoxInfoUserStyled style={{ cursor: "pointer", display: "flex" }}>
+              <ColStyled jContent={"center"} sx={{ gap: 1 }}>
                 <Text18Styled
                   onClick={() => {
                     setFormInfo({ open: true, idNumber: ele1.idNumber });
                   }}
-                  maxWidth={133}
                   color={"black"}
                 >
                   {ele1.fullname}
                 </Text18Styled>
-                <IconButton onClick={() => removeCustomer(ele1.idNumber)}>
-                  <IconPlusCircle style={{ transform: "rotate(45deg)" }} />
-                </IconButton>
-              </RowStyled>
+                <Text14Styled color={"#5a5a5a"}>
+                  {ele1.phoneNumber}
+                </Text14Styled>
+              </ColStyled>
+              <IconButton onClick={() => removeCustomer(ele1.idNumber)}>
+                <IconPlusCircle style={{ transform: "rotate(45deg)" }} />
+              </IconButton>
             </BoxInfoUserStyled>
             {!isEmpty(ele2) && (
-              <BoxInfoUserStyled style={{ cursor: "pointer" }}>
-                <RowStyled>
+              <BoxInfoUserStyled style={{ cursor: "pointer", display: "flex" }}>
+                <ColStyled jContent={"center"} sx={{ gap: 1 }}>
                   <Text18Styled
                     onClick={() => {
                       setFormInfo({ open: true, idNumber: ele2.idNumber });
                     }}
-                    maxWidth={133}
                     color={"black"}
                   >
                     {ele2.fullname}
                   </Text18Styled>
-                  <IconButton onClick={() => removeCustomer(ele2.idNumber)}>
-                    <IconPlusCircle style={{ transform: "rotate(45deg)" }} />
-                  </IconButton>
-                </RowStyled>
+                  <Text14Styled color={"#5a5a5a"}>
+                    {ele2.phoneNumber}
+                  </Text14Styled>
+                </ColStyled>
+                <IconButton onClick={() => removeCustomer(ele2.idNumber)}>
+                  <IconPlusCircle style={{ transform: "rotate(45deg)" }} />
+                </IconButton>
               </BoxInfoUserStyled>
             )}
           </RowStyled>
@@ -541,65 +554,62 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
               <>
                 <WrapperBoxBorderStyled padding={"20px 30px 10px"}>
                   <Title28Styled>Thông tin bên mua</Title28Styled>
-                  {!isEmpty(transactionCode) && data.paymentStatus !== 0 && (
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        border: "1px solid #C7C9D9",
-                        p: 2,
-                        borderRadius: "8px",
-                        mt: 1,
-                      }}
-                    >
-                      <IconWarning />
-                      <Box>
-                        <Typography
-                          sx={{
-                            fontWeight: 500,
-                            fontSize: "14px",
-                            lineHeight: "16.41px",
-                            color: "#1B3459",
-                          }}
-                        >
-                          Thông tin đăng ký tài khoản
-                        </Typography>
-                        <Typography
-                          sx={{
-                            fontWeight: 400,
-                            fontSize: "12px",
-                            lineHeight: "14.84px",
-                            color: "#0E1D34",
-                          }}
-                        >
-                          Thông tin người mua đầu tiên dưới đây sẽ được sử dụng
-                          để đăng ký tài khoản sau khi đặt cọc thành công
-                        </Typography>
+                  {!isEmpty(transactionCode) &&
+                    data.paymentStatus !== 0 &&
+                    !isAuthenticated && (
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          border: "1px solid #C7C9D9",
+                          p: 2,
+                          borderRadius: "8px",
+                          mt: 1,
+                        }}
+                      >
+                        <IconWarning />
+                        <Box>
+                          <Typography
+                            sx={{
+                              fontWeight: 500,
+                              fontSize: "14px",
+                              lineHeight: "16.41px",
+                              color: "#1B3459",
+                            }}
+                          >
+                            Thông tin đăng ký tài khoản
+                          </Typography>
+                          <Typography
+                            sx={{
+                              fontWeight: 400,
+                              fontSize: "12px",
+                              lineHeight: "14.84px",
+                              color: "#0E1D34",
+                            }}
+                          >
+                            Thông tin người mua đầu tiên dưới đây sẽ được sử
+                            dụng để đăng ký tài khoản sau khi đặt cọc thành công
+                          </Typography>
+                        </Box>
                       </Box>
-                    </Box>
-                  )}
+                    )}
                   <RowStyled>
                     <BoxInfoUserStyled
                       sx={{
-                        background:
-                          !isEmpty(transactionCode) && data.paymentStatus !== 0
-                            ? "#FFCC00 !important"
-                            : "#f3f4f6",
+                        background: !isEmpty(transactionCode)
+                          ? "#FFCC00 !important"
+                          : "#f3f4f6",
                       }}
                     >
                       <ColStyled jContent={"center"}>
                         <Title22Styled style={{ marginBottom: 8 }}>
-                          {!isEmpty(transactionCode)
-                            ? watch("fullname")
-                            : isAuthenticated
+                          {!isEmpty(watch("fullname"))
                             ? watch("fullname")
                             : "Khác hàng vãng lai"}
                         </Title22Styled>
                         <Text14Styled color={"#5a5a5a"}>
-                          {!isEmpty(transactionCode)
-                            ? "Số điện thoại: " + watch("phoneNumber")
-                            : isAuthenticated
+                          {!isEmpty(watch("phoneNumber"))
                             ? "Số điện thoại: " + watch("phoneNumber")
                             : "Vui lòng điền đầy đủ thông tin bên dưới để tiến hành giao dịch."}
                         </Text14Styled>

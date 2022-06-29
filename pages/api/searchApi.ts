@@ -48,3 +48,13 @@ export const searchAdvanded = async (data: any, search: SearchParams) => {
     }
   );
 };
+
+export const searchAdvandedHotProduct = async (data: any, search: SearchParams) => {
+	return HttpClient.post<any, CommonResponse>(
+		`api/product/information/advance/search?page=${search.page}&size=${search.size}`,
+		data,
+		{
+		  withToken: false,
+		}
+	  );
+}

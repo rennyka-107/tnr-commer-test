@@ -5,6 +5,7 @@ import CustomButton from "@components/CustomComponent/CustomButton";
 import { postEmailRegister } from "../../../../pages/api/emailApi";
 import { Backdrop, Button, Paper, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
+import useNotification from "hooks/useNotification";
 
 const WrapContainerFooterTop = styled.div`
   background: #fec83c;
@@ -78,7 +79,6 @@ const TypoGrapTitle = styled(Typography)`
   color: #0e1d34;
 `;
 const TypoGraphyBody = styled(Typography)`
-
   width: 434px;
   font-family: "Roboto";
   font-style: normal;
@@ -92,18 +92,16 @@ const TypoGraphyBody = styled(Typography)`
   color: #0e1d34;
 `;
 
-
-
 const useStyles = makeStyles({
   flexGrow: {
     flex: "1",
   },
   button: {
-	textTransform: 'none',
-	fontFamily: 'Roboto',
-	fontStyle: 'normal',
-	fontWeight: 400,
-	fontSize: 16,
+    textTransform: "none",
+    fontFamily: "Roboto",
+    fontStyle: "normal",
+    fontWeight: 400,
+    fontSize: 16,
     height: 48,
     width: 164,
     backgroundColor: "#EA242A",
@@ -123,23 +121,33 @@ const FooterTop = (props: Props) => {
   const classes = useStyles();
   const [emailValue, setEmailValue] = useState("");
   const [open, setOpen] = useState(false);
-
+  const notification = useNotification();
   const handleChange = (event) => {
     setEmailValue(event.target.value);
   };
   const handleSumitEmail = async () => {
     try {
       const response = await postEmailRegister(emailValue);
-		if(response.responseCode === "00"){
-			setOpen(true);
-		}
+      if (response.responseCode === "00") {
+        setOpen(true);
+      } else if (response.responseCode === "9999") {
+        notification({
+          severity: "error",
+          title: `Gửi mail thất bại`,
+          message: `Gửi yêu cầu lỗi hoặc email bị trùng lặp`,
+        });
+      }
     } catch (error) {
-      console.log(error, "-------error--------");
+      notification({
+        severity: "error",
+        title: `Gửi mail thất bại`,
+        message: `Gửi yêu cầu lỗi hoặc email bị trùng lặp`,
+      });
     }
   };
   const handleClose = () => {
-	setOpen(false)
-  }
+    setOpen(false);
+  };
   const fetchBackDrop = () => {
     return (
       <Backdrop
@@ -148,15 +156,21 @@ const FooterTop = (props: Props) => {
         onClick={handleClose}
       >
         <Paper style={{ borderRadius: 10 }}>
-          <div style={{padding: 65, display: 'flex', flexDirection: 'column', gap: 25, alignItems:"center" }}>
+          <div
+            style={{
+              padding: 65,
+              display: "flex",
+              flexDirection: "column",
+              gap: 25,
+              alignItems: "center",
+            }}
+          >
             <TypoGrapTitle>Đăng ký nhận tin thành công!</TypoGrapTitle>
             <TypoGraphyBody>
               Quý khách sẽ nhận được tin tức khuyến mãi mới nhất từ TNR
               Holdings.
             </TypoGraphyBody>
-            <Button className={classes.button}>
-              Đóng
-            </Button>
+            <Button className={classes.button}>Đóng</Button>
           </div>
         </Paper>
       </Backdrop>
