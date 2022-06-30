@@ -130,6 +130,7 @@ const FooterTop = (props: Props) => {
       const response = await postEmailRegister(emailValue);
       if (response.responseCode === "00") {
         setOpen(true);
+		setEmailValue("")
       } else if (response.responseCode === "9999") {
         notification({
           severity: "error",
@@ -148,6 +149,7 @@ const FooterTop = (props: Props) => {
   const handleClose = () => {
     setOpen(false);
   };
+  console.log(emailValue)
   const fetchBackDrop = () => {
     return (
       <Backdrop
@@ -188,6 +190,7 @@ const FooterTop = (props: Props) => {
             <Input
               sx={{ width: "100%", mb: 2 }}
               placeholder="Email"
+			  value={emailValue}
               onChange={(e) => handleChange(e)}
             />
           </DivInput>

@@ -7,11 +7,13 @@ import IconWatingCircle from "@components/Icons/IconWatingCircle";
 import styled from "@emotion/styled";
 import { Typography } from "@mui/material";
 import { ContractI } from "@service/Profile";
+import ImageWithHideOnError from "hooks/ImageWithHideOnError";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import FormatFns from "utils/DateFns";
 import { dayOfWeekToString, getDateFromStringDMY } from "utils/helper";
+import Product3 from "../../../public/images/product3.png";
 
 const DynamicHorizontalLine = dynamic(() =>
   import("@components/CustomComponent/HorizontalLine").then(
@@ -107,6 +109,7 @@ const ProductCard = (props: Props) => {
   const handleChooseItem = (code: string) => {
     router.replace(`/profile?transCode=${code}`);
   };
+  console.log(item);
 
   return (
     <BoxContainer
@@ -120,24 +123,36 @@ const ProductCard = (props: Props) => {
       key={item?.id}
     >
       <div>
-        {item?.avatar ? (
-          <ImageProduct
-            loader={({ src, width, quality }) => {
-              return `${src}?w=${width}&q=${quality}`;
-            }}
-            src={
-              item?.avatar ??
-              "https://tse3.mm.bing.net/th?id=OIP.zsEgRepQ6Uh5OYkkhJyn2gHaE5&pid=Api&P=0&w=277&h=183"
-            }
-            width={159}
-            height={96}
-            alt=""
+        {item?.productionImage ? (
+          //   <ImageProduct
+          //     loader={({ src, width, quality }) => {
+          //       return `${src}?w=${width}&q=${quality}`;
+          //     }}
+          //     src={
+          //       item?.productionImage ??
+          //       "https://tse3.mm.bing.net/th?id=OIP.zsEgRepQ6Uh5OYkkhJyn2gHaE5&pid=Api&P=0&w=277&h=183"
+          //     }
+          //     width={159}
+          //     height={96}
+          //     alt=""
+          //   />
+          <ImageWithHideOnError
+            className="logo"
+            src={item?.productionImage}
+            fallbackSrc={Product3}
+            height={120}
+            width={180}
+            title={"Logo "}
+            alt={"Logo "}
+            priority
+			style={{borderRadius: 8}}
+            unoptimized={true}
           />
         ) : (
           <ImageProduct
-            src={"/images/Product4.png"}
-            width={159}
-            height={96}
+            src={Product3}
+			height={120}
+            width={180}
             alt=""
           />
         )}
@@ -192,7 +207,8 @@ const ProductCard = (props: Props) => {
         </Row>
         <DynamicHorizontalLine />
         {item?.status === "Đặt chỗ thành công" ||
-        item?.status === "Đang chờ thanh toán" || item?.status === "Đã hoàn thiện hồ sơ" ? (
+        item?.status === "Đang chờ thanh toán" ||
+        item?.status === "Đã hoàn thiện hồ sơ" ? (
           <>
             <Row>
               <Column col={1} customStyle={{ paddingLeft: 0 }}>
@@ -297,22 +313,23 @@ const ProductCard = (props: Props) => {
                 </div>
                 Chưa hoàn thành hồ sơ mua bán
               </TextProduct>
-            ): item?.status === "Đặt chỗ thành công" ? (
-				<TextProduct color="#06C270">
-				  {" "}
-				  <div style={{ marginRight: 10 }}>
-					<IconCircleChecked />
-				  </div>
-				  Đặt chỗ thành công
-				</TextProduct>
-			  ) : (
-				<TextProduct color="#06C270">
-				  {" "}
-				  <div style={{ marginRight: 10 }}>
-					<IconCircleChecked />
-				  </div>
-				  Đã hoàn thiện hồ sơ
-				</TextProduct>)}
+            ) : item?.status === "Đặt chỗ thành công" ? (
+              <TextProduct color="#06C270">
+                {" "}
+                <div style={{ marginRight: 10 }}>
+                  <IconCircleChecked />
+                </div>
+                Đặt chỗ thành công
+              </TextProduct>
+            ) : (
+              <TextProduct color="#06C270">
+                {" "}
+                <div style={{ marginRight: 10 }}>
+                  <IconCircleChecked />
+                </div>
+                Đã hoàn thiện hồ sơ
+              </TextProduct>
+            )}
           </Column>
         </Row>
       </ContentProduct>

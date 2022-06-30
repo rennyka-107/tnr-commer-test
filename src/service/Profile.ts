@@ -32,6 +32,7 @@ export interface ContractI {
   paid?: number; // số tiền đã thanh toán
   remaining?: number; // số tiền còn lại
   status?: number | string; // trạng thái
+  productionImage?: string | null;
 }
 
 export interface NotiI {

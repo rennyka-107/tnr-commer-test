@@ -143,7 +143,7 @@ const HomePage = () => {
         valueDienTich[0],
         Math.max(newValue[1], valueDienTich[0] + minDistance),
       ]);
-	  setFilterSearch({ ...filterSearch, areaTo :  valueDienTich[1]});
+	  setFilterSearch({ ...filterSearch,areaFrom:  valueDienTich[0], areaTo :  valueDienTich[1]});
     }
   };
 
@@ -167,7 +167,7 @@ const HomePage = () => {
         valueKhoanGia[0],
         Math.max(newValue[1], valueKhoanGia[0] + minDistance2),
       ]);
-      setFilterSearch({ ...filterSearch,priceTo : valueKhoanGia[1].toString() });
+      setFilterSearch({ ...filterSearch,priceFrom : valueKhoanGia[0].toString(),priceTo : valueKhoanGia[1].toString() });
     }
   };
 

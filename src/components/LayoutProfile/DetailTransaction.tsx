@@ -4,10 +4,9 @@ import styled from "@emotion/styled";
 import { Button } from "@mui/material";
 import {
   ContractI,
-  getContractByUser,
   getOrderById,
-  getOrderByUser,
 } from "@service/Profile";
+import ImageWithHideOnError from "hooks/ImageWithHideOnError";
 
 import { isEmpty } from "lodash";
 import Image from "next/image";
@@ -15,6 +14,7 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import FormatFns from "utils/DateFns";
 import { dayOfWeekToString, getDateFromStringDMY } from "utils/helper";
+import Product3 from "../../../public/images/product3.png";
 interface Props {
   item: ContractI;
 }
@@ -117,6 +117,7 @@ const DetailTransaction = () => {
   }
 
   const fecthComponent = () => {
+	console.log(data)
     return (
       <>
         {isEmpty(data) ? (
@@ -126,13 +127,16 @@ const DetailTransaction = () => {
         ) : (
           <div style={{ padding: 60 }}>
             <div style={{ display: "flex", flexDirection: "row", gap: 50 }}>
-              <ImageProduct
-                src={"/images/Product3.png"}
-                width={350}
+              <ImageWithHideOnError
+                className="logo"
+                src={data.production.apartmentModel.image}
+                fallbackSrc={Product3}
                 height={199}
-                quality={90}
-                objectFit="cover"
-                alt=""
+                width={350}
+                title={"Logo "}
+                alt={"Logo "}
+                priority
+                style={{ borderRadius: 8 }}
                 unoptimized={true}
               />
               <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
@@ -222,7 +226,7 @@ const DetailTransaction = () => {
                     gap: 10,
                     marginTop: 15,
                     textAlign: "right",
-					alignItems: "end"
+                    alignItems: "end",
                   }}
                 >
                   <TextLeftTop>{data.billNumber}</TextLeftTop>
@@ -234,8 +238,10 @@ const DetailTransaction = () => {
                   {data.transactionCodeObject.orderList.status ===
                   "Chưa hoàn thành hồ sơ" ? (
                     <>
-                      <TextLeftTop style={{color: '#EA242A', fontWeight: 700}}>
-                       Chưa hoàn thiện hồ sơ mua bán
+                      <TextLeftTop
+                        style={{ color: "#EA242A", fontWeight: 700 }}
+                      >
+                        Chưa hoàn thiện hồ sơ mua bán
                       </TextLeftTop>
                       <Button
                         style={{
@@ -247,7 +253,11 @@ const DetailTransaction = () => {
                           fontSize: 12,
                           borderRadius: 8,
                         }}
-						onClick={() => router.push(`/payment-cart?transactionCode=${data.transactionCodeObject.code}`)}
+                        onClick={() =>
+                          router.push(
+                            `/payment-cart?transactionCode=${data.transactionCodeObject.code}`
+                          )
+                        }
                       >
                         Hoàn Thiện
                       </Button>
@@ -528,14 +538,24 @@ const DetailTransaction = () => {
                   padding: 10,
                 }}
               >
-                <TextBottomTable style={{fontSize: 12, maxWidth: 150}} >{data.billNumber}</TextBottomTable>
-                <TextBottomTable style={{fontSize: 12, maxWidth: 200}}> {convertDateToString(
-                      getDateFromStringDMY(data.createdAt) ?? new Date()
-                    )}</TextBottomTable>
-                <TextBottomTable style={{fontSize: 12, maxWidth: 150}} >{currencyFormat(data.deposite)}{" "}
-                    đ</TextBottomTable>
-                <TextBottomTable style={{fontSize: 12, maxWidth: 150}} >{data.paymentMethod.name}</TextBottomTable>
-                <TextBottomTable style={{fontSize: 12, maxWidth: 150}} >Chờ duyệt</TextBottomTable>
+                <TextBottomTable style={{ fontSize: 12, maxWidth: 150 }}>
+                  {data.billNumber}
+                </TextBottomTable>
+                <TextBottomTable style={{ fontSize: 12, maxWidth: 200 }}>
+                  {" "}
+                  {convertDateToString(
+                    getDateFromStringDMY(data.createdAt) ?? new Date()
+                  )}
+                </TextBottomTable>
+                <TextBottomTable style={{ fontSize: 12, maxWidth: 150 }}>
+                  {currencyFormat(data.deposite)} đ
+                </TextBottomTable>
+                <TextBottomTable style={{ fontSize: 12, maxWidth: 150 }}>
+                  {data.paymentMethod.name}
+                </TextBottomTable>
+                <TextBottomTable style={{ fontSize: 12, maxWidth: 150 }}>
+                  Chờ duyệt
+                </TextBottomTable>
               </div>
             </div>
           </div>

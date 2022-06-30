@@ -1,11 +1,7 @@
 import styled from "@emotion/styled";
 import { searchLocationResponse } from "interface/searchIF";
 import ItemSearch from "./ItemSearch";
-import {
-  Button,
-  SelectChangeEvent,
-  Typography,
-} from "@mui/material";
+import { Button, SelectChangeEvent, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -16,6 +12,10 @@ import SelectSeach from "@components/CustomComponent/SelectInputComponent/Select
 import { IconFilterSearch } from "@components/Icons";
 import { isEmpty } from "lodash";
 import SelectLocationSearch from "@components/CustomComponent/SelectInputComponent/SelectLocationSearch";
+import SelectInputComponent from "@components/CustomComponent/SelectInputComponent";
+import SelectCategory from "@components/CustomComponent/SelectInputComponent/SelectCategory";
+import SelectKhoanGia from "@components/CustomComponent/SelectInputComponent/SelectKhoanGia";
+import SelectDienTich from "@components/CustomComponent/SelectInputComponent/SelectDienTich";
 
 type dataProps = {
   searchData?: searchLocationResponse[];
@@ -67,24 +67,130 @@ const SearchCompare = ({
       size: 12,
     });
   };
-  
+
   const router = useRouter();
   const [filter, setFilter] = useState<any>({ location: "" });
-  const { listMenuBarType, listMenuBarProjectType, listMenuLocation } =
-    useSelector((state: RootState) => state.menubar);
+  const {
+    listMenuBarType,
+    listMenuBarProjectType,
+    listMenuLocation,
+    listCategory,
+  } = useSelector((state: RootState) => state.menubar);
+  const {
+    categoryId,
+    provinceId,
+    projectId,
+    projectTypeId,
+    priceFrom,
+    priceTo,
+    areaFrom,
+    areaTo,
+  } = router.query;
   const [location, setLocation] = useState<string[]>([]);
+  const [categoryName, setCategoryName] = useState<string[]>([]);
   const [productName, setProductName] = useState<string[]>([]);
   const [projectName, setProjectName] = useState<string[]>([]);
   const [filterSearch, setFilterSearch] = useState({
-    provinceId: "",
-    projectTypeId: "",
-    projectId: "",
-    priceFrom: "",
-    priceTo: "",
-    areaFrom: null,
-    areaTo: null,
+    categoryId: categoryId,
+    provinceId: provinceId,
+    projectTypeId: projectTypeId,
+    projectId: projectId,
+    priceFrom: priceFrom,
+    priceTo: priceTo,
+    areaFrom: areaFrom,
+    areaTo: areaTo,
   });
+  const [valueKhoangGia, setValueKhoangGia] = useState([
+    {
+      name: "Tất cả",
+      value: [0, 0],
+    },
+    {
+      name: "1 Tỷ - 10 Tỷ",
+      value: [1, 10],
+    },
+    {
+      name: "10 Tỷ - 20 Tỷ",
+      value: [10, 20],
+    },
+    {
+      name: "20 Tỷ - 40 Tỷ",
+      value: [20, 40],
+    },
+  ]);
+  const [valueDienTich, setValueDienTich] = useState([
+    {
+      name: "Tất Cả",
+      value: [],
+    },
+    {
+      name: "30 m2 - 50 m2",
+      value: [30, 50],
+    },
+    {
+      name: "50 m2 - 100 m2",
+      value: [50, 100],
+    },
+    {
+      name: "100 m2 - 150 m2",
+      value: [100, 150],
+    },
+    {
+      name: "150 m2 - 200 m2",
+      value: [150, 200],
+    },
+  ]);
+  const [dataKhoangGia, setDataKhoangGia] = useState<any[]>([]);
+  const [dataDienTich, setDataDienTich] = useState<any[]>([]);
 
+  useEffect(() => {
+    const dataLocation = listMenuLocation.filter(
+      (x) => x.ProvinceID === Number(provinceId)
+    );
+    if (!isEmpty(dataLocation)) {
+      setLocation([dataLocation[0].ProvinceName]);
+    }
+    const dataCategory = listCategory.filter((x) => x.id === categoryId);
+    if (!isEmpty(dataCategory)) {
+      setCategoryName([dataCategory[0].name]);
+    }
+    const dataProject = listMenuBarProjectType.filter(
+      (x) => x.id === projectTypeId
+    );
+    if (!isEmpty(dataProject)) {
+      setProjectName(
+        typeof dataProject[0].name === "string"
+          ? dataProject[0].name.split(",")
+          : dataProject[0].name
+      );
+    }
+    const dataProduct = listMenuBarType.filter((x) => x.id === projectId);
+    if (!isEmpty(dataProduct)) {
+      setProductName(
+        typeof dataProduct[0].name === "string"
+          ? dataProduct[0].name.split(",")
+          : dataProduct[0].name
+      );
+    }
+    if (areaFrom !== null || areaTo !== null) {
+      setDataDienTich([areaFrom, areaTo]);
+    }
+    if (priceFrom !== "" || priceTo !== "") {
+      setDataKhoangGia([priceFrom, priceTo]);
+    }
+  }, [
+    provinceId,
+    projectId,
+    projectTypeId,
+    areaFrom,
+    areaTo,
+    priceFrom,
+    priceTo,
+    listMenuBarType,
+    listMenuBarProjectType,
+    listMenuLocation,
+    listCategory,
+  ]);
   useEffect(() => {
     setFilter({
       location: router?.query.textSearch,
@@ -96,7 +202,10 @@ const SearchCompare = ({
       (x) => x.ProvinceName === filter.location
     );
     if (!isEmpty(data)) {
-      setFilterSearch({ ...filterSearch, provinceId: data[0].ProvinceID.toString() });
+      setFilterSearch({
+        ...filterSearch,
+        provinceId: data[0].ProvinceID.toString(),
+      });
     }
     const projectIdData = listMenuBarType.filter(
       (x) => x.id === router.query.projectId
@@ -126,6 +235,16 @@ const SearchCompare = ({
       provinceId: data[0]?.ProvinceID.toString(),
     });
   };
+  const handleSelectCategory = (
+    event: SelectChangeEvent<typeof categoryName>
+  ) => {
+    const {
+      target: { value },
+    } = event;
+    const data = listCategory.filter((x) => x.name === value);
+    setCategoryName(typeof value === "string" ? value.split(",") : value);
+    setFilterSearch({ ...filterSearch, categoryId: data[0].id });
+  };
   const handleSelectProject = (
     event: SelectChangeEvent<typeof projectName>
   ) => {
@@ -134,7 +253,7 @@ const SearchCompare = ({
     } = event;
     const data = listMenuBarProjectType.filter((x) => x.name === value);
     setProjectName(typeof value === "string" ? value.split(",") : value);
-    setFilterSearch({ ...filterSearch, projectId: data[0].id });
+    setFilterSearch({ ...filterSearch, projectTypeId: data[0].id });
   };
   const handleSelectProduct = (
     event: SelectChangeEvent<typeof productName>
@@ -146,7 +265,17 @@ const SearchCompare = ({
     setProductName(typeof value === "string" ? value.split(",") : value);
     setFilterSearch({ ...filterSearch, projectId: data[0].id });
   };
-
+  const handleChangeKhoangGia = (event: any) => {
+    const {
+      target: { value },
+    } = event;
+    setDataKhoangGia(value);
+    setFilterSearch({
+      ...filterSearch,
+      priceFrom: value[0].toString(),
+      priceTo: value[1].toString(),
+    });
+  };
   const handleChangeLocation = (
     event: SelectChangeEvent<typeof projectName>
   ) => {
@@ -157,10 +286,31 @@ const SearchCompare = ({
     setSearch({ ...filterSearch, provinceId: data[0].ProvinceID });
     setLocation(typeof value === "string" ? value.split(",") : value);
   };
+  const handleChangeDienTich = (event: any) => {
+    const {
+      target: { value },
+    } = event;
+
+    if (value.length === 0) {
+      setDataDienTich(value);
+      setFilterSearch({
+        ...filterSearch,
+        areaFrom: "",
+        areaTo: "",
+      });
+    } else {
+      setDataDienTich(value);
+      setFilterSearch({
+        ...filterSearch,
+        areaFrom: value[0],
+        areaTo: value[1],
+      });
+    }
+  };
 
   const handleSearch = () => {
     router.push(
-      `/search?Type=Advanded&&provinceId=${filterSearch.provinceId}&&projectTypeId=${filterSearch.projectTypeId}&&projectId=${filterSearch.projectId}&&priceTo=${filterSearch.priceTo}&&priceFrom=${filterSearch.priceFrom}&&areaTo=${filterSearch.areaTo}&&areaFrom=${filterSearch.areaFrom}`
+      `/compare-search?projectId=${filterSearch.projectId}&&projectTypeId=${filterSearch.projectTypeId}&&priceTo=${filterSearch.priceTo}&&priceFrom=${filterSearch.priceFrom}&&areaTo=${filterSearch.areaTo}&&areaFrom=${filterSearch.areaFrom}&&categoryId=${filterSearch.categoryId}`
     );
   };
 
@@ -171,70 +321,72 @@ const SearchCompare = ({
       // rightContent={fetchRight()}
     >
       <ContainerSearchPage>
+        <div style={{ display: "flex", gap: 50 }}>
+          <SelectSeach
+            label="Loại BĐS"
+            data={listMenuBarProjectType}
+            value={projectName}
+            onChange={handleSelectProject}
+            placeholder="Loại BĐS"
+            style={{ width: 180, height: 40 }}
+          />
+          <SelectCategory
+            label="Dòng sản phẩm"
+            data={listCategory}
+            value={categoryName}
+            onChange={handleSelectCategory}
+            placeholder="Chọn dòng sản phẩm"
+            style={{ width: 180, height: 40 }}
+          />
 
-          <div style={{display: 'flex', gap: 50}}>
-            <SelectLocationSearch
-              label="Chung cư"
-              data={[]}
-              value={[]}
-              onChange={handleChangeLocation}
-              placeholder="Chung cư"
-              style={{ width: 180, height: 40 }}
-            />
-            <SelectSeach
-              label="Loại BĐS"
-              data={listMenuBarProjectType}
-              value={projectName}
-              onChange={handleSelectProject}
-              placeholder="Loại BĐS"
-              style={{ width: 180, height: 40 }}
-            />
-            <SelectSeach
-              label="Chọn dự án"
-              data={listMenuBarType}
-              value={productName}
-              onChange={handleSelectProduct}
-              placeholder="Chọn dự án"
-              style={{ width: 180 }}
-            />
-            <SelectSeach
-              label="Khoảng giá"
-              data={[]}
-              value={[]}
-              onChange={() => console.log("abc")}
-              placeholder="Khoảng giá"
-              style={{ width: 180 }}
-            />
-            <SelectSeach
-              label="Diên tích..."
-              data={[]}
-              value={[]}
-              onChange={() => console.log("abc")}
-              placeholder="Diên tích..."
-              style={{ width: 180 }}
-            />
-			 <Button
+          <SelectSeach
+            label="Chọn dự án"
+            data={listMenuBarType}
+            value={productName}
+            onChange={handleSelectProduct}
+            placeholder="Chọn dự án"
+            style={{ width: 180 }}
+          />
+          <SelectKhoanGia
+            label="Khoảng giá"
+            data={valueKhoangGia}
+            value={dataKhoangGia}
+            setDataKhoangGia={setDataKhoangGia}
+            onChange={handleChangeKhoangGia}
+            placeholder="Khoảng giá"
+            style={{ width: 150, height: 40 }}
+          />
+          <SelectDienTich
+            label="Diên tích (m2)"
+            data={valueDienTich}
+            value={dataDienTich}
+            setDataKhoangGia={setDataDienTich}
+            onChange={handleChangeDienTich}
+            placeholder="Diên tích (m2)"
+            style={{ width: 150, height: 40 }}
+          />
+          <Button
+            style={{
+              background: "#1B3459",
+              width: 125,
+              marginTop: 24,
+              borderRadius: 8,
+              height: 40,
+            }}
+            onClick={handleSearch}
+          >
+            <IconFilterSearch />
+            <span
               style={{
-                background: "#1B3459",
-                width: 125,
-                marginTop: 24,
-                borderRadius: 8,
-                height: 40,
+                color: "#ffffff",
+                textTransform: "none",
+                marginLeft: 5,
               }}
-              onClick={handleSearch}
             >
-              <IconFilterSearch />
-              <span
-                style={{
-                  color: "#ffffff",
-                  textTransform: "none",
-                  marginLeft: 5,
-                }}
-              >
-                Lọc
-              </span>
-            </Button>
-          </div>
+              Lọc
+            </span>
+          </Button>
+        </div>
 
         <div
           style={{
