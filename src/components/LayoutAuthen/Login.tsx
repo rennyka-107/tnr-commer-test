@@ -6,12 +6,13 @@ import PasswordTextField from "@components/Form/PasswordTextField";
 import styled from "@emotion/styled";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { CheckCircleOutline, CircleOutlined } from "@mui/icons-material";
+import { Button, CircularProgress } from "@mui/material";
 import { LoginSuccess, ResponseLoginModel } from "@service/auth";
 import useAuth from "hooks/useAuth";
 import useNotification from "hooks/useNotification";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { validateLine } from "utils/constants";
 import LocalStorage from "utils/LocalStorage";
@@ -35,7 +36,18 @@ const SpanRadio = styled.span`
   font-size: 14px;
   line-height: 16px;
 `;
-
+const ButtonStyled = styled(Button)`
+  text-transform: none;
+  border-radius: 8px;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 19px;
+  color: #ffffff;
+  padding: 14px 70px;
+  cursor: pointer;
+  border: unset;
+  width: 100%;
+`;
 export interface LoginParams {
   username: string;
   password: string;
@@ -44,6 +56,7 @@ export interface LoginParams {
 
 const Login = () => {
   const { login, isAuthenticated } = useAuth();
+  const [loading, setLoading] = useState(false);
   const Route = useRouter();
   const validationSchema = yup.object().shape({
     username: yup
@@ -80,6 +93,7 @@ const Login = () => {
   });
 
   const onSubmit = async (values) => {
+    setLoading(true);
     try {
       if (values.remember) {
         LocalStorage.set("rememberMe", "1");
@@ -94,12 +108,14 @@ const Login = () => {
           title: `Login Fail`,
           message: `${response?.responseMessage}`,
         });
+        setLoading(false);
       } else {
         notification({
           message: "Đăng nhập thành công!",
           severity: "success",
           title: "Đăng Nhập",
         });
+        setLoading(false);
       }
     } catch (error) {
       const AxiosError: { message: string } = error;
@@ -148,11 +164,23 @@ const Login = () => {
           />
         </FormGroup>
         <FormGroup sx={{ mb: 2 }} fullWidth>
-          <CustomButton
+          {/* <CustomButton
             label="Đăng nhập"
             style={{ background: "#D60000" }}
             type="submit"
-          />
+          /> */}
+          <ButtonStyled
+            style={{ background: "#D60000", marginTop: 30 }}
+            type="submit"
+          >
+            {loading === false ? (
+              "Đăng nhập"
+            ) : (
+              <CircularProgress
+                style={{ height: 25, width: 25, color: "#ffffff" }}
+              />
+            )}
+          </ButtonStyled>
         </FormGroup>
         <FormGroup sx={{ mb: 2 }} fullWidth>
           <ControllerCheckbox

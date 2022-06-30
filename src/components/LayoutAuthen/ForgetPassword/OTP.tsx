@@ -1,6 +1,7 @@
 import CustomButton from "@components/CustomComponent/CustomButton";
 import FormGroup from "@components/Form/FormGroup";
 import styled from "@emotion/styled";
+import { Button, CircularProgress } from "@mui/material";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
 import OtpInput from "react-otp-input";
@@ -40,7 +41,18 @@ const Send = styled.a`
   font-size: 14px;
   line-height: 20px;
 `;
-
+const ButtonStyled = styled(Button)`
+text-transform: none;
+border-radius: 8px;
+font-weight: 400;
+font-size: 16px;
+line-height: 19px;
+color: #ffffff;
+padding: 14px 70px;
+cursor: pointer;
+border: unset;
+width:100%;
+`
 export interface Param {
   username: string;
   password: string;
@@ -52,7 +64,7 @@ export interface Props {
 
 const OTP = (props: Props) => {
   const [OTP, setOTP] = useState("");
-
+  const [loading, setLoading] = useState(false);
   const [checked, setChecked] = useState(true);
   const [time, setTime] = useState<number>(120);
   const interval = useRef<any>(null);
@@ -79,11 +91,14 @@ const OTP = (props: Props) => {
   }, []);
 
   const checkOTP = () => {
+	setLoading(true)
     checkValidOTP(props.username, OTP).then((response) => {
       if (response.responseCode === "00" && response.responseData) {
-        props.next();
+		  setLoading(false)
+		  props.next();
       } else {
         setChecked(false);
+		setLoading(false)
       }
     });
   };
@@ -111,6 +126,7 @@ const OTP = (props: Props) => {
           border: "1px solid #C7C9D9",
           borderRadius: 8,
         }}
+		isDisabled={loading}
       />
       {checked ? (
         <Content>
@@ -124,12 +140,18 @@ const OTP = (props: Props) => {
         <NotiFailed>Mã xác thực không chính xác</NotiFailed>
       )}
       <FormGroup sx={{ mb: 2 }} fullWidth>
-        <CustomButton
+        {/* <CustomButton
           label="Tiếp tục"
           style={{ background: "#D60000" }}
           type="button"
           onClick={checkOTP}
-        />
+        /> */}
+		 <ButtonStyled
+            style={{ background: "#D60000", marginTop: 30 ,}}
+            type="button" onClick={checkOTP}
+          >
+           {loading === false ? 'Tiếp Tục' : <CircularProgress style={{height: 25, width: 25, color: '#ffffff'}}/>}
+          </ButtonStyled>
       </FormGroup>
     </Form>
   );

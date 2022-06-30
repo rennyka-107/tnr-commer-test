@@ -395,66 +395,92 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
       transactionCode: !isEmpty(transactionCode) ? transactionCode : null,
       listUserIdDelete: data.listUserIdDelete,
     };
-    try {
-      apiSavePaymentInformation(formatData)
-        .then((res) => {
-          if (!isEmpty(res.responseData)) {
+    if (!isEmpty(uploadMedia) && !isEmpty(transactionCode)) {
+      const data = new FormData();
+      uploadMedia.forEach((media) => {
+        data.append("multipartFileList", media);
+      });
+      data.append("paymentCode", transactionCode as string);
+      apiUploadFile(data)
+        .then((response) => {
+          if (!isEmpty(response.responseData)) {
             notification({
-              message: "Lưu thông tin hồ sơ mua bán thành công!",
               severity: "success",
-              title: "Hoàn thiện hồ sơ mua bán",
+              title: "Hoàn thành hồ sơ",
+              message: response.responseMessage,
             });
-            LocalStorage.remove("cart");
-            addToCart();
-            if (
-              !isEmpty(res.responseData?.transactionCode) &&
-              paymentFlag === 0
-            ) {
-              if (!isEmpty(uploadMedia)) {
-                const data = new FormData();
-                uploadMedia.forEach((media) => {
-                  data.append("multipartFileList", media);
-                });
-                data.append("paymentCode", transactionCode as string);
-                apiUploadFile(data).then((response) => console.log(response));
-              }
-              apiGetQrCode(res.responseData?.transactionCode)
-                .then((res) => {
-                  if (!isEmpty(res.responseData)) {
-                    dispatch(setQrCode(res.responseData));
-                    setScopeRender("transaction_message");
-                  }
-                })
-                .catch((err) => console.log(err));
-            }
-            if (
-              !isEmpty(res.responseData?.msbRedirectLink) &&
-              paymentFlag !== 0
-            ) {
-              window.location.href = res.responseData?.msbRedirectLink;
-            }
+            router.push("/profile");
           } else {
             notification({
-              error: res.responseMessage,
-              title: "Hoàn thiện hồ sơ mua bán",
+              severity: "error",
+              title: "Hoàn thành hồ sơ",
+              message: response.responseMessage,
             });
           }
           setLoading(false);
         })
         .catch((err) => {
           notification({
+            severity: "error",
+            title: "Hoàn thành hồ sơ",
+            message: "Có lỗi xảy ra",
+          });
+          setLoading(false);
+        });
+    } else {
+      try {
+        apiSavePaymentInformation(formatData)
+          .then((res) => {
+            if (!isEmpty(res.responseData)) {
+              notification({
+                message: "Lưu thông tin hồ sơ mua bán thành công!",
+                severity: "success",
+                title: "Hoàn thiện hồ sơ mua bán",
+              });
+              LocalStorage.remove("cart");
+              addToCart();
+              if (
+                !isEmpty(res.responseData?.transactionCode) &&
+                paymentFlag === 0
+              ) {
+                apiGetQrCode(res.responseData?.transactionCode)
+                  .then((res) => {
+                    if (!isEmpty(res.responseData)) {
+                      dispatch(setQrCode(res.responseData));
+                      setScopeRender("transaction_message");
+                    }
+                  })
+                  .catch((err) => console.log(err));
+              }
+              if (
+                !isEmpty(res.responseData?.msbRedirectLink) &&
+                paymentFlag !== 0
+              ) {
+                window.location.href = res.responseData?.msbRedirectLink;
+              }
+            } else {
+              notification({
+                error: res.responseMessage,
+                title: "Hoàn thiện hồ sơ mua bán",
+              });
+            }
+            setLoading(false);
+          })
+          .catch((err) => {
+            notification({
+              error: "Có lỗi xảy ra!",
+              title: "Hoàn thiện hồ sơ mua bán",
+            });
+            setLoading(false);
+          });
+      } catch (error) {
+        {
+          notification({
             error: "Có lỗi xảy ra!",
             title: "Hoàn thiện hồ sơ mua bán",
           });
           setLoading(false);
-        });
-    } catch (error) {
-      {
-        notification({
-          error: "Có lỗi xảy ra!",
-          title: "Hoàn thiện hồ sơ mua bán",
-        });
-        setLoading(false);
+        }
       }
     }
   };
@@ -845,9 +871,11 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                     setPayMethod={setPayMethod}
                   />
                 </Box>
-                <Box>
-                  <FileUpload setValidUpload={setValidUpload} />
-                </Box>
+                {!isEmpty(transactionCode) && (
+                  <Box>
+                    <FileUpload setValidUpload={setValidUpload} />
+                  </Box>
+                )}
               </>
             )}
           </Grid>

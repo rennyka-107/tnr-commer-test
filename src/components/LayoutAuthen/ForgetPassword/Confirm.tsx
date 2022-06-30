@@ -3,8 +3,14 @@ import ControllerRadio from "@components/Form/ControllerRadio";
 import FormGroup from "@components/Form/FormGroup";
 import styled from "@emotion/styled";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Grid, RadioGroup } from "@mui/material";
-import React from "react";
+import {
+  Backdrop,
+  Button,
+  CircularProgress,
+  Grid,
+  RadioGroup,
+} from "@mui/material";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { CommonResponse } from "type/common";
 import { validateLine } from "utils/constants";
@@ -28,7 +34,18 @@ const TypeConFirm = styled.div`
   color: #48576d;
   margin-bottom: 30px;
 `;
-
+const ButtonStyled = styled(Button)`
+text-transform: none;
+border-radius: 8px;
+font-weight: 400;
+font-size: 16px;
+line-height: 19px;
+color: #ffffff;
+padding: 14px 70px;
+cursor: pointer;
+border: unset;
+width:100%;
+`
 export interface Param {
   confirm: string;
 }
@@ -38,7 +55,7 @@ export interface Props {
 }
 
 const Confirm = (props: Props) => {
-
+	const [loading, setLoading] = useState(false);
   const validationSchema = yup.object().shape({
     confirm: yup
       .string()
@@ -53,6 +70,7 @@ const Confirm = (props: Props) => {
   });
 
   const onSubmit = async () => {
+	setLoading(true);
     HttpClient.post<any, CommonResponse>(
       `/api-account/v1/account/forget-password?username=${props.username}`,
       {},
@@ -62,9 +80,11 @@ const Confirm = (props: Props) => {
     ).then((response) => {
       if (response.responseCode === "00") {
         props.next();
+		setLoading(false)
       }
     });
   };
+
 
   return (
     <Form>
@@ -76,6 +96,7 @@ const Confirm = (props: Props) => {
             <ControllerRadio
               name="confirm"
               control={control}
+			  disabled={loading}
               options={[
                 { value: 1, label: "Nhận mã qua email" },
                 { value: 2, label: "Nhắn tin tới số ..." },
@@ -83,13 +104,19 @@ const Confirm = (props: Props) => {
             />
           </Grid>
         </RadioGroup>
-
         <FormGroup sx={{ mb: 2 }} fullWidth>
-          <CustomButton
-            label="Tiếp tục"
-            style={{ background: "#D60000" , marginTop: 30}}
+          <ButtonStyled
+            style={{ background: "#D60000", marginTop: 30 ,}}
             type="submit"
-          />
+          >
+           {loading === false ? 'Tiếp Tục' : <CircularProgress style={{height: 25, width: 25, color: '#ffffff'}}/>}
+          </ButtonStyled>
+          {/* <CustomButton
+            label="Tiếp tục"
+        
+            type="submit"
+			
+          /> */}
         </FormGroup>
       </form>
     </Form>

@@ -3,6 +3,7 @@ import ControllerTextField from "@components/Form/ControllerTextField";
 import FormGroup from "@components/Form/FormGroup";
 import styled from "@emotion/styled";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { Button } from "@mui/material";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { validateLine } from "utils/constants";
@@ -27,7 +28,18 @@ const LinkLabel = styled.a`
   align-items: center;
   display: flex;
 `;
-
+const ButtonStyled = styled(Button)`
+text-transform: none;
+border-radius: 8px;
+font-weight: 400;
+font-size: 16px;
+line-height: 19px;
+color: #ffffff;
+padding: 14px 70px;
+cursor: pointer;
+border: unset;
+width:100%;
+`
 export interface Params {
   username: string;
   password: string;
@@ -76,11 +88,12 @@ const ForgetPassword = (props: Props) => {
           />
         </FormGroup>
         <FormGroup sx={{ mb: 2 }} fullWidth>
-          <CustomButton
-            label="Tiếp tục"
-            style={{ background: "#D60000" }}
+		<ButtonStyled
+            style={{ background: "#D60000", marginTop: 30 ,}}
             type="submit"
-          />
+          >
+            Tiếp tục
+          </ButtonStyled>
         </FormGroup>
       </form>
     </Form>

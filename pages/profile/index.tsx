@@ -3,24 +3,22 @@ import Page from "@layouts/Page";
 import dynamic from "next/dynamic";
 import React from "react";
 
-const DynamicProfilePages = dynamic(() =>
-    import("../../src/components/LayoutProfile/ProfilePages").then(
-        (m) => m.default,
-        (e) => null as never
-    )
+const DynamicProfilePages = dynamic(
+  () => import("../../src/components/LayoutProfile/ProfilePages"),
+  { loading: () => <p>...</p> }
 );
 
 const Profile = () => {
-    return (
-        <Page
-            meta={{
-                title: "TNR Ecommerce",
-                description: "TNR Ecommerce",
-                isHomePage: true,
-            }}
-        >
-            <DynamicProfilePages />
-        </Page>
-    )
-}
+  return (
+    <Page
+      meta={{
+        title: "TNR Ecommerce Account",
+        description: "TNR Ecommerce Account",
+        isHomePage: true,
+      }}
+    >
+      <DynamicProfilePages />
+    </Page>
+  );
+};
 export default WithAuth(Profile);

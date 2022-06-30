@@ -14,6 +14,7 @@ import * as yup from "yup";
 import Image from "next/image";
 import { forgetPassword } from "../../../../pages/api/changePassword";
 import useNotification from "hooks/useNotification";
+import { Button, CircularProgress } from "@mui/material";
 
 const Form = styled.div`
   margin-top: 10px;
@@ -47,7 +48,18 @@ const TextNotice = styled.div`
   text-align: center;
   margin: 25px 0;
 `;
-
+const ButtonStyled = styled(Button)`
+text-transform: none;
+border-radius: 8px;
+font-weight: 400;
+font-size: 16px;
+line-height: 19px;
+color: #ffffff;
+padding: 14px 70px;
+cursor: pointer;
+border: unset;
+width:100%;
+`
 export interface Param {
   password: string;
   rePassword: string;
@@ -60,6 +72,7 @@ export interface Props {
 
 const ChangeNewPass = (props: Props) => {
   const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
   const Route = useRouter();
   const notification = useNotification();
   const validationSchema = yup.object().shape({
@@ -86,17 +99,19 @@ const ChangeNewPass = (props: Props) => {
   });
 
   const onSubmit = async (values) => {
+	setLoading(true);
     forgetPassword(props.username, getValues("password")).then(
       (response: any) => {
         if (
           response.responseCode === "00" &&
           response.responseData === "Success!"
         ) {
-          notification({
-            severity: "success",
-            title: "Đổi mật khẩu",
-            message: "Đổi mật khẩu thành công"
-          })
+			notification({
+				severity: "success",
+				title: "Đổi mật khẩu",
+				message: "Đổi mật khẩu thành công"
+			})
+			setLoading(false);
           setSuccess(true);
         } else {
           notification({
@@ -138,11 +153,17 @@ const ChangeNewPass = (props: Props) => {
             />
           </FormGroup>
           <FormGroup sx={{ mb: 2 }} fullWidth>
-            <CustomButton
+            {/* <CustomButton
               label="Tiếp tục"
               style={{ background: "#D60000" }}
               type="submit"
-            />
+            /> */}
+			 <ButtonStyled
+            style={{ background: "#D60000", marginTop: 30 ,}}
+            type="submit"
+          >
+           {loading === false ? 'Tiếp Tục' : <CircularProgress style={{height: 25, width: 25, color: '#ffffff'}}/>}
+          </ButtonStyled>
           </FormGroup>
         </form>
       ) : (
