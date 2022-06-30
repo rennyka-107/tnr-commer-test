@@ -16,6 +16,9 @@ import {
   ColStyled,
 } from "../../StyledLayout/styled";
 import styled from "@emotion/styled";
+import { RootState } from "../../../../store/store";
+import { useSelector } from "react-redux";
+import { currencyFormat } from "utils/helper";
 
 const BoxInputStyled = styled(Box)(
   {
@@ -42,6 +45,7 @@ const BillingInfo = ({ setBilling, billing }: Props) => {
     "#FCB715",
     "#C7C9D9",
   ]);
+  const data  = useSelector((state: RootState) => state.payments.data);
   useEffect(() => {
     setColorActive(
       billing === 1 ? ["#FCB715", "#C7C9D9"] : ["#C7C9D9", "#FCB715"]
@@ -65,7 +69,7 @@ const BillingInfo = ({ setBilling, billing }: Props) => {
               />
               <BoxInputStyled color={colorActive[0]}>
                 <Text18Styled color={colorActive[0]}>
-                  20.000.000 vnd
+                  {currencyFormat(data?.quotationRealt?.minEarnestMoney)} vnd
                 </Text18Styled>
               </BoxInputStyled>
             </Grid>
@@ -77,7 +81,7 @@ const BillingInfo = ({ setBilling, billing }: Props) => {
               />
               <BoxInputStyled color={colorActive[1]}>
                 <Text18Styled color={colorActive[1]}>
-                  50.000.000 vnd
+                  {currencyFormat(data?.quotationRealt?.regulationOrderPrice)} vnd
                 </Text18Styled>
               </BoxInputStyled>
             </Grid>

@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 interface InitialState {
   listPayment: any[];
   qrCode: string;
+  uploadMedia: [];
   data: {
     productId: string;
     paymentMethodId: string;
@@ -23,12 +24,14 @@ interface InitialState {
     paymentFlag: number;
     production: any;
     paymentStatus: number;
-    listUserIdDelete: string[]
+    listUserIdDelete: string[];
+    paymentMediaList: any[];
   };
 }
 const initialState: InitialState = {
   listPayment: [],
   qrCode: "",
+  uploadMedia: [],
   data: {
     productId: "",
     paymentMethodId: "",
@@ -66,7 +69,8 @@ const initialState: InitialState = {
     paymentFlag: 0,
     production: null,
     paymentStatus: 0,
-    listUserIdDelete: []
+    listUserIdDelete: [],
+    paymentMediaList: []
   },
 };
 
@@ -83,9 +87,12 @@ export const paymentSlice = createSlice({
     setData: (state, action) => {
       state.data = action.payload;
     },
+    setUploadMedia: (state, action) => {
+      state.uploadMedia = action.payload;
+    },
   },
 });
 
-export const { setListPayment, setQrCode, setData } = paymentSlice.actions;
+export const { setListPayment, setQrCode, setData, setUploadMedia } = paymentSlice.actions;
 
 export default paymentSlice.reducer;

@@ -26,34 +26,34 @@ const Index = () => {
   const [key, setKey] = useState("");
   const [userId, setUserId] = useState("");
   const [paramsEndcode, setParamsEndcode] = useState({
-	key: '',
-	OTP: '',
-  })
+    key: "",
+    OTP: "",
+  });
   const { tabIndex } = Route.query;
-  
+
   useEffect(() => {
-	  setType(tabIndex);
-	if(Route.query.key !== undefined && Route.query.otp !== undefined){
-		const key = Base64.decode(Route.query.key as string)
-		const otp = Base64.decode(Route.query.otp as string)
-		setParamsEndcode({
-			key: key,
-			OTP: otp
-		})
-	}
+    setType(tabIndex);
+    if (Route.query.key !== undefined && Route.query.otp !== undefined) {
+      const key = Route.query.key as string;
+      const otp = Route.query.otp as string;
+      setParamsEndcode({
+        key: key,
+        OTP: otp,
+      });
+    }
   }, [Route]);
 
-//   useEffect(() => {
-//     if(tabIndex === 'register'){
-//       Route.push({
-//         pathname: PathRoute.Login,
-//         query: {
-//           prePath: Route.pathname,
-//           tabIndex: "register",
-//         },
-//       });
-//     }
-//   }, [Route]);
+  //   useEffect(() => {
+  //     if(tabIndex === 'register'){
+  //       Route.push({
+  //         pathname: PathRoute.Login,
+  //         query: {
+  //           prePath: Route.pathname,
+  //           tabIndex: "register",
+  //         },
+  //       });
+  //     }
+  //   }, [Route]);
 
   const render = useMemo(() => {
     switch (type) {
@@ -86,8 +86,8 @@ const Index = () => {
         return (
           <OTP
             keycloakId={key}
-			paramsEndcode={paramsEndcode.OTP}
-			keyWidthOTPParams={paramsEndcode.key}
+            paramsEndcode={paramsEndcode.OTP}
+            keyWidthOTPParams={paramsEndcode.key}
             userId={userId}
             back={() => setType("confirm")}
             next={() => setType("ChangeNewPass")}

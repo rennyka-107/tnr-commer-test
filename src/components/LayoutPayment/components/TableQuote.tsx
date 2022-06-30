@@ -105,18 +105,18 @@ const TableQuote = ({ width, urlPayment, setScopeRender, item }: Props) => {
         <RowStyledAgain>
           <Text14Styled>Tiền đặt chỗ tối thiểu</Text14Styled>
           <Text14Styled fw={500}>
-            {!isEmpty(item) && item.totalOnlinePrice
-              ? currencyFormat(item.totalOnlinePrice)
-              : "1.000.000"}
+            {!isEmpty(item) && item.minEarnestMoney
+              ? currencyFormat(item.minEarnestMoney)
+              : "0"}
             đ
           </Text14Styled>
         </RowStyledAgain>
         <RowStyled>
           <Text14Styled>Tiền đặt hàng quy định</Text14Styled>
           <Text14Styled fw={500}>
-            {!isEmpty(item) && item.totalOnlinePrice
-              ? currencyFormat(item.totalOnlinePrice)
-              : "50.000.000"}{" "}
+            {!isEmpty(item) && item.regulationOrderPrice
+              ? currencyFormat(item.regulationOrderPrice)
+              : "0"}
             đ
           </Text14Styled>
         </RowStyled>

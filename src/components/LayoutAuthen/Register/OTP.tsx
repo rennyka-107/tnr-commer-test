@@ -126,12 +126,12 @@ const OTP = (props: Props) => {
 		  });
 	}else {
 		activeAccount(props.keycloakId, OTP).then((response) => {
-			if (response.responseCode === "00" && response.responseData) {
-			  setSuccess(true);
-			} else {
-			  setChecked(false);
-			}
-		  });
+      if (response.responseCode === "00" && response.responseData) {
+        setSuccess(true);
+      } else {
+        setChecked(false);
+      }
+    });
 	}
 
   };

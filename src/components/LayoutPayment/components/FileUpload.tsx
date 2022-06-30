@@ -6,11 +6,13 @@ import {
   Title28Styled,
 } from "@components/StyledLayout/styled";
 import styled from "@emotion/styled";
-import { Box, Grid } from "@mui/material";
-import Image from "next/image";
-import { useRouter } from "next/router";
-import React, { useState } from "react";
+import { Box, CardMedia, Grid } from "@mui/material";
+import { isEmpty } from "lodash";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { apiUploadFile } from "../../../../pages/api/cartApi";
+import { setUploadMedia } from "../../../../store/paymentSlice";
+import { RootState } from "../../../../store/store";
 
 type Props = {};
 const WrapperBoxStyled = styled(Box)({
@@ -32,7 +34,26 @@ const InputUpload = styled.input({
 
 const FileUpload = (props: Props) => {
   const [urlPhoto, setUrlPhoto] = useState([]);
-  const { query: {transactionCode} } = useRouter();
+  const dispatch = useDispatch();
+  const { paymentMediaList } = useSelector(
+    (state: RootState) => state.payments.data
+  );
+  const uploadMedia = useSelector(
+    (state: RootState) => state.payments.uploadMedia
+  );
+
+  useEffect(() => {
+    if (!isEmpty(paymentMediaList)) {
+      setUrlPhoto(
+        paymentMediaList.map((media, idx) => ({
+          name: `Giay to ${++idx}`,
+          path: media.data,
+          active: true,
+        }))
+      );
+    }
+  }, [paymentMediaList]);
+
   const onFileDrop = (e) => {
     const reader = new FileReader();
     const tarFile = e.target.files[0];
@@ -61,23 +82,22 @@ const FileUpload = (props: Props) => {
         setUrlPhoto(urls);
       }
     };
+    dispatch(
+      setUploadMedia(
+        uploadMedia.length > 0 ? [...uploadMedia, tarFile] : [tarFile]
+      )
+    );
 
     // upload file
-    const data = new FormData();
-    data.append("multipartFileList", tarFile);
-    data.append("paymentCode", transactionCode as string);
+    // const data = new FormData();
+    // data.append("multipartFileList", tarFile);
+    // data.append("paymentCode", transactionCode as string);
 
-    apiUploadFile(data).then((response) => console.log(response));
+    // apiUploadFile(data).then((response) => console.log(response));
   };
 
   const onRemoveFile = (url) => {
-    const files = [...urlPhoto];
-    const result = files.map((item) => {
-      if (item.path === url.path) {
-        return { ...item, active: false };
-      }
-      return item;
-    });
+    const result = urlPhoto.filter((item) => item.path !== url.path);
     setUrlPhoto(result);
   };
 
@@ -106,16 +126,22 @@ const FileUpload = (props: Props) => {
                   return (
                     <Grid item xs={3} key={idx}>
                       <RowStyled>
-                        <Image
+                        {/* <Image
                           width={143}
                           height={99}
+                          src={item.path}
+                          alt="clear"
+                        /> */}
+                        <CardMedia
+                          component="img"
+                          sx={{ width: 120, height: 90 }}
                           src={item.path}
                           alt="clear"
                         />
                         <IconRemove
                           onClick={() => onRemoveFile(item)}
                           style={{
-                            margin: "67px 0px 0px 5px",
+                            margin: "0 0 0 0",
                             cursor: "pointer",
                           }}
                         />
