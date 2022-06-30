@@ -138,6 +138,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
   ];
 
   const [payMethod, setPayMethod] = useState<string>("");
+  const [validUpload, setValidUpload] = useState<boolean>(false);
   const [billing, setBilling] = useState<number>(1);
   const [formInfo, setFormInfo] = useState<{ open: boolean; idNumber: string }>(
     { open: false, idNumber: "" }
@@ -478,6 +479,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
       })
     );
   }
+  console.log(validUpload, "??")
   function renderListCustomer() {
     const arrayInfos = [...data.paymentIdentityInfos];
     let paymentIdentityInfos: any[] = [];
@@ -844,7 +846,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                   />
                 </Box>
                 <Box>
-                  <FileUpload />
+                  <FileUpload setValidUpload={setValidUpload} />
                 </Box>
               </>
             )}
@@ -908,7 +910,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                             (info) => info.mainUser === 1
                           ),
                           { ...watch() }
-                        )
+                        ) && !validUpload
                         ? "#E7E9EC"
                         : "red"
                       : "white"
@@ -924,7 +926,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                         (info) => info.mainUser === 1
                       ),
                       { ...watch() }
-                    )
+                    ) && !validUpload
                   }
                 >
                   <Text18Styled>

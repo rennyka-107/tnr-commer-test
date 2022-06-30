@@ -10,11 +10,10 @@ import { Box, CardMedia, Grid } from "@mui/material";
 import { isEmpty } from "lodash";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { apiUploadFile } from "../../../../pages/api/cartApi";
 import { setUploadMedia } from "../../../../store/paymentSlice";
 import { RootState } from "../../../../store/store";
 
-type Props = {};
+type Props = { setValidUpload: React.Dispatch<React.SetStateAction<boolean>> };
 const WrapperBoxStyled = styled(Box)({
   width: "100%",
   border: "2px solid #FEC83C",
@@ -32,7 +31,7 @@ const InputUpload = styled.input({
   opacity: 0,
 });
 
-const FileUpload = (props: Props) => {
+const FileUpload = ({ setValidUpload }: Props) => {
   const [urlPhoto, setUrlPhoto] = useState([]);
   const dispatch = useDispatch();
   const { paymentMediaList } = useSelector(
@@ -49,6 +48,7 @@ const FileUpload = (props: Props) => {
           name: `Giay to ${++idx}`,
           path: media.data,
           active: true,
+          ...media,
         }))
       );
     }
@@ -87,13 +87,7 @@ const FileUpload = (props: Props) => {
         uploadMedia.length > 0 ? [...uploadMedia, tarFile] : [tarFile]
       )
     );
-
-    // upload file
-    // const data = new FormData();
-    // data.append("multipartFileList", tarFile);
-    // data.append("paymentCode", transactionCode as string);
-
-    // apiUploadFile(data).then((response) => console.log(response));
+    setValidUpload(true);
   };
 
   const onRemoveFile = (url) => {
@@ -103,6 +97,7 @@ const FileUpload = (props: Props) => {
       (item: File) => item.name !== url.name
     );
     dispatch(setUploadMedia(newUploadFile));
+    setValidUpload(true);
   };
 
   return (
