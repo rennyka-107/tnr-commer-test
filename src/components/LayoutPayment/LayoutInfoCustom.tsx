@@ -66,6 +66,7 @@ import ControllerReactDatePicker from "@components/Form/ControllerReactDatePicke
 import isEqual from "lodash.isequal";
 import IconWarning from "@components/Icons/IconWarning";
 import LocalStorage from "utils/LocalStorage";
+import { apiUploadFile } from "../../../pages/api/cartApi";
 
 type Props = {
   setScopeRender: Dispatch<SetStateAction<string>>;
@@ -147,6 +148,9 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
   const { listPayment } = useSelector((state: RootState) => state.payments);
   const [acceptPolicy, setAcceptPolicy] = useState<boolean>(false);
   const data = useSelector((state: RootState) => state.payments.data);
+  const uploadMedia = useSelector(
+    (state: RootState) => state.payments.uploadMedia
+  );
   const { isAuthenticated } = useAuth();
   const dispatch = useDispatch();
   const addToCart = useAddToCart();
@@ -405,6 +409,14 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
               !isEmpty(res.responseData?.transactionCode) &&
               paymentFlag === 0
             ) {
+              if (!isEmpty(uploadMedia)) {
+                const data = new FormData();
+                uploadMedia.forEach((media) => {
+                  data.append("multipartFileList", media);
+                });
+                data.append("paymentCode", transactionCode as string);
+                apiUploadFile(data).then((response) => console.log(response));
+              }
               apiGetQrCode(res.responseData?.transactionCode)
                 .then((res) => {
                   if (!isEmpty(res.responseData)) {
@@ -893,9 +905,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                         ) &&
                         isEqual(
                           initialValue.paymentIdentityInfos.find(
-                            (info) =>
-                              isEmpty(info.vocativeId) &&
-                              isEmpty(info.customerTypeId)
+                            (info) => info.mainUser === 1
                           ),
                           { ...watch() }
                         )
@@ -911,9 +921,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                     ) &&
                     isEqual(
                       initialValue.paymentIdentityInfos.find(
-                        (info) =>
-                          isEmpty(info.vocativeId) &&
-                          isEmpty(info.customerTypeId)
+                        (info) => info.mainUser === 1
                       ),
                       { ...watch() }
                     )

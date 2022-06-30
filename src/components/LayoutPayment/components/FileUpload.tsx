@@ -99,6 +99,10 @@ const FileUpload = (props: Props) => {
   const onRemoveFile = (url) => {
     const result = urlPhoto.filter((item) => item.path !== url.path);
     setUrlPhoto(result);
+    const newUploadFile = uploadMedia.filter(
+      (item: File) => item.name !== url.name
+    );
+    dispatch(setUploadMedia(newUploadFile));
   };
 
   return (
@@ -125,13 +129,7 @@ const FileUpload = (props: Props) => {
                 if (item.active) {
                   return (
                     <Grid item xs={3} key={idx}>
-                      <RowStyled>
-                        {/* <Image
-                          width={143}
-                          height={99}
-                          src={item.path}
-                          alt="clear"
-                        /> */}
+                      <RowStyled sx={{ maxHeight: 90, mt: 3 }}>
                         <CardMedia
                           component="img"
                           sx={{ width: 120, height: 90 }}
