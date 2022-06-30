@@ -13,6 +13,7 @@ import Regexs from "utils/Regexs";
 import * as yup from "yup";
 import Image from "next/image";
 import { forgetPassword } from "../../../../pages/api/changePassword";
+import useNotification from "hooks/useNotification";
 
 const Form = styled.div`
   margin-top: 10px;
@@ -60,7 +61,7 @@ export interface Props {
 const ChangeNewPass = (props: Props) => {
   const [success, setSuccess] = useState(false);
   const Route = useRouter();
-
+  const notification = useNotification();
   const validationSchema = yup.object().shape({
     password: yup
       .string()
@@ -91,9 +92,18 @@ const ChangeNewPass = (props: Props) => {
           response.responseCode === "00" &&
           response.responseData === "Success!"
         ) {
+          notification({
+            severity: "success",
+            title: "Đổi mật khẩu",
+            message: "Đổi mật khẩu thành công"
+          })
           setSuccess(true);
         } else {
-          alert("Đổi mật khẩu thất bại");
+          notification({
+            severity: "error",
+            title: "Đổi mật khẩu",
+            message: "Đổi mật khẩu thất bại!"
+          })
         }
       }
     );

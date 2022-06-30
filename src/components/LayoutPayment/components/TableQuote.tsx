@@ -107,7 +107,7 @@ const TableQuote = ({ width, urlPayment, setScopeRender, item }: Props) => {
           <Text14Styled fw={500}>
             {!isEmpty(item) && item.minEarnestMoney
               ? currencyFormat(item.minEarnestMoney)
-              : "0"}
+              : currencyFormat(cart.minEarnestMoney)}
             đ
           </Text14Styled>
         </RowStyledAgain>
@@ -116,7 +116,7 @@ const TableQuote = ({ width, urlPayment, setScopeRender, item }: Props) => {
           <Text14Styled fw={500}>
             {!isEmpty(item) && item.regulationOrderPrice
               ? currencyFormat(item.regulationOrderPrice)
-              : "0"}
+              : currencyFormat(cart.regulationOrderPrice)}
             đ
           </Text14Styled>
         </RowStyled>

@@ -19,6 +19,7 @@ import styled from "@emotion/styled";
 import { RootState } from "../../../../store/store";
 import { useSelector } from "react-redux";
 import { currencyFormat } from "utils/helper";
+import { isEmpty } from "lodash";
 
 const BoxInputStyled = styled(Box)(
   {
@@ -41,11 +42,12 @@ type Props = {
 };
 
 const BillingInfo = ({ setBilling, billing }: Props) => {
+  const { cart } = useSelector((state: RootState) => state.carts);
   const [colorActive, setColorActive] = useState<string[]>([
     "#FCB715",
     "#C7C9D9",
   ]);
-  const data  = useSelector((state: RootState) => state.payments.data);
+  const data = useSelector((state: RootState) => state.payments.data);
   useEffect(() => {
     setColorActive(
       billing === 1 ? ["#FCB715", "#C7C9D9"] : ["#C7C9D9", "#FCB715"]
@@ -69,7 +71,10 @@ const BillingInfo = ({ setBilling, billing }: Props) => {
               />
               <BoxInputStyled color={colorActive[0]}>
                 <Text18Styled color={colorActive[0]}>
-                  {currencyFormat(data?.quotationRealt?.minEarnestMoney)} vnd
+                  {!isEmpty(data.production)
+                    ? currencyFormat(data?.quotationRealt?.minEarnestMoney)
+                    : currencyFormat(cart.minEarnestMoney)}{" "}
+                  vnd
                 </Text18Styled>
               </BoxInputStyled>
             </Grid>
@@ -81,7 +86,10 @@ const BillingInfo = ({ setBilling, billing }: Props) => {
               />
               <BoxInputStyled color={colorActive[1]}>
                 <Text18Styled color={colorActive[1]}>
-                  {currencyFormat(data?.quotationRealt?.regulationOrderPrice)} vnd
+                  {!isEmpty(data.production)
+                    ? currencyFormat(data?.quotationRealt?.regulationOrderPrice)
+                    : currencyFormat(cart.regulationOrderPrice)}
+                  vnd
                 </Text18Styled>
               </BoxInputStyled>
             </Grid>

@@ -17,6 +17,7 @@ import axios from "axios";
 import ImageWithHideOnError from "hooks/ImageWithHideOnError";
 import useCustomType from "hooks/useCustomtype";
 import useForceUpdate from "hooks/useForceUpdate";
+import useNotification from "hooks/useNotification";
 import useProvinces from "hooks/useProvinces";
 import Image from "next/image";
 import React, { useCallback, useEffect, useState } from "react";
@@ -62,13 +63,13 @@ const AttachWrapper = styled.div`
 
 const TextFileUpload = styled.span`
   margin-bottom: 4px;
-  color: #1B3459;
+  color: #1b3459;
   font-family: Roboto;
   font-style: normal;
   font-weight: 400;
   font-size: 18px;
   line-height: 21.09px;
-`
+`;
 
 const UploadButton = styled(Button)`
   height: 24px;
@@ -109,13 +110,15 @@ const EditProfile = () => {
     label: item.name,
     value: item.id,
   }));
+  const notification = useNotification();
 
   const dispatch = useDispatch();
 
   const validationSchema = yup.object().shape({
     fullname: yup.string().required(validateLine.required),
     phone: yup
-      .string().nullable()
+      .string()
+      .nullable()
       .trim(validateLine.trim)
       .strict(true)
       .matches(Regexs.phone, "Số điện thoại không đúng")
@@ -123,7 +126,8 @@ const EditProfile = () => {
       .default(""),
     idNumber: yup.string().required(validateLine.required).nullable(),
     email: yup
-      .string().nullable()
+      .string()
+      .nullable()
       .trim(validateLine.trim)
       .strict(true)
       .matches(Regexs.email, "Email không đúng")
@@ -141,8 +145,9 @@ const EditProfile = () => {
     })();
   }, [rerender, dispatch]);
 
-
-  const detailUser = useSelector((state: RootState) => state?.profile?.userInfo);
+  const detailUser = useSelector(
+    (state: RootState) => state?.profile?.userInfo
+  );
 
   const formController = useForm<ProfileI>({
     mode: "onChange",
@@ -150,7 +155,8 @@ const EditProfile = () => {
     defaultValues: validationSchema.getDefault(),
   });
 
-  const { control, handleSubmit, reset, setValue, watch, getValues } = formController;
+  const { control, handleSubmit, reset, setValue, watch, getValues } =
+    formController;
 
   const resetAsyncForm = useCallback(
     async (data) => {
@@ -172,16 +178,14 @@ const EditProfile = () => {
         avatarThumbnailUrl: imageUrl + data.avatarThumbnailUrl,
         attachPaper: imageUrl + data.attachPaper,
         attachPaperThumbnailUrl: imageUrl + data.attachPaperThumbnailUrl,
-        district: data?.district ? Number(data?.district) : '',
-        province: data?.province ? Number(data?.province) : '',
-        businessRegistration: data?.businessRegistration
+        district: data?.district ? Number(data?.district) : "",
+        province: data?.province ? Number(data?.province) : "",
+        businessRegistration: data?.businessRegistration,
       });
     },
 
     [reset]
   );
-
-
 
   useEffect(() => {
     if (detailUser?.email) {
@@ -195,17 +199,30 @@ const EditProfile = () => {
     formData.append("category", "avatar");
     setLoadingImg(true);
     postImage(formData)
-      .then((res) => (setValue('avatar', imageUrl + res?.responseData?.dataUrl)))
-      .catch((err) => err).finally(() => { setLoadingImg(false) });
+      .then((res) => setValue("avatar", imageUrl + res?.responseData?.dataUrl))
+      .catch((err) => err)
+      .finally(() => {
+        setLoadingImg(false);
+      });
   };
 
   const uploadFile = async (file) => {
-    if (!file) { alert('File không tồn tại') }
+    if (!file) {
+      notification({
+        severity: "error",
+        message: "File không tồn tại",
+        title: "Upload file"
+      })
+    }
     let formDataFile = new FormData();
     formDataFile.append("imageFile", file);
     postFile(formDataFile)
       .then((res) => {
-        alert(res.responseMessage);
+        notification({
+          severity: "success",
+          title: "Cập nhật file ảnh",
+          message: res.responseMessage
+        })
         forceUpdate();
       })
       .catch((err) => err);
@@ -238,7 +255,11 @@ const EditProfile = () => {
         const response = await postChangeInfoApi(body);
         dispatch(changeProfile(response.responseData));
         if (response.responseCode === "00") {
-          alert("Thay đổi thông tin thành công!");
+          notification({
+            severity: "success",
+            title: "Cập nhật file ảnh",
+            message: response.responseMessage
+          })
           forceUpdate();
         }
       } catch (error) {
@@ -248,9 +269,9 @@ const EditProfile = () => {
   };
 
   const getNameFile = (urlString: string) => {
-    const arrString = urlString.split('/');
+    const arrString = urlString.split("/");
     return arrString?.[arrString.length - 1];
-  }
+  };
 
   return (
     <form onSubmit={handleSubmit((values) => onSubmit(values))}>
@@ -259,16 +280,20 @@ const EditProfile = () => {
         styleCustom={{ padding: "21px 24px" }}
       >
         <AvataContainer>
-          {loadingImg ? <span>....Loading</span> : <ImageWithHideOnError
-            className="logo"
-            src={watch('avatar') ?? '/images/avatar.png'}
-            fallbackSrc={'/images/avatar.png'}
-            height={125}
-            width={125}
-            priority
-            unoptimized={true}
-            objectFit="cover"
-          />}
+          {loadingImg ? (
+            <span>....Loading</span>
+          ) : (
+            <ImageWithHideOnError
+              className="logo"
+              src={watch("avatar") ?? "/images/avatar.png"}
+              fallbackSrc={"/images/avatar.png"}
+              height={125}
+              width={125}
+              priority
+              unoptimized={true}
+              objectFit="cover"
+            />
+          )}
           <label htmlFor="image">
             <IconWrapper>
               <IconEditWhite />
@@ -388,13 +413,20 @@ const EditProfile = () => {
             <FormGroup sx={{ mb: 2 }} fullWidth>
               <TextFileUpload>Đính kèm giấy CN ĐKDN</TextFileUpload>
               <AttachWrapper>
-                {!!getValues('businessRegistration') &&
-                  <a href={getValues('businessRegistration')} target="_blank" rel="noopener noreferrer" download>
+                {!!getValues("businessRegistration") && (
+                  <a
+                    href={getValues("businessRegistration")}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    download
+                  >
                     <UploadButton>
-                      {getNameFile(getValues('businessRegistration'))}&nbsp;&nbsp;
+                      {getNameFile(getValues("businessRegistration"))}
+                      &nbsp;&nbsp;
                       <IconDownloadPTG />
                     </UploadButton>
-                  </a>}
+                  </a>
+                )}
                 {/* {!!getValues('fileImages') &&
                   <a href={getValues('businessRegistration')} target="_blank" rel="noopener noreferrer" download>
                     <UploadButton>
@@ -408,7 +440,7 @@ const EditProfile = () => {
                     type="file"
                     style={{ display: "none" }}
                     onChange={(event) => {
-                      setValue('fileImages', event?.target?.files?.[0]);
+                      setValue("fileImages", event?.target?.files?.[0]);
                       uploadFile(event?.target?.files?.[0]);
                     }}
                   />
@@ -481,7 +513,9 @@ const EditProfile = () => {
                 control={control}
                 setValue={setValue}
                 options={convertProvinType}
-                onChangeExtra={() => { setValue('district', '') }}
+                onChangeExtra={() => {
+                  setValue("district", "");
+                }}
               />
             </FormGroup>
           </Column>
@@ -492,7 +526,7 @@ const EditProfile = () => {
                 label="Quận/Huyện"
                 control={control}
                 setValue={setValue}
-                idProvince={Number(watch('province'))}
+                idProvince={Number(watch("province"))}
               />
             </FormGroup>
           </Column>

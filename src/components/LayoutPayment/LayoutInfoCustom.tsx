@@ -136,7 +136,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
     "Thanh toán đợt 7",
     "Bàn giao giấy chứng nhận",
   ];
-
+  const router = useRouter();
   const [payMethod, setPayMethod] = useState<string>("");
   const [validUpload, setValidUpload] = useState<boolean>(false);
   const [billing, setBilling] = useState<number>(1);
@@ -228,7 +228,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
           title: `Thông tin mã giao dịch ${transactionCode}`,
           message: res.responseMessage,
         });
-        // router.push("/404");
+        router.push("/404");
       }
     } catch (err) {
       notification({
@@ -404,8 +404,8 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
               severity: "success",
               title: "Hoàn thiện hồ sơ mua bán",
             });
-            addToCart();
             LocalStorage.remove("cart");
+            addToCart();
             if (
               !isEmpty(res.responseData?.transactionCode) &&
               paymentFlag === 0
@@ -479,7 +479,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
       })
     );
   }
-  console.log(validUpload, "??")
+  console.log(validUpload, "??");
   function renderListCustomer() {
     const arrayInfos = [...data.paymentIdentityInfos];
     let paymentIdentityInfos: any[] = [];
@@ -910,7 +910,8 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                             (info) => info.mainUser === 1
                           ),
                           { ...watch() }
-                        ) && !validUpload
+                        ) &&
+                        !validUpload
                         ? "#E7E9EC"
                         : "red"
                       : "white"
@@ -926,7 +927,8 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                         (info) => info.mainUser === 1
                       ),
                       { ...watch() }
-                    ) && !validUpload
+                    ) &&
+                    !validUpload
                   }
                 >
                   <Text18Styled>

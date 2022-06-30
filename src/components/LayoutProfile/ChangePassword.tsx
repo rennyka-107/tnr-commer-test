@@ -4,6 +4,7 @@ import FormGroup from "@components/Form/FormGroup";
 import PasswordTextField from "@components/Form/PasswordTextField";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { changePassword } from "@service/Profile";
+import useNotification from "hooks/useNotification";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { InputProps, validateLine } from "utils/constants";
@@ -19,6 +20,7 @@ export interface ChangePasswordForm {
 
 
 const ChangePassword = () => {
+    const notification = useNotification();
     const validationSchema = yup.object().shape({
         oldPassword: yup
             .string()
@@ -52,7 +54,11 @@ const ChangePassword = () => {
     const updatePassword = async (params) => {
         const response = await changePassword(params);
         // console.log(response, 'response----------');
-        alert(response?.responseMessage ?? response?.responseData)
+        notification({
+            severity: response.responseCode === "00" ? "success" : "error",
+            title: "Cập nhật mật khẩu",
+            message: response?.responseMessage
+        })
     }
 
     const onSubmit = (values) => {
