@@ -14,6 +14,7 @@ import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { validateLine } from "utils/constants";
+import LocalStorage from "utils/LocalStorage";
 import PathRoute from "utils/PathRoute";
 import * as yup from "yup";
 
@@ -38,7 +39,7 @@ const SpanRadio = styled.span`
 export interface LoginParams {
   username: string;
   password: string;
-  remember?:any;
+  remember?: any;
 }
 
 const Login = () => {
@@ -61,7 +62,7 @@ const Login = () => {
       // .matches(Regexs.password, validateLine.regexPassword)
       .required(validateLine.required)
       .default(""),
-      remember:yup.boolean().default(false)
+    remember: yup.boolean().default(false),
   });
 
   useEffect(() => {
@@ -77,25 +78,32 @@ const Login = () => {
     resolver: yupResolver(validationSchema),
     defaultValues: validationSchema.getDefault(),
   });
+
   const onSubmit = async (values) => {
     try {
+      if (values.remember) {
+        LocalStorage.set("rememberMe", "1");
+      } else {
+        LocalStorage.remove("rememberMe");
+      }
       const response: ResponseLoginModel<LoginSuccess> = await login(values);
+
       if (!response?.responseData?.access_token) {
-		notification({
-			severity: "error",
-			title: `Login Fail`,
-			message: `${response?.responseMessage}`,
-		  });
-      }else {
-		notification({
-			message:  "Đăng nhập thành công!",
-			severity: "success",
-			title: "Đăng Nhập",
-		  });
-	  }
+        notification({
+          severity: "error",
+          title: `Login Fail`,
+          message: `${response?.responseMessage}`,
+        });
+      } else {
+        notification({
+          message: "Đăng nhập thành công!",
+          severity: "success",
+          title: "Đăng Nhập",
+        });
+      }
     } catch (error) {
       const AxiosError: { message: string } = error;
-	  notification({
+      notification({
         severity: "error",
         title: `Login Fail`,
         message: "Có lỗi xảy ra",

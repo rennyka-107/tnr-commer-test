@@ -7,7 +7,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import styled from "@emotion/styled";
 import Product3 from "../../../../public/images/product3.png";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 
 import {
   IconBath,
@@ -17,6 +17,7 @@ import {
   IconFrame,
   IconHeartProduct,
   IconMuaOnline,
+  IconPlusProduct,
 } from "@components/Icons";
 import ImageWithHideOnError from "hooks/ImageWithHideOnError";
 
@@ -204,6 +205,7 @@ export default function ItemProductCard({
   id,
   buyDisabled,
 }: Props) {
+	const router = useRouter();
   function currencyFormat(num) {
     if (!num) {
       return;
@@ -212,7 +214,7 @@ export default function ItemProductCard({
       .toFixed(0)
       .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
   }
- 
+
   return (
     <CardStyled sx={{ maxWidth: 350 }}>
       <IconHeartProduct
@@ -235,7 +237,7 @@ export default function ItemProductCard({
               right: 0,
               padding: 3,
               textAlign: "center",
-			  zIndex: 10
+              zIndex: 10,
             }}
           >
             <span
@@ -266,7 +268,6 @@ export default function ItemProductCard({
         alt={"Logo "}
         priority
         unoptimized={true}
-        objectFit="cover"
       />
 
       <CardContentStyled>
@@ -276,12 +277,12 @@ export default function ItemProductCard({
               {title}
             </TextTitleStyled>
           </span>
-          <TextitleBottom>{subTitle ? subTitle : "N/A"}</TextitleBottom> 
+          <TextitleBottom>{subTitle ? subTitle : "N/A"}</TextitleBottom>
         </div>
         <LineStyled />
         <CenterIntemWrap>
           <WrapItemCenter>
-		  <IconFrame />
+            <IconFrame />
 
             <TextCenterItem>
               {dataItem.item1 ? dataItem?.item1 : "N/A"} m²
@@ -308,7 +309,7 @@ export default function ItemProductCard({
         </CenterIntemWrap>
         <LineStyled />
         <div style={{ marginTop: 12 }}>
-          <div style={{ display: "flex", marginBottom: 14 }}>
+          <div style={{ display: "flex" }}>
             <TextBottomStyled style={{ marginRight: 40 }}>
               Giá niêm yết{" "}
             </TextBottomStyled>
@@ -316,17 +317,17 @@ export default function ItemProductCard({
               {currencyFormat(priceListed)}đ
             </NumberBottomStyled>
           </div>
-          <div style={{ display: "flex" }}>
+          {/* <div style={{ display: "flex" }}>
             <TextBottomStyled2 style={{ marginRight: 19 }}>
               Đơn giá thông thuỷ{" "}
             </TextBottomStyled2>
             <NumberBottomStyled2>
               {currencyFormat(priceSub)}đ/m2
             </NumberBottomStyled2>
-          </div>
+          </div> */}
         </div>
       </CardContentStyled>
-      {/* {activeSoSanh === true ? (
+      {activeSoSanh === true ? (
         <CardActions
           style={{
             flexDirection: "row",
@@ -341,28 +342,35 @@ export default function ItemProductCard({
               flexDirection: "row",
               cursor: "pointer",
             }}
-            // onClick={() => {}}
+			onClick={() => {
+				router.push(`/compare-product?idCompare=${id}`);
+			  }}
           >
             <IconPlusProduct />
             <TextButtonStyled onClick={onCompare}>So sánh</TextButtonStyled>
           </div>
-          <ButtonStyled onClick={onClick}>
+		  <ButtonStyled
+            onClick={onClick}
+            disabled={buyDisabled}
+            style={{ backgroundColor: buyDisabled ? "#FFFF" : " #ea242a" }}
+          >
+            Mua Online&nbsp;
+            <IconMuaOnline />
+          </ButtonStyled>
+
+        </CardActions>
+      ) : (
+        <CardActions style={{ flexDirection: "column", marginBottom: 24 }}>
+          <ButtonStyled
+            onClick={onClick}
+            disabled={buyDisabled}
+            style={{ backgroundColor: buyDisabled ? "#FFFF" : " #ea242a" }}
+          >
             Mua Online&nbsp;
             <IconMuaOnline />
           </ButtonStyled>
         </CardActions>
-      ) : ( */}
-      <CardActions style={{ flexDirection: "column", marginBottom: 24 }}>
-        <ButtonStyled
-          onClick={onClick}
-          disabled={buyDisabled}
-          style={{ backgroundColor: buyDisabled ? "#FFFF" : " #ea242a" }}
-        >
-          Mua Online&nbsp;
-          <IconMuaOnline />
-        </ButtonStyled>
-      </CardActions>
-      {/* )} */}
+      )}
     </CardStyled>
   );
 }

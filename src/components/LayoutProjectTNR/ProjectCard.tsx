@@ -129,7 +129,7 @@ export default function ItemProjectCard({
   //     return num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
   // }
   return (
-    <CardStyled sx={{ maxWidth: 350 }}>
+    <CardStyled sx={{ maxWidth: 350, minHeight: 520 }}>
       <IconHeartProduct
         style={{
           cursor: "pointer",

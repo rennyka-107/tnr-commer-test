@@ -43,18 +43,20 @@ const AuthContext = ({ children }) => {
       const { access_token, refresh_token } = (
         response as ResponseLoginModel<LoginSuccess>
       )?.responseData;
-      if (!!remember) {
+      if (LocalStorage.get("rememberMe")) {
         LocalStorage.set("accessToken", access_token, forceUpdate);
         LocalStorage.set("refreshToken", refresh_token);
-        return;
+      } else {
+        LocalStorage.set("accessToken", access_token, forceUpdate);
+        LocalStorage.set("refreshToken", refresh_token);
       }
-      LocalStorage.remove("accessToken");
-      LocalStorage.remove("refreshToken");
-      SessionStorage.set("accessToken", access_token, forceUpdate);
-      SessionStorage.set("refreshToken", refresh_token);
+      //   LocalStorage.remove("accessToken");
+      //   LocalStorage.remove("refreshToken");
+      //   SessionStorage.set("accessToken", access_token, forceUpdate);
+      //   SessionStorage.set("refreshToken", refresh_token);
     }
     // console.log(response,'------responseresponseresponse-----');
-    
+
     return response;
   };
 

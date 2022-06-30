@@ -6,7 +6,7 @@ import SwiperCore, {
   EffectCoverflow,
   Autoplay,
 } from "swiper";
-import DefaultImage from "../../../../public/images/product_1.png"
+import DefaultImage from "../../../../public/images/product_1.png";
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/navigation";
@@ -107,18 +107,20 @@ const TextInsideNumber = styled(Typography)`
   color: #ffffff;
 `;
 SwiperCore.use([Navigation, Pagination, EffectCoverflow, Autoplay]);
-const dataFake=[1,2,3,4,5,6].map((el)=>{return {
-    avatar:'/images/product_1.png',
-    viewNum:127,
-    name:'Dự án Thiện Long',
-    id:el,
-}})
+const dataFake = [1, 2, 3, 4, 5, 6].map((el) => {
+  return {
+    avatar: "/images/product_1.png",
+    viewNum: 127,
+    name: "Dự án Thiện Long",
+    id: el,
+  };
+});
 
 export default function Slider3dShowBottom() {
   const { dataProductRecenly } = useProjectRecenly();
   const renderItems = useMemo(() => {
-
-      return (isEmpty(dataProductRecenly)?dataFake:dataProductRecenly)?.map((el: any) => (
+    return (isEmpty(dataProductRecenly) ? dataFake : dataProductRecenly)?.map(
+      (el: any) => (
         <SwiperSlide
           className="swiper-3d"
           style={{
@@ -135,114 +137,122 @@ export default function Slider3dShowBottom() {
           key={el.id}
         >
           <WrapTopItem>
-		  <ImageWithHideOnError
-            className="logo"
-            src={el.avatar ? el.avatar : DefaultImage}
-            fallbackSrc={DefaultImage}
-            width={241}
-            height={342}
-            priority
-            layout="fill"
-            unoptimized={true}
-          />
+            <ImageWithHideOnError
+              className="logo"
+              src={el.avatar ? el.avatar : DefaultImage}
+              fallbackSrc={DefaultImage}
+              width={241}
+              height={342}
+              priority
+              layout="fill"
+              unoptimized={true}
+            />
             <IconEye style={{ zIndex: 1000 }} />
             <TextInsideNumber>{el?.viewNum}</TextInsideNumber>
           </WrapTopItem>
           <TextInside>{el.name}</TextInside>
         </SwiperSlide>
-      ));
+      )
+    );
   }, [dataProductRecenly]);
 
   return (
-    <div style={{ marginTop: 101, marginBottom: 130, marginLeft: 337 }}>
-      <div>
-        <TextTitleStyled>BẤT ĐỘNG SẢN XEM GẦN ĐÂY</TextTitleStyled>
-      </div>
-      <div
-        style={{
-          width: "100%",
-          height: 481,
-          display: "flex",
-          //   justifyContent: "right",
-          alignItems: "center",
-        }}
-      >
-        <div style={{ width: 300 }}>
-          <TextLeftStyled>
-            Mauris, turpis lorem pellentesque laoreet eleifend id scelerisque
-            vulputate massa. Adipiscing blandit ultricies mauris egestas
-            volutpat non. Amet mauris nisl odio mauris suscipit bibendum.
-          </TextLeftStyled>
-          <ButtonStyled
-            onClick={() => {
-              console.log("abc");
+    <>
+      {!isEmpty(dataProductRecenly) ? (
+        <div style={{ marginTop: 101, marginBottom: 130, marginLeft: 337 }}>
+          <div>
+            <TextTitleStyled>BẤT ĐỘNG SẢN XEM GẦN ĐÂY</TextTitleStyled>
+          </div>
+          <div
+            style={{
+              width: "100%",
+              height: 481,
+              display: "flex",
+              //   justifyContent: "right",
+              alignItems: "center",
             }}
           >
-            Mua Online&nbsp;
-            <IconMuaOnline />
-          </ButtonStyled>
+            <div style={{ width: 300 }}>
+              <TextLeftStyled>
+                Mauris, turpis lorem pellentesque laoreet eleifend id
+                scelerisque vulputate massa. Adipiscing blandit ultricies mauris
+                egestas volutpat non. Amet mauris nisl odio mauris suscipit
+                bibendum.
+              </TextLeftStyled>
+              <ButtonStyled
+                onClick={() => {
+                  console.log("abc");
+                }}
+              >
+                Mua Online&nbsp;
+                <IconMuaOnline />
+              </ButtonStyled>
+            </div>
+            <div style={{ width: "100%", height: 470, position: "relative" }}>
+              <IconSliderYellowLeft
+                className="y-left"
+                style={{
+                  zIndex: 10,
+                  position: "absolute",
+                  top: "42%",
+                  cursor: "pointer",
+                  left: "-18px",
+                }}
+              />
+              <Swiper
+                autoplay={{
+                  delay: 1000,
+                }}
+                navigation={{
+                  nextEl: ".y-right",
+                  prevEl: ".y-left",
+                }}
+                roundLengths={true}
+                speed={5000}
+                effect="coverflow"
+                slidesPerView="auto"
+                centeredSlides={true}
+                style={{ height: "470px", width: "100%" }}
+                coverflowEffect={{
+                  rotate: 0,
+                  stretch: 10,
+                  depth: 10,
+                  modifier: 1,
+                  slideShadows: true,
+                }}
+                spaceBetween={45}
+                slideToClickedSlide={true}
+                // breakpoints={{
+                //   // when window width is >= 640px
+                //   640: {
+                //     width: 240,
+                //     slidesPerView: 'auto',
+                //   },
+                //   // when window width is >= 768px
+                //   768: {
+                //     width: 240,
+                //     slidesPerView: 'auto',
+                //   },
+                // }}
+              >
+                {renderItems}
+              </Swiper>
+              <IconSliderYellowRight
+                className="y-right"
+                style={{
+                  zIndex: 10,
+                  position: "absolute",
+                  right: "0px",
+                  top: "42%",
+                  cursor: "pointer",
+                }}
+              />
+            </div>
+          </div>
         </div>
-        <div style={{ width: '100%', height: 470, position: "relative" }}>
-          <IconSliderYellowLeft
-            className="y-left"
-            style={{
-              zIndex: 10,
-              position: "absolute",
-              top: "42%",
-              cursor: "pointer",
-              left: "-18px",
-            }}
-          />
-          <Swiper
-            autoplay={{
-              delay: 1000,
-            }}
-            navigation={{
-              nextEl: ".y-right",
-              prevEl: ".y-left",
-            }}
-            roundLengths={true}
-            speed={5000}
-            effect="coverflow"
-            slidesPerView="auto"
-            centeredSlides={true}
-            style={{ height: "470px", width: "100%" }}
-            coverflowEffect={{
-              rotate: 0,
-              stretch: 10,
-              depth: 10,
-              modifier: 1,
-              slideShadows: true,
-            }}
-            spaceBetween={45}
-            slideToClickedSlide={true}
-            // breakpoints={{
-            //   // when window width is >= 640px
-            //   640: {
-            //     width: 240,
-            //     slidesPerView: 'auto',
-            //   },
-            //   // when window width is >= 768px
-            //   768: {
-            //     width: 240,
-            //     slidesPerView: 'auto',
-            //   },
-            // }}
-          >
-            {renderItems}
-          </Swiper>
-          <IconSliderYellowRight
-            className="y-right"
-            style={{
-              zIndex: 10,
-              position: "absolute",
-              right: "0px",
-              top: "42%",
-              cursor: "pointer",
-            }}
-          />
-        </div>
-      </div>
-    </div>
+      ) : (
+		<></>
+      )}
+    </>
   );
 }

@@ -24,6 +24,7 @@ const ProductCategorySelect = (props: PropsI) => {
   const getList = (id: string) => {
     try {
       apiGetPropductCategory(id).then((response) => {
+		console.log("response",response)
         if (response?.responseCode === "00") {
           const temp = response?.responseData?.map((el) => {
             const district: optionI = {

@@ -43,7 +43,7 @@ const Filter = (props: PropsI) => {
   const { control, handleSubmit, watch, getValues, setValue } = formControler;
 
   useEffect(() => {
-    // console.log(getValues("categoryId"), '----getValues("categoryId") ----');
+  
 
     if (!!getValues("projectId")) {
       onSubmit({

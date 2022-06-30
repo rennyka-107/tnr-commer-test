@@ -166,7 +166,7 @@ export default function ModalAdvanSearch() {
         valueDienTich[0],
         Math.max(newValue[1], valueDienTich[0] + minDistance),
       ]);
-	  setSearch({ ...search, areaTo :  valueDienTich[1]});
+	  setSearch({ ...search,areaFrom:  valueDienTich[0], areaTo :  valueDienTich[1]});
     }
   };
 
@@ -190,7 +190,7 @@ export default function ModalAdvanSearch() {
         valueKhoanGia[0],
         Math.max(newValue[1], valueKhoanGia[0] + minDistance2),
       ]);
-      setSearch({ ...search,priceTo : valueKhoanGia[1].toString() });
+      setSearch({ ...search,priceFrom : valueKhoanGia[0].toString(),priceTo : valueKhoanGia[1].toString() });
     }
   };
 

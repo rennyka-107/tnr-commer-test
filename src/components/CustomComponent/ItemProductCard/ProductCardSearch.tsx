@@ -8,7 +8,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import styled from "@emotion/styled";
 import { IconPlusProduct } from "../../Icons/index";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 
 import {
   IconBath,
@@ -205,6 +205,7 @@ export default function ProductCardSearch({
   id,
   buyDisabled
 }: Props) {
+	const router = useRouter();
   function currencyFormat(num) {
     if (!num) {
       return;
@@ -309,7 +310,7 @@ export default function ProductCardSearch({
         </CenterIntemWrap>
         <LineStyled />
         <div style={{ marginTop: 12 }}>
-          <div style={{ display: "flex", marginBottom: 14 }}>
+          <div style={{ display: "flex" }}>
             <TextBottomStyled style={{ marginRight: 40 }}>
               Giá niêm yết{" "}
             </TextBottomStyled>
@@ -317,14 +318,14 @@ export default function ProductCardSearch({
               {currencyFormat(priceListed)}đ
             </NumberBottomStyled>
           </div>
-          <div style={{ display: "flex" }}>
+          {/* <div style={{ display: "flex" }}>
             <TextBottomStyled2 style={{ marginRight: 19 }}>
               Đơn giá thông thuỷ{" "}
             </TextBottomStyled2>
             <NumberBottomStyled2>
               {currencyFormat(priceSub)}đ/m2
             </NumberBottomStyled2>
-          </div>
+          </div> */}
         </div>
       </CardContentStyled>
       {activeSoSanh === true ? (
@@ -342,7 +343,9 @@ export default function ProductCardSearch({
               flexDirection: "row",
               cursor: "pointer",
             }}
-            // onClick={() => {}}
+			onClick={() => {
+				router.push(`/compare-product?idCompare=${id}`);
+			  }}
           >
             <IconPlusProduct />
             <TextButtonStyled onClick={onCompare}>So sánh</TextButtonStyled>

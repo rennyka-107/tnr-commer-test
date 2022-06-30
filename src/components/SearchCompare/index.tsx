@@ -3,9 +3,7 @@ import { searchLocationResponse } from "interface/searchIF";
 import ItemSearch from "./ItemSearch";
 import {
   Button,
-  FormControl,
   SelectChangeEvent,
-  TextField,
   Typography,
 } from "@mui/material";
 import { useRouter } from "next/router";

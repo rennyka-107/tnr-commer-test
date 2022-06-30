@@ -309,7 +309,7 @@ export default function ItemCompareSearch({
         </CenterIntemWrap>
         <LineStyled />
         <div style={{ marginTop: 12 }}>
-          <div style={{ display: "flex", marginBottom: 14 }}>
+          <div style={{ display: "flex"}}>
             <TextBottomStyled style={{ marginRight: 40 }}>
               Giá niêm yết{" "}
             </TextBottomStyled>
@@ -317,14 +317,14 @@ export default function ItemCompareSearch({
               {currencyFormat(priceListed)}đ
             </NumberBottomStyled>
           </div>
-          <div style={{ display: "flex" }}>
+          {/* <div style={{ display: "flex" }}>
             <TextBottomStyled2 style={{ marginRight: 19 }}>
               Đơn giá thông thuỷ{" "}
             </TextBottomStyled2>
             <NumberBottomStyled2>
               {currencyFormat(priceSub)}đ/m2
             </NumberBottomStyled2>
-          </div>
+          </div> */}
         </div>
       </CardContentStyled>
       {/* {activeSoSanh === true ? ( */}
