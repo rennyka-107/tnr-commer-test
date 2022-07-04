@@ -106,7 +106,7 @@ const AuthenPages = () => {
 	const Route = useRouter();
   const [tab, setTab] = useState<
     "login" | "register" | "forgetPassword" | "confirm"
-  >("register");
+  >("login");
   const { tabIndex } = useRouter().query;
   
   const { query } = useRouter();

@@ -1,4 +1,4 @@
-import BoxContainer from "@components/CustomComponent/BoxContainer";
+ import BoxContainer from "@components/CustomComponent/BoxContainer";
 import FlexContainer from "@components/CustomComponent/FlexContainer";
 import IconArrowRight from "@components/Icons/IconArrowRight";
 import IconBasket from "@components/Icons/IconBasket";
