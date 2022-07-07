@@ -505,7 +505,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
       })
     );
   }
-  console.log(validUpload, "??");
+  
   function renderListCustomer() {
     const arrayInfos = [...data.paymentIdentityInfos];
     let paymentIdentityInfos: any[] = [];

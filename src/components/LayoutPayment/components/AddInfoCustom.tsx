@@ -22,6 +22,7 @@ import { setData } from "../../../../store/paymentSlice";
 import ControllerReactDatePicker from "@components/Form/ControllerReactDatePicker";
 import { validateLine } from "utils/constants";
 import isEqual from "lodash.isequal";
+import useNotification from "hooks/useNotification";
 
 type Props = {
   onClose: Function;
@@ -68,6 +69,7 @@ const AddInfoCustom = (props: Props) => {
   const [initialValue, setInitialValue] = useState<any>(
     validationSchema.getDefault()
   );
+  const notification = useNotification();
   const { control, handleSubmit, setValue, reset, watch } =
     useForm<InformationCustom>({
       mode: "onChange",
@@ -90,25 +92,56 @@ const AddInfoCustom = (props: Props) => {
   const handleOnSubmit = (values) => {
     const { paymentIdentityInfos } = data;
     if (!isEmpty(idNumber)) {
+      let valid = true;
       const formatArray = paymentIdentityInfos.map((info) => {
         if (info.idNumber === idNumber) {
           return { ...info, ...values };
+        } else {
+          if (info.idNumber === values.idNumber) {
+            valid = false;
+          }
         }
         return info;
       });
-      dispatch(
-        setData({
-          ...data,
-          paymentIdentityInfos: formatArray,
-        })
-      );
+      if (valid) {
+        dispatch(
+          setData({
+            ...data,
+            paymentIdentityInfos: formatArray,
+          })
+        );
+      } else {
+        notification({
+          severity: "error",
+          title: "Trùng CMND/CCCD",
+          message:
+            "CMND/CCCD của người mua bị trùng với CMND/CCCD của người mua khác",
+        });
+        return;
+      }
     } else {
-      dispatch(
-        setData({
-          ...data,
-          paymentIdentityInfos: [...paymentIdentityInfos, values],
-        })
-      );
+      let valid = true;
+      paymentIdentityInfos.forEach((item) => {
+        if (item.idNumber === values.idNumber) {
+          valid = false;
+        }
+      });
+      if (valid) {
+        dispatch(
+          setData({
+            ...data,
+            paymentIdentityInfos: [...paymentIdentityInfos, values],
+          })
+        );
+      } else {
+        notification({
+          severity: "error",
+          title: "Trùng CMND/CCCD",
+          message:
+            "CMND/CCCD của người mua bị trùng với CMND/CCCD của người mua khác",
+        });
+        return;
+      }
     }
     onClose();
   };
