@@ -77,6 +77,8 @@ const ProjectPages = () => {
     setTitleData(items?.name);
   }, [body, type, listMenuBarProjectType]);
 
+
+  console.log(data)
   const fetchComponent = () => {
 
     return (

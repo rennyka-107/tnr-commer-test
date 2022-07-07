@@ -21,7 +21,7 @@ const ProductWrap = styled.div`
 `;
 const ItemSearch = ({ data ,buyDisabled}: searchProps) => {
   const addToCart = useAddToCart();
-
+	console.log(data)
   return (
     <>
       <ProductWrap>
@@ -31,6 +31,7 @@ const ItemSearch = ({ data ,buyDisabled}: searchProps) => {
             key={index}
             id={product.productId}
             src={product.thumbnail}
+			projectName={product.projectName}
             title={product.name}
             subTitle={product.location}
             dataItem={{

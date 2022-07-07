@@ -158,7 +158,7 @@ export default function ItemProjectCard({
             fontWeight: 400,
             fontSize: 14,
             lineHeight: "16px",
-            color: "#FFFFFF",
+            color: "#1B3459",
           }}
         >
           {ticketCard}

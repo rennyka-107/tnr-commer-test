@@ -96,6 +96,7 @@ const OTP = (props: Props) => {
   const Route = useRouter();
   const paramsOTP = props.paramsEndcode;
   const keyWidthOTP = props.keyWidthOTPParams;
+  console.log(keyWidthOTP)
 
   const [checked, setChecked] = useState(true);
   const [time, setTime] = useState<number>(120);

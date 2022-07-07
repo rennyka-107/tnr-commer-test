@@ -23,6 +23,7 @@ const ProductWrap = styled.div`
 `;
 const ItemProduct = ({ data }: ProductsProps) => {
   const addToCart = useAddToCart();
+
   return (
     <>
       <ProductWrap>

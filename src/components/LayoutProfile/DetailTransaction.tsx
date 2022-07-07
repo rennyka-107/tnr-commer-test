@@ -241,7 +241,7 @@ const DetailTransaction = () => {
                       <TextLeftTop
                         style={{ color: "#EA242A", fontWeight: 700 }}
                       >
-                        Chưa hoàn thiện hồ sơ mua bán
+                            {data.transactionCodeObject.orderList.status}
                       </TextLeftTop>
                       <Button
                         style={{

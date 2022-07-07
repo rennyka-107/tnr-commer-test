@@ -6,6 +6,8 @@ import { Paper, Typography } from "@mui/material";
 import moment from "moment";
 import { useRouter } from "next/router";
 import ItemProjectCard from "@components/LayoutProjectTNR/ProjectCard";
+import pdfimage from "../../../public/images/pdfimage.png";
+import Image from "next/image";
 
 const ContainerStyled = styled.div`
   display: flex;
@@ -29,14 +31,12 @@ const TypoGraphyStyled = styled(Typography)`
   margin-bottom: 40px;
 `;
 const TitleStyled = styled(Typography)`
-  text-align: center;
   font-family: Roboto;
   font-style: normal;
   font-size: 16px;
   font-weight: 600;
   line-height: 20px;
   color: rgb(50, 47, 80);
-
 `;
 const DescriptionStyled = styled(Typography)`
   font-size: 13px;
@@ -82,37 +82,24 @@ const PolicySales = ({ listSalePolicy, idPolicy }: Props) => {
       <ContainerStyled>
         <TypoGraphyStyled>Chính Sách Bán Hàng</TypoGraphyStyled>
         {listSalePolicy.map((item: any, index: any) => (
-          <Paper elevation={3} style={{ padding: 20 }} key={index}>
-            {/* <ItemWrapStyled key={index}> */}
-
-            <TitleStyled>{item.name}</TitleStyled>
-            <div style={{ border: "1px solid #C7C9D9" , marginTop: 20, marginBottom: 20}} />
-            <div style={{ textAlign: "center" }}>
-              <LinkStyled href={item.pdf} target="_blank">
-                Xem chính sách
-              </LinkStyled>
+          <div style={{ display: "flex", flexDirection: "row" }}>
+            <Image src={pdfimage} width={100} height={100} unoptimized={true} />
+            <div
+              style={{
+                padding: 20,
+                display: "flex",
+                flexDirection: "column",
+                gap: 10,
+              }}
+            >
+              <TitleStyled>{item.name}</TitleStyled>
+              <div>
+                <LinkStyled href={item.pdf} target="_blank">
+                  Xem chính sách
+                </LinkStyled>
+              </div>
             </div>
-            {/* <DescriptionStyled>{item.shortDescription}</DescriptionStyled>
-              <DateStyled>{item.createdDate}</DateStyled> */}
-            {/* <div style={{minWidth: 360, minHeight: 200}}>
-              <ImageWithHideOnError
-                className="logo"
-                src={item.avatar ? item?.avatar : Product3}
-                fallbackSrc={Product3}
-                height={190}
-                width={350}
-                title={"Logo "}
-                alt={"Logo "}
-                priority
-                unoptimized={true}
-                objectFit="cover"
-              />
-            </div> */}
-            {/* <div>
-               
-              </div> */}
-            {/* </ItemWrapStyled> */}
-          </Paper>
+          </div>
         ))}
       </ContainerStyled>
     </>

@@ -26,6 +26,7 @@ type Props = {
   src?: any;
   title?: string;
   subTitle?: string;
+  projectName?: string;
   dataItem?: {
     item1?: any;
     item2?: any;
@@ -50,7 +51,7 @@ const CardStyled = styled(Card)`
   border-radius: 20px;
 `;
 const CardContentStyled = styled(CardContent)`
-  padding: 25px;
+padding: 10px 0px 0px 25px;
 `;
 const TextTitleStyled = styled.a`
   font-family: "Roboto";
@@ -189,8 +190,24 @@ const TextButtonStyled = styled(Typography)`
 
   /* Brand/Text */
 
-  color: #0e1d34;
+  color: #0063F7;
 `;
+
+const TextProjectStyled = styled(Typography)`
+font-family: 'Roboto';
+font-style: normal;
+font-weight: 500;
+font-size: 16px;
+line-height: 150%;
+margin-bottom: 3px;
+/* identical to box height, or 24px */
+
+letter-spacing: 0.005em;
+
+/* Shades/Dark 2 */
+
+color: #48576D;
+`
 export default function ProductCardSearch({
   src,
   title,
@@ -200,6 +217,7 @@ export default function ProductCardSearch({
   priceSub,
   onClick,
   onCompare,
+  projectName,
   ticketCard,
   activeSoSanh,
   id,
@@ -246,7 +264,7 @@ export default function ProductCardSearch({
             fontWeight: 400,
             fontSize: 14,
             lineHeight: "16px",
-            color: "#FFFFFF",
+			color: "#48576D",
           }}
         >
           {ticketCard}
@@ -277,10 +295,13 @@ export default function ProductCardSearch({
             <TextTitleStyled style={{ marginBottom: 9 }}>
               {title}
             </TextTitleStyled>
+			<TextProjectStyled>
+				{projectName}
+			</TextProjectStyled>
           </span>
           <TextitleBottom>{subTitle ? subTitle : "N/A"}</TextitleBottom>
         </div>
-        <LineStyled />
+        {/* <LineStyled /> */}
         <CenterIntemWrap>
           <WrapItemCenter>
             <IconFrame />
@@ -308,16 +329,16 @@ export default function ProductCardSearch({
             </TextCenterItem>
           </WrapItemCenter>
         </CenterIntemWrap>
-        <LineStyled />
-        <div style={{ marginTop: 12 }}>
-          <div style={{ display: "flex" }}>
+        {/* <LineStyled /> */}
+        {/* <div style={{ marginTop: 12 }}> */}
+          {/* <div style={{ display: "flex" }}>
             <TextBottomStyled style={{ marginRight: 40 }}>
               Giá niêm yết{" "}
             </TextBottomStyled>
             <NumberBottomStyled>
               {currencyFormat(priceListed)}đ
             </NumberBottomStyled>
-          </div>
+          </div> */}
           {/* <div style={{ display: "flex" }}>
             <TextBottomStyled2 style={{ marginRight: 19 }}>
               Đơn giá thông thuỷ{" "}
@@ -326,7 +347,7 @@ export default function ProductCardSearch({
               {currencyFormat(priceSub)}đ/m2
             </NumberBottomStyled2>
           </div> */}
-        </div>
+        {/* </div> */}
       </CardContentStyled>
       {activeSoSanh === true ? (
         <CardActions

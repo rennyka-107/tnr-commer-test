@@ -126,7 +126,7 @@ export default function BodyIndex() {
   return (
     <FlexContainer>
       <WrapContainer>
-        {(menuBarProjectType?.slice(0, 7) || []).map((item, index) => {
+        {(menuBarProjectType?.slice(0, 4) || []).map((item, index) => {
           return (
             <WrapIconContainer
               key={index}

@@ -29,6 +29,7 @@ const ItemSearch = ({ data }: searchProps) => {
             id={product.productId}
             src={product.thumbnail}
             title={product.name}
+			projectName={product.projectName}
             subTitle={product.location}
             dataItem={{
               item1: product.landArea,

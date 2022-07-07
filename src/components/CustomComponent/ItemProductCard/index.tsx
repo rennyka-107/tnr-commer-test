@@ -23,6 +23,7 @@ import ImageWithHideOnError from "hooks/ImageWithHideOnError";
 
 type Props = {
   id?: string;
+  projectName?: string;
   src?: any;
   title?: string;
   subTitle?: string;
@@ -50,7 +51,8 @@ const CardStyled = styled(Card)`
   border-radius: 20px;
 `;
 const CardContentStyled = styled(CardContent)`
-  padding: 25px;
+padding: 10px 0px 0px 25px;
+
 `;
 const TextTitleStyled = styled.a`
   font-family: "Roboto";
@@ -94,7 +96,6 @@ const CenterIntemWrap = styled.div`
   column-gap: 10px;
   row-gap: 13px;
   margin-top: 19px;
-  margin-bottom: 19px;
 `;
 const TextCenterItem = styled(Typography)`
   font-family: "Roboto";
@@ -189,8 +190,24 @@ const TextButtonStyled = styled(Typography)`
 
   /* Brand/Text */
 
-  color: #0e1d34;
+  color: #0063F7;
 `;
+
+const TextProjectStyled = styled(Typography)`
+font-family: 'Roboto';
+font-style: normal;
+font-weight: 500;
+font-size: 16px;
+line-height: 150%;
+margin-bottom: 3px;
+/* identical to box height, or 24px */
+
+letter-spacing: 0.005em;
+
+/* Shades/Dark 2 */
+
+color: #48576D;
+`
 export default function ItemProductCard({
   src,
   title,
@@ -198,6 +215,7 @@ export default function ItemProductCard({
   dataItem,
   priceListed,
   priceSub,
+  projectName,
   onClick,
   onCompare,
   ticketCard,
@@ -205,7 +223,7 @@ export default function ItemProductCard({
   id,
   buyDisabled,
 }: Props) {
-	const router = useRouter();
+  const router = useRouter();
   function currencyFormat(num) {
     if (!num) {
       return;
@@ -247,7 +265,7 @@ export default function ItemProductCard({
                 fontWeight: 400,
                 fontSize: 14,
                 lineHeight: "16px",
-                color: "#FFFFFF",
+                color: "#48576D",
               }}
             >
               {ticketCard}
@@ -271,16 +289,25 @@ export default function ItemProductCard({
       />
 
       <CardContentStyled>
-        <div style={{ marginBottom: 7 }}>
+        <div>
           <span onClick={() => Router.push(`/products/${id}`)}>
             <TextTitleStyled style={{ marginBottom: 9 }}>
               {title}
             </TextTitleStyled>
+			<TextProjectStyled>
+				{projectName}
+			</TextProjectStyled>
           </span>
           <TextitleBottom>{subTitle ? subTitle : "N/A"}</TextitleBottom>
         </div>
-        <LineStyled />
+        {/* <LineStyled /> */}
         <CenterIntemWrap>
+          <WrapItemCenter>
+            <IconBath />
+            <TextCenterItem>
+              {dataItem.item2 ? dataItem?.item2 : "N/A"}
+            </TextCenterItem>
+          </WrapItemCenter>
           <WrapItemCenter>
             <IconFrame />
 
@@ -289,17 +316,12 @@ export default function ItemProductCard({
             </TextCenterItem>
           </WrapItemCenter>
           <WrapItemCenter>
-            <IconBath />
-            <TextCenterItem>
-              {dataItem.item2 ? dataItem?.item2 : "N/A"}
-            </TextCenterItem>
-          </WrapItemCenter>
-          <WrapItemCenter>
             <IconBedDouble />
             <TextCenterItem>
               {dataItem.item3 ? dataItem?.item3 : "N/A"}
             </TextCenterItem>
           </WrapItemCenter>
+
           <WrapItemCenter>
             <IconCompass />
             <TextCenterItem>
@@ -307,17 +329,17 @@ export default function ItemProductCard({
             </TextCenterItem>
           </WrapItemCenter>
         </CenterIntemWrap>
-        <LineStyled />
-        <div style={{ marginTop: 12 }}>
-          <div style={{ display: "flex" }}>
+        {/* <LineStyled /> */}
+        {/* <div style={{ marginTop: 12 }}> */}
+        {/* <div style={{ display: "flex" }}>
             <TextBottomStyled style={{ marginRight: 40 }}>
               Giá niêm yết{" "}
             </TextBottomStyled>
             <NumberBottomStyled>
               {currencyFormat(priceListed)}đ
             </NumberBottomStyled>
-          </div>
-          {/* <div style={{ display: "flex" }}>
+          </div> */}
+        {/* <div style={{ display: "flex" }}>
             <TextBottomStyled2 style={{ marginRight: 19 }}>
               Đơn giá thông thuỷ{" "}
             </TextBottomStyled2>
@@ -325,7 +347,7 @@ export default function ItemProductCard({
               {currencyFormat(priceSub)}đ/m2
             </NumberBottomStyled2>
           </div> */}
-        </div>
+        {/* </div> */}
       </CardContentStyled>
       {activeSoSanh === true ? (
         <CardActions
@@ -342,14 +364,14 @@ export default function ItemProductCard({
               flexDirection: "row",
               cursor: "pointer",
             }}
-			onClick={() => {
-				router.push(`/compare-product?idCompare=${id}`);
-			  }}
+            onClick={() => {
+              router.push(`/compare-product?idCompare=${id}`);
+            }}
           >
             <IconPlusProduct />
             <TextButtonStyled onClick={onCompare}>So sánh</TextButtonStyled>
           </div>
-		  <ButtonStyled
+          <ButtonStyled
             onClick={onClick}
             disabled={buyDisabled}
             style={{ backgroundColor: buyDisabled ? "#FFFF" : " #ea242a" }}
@@ -357,7 +379,6 @@ export default function ItemProductCard({
             Mua Online&nbsp;
             <IconMuaOnline />
           </ButtonStyled>
-
         </CardActions>
       ) : (
         <CardActions style={{ flexDirection: "column", marginBottom: 24 }}>

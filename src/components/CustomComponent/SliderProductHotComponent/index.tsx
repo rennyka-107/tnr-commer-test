@@ -30,7 +30,7 @@ export default function SliderProductHotComponent() {
     (state: RootState) => state.products
   );
   const addToCart = useAddToCart();
-
+	// console.log(productTopByOutStanding)
   return (
     <WrapSlide>
       <IconCarsouelLeftProduct style={{ cursor: "pointer" }} />
@@ -61,6 +61,7 @@ export default function SliderProductHotComponent() {
               <ItemProductCard
                 key={index}
                 id={item.id}
+				projectName={item.projectName}
                 src={item.avatar}
                 title={item.name}
                 subTitle={item.projectLocation}

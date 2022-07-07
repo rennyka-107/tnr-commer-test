@@ -89,7 +89,7 @@ const Index = () => {
       case "confirmRegister":
         return (
           <OTP
-            keycloakId={key}
+            keycloakId={transKey}
             paramsEndcode={paramsEndcode.OTP}
             keyWidthOTPParams={paramsEndcode.key}
             userId={userId}
