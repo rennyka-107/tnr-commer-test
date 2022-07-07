@@ -19,6 +19,7 @@ import {
 import IconInfor from "@components/Icons/IconInfor";
 import styled from "@emotion/styled";
 import {
+  Backdrop,
   Box,
   Button,
   CircularProgress,
@@ -365,6 +366,8 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
   const [typeBottomShow, setTypeBottomShow] = useState(1);
   const [openModalVideo, setOpenModalVideo] = useState(false);
   const [openModalRegister, setOpenModalRegister] = useState(false);
+  const [handleOpen, setHandleOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [callApi, setCallApi] = useState(false);
   const [numberRoom, setNumberRoom] = useState({
     num: "S.202",
@@ -446,13 +449,19 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
       </>
     );
   };
+  const handleClose = () => {
+    setHandleOpen(false);
+  };
 
   useEffect(() => {
     fetchPhieuTinhGia();
   }, [productItem]);
+  console.log(handleOpen);
 
   const handleDownloadPhieuTinhGia = () => {
     (async () => {
+      setLoading(true);
+      setHandleOpen(true);
       const response: any = await downloadPhieuTinhGiaAPI(mockDataPhieutinhgia);
       var binaryString = window.atob(response);
       var binaryLen = binaryString.length;
@@ -463,10 +472,29 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
       }
       var blob = new Blob([bytes], { type: "application/pdf" });
       var link = document.createElement("a");
+      link.setAttribute("target", "_blank");
       link.href = window.URL.createObjectURL(blob);
       link.click();
+	  setLoading(false);
+	  setHandleOpen(false);
     })();
   };
+  const fecthBackDrop = () => {
+    return (
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={handleOpen}
+        onClick={handleClose}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+    );
+  };
+  useEffect(() => {
+    if (loading === false) {
+      setHandleOpen(false);
+    }
+  }, [loading]);
   return (
     <>
       <FlexContainer>
@@ -996,6 +1024,7 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
             <> {fetchPhieuTinhGia()} </>
           )}
           {/* Tab Components */}
+          {fecthBackDrop()}
         </div>
       </FlexContainer>
     </>

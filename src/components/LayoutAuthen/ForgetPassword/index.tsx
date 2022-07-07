@@ -1,7 +1,7 @@
 import IconArrowLeftBlue from "@components/Icons/IconArrowLeftBlue";
 import styled from "@emotion/styled";
 import { useRouter } from "next/router";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import PathRoute from "utils/PathRoute";
 import ChangeNewPass from "./ChangeNewPass";
 import Confirm from "./Confirm";
@@ -11,7 +11,6 @@ import OTP from "./OTP";
 const Form = styled.div`
   margin-top: 10px;
 `;
-
 
 const LinkLabel = styled.a`
   color: #1f70e8;
@@ -30,7 +29,29 @@ export interface Props {
 const Index = () => {
   const Route = useRouter();
   const [type, setType] = useState("forgetPassword");
+  const { key, otp } = Route.query;
   const [username, setUsername] = useState("");
+  const [keyTrans, setKeyTrans] = useState("");
+  const[keyForgot, setKeyForgot] = useState("");
+  const [paramsEndcode, setParamsEndcode] = useState({
+    key: "",
+    OTP: "",
+  });
+
+  useEffect(() => {
+    if (key || otp) {
+      setType("OTP");
+    }
+    if (Route.query.key !== undefined && Route.query.otp !== undefined) {
+      const key = Route.query.key as string;
+      const otp = Route.query.otp as string;
+      setParamsEndcode({
+        key: key,
+        OTP: otp,
+      });
+    }
+  }, [Route]);
+
 
   const render = useMemo(() => {
     switch (type) {
@@ -42,10 +63,24 @@ const Index = () => {
           />
         );
       case "confirm":
-        return <Confirm username={username} next={() => setType("OTP")} />;
+        return (
+          <Confirm
+            username={username}
+			setKeyForgot={setKeyForgot}
+            next={() => setType("OTP")}
+            setKeyTrans={setKeyTrans}
+          />
+        );
       case "OTP":
         return (
-          <OTP username={username} next={() => setType("ChangeNewPass")} />
+          <OTP
+		  keyForgot={keyForgot}
+            username={username}
+            keyTrans={keyTrans}
+			paramsEndcode={paramsEndcode.OTP}
+            keyWidthOTPParams={paramsEndcode.key}
+            next={() => setType("ChangeNewPass")}
+          />
         );
       case "ChangeNewPass":
         return (

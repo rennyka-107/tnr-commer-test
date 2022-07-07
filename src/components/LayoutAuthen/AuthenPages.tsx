@@ -103,13 +103,11 @@ const LinkLabel = styled.a`
 `;
 
 const AuthenPages = () => {
-	const Route = useRouter();
+  const Route = useRouter();
   const [tab, setTab] = useState<
     "login" | "register" | "forgetPassword" | "confirm"
   >("login");
-  const { tabIndex } = useRouter().query;
-  
-  const { query } = useRouter();
+  const [loading, setLoading] = useState(false);
 
   const renderTab = useMemo(() => {
     switch (tab) {
@@ -121,35 +119,95 @@ const AuthenPages = () => {
         return <DynamicForgetPassword />;
       case "confirm":
         return <DynamicRegister />;
-
+	
       default:
         return null;
     }
   }, [tab]);
 
   useEffect(() => {
-    if (!!query.tabIndex && query.tabIndex == "login") {
-      setTab("login");
+    if (Route.isReady) {
+      setLoading(true);
+      if (Route.query.tabIndex) {
+        setLoading(false);
+      }
+      if (!!Route.query.tabIndex && Route.query.tabIndex == "login") {
+        setTab("login");
+      }
+      if (
+        (!!Route.query.tabIndex && Route.query.tabIndex == "register") ||
+        Route.query.tabIndex === "confirmRegister"
+      ) {
+        setTab("register");
+      }
+      if (!!Route.query.tabIndex && Route.query.tabIndex == "forgetPassword") {
+        setTab("forgetPassword");
+      }
+      if (!!Route.query.tabIndex && Route.query.tabIndex == "confirm") {
+        setTab("confirm");
+      }
     }
-    if (!!query.tabIndex && query.tabIndex == "register") {
-      setTab("register");
-    }
-    if (!!query.tabIndex && query.tabIndex == "forgetPassword") {
-      setTab("forgetPassword");
-    }
-    if (!!query.tabIndex && query.tabIndex == "confirm") {
-      setTab("confirm");
-    }
-  }, [query]);
+  }, [Route.query]);
 
   const handleChangeTab = (value: any) => {
-	if(value === 'register'){
-		Route.replace(`/authen?prePath=%2Fprofile&tabIndex=register`)
-	}else if(value === 'login'){
-		Route.replace(`/authen?prePath=%2Fprofile&tabIndex=login`)
-	}
-	setTab(value)
-  }
+    if (value === "register") {
+      Route.replace(`/authen?prePath=%2Fprofile&tabIndex=register`);
+    } else if (value === "login") {
+      Route.replace(`/authen?prePath=%2Fprofile&tabIndex=login`);
+    }
+    setTab(value);
+  };
+
+  const fetchTab = () => {
+    return (
+      <>
+        {loading === true ? (
+          <></>
+        ) : (
+          <>
+            {tab === "forgetPassword" || tab === "confirm" ? null : (
+              <Tabs
+                value={tab}
+                onChange={(event, value) => {
+                  if (tab !== value) {
+                    handleChangeTab(value);
+                  }
+                }}
+                indicatorColor="secondary"
+                TabIndicatorProps={{ style: { background: "#FEC83C" } }}
+                scrollButtons
+                allowScrollButtonsMobile
+              >
+                <Tab
+                  value="register"
+                  label="Đăng ký tài khoản"
+                  style={{
+                    // fontWeight: '700',
+                    fontSize: 20,
+                    color: tab == "register" ? "#48576D" : "#8190A7",
+                  }}
+                />
+                <Tab
+                  value="login"
+                  label="Đăng nhập"
+                  style={{
+                    // fontWeight: '700',
+                    fontSize: 20,
+                    color: tab == "login" ? "#48576D" : "#8190A7",
+                  }}
+                />
+              </Tabs>
+            )}
+            {renderTab}
+          </>
+        )}
+      </>
+    );
+  };
+
+  useEffect(() => {
+    fetchTab();
+  }, [loading]);
   return (
     <ContainerRegister>
       <ItemLeft>
@@ -161,42 +219,7 @@ const AuthenPages = () => {
         </div>
       </ItemLeft>
       <ItemRight>
-        <ContainForm>
-          {tab === "forgetPassword" || tab === "confirm" ? null : (
-            <Tabs
-              value={tab}
-              onChange={(event, value) => {
-                if (tab !== value) {
-					handleChangeTab(value);
-                }
-              }}
-              indicatorColor="secondary"
-              TabIndicatorProps={{ style: { background: "#FEC83C" } }}
-              scrollButtons
-              allowScrollButtonsMobile
-            >
-              <Tab
-                value="register"
-                label="Đăng ký tài khoản"
-                style={{
-                  // fontWeight: '700',
-                  fontSize: 20,
-                  color: tab == "register" ? "#48576D" : "#8190A7",
-                }}
-              />
-              <Tab
-                value="login"
-                label="Đăng nhập"
-                style={{
-                  // fontWeight: '700',
-                  fontSize: 20,
-                  color: tab == "login" ? "#48576D" : "#8190A7",
-                }}
-              />
-            </Tabs>
-          )}
-          {renderTab}
-        </ContainForm>
+        <ContainForm>{fetchTab()}</ContainForm>
       </ItemRight>
     </ContainerRegister>
   );

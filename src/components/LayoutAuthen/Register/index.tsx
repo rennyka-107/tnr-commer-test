@@ -21,10 +21,12 @@ export interface RegisterParam {
 }
 
 const Index = () => {
-  const Route = useRouter();
+	const Route = useRouter();
+
   const [type, setType] = useState<any>("register");
   const [key, setKey] = useState("");
   const [userId, setUserId] = useState("");
+  const [transKey, setTransKey] = useState("");
   const [paramsEndcode, setParamsEndcode] = useState({
     key: "",
     OTP: "",
@@ -63,12 +65,14 @@ const Index = () => {
             next={() => setType("confirm")}
             setKey={setKey}
             setUserId={setUserId}
+			setTransKey={setTransKey}
           />
         );
       case "confirm":
         return (
           <Confirm
             userId={userId}
+			transKey={transKey}
             back={() => {
               Route.push({
                 pathname: PathRoute.Login,
@@ -79,10 +83,10 @@ const Index = () => {
               });
               setType("register");
             }}
-            next={() => setType("OTP")}
+            next={() => setType("confirmRegister")}
           />
         );
-      case "OTP":
+      case "confirmRegister":
         return (
           <OTP
             keycloakId={key}

@@ -51,11 +51,14 @@ export interface Param {
 }
 export interface Props {
   username?: String;
+  setKeyForgot?: (value: string) => void;
+  setKeyTrans?:(value:string) => void;
   next?: () => void;
 }
 
 const Confirm = (props: Props) => {
 	const [loading, setLoading] = useState(false);
+
   const validationSchema = yup.object().shape({
     confirm: yup
       .string()
@@ -79,6 +82,8 @@ const Confirm = (props: Props) => {
       }
     ).then((response) => {
       if (response.responseCode === "00") {
+		props.setKeyTrans(response.responseData)
+		props.setKeyForgot(response.responseData)
         props.next();
 		setLoading(false)
       }

@@ -5,7 +5,7 @@ import IconArrowLeft from "@components/Icons/IconArrowLeft";
 import IconArrowLeftBlue from "@components/Icons/IconArrowLeftBlue";
 import styled from "@emotion/styled";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Box, Grid, RadioGroup } from "@mui/material";
+import { Box, Button, CircularProgress, Grid, RadioGroup } from "@mui/material";
 import useAuth from "hooks/useAuth";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
@@ -43,18 +43,30 @@ const TypeConFirm = styled.div`
   color: #48576d;
   margin-bottom: 30px;
 `;
-
+const ButtonStyled = styled(Button)`
+text-transform: none;
+border-radius: 8px;
+font-weight: 400;
+font-size: 16px;
+line-height: 19px;
+color: #ffffff;
+padding: 14px 70px;
+cursor: pointer;
+border: unset;
+width:100%;
+`
 export interface Param {
   confirm: string;
 }
 export interface Props {
   userId?: String;
+  transKey?: String;
   back: () => void;
   next?: () => void;
 }
 
 const Confirm = (props: Props) => {
-  
+	const [loading, setLoading] = useState(false);
   const validationSchema = yup.object().shape({
     confirm: yup
       .string()
@@ -69,10 +81,15 @@ const Confirm = (props: Props) => {
   });
 
   const onSubmit = async () => {
-    getOTP(props.userId).then((response) => {
+	setLoading(true);
+    getOTP(props.transKey).then((response) => {
       if (response.responseCode === "00") {
         props.next();
-      }
+		setLoading(false);
+      }else {
+		setLoading(false)
+	  }
+	  
     });
   };
 
@@ -90,6 +107,7 @@ const Confirm = (props: Props) => {
             <ControllerRadio
               name="confirm"
               control={control}
+			  disabled={loading}
               options={[
                 { value: 1, label: "Nhận mã qua email" },
                 { value: 2, label: "Nhắn tin tới số ..." },
@@ -99,11 +117,17 @@ const Confirm = (props: Props) => {
         </RadioGroup>
 
         <FormGroup sx={{ mb: 2 }} fullWidth>
-          <CustomButton
+          {/* <CustomButton
             label="Tiếp tục"
             style={{ background: "#D60000", marginTop: 30 }}
             type="submit"
-          />
+          /> */}
+		    <ButtonStyled
+            style={{ background: "#D60000", marginTop: 30 ,}}
+            type="submit"
+          >
+           {loading === false ? 'Tiếp Tục' : <CircularProgress style={{height: 25, width: 25, color: '#ffffff'}}/>}
+          </ButtonStyled>
         </FormGroup>
       </form>
     </Form>

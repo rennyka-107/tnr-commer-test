@@ -367,7 +367,7 @@ const ProductTablePages = () => {
                 </TableCellStyled>
                 {data?.lstProductionRow?.map((el, index) => (
                   <TableCellContent align="center" key={index}>
-                    {el.isCornerApartment ? <Check /> : ""}
+                    {el.isCornerApartment === 1 ? <Check /> : ""}
                   </TableCellContent>
                 ))}
               </TableRow>

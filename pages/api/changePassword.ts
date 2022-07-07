@@ -7,8 +7,8 @@ export const forgetPassword = async (username: any, password: any) => {
   );
 };
 
-export const checkValidOTP = async (username: any, OTP: any) => {
+export const checkValidOTP = async (key: any, OTP: any) => {
   return HttpClient.get<any, CommonResponse>(
-    `/api/v1/verify/check-otp-valid?username=${username}&otp=${OTP}`
+    `/api/v1/verify/check-otp-valid?key=${key}&otp=${OTP}`
   );
 };

@@ -178,7 +178,7 @@ export default function BodyIndex() {
               justifyContent: sizeOfArray >= 4 ? "center" : "",
             }}
           >
-            {productTopByOutStanding.length > 0 ? (
+            {productTopByOutStanding?.length > 0 ? (
               <>
                 <DynamicSliderHotProduct />
               </>

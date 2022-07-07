@@ -2,6 +2,7 @@ import CustomButton from "@components/CustomComponent/CustomButton";
 import FormGroup from "@components/Form/FormGroup";
 import IconArrowLeftBlue from "@components/Icons/IconArrowLeftBlue";
 import styled from "@emotion/styled";
+import { Button, CircularProgress, Typography } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
@@ -63,7 +64,18 @@ const TextNotice = styled.div`
   line-height: 170%;
   text-align: center;
   margin: 25px 0;
-  width: 330px;
+`;
+const ButtonStyled = styled(Button)`
+  text-transform: none;
+  border-radius: 8px;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 19px;
+  color: #ffffff;
+  padding: 14px 70px;
+  cursor: pointer;
+  border: unset;
+  width: 100%;
 `;
 export interface Param {
   username: string;
@@ -80,6 +92,7 @@ export interface Props {
 
 const OTP = (props: Props) => {
   const [OTP, setOTP] = useState("");
+  const [loading, setLoading] = useState(false);
   const Route = useRouter();
   const paramsOTP = props.paramsEndcode;
   const keyWidthOTP = props.keyWidthOTPParams;
@@ -116,24 +129,27 @@ const OTP = (props: Props) => {
   }, []);
 
   const checkOTP = () => {
-	if(keyWidthOTP !== ""){
-		activeAccount(keyWidthOTP, OTP).then((response) => {
-			if (response.responseCode === "00" && response.responseData) {
-			  setSuccess(true);
-			} else {
-			  setChecked(false);
-			}
-		  });
-	}else {
-		activeAccount(props.keycloakId, OTP).then((response) => {
-      if (response.responseCode === "00" && response.responseData) {
-        setSuccess(true);
-      } else {
-        setChecked(false);
-      }
-    });
-	}
-
+    setLoading(true);
+    if (keyWidthOTP !== "") {
+      activeAccount(keyWidthOTP, OTP).then((response) => {
+        if (response.responseCode === "00" && response.responseData) {
+          setSuccess(true);
+          setLoading(false);
+        } else {
+          setChecked(false);
+          setLoading(false);
+        }
+      });
+    } else {
+      activeAccount(props.keycloakId, OTP).then((response) => {
+        if (response.responseCode === "00" && response.responseData) {
+          setSuccess(true);
+        } else {
+          setChecked(false);
+		  setLoading(false);
+        }
+      });
+    }
   };
 
   const reSend = () => {
@@ -178,12 +194,25 @@ const OTP = (props: Props) => {
             <NotiFailed>Mã xác thực không chính xác</NotiFailed>
           )}
           <FormGroup sx={{ mb: 2 }} fullWidth>
-            <CustomButton
+            {/* <CustomButton
               label="Hoàn tất đăng ký"
               style={{ background: "#D60000" }}
               type="button"
               onClick={checkOTP}
-            />
+            /> */}
+            <ButtonStyled
+              style={{ background: "#D60000", marginTop: 30 }}
+              type="button"
+              onClick={checkOTP}
+            >
+              {loading === false ? (
+                "Hoàn Tất đăng ký"
+              ) : (
+                <CircularProgress
+                  style={{ height: 25, width: 25, color: "#ffffff" }}
+                />
+              )}
+            </ButtonStyled>
           </FormGroup>
         </>
       ) : (
@@ -195,8 +224,8 @@ const OTP = (props: Props) => {
             height={125}
             style={{ borderRadius: 20 }}
           />
-          <TextNotice>
-            Chào mừng bạn đến với nền tảng mua BĐS hàng đầu của TNR Holdings
+          <TextNotice style={{display: 'flex', justifyContent: 'center'}}>
+           <Typography style={{maxWidth: 350}}> Chào mừng bạn đến với nền tảng mua BĐS hàng đầu của TNR Holdings</Typography>
           </TextNotice>
           <FormGroup sx={{ mb: 2 }} fullWidth>
             <CustomButton

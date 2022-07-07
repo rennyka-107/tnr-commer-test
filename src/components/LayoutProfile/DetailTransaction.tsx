@@ -236,7 +236,7 @@ const DetailTransaction = () => {
                     )}
                   </TextLeftTop>
                   {data.transactionCodeObject.orderList.status ===
-                  "Chưa hoàn thành hồ sơ" ? (
+                  "Chưa hoàn thành hồ sơ"  || data.transactionCodeObject.orderList.status === "Đã tạo bản nháp thông tin mua hàng" ?(
                     <>
                       <TextLeftTop
                         style={{ color: "#EA242A", fontWeight: 700 }}

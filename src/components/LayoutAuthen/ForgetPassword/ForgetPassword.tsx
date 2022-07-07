@@ -4,7 +4,7 @@ import FormGroup from "@components/Form/FormGroup";
 import styled from "@emotion/styled";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Button } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { validateLine } from "utils/constants";
 import * as yup from "yup";
@@ -49,6 +49,7 @@ export interface Props {
   next?: () => void;
 }
 const ForgetPassword = (props: Props) => {
+
   const validationSchema = yup.object().shape({
     username: yup
       .string()

@@ -59,19 +59,32 @@ export interface Param {
 }
 export interface Props {
   username: String;
+  paramsEndcode?: string;
+  keyForgot?: string;
+  keyWidthOTPParams?: string;
+  keyTrans?: String;
   next: () => void;
 }
 
 const OTP = (props: Props) => {
   const [OTP, setOTP] = useState("");
+  const Router = useRouter();
+  const {link,key} = Router.query;
   const [loading, setLoading] = useState(false);
   const [checked, setChecked] = useState(true);
   const [time, setTime] = useState<number>(120);
+  const paramsOTP = props.paramsEndcode;
+  const keyWidthOTP = props.keyWidthOTPParams;
   const interval = useRef<any>(null);
 
   useEffect(() => {
     countDown();
   }, []);
+  useEffect(() => {
+    if (paramsOTP !== "") {
+      setOTP(paramsOTP);
+    }
+  }, [paramsOTP]);
 
   const countDown = () => {
     interval.current = setInterval(() => {
@@ -89,18 +102,31 @@ const OTP = (props: Props) => {
       interval.current && clearInterval(interval.current);
     };
   }, []);
-
+ 
   const checkOTP = () => {
 	setLoading(true)
-    checkValidOTP(props.username, OTP).then((response) => {
-      if (response.responseCode === "00" && response.responseData) {
-		  setLoading(false)
-		  props.next();
-      } else {
-        setChecked(false);
-		setLoading(false)
-      }
-    });
+	if(link === '1'){
+		checkValidOTP(key, OTP).then((response) => {
+			if (response.responseCode === "00") {
+				setLoading(false)
+				props.next();
+			} else {
+			  setChecked(false);
+			  setLoading(false)
+			}
+		  });
+	}else {
+		checkValidOTP(props.keyForgot, OTP).then((response) => {
+			if (response.responseCode === "00") {
+				setLoading(false)
+				props.next();
+			} else {
+			  setChecked(false);
+			  setLoading(false)
+			}
+		  });
+	}
+    
   };
 
   const reSend = () => {

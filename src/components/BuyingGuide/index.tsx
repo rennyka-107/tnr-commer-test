@@ -13,6 +13,7 @@ import { getUserManualContent } from "../../../pages/api/userManualApi";
 import { useDispatch, useSelector } from "react-redux";
 import { Skeleton } from "@mui/material";
 import { RootState } from "../../../store/store";
+import { isEmpty } from "lodash";
 
 type PropsUserManual = {
   data: responseUserManual[];
@@ -166,7 +167,8 @@ const BuyingGuideComponent = ({ data }: PropsUserManual) => {
   const renderLeft = () => {
 	return (
 		<>
-		  <ItemLeft>
+		  {!isEmpty(data) && (
+			<ItemLeft>
 			<BoxContainer styleCustom={{ backgroundColor: "#F3F4F6" }}>
 			  <List
 				component="nav"
@@ -199,6 +201,7 @@ const BuyingGuideComponent = ({ data }: PropsUserManual) => {
 			  </List>
 			</BoxContainer>
 		  </ItemLeft>
+		  )}
 		</>
 	  );
   }

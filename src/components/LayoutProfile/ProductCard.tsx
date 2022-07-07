@@ -321,7 +321,23 @@ const ProductCard = (props: Props) => {
                 </div>
                 Đặt chỗ thành công
               </TextProduct>
-            ) : (
+            ) : item?.status === "Đã tạo phiếu thanh toán" ? (
+				<TextProduct color="#06C270">
+                {" "}
+                <div style={{ marginRight: 10 }}>
+                  <IconCircleChecked />
+                </div>
+                Đã tạo phiếu thanh toán
+              </TextProduct>
+			) : item?.status === "Đã tạo bản nháp thông tin mua hàng" ? (
+				<TextProduct color="#FF3B3B">
+                <div style={{ marginRight: 10 }}>
+                  {" "}
+                  <IconCircleClose />
+                </div>
+				Đã tạo bản nháp thông tin mua hàng
+              </TextProduct>
+			) :(
               <TextProduct color="#06C270">
                 {" "}
                 <div style={{ marginRight: 10 }}>

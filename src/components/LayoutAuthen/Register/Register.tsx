@@ -6,6 +6,7 @@ import PasswordTextField from "@components/Form/PasswordTextField";
 import styled from "@emotion/styled";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { CheckCircleOutline, CircleOutlined } from "@mui/icons-material";
+import { Button, CircularProgress } from "@mui/material";
 import useNotification from "hooks/useNotification";
 import isEmpty from "lodash.isempty";
 import { useRouter } from "next/router";
@@ -44,7 +45,18 @@ const LinkLabel = styled.a`
   line-height: 16px;
   text-decoration: underline;
 `;
-
+const ButtonStyled = styled(Button)`
+  text-transform: none;
+  border-radius: 8px;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 19px;
+  color: #ffffff;
+  padding: 14px 70px;
+  cursor: pointer;
+  border: unset;
+  width: 100%;
+`;
 export interface RegisterParam {
   fullName: string;
   password: string;
@@ -55,12 +67,14 @@ export interface RegisterParam {
 }
 export interface Props {
   setUserId?: (value: string) => void;
+  setTransKey?: (value: string) => void;
   setKey?: (value: string) => void;
   next?: () => void;
 }
 
 const Index = (props: Props) => {
   const Route = useRouter();
+  const [loading, setLoading] = useState(false);
   const validationSchema = yup.object().shape({
     fullName: yup
       .string()
@@ -68,7 +82,7 @@ const Index = (props: Props) => {
       .strict(true)
       .required(validateLine.required)
       .min(3, "Họ tên không được chứa ít hơn 3 ký tự")
-      .matches(validateVietnameseName(),'Họ và tên không đúng định dạng')
+      .matches(validateVietnameseName(), "Họ và tên không đúng định dạng")
       .max(255)
       .default(""),
     password: yup
@@ -79,7 +93,7 @@ const Index = (props: Props) => {
       .min(8, "Mật khẩu không được chứa ít hơn 8 ký tự")
       .max(255, "Mật khẩu không được chứa quá 255 ký tự")
       .matches(Regexs.password, validateLine.regexPassword)
-      // .test('passwords-match', 'Mật khẩu không khớp', function (value) {       return this.parent?.rePassword === value     }) 
+      // .test('passwords-match', 'Mật khẩu không khớp', function (value) {       return this.parent?.rePassword === value     })
       .default(""),
     rePassword: yup
       .string()
@@ -93,6 +107,8 @@ const Index = (props: Props) => {
       .trim(validateLine.trim)
       .strict(true)
       .matches(Regexs.phone, "Số điện thoại không đúng")
+      .min(10, "Số điện thoại không được dưới 10 số")
+      .max(12, "Số điện thoại không được nhiều hơn 12 số")
       .required(validateLine.required)
       .default(""),
     accept: yup.boolean().default(false),
@@ -146,12 +162,14 @@ const Index = (props: Props) => {
     };
     (async () => {
       try {
+        setLoading(true);
         const response = await registerApi(body);
 
         dispatch(registerAcc(response.responseData));
         if (response.responseCode === "00") {
           reset();
           props.setUserId(response.responseData?.id);
+		  props.setTransKey(response.responseData?.transKey);
           props.setKey(response.responseData?.keycloakId);
           props.next();
           Route.push({
@@ -161,17 +179,21 @@ const Index = (props: Props) => {
               tabIndex: "confirm",
             },
           });
-		  notification({
-			message:  "Đăng ký tài khoản thành công. Vui lòng chọn phương thức xác thực!",
-			severity: "success",
-			title: "Đăng ký tài khoản",
-		  });
+          notification({
+            message:
+              "Đăng ký tài khoản thành công. Vui lòng chọn phương thức xác thực!",
+            severity: "success",
+            title: "Đăng ký tài khoản",
+          });
+          setLoading(false);
         } else {
-		  notification({
-			severity: "error",
-			title: `Đăng ký thất bại`,
-			message:  "Email hoặc số điện thoại đã được sử dụng. Vui lòng thay đổi để tiếp tục!",
-		  });
+          notification({
+            severity: "error",
+            title: `Đăng ký thất bại`,
+            message:
+              "Email hoặc số điện thoại đã được sử dụng. Vui lòng thay đổi để tiếp tục!",
+          });
+		  setLoading(false);
         }
       } catch (error) {
         console.log(error);
@@ -201,6 +223,7 @@ const Index = (props: Props) => {
           required
           fullWidth
           label="Họ và tên"
+		  disabled={loading}
           labelColor="#666666"
         />
       </FormGroup>
@@ -214,6 +237,7 @@ const Index = (props: Props) => {
           required
           fullWidth
           label="Email"
+		  disabled={loading}
           labelColor="#666666"
         />
       </FormGroup>
@@ -227,6 +251,7 @@ const Index = (props: Props) => {
           fullWidth
           label="Số điện thoại"
           labelColor="#666666"
+		  disabled={loading}
           required
         />
       </FormGroup>
@@ -239,6 +264,7 @@ const Index = (props: Props) => {
           fullWidth
           label="Mật khẩu"
           labelColor="#666666"
+		  disabled={loading}
         />
       </FormGroup>
       <FormGroup sx={{ mb: 2 }} fullWidth>
@@ -250,6 +276,7 @@ const Index = (props: Props) => {
           fullWidth
           label="Nhập lại mật khẩu"
           labelColor="#666666"
+		  disabled={loading}
         />
       </FormGroup>
       <FormGroup sx={{ mb: 2 }} fullWidth>
@@ -269,7 +296,26 @@ const Index = (props: Props) => {
         />
       </FormGroup>
       <div style={{ width: "100%" }}>
-        <CustomButton
+        <ButtonStyled
+          style={{
+            background:
+              !checked || !isEmpty(errors) || !checkField
+                ? "#D6000080"
+                : "#D60000",
+            marginTop: 30,
+          }}
+          type="submit"
+          disabled={!checked || !isEmpty(errors) || !checkField}
+        >
+          {loading === false ? (
+            "Tiếp Tục"
+          ) : (
+            <CircularProgress
+              style={{ height: 25, width: 25, color: "#ffffff" }}
+            />
+          )}
+        </ButtonStyled>
+        {/* <CustomButton
           label="Tiếp tục"
           style={{
             background:
@@ -279,7 +325,7 @@ const Index = (props: Props) => {
           }}
           type="submit"
           disabled={!checked || !isEmpty(errors)|| !checkField}
-        />
+        /> */}
       </div>
     </form>
   );
