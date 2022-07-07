@@ -6,21 +6,12 @@ import Image from "next/image";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../store/store";
-import styled from "@emotion/styled";
-
-
-const ContainerStyled = styled.div`
-	.img {
-		max-width: 100%;
-	}
-`
 
 const TabsComponent = () => {
   const { listTabsProject } = useSelector((state: RootState) => state.projects);
 
   const useStyles = makeStyles((theme) => ({
     root: {
-		padding: '0px 50px 0px 100px',
       "& .MuiTabs-flexContainer": {
         gap: 50,
       },
@@ -86,11 +77,10 @@ const TabsComponent = () => {
         <>
           {" "}
           <div>
-            <div style={{ width: '100%', padding: 80 }}>
+            <div style={{ width: 1100, padding: 50 }}>
               {!_.isEmpty(listTabsProject) ? (
                 <div
-                  // className="ck-content"
-				className="content-project-view ck-content" 
+				className="content-project-view"
                   dangerouslySetInnerHTML={{ __html: listTabsProject[0]?.text }}
                 />
               ) : (
@@ -108,10 +98,8 @@ const TabsComponent = () => {
           <>
             {" "}
             <div>
-              {/* <div style={{ width: 896, padding: 50 }}>
-                <div className="ck-content" dangerouslySetInnerHTML={{ __html: itemView?.text }} /> */}
-              <div style={{ width: '100%', padding: 80 }}>
-                <div className="content-project-view ck-content"  dangerouslySetInnerHTML={{ __html: itemView?.text }} />
+              <div style={{ width: 1100, padding: 50 }}>
+                <div className="content-project-view" dangerouslySetInnerHTML={{ __html: itemView?.text }} />
               </div>
               {/* <DynamicBottomProdComponent
 		style={{ marginTop: 50, marginBottom: 85 }}

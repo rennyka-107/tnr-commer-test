@@ -68,7 +68,7 @@ const DynamicSliderProductComponent = dynamic(
 );
 
 const DynamicTabsComponent = dynamic(
-  () => import("@components/CustomComponent/TabsComponent"),
+  () => import("@components/CustomComponent/TabsComponent/TabComponentDetail"),
   { loading: () => <p>...</p> }
 );
 

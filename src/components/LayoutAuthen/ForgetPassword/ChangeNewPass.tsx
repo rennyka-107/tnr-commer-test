@@ -74,6 +74,7 @@ const ChangeNewPass = (props: Props) => {
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const Route = useRouter();
+  const {userName} = Route.query;
   const notification = useNotification();
   const validationSchema = yup.object().shape({
     password: yup
@@ -100,28 +101,54 @@ const ChangeNewPass = (props: Props) => {
 
   const onSubmit = async (values) => {
 	setLoading(true);
-    forgetPassword(props.username, getValues("password")).then(
-      (response: any) => {
-        if (
-          response.responseCode === "00" &&
-          response.responseData === "Success!"
-        ) {
-			notification({
-				severity: "success",
-				title: "Đổi mật khẩu",
-				message: "Đổi mật khẩu thành công"
-			})
-			setLoading(false);
-          setSuccess(true);
-        } else {
-          notification({
-            severity: "error",
-            title: "Đổi mật khẩu",
-            message: "Đổi mật khẩu thất bại!"
-          })
-        }
-      }
-    );
+	if(userName){
+		forgetPassword(userName, getValues("password")).then(
+			(response: any) => {
+			  if (
+				response.responseCode === "00" &&
+				response.responseData === "Success!"
+			  ) {
+				  notification({
+					  severity: "success",
+					  title: "Đổi mật khẩu",
+					  message: "Đổi mật khẩu thành công"
+				  })
+				  setLoading(false);
+				setSuccess(true);
+			  } else {
+				notification({
+				  severity: "error",
+				  title: "Đổi mật khẩu",
+				  message: "Đổi mật khẩu thất bại!"
+				})
+			  }
+			}
+		  );
+	}else {
+		forgetPassword(props.username, getValues("password")).then(
+			(response: any) => {
+			  if (
+				response.responseCode === "00" &&
+				response.responseData === "Success!"
+			  ) {
+				  notification({
+					  severity: "success",
+					  title: "Đổi mật khẩu",
+					  message: "Đổi mật khẩu thành công"
+				  })
+				  setLoading(false);
+				setSuccess(true);
+			  } else {
+				notification({
+				  severity: "error",
+				  title: "Đổi mật khẩu",
+				  message: "Đổi mật khẩu thất bại!"
+				})
+			  }
+			}
+		  );
+	}
+
   };
 
   return (
