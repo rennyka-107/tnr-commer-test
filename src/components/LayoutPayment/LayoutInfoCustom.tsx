@@ -106,7 +106,7 @@ const validationSchema = yup.object().shape({
   phoneNumber: yup.string().required(validateLine.required).default(""),
   email: yup
     .string()
-    .email()
+    .email("Không đúng định dạng email")
     .required(validateLine.required)
     .trim(validateLine.trim)
     .default(""),

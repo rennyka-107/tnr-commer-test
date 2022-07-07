@@ -149,7 +149,7 @@ const FooterTop = (props: Props) => {
   const handleClose = () => {
     setOpen(false);
   };
-  console.log(emailValue)
+
   const fetchBackDrop = () => {
     return (
       <Backdrop

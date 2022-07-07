@@ -78,7 +78,6 @@ const ProjectPages = () => {
   }, [body, type, listMenuBarProjectType]);
 
 
-  console.log(data)
   const fetchComponent = () => {
 
     return (
@@ -101,7 +100,7 @@ const ProjectPages = () => {
                     <ContainerProduct>
                       <DynamicProductCard
                         id={el.id}
-                        src={{ src: el?.avatar }}
+                        src={el.avatar}
                         title={el?.name}
                         subTitle={el?.location}
                         ticketCard={el?.name}

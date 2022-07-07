@@ -174,7 +174,7 @@ export default function ItemProjectCard({
       /> */}
 	   <ImageWithHideOnError
           className="logo"
-          src={src ? src?.src : Product3}
+          src={src ? src : Product3}
           fallbackSrc={Product3}
           height={190}
 		  width={350}

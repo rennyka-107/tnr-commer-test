@@ -82,7 +82,7 @@ const PolicySales = ({ listSalePolicy, idPolicy }: Props) => {
       <ContainerStyled>
         <TypoGraphyStyled>Chính Sách Bán Hàng</TypoGraphyStyled>
         {listSalePolicy.map((item: any, index: any) => (
-          <div style={{ display: "flex", flexDirection: "row" }}>
+          <div key={index+ 'key'} style={{ display: "flex", flexDirection: "row" }}>
             <Image src={pdfimage} width={100} height={100} unoptimized={true} />
             <div
               style={{
