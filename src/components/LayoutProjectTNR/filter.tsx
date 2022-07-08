@@ -5,7 +5,7 @@ import { IconHuyLoc } from "@components/Icons";
 import styled from "@emotion/styled";
 import { SelectChangeEvent } from "@mui/material";
 import { BodyListProjectI } from "@service/ProjectList";
-import isEmpty from "lodash.isEmpty";
+import isEmpty from "lodash.isempty";
 import dynamic from "next/dynamic";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
