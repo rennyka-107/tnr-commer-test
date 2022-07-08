@@ -3,7 +3,7 @@ import HttpClient from "utils/HttpClient";
 
 export const saveInforVisitApament = async (data: any) => {
     return HttpClient.post<any, CommonResponse>(
-      "/api/customer/save",
+      "/api/customer/visit-schedule/save",
       data,
       { withToken: false }
     );

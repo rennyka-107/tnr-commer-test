@@ -13,6 +13,7 @@ import { RootState } from "../../../store/store";
 import { useRouter } from "next/router";
 import  isEmpty  from "lodash.isempty";
 import LoadingComponent from "@components/LoadingComponent";
+import ContainerProjectTypePage from "@components/Container/ContainerProjectTypePage";
 export interface ProjectInforI {
   id: string;
   name: string;
@@ -90,7 +91,7 @@ const ProjectPages = () => {
           </>
         ) : (
           <>
-            <Container
+            <ContainerProjectTypePage
               title={titleData}
               rightContent={<DynamicFilter onSubmit={onSubmit} body={body} />}
             >
@@ -119,7 +120,7 @@ const ProjectPages = () => {
                   page={params.pageNumber + 1}
                 />
               </Row>
-            </Container>
+            </ContainerProjectTypePage>
           </>
         )}
       </>

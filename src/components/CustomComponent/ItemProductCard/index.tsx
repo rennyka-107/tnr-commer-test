@@ -10,6 +10,7 @@ import Product3 from "../../../../public/images/product3.png";
 import Router, { useRouter } from "next/router";
 
 import {
+	FloorIcon,
   IconBath,
   IconBedDouble,
   IconCompass,
@@ -39,6 +40,9 @@ type Props = {
   onClick?: MouseEventHandler<HTMLButtonElement>;
   onCompare?: MouseEventHandler<HTMLButtonElement>;
   ticketCard?: string;
+  projectTypeCode?: string;
+  minFloor?: number;
+  maxFloor?: number;
   buyDisabled?: boolean;
 };
 
@@ -208,6 +212,31 @@ letter-spacing: 0.005em;
 
 color: #48576D;
 `
+
+const TextFloorStyled = styled(Typography)`
+  margin-left: 5px;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 14px;
+  /* identical to box height */
+
+  /* Shades/Dark 2 */
+
+  color: #48576d;
+`;
+const TextFloorValue = styled(Typography)`
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16px;
+
+  /* Brand/Main color */
+
+  color: #1b3459;
+`;
 export default function ItemProductCard({
   src,
   title,
@@ -218,6 +247,9 @@ export default function ItemProductCard({
   projectName,
   onClick,
   onCompare,
+  projectTypeCode,
+  minFloor,
+  maxFloor,
   ticketCard,
   activeSoSanh,
   id,
@@ -302,12 +334,33 @@ export default function ItemProductCard({
         </div>
         {/* <LineStyled /> */}
         <CenterIntemWrap>
-          <WrapItemCenter>
+          {/* <WrapItemCenter>
             <IconBath />
             <TextCenterItem>
               {dataItem.item2 ? dataItem?.item2 : "N/A"}
             </TextCenterItem>
-          </WrapItemCenter>
+          </WrapItemCenter> */}
+		   {projectTypeCode === "1" ? (
+            <>
+              <WrapItemCenter>
+                <IconBath />
+                <TextCenterItem>
+                  {dataItem.item2 ? dataItem?.item2 : "N/A"}
+                </TextCenterItem>
+              </WrapItemCenter>
+            </>
+          ) : (
+            <>
+              <WrapItemCenter>
+                <FloorIcon />
+                <TextFloorStyled>min</TextFloorStyled>
+                <TextCenterItem>
+                  <TextFloorValue>{minFloor} tầng</TextFloorValue>
+                </TextCenterItem>
+              </WrapItemCenter>
+            </>
+          )}
+
           <WrapItemCenter>
             <IconFrame />
 
@@ -315,12 +368,35 @@ export default function ItemProductCard({
               {dataItem.item1 ? dataItem?.item1 : "N/A"} m²
             </TextCenterItem>
           </WrapItemCenter>
-          <WrapItemCenter>
+          {/* <WrapItemCenter>
             <IconBedDouble />
             <TextCenterItem>
               {dataItem.item3 ? dataItem?.item3 : "N/A"}
             </TextCenterItem>
-          </WrapItemCenter>
+          </WrapItemCenter> */}
+		  
+          {projectTypeCode === "1" ? (
+            <>
+              <WrapItemCenter>
+                <IconBedDouble />
+                <TextCenterItem>
+                  {dataItem.item3 ? dataItem?.item3 : "N/A"}
+                </TextCenterItem>
+              </WrapItemCenter>
+            </>
+          ) : (
+            <>
+              <>
+                <WrapItemCenter>
+                  <FloorIcon />
+                  <TextFloorStyled>max</TextFloorStyled>
+                  <TextCenterItem>
+                    <TextFloorValue>{maxFloor} tầng</TextFloorValue>
+                  </TextCenterItem>
+                </WrapItemCenter>
+              </>
+            </>
+          )}
 
           <WrapItemCenter>
             <IconCompass />

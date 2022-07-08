@@ -12,7 +12,8 @@ import userManual from "./userManualSlice";
 import profile from "./profileSlice";
 import shortcut from "./shortcut";
 import infoCms from "./infoCmsSlice";
-import salePolicy from './salePolicySlice';
+import salePolicy from "./salePolicySlice";
+import productCompareSlice from "./productCompareSlice";
 
 const combinedReducer = combineReducers({
   menubar,
@@ -26,7 +27,8 @@ const combinedReducer = combineReducers({
   profile,
   shortcut,
   infoCms,
-  salePolicy
+  salePolicy,
+  productCompareSlice,
 });
 
 export type RootState = ReturnType<typeof combinedReducer>;
@@ -38,7 +40,7 @@ const masterReducer = (state, action) => {
         menubarList: action.payload.menubar.listMenuBarType,
         menuBarProjectList: action.payload.menubar.listMenuBarProjectType,
         listMenuLocation: action.payload.menubar.listMenuLocation,
-		listCategory: action.payload.menubar.listCategory,
+        listCategory: action.payload.menubar.listCategory,
       },
       products: {
         listProductResponse: action.payload.products.listProductResponse,
@@ -46,14 +48,14 @@ const masterReducer = (state, action) => {
         productByID: action.payload.products.productByID,
         productTopByOutStanding:
           action.payload.products.productTopByOutStanding,
-		  totalElement: action.payload.searchs.totalElement,
+        totalElement: action.payload.searchs.totalElement,
       },
       projects: {
         listProjectResponse: action.payload.projects.listProjectResponse,
         listTabsProject: action.payload.projects.listTabsProject,
       },
       payments: {
-        ...action.payload.payments
+        ...action.payload.payments,
       },
       carts: {
         ...action.payload.carts,
@@ -76,14 +78,17 @@ const masterReducer = (state, action) => {
           saveInfo: action.payload.saveInfo,
           getCodeQR: action.payload.getCodeQR,
         },
-		transationList: action.payload.transationList
+        transationList: action.payload.transationList,
       },
       shortcut: {
-       ...action.payload.shortcut
+        ...action.payload.shortcut,
       },
-	  salePolicy: {
-		...action.payload.salePolicy,
-	  }
+      salePolicy: {
+        ...action.payload.salePolicy,
+      },
+      productCompareSlice: {
+        ...action.payload.productCompareSlice,
+      }
     };
     return nextState;
   } else {

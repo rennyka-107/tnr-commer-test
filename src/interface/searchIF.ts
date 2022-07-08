@@ -20,7 +20,10 @@ export interface searchLocationResponse {
   tongBanGhi: string;
   projectName: string;
   category: string;
+  maxFloor?: number;
+  minFloor?: number;
   name: string;
+  projectTypeCode?: string;
   paymentStatus?:string|number|null;
   
 }

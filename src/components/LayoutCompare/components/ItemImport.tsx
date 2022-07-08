@@ -14,6 +14,8 @@ import {
 import React, { MouseEventHandler, useState } from "react";
 import { IconTimes } from "@components/Icons";
 import dynamic from "next/dynamic";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../../../store/store";
 
 type Props = {
   onClick?: MouseEventHandler<HTMLButtonElement>;
@@ -106,6 +108,9 @@ const ButtonSearchModalStyled = styled(Button)`
 
 const ItemImport = (props: Props) => {
   const [open, setOpen] = useState<boolean>(false);
+  const { compareParams } = useSelector(
+    (state: RootState) => state.productCompareSlice
+  );
   const handleOnClick = () => {
     setOpen(true);
   };
@@ -172,12 +177,9 @@ const ItemImport = (props: Props) => {
           <TextStyled>Thêm sản phầm so sánh</TextStyled>
         </ButtonStyled>
       </WrapperContent>
-      <BoxInputStyled />
-      <BoxInputStyled />
-      <BoxInputStyled />
-      <BoxInputStyled />
-      <BoxInputStyled />
-      <BoxInputStyled />
+      {compareParams.filter(item => item.type === 'Thông tin chung').map(item => (
+                <BoxInputStyled key={item.id}/>
+              ))}
     </Box>
   );
 };

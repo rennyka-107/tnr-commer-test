@@ -7,7 +7,7 @@ import {
   AccordionDetails,
 } from "@mui/material";
 import { ExpandMore } from "@mui/icons-material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import {
   ColStyled,
@@ -17,6 +17,10 @@ import {
 import { IconTimes } from "@components/Icons";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
+import { searchLocationResponse } from "interface/searchIF";
+import LocalStorage from "utils/LocalStorage";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../../store/store";
 
 type Props = {};
 
@@ -48,10 +52,59 @@ const BoxInputStyled = styled(Box)(
 );
 
 const LayoutCompare = (props: Props) => {
+  const [compareItem, setCompareItem] = useState<searchLocationResponse[]>([]);
+  const { compareParams } = useSelector(
+    (state: RootState) => state.productCompareSlice
+  );
+
+  useEffect(() => {
+    initItem();
+  },[])
+
+  useEffect(() => {
+    console.log(compareParams);
+  })
+
+  const initItem = () => {
+    if(typeof window !== 'undefined'){
+      const local = LocalStorage.get('compare-item');
+      if(local){
+        setCompareItem(local);
+      }
+    }
+  }
+
+  const onRemove = (id: string) => () => {
+    const local: searchLocationResponse[] = LocalStorage.get('compare-item');
+    if(local){
+      const index = local.map((item: searchLocationResponse) => item.productId).indexOf(id);
+      if(index !== -1){
+        local.splice(index, 1);
+      }
+      LocalStorage.set('compare-item',local);
+      setCompareItem(local);
+    }
+  }
+
+  const onAdd = (product: searchLocationResponse) => {
+
+  }
+
+
   const renderDataChildren = ({ data }) => {
     return (
       <React.Fragment>
-        <ColStyled style={{ width: 293 }}>
+        {data.map((item, index) => (
+          <BoxInputStyled width={293} paddingLeft={"14px"} key={index}>
+          <Title22Styled color={"#1b3459"}>{item}</Title22Styled>
+        </BoxInputStyled>
+        ))}
+        {Array.from({ length: 3 - data.length }).map((item, index) => (
+          <BoxInputStyled width={293} paddingLeft={"14px"} key={index}>
+          <IconTimes style={{ width: 22.5 }} />
+        </BoxInputStyled>
+        ))}
+        {/* <ColStyled style={{ width: 293 }}>
           <BoxInputStyled width={293} paddingLeft={"14px"}>
             <Title22Styled color={"#1b3459"}>2</Title22Styled>
           </BoxInputStyled>
@@ -65,30 +118,29 @@ const LayoutCompare = (props: Props) => {
           <BoxInputStyled width={293} paddingLeft={"14px"}>
             <IconTimes style={{ width: 22.5 }} />
           </BoxInputStyled>
-        </ColStyled>
+        </ColStyled> */}
       </React.Fragment>
     );
   };
 
   const router = useRouter();
-  const ArrayItemLocal = () => {
+
+  const ArrayItemLocal = (product: searchLocationResponse[]) => {
     if (typeof window !== "undefined") {
-      const local = localStorage.getItem("compare-item");
-      if (local !== null) {
-        const items = JSON.parse(local);
-        const result = items?.map((item, idx) => (
+        const result = product.map((item, idx) => (
           <ColStyled style={{ width: 293 }} key={idx}>
             <ItemCompareDynamic
               data={item}
-              onClick={() => router.push(`/payment-cart/${item.id}`)}
+              onRemove={onRemove(item.productId)}
+              onClick={() => router.push(`/payment-cart/${item.productId}`)}
             />
           </ColStyled>
         ));
         return result;
-      }
     }
     return <></>;
   };
+
   const ArrayItemImport = () => {
     if (typeof window !== "undefined") {
       const local = localStorage.getItem("compare-item");
@@ -117,7 +169,12 @@ const LayoutCompare = (props: Props) => {
                 alignItems: "start",
               }}
             >
-              <BoxInputStyled>
+              {compareParams.filter(item => item.type === 'Thông tin chung').map(item => (
+                <BoxInputStyled key={item.id}>
+                <TitleMoneyStyled>{item.name}</TitleMoneyStyled>
+              </BoxInputStyled>
+              ))}
+              {/* <BoxInputStyled>
                 <TitleMoneyStyled>Giá</TitleMoneyStyled>
               </BoxInputStyled>
 
@@ -139,10 +196,10 @@ const LayoutCompare = (props: Props) => {
 
               <BoxInputStyled>
                 <TitleMoneyStyled>Hướng</TitleMoneyStyled>
-              </BoxInputStyled>
+              </BoxInputStyled> */}
             </Box>
           </ColStyled>
-          {ArrayItemLocal()}
+          {ArrayItemLocal(compareItem)}
           {ArrayItemImport()}
         </RowStyled>
 
@@ -166,7 +223,19 @@ const LayoutCompare = (props: Props) => {
               </AccordionSummary>
 
               <AccordionDetails style={{ padding: 0 }}>
-                <RowStyled>
+              {compareParams.filter(item => item.type === 'Tiện ích').map(item => (
+                <RowStyled key={item.id}>
+                <ColStyled style={{ width: 134, marginRight: 56 }}>
+                  <BoxInputStyled>
+                    <TitleMoneyStyled>{item.name}</TitleMoneyStyled>
+                  </BoxInputStyled>
+                </ColStyled>
+                {renderDataChildren({ data: [compareItem.map(product => product[item.keyMap.trim()])] })}
+              </RowStyled>
+              ))}
+
+
+                {/* <RowStyled>
                   <ColStyled style={{ width: 134, marginRight: 56 }}>
                     <BoxInputStyled>
                       <TitleMoneyStyled>Điều hoà</TitleMoneyStyled>
@@ -191,7 +260,7 @@ const LayoutCompare = (props: Props) => {
                     </BoxInputStyled>
                   </ColStyled>
                   {renderDataChildren({ data: [] })}
-                </RowStyled>
+                </RowStyled> */}
               </AccordionDetails>
             </Accordion>
           </Grid>
@@ -207,8 +276,16 @@ const LayoutCompare = (props: Props) => {
                 </Box>
               </AccordionSummary>
               <AccordionDetails>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Est,
-                autem.
+              {compareParams.filter(item => item.type === 'Chi tiết').map(item => (
+                <RowStyled key={item.id}>
+                <ColStyled style={{ width: 134, marginRight: 56 }}>
+                  <BoxInputStyled>
+                    <TitleMoneyStyled>{item.name}</TitleMoneyStyled>
+                  </BoxInputStyled>
+                </ColStyled>
+                {renderDataChildren({ data: [compareItem.map(product => product[item.keyMap.trim()])] })}
+              </RowStyled>
+              ))}
               </AccordionDetails>
             </Accordion>
           </Grid>

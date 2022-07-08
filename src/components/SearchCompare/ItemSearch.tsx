@@ -5,6 +5,7 @@ import styled from "@emotion/styled";
 import { searchLocationResponse } from "interface/searchIF";
 import ProductCardSearch from "@components/CustomComponent/ItemProductCard/ProductCardSearch";
 import ItemCompareSearch from "@components/CustomComponent/ItemProductCard/ItemCompareSearch";
+import LocalStorage from "utils/LocalStorage";
 
 interface searchProps {
   data?: searchLocationResponse[];
@@ -20,6 +21,19 @@ const ProductWrap = styled.div`
 `;
 const ItemSearch = ({ data }: searchProps) => {
 
+  const onCompare = (product: searchLocationResponse) => () => {
+    const list = LocalStorage.get("compare-item");
+    if (list) {
+      // const item = JSON.parse(list);
+      if (list.length >= 3 || list.find((prod: searchLocationResponse) => prod.productId === product.productId)) return;
+      list.push(product);
+      LocalStorage.set('compare-item', list);
+    }else{
+      LocalStorage.set('compare-item', [product]);
+    }
+    console.log(list);
+  };
+
   return (
     <>
       <ProductWrap>
@@ -29,7 +43,7 @@ const ItemSearch = ({ data }: searchProps) => {
             id={product.productId}
             src={product.thumbnail}
             title={product.name}
-			projectName={product.projectName}
+            projectName={product.projectName}
             subTitle={product.location}
             dataItem={{
               item1: product.landArea,
@@ -38,8 +52,12 @@ const ItemSearch = ({ data }: searchProps) => {
               item4: product.doorDirection,
             }}
 			priceListed={product.totalPrice}
+			projectTypeCode={product.projectTypeCode}
+			minFloor={product.minFloor}
+			maxFloor={product.maxFloor}
             priceSub={product.unitPrice}
-			ticketCard={product.category}
+            ticketCard={product.category}
+            onCompare={onCompare(product)}
           />
         ))}
       </ProductWrap>

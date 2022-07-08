@@ -43,6 +43,9 @@ const ItemSearch = ({ data ,buyDisabled}: searchProps) => {
             priceListed={product.totalPrice}
             priceSub={product.unitPrice}
             ticketCard={product.category}
+			projectTypeCode={product.projectTypeCode}
+			minFloor={product.minFloor}
+			maxFloor={product.maxFloor}
 			activeSoSanh={true}
             buyDisabled={product?.paymentStatus!==2}
           />

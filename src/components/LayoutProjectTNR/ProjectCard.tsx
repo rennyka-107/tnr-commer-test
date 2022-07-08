@@ -1,7 +1,4 @@
-import {
-  IconHeartProduct,
-  IconMuaOnline,
-} from "@components/Icons";
+import { IconHeartProduct, IconMuaOnline } from "@components/Icons";
 import { BoxTextOver } from "@components/StyledComponents";
 import styled from "@emotion/styled";
 import Button from "@mui/material/Button";
@@ -15,7 +12,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import * as React from "react";
 import { MouseEventHandler } from "react";
-import Product3 from '../../../public/images/product3.png';
+import Product3 from "../../../public/images/product3.png";
 
 export interface ProjectI {
   id: string;
@@ -36,22 +33,26 @@ const CardStyled = styled(Card)`
   border-radius: 20px;
 `;
 const CardContentStyled = styled(CardContent)`
-  padding: 25px;
+  padding: 17px 25px 25px 25px;
 `;
 const TextTitleStyled = styled.a`
+  cursor: pointer;
   font-family: "Roboto";
   font-style: normal;
   font-weight: 500;
   font-size: 22px;
   line-height: 26px;
-  cursor: pointer;
   /* identical to box height */
 
   /* Brand/Main color */
 
   color: #1b3459;
+  :hover {
+    color:#ea242a;
+}
 `;
 const TextitleBottom = styled(Typography)`
+  margin-top: 5px;
   width: 85%;
   font-family: "Roboto";
   font-style: normal;
@@ -129,8 +130,8 @@ export default function ItemProjectCard({
   //     return num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
   // }
   return (
-    <CardStyled sx={{ maxWidth: 350, minHeight: 520 }}>
-      <IconHeartProduct
+    <CardStyled sx={{ maxWidth: 350, minHeight: 500 }}>
+      {/* <IconHeartProduct
         style={{
           cursor: "pointer",
           position: "absolute",
@@ -163,7 +164,7 @@ export default function ItemProjectCard({
         >
           {ticketCard}
         </span>
-      </div>
+      </div> */}
       {/* <CardMedia
         component="img"
         height="190"
@@ -172,19 +173,19 @@ export default function ItemProjectCard({
           borderRadius: "20px 20px 0px 0px",
         }}
       /> */}
-	   <ImageWithHideOnError
-          className="logo"
-          src={src ? src : Product3}
-          fallbackSrc={Product3}
-          height={190}
-		  width={350}
-          title={'Logo ' }
-          alt={'Logo '}
-          priority
-          unoptimized={true}
-          objectFit="cover"
-        />
-    {/* <Image
+      <ImageWithHideOnError
+        className="logo"
+        src={src ? src : Product3}
+        fallbackSrc={Product3}
+        height={190}
+        width={350}
+        title={"Logo "}
+        alt={"Logo "}
+        priority
+        unoptimized={true}
+        objectFit="cover"
+      />
+      {/* <Image
         src="/static-data/5c979bae-249b-4b0a-880a-9729cb757a50/eccda50b-6c1b-42f4-af84-c6a753a185bd/Project/f6caa857-2d8f-421f-bff9-dc120640e745/anh-dep-thien-nhien-3.jpg"
         placeholder="blur"
         blurDataURL="/images/product3.png"
@@ -195,7 +196,7 @@ export default function ItemProjectCard({
       <CardContentStyled>
         <div style={{ marginBottom: 7 }}>
           <Link href={`/products?idProject=${id}&&provinceId=&&projectTypeId=`}>
-            <TextTitleStyled style={{ marginBottom: 9 }}>
+            <TextTitleStyled style={{ marginBottom: 10 }}>
               {title}
             </TextTitleStyled>
           </Link>
@@ -206,13 +207,11 @@ export default function ItemProjectCard({
           <TextDescription aria-multiline>{description}</TextDescription>
         </BoxTextOver>
       </CardContentStyled>
-      <CardActions style={{ flexDirection: "column", marginBottom: 24 }}>
+      <CardActions style={{ flexDirection: "column" }}>
         <ButtonStyled
           onClick={() => {
             // onClick;
-            router.push(
-              `/project-detail/${id}`
-            );
+            router.push(`/project-detail/${id}`);
           }}
         >
           Xem dự án&nbsp;

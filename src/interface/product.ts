@@ -82,6 +82,9 @@ export interface ProductsResponse {
 	thumbnail?: string,
 	productId?: string,
 	paymentStatus?:number|string|null;
+	projectTypeCode?: string;
+	minFloor?: number;
+	maxFloor?: number;
 }
 
 export interface ResponseSearchById {

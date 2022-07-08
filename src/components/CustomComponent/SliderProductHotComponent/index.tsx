@@ -30,7 +30,7 @@ export default function SliderProductHotComponent() {
     (state: RootState) => state.products
   );
   const addToCart = useAddToCart();
-	// console.log(productTopByOutStanding)
+
   return (
     <WrapSlide>
       <IconCarsouelLeftProduct style={{ cursor: "pointer" }} />
@@ -74,6 +74,9 @@ export default function SliderProductHotComponent() {
                 priceListed={item.price}
                 priceSub={item.unitPrice}
                 ticketCard={item.category}
+				projectTypeCode={item.projectTypeCode}
+				minFloor={item.minFloor}
+				maxFloor={item.maxFloor}
                 onClick={() => addToCart(item.id)}
 				activeSoSanh={true}
                 buyDisabled={item?.paymentStatus!==2}

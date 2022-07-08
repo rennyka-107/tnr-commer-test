@@ -1,4 +1,4 @@
-import { IconHeartProduct } from "@components/Icons";
+import { IconHeartProduct, IconRemove } from "@components/Icons";
 import IconArrowRight from "@components/Icons/IconArrowRight";
 import {
   ButtonAction,
@@ -13,10 +13,14 @@ import {
 import styled from "@emotion/styled";
 import { Box, CardMedia } from "@mui/material";
 import React, { MouseEventHandler } from "react";
+import LocalStorage from "utils/LocalStorage";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../../../store/store";
 
 type Props = {
   onClick?: MouseEventHandler<HTMLButtonElement>;
   data?: object | any;
+  onRemove?: MouseEventHandler<SVGSVGElement>;
 };
 const TitleMoneyStyled = styled(Title28Styled)({
   fontSize: 24,
@@ -41,7 +45,25 @@ const BoxInputStyled = styled(Box)({
   alignItems: "end",
 });
 
-const ItemCompare = ({ onClick, data }: Props) => {
+const ItemCompare = ({ onClick, data, onRemove }: Props) => {
+  const { compareParams } = useSelector(
+    (state: RootState) => state.productCompareSlice
+  );
+
+  // const onRemove = () => {
+  //   const local = LocalStorage.get("compare-item");
+  //   if(local){
+  //     console.log(local.map(item => item.productId).indexOf(data.productId));
+  //     // const items = JSON.parse(local);
+  //     const index = local.map(item => item.productId).indexOf(data.productId);
+  //     if(index !== -1){
+  //       local.splice(index, 1);
+  //     }
+  //     console.log(local);
+  //     LocalStorage.set("compare-item", local);
+  //   }
+  // }
+
   return (
     <Box width={289}>
       <WrapperContent
@@ -50,8 +72,11 @@ const ItemCompare = ({ onClick, data }: Props) => {
         padding={"0px"}
         marginBottom={"20px"}
       >
-        <Box style={{ position: "absolute", left: "249px", top: "10px" }}>
+        <Box style={{ position: "absolute", left: "210px", top: "10px" }}>
           <IconHeartProduct />
+        </Box>
+        <Box style={{ position: "absolute", left: "249px", top: "10px" }}>
+          <IconRemove style={{ stroke: 'white', width: '27px', height: '27px'}} onClick={onRemove}/>
         </Box>
         <Box
           style={{
@@ -70,7 +95,7 @@ const ItemCompare = ({ onClick, data }: Props) => {
           component={"img"}
           height={160}
           style={{ borderRadius: "20px 20px 0px 0px" }}
-          image={"https://picsum.photos/308/200"}
+          image={data?.thumbnail ?? "https://picsum.photos/308/200"}
           alt={"green image"}
         />
         <ColStyled aItems="center" margin={"11px 0px 23px"}>
@@ -97,7 +122,23 @@ const ItemCompare = ({ onClick, data }: Props) => {
         </ColStyled>
       </WrapperContent>
 
-      <BoxInputStyled>
+      {compareParams.filter(item => item.type === 'Thông tin chung').map(item => (
+                <BoxInputStyled key={item.id}>
+                <TitleMoneyStyled>{data[item.keyMap.trim()] ?? 'N/A'}</TitleMoneyStyled>
+              </BoxInputStyled>
+              ))}
+              {/* {compareParams.filter(item => item.type === 'Tiện ích').map(item => (
+                <BoxInputStyled key={item.id}>
+                <TitleMoneyStyled>{data[item.keyMap.trim()] ?? 'N/A'}</TitleMoneyStyled>
+              </BoxInputStyled>
+              ))} */}
+              {/* {compareParams.filter(item => item.type === 'Chi tiết').map(item => (
+                <BoxInputStyled key={item.id}>
+                <TitleMoneyStyled>{data[item.keyMap.trim()] ?? 'N/A'}</TitleMoneyStyled>
+              </BoxInputStyled>
+              ))} */}
+
+      {/* <BoxInputStyled>
         <TitleMoneyStyled>{data?.totalPrice ?? "N/A"} đ</TitleMoneyStyled>
       </BoxInputStyled>
 
@@ -121,7 +162,7 @@ const ItemCompare = ({ onClick, data }: Props) => {
 
       <BoxInputStyled>
         <TextMoneyStyled>{data?.doorDirection ?? "N/A"}</TextMoneyStyled>
-      </BoxInputStyled>
+      </BoxInputStyled> */}
     </Box>
   );
 };

@@ -71,3 +71,5 @@ export {default as IconNumberRoomSleep} from './NumberRoomSleep';
 export {default as IconBedProductTable} from './IconBedProductTable';
 export {default as IconHuongProductTable} from './IconHuongProductTable';
 export {default as IconDienTichProductTable} from './IconDienTichProductTable';
+export {default as IconHuyLoc} from './IconHuyLoc'
+export {default as FloorIcon} from './FloorIcon'

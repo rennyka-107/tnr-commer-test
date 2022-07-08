@@ -6,7 +6,7 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import styled from "@emotion/styled";
-import { IconPlusProduct } from "../../Icons/index";
+import { FloorIcon, IconPlusProduct } from "../../Icons/index";
 import Router, { useRouter } from "next/router";
 import Product3 from "../../../../public/images/product3.png";
 
@@ -37,6 +37,9 @@ type Props = {
   onClick?: MouseEventHandler<HTMLButtonElement>;
   onCompare?: MouseEventHandler<HTMLButtonElement>;
   ticketCard?: string;
+  projectTypeCode?: string;
+  minFloor?: number;
+  maxFloor?: number;
 };
 
 const CardStyled = styled(Card)`
@@ -48,7 +51,7 @@ const CardStyled = styled(Card)`
   border-radius: 20px;
 `;
 const CardContentStyled = styled(CardContent)`
-padding: 10px 0px 0px 25px;
+  padding: 10px 0px 0px 25px;
 `;
 const TextTitleStyled = styled.a`
   font-family: "Roboto";
@@ -191,20 +194,45 @@ const TextButtonStyled = styled(Typography)`
 `;
 
 const TextProjectStyled = styled(Typography)`
-font-family: 'Roboto';
-font-style: normal;
-font-weight: 500;
-font-size: 16px;
-line-height: 150%;
-margin-bottom: 3px;
-/* identical to box height, or 24px */
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 150%;
+  margin-bottom: 3px;
+  /* identical to box height, or 24px */
 
-letter-spacing: 0.005em;
+  letter-spacing: 0.005em;
 
-/* Shades/Dark 2 */
+  /* Shades/Dark 2 */
 
-color: #48576D;
-`
+  color: #48576d;
+`;
+
+const TextFloorStyled = styled(Typography)`
+  margin-left: 5px;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 14px;
+  /* identical to box height */
+
+  /* Shades/Dark 2 */
+
+  color: #48576d;
+`;
+const TextFloorValue = styled(Typography)`
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16px;
+
+  /* Brand/Main color */
+
+  color: #1b3459;
+`;
 export default function ItemCompareSearch({
   src,
   title,
@@ -216,6 +244,9 @@ export default function ItemCompareSearch({
   onCompare,
   projectName,
   ticketCard,
+  projectTypeCode,
+  minFloor,
+  maxFloor,
   activeSoSanh,
   id,
 }: Props) {
@@ -250,7 +281,7 @@ export default function ItemCompareSearch({
             right: 0,
             padding: 3,
             textAlign: "center",
-			zIndex: 10
+            zIndex: 10,
           }}
         >
           <span
@@ -266,10 +297,10 @@ export default function ItemCompareSearch({
             {ticketCard}
           </span>
         </div>
-      ) : ( 
+      ) : (
         <></>
       )}
-    <ImageWithHideOnError
+      <ImageWithHideOnError
         className="logo"
         src={src}
         fallbackSrc={Product3}
@@ -285,23 +316,42 @@ export default function ItemCompareSearch({
       <CardContentStyled>
         <div style={{ marginBottom: 7 }}>
           <span
-            onClick={() =>
-              Router.push(
-                `/products/${id ? id : "adf68c39-c5b3-4a80-b806-a2b8a840d4c4"}`
-              )
-            }
+            // onClick={() =>
+            //   Router.push(
+            //     `/products/${id ? id : "adf68c39-c5b3-4a80-b806-a2b8a840d4c4"}`
+            //   )
+            // }
           >
             <TextTitleStyled style={{ marginBottom: 9 }}>
               {title}
             </TextTitleStyled>
-			<TextProjectStyled>
-				{projectName}
-			</TextProjectStyled>
+            <TextProjectStyled>{projectName}</TextProjectStyled>
           </span>
           <TextitleBottom>{subTitle ? subTitle : "N/A"}</TextitleBottom>
         </div>
         {/* <LineStyled /> */}
         <CenterIntemWrap>
+          {projectTypeCode === "1" ? (
+            <>
+              <WrapItemCenter>
+                <IconBath />
+                <TextCenterItem>
+                  {dataItem.item2 ? dataItem?.item2 : "N/A"}
+                </TextCenterItem>
+              </WrapItemCenter>
+            </>
+          ) : (
+            <>
+              <WrapItemCenter>
+                <FloorIcon />
+                <TextFloorStyled>min</TextFloorStyled>
+                <TextCenterItem>
+                  <TextFloorValue>{minFloor} tầng</TextFloorValue>
+                </TextCenterItem>
+              </WrapItemCenter>
+            </>
+          )}
+
           <WrapItemCenter>
             <IconFrame />
 
@@ -309,18 +359,41 @@ export default function ItemCompareSearch({
               {dataItem.item1 ? dataItem?.item1 : "N/A"} m²
             </TextCenterItem>
           </WrapItemCenter>
-          <WrapItemCenter>
+          {/* <WrapItemCenter>
             <IconBath />
             <TextCenterItem>
               {dataItem.item2 ? dataItem?.item2 : "N/A"}
             </TextCenterItem>
-          </WrapItemCenter>
-          <WrapItemCenter>
+          </WrapItemCenter> */}
+          {/* <WrapItemCenter>
             <IconBedDouble />
             <TextCenterItem>
               {dataItem.item3 ? dataItem?.item3 : "N/A"}
             </TextCenterItem>
-          </WrapItemCenter>
+          </WrapItemCenter> */}
+          {projectTypeCode === "1" ? (
+            <>
+              <WrapItemCenter>
+                <IconBedDouble />
+                <TextCenterItem>
+                  {dataItem.item3 ? dataItem?.item3 : "N/A"}
+                </TextCenterItem>
+              </WrapItemCenter>
+            </>
+          ) : (
+            <>
+              <>
+                <WrapItemCenter>
+                  <FloorIcon />
+                  <TextFloorStyled>max</TextFloorStyled>
+                  <TextCenterItem>
+                    <TextFloorValue>{maxFloor} tầng</TextFloorValue>
+                  </TextCenterItem>
+                </WrapItemCenter>
+              </>
+            </>
+          )}
+
           <WrapItemCenter>
             <IconCompass />
             <TextCenterItem>
@@ -330,7 +403,7 @@ export default function ItemCompareSearch({
         </CenterIntemWrap>
         {/* <LineStyled /> */}
         {/* <div style={{ marginTop: 12 }}> */}
-          {/* <div style={{ display: "flex"}}>
+        {/* <div style={{ display: "flex"}}>
             <TextBottomStyled style={{ marginRight: 40 }}>
               Giá niêm yết{" "}
             </TextBottomStyled>
@@ -338,7 +411,7 @@ export default function ItemCompareSearch({
               {currencyFormat(priceListed)}đ
             </NumberBottomStyled>
           </div> */}
-          {/* <div style={{ display: "flex" }}>
+        {/* <div style={{ display: "flex" }}>
             <TextBottomStyled2 style={{ marginRight: 19 }}>
               Đơn giá thông thuỷ{" "}
             </TextBottomStyled2>
@@ -363,9 +436,9 @@ export default function ItemCompareSearch({
             flexDirection: "row",
             cursor: "pointer",
           }}
-          onClick={() => {
-            router.push(`/compare-product?idCompare=${id}`);
-          }}
+          // onClick={() => {
+          //   router.push(`/compare-product?idCompare=${id}`);
+          // }}
         >
           <IconPlusProduct />
           <TextButtonStyled style={{ color: "#0063F7" }} onClick={onCompare}>
