@@ -340,7 +340,7 @@ export default function ItemProductCard({
               {dataItem.item2 ? dataItem?.item2 : "N/A"}
             </TextCenterItem>
           </WrapItemCenter> */}
-		   {projectTypeCode === "1" ? (
+		   {projectTypeCode === "2" ? (
             <>
               <WrapItemCenter>
                 <IconBath />
@@ -375,7 +375,7 @@ export default function ItemProductCard({
             </TextCenterItem>
           </WrapItemCenter> */}
 		  
-          {projectTypeCode === "1" ? (
+          {projectTypeCode === "2" ? (
             <>
               <WrapItemCenter>
                 <IconBedDouble />

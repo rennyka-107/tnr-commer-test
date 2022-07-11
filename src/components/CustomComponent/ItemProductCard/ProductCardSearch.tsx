@@ -329,7 +329,7 @@ export default function ProductCardSearch({
         {/* <LineStyled /> */}
 
         <CenterIntemWrap>
-          {projectTypeCode === "1" ? (
+          {projectTypeCode === "2" ? (
             <>
               <WrapItemCenter>
                 <IconBath />
@@ -357,7 +357,7 @@ export default function ProductCardSearch({
             </TextCenterItem>
           </WrapItemCenter>
 
-          {projectTypeCode === "1" ? (
+          {projectTypeCode === "2" ? (
             <>
               <WrapItemCenter>
                 <IconBedDouble />

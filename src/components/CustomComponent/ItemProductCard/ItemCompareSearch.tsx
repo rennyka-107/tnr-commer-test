@@ -331,7 +331,7 @@ export default function ItemCompareSearch({
         </div>
         {/* <LineStyled /> */}
         <CenterIntemWrap>
-          {projectTypeCode === "1" ? (
+          {projectTypeCode === "2" ? (
             <>
               <WrapItemCenter>
                 <IconBath />
@@ -371,7 +371,7 @@ export default function ItemCompareSearch({
               {dataItem.item3 ? dataItem?.item3 : "N/A"}
             </TextCenterItem>
           </WrapItemCenter> */}
-          {projectTypeCode === "1" ? (
+          {projectTypeCode === "2" ? (
             <>
               <WrapItemCenter>
                 <IconBedDouble />
