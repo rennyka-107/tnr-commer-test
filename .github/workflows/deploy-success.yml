@@ -12,7 +12,7 @@ jobs:
       - name: Add commit comment - success
         run: |
           curl -L -X POST \
-          --url https://v1.nocodeapi.com/rennyka/telegram/PnQkOtdAtVJlgbgt/sendText?text=Adminsite up \
+          --url 'https://v1.nocodeapi.com/rennyka/telegram/PnQkOtdAtVJlgbgt/sendText?text=Adminsite up' \
           --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
           --header 'content-type: application/json' \
           --data '{
