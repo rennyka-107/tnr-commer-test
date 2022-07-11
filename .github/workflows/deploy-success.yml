@@ -1,0 +1,20 @@
+#Triggered for deployment status changes
+name: Deployment Success notification
+on: [deployment_status]
+
+jobs:
+  add-success-comment:
+    name: Add a comment to the commit that caused the success
+    if: github.event.deployment_status.state == 'success'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Add commit comment - success
+        run: |
+          curl -L -X POST \
+          --url https://v1.nocodeapi.com/rennyka/telegram/PnQkOtdAtVJlgbgt/sendText?text=Adminsite up \
+          --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+          --header 'content-type: application/json' \
+          --data '{
+            "body": "Deployment has failed."
+            }'
