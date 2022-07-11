@@ -12,9 +12,5 @@ jobs:
       - name: Add commit comment - success
         run: |
           curl -L -X POST \
-          --url 'https://v1.nocodeapi.com/rennyka/telegram/PnQkOtdAtVJlgbgt/sendText?text=Adminsite up' \
-          --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+          --url 'https://api.telegram.org/bot5522907899:AAFiDQrXUE7J1WgUy5Cz4TKbo3XJvvq9oNg/sendMessage?chat_id=-1001698161361&text=Deploy successfully!' \
           --header 'content-type: application/json' \
-          --data '{
-            "body": "Deployment has failed."
-            }'
