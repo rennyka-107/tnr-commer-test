@@ -108,7 +108,7 @@ const Index = (props: Props) => {
       .strict(true)
       .matches(Regexs.phone, "Số điện thoại không đúng")
       .min(10, "Số điện thoại không được dưới 10 số")
-      .max(12, "Số điện thoại không được nhiều hơn 12 số")
+      .max(10, "Số điện thoại không được nhiều hơn 10 số")
       .required(validateLine.required)
       .default(""),
     accept: yup.boolean().default(false),

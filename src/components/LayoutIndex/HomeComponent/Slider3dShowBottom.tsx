@@ -20,6 +20,7 @@ import IconSliderYellowRight from "@components/Icons/IconSliderYellowRight";
 import useProjectRecenly from "hooks/useProjectRecenly";
 import isEmpty from "lodash.isempty";
 import ImageWithHideOnError from "hooks/ImageWithHideOnError";
+import { useRouter } from "next/router";
 
 const TextLeftStyled = styled(Typography)`
   font-family: "Roboto";
@@ -118,10 +119,12 @@ const dataFake = [1, 2, 3, 4, 5, 6].map((el) => {
 
 export default function Slider3dShowBottom() {
   const { dataProductRecenly } = useProjectRecenly();
+  const Router = useRouter();
   const renderItems = useMemo(() => {
     return (isEmpty(dataProductRecenly) ? dataFake : dataProductRecenly)?.map(
       (el: any) => (
         <SwiperSlide
+		onClick={() => Router.push(`/products?idProject=${el.id}&&provinceId=&&projectTypeId=`)}
           className="swiper-3d"
           style={{
             width: "241px !important",
