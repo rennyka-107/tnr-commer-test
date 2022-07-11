@@ -28,7 +28,8 @@ function getStyles(name: string, value: readonly string[], theme: Theme) {
 	value.indexOf(name) === -1
         ? theme.typography.fontWeightRegular
         : theme.typography.fontWeightMedium,
-		fontSize:14
+		fontSize:14,
+		maxHeight: 250
   };
 }
 
@@ -48,7 +49,7 @@ const MenuProps = {
 export default function SelectSeach({label, data, onChange,value,placeholder, style}: Props) {
 	const theme = useTheme();
   return (
-    <FormControl sx={{ m: 1, width: 300, mt: 3 }} style={style}>
+    <FormControl sx={{ m: 1, width: 300, mt: 3, maxHeight: 250 }} style={style}>
 
       <Select
         displayEmpty
@@ -69,6 +70,7 @@ export default function SelectSeach({label, data, onChange,value,placeholder, st
             paddingTop: 18,
             paddingBottom: 18,
             paddingLeft: 19,
+			maxHeight: 250
 			
           },
         }}
