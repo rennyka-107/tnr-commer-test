@@ -1,12 +1,9 @@
-import { Dispatch } from "react";
 import styled from "@emotion/styled";
 import { Card, Stack, Divider, Typography, Button } from "@mui/material";
-import { searchLocationResponse } from "interface/searchIF";
 import PopUpItem, {ItemWrapper} from './PopUpItem'
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  getComparePopUpItem,
   removeComparePopUpItem,
   removeAllComparePopUpItem,
 } from "../../../../store/productCompareSlice";
@@ -53,7 +50,7 @@ const ComparePopUp = () => {
         dispatch(removeComparePopUpItem(id))
       }
     }else{
-      dispatch(removeAllComparePopUpItem())
+      dispatch(removeAllComparePopUpItem({}))
     }
   }
 
