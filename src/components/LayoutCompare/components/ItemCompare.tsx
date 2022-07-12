@@ -1,4 +1,4 @@
-import { IconHeartProduct, IconRemove } from "@components/Icons";
+import { IconHeartProduct, IconX } from "@components/Icons";
 import IconArrowRight from "@components/Icons/IconArrowRight";
 import {
   ButtonAction,
@@ -13,14 +13,17 @@ import {
 import styled from "@emotion/styled";
 import { Box, CardMedia } from "@mui/material";
 import React, { MouseEventHandler } from "react";
-import LocalStorage from "utils/LocalStorage";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../store/store";
+import {CompareValueFormat} from "utils/CompareValueFormat"
+import {
+  removeCompareItem,
+  removeComparePopUpItem,
+} from "../../../../store/productCompareSlice";
 
 type Props = {
   onClick?: MouseEventHandler<HTMLButtonElement>;
   data?: object | any;
-  onRemove?: MouseEventHandler<SVGSVGElement>;
 };
 const TitleMoneyStyled = styled(Title28Styled)({
   fontSize: 24,
@@ -45,24 +48,27 @@ const BoxInputStyled = styled(Box)({
   alignItems: "end",
 });
 
-const ItemCompare = ({ onClick, data, onRemove }: Props) => {
+const IconWrapper = styled(Box)`
+  position: absolute;
+  cursor: pointer;
+  background: rgba(185, 189, 195, 0.3);
+  backdrop-filter: blur(8px);
+  border-radius: 12px;
+  display: flex;
+  padding: 8px;
+  width: 30px;
+  height: 28px;
+`
+
+const ItemCompare = ({ onClick, data }: Props) => {
   const { compareParams } = useSelector(
     (state: RootState) => state.productCompareSlice
   );
+  const dispatch = useDispatch();
 
-  // const onRemove = () => {
-  //   const local = LocalStorage.get("compare-item");
-  //   if(local){
-  //     console.log(local.map(item => item.productId).indexOf(data.productId));
-  //     // const items = JSON.parse(local);
-  //     const index = local.map(item => item.productId).indexOf(data.productId);
-  //     if(index !== -1){
-  //       local.splice(index, 1);
-  //     }
-  //     console.log(local);
-  //     LocalStorage.set("compare-item", local);
-  //   }
-  // }
+  const onRemove = () => {
+    dispatch(removeComparePopUpItem(data.productId))
+  }
 
   return (
     <Box width={289}>
@@ -72,12 +78,12 @@ const ItemCompare = ({ onClick, data, onRemove }: Props) => {
         padding={"0px"}
         marginBottom={"20px"}
       >
-        <Box style={{ position: "absolute", left: "210px", top: "10px" }}>
-          <IconHeartProduct />
-        </Box>
-        <Box style={{ position: "absolute", left: "249px", top: "10px" }}>
-          <IconRemove style={{ stroke: 'white', width: '27px', height: '27px'}} onClick={onRemove}/>
-        </Box>
+        <IconWrapper style={{ left: "210px", top: "10px" }}>
+          <IconHeartProduct style={{ width: '14px', height: '12px'}}/>
+        </IconWrapper>
+        <IconWrapper style={{ left: "249px", top: "10px" }} onClick={onRemove}>
+          <IconX style={{ stroke: 'white', width: '12px', height: '12px'}} />
+        </IconWrapper>
         <Box
           style={{
             position: "absolute",
@@ -96,10 +102,10 @@ const ItemCompare = ({ onClick, data, onRemove }: Props) => {
           height={160}
           style={{ borderRadius: "20px 20px 0px 0px" }}
           image={data?.thumbnail ?? "https://picsum.photos/308/200"}
-          alt={"green image"}
+          alt={data?.projectName ?? "N/A"}
         />
         <ColStyled aItems="center" margin={"11px 0px 23px"}>
-          <Title22Styled color={"#1b3459"}>{data?.name ?? "N/A"}</Title22Styled>
+          <Title22Styled color={"#1b3459"} style={{ width: '250px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', textAlign: 'center'}}>{data?.projectName ?? "N/A"}</Title22Styled>
           <ButtonAction
             style={{
               width: 164,
@@ -109,7 +115,7 @@ const ItemCompare = ({ onClick, data, onRemove }: Props) => {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              backgroundColor: data?.paymentStatus!==2 ? "#FFFF" : " #ea242a"
+              // backgroundColor: data?.paymentStatus!==2 ? "#FFFF" : " #ea242a"
             }}
             onClick={onClick}
             disabled={data?.paymentStatus!==2}
@@ -124,45 +130,14 @@ const ItemCompare = ({ onClick, data, onRemove }: Props) => {
 
       {compareParams.filter(item => item.type === 'Thông tin chung').map(item => (
                 <BoxInputStyled key={item.id}>
-                <TitleMoneyStyled>{data[item.keyMap.trim()] ?? 'N/A'}</TitleMoneyStyled>
+                  {item.keyMap.trim() === 'totalPrice' ? (
+                    <TitleMoneyStyled>{CompareValueFormat(data[item.keyMap], item.keyMap)}</TitleMoneyStyled>
+                  ) : (
+                    <TextMoneyStyled>{CompareValueFormat(data[item.keyMap], item.keyMap)}</TextMoneyStyled>
+                  )}
+                
               </BoxInputStyled>
               ))}
-              {/* {compareParams.filter(item => item.type === 'Tiện ích').map(item => (
-                <BoxInputStyled key={item.id}>
-                <TitleMoneyStyled>{data[item.keyMap.trim()] ?? 'N/A'}</TitleMoneyStyled>
-              </BoxInputStyled>
-              ))} */}
-              {/* {compareParams.filter(item => item.type === 'Chi tiết').map(item => (
-                <BoxInputStyled key={item.id}>
-                <TitleMoneyStyled>{data[item.keyMap.trim()] ?? 'N/A'}</TitleMoneyStyled>
-              </BoxInputStyled>
-              ))} */}
-
-      {/* <BoxInputStyled>
-        <TitleMoneyStyled>{data?.totalPrice ?? "N/A"} đ</TitleMoneyStyled>
-      </BoxInputStyled>
-
-      <BoxInputStyled>
-        <TextMoneyStyled>
-          {data?.landArea ?? "N/A"} m<sup>2</sup>
-        </TextMoneyStyled>
-      </BoxInputStyled>
-
-      <BoxInputStyled>
-        <TextMoneyStyled>{data?.numBed ?? "N/A"}</TextMoneyStyled>
-      </BoxInputStyled>
-
-      <BoxInputStyled>
-        <TextMoneyStyled>{data?.numBath ?? "N/A"}</TextMoneyStyled>
-      </BoxInputStyled>
-
-      <BoxInputStyled>
-        <TextMoneyStyled>{data?.doorDirection ?? "N/A"}</TextMoneyStyled>
-      </BoxInputStyled>
-
-      <BoxInputStyled>
-        <TextMoneyStyled>{data?.doorDirection ?? "N/A"}</TextMoneyStyled>
-      </BoxInputStyled> */}
     </Box>
   );
 };

@@ -6,7 +6,7 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import styled from "@emotion/styled";
-import { FloorIcon, IconPlusProduct } from "../../Icons/index";
+import { FloorIcon, IconPlusProduct, IconSuccess } from "../../Icons/index";
 import Router, { useRouter } from "next/router";
 import Product3 from "../../../../public/images/product3.png";
 
@@ -40,6 +40,7 @@ type Props = {
   projectTypeCode?: string;
   minFloor?: number;
   maxFloor?: number;
+  isCompare?: boolean;
 };
 
 const CardStyled = styled(Card)`
@@ -249,6 +250,7 @@ export default function ItemCompareSearch({
   maxFloor,
   activeSoSanh,
   id,
+  isCompare
 }: Props) {
   const router = useRouter();
 
@@ -429,7 +431,21 @@ export default function ItemCompareSearch({
           justifyContent: "space-around",
         }}
       >
-        <div
+        {isCompare ? (<>
+          <div
+          style={{
+            gap: 10,
+            display: "flex",
+            flexDirection: "row",
+          }}
+        >
+          <IconSuccess style={{ height: '15px', width: '15px' }}/>
+          <TextButtonStyled style={{ color: "#30c270" }}>
+            Đã thêm vào để so sánh
+          </TextButtonStyled>
+        </div>
+        </>) : (
+          <div
           style={{
             gap: 10,
             display: "flex",
@@ -445,6 +461,8 @@ export default function ItemCompareSearch({
             Thêm sản phẩm so sánh
           </TextButtonStyled>
         </div>
+        )}
+        
       </CardActions>
       {/* ) : (
         <CardActions style={{ flexDirection: "column", marginBottom: 24 }}>

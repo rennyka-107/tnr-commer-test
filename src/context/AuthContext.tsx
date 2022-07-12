@@ -1,22 +1,29 @@
-import { Login, LoginSuccess, ResponseLoginModel } from "@service/auth";
+import {
+  Login,
+  LoginSuccess,
+  ResponseLoginModel,
+  sendNotificationToken,
+} from "@service/auth";
+import { firebaseCloudMessaging } from "../firebase";
 import useForceUpdate from "hooks/useForceUpdate";
 import React, { createContext, useEffect, useState } from "react";
 import LocalStorage from "utils/LocalStorage";
 import SessionStorage from "utils/SessionStorage";
 import { LoginParams } from "../components/LayoutAuthen/Login";
+import localforage from "localforage";
+import { useDispatch, useSelector } from "react-redux";
+import { isEmpty } from "lodash";
+import { RootState } from "../../store/store";
+import useNotification from "hooks/useNotification";
+import { AlertColor } from "@mui/material";
+import { setNotification } from "../../store/notificationSlice";
+
 // import jwtDecode from 'jwt-decode';
 
 interface State {
   user: any;
   isAuthenticated: boolean;
 }
-
-type DecodeUserInfo = {
-  preferred_username: string;
-  email: string;
-  // image?: string;
-  // role: string;
-};
 
 export interface AuthContextValue extends State {
   login: (data: LoginParams) => any;
@@ -33,6 +40,39 @@ export const AuthenStore = createContext<AuthContextValue | null>(null);
 const AuthContext = ({ children }) => {
   const [state, setState] = useState<State>(initialAuthState);
   const [rerender, forceUpdate] = useForceUpdate();
+  const [deviceToken, setDeviceToken] = useState<string | null>();
+  const notification = useNotification();
+  const dispatch = useDispatch();
+  const [mounted, setMounted] = useState(false);
+  if (mounted) {
+    firebaseCloudMessaging.onMessage();
+  }
+  const payloadNotification = useSelector(
+    (state: RootState) => state.notification.payload
+  );
+  useEffect(() => {
+    if (!isEmpty(payloadNotification)) {
+      notification({
+        severity:
+          (payloadNotification?.data?.noticeType as AlertColor) ?? "success",
+        title: payloadNotification?.notification?.title ?? "Tiêu đề",
+        message: payloadNotification?.notification?.body ?? "Nội dung",
+      });
+      dispatch(setNotification(null));
+    }
+  }, [payloadNotification]);
+  useEffect(() => {
+    firebaseCloudMessaging.init();
+    const setToken = async () => {
+      const token = await firebaseCloudMessaging.tokenInlocalforage();
+      if (token) {
+        setDeviceToken(token as string);
+        setMounted(true);
+        // not working
+      }
+    };
+    setToken();
+  }, []);
 
   const loginRequest = async (params: LoginParams) => {
     const { password, username, remember } = params;
@@ -50,21 +90,27 @@ const AuthContext = ({ children }) => {
         LocalStorage.set("accessToken", access_token, forceUpdate);
         LocalStorage.set("refreshToken", refresh_token);
       }
+      await sendNotificationToken({ deviceToken, action: 1 });
       //   LocalStorage.remove("accessToken");
       //   LocalStorage.remove("refreshToken");
       //   SessionStorage.set("accessToken", access_token, forceUpdate);
       //   SessionStorage.set("refreshToken", refresh_token);
     }
-    // console.log(response,'------responseresponseresponse-----');
 
     return response;
   };
 
-  const logout = () => {
+  const logout = async () => {
     LocalStorage.remove("accessToken", forceUpdate);
     LocalStorage.remove("refreshToken");
     SessionStorage.remove("accessToken", forceUpdate);
     SessionStorage.remove("refreshToken");
+    const deviceToken = await localforage.getItem("fcm_token");
+    await sendNotificationToken({
+      deviceToken: deviceToken as string,
+      action: 0,
+    });
+    await localforage.removeItem("fcm_token");
   };
 
   useEffect(() => {

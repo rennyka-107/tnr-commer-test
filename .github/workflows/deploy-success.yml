@@ -12,5 +12,5 @@ jobs:
       - name: Add commit comment - success
         run: |
           curl -L -X POST \
-          --url 'https://api.telegram.org/bot5522907899:AAFiDQrXUE7J1WgUy5Cz4TKbo3XJvvq9oNg/sendMessage?chat_id=-738462127&text=Deploy successfully!' \
+          --url 'https://api.telegram.org/bot5522907899:AAFiDQrXUE7J1WgUy5Cz4TKbo3XJvvq9oNg/sendMessage?chat_id=-738462127&text=Customer site deploy successfully! Customer site lên rồi mọi người ơi!' \
           --header 'content-type: application/json' \
