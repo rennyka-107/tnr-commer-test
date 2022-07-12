@@ -6,6 +6,14 @@ import { searchLocationResponse } from "interface/searchIF";
 import ProductCardSearch from "@components/CustomComponent/ItemProductCard/ProductCardSearch";
 import ItemCompareSearch from "@components/CustomComponent/ItemProductCard/ItemCompareSearch";
 import LocalStorage from "utils/LocalStorage";
+import { useEffect, useState } from "react";
+import ComparePopUp from "@components/CustomComponent/ComparePopup";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getComparePopUpItem,
+  comparePopUpItemI,
+} from "../../../store/productCompareSlice";
+import { RootState } from "../../../store/store";
 
 interface searchProps {
   data?: searchLocationResponse[];
@@ -18,20 +26,28 @@ const ProductWrap = styled.div`
   display: grid;
   gap: 31px;
   grid-template-columns: repeat(4, 1fr);
+  position: relative;
 `;
 const ItemSearch = ({ data }: searchProps) => {
+  const dispatch = useDispatch();
+  const { comparePopUpItem } = useSelector(
+    (state: RootState) => state.productCompareSlice
+  );
 
   const onCompare = (product: searchLocationResponse) => () => {
-    const list = LocalStorage.get("compare-item");
-    if (list) {
-      // const item = JSON.parse(list);
-      if (list.length >= 3 || list.find((prod: searchLocationResponse) => prod.productId === product.productId)) return;
-      list.push(product);
-      LocalStorage.set('compare-item', list);
+    const local: comparePopUpItemI[] = _.cloneDeep(comparePopUpItem);
+    if(local){
+      if(local.length >= 3 || local.find(item => item.productId === product.productId)) return;
+      local.push({
+        thumbnail: product.thumbnail,
+  projectName: product.projectName,
+  name: product.name,
+  productId: product.productId,
+      })
+      dispatch(getComparePopUpItem(local))
     }else{
-      LocalStorage.set('compare-item', [product]);
+      dispatch(getComparePopUpItem([product]))
     }
-    console.log(list);
   };
 
   return (
@@ -58,8 +74,10 @@ const ItemSearch = ({ data }: searchProps) => {
             priceSub={product.unitPrice}
             ticketCard={product.category}
             onCompare={onCompare(product)}
+            isCompare={comparePopUpItem.filter(item => item.productId === product.productId).length > 0}
           />
         ))}
+        <ComparePopUp/>
       </ProductWrap>
     </>
   );

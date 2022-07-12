@@ -60,16 +60,19 @@ export { default as IconFilterSearch } from "./IconFilterSearch";
 
 export { default as IconAttach } from "./IconAttach";
 export { default as IconRemove } from "./IconRemove";
-export {default as IconResetFilter} from "./IconResetFilter"
+export { default as IconResetFilter } from "./IconResetFilter";
 
-export {default as PhoneIconPage} from './phonePage';
-export {default as UpIconPage} from './upPage';
+export { default as PhoneIconPage } from "./phonePage";
+export { default as UpIconPage } from "./upPage";
 
-export {default as IconCanGoc} from './CanGoc';
-export {default as IconNumberRoom} from './NumberRoom';
-export {default as IconNumberRoomSleep} from './NumberRoomSleep';
-export {default as IconBedProductTable} from './IconBedProductTable';
-export {default as IconHuongProductTable} from './IconHuongProductTable';
-export {default as IconDienTichProductTable} from './IconDienTichProductTable';
-export {default as IconHuyLoc} from './IconHuyLoc'
-export {default as FloorIcon} from './FloorIcon'
+export { default as IconCanGoc } from "./CanGoc";
+export { default as IconNumberRoom } from "./NumberRoom";
+export { default as IconNumberRoomSleep } from "./NumberRoomSleep";
+export { default as IconBedProductTable } from "./IconBedProductTable";
+export { default as IconHuongProductTable } from "./IconHuongProductTable";
+export { default as IconDienTichProductTable } from "./IconDienTichProductTable";
+export { default as IconHuyLoc } from "./IconHuyLoc";
+export { default as FloorIcon } from "./FloorIcon";
+export { default as IconSuccess } from "./IconSuccess";
+export { default as IconX } from "./IconX";
+export { default as IconTick } from "./IconTick";

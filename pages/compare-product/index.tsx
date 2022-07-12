@@ -4,11 +4,14 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import React from "react";
 import { useEffect, useState } from "react";
-import { GetCompareParam } from "../api/compareApi";
-import { useDispatch } from "react-redux";
+import { GetCompareParam, GetComapreProduct } from "../api/compareApi";
+import { useDispatch, useSelector } from "react-redux";
 import {
   getCompareParam,
+  getCompareItem,
+  getComparePopUpItem,
 } from "../../store/productCompareSlice";
+import { RootState } from "../../store/store";
 
 const DynamicLayoutCompare = dynamic(
   () => import("../../src/components/LayoutCompare"),
@@ -19,10 +22,17 @@ const CompareProduct = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  const { comparePopUpItem } = useSelector(
+    (state: RootState) => state.productCompareSlice
+  );
 
   useEffect(() => {
     fetchCompareParam();
   },[router.isReady])
+
+  useEffect(() => {
+    fetchCompareItem();
+  }, [router.isReady, comparePopUpItem])
 
   const fetchCompareParam = async () => {
     try{
@@ -36,6 +46,15 @@ const CompareProduct = () => {
       console.error(e);
     }finally{
   
+    }
+  }
+
+  const fetchCompareItem = async () => {
+    if(router.isReady && comparePopUpItem.length > 0){
+      const res = await GetComapreProduct(comparePopUpItem.map(item => item.productId));
+      if(res.responseCode === '00'){
+        dispatch(getCompareItem(res.responseData))
+      }
     }
   }
 
