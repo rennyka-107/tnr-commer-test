@@ -107,7 +107,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
     try {
       const idProduct = context.params.productId;
       const response = await getProducById(idProduct);
-      store.dispatch(getProductById(response.responseData));
+      const dispatch = store.dispatch as Function
+      dispatch(getProductById(response.responseData));
     } catch (err) {}
     return {
       props: {},
