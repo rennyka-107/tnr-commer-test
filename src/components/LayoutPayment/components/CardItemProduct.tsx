@@ -87,7 +87,7 @@ const CardItemProduct = (props: Props) => {
         <Title28Styled>{cart.name ?? "N/A"}</Title28Styled>
 
         <RowStyledAgain>
-          <Text14Styled>{cart.lotCode ?? "N/A"}</Text14Styled>
+          <Text14Styled>{cart.lot_code ?? "N/A"}</Text14Styled>
           <Text14Styled>{cart.code}</Text14Styled>
         </RowStyledAgain>
 

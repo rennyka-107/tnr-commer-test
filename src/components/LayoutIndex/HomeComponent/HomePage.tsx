@@ -77,7 +77,7 @@ const HomePage = () => {
   const [projectName, setProjectName] = useState<string[]>([]);
   const [valueDienTich, setValueDientich] = useState<number[]>([30, 200]);
   const [valueKhoanGia, setValueKhoangGia] = useState<number[]>([1, 200]);
-  
+
   const [filterSearch, setFilterSearch] = useState({
     textSearch: "",
     provinceId: "",
@@ -85,14 +85,17 @@ const HomePage = () => {
     projectId: "",
     priceFrom: "",
     priceTo: "",
-	categoryId: "",
+    categoryId: "",
     areaFrom: null,
     areaTo: null,
   });
 
-  const { listMenuBarType, listMenuBarProjectType, listMenuLocation,listCategory } =
-    useSelector((state: RootState) => state.menubar);
-
+  const {
+    listMenuBarType,
+    listMenuBarProjectType,
+    listMenuLocation,
+    listCategory,
+  } = useSelector((state: RootState) => state.menubar);
 
   const handleSelectProject = (
     event: SelectChangeEvent<typeof projectTypeName>
@@ -137,13 +140,21 @@ const HomePage = () => {
         Math.min(newValue[0], valueDienTich[1] - minDistance),
         valueDienTich[1],
       ]);
-	  setFilterSearch({ ...filterSearch, areaFrom:  valueDienTich[0], areaTo : valueDienTich[1]});
+      setFilterSearch({
+        ...filterSearch,
+        areaFrom: valueDienTich[0],
+        areaTo: valueDienTich[1],
+      });
     } else {
       setValueDientich([
         valueDienTich[0],
         Math.max(newValue[1], valueDienTich[0] + minDistance),
       ]);
-	  setFilterSearch({ ...filterSearch,areaFrom:  valueDienTich[0], areaTo :  valueDienTich[1]});
+      setFilterSearch({
+        ...filterSearch,
+        areaFrom: valueDienTich[0],
+        areaTo: valueDienTich[1],
+      });
     }
   };
 
@@ -161,18 +172,28 @@ const HomePage = () => {
         Math.min(newValue[0], valueKhoanGia[1] - minDistance2),
         valueKhoanGia[1],
       ]);
-      setFilterSearch({ ...filterSearch,priceFrom : valueKhoanGia[0].toString(),priceTo : valueKhoanGia[1].toString() });
+      setFilterSearch({
+        ...filterSearch,
+        priceFrom: valueKhoanGia[0].toString(),
+        priceTo: valueKhoanGia[1].toString(),
+      });
     } else {
       setValueKhoangGia([
         valueKhoanGia[0],
         Math.max(newValue[1], valueKhoanGia[0] + minDistance2),
       ]);
-      setFilterSearch({ ...filterSearch,priceFrom : valueKhoanGia[0].toString(),priceTo : valueKhoanGia[1].toString() });
+      setFilterSearch({
+        ...filterSearch,
+        priceFrom: valueKhoanGia[0].toString(),
+        priceTo: valueKhoanGia[1].toString(),
+      });
     }
   };
 
   const handleSearchCompare = () => {
-    router.push(`/compare-search?projectId=${filterSearch.projectId}&&projectTypeId=${filterSearch.projectTypeId}&&priceTo=${filterSearch.priceTo}&&priceFrom=${filterSearch.priceFrom}&&areaTo=${filterSearch.areaTo}&&areaFrom=${filterSearch.areaFrom}&&categoryId=${filterSearch.categoryId}`);
+    router.push(
+      `/compare-search?projectId=${filterSearch.projectId}&&projectTypeId=${filterSearch.projectTypeId}&&priceTo=${filterSearch.priceTo}&&priceFrom=${filterSearch.priceFrom}&&areaTo=${filterSearch.areaTo}&&areaFrom=${filterSearch.areaFrom}&&categoryId=${filterSearch.categoryId}`
+    );
   };
 
   return (
@@ -213,14 +234,6 @@ const HomePage = () => {
             So sánh nhanh các sản phẩm theo tiêu chí lựa chọn của bạn giúp cho
             bạn dễ dàng chọn được sản phẩm ưng ý cho mình
           </Typography>
-          <SelectInputComponent
-            label="Loại bất động sản"
-            data={listMenuBarProjectType}
-            value={projectTypeName}
-            onChange={handleSelectProject}
-            placeholder="Chọn loại bất động sản"
-            style={{ margin: 0 }}
-          />
         </div>
         <div
           style={{
@@ -232,11 +245,12 @@ const HomePage = () => {
         >
           <BoxStyled sx={{ minWidth: 120, padding: "0px !important" }}>
             <SelectInputComponent
-              label="Dòng sản phẩm"
-              data={listCategory}
-              value={categoryName}
-              onChange={handleSelectCategory}
-              placeholder="Chọn dòng sản phẩm"
+              label="Loại bất động sản"
+              data={listMenuBarProjectType}
+              value={projectTypeName}
+              onChange={handleSelectProject}
+              placeholder="Chọn loại bất động sản"
+              style={{ margin: 0 }}
             />
             <SelectInputComponent
               label="Dự án"

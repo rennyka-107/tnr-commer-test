@@ -251,7 +251,7 @@ const AddInfoCustom = (props: Props) => {
               <Grid item xs={6}>
                 <FormGroup>
                   <ControllerTextField
-                    label={"Số CMNSD"}
+                    label={"Số CMND/CCCD"}
                     control={control}
                     variant={"outlined"}
                     name={"idNumber"}
@@ -353,7 +353,7 @@ const AddInfoCustom = (props: Props) => {
             onClick={handleSubmit((value) => handleOnSubmit(value))}
           >
             <Text18Styled color={"#fff"}>
-              {!isEmpty(idNumber) ? "Lưu" : "Thêm người mua"}
+              Lưu thông tin
             </Text18Styled>
           </ButtonNormalStyled>
         </RowStyled>

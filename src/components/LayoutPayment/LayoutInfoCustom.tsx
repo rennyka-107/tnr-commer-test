@@ -567,7 +567,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
     return <></>;
   }
   return (
-    <Container title={"Thông tin"}>
+    <Container title={"Thanh toán"}>
       {/* {!formInfo && (
         <Box style={{ marginBottom: 60 }}>
           <Stepper alternativeLabel activeStep={1}>

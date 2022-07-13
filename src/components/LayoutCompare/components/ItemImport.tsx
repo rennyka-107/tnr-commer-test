@@ -10,15 +10,21 @@ import {
   FormControl,
   Select,
   MenuItem,
+  SelectChangeEvent,
+  FormControlLabel,
 } from "@mui/material";
 import React, { MouseEventHandler, useState } from "react";
 import { IconTimes } from "@components/Icons";
 import dynamic from "next/dynamic";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../store/store";
+import { priceRange } from "constant/filter";
+import { useRouter } from "next/router";
 
 type Props = {
   onClick?: MouseEventHandler<HTMLButtonElement>;
+  filter: any;
+  onChangeFilter: (filter: any) => void;
 };
 
 const ItemScreenDynamic = dynamic(() => import("./ItemScreen"));
@@ -106,21 +112,57 @@ const ButtonSearchModalStyled = styled(Button)`
   }
 `;
 
-const ItemImport = (props: Props) => {
+const ItemImport = ({ onChangeFilter, filter }: Props) => {
   const [open, setOpen] = useState<boolean>(false);
   const { compareParams } = useSelector(
     (state: RootState) => state.productCompareSlice
   );
+  const { listMenuBarProjectType, listCategory } = useSelector(
+    (state: RootState) => state.menubar
+  );
+  const [priceRangeValue, setPriceRangeValue] = useState<number[]>([0, 0]);
+  const router = useRouter();
+
   const handleOnClick = () => {
-    setOpen(true);
+    // setOpen(true);
+    router.push({
+      pathname: `/compare-search`,
+      query: {
+        ...filter
+      }
+    })
   };
+
   const handleClickScreen = () => {
     setOpen(false);
   };
 
+  const changeFilter = (e: SelectChangeEvent<any>) => {
+    if (e.target.name === "priceRange") {
+      setPriceRangeValue(e.target.value);
+      onChangeFilter({
+        priceFrom: e.target.value[0].toString(),
+        priceTo: e.target.value[1].toString(),
+      });
+    } else {
+      onChangeFilter({
+        [e.target.name]: e.target.value,
+      });
+    }
+  };
+
+  const onCompare = () => {
+    router.push({
+      pathname: `/compare-search`,
+      query: {
+        ...filter
+      }
+    })
+  }
+
   return (
     <Box maxWidth={289}>
-      <Modal
+      {/* <Modal
         open={open}
         onClose={() => setOpen(false)}
         aria-labelledby="modal-title"
@@ -149,37 +191,81 @@ const ItemImport = (props: Props) => {
             <Grid item xs={4}></Grid>
           </Grid>
           <TitleModal style={{ marginTop: 33 }}>Hoặc tìm sản phẩm</TitleModal>
-          <FormControl style={{ width: "100%" }}>
-            <BoxSearchModalStyled>
-              <Select defaultValue={"1"} style={{ background: "white" }}>
-                <MenuItem value="1">Dòng sản phầm</MenuItem>
-                <MenuItem value="2">Dòng sản phầm</MenuItem>
-              </Select>
-              <Select defaultValue={"1"} style={{ background: "white" }}>
-                <MenuItem value="1">Loại sản phẩm</MenuItem>
-                <MenuItem value="2">Loại sản phẩm</MenuItem>
-              </Select>
-              <Select defaultValue={"1"} style={{ background: "white" }}>
-                <MenuItem value="1">Khoảng giá</MenuItem>
-                <MenuItem value="2">Khoảng giá</MenuItem>
-                <MenuItem value="3">Khoảng giá</MenuItem>
-              </Select>
-              <ButtonSearchModalStyled>So sánh</ButtonSearchModalStyled>
-            </BoxSearchModalStyled>
-          </FormControl>
+          <BoxSearchModalStyled>
+            <Grid container spacing={2}>
+              <Grid item xs={3}>
+                <FormControl fullWidth>
+                  <Select
+                    onChange={changeFilter}
+                    defaultValue={"1"}
+                    value={filter.categoryId ?? "1"}
+                    style={{ background: "white" }}
+                    name={"categoryId"}
+                    placeholder={'Chọn dòng sản phẩm'}
+                  >
+                    {listCategory.map((item) => (
+                      <MenuItem value={item.id} key={item.code}>
+                        {item.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item xs={3}>
+                <FormControl fullWidth>
+                  <Select
+                    value={priceRangeValue}
+                    style={{ background: "white" }}
+                    onChange={changeFilter}
+                    name={"priceRange"}
+                    placeholder={'Khoảng giá'}
+                  >
+                    {priceRange.map((item, index) => (
+                      <MenuItem value={item.value} key={index}>
+                        {item.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item xs={3}>
+                <FormControl fullWidth>
+                  <Select
+                    defaultValue={null}
+                    value={filter.projectTypeId ?? "1"}
+                    style={{ background: "white" }}
+                    onChange={changeFilter}
+                    name={"projectTypeId"}
+                    placeholder={'Loại BĐS'}
+                  >
+                    {listMenuBarProjectType.map((item) => (
+                      <MenuItem value={item.id} key={item.id}>
+                        {item.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item xs={3}>
+                <ButtonSearchModalStyled onClick={onCompare}>So sánh</ButtonSearchModalStyled>
+              </Grid>
+            </Grid>
+          </BoxSearchModalStyled>
         </BoxModalStyled>
-      </Modal>
+      </Modal> */}
       <WrapperContent>
         <ButtonStyled onClick={handleOnClick}>
           <IconPlusProduct
             style={{ width: 46.6, height: 46.6, marginTop: 10 }}
           />
-          <TextStyled>Thêm sản phầm so sánh</TextStyled>
+          <TextStyled>Thêm sản phẩm so sánh</TextStyled>
         </ButtonStyled>
       </WrapperContent>
-      {compareParams.filter(item => item.type === 'Thông tin chung').map(item => (
-                <BoxInputStyled key={item.id}/>
-              ))}
+      {compareParams
+        .filter((item) => item.type === "Thông tin chung")
+        .map((item) => (
+          <BoxInputStyled key={item.id} />
+        ))}
     </Box>
   );
 };

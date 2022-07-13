@@ -330,15 +330,6 @@ const SearchCompare = ({
             placeholder="Loại BĐS"
             style={{ width: 180, height: 40 }}
           />
-          <SelectCategory
-            label="Dòng sản phẩm"
-            data={listCategory}
-            value={categoryName}
-            onChange={handleSelectCategory}
-            placeholder="Chọn dòng sản phẩm"
-            style={{ width: 180, height: 40 }}
-          />
-
           <SelectSeach
             label="Chọn dự án"
             data={listMenuBarType}

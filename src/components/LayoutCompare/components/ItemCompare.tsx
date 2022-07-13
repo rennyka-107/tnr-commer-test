@@ -1,4 +1,4 @@
-import { IconHeartProduct, IconX } from "@components/Icons";
+import { IconHeartFilled, IconHeartProduct, IconX } from "@components/Icons";
 import IconArrowRight from "@components/Icons/IconArrowRight";
 import {
   ButtonAction,
@@ -12,14 +12,13 @@ import {
 } from "@components/StyledLayout/styled";
 import styled from "@emotion/styled";
 import { Box, CardMedia } from "@mui/material";
-import React, { MouseEventHandler } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { MouseEventHandler, useState } from "react";
+import { useSelector } from "react-redux";
 import { RootState } from "../../../../store/store";
-import {CompareValueFormat} from "utils/CompareValueFormat"
-import {
-  removeCompareItem,
-  removeComparePopUpItem,
-} from "../../../../store/productCompareSlice";
+import { CompareValueFormat } from "utils/CompareValueFormat";
+import { useRouter } from "next/router";
+import { ToggleProductFavorite } from "../../../../pages/api/favorite";
+import useAuth from "hooks/useAuth";
 
 type Props = {
   onClick?: MouseEventHandler<HTMLButtonElement>;
@@ -58,17 +57,41 @@ const IconWrapper = styled(Box)`
   padding: 8px;
   width: 30px;
   height: 28px;
-`
+`;
 
 const ItemCompare = ({ onClick, data }: Props) => {
-  const { compareParams } = useSelector(
+  const router = useRouter();
+  const [favorite, setFavorite] = useState<boolean>(false);
+  const { compareParams, compareItems } = useSelector(
     (state: RootState) => state.productCompareSlice
   );
-  const dispatch = useDispatch();
+  const { isAuthenticated } = useAuth();
 
   const onRemove = () => {
-    dispatch(removeComparePopUpItem(data.productId))
-  }
+    router.push({
+      pathname: "/compare-product",
+      query: {
+        productId: compareItems
+          .map((item) => item.productId)
+          .filter((item: string) => item !== data.productId),
+      },
+    });
+  };
+
+  const onFavorite = async () => {
+    try {
+      const res = await ToggleProductFavorite({
+        productId: data.productId,
+        action: favorite ? 0 : 1,
+      });
+      if (res.responseCode === "00") {
+        setFavorite(!favorite);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+    }
+  };
 
   return (
     <Box width={289}>
@@ -78,11 +101,20 @@ const ItemCompare = ({ onClick, data }: Props) => {
         padding={"0px"}
         marginBottom={"20px"}
       >
-        <IconWrapper style={{ left: "210px", top: "10px" }}>
-          <IconHeartProduct style={{ width: '14px', height: '12px'}}/>
-        </IconWrapper>
+        {isAuthenticated && (
+          <IconWrapper
+            style={{ left: "210px", top: "10px" }}
+            onClick={onFavorite}
+          >
+            {favorite ? (
+              <IconHeartFilled style={{ width: "14px", height: "12px" }} />
+            ) : (
+              <IconHeartProduct style={{ width: "14px", height: "12px" }} />
+            )}
+          </IconWrapper>
+        )}
         <IconWrapper style={{ left: "249px", top: "10px" }} onClick={onRemove}>
-          <IconX style={{ stroke: 'white', width: '12px', height: '12px'}} />
+          <IconX style={{ stroke: "white", width: "12px", height: "12px" }} />
         </IconWrapper>
         <Box
           style={{
@@ -94,7 +126,7 @@ const ItemCompare = ({ onClick, data }: Props) => {
           }}
         >
           <Text14Styled color={"white"} style={{ whiteSpace: "pre" }}>
-            TNR Star
+            {data?.categoryName}
           </Text14Styled>
         </Box>
         <CardMedia
@@ -102,10 +134,21 @@ const ItemCompare = ({ onClick, data }: Props) => {
           height={160}
           style={{ borderRadius: "20px 20px 0px 0px" }}
           image={data?.thumbnail ?? "https://picsum.photos/308/200"}
-          alt={data?.projectName ?? "N/A"}
+          alt={data?.productName ?? "N/A"}
         />
         <ColStyled aItems="center" margin={"11px 0px 23px"}>
-          <Title22Styled color={"#1b3459"} style={{ width: '250px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', textAlign: 'center'}}>{data?.projectName ?? "N/A"}</Title22Styled>
+          <Title22Styled
+            color={"#1b3459"}
+            style={{
+              width: "250px",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+              textAlign: "center",
+            }}
+          >
+            {data?.productName ?? "N/A"}
+          </Title22Styled>
           <ButtonAction
             style={{
               width: 164,
@@ -115,10 +158,11 @@ const ItemCompare = ({ onClick, data }: Props) => {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              // backgroundColor: data?.paymentStatus!==2 ? "#FFFF" : " #ea242a"
+              backgroundColor:
+                data?.paymentStatus !== "2" ? "#FFFF" : " #ea242a",
             }}
             onClick={onClick}
-            disabled={data?.paymentStatus!==2}
+            disabled={data?.paymentStatus !== "2"}
           >
             <Text16Styled color={"white"}>Mua Online</Text16Styled>
             <Box width={19} height={19}>
@@ -128,16 +172,21 @@ const ItemCompare = ({ onClick, data }: Props) => {
         </ColStyled>
       </WrapperContent>
 
-      {compareParams.filter(item => item.type === 'Thông tin chung').map(item => (
-                <BoxInputStyled key={item.id}>
-                  {item.keyMap.trim() === 'totalPrice' ? (
-                    <TitleMoneyStyled>{CompareValueFormat(data[item.keyMap], item.keyMap)}</TitleMoneyStyled>
-                  ) : (
-                    <TextMoneyStyled>{CompareValueFormat(data[item.keyMap], item.keyMap)}</TextMoneyStyled>
-                  )}
-                
-              </BoxInputStyled>
-              ))}
+      {compareParams
+        .filter((item) => item.type === "Thông tin chung")
+        .map((item) => (
+          <BoxInputStyled key={item.id}>
+            {item.keyMap.trim() === "totalPrice" ? (
+              <TitleMoneyStyled>
+                {CompareValueFormat(data[item.keyMap], item.keyMap)}
+              </TitleMoneyStyled>
+            ) : (
+              <TextMoneyStyled>
+                {CompareValueFormat(data[item.keyMap], item.keyMap)}
+              </TextMoneyStyled>
+            )}
+          </BoxInputStyled>
+        ))}
     </Box>
   );
 };

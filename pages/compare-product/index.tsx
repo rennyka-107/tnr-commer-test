@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getCompareParam,
   getCompareItem,
-  getComparePopUpItem,
+  removeAllComparePopUpItem,
 } from "../../store/productCompareSlice";
 import { RootState } from "../../store/store";
 
@@ -28,35 +28,47 @@ const CompareProduct = () => {
 
   useEffect(() => {
     fetchCompareParam();
-  },[router.isReady])
+  }, [router.isReady]);
 
   useEffect(() => {
     fetchCompareItem();
-  }, [router.isReady, comparePopUpItem])
+  }, [router.isReady, router.query.productId]);
 
   const fetchCompareParam = async () => {
-    try{
-      if(router.isReady){
+    try {
+      if (router.isReady) {
         const res = await GetCompareParam();
-        if(res.responseCode === '00'){
-          dispatch(getCompareParam(res.responseData))
+        if (res.responseCode === "00") {
+          dispatch(getCompareParam(res.responseData));
         }
       }
-    }catch(e){
+    } catch (e) {
       console.error(e);
-    }finally{
-  
+    } finally {
     }
-  }
+  };
 
   const fetchCompareItem = async () => {
-    if(router.isReady && comparePopUpItem.length > 0){
-      const res = await GetComapreProduct(comparePopUpItem.map(item => item.productId));
-      if(res.responseCode === '00'){
-        dispatch(getCompareItem(res.responseData))
+    if (router.isReady && router.query.productId) {
+      const res = await GetComapreProduct(
+        typeof router.query.productId === "string"
+          ? [router.query.productId]
+          : router.query.productId
+      );
+      if (res.responseCode === "00") {
+        dispatch(
+          getCompareItem(
+            Array.from(router.query.productId, (item) =>
+              res.responseData.find((prob) => prob.productId === item)
+            )
+          )
+        );
+        if (comparePopUpItem.length > 0) {
+          dispatch(removeAllComparePopUpItem({}));
+        }
       }
     }
-  }
+  };
 
   return (
     <Page
