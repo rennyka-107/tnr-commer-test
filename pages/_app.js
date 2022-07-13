@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { CacheProvider } from "@emotion/react";
 import { ThemeProvider, CssBaseline } from "@mui/material";
@@ -8,14 +8,14 @@ import lightTheme from "../styles/theme/lightTheme";
 import "../styles/globals.css";
 import AuthContext from "../src/context/AuthContext";
 import CartProvider from "./../src/context/CartProvider";
-import { NotificationProvider } from '../src/context/NotificationContext';
+import { NotificationProvider } from "../src/context/NotificationContext";
 import "react-datepicker/dist/react-datepicker.css";
 
 const clientSideEmotionCache = createEmotionCache();
 
 const MyApp = (props) => {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
-
+  
   return (
     <CacheProvider value={emotionCache}>
       <ThemeProvider theme={lightTheme}>

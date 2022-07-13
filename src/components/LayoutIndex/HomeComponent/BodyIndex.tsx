@@ -160,62 +160,33 @@ export default function BodyIndex() {
             marginBottom: 33,
           }}
         ></div>
-        <div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-around",
-              marginBottom: 20,
-            }}
-          >
-            <TextBDS>BẤT ĐỘNG SẢN NỔI BẬT</TextBDS>
-            <LinkStyled href="/hot-products">Xem tất cả</LinkStyled>
-          </div>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(4, auto)",
-              justifyContent: sizeOfArray >= 4 ? "center" : "",
-            }}
-          >
-            {productTopByOutStanding?.length > 0 ? (
+        {productTopByOutStanding?.length > 0 ? (
+          <div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-around",
+                marginBottom: 20,
+              }}
+            >
+              <TextBDS>BẤT ĐỘNG SẢN NỔI BẬT</TextBDS>
+              <LinkStyled href="/hot-products">Xem tất cả</LinkStyled>
+            </div>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(4, auto)",
+                justifyContent: sizeOfArray >= 4 ? "center" : "",
+              }}
+            >
               <>
                 <DynamicSliderHotProduct />
               </>
-            ) : (
-              <></>
-            )}
+            </div>
           </div>
-          {/* <ItemProductCard
-            src={Product2}
-            title="TNR AMALUNA - TRÀ VINH - LK.08.32"
-            subTitle="Hải Phòng"
-            dataItem={{
-              item1: "1",
-              item2: "1",
-              item3: "1",
-              item4: "Tây",
-            }}
-            priceListed={3018933000}
-            priceSub={40580174}
-            ticketCard="TRN Star"
-            onClick={() => Router.push('/payment-cart')}
-          />
-          <ItemProductCard
-            src={Product3}
-            title="TNR GoldSeason"
-            subTitle="90 đường Láng, Thịnh Quang, Đống Đa, Hà Nội"
-            dataItem={{
-              item1: "02",
-              item2: "02",
-              item3: "80",
-              item4: "Đông Nam",
-            }}
-            priceListed={3018933000}
-            priceSub={40580174}
-            ticketCard="TNR Grand Palace"
-          /> */}
-        </div>
+        ) : (
+          <></>
+        )}
       </ContainerProduct>
     </FlexContainer>
   );

@@ -16,3 +16,9 @@ export const GetCompareParam = async () => {
     withToken: false,
   });
 };
+
+export const GetComapreProduct = async (data: string[]) => {
+  return HttpClient.post<string[], CommonResponse>(`/api/compare/get-compare-product-info`, data, {
+    withToken: false,
+  })
+}

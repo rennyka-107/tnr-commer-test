@@ -40,8 +40,9 @@ const TextTitleStyled = styled.a`
   font-family: "Roboto";
   font-style: normal;
   font-weight: 500;
-  font-size: 22px;
-  line-height: 26px;
+  Giảm fontsize:20px
+  max height 52px
+  line-height:28px
   /* identical to box height */
 
   /* Brand/Main color */

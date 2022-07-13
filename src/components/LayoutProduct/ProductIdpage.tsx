@@ -44,6 +44,9 @@ import Product3 from "../../../public/images/product3.png";
 import { getProductPTG } from "../../../store/productSlice";
 import { RootState } from "../../../store/store";
 import ModalRegister from "./ModalRegister";
+import { getUserInfoApi } from "../../../pages/api/profileApi";
+import { getUserInfo } from "../../../store/profileSlice";
+import useForceUpdate from "hooks/useForceUpdate";
 
 interface ProductsProps {
   listProject?: ProjectResponse[];
@@ -358,6 +361,10 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
       value: "Tiểu khu",
     },
   ];
+  const [rerender, forceUpdate] = useForceUpdate();
+  const detailUser = useSelector(
+    (state: RootState) => state?.profile?.userInfo
+  );
   const dispatch = useDispatch();
   const productItem = useSelector(
     (state: RootState) => state.products.productItem
@@ -369,6 +376,7 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
   const [handleOpen, setHandleOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [callApi, setCallApi] = useState(false);
+
   const [numberRoom, setNumberRoom] = useState({
     num: "S.202",
     open: false,
@@ -411,7 +419,16 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
       }
     }
   }, [callApi, dispatch]);
-
+  const fetchUserInfor = async () => {
+    const responseUser = await getUserInfoApi();
+    dispatch(getUserInfo(responseUser.responseData));
+  };
+  //   console.log()
+  useEffect(() => {
+    if (localStorage.getItem("accessToken")) {
+      fetchUserInfor();
+    }
+  }, []);
   const handlePhieuTinhGia = () => {
     setTabCardValue(false);
     setTypeBottomShow(2);
@@ -475,8 +492,8 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
       link.setAttribute("target", "_blank");
       link.href = window.URL.createObjectURL(blob);
       link.click();
-	  setLoading(false);
-	  setHandleOpen(false);
+      setLoading(false);
+      setHandleOpen(false);
     })();
   };
   const fecthBackDrop = () => {

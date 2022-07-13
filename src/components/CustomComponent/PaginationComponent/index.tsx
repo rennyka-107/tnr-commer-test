@@ -13,7 +13,6 @@ interface PaginationI {
 
 export default function PaginationComponent(props: PaginationI) {
   const { count, onChange, page } = props
-
   return (
     <Stack spacing={2}>
       <Pagination

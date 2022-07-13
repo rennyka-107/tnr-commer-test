@@ -21,7 +21,7 @@ const ProductWrap = styled.div`
 `;
 const ItemSearch = ({ data ,buyDisabled}: searchProps) => {
   const addToCart = useAddToCart();
-	console.log(data)
+
   return (
     <>
       <ProductWrap>

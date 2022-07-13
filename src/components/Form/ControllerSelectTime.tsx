@@ -1,3 +1,4 @@
+import { IconSelectDatLich, StrokeHeaderIcon } from "@components/Icons";
 import IconCircleClose from "@components/Icons/IconCircleClose";
 import styled from "@emotion/styled";
 import {
@@ -39,7 +40,7 @@ const Container = styled.div``;
 
 const LabelSpan = styled.span<{ color: string }>`
   margin-bottom: 4px;
-  color: ${({ color }) => color ?? "#1B3459"};
+  color: ${({ color }) => color ?? "#8190A7"};
   font-family: Roboto;
   font-style: normal;
   font-weight: 400;
@@ -104,6 +105,10 @@ const ControllerSelectTime = <T extends FieldValues>(props: Props<T>) => {
         render={({ field, fieldState: { error } }) => (
           <FormControl fullWidth>
             <SelectInput
+              IconComponent={({ className }) => {
+                className = className.replace("MuiSelect-iconOpen", "");
+                return <IconSelectDatLich />;
+              }}
               value={field?.value}
               inputProps={{
                 "aria-label": "Without label",
@@ -120,7 +125,6 @@ const ControllerSelectTime = <T extends FieldValues>(props: Props<T>) => {
                   </span>
                 );
               }}
-
               displayEmpty
               multiple={multiple}
               {...field}
@@ -129,20 +133,14 @@ const ControllerSelectTime = <T extends FieldValues>(props: Props<T>) => {
               {dataSelect.map((item) => {
                 if (renderItemSelect) {
                   return (
-                    <MenuItem
-                      value={item.value}
-                      key={item.value}
-                    >
+                    <MenuItem value={item.value} key={item.value}>
                       {renderItemSelect(item)}
                     </MenuItem>
                   );
                 }
                 return (
-                  <MenuItem
-                    value={item.value}
-                    key={item.value}
-                  >
-                    {item.label} 
+                  <MenuItem value={item.value} key={item.value}>
+                    {item.label}
                   </MenuItem>
                 );
               })}

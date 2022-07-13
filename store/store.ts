@@ -14,6 +14,8 @@ import shortcut from "./shortcut";
 import infoCms from "./infoCmsSlice";
 import salePolicy from "./salePolicySlice";
 import productCompareSlice from "./productCompareSlice";
+import notification from "./notificationSlice";
+import specialoffers from './SpecialOffersSlice'
 
 const combinedReducer = combineReducers({
   menubar,
@@ -29,6 +31,8 @@ const combinedReducer = combineReducers({
   infoCms,
   salePolicy,
   productCompareSlice,
+  notification,
+  specialoffers
 });
 
 export type RootState = ReturnType<typeof combinedReducer>;
@@ -88,18 +92,27 @@ const masterReducer = (state, action) => {
       },
       productCompareSlice: {
         ...action.payload.productCompareSlice,
-      }
+      },
+      notification: {
+        ...action.payload.notification,
+      },
+	  specialoffers: {
+		...action.payload.specialoffers
+	  }
     };
     return nextState;
   } else {
     return combinedReducer(state, action);
   }
 };
+let store: ReturnType<typeof configureStore>;
 
-export const makeStore = () =>
-  configureStore({
+export const makeStore = () => {
+  store = configureStore({
     reducer: masterReducer,
   });
+  return store;
+};
 
 export type AppStore = ReturnType<typeof makeStore>;
 export type AppState = ReturnType<AppStore["getState"]>;
@@ -111,3 +124,4 @@ export type AppThunk<ReturnType = void> = ThunkAction<
 >;
 
 export const wrapper = createWrapper<AppStore>(makeStore);
+export { store };

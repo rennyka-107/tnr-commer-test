@@ -3,7 +3,7 @@ import { convertToQuery } from "utils/helper";
 import HttpClient from "utils/HttpClient";
 
 const GET_CONTRACT = "api/customer/customer-order/find-by-user";
-const GET_NOTIFICATION = "/api/customer/notification/find-notification-by-user";
+const GET_NOTIFICATION = "/api-noti/notification/get-notice-for-user";
 const CHANGE_PASSWORD = "/api-account/v1/account/change-password";
 const UPDATE_PROFILE = "api-profile/profile/update";
 export interface ContractI {
@@ -33,15 +33,6 @@ export interface ContractI {
   remaining?: number; // số tiền còn lại
   status?: number | string; // trạng thái
   productionImage?: string | null;
-}
-
-export interface NotiI {
-  id: string;
-  notiTime: string;
-  orderId: string | null;
-  status: number;
-  type: number;
-  userid: string;
 }
 
 export interface ProfileI {
@@ -85,9 +76,9 @@ export const getOrderById = (id: any) => {
 	)
 }
 
-export const getNotificationByUser = () => {
-  return HttpClient.get<ResponseTypeAPI, CommonResponse<NotiI[]>>(
-    `${GET_NOTIFICATION}`
+export const getNotificationByUser = ({page,size}) => {
+  return HttpClient.get<ResponseTypeAPI, CommonResponse<any>>(
+    `${GET_NOTIFICATION}/${page}/${size}`
   );
 };
 

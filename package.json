@@ -43,7 +43,9 @@
     "react-redux": "^8.0.2",
     "redux-persist": "^6.0.0",
     "swiper": "^8.1.4",
-    "yup": "^0.32.11"
+    "yup": "^0.32.11",
+    "firebase": "^9.8.1",
+    "localforage": "^1.10.0"
   },
   "devDependencies": {
     "@types/node": "^17.0.31",

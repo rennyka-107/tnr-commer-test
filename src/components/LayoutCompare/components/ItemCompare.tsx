@@ -1,4 +1,4 @@
-import { IconHeartProduct, IconRemove } from "@components/Icons";
+import { IconHeartFilled, IconHeartProduct, IconX } from "@components/Icons";
 import IconArrowRight from "@components/Icons/IconArrowRight";
 import {
   ButtonAction,
@@ -12,15 +12,17 @@ import {
 } from "@components/StyledLayout/styled";
 import styled from "@emotion/styled";
 import { Box, CardMedia } from "@mui/material";
-import React, { MouseEventHandler } from "react";
-import LocalStorage from "utils/LocalStorage";
-import { useDispatch, useSelector } from "react-redux";
+import React, { MouseEventHandler, useState } from "react";
+import { useSelector } from "react-redux";
 import { RootState } from "../../../../store/store";
+import { CompareValueFormat } from "utils/CompareValueFormat";
+import { useRouter } from "next/router";
+import { ToggleProductFavorite } from "../../../../pages/api/favorite";
+import useAuth from "hooks/useAuth";
 
 type Props = {
   onClick?: MouseEventHandler<HTMLButtonElement>;
   data?: object | any;
-  onRemove?: MouseEventHandler<SVGSVGElement>;
 };
 const TitleMoneyStyled = styled(Title28Styled)({
   fontSize: 24,
@@ -45,24 +47,51 @@ const BoxInputStyled = styled(Box)({
   alignItems: "end",
 });
 
-const ItemCompare = ({ onClick, data, onRemove }: Props) => {
-  const { compareParams } = useSelector(
+const IconWrapper = styled(Box)`
+  position: absolute;
+  cursor: pointer;
+  background: rgba(185, 189, 195, 0.3);
+  backdrop-filter: blur(8px);
+  border-radius: 12px;
+  display: flex;
+  padding: 8px;
+  width: 30px;
+  height: 28px;
+`;
+
+const ItemCompare = ({ onClick, data }: Props) => {
+  const router = useRouter();
+  const [favorite, setFavorite] = useState<boolean>(false);
+  const { compareParams, compareItems } = useSelector(
     (state: RootState) => state.productCompareSlice
   );
+  const { isAuthenticated } = useAuth();
 
-  // const onRemove = () => {
-  //   const local = LocalStorage.get("compare-item");
-  //   if(local){
-  //     console.log(local.map(item => item.productId).indexOf(data.productId));
-  //     // const items = JSON.parse(local);
-  //     const index = local.map(item => item.productId).indexOf(data.productId);
-  //     if(index !== -1){
-  //       local.splice(index, 1);
-  //     }
-  //     console.log(local);
-  //     LocalStorage.set("compare-item", local);
-  //   }
-  // }
+  const onRemove = () => {
+    router.push({
+      pathname: "/compare-product",
+      query: {
+        productId: compareItems
+          .map((item) => item.productId)
+          .filter((item: string) => item !== data.productId),
+      },
+    });
+  };
+
+  const onFavorite = async () => {
+    try {
+      const res = await ToggleProductFavorite({
+        productId: data.productId,
+        action: favorite ? 0 : 1,
+      });
+      if (res.responseCode === "00") {
+        setFavorite(!favorite);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+    }
+  };
 
   return (
     <Box width={289}>
@@ -72,12 +101,21 @@ const ItemCompare = ({ onClick, data, onRemove }: Props) => {
         padding={"0px"}
         marginBottom={"20px"}
       >
-        <Box style={{ position: "absolute", left: "210px", top: "10px" }}>
-          <IconHeartProduct />
-        </Box>
-        <Box style={{ position: "absolute", left: "249px", top: "10px" }}>
-          <IconRemove style={{ stroke: 'white', width: '27px', height: '27px'}} onClick={onRemove}/>
-        </Box>
+        {isAuthenticated && (
+          <IconWrapper
+            style={{ left: "210px", top: "10px" }}
+            onClick={onFavorite}
+          >
+            {favorite ? (
+              <IconHeartFilled style={{ width: "14px", height: "12px" }} />
+            ) : (
+              <IconHeartProduct style={{ width: "14px", height: "12px" }} />
+            )}
+          </IconWrapper>
+        )}
+        <IconWrapper style={{ left: "249px", top: "10px" }} onClick={onRemove}>
+          <IconX style={{ stroke: "white", width: "12px", height: "12px" }} />
+        </IconWrapper>
         <Box
           style={{
             position: "absolute",
@@ -88,7 +126,7 @@ const ItemCompare = ({ onClick, data, onRemove }: Props) => {
           }}
         >
           <Text14Styled color={"white"} style={{ whiteSpace: "pre" }}>
-            TNR Star
+            {data?.categoryName}
           </Text14Styled>
         </Box>
         <CardMedia
@@ -96,10 +134,21 @@ const ItemCompare = ({ onClick, data, onRemove }: Props) => {
           height={160}
           style={{ borderRadius: "20px 20px 0px 0px" }}
           image={data?.thumbnail ?? "https://picsum.photos/308/200"}
-          alt={"green image"}
+          alt={data?.productName ?? "N/A"}
         />
         <ColStyled aItems="center" margin={"11px 0px 23px"}>
-          <Title22Styled color={"#1b3459"}>{data?.name ?? "N/A"}</Title22Styled>
+          <Title22Styled
+            color={"#1b3459"}
+            style={{
+              width: "250px",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+              textAlign: "center",
+            }}
+          >
+            {data?.productName ?? "N/A"}
+          </Title22Styled>
           <ButtonAction
             style={{
               width: 164,
@@ -109,10 +158,11 @@ const ItemCompare = ({ onClick, data, onRemove }: Props) => {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              backgroundColor: data?.paymentStatus!==2 ? "#FFFF" : " #ea242a"
+              backgroundColor:
+                data?.paymentStatus !== "2" ? "#FFFF" : " #ea242a",
             }}
             onClick={onClick}
-            disabled={data?.paymentStatus!==2}
+            disabled={data?.paymentStatus !== "2"}
           >
             <Text16Styled color={"white"}>Mua Online</Text16Styled>
             <Box width={19} height={19}>
@@ -122,47 +172,21 @@ const ItemCompare = ({ onClick, data, onRemove }: Props) => {
         </ColStyled>
       </WrapperContent>
 
-      {compareParams.filter(item => item.type === 'Thông tin chung').map(item => (
-                <BoxInputStyled key={item.id}>
-                <TitleMoneyStyled>{data[item.keyMap.trim()] ?? 'N/A'}</TitleMoneyStyled>
-              </BoxInputStyled>
-              ))}
-              {/* {compareParams.filter(item => item.type === 'Tiện ích').map(item => (
-                <BoxInputStyled key={item.id}>
-                <TitleMoneyStyled>{data[item.keyMap.trim()] ?? 'N/A'}</TitleMoneyStyled>
-              </BoxInputStyled>
-              ))} */}
-              {/* {compareParams.filter(item => item.type === 'Chi tiết').map(item => (
-                <BoxInputStyled key={item.id}>
-                <TitleMoneyStyled>{data[item.keyMap.trim()] ?? 'N/A'}</TitleMoneyStyled>
-              </BoxInputStyled>
-              ))} */}
-
-      {/* <BoxInputStyled>
-        <TitleMoneyStyled>{data?.totalPrice ?? "N/A"} đ</TitleMoneyStyled>
-      </BoxInputStyled>
-
-      <BoxInputStyled>
-        <TextMoneyStyled>
-          {data?.landArea ?? "N/A"} m<sup>2</sup>
-        </TextMoneyStyled>
-      </BoxInputStyled>
-
-      <BoxInputStyled>
-        <TextMoneyStyled>{data?.numBed ?? "N/A"}</TextMoneyStyled>
-      </BoxInputStyled>
-
-      <BoxInputStyled>
-        <TextMoneyStyled>{data?.numBath ?? "N/A"}</TextMoneyStyled>
-      </BoxInputStyled>
-
-      <BoxInputStyled>
-        <TextMoneyStyled>{data?.doorDirection ?? "N/A"}</TextMoneyStyled>
-      </BoxInputStyled>
-
-      <BoxInputStyled>
-        <TextMoneyStyled>{data?.doorDirection ?? "N/A"}</TextMoneyStyled>
-      </BoxInputStyled> */}
+      {compareParams
+        .filter((item) => item.type === "Thông tin chung")
+        .map((item) => (
+          <BoxInputStyled key={item.id}>
+            {item.keyMap.trim() === "totalPrice" ? (
+              <TitleMoneyStyled>
+                {CompareValueFormat(data[item.keyMap], item.keyMap)}
+              </TitleMoneyStyled>
+            ) : (
+              <TextMoneyStyled>
+                {CompareValueFormat(data[item.keyMap], item.keyMap)}
+              </TextMoneyStyled>
+            )}
+          </BoxInputStyled>
+        ))}
     </Box>
   );
 };

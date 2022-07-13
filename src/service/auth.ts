@@ -44,3 +44,7 @@ export const refreshAccessToken = async (refreshToken: string) => {
         }
     );
 };
+
+export const sendNotificationToken = async ({deviceToken, action}: {deviceToken: string, action: number}) => {
+    return HttpClient.put<any, any>(`api-noti/notification/update-device-token?deviceToken=${deviceToken}&action=${action}`)
+}

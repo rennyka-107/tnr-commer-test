@@ -4,11 +4,14 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import React from "react";
 import { useEffect, useState } from "react";
-import { GetCompareParam } from "../api/compareApi";
-import { useDispatch } from "react-redux";
+import { GetCompareParam, GetComapreProduct } from "../api/compareApi";
+import { useDispatch, useSelector } from "react-redux";
 import {
   getCompareParam,
+  getCompareItem,
+  removeAllComparePopUpItem,
 } from "../../store/productCompareSlice";
+import { RootState } from "../../store/store";
 
 const DynamicLayoutCompare = dynamic(
   () => import("../../src/components/LayoutCompare"),
@@ -19,25 +22,53 @@ const CompareProduct = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  const { comparePopUpItem } = useSelector(
+    (state: RootState) => state.productCompareSlice
+  );
 
   useEffect(() => {
     fetchCompareParam();
-  },[router.isReady])
+  }, [router.isReady]);
+
+  useEffect(() => {
+    fetchCompareItem();
+  }, [router.isReady, router.query.productId]);
 
   const fetchCompareParam = async () => {
-    try{
-      if(router.isReady){
+    try {
+      if (router.isReady) {
         const res = await GetCompareParam();
-        if(res.responseCode === '00'){
-          dispatch(getCompareParam(res.responseData))
+        if (res.responseCode === "00") {
+          dispatch(getCompareParam(res.responseData));
         }
       }
-    }catch(e){
+    } catch (e) {
       console.error(e);
-    }finally{
-  
+    } finally {
     }
-  }
+  };
+
+  const fetchCompareItem = async () => {
+    if (router.isReady && router.query.productId) {
+      const res = await GetComapreProduct(
+        typeof router.query.productId === "string"
+          ? [router.query.productId]
+          : router.query.productId
+      );
+      if (res.responseCode === "00") {
+        dispatch(
+          getCompareItem(
+            Array.from(router.query.productId, (item) =>
+              res.responseData.find((prob) => prob.productId === item)
+            )
+          )
+        );
+        if (comparePopUpItem.length > 0) {
+          dispatch(removeAllComparePopUpItem({}));
+        }
+      }
+    }
+  };
 
   return (
     <Page
