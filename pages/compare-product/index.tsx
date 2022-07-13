@@ -10,6 +10,7 @@ import {
   getCompareParam,
   getCompareItem,
   removeAllComparePopUpItem,
+  getComparePopUpItem,
 } from "../../store/productCompareSlice";
 import { RootState } from "../../store/store";
 
@@ -33,6 +34,10 @@ const CompareProduct = () => {
   useEffect(() => {
     fetchCompareItem();
   }, [router.isReady, router.query.productId]);
+
+  useEffect(() => {
+    fetchCompareItem();
+  }, [router.isReady, comparePopUpItem])
 
   const fetchCompareParam = async () => {
     try {
@@ -69,6 +74,15 @@ const CompareProduct = () => {
       }
     }
   };
+
+  const fetchCompareItem = async () => {
+    if(router.isReady && comparePopUpItem.length > 0){
+      const res = await GetComapreProduct(comparePopUpItem.map(item => item.productId));
+      if(res.responseCode === '00'){
+        dispatch(getCompareItem(res.responseData))
+      }
+    }
+  }
 
   return (
     <Page

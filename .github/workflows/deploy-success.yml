@@ -1,0 +1,16 @@
+#Triggered for deployment status changes
+name: Deployment Success notification
+on: [deployment_status]
+
+jobs:
+  add-success-comment:
+    name: Add a comment to the commit that caused the success
+    if: github.event.deployment_status.state == 'success'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Add commit comment - success
+        run: |
+          curl -L -X POST \
+          --url 'https://api.telegram.org/bot5522907899:AAFiDQrXUE7J1WgUy5Cz4TKbo3XJvvq9oNg/sendMessage?chat_id=-738462127&text=Customer site deploy successfully! Customer site lên rồi mọi người ơi!' \
+          --header 'content-type: application/json' \

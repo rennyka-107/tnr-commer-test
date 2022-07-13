@@ -1,0 +1,17 @@
+#Triggered for deployment status changes
+name: Deployment Failure notification
+on: [deployment_status]
+
+jobs:
+  add-failure-comment:
+    name: Add a comment to the commit that caused the failure
+    if: github.event.deployment_status.state == 'failure'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Add commit comment - failure
+        run: |
+          curl -L -X POST \
+          --url 'https://api.telegram.org/bot5522907899:AAFiDQrXUE7J1WgUy5Cz4TKbo3XJvvq9oNg/sendMessage?chat_id=-738462127&text=Customer site deploy failure! Please check build state again!' \
+          --header 'content-type: application/json' \
+          

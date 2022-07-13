@@ -55,12 +55,7 @@ const ComparePopUp = () => {
   }
 
   const onCompare = () => {
-    router.push({
-      pathname: `/compare-product`,
-      query: {
-        productId: comparePopUpItem.map(item => item.productId),
-      }
-    });
+    router.push(`/compare-product`);
   }
 
   return (
