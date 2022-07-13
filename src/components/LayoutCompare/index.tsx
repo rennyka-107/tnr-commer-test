@@ -22,7 +22,7 @@ import { searchLocationResponse } from "interface/searchIF";
 import LocalStorage from "utils/LocalStorage";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../store/store";
-import {CompareValueFormat} from "utils/CompareValueFormat";
+import { CompareValueFormat } from "utils/CompareValueFormat";
 import _ from "lodash";
 
 type Props = {};
@@ -90,17 +90,19 @@ const LayoutCompare = (props: Props) => {
       <React.Fragment>
         {data.map((item, index) => (
           <ColStyled style={{ width: 293 }} key={index}>
-          <BoxInputStyled width={293} paddingLeft={"14px"} >
-          <Text18Styled color={"#1b3459"} style={{lineHeight: "31px",}}>{CompareValueFormat(item.value, item.key)}</Text18Styled>
-        </BoxInputStyled>
-        </ColStyled>
+            <BoxInputStyled width={293} paddingLeft={"14px"}>
+              <Text18Styled color={"#1b3459"} style={{ lineHeight: "31px" }}>
+                {CompareValueFormat(item.value, item.key)}
+              </Text18Styled>
+            </BoxInputStyled>
+          </ColStyled>
         ))}
         {Array.from({ length: 3 - data.length }).map((item, index) => (
           <ColStyled style={{ width: 293 }} key={index}>
-          <BoxInputStyled width={293} paddingLeft={"14px"}>
-          <IconTimes style={{ width: 22.5 }} />
-        </BoxInputStyled>
-        </ColStyled>
+            <BoxInputStyled width={293} paddingLeft={"14px"}>
+              
+            </BoxInputStyled>
+          </ColStyled>
         ))}
       </React.Fragment>
     );
@@ -110,15 +112,15 @@ const LayoutCompare = (props: Props) => {
 
   const ArrayItemLocal = (product: any[]) => {
     if (typeof window !== "undefined") {
-        const result = product.map((item, idx) => (
-          <ColStyled style={{ width: 293 }} key={idx}>
-            <ItemCompareDynamic
-              data={item}
-              onClick={() => router.push(`/payment-cart/${item.productId}`)}
-            />
-          </ColStyled>
-        ));
-        return result;
+      const result = product.map((item, idx) => (
+        <ColStyled style={{ width: 293 }} key={idx}>
+          <ItemCompareDynamic
+            data={item}
+            onClick={() => router.push(`/payment-cart/${item.productId}`)}
+          />
+        </ColStyled>
+      ));
+      return result;
     }
     return <></>;
   };
@@ -151,11 +153,13 @@ const LayoutCompare = (props: Props) => {
                 direction: "rtl",
               }}
             >
-              {compareParams.filter(item => item.type === 'Thông tin chung').map(item => (
-                <BoxInputStyled key={item.id}>
-                <TitleMoneyStyled>{item.name}</TitleMoneyStyled>
-              </BoxInputStyled>
-              ))}
+              {compareParams
+                .filter((item) => item.type === "Thông tin chung")
+                .map((item) => (
+                  <BoxInputStyled key={item.id}>
+                    <TitleMoneyStyled>{item.name}</TitleMoneyStyled>
+                  </BoxInputStyled>
+                ))}
             </Box>
           </ColStyled>
           {ArrayItemLocal(compareItems)}
@@ -182,16 +186,31 @@ const LayoutCompare = (props: Props) => {
               </AccordionSummary>
 
               <AccordionDetails style={{ padding: 0 }}>
-              {compareParams.filter(item => item.type === 'Tiện ích').map(item => (
-                <RowStyled key={item.id}>
-                <ColStyled style={{ width: 134, marginRight: 56, direction: "rtl", }}>
-                  <BoxInputStyled>
-                    <TitleMoneyStyled>{item.name}</TitleMoneyStyled>
-                  </BoxInputStyled>
-                </ColStyled>
-                {renderDataChildren({ data: compareItems.map(product => { return { value: product[item.keyMap], key: item.keyMap}}) })}
-              </RowStyled>
-              ))}
+                {compareParams
+                  .filter((item) => item.type === "Tiện ích")
+                  .map((item) => (
+                    <RowStyled key={item.id}>
+                      <ColStyled
+                        style={{
+                          width: 134,
+                          marginRight: 56,
+                          direction: "rtl",
+                        }}
+                      >
+                        <BoxInputStyled>
+                          <TitleMoneyStyled>{item.name}</TitleMoneyStyled>
+                        </BoxInputStyled>
+                      </ColStyled>
+                      {renderDataChildren({
+                        data: compareItems.map((product) => {
+                          return {
+                            value: product[item.keyMap],
+                            key: item.keyMap,
+                          };
+                        }),
+                      })}
+                    </RowStyled>
+                  ))}
               </AccordionDetails>
             </Accordion>
           </Grid>
@@ -207,16 +226,31 @@ const LayoutCompare = (props: Props) => {
                 </Box>
               </AccordionSummary>
               <AccordionDetails>
-              {compareParams.filter(item => item.type === 'Chi tiết').map(item => (
-                <RowStyled key={item.id}>
-                <ColStyled style={{ width: 134, marginRight: 56, direction: "rtl", }}>
-                  <BoxInputStyled>
-                    <TitleMoneyStyled>{item.name}</TitleMoneyStyled>
-                  </BoxInputStyled>
-                </ColStyled>
-                {renderDataChildren({ data: compareItems.map(product => { return { value: product[item.keyMap], key: item.keyMap}}) })}
-              </RowStyled>
-              ))}
+                {compareParams
+                  .filter((item) => item.type === "Chi tiết")
+                  .map((item) => (
+                    <RowStyled key={item.id}>
+                      <ColStyled
+                        style={{
+                          width: 134,
+                          marginRight: 56,
+                          direction: "rtl",
+                        }}
+                      >
+                        <BoxInputStyled>
+                          <TitleMoneyStyled>{item.name}</TitleMoneyStyled>
+                        </BoxInputStyled>
+                      </ColStyled>
+                      {renderDataChildren({
+                        data: compareItems.map((product) => {
+                          return {
+                            value: product[item.keyMap],
+                            key: item.keyMap,
+                          };
+                        }),
+                      })}
+                    </RowStyled>
+                  ))}
               </AccordionDetails>
             </Accordion>
           </Grid>

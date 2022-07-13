@@ -44,9 +44,6 @@ const LayoutQRCode = () => {
           Quý khách vui lòng hoàn thiện hồ sơ mua bán trong vòng 12 tiếng để
           được nhận phiếu đặt hàng
         </Text18ItalicStyled>
-        <Text18Styled style={{ margin: "22px 0px 37px" }}>
-          Cám ơn Quý khách
-        </Text18Styled>
         <ButtonNormalStyled
           style={{ width: 225 }}
           bg={"#1b3459"}

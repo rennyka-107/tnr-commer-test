@@ -220,7 +220,7 @@ const EditProfile = () => {
       .then((res) => {
         notification({
           severity: "success",
-          title: "Cập nhật file ảnh",
+          title: "Cập nhật thông tin hồ sơ",
           message: res.responseMessage
         })
         forceUpdate();
