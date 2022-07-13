@@ -1,8 +1,8 @@
+import LocalStorage from 'utils/LocalStorage';
 /* eslint-disable no-unused-vars */
 // Import the functions you need from the SDKs you need
 import { initializeApp, getApps, getApp } from "firebase/app";
 // import { doc, getFirestore, setDoc } from "firebase/firestore";
-import localforage from "localforage";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
 import { setNotification } from "../../store/notificationSlice";
 import { store } from "../../store/store";
@@ -22,7 +22,7 @@ const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 // const db = getFirestore();
 const firebaseCloudMessaging = {
   tokenInlocalforage: async () => {
-    const token = await localforage.getItem("fcm_token");
+    const token = await LocalStorage.get("fcm_token");
     return token;
   },
   onMessage: async () => {
@@ -47,7 +47,8 @@ const firebaseCloudMessaging = {
           if (currentToken) {
             // Send the token to your server and update the UI if necessary
             // save the token in your database
-            localforage.setItem("fcm_token", currentToken);
+            console.log(currentToken, "current token")
+            LocalStorage.set("fcm_token", currentToken);
           } else {
             // Show permission request UI
             console.log(

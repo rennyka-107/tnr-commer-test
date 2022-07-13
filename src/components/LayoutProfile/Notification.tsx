@@ -1,135 +1,181 @@
 import BoxContainer from "@components/CustomComponent/BoxContainer";
-import Row from "@components/CustomComponent/Row";
-import IconNotifiType1 from "@components/Icons/IconNotifiType1";
-import IconNotifiType2 from "@components/Icons/IconNotifiType2";
-import IconNotifiType3 from "@components/Icons/IconNotifiType3";
-import styled from "@emotion/styled";
-import { getNotificationByUser, NotiI } from "@service/Profile";
+import { getNotificationByUser } from "@service/Profile";
 import React, { useEffect, useState } from "react";
-import { convertDateToString } from "utils/helper";
-import FormatFns from 'utils/DateFns';
+import { Alert, Box, CircularProgress, Typography } from "@mui/material";
+import IconWarning from "@components/Icons/IconWarning";
+import { IconSuccess } from "@components/Icons";
+import IconError from "@components/Icons/IconError";
+import Row from "@components/CustomComponent/Row";
+import PaginationComponent from "@components/CustomComponent/PaginationComponent";
+import useNotification from "hooks/useNotification";
+import isEmpty from "lodash.isempty";
 
-
-const ItemContainer = styled.div`
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    width:100%;
-`;
-
-const LeftItem = styled.div`
-    display:flex;
-`;
-
-const RightItem = styled.span`
-    color:#8190A7;
-    font-family: Roboto;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 12px;
-    line-height: 14.48px;
-`;
-
-const TitleItem = styled.span<{ color: string }>`
-    color:${({ color }) => color};
-    font-family: Roboto;
-    font-style: normal;
-    font-weight: 500;
-    font-size: 12px;
-    line-height: 16.41px;
-`;
-
-const ContentItem = styled.span`
-    color:#0E1D34;
-    font-family: Roboto;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 12px;
-    line-height: 14.48px;
-`;
-
-const ContentContainer = styled.div`
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-`;
-
-const IconContainer = styled.div`
-    margin-right:11.37px;
-`;
+const AlertMessage = <HTMLDivElement, AlertProps>(props) => {
+  function getIcon() {
+    switch (props.icon) {
+      case "warning":
+        return <IconWarning />;
+      case "success":
+        return <IconSuccess />;
+      default:
+        return <IconError />;
+    }
+  }
+  return (
+    <Alert
+      action={props.action}
+      elevation={6}
+      variant="standard"
+      {...props}
+      icon={getIcon()}
+    />
+  );
+};
 
 const Notification = () => {
-
-    // const notifications: NotiI[] = [
-    //     {
-    //         id: 0,
-    //         titile: "Hoàn thiện hồ sơ mua bán",
-    //         content: "Hệ thống ghi nhận bạn chưa hoàn thành hồ sơ mua bán.",
-    //         time: "09:24 | thứ 2, 09/11",
-    //         type: 1,
-    //     },
-    //     {
-    //         id: 2,
-    //         titile: "Hoàn thiện hồ sơ mua bán",
-    //         content: "Hệ thống ghi nhận bạn chưa hoàn thành hồ sơ mua bán.",
-    //         time: "09:24 | thứ 2, 09/11",
-    //         type: 2,
-    //     },
-    //     {
-    //         id: 3,
-    //         titile: "Hoàn thiện hồ sơ mua bán",
-    //         content: "Hệ thống ghi nhận bạn chưa hoàn thành hồ sơ mua bán.",
-    //         time: "09:24 | thứ 2, 09/11",
-    //         type: 3,
-    //     },
-    // ]
-
-    const [notifications, setNotifications] = useState<NotiI[]>([]);
-
-
-
-    const getNotifications = async () => {
-        const response = await getNotificationByUser();
-        setNotifications(response.responseData);
+  const [notifications, setNotifications] = useState<any[]>([]);
+  const notification = useNotification();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [paginate, setPaginate] = useState<{
+    page: number;
+    size: number;
+    total: number;
+  }>({
+    page: 1,
+    size: 5,
+    total: 0,
+  });
+  const getNotifications = async () => {
+    try {
+      setLoading(true);
+      const response = await getNotificationByUser({
+        ...paginate,
+        page: paginate.page - 1,
+      });
+      if (!isEmpty(response.responseData)) {
+        setNotifications(response.responseData?.content);
+        setPaginate({ ...paginate, total: response.responseData.totalPages });
+      }
+    } catch (err) {
+      notification({
+        severity: "error",
+        title: "Lỗi",
+        message: "Có lỗi xảy ra!",
+      });
     }
+    setLoading(false);
+  };
 
-    useEffect(() => {
-        getNotifications();
-    }, [])
+  useEffect(() => {
+    getNotifications();
+  }, [paginate.page]);
 
-    const renderIcon = (type: number) => {
-        switch (type) {
-            case 1:
-                return <IconNotifiType1 />;
-            case 2:
-                return <IconNotifiType2 />;
-            case 3:
-                return <IconNotifiType3 />;
-            default:
-                return null;
-        }
-    }
+  const ItemCard = (item: any) => (
+    <AlertMessage
+      severity={item.type}
+      sx={{
+        width: "100%",
+        display: "flex",
+        alignItems: "center",
+        margin: "1.5rem 0 0 0",
+        boxShadow: "unset",
+        background: "unset",
+        border: "1px solid #C7C9D9",
+        borderRadius: "8px",
+      }}
+      action={
+        <Typography
+          sx={{
+            fontWeight: 400,
+            fontSize: "12px",
+            lineHeight: "15px",
+            color: "#8190A7",
+          }}
+        >
+          {item.noticeAt}
+        </Typography>
+      }
+      icon={item.type}
+    >
+      <Box
+        sx={{ width: "100%", display: "flex", justifyContent: "space-between" }}
+      >
+        <Box>
+          <Typography
+            sx={{
+              color: (function () {
+                switch (item.type) {
+                  case "success":
+                    return "#06C270";
+                  case "warning":
+                    return "#FFCC00";
+                  default:
+                    return "#FF3B3B";
+                }
+              })(),
+              fontWeight: 500,
+              fontSize: "14px",
+              lineHeight: "16px",
+            }}
+          >
+            {item.subject ?? ""}
+          </Typography>
+          <Typography
+            sx={{
+              fontWeight: 400,
+              fontSize: "12px",
+              lineHeight: "15px",
+              color: "#0E1D34",
+            }}
+          >
+            {item.content}
+          </Typography>
+        </Box>
+      </Box>
+    </AlertMessage>
+  );
 
-    const ItemCard = (item: NotiI, isLast?: boolean) => (
-        <BoxContainer styleCustom={{ padding: "13.1px 15.95px", borderRadius: 8, marginBottom: isLast ? 0 : 23, marginTop: 18 }} key={item.id}>
-            <ItemContainer>
-                <LeftItem>
-                    <IconContainer>
-                        {renderIcon(item.status)}
-                    </IconContainer>
-                    <ContentContainer>
-                        <TitleItem color="#FFCC00">{item.status}</TitleItem>
-                        <ContentItem>{item.type}</ContentItem>
-                    </ContentContainer>
-                </LeftItem>
-                <RightItem>{convertDateToString(new Date(item?.notiTime) ?? new Date())}</RightItem>
-            </ItemContainer>
-        </BoxContainer>
-    )
+  function renderPaginate() {
     return (
-        <BoxContainer titleHeader="Quản lý thông báo" styleCustom={{ padding: "21px 24px" }}>
-            {notifications.map((item) => ItemCard(item))}
-        </BoxContainer>
-    )
-}
+      <Row customStyle={{ padding: 20, justifyContent: "center" }}>
+        <PaginationComponent
+          count={paginate.total}
+          onChange={(event, page) => {
+            if (page !== paginate.page) {
+              setPaginate({ ...paginate, page });
+            }
+          }}
+          page={paginate.page}
+        />
+      </Row>
+    );
+  }
+
+  return (
+    <BoxContainer
+      titleHeader="Quản lý thông báo"
+      styleCustom={{ padding: "21px 24px" }}
+    >
+      {loading ? (
+        <Box
+          sx={{
+            mt: 3,
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      ) : !isEmpty(notifications) ? (
+        notifications.map((item, idx) => (
+          <React.Fragment key={idx}>{ItemCard(item)}</React.Fragment>
+        ))
+      ) : (
+        "Không có thông báo"
+      )}
+      {paginate.total > 1 && renderPaginate()}
+    </BoxContainer>
+  );
+};
 export default Notification;

@@ -10,7 +10,6 @@ import React, { createContext, useEffect, useState } from "react";
 import LocalStorage from "utils/LocalStorage";
 import SessionStorage from "utils/SessionStorage";
 import { LoginParams } from "../components/LayoutAuthen/Login";
-import localforage from "localforage";
 import { useDispatch, useSelector } from "react-redux";
 import { isEmpty } from "lodash";
 import { RootState } from "../../store/store";
@@ -100,17 +99,18 @@ const AuthContext = ({ children }) => {
     return response;
   };
 
+  console.log(deviceToken, "device token")
+
   const logout = async () => {
     LocalStorage.remove("accessToken", forceUpdate);
     LocalStorage.remove("refreshToken");
     SessionStorage.remove("accessToken", forceUpdate);
     SessionStorage.remove("refreshToken");
-    const deviceToken = await localforage.getItem("fcm_token");
+    const deviceToken = await LocalStorage.get("fcm_token");
     await sendNotificationToken({
       deviceToken: deviceToken as string,
       action: 0,
     });
-    await localforage.removeItem("fcm_token");
   };
 
   useEffect(() => {
