@@ -77,10 +77,6 @@ const LayoutCompare = (props: Props) => {
     })
   };
 
-  useEffect(() => {
-    console.log(filterSearch);
-  })
-
   const onAdd = () => {};
 
   

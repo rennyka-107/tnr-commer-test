@@ -2,9 +2,11 @@ import Page from "@layouts/Page";
 import dynamic from "next/dynamic";
 import { getProductTopByStanding } from "./api/productsApi";
 import { getListProductTopByOS } from "../store/productSlice";
+import {apiGetBanner} from './api/bannerApi'
 import {getTop10Special} from './api/specialOffersApi'
 import { wrapper } from "../store/store";
 import { getSearchSpecialOffers } from "../store/SpecialOffersSlice";
+import { getBanner } from "../store/BannerSlice";
 
 const DynamicHome = dynamic(
   () => import("../src/components/LayoutIndex/HomeComponent/HomePage"),
@@ -36,6 +38,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
       store.dispatch(getListProductTopByOS(response.responseData));
 	  const responseSpecial = await getTop10Special();
 	  store.dispatch(getSearchSpecialOffers(responseSpecial.responseData))
+	  const responseBanner = await apiGetBanner();
+	  store.dispatch(getBanner(responseBanner.responseData))
     } catch (err) {
       console.log(err);
     }

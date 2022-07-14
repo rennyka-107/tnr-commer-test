@@ -4,6 +4,9 @@ import { Typography } from "@mui/material";
 import Image from "next/image";
 import ModalAdvanSearch from "./ModalAdvanSearch";
 import Banner from "../../../../public/images/GMC.jpeg";
+import Sliderbanner from "@components/CustomComponent/Sliderbanner";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../store/store";
 const WrapBanner = styled.div`
 position: absolute;
 width: 100%;
@@ -43,27 +46,14 @@ const TextBanner = styled(Typography)`
 `;
 
 const BannerIndex = () => {
+	const {
+		bannerList
+	  } = useSelector((state: RootState) => state.banner);
   return (
     <div style={{ width: "100%", height: 644, position: 'relative' }}>
-      <Image src={Banner} width={1200} height={644} layout="fill" objectFit="cover" />
-      <WrapBanner>
-        <ContainerBody>
-          <div style={{ marginBottom: 20 }}>
-            <TextBanner>SỐNG XANH THỊNH VƯỢNG</TextBanner>
-            <TextBanner>ĐẤT VÀNG PHỒN VINH</TextBanner>
-          </div>
-
-          <SearchInput
-            placholder="Nhập tên dự án, địa chỉ hoặc thành phố"
-            width={723}
-            height={60}
-          />
-
-          <div style={{ marginTop: 19 }}>
-            <ModalAdvanSearch />
-          </div>
-        </ContainerBody>
-      </WrapBanner>
+      {/* <Image src={Banner} width={1200} height={644} layout="fill" objectFit="cover" /> */}
+	  <Sliderbanner data={bannerList}/>
+     
     </div>
   );
 };

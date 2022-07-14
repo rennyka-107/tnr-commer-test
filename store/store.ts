@@ -15,7 +15,8 @@ import infoCms from "./infoCmsSlice";
 import salePolicy from "./salePolicySlice";
 import productCompareSlice from "./productCompareSlice";
 import notification from "./notificationSlice";
-import specialoffers from './SpecialOffersSlice'
+import specialoffers from './SpecialOffersSlice';
+import banner from './bannerSlice'
 
 const combinedReducer = combineReducers({
   menubar,
@@ -32,7 +33,8 @@ const combinedReducer = combineReducers({
   salePolicy,
   productCompareSlice,
   notification,
-  specialoffers
+  specialoffers,
+  banner
 });
 
 export type RootState = ReturnType<typeof combinedReducer>;
@@ -98,6 +100,9 @@ const masterReducer = (state, action) => {
       },
 	  specialoffers: {
 		...action.payload.specialoffers
+	  },
+	  banner:{
+		...action.payload.banner
 	  }
     };
     return nextState;

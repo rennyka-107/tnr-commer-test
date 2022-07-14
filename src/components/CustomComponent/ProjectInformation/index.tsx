@@ -128,7 +128,6 @@ const ProjectInformation = ({
   const ProjectInformation = useSelector(
     (state: RootState) => state.projectMap.ProjectInformation
   );
-  console.log(ProjectInformation);
   const [open, setOpen] = useState(true);
   const classes = useStyle();
   const [value, setValue] = useState(0);
