@@ -31,7 +31,7 @@ export const menuBarSlice = createSlice({
         },
       ];
       const newDataProject = dataProject.concat(action.payload);
-      state.listMenuBarType = newDataProject;
+      state.listMenuBarType = action.payload;
     },
     getListMenuBarProjectType: (state, action) => {
       const dataProjectType = [
@@ -49,7 +49,7 @@ export const menuBarSlice = createSlice({
         },
       ];
       const newDataType = dataProjectType.concat(action.payload);
-      state.listMenuBarProjectType = newDataType;
+      state.listMenuBarProjectType = action.payload;
     },
     getListMenuLocation: (state, action) => {
       const dataLocation = [
