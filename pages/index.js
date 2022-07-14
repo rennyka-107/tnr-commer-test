@@ -6,7 +6,7 @@ import {apiGetBanner} from './api/bannerApi'
 import {getTop10Special} from './api/specialOffersApi'
 import { wrapper } from "../store/store";
 import { getSearchSpecialOffers } from "../store/SpecialOffersSlice";
-import { getBanner } from "../store/BannerSlice";
+import { getBanner } from "../store/bannerSlice";
 
 const DynamicHome = dynamic(
   () => import("../src/components/LayoutIndex/HomeComponent/HomePage"),
