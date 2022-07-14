@@ -25,5 +25,6 @@ export interface searchLocationResponse {
   name: string;
   projectTypeCode?: string;
   paymentStatus?:string|number|null;
+  favouriteStatus?: number | null;
   
 }

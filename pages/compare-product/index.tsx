@@ -27,26 +27,8 @@ const CompareProduct = () => {
   );
 
   useEffect(() => {
-    fetchCompareParam();
-  }, [router.isReady]);
-
-  useEffect(() => {
     fetchCompareItem();
   }, [router.isReady, router.query.productId]);
-
-  const fetchCompareParam = async () => {
-    try {
-      if (router.isReady) {
-        const res = await GetCompareParam();
-        if (res.responseCode === "00") {
-          dispatch(getCompareParam(res.responseData));
-        }
-      }
-    } catch (e) {
-      console.error(e);
-    } finally {
-    }
-  };
 
   const fetchCompareItem = async () => {
     if (router.isReady && router.query.productId) {
@@ -59,10 +41,11 @@ const CompareProduct = () => {
         dispatch(
           getCompareItem(
             Array.from(router.query.productId, (item) =>
-              res.responseData.find((prob) => prob.productId === item)
+              res.responseData.data.find((prob) => prob.productId === item)
             )
           )
         );
+        dispatch(getCompareParam(res.responseData.compareProduct));
         if (comparePopUpItem.length > 0) {
           dispatch(removeAllComparePopUpItem({}));
         }

@@ -80,3 +80,4 @@ export { default as StrokeHeaderIcon} from './StrokeHeaderIcon';
 export {default as IconDatLich} from './IconDatLich';
 export { default as IconSelectDatLich} from './IconSelectDatLich';
 export { default as IconHeartFilled } from "./IconHeartFilled";
+export {default as IconAddHearProduct} from './IconAddHearProduct'

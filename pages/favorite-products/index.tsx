@@ -1,76 +1,27 @@
-import BoxContainer from "@components/CustomComponent/BoxContainer";
 import FlexContainer from "@components/CustomComponent/FlexContainer";
-import IconArrowLeft from "@components/Icons/IconArrowLeft";
+import LoadingComponent from "@components/LoadingComponent";
 import styled from "@emotion/styled";
 import Page from "@layouts/Page";
-import { Typography } from "@mui/material";
+import useNotification from "hooks/useNotification";
 import dynamic from "next/dynamic";
-import Link from "next/link";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getProductFavorite,
-  getProductLocation,
-  getProductOrderCondition,
-  getProductType,
-} from "../../store/productSlice";
+import LocalStorage from "utils/LocalStorage";
+import SessionStorage from "utils/SessionStorage";
+import { getListFavouriteByUser } from "../../store/productFavouriteSlice";
 import { RootState } from "../../store/store";
-import {
-  getProductFavoriteApi,
-  getProductLocationApi,
-  getProductOrderConditionApi,
-  getProductTypeApi,
-} from "../api/productsApi";
+import { getListFavourite } from "../api/FavouriteApi";
 
-const ContainerProduct = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 29px 164px;
-  margin-top: 127px;
-  width: 100%;
-`;
-
-const TextProduct = styled(Typography)`
-  font-family: "Roboto";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 28px;
-  line-height: 33px;
-
-  /* Brand/Main color */
-
-  color: #1b3459;
-`;
-
-const ContentWrapper = styled.a`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 13px;
-  margin-bottom: 56px;
-`;
-const ContentLeftWrapper = styled.div`
-  display: flex;
-  justify-items: center;
-  align-items: center;
-  flex: 1;
-`;
 
 const DynamicItemProductComponent = dynamic(
-  () => import("@components/LayoutProduct/ItemProduct"),
+  () => import("@components/FavouriteComponent/ItemCardFavouriteProduct"),
   { loading: () => <p>...</p> }
 );
 
 const DynamicBreadcrumsComponent = dynamic(
   () => import("../../src/components/CustomComponent/BreadcrumsComponent"),
   { loading: () => <p>...</p> }
-);
-
-const DynamicMenuDropdown = dynamic(() =>
-  import("ItemComponents/MenuDropdown").then(
-    (m) => m.default,
-    (e) => null as never
-  )
 );
 
 const listBread = [
@@ -81,33 +32,63 @@ const listBread = [
 ];
 
 const FavoriteProducts = () => {
-  const [bodySearch, setBodySearch] = useState<any>();
-  const {
-    productFavorite,
-    productFavoriteType,
-    productLocation,
-    productCondition,
-  } = useSelector((state: RootState) => state.products);
-
   const dispatch = useDispatch();
+  const Router = useRouter();
+  const notification = useNotification();
+  const [loading, setLoading] = useState(false);
+  const { listFavouriteByUser } = useSelector(
+    (state: RootState) => state.favourites
+  );
 
   useEffect(() => {
-    (async () => {
-      try {
-        const response = await getProductFavoriteApi(bodySearch);
-        dispatch(getProductFavorite(response.responseData));
-        const responseType = await getProductTypeApi();
-        dispatch(getProductType(responseType.responseData));
-        const responseLocation = await getProductLocationApi();
-        dispatch(getProductLocation(responseLocation.responseData));
-        const responseOrder = await getProductOrderConditionApi();
-        dispatch(getProductOrderCondition(responseOrder.responseData));
-      } catch (error) {
-        console.log(error);
-      }
-    })();
-  }, [bodySearch]);
+    if (LocalStorage.get("accessToken")|| SessionStorage.get("accessToken")) {
+return;
+    }else {
+		notification({
+			severity: "success",
+			title: `Chưa có tài khoản`,
+			message: `Bạn cần tạo tài khoản để tiếp tục`,
+		  });
+     
+		Router.push(`/authen?prePath=%2Fprofile&tabIndex=register`);
+	}
+  }, []);
 
+  const fetchFavouriteByUser = async () => {
+    if (LocalStorage.get("accessToken") || SessionStorage.get("accessToken")) {
+      setLoading(true);
+      try {
+        const response: any = await getListFavourite();
+        if (response.responseCode === "00") {
+          dispatch(getListFavouriteByUser(response.responseData));
+          setLoading(false);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchFavouriteByUser();
+  }, []);
+
+  const fetchComponent = () => {
+    return (
+      <>
+        {loading ? (
+          <div style={{ textAlign: "center", marginTop: 300 }}>
+            <LoadingComponent />
+          </div>
+        ) : (
+          <DynamicItemProductComponent data={listFavouriteByUser} />
+        )}
+      </>
+    );
+  };
+  useEffect(() => {
+    fetchComponent();
+  }, [listFavouriteByUser]);
   return (
     <Page
       meta={{
@@ -117,64 +98,7 @@ const FavoriteProducts = () => {
       }}
     >
       <FlexContainer>
-        <ContainerProduct>
-          <DynamicBreadcrumsComponent
-            breaditem={listBread}
-            activePage="Sản phẩm yêu thích"
-          />
-          <ContentWrapper>
-            <Link href={"/"} passHref>
-              <ContentLeftWrapper>
-                <IconArrowLeft />
-                &nbsp;
-                <TextProduct>Sản phẩm yêu thích</TextProduct>
-              </ContentLeftWrapper>
-            </Link>
-            <div style={{ flex: 1 }}>
-              <BoxContainer
-                styleCustom={{
-                  borderRadius: 8,
-                  display: "flex",
-                  justifyContent: "space-around",
-                }}
-              >
-                <DynamicMenuDropdown
-                  title="Vị trí"
-                  data={productLocation}
-                  onSelect={(values) =>
-                    setBodySearch({ location: values.name })
-                  }
-                />
-                <DynamicMenuDropdown
-                  title="Loại"
-                  data={productFavoriteType}
-                  onSelect={(values) => setBodySearch({ type: values.name })}
-                />
-                <DynamicMenuDropdown
-                  title="Khoảng giá"
-                  data={[
-                    { id: "1", name: "Khoảng từ 1 tỷ đến 5 tỷ" },
-                    { id: "2", name: "Khoảng từ 5 tỷ đến 10 tỷ" },
-                  ]}
-                  onSelect={(values) => setBodySearch(values.name)}
-                />
-                <DynamicMenuDropdown
-                  title="Sắp xếp theo"
-                  data={(productCondition || []).map((elm) => ({
-                    id: elm.value,
-                    name: elm.key,
-                  }))}
-                  onSelect={(values) =>
-                    setBodySearch({ orderCondition: values.name })
-                  }
-                />
-              </BoxContainer>
-            </div>
-          </ContentWrapper>
-          <div style={{ display: "flex", gap: 31 }}>
-            <DynamicItemProductComponent data={productFavorite} />
-          </div>
-        </ContainerProduct>
+        <div style={{ display: "flex", gap: 31 }}>{fetchComponent()}</div>
       </FlexContainer>
     </Page>
   );

@@ -34,6 +34,7 @@ const ItemSearch = ({ data ,buyDisabled}: searchProps) => {
 			projectName={product.projectName}
             title={product.name}
             subTitle={product.location}
+			activeFavourite={true}
             dataItem={{
               item1: product.landArea,
               item2: product.numBath,
@@ -41,6 +42,7 @@ const ItemSearch = ({ data ,buyDisabled}: searchProps) => {
               item4: product.doorDirection,
             }}
             priceListed={product.totalPrice}
+			favouriteStatus={product.favouriteStatus}
             priceSub={product.unitPrice}
             ticketCard={product.category}
 			projectTypeCode={product.projectTypeCode}

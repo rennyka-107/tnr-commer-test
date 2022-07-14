@@ -16,6 +16,9 @@ import SelectInputComponent from "@components/CustomComponent/SelectInputCompone
 import SelectCategory from "@components/CustomComponent/SelectInputComponent/SelectCategory";
 import SelectKhoanGia from "@components/CustomComponent/SelectInputComponent/SelectKhoanGia";
 import SelectDienTich from "@components/CustomComponent/SelectInputComponent/SelectDienTich";
+import SilderGroup from "@components/CustomComponent/SliderGroupComponent";
+import SliderComponent from "@components/CustomComponent/SliderComponent";
+import { FormatFilterText } from "utils/FormatText";
 
 type dataProps = {
   searchData?: searchLocationResponse[];
@@ -140,8 +143,8 @@ const SearchCompare = ({
       value: [150, 200],
     },
   ]);
-  const [dataKhoangGia, setDataKhoangGia] = useState<any[]>([]);
-  const [dataDienTich, setDataDienTich] = useState<any[]>([]);
+  const [dataKhoangGia, setDataKhoangGia] = useState<number[]>([1, 20]);
+  const [dataDienTich, setDataDienTich] = useState<number[]>([30, 200]);
 
   useEffect(() => {
     const dataLocation = listMenuLocation.filter(
@@ -172,11 +175,19 @@ const SearchCompare = ({
           : dataProduct[0].name
       );
     }
-    if (areaFrom !== null || areaTo !== null) {
-      setDataDienTich([areaFrom, areaTo]);
+    if (
+      (areaFrom !== "" || areaTo !== "") &&
+      typeof areaFrom === "string" &&
+      typeof areaTo === "string"
+    ) {
+      setDataDienTich([parseInt(areaFrom), parseInt(areaTo)]);
     }
-    if (priceFrom !== "" || priceTo !== "") {
-      setDataKhoangGia([priceFrom, priceTo]);
+    if (
+      (priceFrom !== "" || priceTo !== "") &&
+      typeof priceFrom === "string" &&
+      typeof priceTo === "string"
+    ) {
+      setDataKhoangGia([parseInt(priceFrom), parseInt(priceTo)]);
     }
   }, [
     provinceId,
@@ -265,6 +276,7 @@ const SearchCompare = ({
     setProductName(typeof value === "string" ? value.split(",") : value);
     setFilterSearch({ ...filterSearch, projectId: data[0].id });
   };
+
   const handleChangeKhoangGia = (event: any) => {
     const {
       target: { value },
@@ -276,6 +288,7 @@ const SearchCompare = ({
       priceTo: value[1].toString(),
     });
   };
+
   const handleChangeLocation = (
     event: SelectChangeEvent<typeof projectName>
   ) => {
@@ -286,6 +299,7 @@ const SearchCompare = ({
     setSearch({ ...filterSearch, provinceId: data[0].ProvinceID });
     setLocation(typeof value === "string" ? value.split(",") : value);
   };
+
   const handleChangeDienTich = (event: any) => {
     const {
       target: { value },
@@ -302,8 +316,8 @@ const SearchCompare = ({
       setDataDienTich(value);
       setFilterSearch({
         ...filterSearch,
-        areaFrom: value[0],
-        areaTo: value[1],
+        areaFrom: value[0].toString(),
+        areaTo: value[1].toString(),
       });
     }
   };
@@ -338,24 +352,57 @@ const SearchCompare = ({
             placeholder="Chọn dự án"
             style={{ width: 180 }}
           />
-          <SelectKhoanGia
-            label="Khoảng giá"
-            data={valueKhoangGia}
-            value={dataKhoangGia}
-            setDataKhoangGia={setDataKhoangGia}
-            onChange={handleChangeKhoangGia}
-            placeholder="Khoảng giá"
-            style={{ width: 150, height: 40 }}
-          />
-          <SelectDienTich
-            label="Diên tích (m2)"
-            data={valueDienTich}
-            value={dataDienTich}
-            setDataKhoangGia={setDataDienTich}
-            onChange={handleChangeDienTich}
-            placeholder="Diên tích (m2)"
-            style={{ width: 150, height: 40 }}
-          />
+          <SilderGroup
+            // label={"Khác"}
+            text={FormatFilterText([
+              {
+                text: `${filterSearch.priceFrom} tỷ ~ ${filterSearch.priceTo} tỷ`,
+                hasValue: Boolean(filterSearch.priceFrom),
+              },
+              {
+                text: (
+                  <>
+                    {filterSearch.areaFrom} m<sup>2</sup> -&nbsp;
+                    {filterSearch.areaTo} m<sup>2</sup>
+                  </>
+                ),
+                hasValue: Boolean(filterSearch.areaFrom),
+              },
+            ])}
+          >
+            <SliderComponent
+              label="Khoảng giá"
+              onChange={handleChangeKhoangGia}
+              numberMin={1}
+              numberMax={20}
+              value={dataKhoangGia}
+              unit="tỷ"
+              sx={{
+                "& .MuiTypography-root": {
+                  color: "#1B3459",
+                },
+                "& .MuiSlider-valueLabelLabel": {
+                  color: "#1B3459",
+                },
+              }}
+            />
+            <SliderComponent
+              label="Diện tích (m2)"
+              onChange={handleChangeDienTich}
+              numberMin={30}
+              numberMax={200}
+              value={dataDienTich}
+              unit="m2"
+              sx={{
+                "& .MuiTypography-root": {
+                  color: "#1B3459",
+                },
+                "& .MuiSlider-valueLabelLabel": {
+                  color: "#1B3459",
+                },
+              }}
+            />
+          </SilderGroup>
           <Button
             style={{
               background: "#1B3459",

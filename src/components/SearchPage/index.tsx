@@ -22,6 +22,7 @@ import SelectLocationSearch from "@components/CustomComponent/SelectInputCompone
 import SelectKhoanGia from "@components/CustomComponent/SelectInputComponent/SelectKhoanGia";
 import SelectDienTich from "@components/CustomComponent/SelectInputComponent/SelectDienTich";
 import IconResetFilter from "@components/Icons/IconResetFilter";
+import useFavourite from "hooks/useFavourite";
 
 type dataProps = {
   searchData: searchLocationResponse[];
@@ -87,6 +88,7 @@ const SearchPage = ({
   const [location, setLocation] = useState<string[]>([]);
   const [productName, setProductName] = useState<string[]>([]);
   const [projectName, setProjectName] = useState<string[]>([]);
+  const {checkReload} = useFavourite();
   const [valueKhoangGia, setValueKhoangGia] = useState([
     {
       name: "Tất cả",

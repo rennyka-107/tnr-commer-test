@@ -7,6 +7,8 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import LocalStorage from "utils/LocalStorage";
+import SessionStorage from "utils/SessionStorage";
 import {
   getPaggingSearch,
   getSearchHomeLocation,
@@ -24,6 +26,8 @@ const CompareSearch = () => {
   const { SearchHomeLocation, totalElement } = useSelector(
     (state: RootState) => state.searchs
   );
+  const { checkUp } = useSelector((state: RootState) => state.favourites);
+
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState({
     page: 0,
@@ -81,10 +85,31 @@ const CompareSearch = () => {
       console.log(err);
     }
   };
+
+  const fetchAdvandedSearchListCompareFavourite = async () => {
+    try {
+      if (
+        LocalStorage.get("accessToken") ||
+        SessionStorage.get("accessToken")
+      ) {
+        const response = await searchAdvanded(searchBody, search);
+        dispatch(getSearchHomeLocation(response.responseData));
+        dispatch(getPaggingSearch(response.totalElement));
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
     fetchAdvandedSearchListCompare();
   }, [searchBody, search.page]);
 
+  useEffect(() => {
+	if (router.pathname === '/compare-search') {
+    fetchAdvandedSearchListCompareFavourite();
+}
+  }, [checkUp]);
   const fetchComponent = () => {
     return (
       <>

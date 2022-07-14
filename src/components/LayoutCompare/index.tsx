@@ -73,13 +73,9 @@ const LayoutCompare = (props: Props) => {
   const onChangeFilter = (value: any) => {
     setFilterSearch({
       ...filterSearch,
-      ...value
-    })
+      ...value,
+    });
   };
-
-  const onAdd = () => {};
-
-  
 
   const renderDataChildren = ({ data }) => {
     return (
@@ -95,9 +91,7 @@ const LayoutCompare = (props: Props) => {
         ))}
         {Array.from({ length: 3 - data.length }).map((item, index) => (
           <ColStyled style={{ width: 293 }} key={index}>
-            <BoxInputStyled width={293} paddingLeft={"14px"}>
-              
-            </BoxInputStyled>
+            <BoxInputStyled width={293} paddingLeft={"14px"}></BoxInputStyled>
           </ColStyled>
         ))}
       </React.Fragment>
@@ -127,7 +121,10 @@ const LayoutCompare = (props: Props) => {
         const items = 3 - compareItems.length;
         const result = Array.from({ length: items }, (_, i) => i).map((el) => (
           <ColStyled key={el} style={{ width: 293 }}>
-            <ItemImportDynamic onChangeFilter={onChangeFilter} filter={filterSearch}/>
+            <ItemImportDynamic
+              onChangeFilter={onChangeFilter}
+              filter={filterSearch}
+            />
           </ColStyled>
         ));
         return result;
@@ -170,86 +167,89 @@ const LayoutCompare = (props: Props) => {
           style={{ marginTop: 36 }}
           maxWidth={"1108px"}
         >
-          <Grid item xs={1}>
-            <Accordion style={{ boxShadow: "none" }}>
-              <AccordionSummary
-                expandIcon={<ExpandMore />}
-                style={{ background: "#F3F3F3", marginLeft: 0 }}
-              >
-                <Box style={{ maxWidth: "35px" }}>
-                  <TitleMoneyStyled>Tiện ích</TitleMoneyStyled>
-                </Box>
-              </AccordionSummary>
+          {compareParams.map((item) => item.type).includes("Tiện ích") && (
+            <Grid item xs={1}>
+              <Accordion style={{ boxShadow: "none" }}>
+                <AccordionSummary
+                  expandIcon={<ExpandMore />}
+                  style={{ background: "#F3F3F3", marginLeft: 0 }}
+                >
+                  <Box style={{ maxWidth: "35px" }}>
+                    <TitleMoneyStyled>Tiện ích</TitleMoneyStyled>
+                  </Box>
+                </AccordionSummary>
 
-              <AccordionDetails style={{ padding: 0 }}>
-                {compareParams
-                  .filter((item) => item.type === "Tiện ích")
-                  .map((item) => (
-                    <RowStyled key={item.id}>
-                      <ColStyled
-                        style={{
-                          width: 134,
-                          marginRight: 56,
-                          direction: "rtl",
-                        }}
-                      >
-                        <BoxInputStyled>
-                          <TitleMoneyStyled>{item.name}</TitleMoneyStyled>
-                        </BoxInputStyled>
-                      </ColStyled>
-                      {renderDataChildren({
-                        data: compareItems.map((product) => {
-                          return {
-                            value: product[item.keyMap],
-                            key: item.keyMap,
-                          };
-                        }),
-                      })}
-                    </RowStyled>
-                  ))}
-              </AccordionDetails>
-            </Accordion>
-          </Grid>
-
-          <Grid item xs={1} style={{ maxWidth: 1108, marginTop: 15 }}>
-            <Accordion style={{ boxShadow: "none" }}>
-              <AccordionSummary
-                expandIcon={<ExpandMore />}
-                style={{ background: "#F3F3F3", marginLeft: 0 }}
-              >
-                <Box style={{ maxWidth: "35px" }}>
-                  <TitleMoneyStyled>Chi Tiết</TitleMoneyStyled>
-                </Box>
-              </AccordionSummary>
-              <AccordionDetails>
-                {compareParams
-                  .filter((item) => item.type === "Chi tiết")
-                  .map((item) => (
-                    <RowStyled key={item.id}>
-                      <ColStyled
-                        style={{
-                          width: 134,
-                          marginRight: 56,
-                          direction: "rtl",
-                        }}
-                      >
-                        <BoxInputStyled>
-                          <TitleMoneyStyled>{item.name}</TitleMoneyStyled>
-                        </BoxInputStyled>
-                      </ColStyled>
-                      {renderDataChildren({
-                        data: compareItems.map((product) => {
-                          return {
-                            value: product[item.keyMap],
-                            key: item.keyMap,
-                          };
-                        }),
-                      })}
-                    </RowStyled>
-                  ))}
-              </AccordionDetails>
-            </Accordion>
-          </Grid>
+                <AccordionDetails style={{ padding: 0 }}>
+                  {compareParams
+                    .filter((item) => item.type === "Tiện ích")
+                    .map((item) => (
+                      <RowStyled key={item.id}>
+                        <ColStyled
+                          style={{
+                            width: 134,
+                            marginRight: 56,
+                            direction: "rtl",
+                          }}
+                        >
+                          <BoxInputStyled>
+                            <TitleMoneyStyled>{item.name}</TitleMoneyStyled>
+                          </BoxInputStyled>
+                        </ColStyled>
+                        {renderDataChildren({
+                          data: compareItems.map((product) => {
+                            return {
+                              value: product[item.keyMap],
+                              key: item.keyMap,
+                            };
+                          }),
+                        })}
+                      </RowStyled>
+                    ))}
+                </AccordionDetails>
+              </Accordion>
+            </Grid>
+          )}
+          {compareParams.map((item) => item.type).includes("Chi tiết") && (
+            <Grid item xs={1} style={{ maxWidth: 1108, marginTop: 15 }}>
+              <Accordion style={{ boxShadow: "none" }}>
+                <AccordionSummary
+                  expandIcon={<ExpandMore />}
+                  style={{ background: "#F3F3F3", marginLeft: 0 }}
+                >
+                  <Box style={{ maxWidth: "35px" }}>
+                    <TitleMoneyStyled>Chi Tiết</TitleMoneyStyled>
+                  </Box>
+                </AccordionSummary>
+                <AccordionDetails>
+                  {compareParams
+                    .filter((item) => item.type === "Chi tiết")
+                    .map((item) => (
+                      <RowStyled key={item.id}>
+                        <ColStyled
+                          style={{
+                            width: 134,
+                            marginRight: 56,
+                            direction: "rtl",
+                          }}
+                        >
+                          <BoxInputStyled>
+                            <TitleMoneyStyled>{item.name}</TitleMoneyStyled>
+                          </BoxInputStyled>
+                        </ColStyled>
+                        {renderDataChildren({
+                          data: compareItems.map((product) => {
+                            return {
+                              value: product[item.keyMap],
+                              key: item.keyMap,
+                            };
+                          }),
+                        })}
+                      </RowStyled>
+                    ))}
+                </AccordionDetails>
+              </Accordion>
+            </Grid>
+          )}
         </Grid>
       </Box>
     </Container>

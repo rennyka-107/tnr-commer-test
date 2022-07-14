@@ -800,3 +800,16 @@ a {
 .leaflet-bottom {
     z-index: 300 !important;
 }
+
+.icon-heart:hover path {
+    fill: #EA242A;
+}
+
+.icon-heart-add:hover path {
+    fill: #ffffff;
+}
+
+
+/* .icon-heart:focus {
+    fill: red;
+} */

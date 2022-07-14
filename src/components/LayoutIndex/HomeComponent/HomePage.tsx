@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { Box } from "@mui/system";
 import SelectInputComponent from "@components/CustomComponent/SelectInputComponent";
 import { Button, SelectChangeEvent, Typography } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import SliderComponent from "@components/CustomComponent/SliderComponent";
 import SliderSearchKhoangGia from "@components/CustomComponent/SliderComponent/SliderSearchKhoangGia";
@@ -76,7 +76,7 @@ const HomePage = () => {
   const [categoryName, setCategoryName] = useState<string[]>([]);
   const [projectName, setProjectName] = useState<string[]>([]);
   const [valueDienTich, setValueDientich] = useState<number[]>([30, 200]);
-  const [valueKhoanGia, setValueKhoangGia] = useState<number[]>([1, 200]);
+  const [valueKhoanGia, setValueKhoangGia] = useState<number[]>([1, 20]);
 
   const [filterSearch, setFilterSearch] = useState({
     textSearch: "",
@@ -86,16 +86,33 @@ const HomePage = () => {
     priceFrom: "",
     priceTo: "",
     categoryId: "",
-    areaFrom: null,
-    areaTo: null,
+    areaFrom: "",
+    areaTo: "",
   });
 
-  const {
-    listMenuBarType,
-    listMenuBarProjectType,
-    listMenuLocation,
-    listCategory,
-  } = useSelector((state: RootState) => state.menubar);
+  const { listMenuBarType, listMenuBarProjectType } = useSelector(
+    (state: RootState) => state.menubar
+  );
+
+  useEffect(() => {
+    console.log(filterSearch);
+  });
+
+  useEffect(() => {
+    if (listMenuBarProjectType?.length > 0) {
+      setProjectTypeName(listMenuBarProjectType[0].name.split(","));
+    }
+    if (listMenuBarType?.length > 0) {
+      setProjectName(listMenuBarType[0].name.split(","));
+    }
+    if (listMenuBarProjectType?.length > 0 && listMenuBarType?.length > 0) {
+      setFilterSearch({
+        ...filterSearch,
+        projectTypeId: listMenuBarProjectType[0].id,
+        projectId: listMenuBarType[0].id,
+      });
+    }
+  }, [listMenuBarProjectType, listMenuBarType]);
 
   const handleSelectProject = (
     event: SelectChangeEvent<typeof projectTypeName>
@@ -107,16 +124,7 @@ const HomePage = () => {
     setProjectTypeName(typeof value === "string" ? value.split(",") : value);
     setFilterSearch({ ...filterSearch, projectTypeId: data[0].id });
   };
-  const handleSelectCategory = (
-    event: SelectChangeEvent<typeof categoryName>
-  ) => {
-    const {
-      target: { value },
-    } = event;
-    const data = listCategory.filter((x) => x.name === value);
-    setCategoryName(typeof value === "string" ? value.split(",") : value);
-    setFilterSearch({ ...filterSearch, categoryId: data[0].id });
-  };
+
   const handleSelectProjectName = (
     event: SelectChangeEvent<typeof projectName>
   ) => {
@@ -127,6 +135,7 @@ const HomePage = () => {
     setProjectName(typeof value === "string" ? value.split(",") : value);
     setFilterSearch({ ...filterSearch, projectId: data[0].id });
   };
+
   const handleChange1 = (
     event: Event,
     newValue: number | number[],
@@ -142,8 +151,8 @@ const HomePage = () => {
       ]);
       setFilterSearch({
         ...filterSearch,
-        areaFrom: valueDienTich[0],
-        areaTo: valueDienTich[1],
+        areaFrom: valueDienTich[0].toString(),
+        areaTo: valueDienTich[1].toString(),
       });
     } else {
       setValueDientich([
@@ -152,8 +161,8 @@ const HomePage = () => {
       ]);
       setFilterSearch({
         ...filterSearch,
-        areaFrom: valueDienTich[0],
-        areaTo: valueDienTich[1],
+        areaFrom: valueDienTich[0].toString(),
+        areaTo: valueDienTich[1].toString(),
       });
     }
   };
@@ -192,7 +201,7 @@ const HomePage = () => {
 
   const handleSearchCompare = () => {
     router.push(
-      `/compare-search?projectId=${filterSearch.projectId}&&projectTypeId=${filterSearch.projectTypeId}&&priceTo=${filterSearch.priceTo}&&priceFrom=${filterSearch.priceFrom}&&areaTo=${filterSearch.areaTo}&&areaFrom=${filterSearch.areaFrom}&&categoryId=${filterSearch.categoryId}`
+      `/compare-search?projectId=${filterSearch.projectId}&projectTypeId=${filterSearch.projectTypeId}&priceTo=${filterSearch.priceTo}&priceFrom=${filterSearch.priceFrom}&areaTo=${filterSearch.areaTo}&areaFrom=${filterSearch.areaFrom}&categoryId=${filterSearch.categoryId}`
     );
   };
 

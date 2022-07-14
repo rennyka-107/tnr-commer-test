@@ -65,6 +65,7 @@ export default function SliderProductHotComponent() {
                 src={item.avatar}
                 title={item.name}
                 subTitle={item.projectLocation}
+				activeFavourite={true}
                 dataItem={{
                   item1: item.landArea,
                   item2: item.numBath,
@@ -75,6 +76,7 @@ export default function SliderProductHotComponent() {
                 priceSub={item.unitPrice}
                 ticketCard={item.category}
 				projectTypeCode={item.projectTypeCode}
+				favouriteStatus={item.favouriteStatus}
 				minFloor={item.minFloor}
 				maxFloor={item.maxFloor}
                 onClick={() => addToCart(item.id)}

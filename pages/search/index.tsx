@@ -13,6 +13,8 @@ import {
 import PaginationComponent from "@components/CustomComponent/PaginationComponent";
 import Row from "@components/CustomComponent/Row";
 import LoadingComponent from "@components/LoadingComponent";
+import LocalStorage from "utils/LocalStorage";
+import SessionStorage from "utils/SessionStorage";
 
 const DynamicSearchPages = dynamic(
   () => import("../../src/components/SearchPage"),
@@ -22,6 +24,7 @@ const DynamicSearchPages = dynamic(
 const Search = () => {
   const router = useRouter();
   const dispatch = useDispatch();
+
   const {
     Type,
     areaFrom,
@@ -37,6 +40,7 @@ const Search = () => {
   const { SearchHomeLocation, totalElement } = useSelector(
     (state: RootState) => state.searchs
   );
+  const { checkUp } = useSelector((state: RootState) => state.favourites);
 
   const [searchBody, setSearchBody] = useState<any>({
     provinceId: provinceId,
@@ -95,6 +99,32 @@ const Search = () => {
       console.log(err);
     }
   };
+  const fetchAdvandedSearchListFavorite = async () => {
+    try {
+      if (router.isReady === true) {
+        if (
+          LocalStorage.get("accessToken") ||
+          SessionStorage.get("accessToken")
+        ) {
+          // setLoading(false);
+          const response = await searchAdvanded(searchBody, search);
+          dispatch(getSearchHomeLocation(response.responseData));
+          dispatch(getPaggingSearch(response.totalElement));
+          // if (response.responseCode === "00") {
+          // //   setLoading(true);
+          // }
+        }
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    if (router.pathname === '/search') {
+      fetchAdvandedSearchListFavorite();
+    }
+  }, [checkUp]);
 
   useEffect(() => {
     if (router.isReady === true) {

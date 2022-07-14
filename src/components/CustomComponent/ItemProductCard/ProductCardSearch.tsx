@@ -7,7 +7,11 @@ import Product3 from "../../../../public/images/product3.png";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import styled from "@emotion/styled";
-import { FloorIcon, IconPlusProduct } from "../../Icons/index";
+import {
+  FloorIcon,
+  IconAddHearProduct,
+  IconPlusProduct,
+} from "../../Icons/index";
 import Router, { useRouter } from "next/router";
 
 import {
@@ -20,6 +24,7 @@ import {
 } from "@components/Icons";
 import Link from "next/link";
 import ImageWithHideOnError from "hooks/ImageWithHideOnError";
+import useFavourite from "hooks/useFavourite";
 
 type Props = {
   id?: string;
@@ -27,6 +32,7 @@ type Props = {
   title?: string;
   subTitle?: string;
   projectName?: string;
+  favouriteStatus?: number;
   dataItem?: {
     item1?: any;
     item2?: any;
@@ -43,6 +49,7 @@ type Props = {
   minFloor?: number;
   maxFloor?: number;
   buyDisabled?: boolean;
+  activeFavourite?: boolean;
 };
 
 const CardStyled = styled(Card)`
@@ -253,8 +260,11 @@ export default function ProductCardSearch({
   activeSoSanh,
   id,
   buyDisabled,
+  favouriteStatus,
+  activeFavourite
 }: Props) {
   const router = useRouter();
+  const { addProductToFavouriteFunction } = useFavourite();
   function currencyFormat(num) {
     if (!num) {
       return;
@@ -266,15 +276,37 @@ export default function ProductCardSearch({
 
   return (
     <CardStyled sx={{ maxWidth: 350 }}>
-      <IconHeartProduct
-        style={{
-          cursor: "pointer",
-          position: "absolute",
-          right: 0,
-          margin: 20,
-		  zIndex: 10
-        }}
-      />
+     {activeFavourite ? (
+        <>
+          {favouriteStatus === 0 ? (
+            <IconHeartProduct
+              style={{
+                cursor: "pointer",
+                position: "absolute",
+                right: 0,
+                margin: 20,
+                zIndex: 10,
+              }}
+              onClick={() => addProductToFavouriteFunction(id, 1)}
+            />
+          ) : (
+            <IconAddHearProduct
+              style={{
+                cursor: "pointer",
+                position: "absolute",
+                right: 0,
+                margin: 20,
+                zIndex: 10,
+              }}
+              onClick={() => addProductToFavouriteFunction(id, 0)}
+            />
+          )}
+        </>
+      ) : (
+        <></>
+      )}
+
+
       {ticketCard ? (
         <div
           style={{
