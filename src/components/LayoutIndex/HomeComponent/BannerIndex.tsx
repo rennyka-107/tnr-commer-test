@@ -48,7 +48,7 @@ const TextBanner = styled(Typography)`
 const BannerIndex = () => {
 	const {
 		bannerList
-	  } = useSelector((state: RootState) => state.banner);
+	  } = useSelector((state: RootState) => state.banners);
   return (
     <div style={{ width: "100%", height: 644, position: 'relative' }}>
       {/* <Image src={Banner} width={1200} height={644} layout="fill" objectFit="cover" /> */}
