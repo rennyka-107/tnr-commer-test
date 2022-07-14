@@ -172,7 +172,7 @@ const Notification = () => {
           <React.Fragment key={idx}>{ItemCard(item)}</React.Fragment>
         ))
       ) : (
-        "Không có thông báo"
+        <Typography sx={{ mt: 2, width: "100%", textAlign: "center"}}>Không có thông báo</Typography>
       )}
       {paginate.total > 1 && renderPaginate()}
     </BoxContainer>
