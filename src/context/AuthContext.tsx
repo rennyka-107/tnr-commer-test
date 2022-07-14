@@ -99,7 +99,7 @@ const AuthContext = ({ children }) => {
     return response;
   };
 
-  console.log(deviceToken, "device token")
+//   console.log(deviceToken, "device token")
 
   const logout = async () => {
     LocalStorage.remove("accessToken", forceUpdate);

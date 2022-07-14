@@ -102,7 +102,7 @@ const masterReducer = (state, action) => {
 		...action.payload.specialoffers
 	  },
 	  banners:{
-		...action.payload.banner
+		...action.payload.banners
 	  }
     };
     return nextState;

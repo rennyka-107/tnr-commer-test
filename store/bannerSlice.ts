@@ -1,10 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import LocalStorage from "utils/LocalStorage";
 interface InitialState {
-  bannerList: any[];
+
+  bannerList?: any[];
 }
 
 const initialState: InitialState = {
+
 	bannerList: [],
 };
 
