@@ -19,6 +19,10 @@ import { CompareValueFormat } from "utils/CompareValueFormat";
 import { useRouter } from "next/router";
 import { ToggleProductFavorite } from "../../../../pages/api/favorite";
 import useAuth from "hooks/useAuth";
+import {
+  removeCompareItem,
+  removeComparePopUpItem,
+} from "../../../../store/productCompareSlice";
 
 type Props = {
   onClick?: MouseEventHandler<HTMLButtonElement>;

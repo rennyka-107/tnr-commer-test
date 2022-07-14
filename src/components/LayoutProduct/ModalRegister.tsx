@@ -1,4 +1,6 @@
 import CustomButton from "@components/CustomComponent/CustomButton";
+import ControllerDatePicker from "@components/Form/ControllerDatePicker";
+import ControllerDatePickerThamQuan from "@components/Form/ControllerDatePickerThamQuan";
 import ControllerDateTimeDatLich from "@components/Form/ControllerDateTimeDatLich";
 import ControllerInputDatLich from "@components/Form/ControllerInputDatLich";
 import ControllerReactDatePicker from "@components/Form/ControllerReactDatePicker";
@@ -8,18 +10,30 @@ import ControllerTextField from "@components/Form/ControllerTextField";
 import FormGroup from "@components/Form/FormGroup";
 import styled from "@emotion/styled";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Box, MenuItem, Modal, Select } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  MenuItem,
+  Modal,
+  Select,
+} from "@mui/material";
+import useForceUpdate from "hooks/useForceUpdate";
 import useNotification from "hooks/useNotification";
 
 import { ResponseSearchById } from "interface/product";
 import isEmpty from "lodash.isempty";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
 import { validateLine } from "utils/constants";
 import { validateVietnameseName } from "utils/helper";
 import Regexs from "utils/Regexs";
 import * as yup from "yup";
+import { getUserInfoApi } from "../../../pages/api/profileApi";
 import { saveInforVisitApament } from "../../../pages/api/visitAparmentFormApi";
+import { getUserInfo } from "../../../store/profileSlice";
+import { RootState } from "../../../store/store";
 interface PropsI {
   isOpen: boolean;
   onClose?: () => void;
@@ -159,8 +173,27 @@ const LineStyled = styled.div`
 
   border: 1px solid #c7c9d9;
 `;
+const ButtonStyled = styled(Button)`
+  text-transform: none;
+  border-radius: 8px;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 19px;
+  color: #ffffff;
+  padding: 14px 70px;
+  cursor: pointer;
+  border: unset;
+  width: 100%;
+`;
 const ModalRegister = (props: PropsI) => {
   const { isOpen, onClose, product, toggle } = props;
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+//   const [rerender, forceUpdate] = useForceUpdate();
+  const detailUser = useSelector(
+    (state: RootState) => state?.profile?.userInfo
+  );
+
   const notification = useNotification();
   const validationSchema = yup.object().shape({
     fullname: yup
@@ -213,26 +246,42 @@ const ModalRegister = (props: PropsI) => {
   });
 
   useEffect(() => {
+	if(detailUser){
+		setValue('fullname',detailUser.fullname)
+		setValue('email',detailUser.email)
+		setValue('phone',detailUser.phone)
+	}
+  },[detailUser])
+  useEffect(() => {
     if (!isOpen) {
       reset();
     }
   }, [isOpen]);
 
   const submitForm = async (values) => {
-    const response = await saveInforVisitApament(values);
-    // console.log(response,'response');
-    if (response?.responseCode == "00") {
-      notification({
-        severity: "success",
-        title: `Đặt lịch`,
-        message: "Đặt lịch thành công",
-      });
-      toggle();
-    } else {
+    setLoading(true);
+    try {
+      const response = await saveInforVisitApament(values);
+      // console.log(response,'response');
+      if (response?.responseCode == "00") {
+        notification({
+          severity: "success",
+          title: `Đặt lịch`,
+          message: "Đặt lịch thành công",
+        });
+		setLoading(false);
+        toggle();
+      } else {
+        notification({
+          severity: "error",
+          title: `Đặt lịch`,
+          message: response?.responseMessage ?? "Có một số lỗi xảy ra",
+        });
+      }
+	  setLoading(false);
+    } catch (err) {
       notification({
         severity: "error",
-        title: `Đặt lịch`,
-        message: response?.responseMessage ?? "Có một số lỗi xảy ra",
       });
     }
   };
@@ -264,7 +313,7 @@ const ModalRegister = (props: PropsI) => {
           autoComplete="off"
         >
           <div style={{ padding: "10px 0px 10px 0px" }}>
-            <TitleStyled>Đăt lịch xem nhà mẫu</TitleStyled>
+            <TitleStyled>Đặt lịch tham quan nhà mẫu</TitleStyled>
             <LineStyled style={{ border: "1px solid #C7C9D9;" }}></LineStyled>
           </div>
 
@@ -303,24 +352,28 @@ const ModalRegister = (props: PropsI) => {
               placeholder="Số điện thoại"
               required
               fullWidth
-              label="Mời bạn nhập số điện thoại"
+              label="Số điện thoại"
               labelColor="#666666"
             />
           </FormGroup>
           <FormGroup fullWidth>
-            <ControllerDateTimeDatLich
+            <ControllerDatePickerThamQuan
               label={"Ngày tham quan"}
               control={control}
               name={"date"}
               required
-              maxDate={new Date()}
             />
+            {/* <ControllerDatePicker
+                control={control}
+                name="date"
+                label="Ngày tham quan"
+              /> */}
           </FormGroup>
           <FormGroup fullWidth>
             <ControllerSelectTime
               variant="outlined"
               name="time"
-              label="Chọn time"
+              label="Chọn giờ tham quan"
               control={control}
               setValue={setValue}
               dataSelect={listTime}
@@ -331,15 +384,22 @@ const ModalRegister = (props: PropsI) => {
 
           <FormGroup>
             <div style={{ width: "100%", marginTop: 20 }}>
-              <CustomButton
-                label="Đặt lịch"
+              <ButtonStyled
                 style={{
                   background: !isEmpty(errors) ? "#D6000080" : "#FEC83C",
                   color: !isEmpty(errors) ? "#ffffff" : "#1B3459",
                 }}
                 type="submit"
                 disabled={!isEmpty(errors)}
-              />
+              >
+                {loading === false ? (
+                  <>Đặt lịch</>
+                ) : (
+                  <CircularProgress
+                    style={{ height: 25, width: 25, color: "#ffffff" }}
+                  />
+                )}
+              </ButtonStyled>
             </div>
           </FormGroup>
         </form>

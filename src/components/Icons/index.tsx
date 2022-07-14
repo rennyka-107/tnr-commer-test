@@ -76,4 +76,7 @@ export { default as FloorIcon } from "./FloorIcon";
 export { default as IconSuccess } from "./IconSuccess";
 export { default as IconX } from "./IconX";
 export { default as IconTick } from "./IconTick";
+export { default as StrokeHeaderIcon} from './StrokeHeaderIcon';
+export {default as IconDatLich} from './IconDatLich';
+export { default as IconSelectDatLich} from './IconSelectDatLich';
 export { default as IconHeartFilled } from "./IconHeartFilled";

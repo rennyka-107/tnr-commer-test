@@ -4,13 +4,16 @@ import isEmpty from "lodash/isEmpty";
 import dynamic from "next/dynamic";
 import { ProductsResponse } from "interface/product";
 import { ProjectResponse } from "interface/project";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ContainerProduct from "@components/Container/ContainerProduct";
 import { RootState } from "../../../store/store";
 import { useEffect, useState } from "react";
 import SelectLocationProductPage from "@components/CustomComponent/SelectInputComponent/SelectLocationProductPage";
 import SelectTypeProductPage from "@components/CustomComponent/SelectInputComponent/SelectTypeProductPage";
 import { useRouter } from "next/router";
+import { getUserInfoApi } from "../../../pages/api/profileApi";
+import useForceUpdate from "hooks/useForceUpdate";
+import { getUserInfo } from "../../../store/profileSlice";
 
 interface ProductsProps {
   listProducts?: ProductsResponse[];
@@ -26,7 +29,7 @@ const DynamicItemProductComponent = dynamic(
 const ProductPages = ({ listProducts, listProject }: ProductsProps) => {
   const Router = useRouter();
   const { idProject, provinceId, projectTypeId } = Router.query;
-
+ 
     const { listMenuBarProjectType, listMenuLocation } = useSelector(
       (state: RootState) => state.menubar
     );
@@ -58,6 +61,7 @@ const ProductPages = ({ listProducts, listProject }: ProductsProps) => {
 		);
 	  }
     }, [projectTypeId, provinceId, listMenuBarProjectType, listMenuLocation]);
+//   const fetchDataUser
 
     const handleChangeLocation = (event: any) => {
       const {

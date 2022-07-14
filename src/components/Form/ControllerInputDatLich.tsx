@@ -16,7 +16,7 @@ interface Props<T> extends Omit<TextFieldProps, 'name'> {
 const Container = styled.div``;
 const LabelSpan = styled.div<{ color: string }>`
   margin-bottom: 4px;
-  color:  #1B3459;
+  color:  #8190A7;
   font-family: Roboto;
   font-style: normal;
   font-weight: 400;

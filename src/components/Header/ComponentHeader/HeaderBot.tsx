@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { IconBag, IconHeart, IconUser, Logo } from "@components/Icons";
 import styled from "@emotion/styled";
-import { Button } from "@mui/material";
+import { Button, Skeleton } from "@mui/material";
 import useAuth from "hooks/useAuth";
 import MenuDropdown from "ItemComponents/MenuDropdown";
 import Link from "next/link";
@@ -153,17 +153,18 @@ const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
   }, []);
 
   const scrollView = () => {
-    setCheckSale(true);
-    if (Router.pathname === "/") {
-      const mainRoot = document.getElementById("uu-dai");
-      if (mainRoot) {
-        mainRoot.scrollIntoView({ behavior: "smooth", block: "center" });
-      } else {
-        return;
-      }
-    } else {
-      Router.replace(`/sales`);
-    }
+    // setCheckSale(true);
+    // if (Router.pathname === "/") {
+    //   const mainRoot = document.getElementById("uu-dai");
+    //   if (mainRoot) {
+    //     mainRoot.scrollIntoView({ behavior: "smooth", block: "center" });
+    //   } else {
+    //     return;
+    //   }
+    // } else {
+    //   Router.replace(`/sales`);
+    // }
+    Router.push("/sales");
   };
 
   const handleScrollHuongDan = () => {
@@ -184,15 +185,65 @@ const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
   const pressShortcut = (type: typeShortcut) => {
     switch (type) {
       case "BANG_HANG":
-        Router.replace('/productTable');
+        Router.replace("/productTable");
         break;
       case "HUONG_DAN_OL":
-        handleScrollHuongDan()
+        handleScrollHuongDan();
         break;
 
       default:
         break;
     }
+  };
+  const fetchListDropdown = () => {
+    return (
+      <>
+        <div style={{ display: "flex", gap: 35, marginLeft: 38 }}>
+          {!isEmpty(menuDataProject) ? (
+            <MenuDropdown
+              title={"Loại bất động sản"}
+              data={menuDataProject}
+              onSelect={(item) => {
+                Router.replace(`/${PathRoute.ProjectTNR}?type=${item.id}`);
+              }}
+            />
+          ) : (
+            <Skeleton animation="wave" style={{ width: 200, height: 42 ,opacity: '40%'}} />
+          )}
+          {!isEmpty(menuData) ? (
+            <MenuDropdown
+              title={"Dự Án"}
+              data={menuData}
+              onSelect={(item) => {
+                // Router.replace(`/products?idProject=${item.id}`);
+                Router.replace(`/project-detail/${item.id}`);
+              }}
+            />
+          ) : (
+            <Skeleton animation="wave" style={{ width: 111, height: 42 ,opacity: '40%' }} />
+          )}
+          {!isEmpty(menuDataProject) ? (
+            <Button onClick={() => scrollView()}>
+              <TextLink>Khuyến mãi</TextLink>
+            </Button>
+          ) : (
+            <Skeleton animation="wave" style={{ width: 111, height: 42 ,opacity: '40%' }} />
+          )}
+          {!isEmpty(menuDataProject) ? (
+            <Button>
+              <Link
+                href={"https://tnrvietnam.com.vn/sites/tnr/tin-tuc/"}
+                passHref
+              >
+                <TextLink target={"_blank"}>Tin tức</TextLink>
+              </Link>
+            </Button>
+          ) : (
+            <Skeleton animation="wave" style={{ width: 111, height: 42 ,opacity: '40%' }} />
+          )}
+        </div>
+      </>
+    );
   };
 
   return (
@@ -204,34 +255,7 @@ const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
               <Logo />
             </a>
           </Link>
-          <div style={{ display: "flex", gap: 35, marginLeft: 38 }}>
-            <MenuDropdown
-              title={"Loại bất động sản"}
-              data={menuDataProject}
-              onSelect={(item) => {
-                Router.replace(`/${PathRoute.ProjectTNR}?type=${item.id}`);
-              }}
-            />
-            <MenuDropdown
-              title={"Dự Án"}
-              data={menuData}
-              onSelect={(item) => {
-                // Router.replace(`/products?idProject=${item.id}`);
-                Router.replace(`/project-detail/${item.id}`);
-              }}
-            />
-            <Button onClick={() => scrollView()}>
-              <TextLink>Khuyến mãi</TextLink>
-            </Button>
-            <Button>
-              <Link
-                href={"https://tnrvietnam.com.vn/sites/tnr/tin-tuc/"}
-                passHref
-              >
-                <TextLink target={"_blank"}>Tin tức</TextLink>
-              </Link>
-            </Button>
-          </div>
+          {fetchListDropdown()}
         </WrapMenuItem>
         <WrapRightItem>
           <ButtonBuyHelp onClick={() => pressShortcut(typeAction)}>

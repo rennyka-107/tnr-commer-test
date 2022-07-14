@@ -15,6 +15,7 @@ interface InitialState {
   TargetShape: any;
   ArrayImgMap: any[];
   ListTarget: any[];
+  lstOffers: any[];
   Resize: string;
 }
 const initialState: InitialState = {
@@ -30,6 +31,7 @@ const initialState: InitialState = {
   },
   ImgMap: null,
   TargetShape: null,
+  lstOffers: [],
   ArrayImgMap: [],
   ListTarget: [],
   Resize: ""

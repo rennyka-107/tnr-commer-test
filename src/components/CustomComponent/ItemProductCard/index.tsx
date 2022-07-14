@@ -55,8 +55,7 @@ const CardStyled = styled(Card)`
   border-radius: 20px;
 `;
 const CardContentStyled = styled(CardContent)`
-padding: 10px 0px 0px 25px;
-
+  padding: 10px 0px 0px 25px;
 `;
 const TextTitleStyled = styled.a`
   font-family: "Roboto";
@@ -100,6 +99,7 @@ const CenterIntemWrap = styled.div`
   column-gap: 10px;
   row-gap: 13px;
   margin-top: 19px;
+  margin-bottom: 19px;
 `;
 const TextCenterItem = styled(Typography)`
   font-family: "Roboto";
@@ -194,25 +194,24 @@ const TextButtonStyled = styled(Typography)`
 
   /* Brand/Text */
 
-  color: #0063F7;
+  color: #0063f7;
 `;
 
 const TextProjectStyled = styled(Typography)`
-font-family: 'Roboto';
-font-style: normal;
-font-weight: 500;
-font-size: 16px;
-line-height: 150%;
-margin-bottom: 3px;
-/* identical to box height, or 24px */
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 150%;
+  margin-bottom: 3px;
+  /* identical to box height, or 24px */
 
-letter-spacing: 0.005em;
+  letter-spacing: 0.005em;
 
-/* Shades/Dark 2 */
+  /* Shades/Dark 2 */
 
-color: #48576D;
-`
-
+  color: #48576d;
+`;
 const TextFloorStyled = styled(Typography)`
   margin-left: 5px;
   font-family: "Roboto";
@@ -273,6 +272,7 @@ export default function ItemProductCard({
           position: "absolute",
           right: 0,
           margin: 20,
+		  zIndex: 10
         }}
       />
       {ticketCard ? (

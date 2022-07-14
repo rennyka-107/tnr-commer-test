@@ -7,6 +7,7 @@ import { Controller } from "react-hook-form";
 import { InputProps } from "utils/constants";
 import DatePicker from "react-datepicker";
 import { parse, format } from "date-fns";
+import { IconDatLich } from "@components/Icons";
 
 interface Props<T> extends Omit<TextFieldProps | any, "name"> {
   control: Control<T>;
@@ -21,7 +22,7 @@ interface Props<T> extends Omit<TextFieldProps | any, "name"> {
 const Container = styled.div``;
 const LabelSpan = styled.div<{ color: string }>`
   margin-bottom: 4px;
-  color: #1B3459;
+  color: #8190A7;
   font-family: Roboto;
   font-style: normal;
   font-weight: 400;
@@ -65,19 +66,30 @@ const ControllerDateTimeDatLich = <T extends FieldValues>(props: Props<T>) => {
         }) => (
           <DatePicker
             customInput={
-              <StyledTextField
-                variant={variant}
-                id={name}
-                fullWidth
-                InputLabelProps={{
-                  shrink: true,
-                }}
+             <>
+			  <StyledTextField
+               variant={variant}
+			   id={name}
+			   type={"date"}
+			   defaultValue={value}
+			   fullWidth
+			   InputLabelProps={{
+				 shrink: true,
+			   }}
+			   InputProps={{
+				 style: {
+				   ...InputProps.style,
+				   paddingTop: 0,
+				   paddingBottom: 0,
+				 },
+			   }}
                 error={Boolean(error)}
                 helperText={error?.message && error.message}
                 hiddenLabel
                 {...restField}
                 {...rest}
               />
+			 </>
             }
             selected={value ? parse(value, "dd-MM-yyyy", new Date()) : ""}
             onChange={(value) =>

@@ -2,10 +2,13 @@ import Page from "@layouts/Page";
 import styled from "@emotion/styled";
 import FlexContainer from "@components/CustomComponent/FlexContainer";
 import { useRouter } from "next/router";
-import { getTopAllSpecial } from "../api/specialOffersApi";
+import { getSpecialById, getTopAllSpecial } from "../api/specialOffersApi";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllSearchSpecialOffers } from "../../store/SpecialOffersSlice";
+import {
+  getAllSearchSpecialOffers,
+  getSpecialOfferById,
+} from "../../store/SpecialOffersSlice";
 import { RootState } from "../../store/store";
 import dynamic from "next/dynamic";
 import LoadingComponent from "@components/LoadingComponent";
@@ -18,17 +21,18 @@ const Container = styled.div`
   display: flex;
 `;
 
-const DynamicSpecialOffersComponent = dynamic(
-  () => import("../../src/components/SpecialOffersComponent"),
+const DynamicSpecialDetailComponent = dynamic(
+  () => import("../../src/components/SpecialOffersComponent/SpecialDetail"),
   { loading: () => <p>...</p> }
 );
 
-const SpecialOffers = () => {
+const SpecialOfferDetail = () => {
   const Router = useRouter();
+  const { id } = Router.query;
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [totalPage, setTotalPage] = useState<number>(0);
-  const { SearchAllSpecialOffer, totalElement } = useSelector(
+  const { SearchSpecialOfferById } = useSelector(
     (state: RootState) => state.specialoffers
   );
 
@@ -39,26 +43,29 @@ const SpecialOffers = () => {
 
   const fetchAllSpecialSales = async () => {
     setLoading(true);
-    try {
-      const response = await getTopAllSpecial(params);
-      if (response.responseCode === "00") {
-        dispatch(getAllSearchSpecialOffers(response.responseData.content));
-        setTotalPage(response.responseData.totalPage);
+    if (id) {
+      try {
+        const response = await getSpecialById(id, params);
+        if (response.responseCode === "00") {
+          dispatch(getSpecialOfferById(response.responseData));
+          setTotalPage(response.responseData.totalPage);
+          setLoading(false);
+        }
+      } catch (err) {
         setLoading(false);
       }
-    } catch (err) {
-      setLoading(false);
     }
   };
+
   useEffect(() => {
     fetchAllSpecialSales();
-  }, [params]);
+  }, [id]);
 
   const fetchComponent = () => {
     return (
       <>
         {loading === false ? (
-          <DynamicSpecialOffersComponent data={SearchAllSpecialOffer} />
+          <DynamicSpecialDetailComponent data={SearchSpecialOfferById} />
         ) : (
           <div style={{ textAlign: "center", marginTop: 300 }}>
             <LoadingComponent />
@@ -86,19 +93,8 @@ const SpecialOffers = () => {
       }}
     >
       <FlexContainer>{fetchComponent()} </FlexContainer>
-      {SearchAllSpecialOffer.length > 0 && (
-        <Row customStyle={{ padding: 70, justifyContent: "center" }}>
-          <PaginationComponent
-            count={totalPage}
-            onChange={(event, page) => {
-              changePage(page - 1);
-            }}
-            page={params.page + 1}
-          />
-        </Row>
-      )}
     </Page>
   );
 };
 
-export default SpecialOffers;
+export default SpecialOfferDetail;

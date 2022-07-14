@@ -272,6 +272,7 @@ export default function ProductCardSearch({
           position: "absolute",
           right: 0,
           margin: 20,
+		  zIndex: 10
         }}
       />
       {ticketCard ? (
