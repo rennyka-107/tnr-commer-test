@@ -130,7 +130,7 @@ const FooterBot = ({ listMenuBarProjectType, listUserManual }: MenuProps) => {
             <LineInfo2
               key={index}
               onClick={() => {
-                Router.replace(`/productTNR?provinceId=&&projectTypeId=${item.id}`);
+                Router.replace(`/projectTNR?type=${item.id}`);
               }}
             >
               {item.name}

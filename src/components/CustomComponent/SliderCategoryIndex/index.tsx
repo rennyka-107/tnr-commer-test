@@ -106,7 +106,7 @@ const SliderCategoryIndex = ({ data }: { data?: any[] }) => {
     //   dispatch(getListProduct(response.responseData));
 
     //   if (response.responseCode === "00") {
-    router.replace(`/productTNR?provinceId=&&projectTypeId=${projectTypeId}`);
+    router.replace(`/projectTNR?type=${projectTypeId}`);
     //   }
     // } catch (error) {
     //   console.log(error);
@@ -137,67 +137,65 @@ const SliderCategoryIndex = ({ data }: { data?: any[] }) => {
     ));
   }, [menuBarProjectType]);
   return (
-	<>
-			          <TextTitle>LOẠI BẤT ĐỘNG SẢN</TextTitle>
+    <>
+      <TextTitle>LOẠI BẤT ĐỘNG SẢN</TextTitle>
 
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        gap: 100,
-      }}
-    >
-
-      <div style={{ height: 85 }}>
-        <IconPrevProduct
-        //   style={{
-        //     cursor: "pointer",
-        //     position: "absolute",
-        //     zIndex: 10,
-        //     marginLeft: 10,
-        //   }}
-        />
-      </div>
-      <WrapSlide>
-        <Swiper
-          spaceBetween={10}
-          speed={1000}
-          //   centeredSlides={true}
-          slidesPerView={5}
-          navigation={{
-            prevEl: ".icon-PrevProduct",
-            nextEl: ".icon-NextProduct",
-            // @ts-ignore
-            clickable: true,
-          }}
-          observer={true}
-          observeParents={true}
-          //   autoplay={{
-          // 	delay: 5000,
-          // 	disableOnInteraction: false,
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          gap: 100,
+        }}
+      >
+        <div style={{ height: 85 }}>
+          <IconPrevProduct
+          //   style={{
+          //     cursor: "pointer",
+          //     position: "absolute",
+          //     zIndex: 10,
+          //     marginLeft: 10,
           //   }}
-          //   modules={[Autoplay, Pagination, Navigation]}
-          className="mySwiper"
-          style={{ maxWidth: 900, width: 900, height: 160 }}
-        >
-
-          {renderItems}
-        </Swiper>
-      </WrapSlide>
-      <div style={{ height: 85 }}>
-        <IconNextProduct
-        // style={{
-        //   cursor: "pointer",
-        //   position: "absolute",
-        //   zIndex: 10,
-        //   right: 0,
-        //   marginRight: 10,
-        // }}
-        />
+          />
+        </div>
+        <WrapSlide>
+          <Swiper
+            spaceBetween={10}
+            speed={1000}
+            //   centeredSlides={true}
+            slidesPerView={5}
+            navigation={{
+              prevEl: ".icon-PrevProduct",
+              nextEl: ".icon-NextProduct",
+              // @ts-ignore
+              clickable: true,
+            }}
+            observer={true}
+            observeParents={true}
+            //   autoplay={{
+            // 	delay: 5000,
+            // 	disableOnInteraction: false,
+            //   }}
+            //   modules={[Autoplay, Pagination, Navigation]}
+            className="mySwiper"
+            style={{ maxWidth: 900, width: 900, height: 160 }}
+          >
+            {renderItems}
+          </Swiper>
+        </WrapSlide>
+        <div style={{ height: 85 }}>
+          <IconNextProduct
+          // style={{
+          //   cursor: "pointer",
+          //   position: "absolute",
+          //   zIndex: 10,
+          //   right: 0,
+          //   marginRight: 10,
+          // }}
+          />
+        </div>
       </div>
-    </div>
-	</>
+    </>
   );
 };
 export default SliderCategoryIndex;
