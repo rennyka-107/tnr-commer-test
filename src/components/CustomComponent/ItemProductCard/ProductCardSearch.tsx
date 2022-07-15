@@ -57,11 +57,12 @@ const CardStyled = styled(Card)`
   width: 350px;
   /* Line/stroke */
   position: relative;
-  border: 1px solid #c7c9d9;
-  border-radius: 20px;
+  border: 0.5px solid #D8D8D8;
+  border-radius: 20px 20px 20px 20px;
+  box-shadow: none !important;
 `;
 const CardContentStyled = styled(CardContent)`
-  padding: 10px 0px 0px 25px;
+  padding: 10px 0px 0px 20px;
 `;
 const TextTitleStyled = styled.a`
   font-family: "Roboto";

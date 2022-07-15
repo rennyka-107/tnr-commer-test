@@ -1,4 +1,5 @@
 import FlexContainer from "@components/CustomComponent/FlexContainer";
+import SliderCategoryIndex from "@components/CustomComponent/SliderCategoryIndex";
 import styled from "@emotion/styled";
 import { Typography } from "@mui/material";
 import { TBOUTStanding } from "interface/product";
@@ -12,51 +13,6 @@ const DynamicSliderHotProduct = dynamic(
   () => import("../../../components/CustomComponent/SliderProductHotComponent"),
   { loading: () => <p>...</p> }
 );
-const WrapContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  flex-direction: row;
-  gap: 50px;
-  height: 200px;
-  align-items: flex-start;
-`;
-const WrapIconContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  max-width: 150px;
-  gap: 20px;
-`;
-const WrapIcon = styled.div`
-  width: 111px;
-  height: 111px;
-  border-radius: 20px;
-  text-align: center;
-  padding: 30px;
-  background-size: contain;
-  :hover {
-    background-image: url(${(props) => props.theme["icon"]}) !important;
-    background-size: contain;
-  }
-`;
-
-const TextBottomIcon = styled(Typography)`
-  margin-top: 20px
-  font-family: "Roboto";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 18px;
-  line-height: 21px;
-  /* identical to box height */
-
-  text-align: center;
-
-  /* Brand/Main color */
-
-  color: #1b3459;
-`;
 
 const TextBDS = styled(Typography)`
   font-family: "Roboto";
@@ -125,27 +81,7 @@ export default function BodyIndex() {
   };
   return (
     <FlexContainer>
-      <WrapContainer>
-        {(menuBarProjectType?.slice(0, 4) || []).map((item, index) => {
-          return (
-            <WrapIconContainer
-              key={index}
-              onClick={() => {
-                onClickProduct(item.id);
-              }}
-            >
-              <WrapIcon
-                theme={{ icon: item?.iconHover }}
-                style={{
-                  backgroundImage: `url(${item?.icon})`,
-                  backgroundSize: "contain",
-                }}
-              ></WrapIcon>
-              <TextBottomIcon>{item.name}</TextBottomIcon>
-            </WrapIconContainer>
-          );
-        })}
-      </WrapContainer>
+      <SliderCategoryIndex />
       <ContainerProduct
         style={{
           width: sizeOfArray >= 4 ? "100%" : 1115,
