@@ -31,7 +31,7 @@ const WrapperContent = styled(Box)`
   height: 100%;
   background: #fff;
   box-shadow: none;
-  padding: 0 16px;
+  // padding: 0 16px;
   margin-top: 15px;
   display: flex;
   flex-direction: column;

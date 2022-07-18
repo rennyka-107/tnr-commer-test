@@ -155,19 +155,12 @@ export default function ModalAdvanSearch() {
     if (!Array.isArray(newValue)) {
       return;
     }
-    if (activeThumb === 0) {
-      setValueDientich([
-        Math.min(newValue[0], valueDienTich[1] - minDistance),
-        valueDienTich[1],
-      ]);
-	  setSearch({ ...search, areaFrom:  valueDienTich[0], areaTo :  valueDienTich[1]});
-    } else {
-      setValueDientich([
-        valueDienTich[0],
-        Math.max(newValue[1], valueDienTich[0] + minDistance),
-      ]);
-	  setSearch({ ...search,areaFrom:  valueDienTich[0], areaTo :  valueDienTich[1]});
-    }
+    setValueDientich([newValue[0], newValue[1]]);
+    setSearch({
+      ...search,
+      areaFrom: newValue[0].toString(),
+      areaTo: newValue[1].toString(),
+    });
   };
 
   const handleChange2 = (
@@ -178,20 +171,12 @@ export default function ModalAdvanSearch() {
     if (!Array.isArray(newValue)) {
       return;
     }
-
-    if (activeThumb === 0) {
-      setValueKhoangGia([
-        Math.min(newValue[0], valueKhoanGia[1] - minDistance2),
-        valueKhoanGia[1],
-      ]);
-      setSearch({ ...search,priceFrom : valueKhoanGia[0].toString(),priceTo : valueKhoanGia[1].toString()  });
-    } else {
-      setValueKhoangGia([
-        valueKhoanGia[0],
-        Math.max(newValue[1], valueKhoanGia[0] + minDistance2),
-      ]);
-      setSearch({ ...search,priceFrom : valueKhoanGia[0].toString(),priceTo : valueKhoanGia[1].toString() });
-    }
+    setValueKhoangGia([newValue[0], newValue[1]]);
+    setSearch({
+      ...search,
+      priceFrom: newValue[0].toString(),
+      priceTo: newValue[1].toString(),
+    });
   };
 
   const handleSearch = () => {

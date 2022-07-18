@@ -25,8 +25,8 @@ const MapImage = dynamic(() => import("./MapImage"), {
 
 const Map = (props: Props) => {
   const bounds: LatLngBoundsExpression = [
-    [window.innerWidth, window.innerWidth],
-    [-window.innerWidth, -window.innerWidth],
+    [1.3*window.innerWidth, 1.3*window.innerWidth],
+    [-1.3*window.innerWidth, -1.3*window.innerWidth],
   ];
 
   const [layerParent, setLayerParent] = useState<any>(null);

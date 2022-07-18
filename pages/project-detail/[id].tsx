@@ -109,8 +109,8 @@ const ProjectDetail = () => {
             >
               <Box
                 sx={{
-                  width: "50vw",
-                  height: "50vw",
+                  width: "65vw",
+                  height: "65vw",
                 }}
               >
                 <DynamicMap />
@@ -137,8 +137,8 @@ const ProjectDetail = () => {
         description: "TNR Ecommerce Product",
       }}
     >
-      <Container title={`${ProjectInformation.name ?? ""}`}>
-        {!isEmpty(Target) ? (
+      {/* <Container> */}
+        {/* {!isEmpty(Target) ? (
           <Button
             sx={{ pt: 0 }}
             onClick={initialProjectMap}
@@ -148,9 +148,9 @@ const ProjectDetail = () => {
           </Button>
         ) : (
           ""
-        )}
-        <Grid>{fetchComponent()}</Grid>
-      </Container>
+        )} */}
+        <Grid sx={{ mt: "127px"}}>{fetchComponent()}</Grid>
+      {/* </Container> */}
     </Page>
   );
 };

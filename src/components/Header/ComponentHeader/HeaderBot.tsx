@@ -16,6 +16,9 @@ import {
   shortcut,
   typeShortcut,
 } from "../../../../store/shortcut";
+import { getListFavourite } from "../../../../pages/api/FavouriteApi";
+import LocalStorage from "utils/LocalStorage";
+import SessionStorage from "utils/SessionStorage";
 
 const ContainerNavTop = styled.div`
   height: 93px;
@@ -128,9 +131,24 @@ const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
   const Router = useRouter();
   const [checkSale, setCheckSale] = useState(false);
   const { cart } = useSelector((state: RootState) => state.carts);
+  const [listFavourite, setListFavourite] = useState<any[]>([]);
   const { title, typeAction } = useSelector(
     (state: RootState) => state?.shortcut
   );
+  const { checkUp } = useSelector((state: RootState) => state.favourites);
+  const fetchFavourite = async () => {
+    try {
+      const response: any = await getListFavourite();
+
+      setListFavourite(response.responseData);
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    if (LocalStorage.get("accessToken") || SessionStorage.get("accessToken")) {
+      fetchFavourite();
+    }
+  }, [checkUp]);
 
   const menuUser: ItemValueProps[] = [
     { id: "Profile", name: "Thông tin cá nhân" },
@@ -208,7 +226,10 @@ const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
               }}
             />
           ) : (
-            <Skeleton animation="wave" style={{ width: 200, height: 42 ,opacity: '40%'}} />
+            <Skeleton
+              animation="wave"
+              style={{ width: 200, height: 42, opacity: "40%" }}
+            />
           )}
           {!isEmpty(menuData) ? (
             <MenuDropdown
@@ -220,14 +241,20 @@ const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
               }}
             />
           ) : (
-            <Skeleton animation="wave" style={{ width: 111, height: 42 ,opacity: '40%' }} />
+            <Skeleton
+              animation="wave"
+              style={{ width: 111, height: 42, opacity: "40%" }}
+            />
           )}
           {!isEmpty(menuDataProject) ? (
             <Button onClick={() => scrollView()}>
               <TextLink>Khuyến mãi</TextLink>
             </Button>
           ) : (
-            <Skeleton animation="wave" style={{ width: 111, height: 42 ,opacity: '40%' }} />
+            <Skeleton
+              animation="wave"
+              style={{ width: 111, height: 42, opacity: "40%" }}
+            />
           )}
           {!isEmpty(menuDataProject) ? (
             <Button>
@@ -239,7 +266,10 @@ const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
               </Link>
             </Button>
           ) : (
-            <Skeleton animation="wave" style={{ width: 111, height: 42 ,opacity: '40%' }} />
+            <Skeleton
+              animation="wave"
+              style={{ width: 111, height: 42, opacity: "40%" }}
+            />
           )}
         </div>
       </>
@@ -285,7 +315,9 @@ const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
             />
             <Link href="/favorite-products">
               <a>
-                <IconHeart />
+                <IconHeart
+                  total={!isEmpty(listFavourite) ? listFavourite.length : 0}
+                />
               </a>
             </Link>
             <Link href="/payment-cart">

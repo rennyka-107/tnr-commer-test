@@ -126,9 +126,7 @@ const BuyingGuideComponent = ({ data }: PropsUserManual) => {
   };
 
   useEffect(() => {
-    // console.log(data)
-    //   const idSearch = data.map(item => item.id).indexOf('1')
-    //   console.log(idSearch)
+
     fetchDataSelect(idUserManual);
   }, [idUserManual]);
 

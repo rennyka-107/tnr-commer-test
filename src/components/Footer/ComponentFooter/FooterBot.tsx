@@ -118,7 +118,7 @@ const FooterBot = ({ listMenuBarProjectType, listUserManual }: MenuProps) => {
           </LineInfo>
           <LineInfo style={{ marginTop: 5 }}>
             <TitleTypo>
-              TNR Version 1.3.3 Copyright © tnrholdings.com.vn {""}
+              TNR Version 1.3.6 Copyright © tnrholdings.com.vn {""}
             </TitleTypo>
           </LineInfo>
         </BlockDiv>
@@ -130,7 +130,7 @@ const FooterBot = ({ listMenuBarProjectType, listUserManual }: MenuProps) => {
             <LineInfo2
               key={index}
               onClick={() => {
-                Router.replace(`/productTNR?provinceId=&&projectTypeId=${item.id}`);
+                Router.replace(`/projectTNR?type=${item.id}`);
               }}
             >
               {item.name}

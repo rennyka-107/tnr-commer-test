@@ -13,7 +13,7 @@ import ItemProductCard from "../ItemProductCard";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../store/store";
 import useAddToCart from "hooks/useAddToCart";
-
+import { useRouter } from "next/router";
 
 const WrapSlide = styled.div`
   width: 1245px;
@@ -30,6 +30,21 @@ export default function SliderProductHotComponent() {
     (state: RootState) => state.products
   );
   const addToCart = useAddToCart();
+  const router = useRouter();
+
+  const onCompare = (projectId: string, projectType: string) => () => {
+    router.push({
+      pathname: "/compare-search",
+      query: {
+        projectId: projectId,
+        projectTypeId: projectType,
+        priceTo: "20",
+        priceFrom: "1",
+        areaTo: "200",
+        areaFrom: "30",
+      },
+    });
+  };
 
   return (
     <WrapSlide>
@@ -61,10 +76,11 @@ export default function SliderProductHotComponent() {
               <ItemProductCard
                 key={index}
                 id={item.id}
-				projectName={item.projectName}
+                projectName={item.projectName}
                 src={item.avatar}
                 title={item.name}
                 subTitle={item.projectLocation}
+                activeFavourite={true}
                 dataItem={{
                   item1: item.landArea,
                   item2: item.numBath,
@@ -74,12 +90,14 @@ export default function SliderProductHotComponent() {
                 priceListed={item.price}
                 priceSub={item.unitPrice}
                 ticketCard={item.category}
-				projectTypeCode={item.projectTypeCode}
-				minFloor={item.minFloor}
-				maxFloor={item.maxFloor}
+                projectTypeCode={item.projectTypeCode}
+                favouriteStatus={item.favouriteStatus}
+                minFloor={item.minFloor}
+                maxFloor={item.maxFloor}
                 onClick={() => addToCart(item.id)}
-				activeSoSanh={true}
-                buyDisabled={item?.paymentStatus!==2}
+                activeSoSanh={true}
+                buyDisabled={item?.paymentStatus !== 2}
+                onCompare={onCompare(item.projectId, item.projectTypeId)}
               />
             </CardContainer>
           </SwiperSlide>

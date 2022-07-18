@@ -88,6 +88,10 @@ const ControllerReactDatePicker = <T extends FieldValues>(props: Props<T>) => {
             }
             dateFormat="dd-MM-yyyy"
             maxDate={maxDate}
+            peekNextMonth
+            showMonthDropdown
+            showYearDropdown
+            dropdownMode="select"
             {...rest}
           />
         )}

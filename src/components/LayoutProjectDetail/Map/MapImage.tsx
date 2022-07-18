@@ -17,8 +17,8 @@ const MapImage = ({ url }: Props) => {
 
   function handleResizeMap() {
     const bound = L.latLngBounds(
-      [window.innerWidth, window.innerWidth],
-      [-window.innerWidth, -window.innerWidth]
+      [1.3*window.innerWidth, 1.3*window.innerWidth],
+      [-1.3*window.innerWidth, -1.3*window.innerWidth]
     );
     setOriginBound(bound);
     dispatch(setResize(`resize ${window.innerWidth}`));

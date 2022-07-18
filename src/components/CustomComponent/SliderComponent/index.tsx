@@ -2,18 +2,18 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
 import styled from "@emotion/styled";
-import { Typography } from "@mui/material";
+import { SxProps, Theme, Typography } from "@mui/material";
 
 type Props = {
-	label?: string;
-	numberMin?: number;
-	numberMax?: number;
-	unit?: string;
-	style?: React.CSSProperties;
-	onChange?: any;
-	value?: any;
-
-  };
+  label?: string;
+  numberMin?: number;
+  numberMax?: number;
+  unit?: string;
+  style?: React.CSSProperties;
+  onChange?: any;
+  value?: any;
+  sx?: SxProps<Theme>;
+};
 
 const SliderSyled = styled(Slider)`
   color: #fcb715;
@@ -21,9 +21,9 @@ const SliderSyled = styled(Slider)`
   .MuiSlider-rail {
     color: #d8d8d8;
   }
-  .MuiSlider-thumb{
-	  height: 13px;
-	  width: 13px;
+  .MuiSlider-thumb {
+    height: 13px;
+    width: 13px;
   }
   .MuiSlider-valueLabel {
     background-color: transparent;
@@ -38,6 +38,12 @@ const SliderSyled = styled(Slider)`
   .MuiSlider-valueLabelOpen {
     transform: translateY(150%) scale(1) !important;
   }
+  .MuiSlider-thumb[data-index="0"] .MuiSlider-valueLabelOpen{
+    left: -10px;
+  }
+  .MuiSlider-thumb[data-index="1"] .MuiSlider-valueLabelOpen{
+    right: -10px;
+  }
 `;
 const CustomTittle = styled(Typography)`
   font-family: "Roboto";
@@ -50,14 +56,22 @@ const CustomTittle = styled(Typography)`
   color: #ffffff;
 `;
 
-
 const minDistance = 10;
 
-export default function SliderComponent({label,numberMin,numberMax,unit,onChange,value}) {
+export default function SliderComponent({
+  label,
+  numberMin,
+  numberMax,
+  unit,
+  onChange,
+  value,
+  style,
+  sx,
+}: Props) {
   const [value1, setValue1] = React.useState<number[]>([0, 200]);
 
   function valuetext(value: number) {
-	return `${value} ${unit}`;
+    return `${value} ${unit}`;
   }
   const handleChange1 = (
     event: Event,
@@ -75,15 +89,14 @@ export default function SliderComponent({label,numberMin,numberMax,unit,onChange
     }
   };
 
-
   return (
-    <Box sx={{ width: 297 }}>
+    <Box sx={{ width: 297, ...sx }} style={style}>
       <CustomTittle>{label}</CustomTittle>
       <SliderSyled
         getAriaLabel={() => "Minimum distance"}
         value={value}
-		min={numberMin}
-		max={numberMax}
+        min={numberMin}
+        max={numberMax}
         onChange={onChange}
         valueLabelDisplay="on"
         valueLabelFormat={valuetext}

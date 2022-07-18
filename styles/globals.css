@@ -214,7 +214,7 @@ a {
 
 /* ckeditor5-block-quote/theme/blockquote.css */
 
-.ck-content[dir='rtl'] blockquote {
+.ck-content[dir="rtl"] blockquote {
     border-left: 0;
     border-right: solid 5px hsl(0, 0%, 80%);
 }
@@ -501,7 +501,7 @@ a {
     display: block;
     position: absolute;
     box-sizing: border-box;
-    content: '';
+    content: "";
     width: 100%;
     height: 100%;
     border: 1px solid hsl(0, 0%, 20%);
@@ -517,7 +517,7 @@ a {
     position: absolute;
     box-sizing: content-box;
     pointer-events: none;
-    content: '';
+    content: "";
     left: calc(var(--ck-todo-list-checkmark-size) / 3);
     top: calc(var(--ck-todo-list-checkmark-size) / 5.3);
     width: calc(var(--ck-todo-list-checkmark-size) / 5.3);
@@ -576,7 +576,7 @@ a {
 /* ckeditor5-page-break/theme/pagebreak.css */
 
 .ck-content .page-break::after {
-    content: '';
+    content: "";
     position: absolute;
     border-bottom: 2px dashed hsl(0, 0%, 77%);
     width: 100%;
@@ -645,14 +645,14 @@ a {
 
 /* ckeditor5-table/theme/table.css */
 
-.ck-content[dir='rtl'] .table th {
+.ck-content[dir="rtl"] .table th {
     text-align: right;
 }
 
 
 /* ckeditor5-table/theme/table.css */
 
-.ck-content[dir='ltr'] .table th {
+.ck-content[dir="ltr"] .table th {
     text-align: left;
 }
 
@@ -720,7 +720,7 @@ a {
 
 /* ckeditor5-table/theme/tablecolumnresize.css */
 
-.ck-content[dir='rtl'] .table .table-column-resizer {
+.ck-content[dir="rtl"] .table .table-column-resizer {
     left: var(--ck-table-column-resizer-position-offset);
     right: unset;
 }
@@ -799,4 +799,18 @@ a {
 .leaflet-top,
 .leaflet-bottom {
     z-index: 300 !important;
+}
+
+.icon-heart:hover path {
+    fill: #ea242a;
+}
+
+
+/* .icon-heart-add:hover {
+    view-box: "0 0 101.5 87.52";
+} */
+
+.icon-heart-add:hover path {
+    fill: #ffffff;
+    stroke: #ffffff;
 }

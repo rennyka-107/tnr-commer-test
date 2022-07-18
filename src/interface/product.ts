@@ -85,6 +85,8 @@ export interface ProductsResponse {
 	projectTypeCode?: string;
 	minFloor?: number;
 	maxFloor?: number;
+	projectLocation?: string;
+	projectName?: string;
 }
 
 export interface ResponseSearchById {

@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import LocalStorage from 'utils/LocalStorage';
 import { CompareParamsI } from "../pages/api/compareApi";
 
 export interface comparePopUpItemI {
@@ -12,12 +13,14 @@ interface ProductCompareI {
   compareParams: CompareParamsI[];
   compareItems: any[];
   comparePopUpItem: comparePopUpItemI[];
+  isValid: boolean;
 }
 
 const initialState: ProductCompareI = {
   compareParams: [],
   compareItems: [],
-  comparePopUpItem: [],
+  comparePopUpItem: LocalStorage.get('compare-item') ?? [],
+  isValid: true,
 }
 
 export const productCompareSlice = createSlice({
@@ -28,19 +31,27 @@ export const productCompareSlice = createSlice({
       state.compareParams = action.payload;
     },
     getCompareItem: (state, action) => {
+      console.log(action.payload);
       state.compareItems = action.payload;
     },
     getComparePopUpItem: (state, action) => {
+      LocalStorage.set('compare-item', action.payload);
       state.comparePopUpItem = action.payload;
     },
     removeCompareItem: (state, action) => {
       state.compareItems = state.compareItems.filter(item => item.productId !== action.payload);
     },
     removeComparePopUpItem: (state, action) => {
-      state.comparePopUpItem = state.comparePopUpItem.filter(item => item.productId !== action.payload);
+      const items = state.comparePopUpItem.filter(item => item.productId !== action.payload)
+      LocalStorage.set('compare-item', items);
+      state.comparePopUpItem = items;
     },
     removeAllComparePopUpItem: (state, action) => {
-      state.comparePopUpItem = initialState.comparePopUpItem;
+      LocalStorage.remove('compare-item');
+      state.comparePopUpItem = [];
+    },
+    setValidCompare: (state, action) => {
+      state.isValid = action.payload;
     }
   }
 })
@@ -52,6 +63,7 @@ export const {
   removeCompareItem,
   removeComparePopUpItem,
   removeAllComparePopUpItem,
+  setValidCompare,
 } = productCompareSlice.actions;
 
 export default productCompareSlice.reducer;

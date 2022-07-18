@@ -35,7 +35,7 @@ const ListProductCard = ({ data }: ProductsProps) => {
             pt: 0,
             display: "grid",
             gridAutoColumns: "23rem",
-            gridTemplateRows: "2fr",
+            // gridTemplateRows: "2fr",
             overflowX: "auto",
           }}
         >
@@ -65,7 +65,7 @@ const ListProductCard = ({ data }: ProductsProps) => {
           ))}
         </Grid>
       ) : (
-        <div style={{ textAlign: "center" }}>No Data</div>
+        <div style={{ textAlign: "center" }}>Không có dữ liệu</div>
       )}
     </Box>
   );

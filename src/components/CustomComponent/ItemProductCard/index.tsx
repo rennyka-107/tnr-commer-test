@@ -10,7 +10,8 @@ import Product3 from "../../../../public/images/product3.png";
 import Router, { useRouter } from "next/router";
 
 import {
-	FloorIcon,
+  FloorIcon,
+  IconAddHearProduct,
   IconBath,
   IconBedDouble,
   IconCompass,
@@ -21,6 +22,7 @@ import {
   IconPlusProduct,
 } from "@components/Icons";
 import ImageWithHideOnError from "hooks/ImageWithHideOnError";
+import useFavourite from "hooks/useFavourite";
 
 type Props = {
   id?: string;
@@ -36,6 +38,7 @@ type Props = {
   };
   priceListed?: string;
   priceSub?: number;
+  favouriteStatus?: number;
   activeSoSanh?: boolean;
   onClick?: MouseEventHandler<HTMLButtonElement>;
   onCompare?: MouseEventHandler<HTMLButtonElement>;
@@ -44,6 +47,7 @@ type Props = {
   minFloor?: number;
   maxFloor?: number;
   buyDisabled?: boolean;
+  activeFavourite?: boolean;
 };
 
 const CardStyled = styled(Card)`
@@ -51,11 +55,12 @@ const CardStyled = styled(Card)`
   width: 350px;
   /* Line/stroke */
   position: relative;
-  border: 1px solid #c7c9d9;
-  border-radius: 20px;
+  border: 0.5px solid #D8D8D8;
+  border-radius: 20px 20px 20px 20px;
+  box-shadow: none !important;
 `;
 const CardContentStyled = styled(CardContent)`
-  padding: 10px 0px 0px 25px;
+  padding: 10px 0px 0px 20px;
 `;
 const TextTitleStyled = styled.a`
   font-family: "Roboto";
@@ -253,8 +258,13 @@ export default function ItemProductCard({
   activeSoSanh,
   id,
   buyDisabled,
+  favouriteStatus,
+  activeFavourite,
 }: Props) {
   const router = useRouter();
+
+  const { addProductToFavouriteFunction } = useFavourite();
+
   function currencyFormat(num) {
     if (!num) {
       return;
@@ -266,15 +276,36 @@ export default function ItemProductCard({
 
   return (
     <CardStyled sx={{ maxWidth: 350 }}>
-      <IconHeartProduct
-        style={{
-          cursor: "pointer",
-          position: "absolute",
-          right: 0,
-          margin: 20,
-		  zIndex: 10
-        }}
-      />
+      {activeFavourite ? (
+        <>
+          {favouriteStatus === 0 ? (
+            <IconHeartProduct
+              style={{
+                cursor: "pointer",
+                position: "absolute",
+                right: 0,
+                margin: 20,
+                zIndex: 10,
+              }}
+              onClick={() => addProductToFavouriteFunction(id, 1)}
+            />
+          ) : (
+            <IconAddHearProduct
+              style={{
+                cursor: "pointer",
+                position: "absolute",
+                right: 0,
+                margin: 20,
+                zIndex: 10,
+              }}
+              onClick={() => addProductToFavouriteFunction(id, 0)}
+            />
+          )}
+        </>
+      ) : (
+        <></>
+      )}
+
       {ticketCard ? (
         <>
           <div
@@ -326,9 +357,7 @@ export default function ItemProductCard({
             <TextTitleStyled style={{ marginBottom: 9 }}>
               {title}
             </TextTitleStyled>
-			<TextProjectStyled>
-				{projectName}
-			</TextProjectStyled>
+            <TextProjectStyled>{projectName}</TextProjectStyled>
           </span>
           <TextitleBottom>{subTitle ? subTitle : "N/A"}</TextitleBottom>
         </div>
@@ -340,7 +369,7 @@ export default function ItemProductCard({
               {dataItem.item2 ? dataItem?.item2 : "N/A"}
             </TextCenterItem>
           </WrapItemCenter> */}
-		   {projectTypeCode === "2" ? (
+          {projectTypeCode === "2" ? (
             <>
               <WrapItemCenter>
                 <IconBath />
@@ -374,7 +403,7 @@ export default function ItemProductCard({
               {dataItem.item3 ? dataItem?.item3 : "N/A"}
             </TextCenterItem>
           </WrapItemCenter> */}
-		  
+
           {projectTypeCode === "2" ? (
             <>
               <WrapItemCenter>
@@ -439,9 +468,6 @@ export default function ItemProductCard({
               display: "flex",
               flexDirection: "row",
               cursor: "pointer",
-            }}
-            onClick={() => {
-              router.push(`/compare-product?idCompare=${id}`);
             }}
           >
             <IconPlusProduct />

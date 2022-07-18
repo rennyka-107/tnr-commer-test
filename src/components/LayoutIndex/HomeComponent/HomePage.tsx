@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { Box } from "@mui/system";
 import SelectInputComponent from "@components/CustomComponent/SelectInputComponent";
 import { Button, SelectChangeEvent, Typography } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import SliderComponent from "@components/CustomComponent/SliderComponent";
 import SliderSearchKhoangGia from "@components/CustomComponent/SliderComponent/SliderSearchKhoangGia";
@@ -76,26 +76,39 @@ const HomePage = () => {
   const [categoryName, setCategoryName] = useState<string[]>([]);
   const [projectName, setProjectName] = useState<string[]>([]);
   const [valueDienTich, setValueDientich] = useState<number[]>([30, 200]);
-  const [valueKhoanGia, setValueKhoangGia] = useState<number[]>([1, 200]);
+  const [valueKhoanGia, setValueKhoangGia] = useState<number[]>([1, 20]);
 
   const [filterSearch, setFilterSearch] = useState({
     textSearch: "",
     provinceId: "",
     projectTypeId: "",
     projectId: "",
-    priceFrom: "",
-    priceTo: "",
+    priceFrom: "1",
+    priceTo: "20",
     categoryId: "",
-    areaFrom: null,
-    areaTo: null,
+    areaFrom: "30",
+    areaTo: "200",
   });
 
-  const {
-    listMenuBarType,
-    listMenuBarProjectType,
-    listMenuLocation,
-    listCategory,
-  } = useSelector((state: RootState) => state.menubar);
+  const { listMenuBarType, listMenuBarProjectType } = useSelector(
+    (state: RootState) => state.menubar
+  );
+
+  useEffect(() => {
+    if (listMenuBarProjectType?.length > 0) {
+      setProjectTypeName(listMenuBarProjectType[0].name.split(","));
+    }
+    if (listMenuBarType?.length > 0) {
+      setProjectName(listMenuBarType[0].name.split(","));
+    }
+    if (listMenuBarProjectType?.length > 0 && listMenuBarType?.length > 0) {
+      setFilterSearch({
+        ...filterSearch,
+        projectTypeId: listMenuBarProjectType[0].id,
+        projectId: listMenuBarType[0].id,
+      });
+    }
+  }, [listMenuBarProjectType, listMenuBarType]);
 
   const handleSelectProject = (
     event: SelectChangeEvent<typeof projectTypeName>
@@ -107,16 +120,7 @@ const HomePage = () => {
     setProjectTypeName(typeof value === "string" ? value.split(",") : value);
     setFilterSearch({ ...filterSearch, projectTypeId: data[0].id });
   };
-  const handleSelectCategory = (
-    event: SelectChangeEvent<typeof categoryName>
-  ) => {
-    const {
-      target: { value },
-    } = event;
-    const data = listCategory.filter((x) => x.name === value);
-    setCategoryName(typeof value === "string" ? value.split(",") : value);
-    setFilterSearch({ ...filterSearch, categoryId: data[0].id });
-  };
+
   const handleSelectProjectName = (
     event: SelectChangeEvent<typeof projectName>
   ) => {
@@ -127,6 +131,7 @@ const HomePage = () => {
     setProjectName(typeof value === "string" ? value.split(",") : value);
     setFilterSearch({ ...filterSearch, projectId: data[0].id });
   };
+
   const handleChange1 = (
     event: Event,
     newValue: number | number[],
@@ -135,27 +140,12 @@ const HomePage = () => {
     if (!Array.isArray(newValue)) {
       return;
     }
-    if (activeThumb === 0) {
-      setValueDientich([
-        Math.min(newValue[0], valueDienTich[1] - minDistance),
-        valueDienTich[1],
-      ]);
-      setFilterSearch({
-        ...filterSearch,
-        areaFrom: valueDienTich[0],
-        areaTo: valueDienTich[1],
-      });
-    } else {
-      setValueDientich([
-        valueDienTich[0],
-        Math.max(newValue[1], valueDienTich[0] + minDistance),
-      ]);
-      setFilterSearch({
-        ...filterSearch,
-        areaFrom: valueDienTich[0],
-        areaTo: valueDienTich[1],
-      });
-    }
+    setValueDientich([newValue[0], newValue[1]]);
+    setFilterSearch({
+      ...filterSearch,
+      areaFrom: newValue[0].toString(),
+      areaTo: newValue[1].toString(),
+    });
   };
 
   const handleChange2 = (
@@ -167,32 +157,17 @@ const HomePage = () => {
       return;
     }
 
-    if (activeThumb === 0) {
-      setValueKhoangGia([
-        Math.min(newValue[0], valueKhoanGia[1] - minDistance2),
-        valueKhoanGia[1],
-      ]);
-      setFilterSearch({
-        ...filterSearch,
-        priceFrom: valueKhoanGia[0].toString(),
-        priceTo: valueKhoanGia[1].toString(),
-      });
-    } else {
-      setValueKhoangGia([
-        valueKhoanGia[0],
-        Math.max(newValue[1], valueKhoanGia[0] + minDistance2),
-      ]);
-      setFilterSearch({
-        ...filterSearch,
-        priceFrom: valueKhoanGia[0].toString(),
-        priceTo: valueKhoanGia[1].toString(),
-      });
-    }
+    setValueKhoangGia([newValue[0], newValue[1]]);
+    setFilterSearch({
+      ...filterSearch,
+      priceFrom: newValue[0].toString(),
+      priceTo: newValue[1].toString(),
+    });
   };
 
   const handleSearchCompare = () => {
     router.push(
-      `/compare-search?projectId=${filterSearch.projectId}&&projectTypeId=${filterSearch.projectTypeId}&&priceTo=${filterSearch.priceTo}&&priceFrom=${filterSearch.priceFrom}&&areaTo=${filterSearch.areaTo}&&areaFrom=${filterSearch.areaFrom}&&categoryId=${filterSearch.categoryId}`
+      `/compare-search?projectId=${filterSearch.projectId}&projectTypeId=${filterSearch.projectTypeId}&priceTo=${filterSearch.priceTo}&priceFrom=${filterSearch.priceFrom}&areaTo=${filterSearch.areaTo}&areaFrom=${filterSearch.areaFrom}&categoryId=${filterSearch.categoryId}`
     );
   };
 

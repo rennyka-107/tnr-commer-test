@@ -1,4 +1,4 @@
-import { IconHeartFilled, IconHeartProduct, IconX } from "@components/Icons";
+import { IconAddHearProduct, IconHeartProduct, IconX } from "@components/Icons";
 import IconArrowRight from "@components/Icons/IconArrowRight";
 import {
   ButtonAction,
@@ -12,17 +12,14 @@ import {
 } from "@components/StyledLayout/styled";
 import styled from "@emotion/styled";
 import { Box, CardMedia } from "@mui/material";
-import React, { MouseEventHandler, useState } from "react";
-import { useSelector } from "react-redux";
+import React, { MouseEventHandler, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../store/store";
 import { CompareValueFormat } from "utils/CompareValueFormat";
 import { useRouter } from "next/router";
-import { ToggleProductFavorite } from "../../../../pages/api/favorite";
 import useAuth from "hooks/useAuth";
-import {
-  removeCompareItem,
-  removeComparePopUpItem,
-} from "../../../../store/productCompareSlice";
+import { removeComparePopUpItem } from "../../../../store/productCompareSlice";
+import useFavourite from "hooks/useFavourite";
 
 type Props = {
   onClick?: MouseEventHandler<HTMLButtonElement>;
@@ -65,13 +62,22 @@ const IconWrapper = styled(Box)`
 
 const ItemCompare = ({ onClick, data }: Props) => {
   const router = useRouter();
-  const [favorite, setFavorite] = useState<boolean>(false);
+  const dispatch = useDispatch();
+  const [favorite, setFavorite] = useState<boolean>(
+    data.favouriteStatus === "0" ? false : true
+  );
   const { compareParams, compareItems } = useSelector(
     (state: RootState) => state.productCompareSlice
   );
   const { isAuthenticated } = useAuth();
+  const { addProductToFavouriteFunction } = useFavourite();
+
+  useEffect(() => {
+    setFavorite(data.favouriteStatus === "0" ? false : true);
+  }, [data.favouriteStatus]);
 
   const onRemove = () => {
+    dispatch(removeComparePopUpItem(data.productId));
     router.push({
       pathname: "/compare-product",
       query: {
@@ -80,21 +86,6 @@ const ItemCompare = ({ onClick, data }: Props) => {
           .filter((item: string) => item !== data.productId),
       },
     });
-  };
-
-  const onFavorite = async () => {
-    try {
-      const res = await ToggleProductFavorite({
-        productId: data.productId,
-        action: favorite ? 0 : 1,
-      });
-      if (res.responseCode === "00") {
-        setFavorite(!favorite);
-      }
-    } catch (e) {
-      console.error(e);
-    } finally {
-    }
   };
 
   return (
@@ -106,14 +97,31 @@ const ItemCompare = ({ onClick, data }: Props) => {
         marginBottom={"20px"}
       >
         {isAuthenticated && (
-          <IconWrapper
-            style={{ left: "210px", top: "10px" }}
-            onClick={onFavorite}
-          >
+          <IconWrapper style={{ left: "210px", top: "10px" }}>
             {favorite ? (
-              <IconHeartFilled style={{ width: "14px", height: "12px" }} />
+              <IconAddHearProduct
+                style={{
+                  cursor: "pointer",
+                  width: "14px",
+                  height: "12px",
+                }}
+                onClick={() => {
+                  addProductToFavouriteFunction(data.productId, 0);
+                  setFavorite(false);
+                }}
+              />
             ) : (
-              <IconHeartProduct style={{ width: "14px", height: "12px" }} />
+              <IconHeartProduct
+                style={{
+                  cursor: "pointer",
+                  width: "14px",
+                  height: "12px",
+                }}
+                onClick={() => {
+                  addProductToFavouriteFunction(data.productId, 1);
+                  setFavorite(true);
+                }}
+              />
             )}
           </IconWrapper>
         )}

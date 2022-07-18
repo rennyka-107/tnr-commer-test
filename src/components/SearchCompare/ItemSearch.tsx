@@ -14,6 +14,7 @@ import {
   comparePopUpItemI,
 } from "../../../store/productCompareSlice";
 import { RootState } from "../../../store/store";
+import { useRouter } from "next/router";
 
 interface searchProps {
   data?: searchLocationResponse[];
@@ -30,23 +31,29 @@ const ProductWrap = styled.div`
 `;
 const ItemSearch = ({ data }: searchProps) => {
   const dispatch = useDispatch();
-  const { comparePopUpItem } = useSelector(
+  const router = useRouter();
+  const { comparePopUpItem, isValid } = useSelector(
     (state: RootState) => state.productCompareSlice
   );
 
   const onCompare = (product: searchLocationResponse) => () => {
+    if (!isValid) return;
     const local: comparePopUpItemI[] = _.cloneDeep(comparePopUpItem);
-    if(local){
-      if(local.length >= 3 || local.find(item => item.productId === product.productId)) return;
+    if (local) {
+      if (
+        local.length >= 3 ||
+        local.find((item) => item.productId === product.productId)
+      )
+        return;
       local.push({
         thumbnail: product.thumbnail,
-  projectName: product.projectName,
-  name: product.name,
-  productId: product.productId,
-      })
-      dispatch(getComparePopUpItem(local))
-    }else{
-      dispatch(getComparePopUpItem([product]))
+        projectName: product.projectName,
+        name: product.name,
+        productId: product.productId,
+      });
+      dispatch(getComparePopUpItem(local));
+    } else {
+      dispatch(getComparePopUpItem([product]));
     }
   };
 
@@ -61,23 +68,32 @@ const ItemSearch = ({ data }: searchProps) => {
             title={product.name}
             projectName={product.projectName}
             subTitle={product.location}
+            activeFavourite={true}
+            favouriteStatus={product.favouriteStatus}
             dataItem={{
               item1: product.landArea,
               item2: product.numBath,
               item3: product.numBed,
               item4: product.doorDirection,
             }}
-			priceListed={product.totalPrice}
-			projectTypeCode={product.projectTypeCode}
-			minFloor={product.minFloor}
-			maxFloor={product.maxFloor}
+            priceListed={product.totalPrice}
+            projectTypeCode={product.projectTypeCode}
+            minFloor={product.minFloor}
+            maxFloor={product.maxFloor}
             priceSub={product.unitPrice}
             ticketCard={product.category}
             onCompare={onCompare(product)}
-            isCompare={comparePopUpItem.filter(item => item.productId === product.productId).length > 0}
+            isCompare={
+              comparePopUpItem.filter(
+                (item) => item.productId === product.productId
+              ).length > 0
+            }
           />
         ))}
-        <ComparePopUp/>
+        <ComparePopUp
+          projectId={router.query.projectId as string}
+          projectTypeId={router.query.projectTypeId as string}
+        />
       </ProductWrap>
     </>
   );

@@ -20,7 +20,7 @@ const StyledUpContainer = styled.div`
   border-radius: 8px;
   text-align: center;
   padding: 10px;
-  z-index: 10000;
+  z-index: 500;
   box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.2);
 `;
 const ScrollPage = () => {
@@ -35,7 +35,7 @@ const ScrollPage = () => {
           right: 0,
           top: "40%",
           marginRight: 20,
-          zIndex: 10,
+          zIndex: 500,
         }}
       >
         <StyledPhoneContainer style={{ marginBottom: 9 }}>
