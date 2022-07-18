@@ -20,6 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../store/store";
 import { priceRange } from "constant/filter";
 import { useRouter } from "next/router";
+import LocalStorage from "utils/LocalStorage";
 
 type Props = {
   onClick?: MouseEventHandler<HTMLButtonElement>;
@@ -125,12 +126,14 @@ const ItemImport = ({ onChangeFilter, filter }: Props) => {
 
   const handleOnClick = () => {
     // setOpen(true);
+    const param = LocalStorage.get("compare-url");
+    if (!param) return;
     router.push({
       pathname: `/compare-search`,
       query: {
-        ...filter
-      }
-    })
+        ...param,
+      },
+    });
   };
 
   const handleClickScreen = () => {
@@ -155,10 +158,10 @@ const ItemImport = ({ onChangeFilter, filter }: Props) => {
     router.push({
       pathname: `/compare-search`,
       query: {
-        ...filter
-      }
-    })
-  }
+        ...filter,
+      },
+    });
+  };
 
   return (
     <Box maxWidth={289}>

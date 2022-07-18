@@ -40,15 +40,19 @@ const CompareProduct = () => {
       if (res.responseCode === "00") {
         dispatch(
           getCompareItem(
-            Array.from(router.query.productId, (item) =>
-              res.responseData.data.find((prob) => prob.productId === item)
+            Array.from(
+              typeof router.query.productId === "string"
+                ? [router.query.productId]
+                : router.query.productId,
+              (item) =>
+                res.responseData.data.find((prob) => prob.productId === item)
             )
           )
         );
         dispatch(getCompareParam(res.responseData.compareProduct));
-        if (comparePopUpItem.length > 0) {
-          dispatch(removeAllComparePopUpItem({}));
-        }
+        // if (comparePopUpItem.length > 0) {
+        //   dispatch(removeAllComparePopUpItem({}));
+        // }
       }
     }
   };

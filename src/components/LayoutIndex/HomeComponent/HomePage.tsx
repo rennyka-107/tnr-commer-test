@@ -83,11 +83,11 @@ const HomePage = () => {
     provinceId: "",
     projectTypeId: "",
     projectId: "",
-    priceFrom: "",
-    priceTo: "",
+    priceFrom: "1",
+    priceTo: "20",
     categoryId: "",
-    areaFrom: "",
-    areaTo: "",
+    areaFrom: "30",
+    areaTo: "200",
   });
 
   const { listMenuBarType, listMenuBarProjectType } = useSelector(

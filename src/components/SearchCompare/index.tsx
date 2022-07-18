@@ -19,6 +19,7 @@ import SelectDienTich from "@components/CustomComponent/SelectInputComponent/Sel
 import SilderGroup from "@components/CustomComponent/SliderGroupComponent";
 import SliderComponent from "@components/CustomComponent/SliderComponent";
 import { FormatFilterText } from "utils/FormatText";
+import LocalStorage from "utils/LocalStorage";
 
 type dataProps = {
   searchData?: searchLocationResponse[];
@@ -98,10 +99,10 @@ const SearchCompare = ({
     provinceId: provinceId,
     projectTypeId: projectTypeId,
     projectId: projectId,
-    priceFrom: priceFrom,
-    priceTo: priceTo,
-    areaFrom: areaFrom,
-    areaTo: areaTo,
+    priceFrom: (priceFrom as string) ?? "1",
+    priceTo: (priceTo as string) ?? "20",
+    areaFrom: (areaFrom as string) ?? "30",
+    areaTo: (areaTo as string) ?? "200",
   });
   const [valueKhoangGia, setValueKhoangGia] = useState([
     {
@@ -282,11 +283,11 @@ const SearchCompare = ({
       target: { value },
     } = event;
     setDataKhoangGia(value);
-    setFilterSearch({
-      ...filterSearch,
-      priceFrom: value[0].toString(),
-      priceTo: value[1].toString(),
-    });
+    // setFilterSearch({
+    //   ...filterSearch,
+    //   priceFrom: value[0].toString(),
+    //   priceTo: value[1].toString(),
+    // });
   };
 
   const handleChangeLocation = (
@@ -307,24 +308,45 @@ const SearchCompare = ({
 
     if (value.length === 0) {
       setDataDienTich(value);
-      setFilterSearch({
-        ...filterSearch,
-        areaFrom: "",
-        areaTo: "",
-      });
+      // setFilterSearch({
+      //   ...filterSearch,
+      //   areaFrom: "20",
+      //   areaTo: "200",
+      // });
     } else {
       setDataDienTich(value);
-      setFilterSearch({
-        ...filterSearch,
-        areaFrom: value[0].toString(),
-        areaTo: value[1].toString(),
-      });
+      // setFilterSearch({
+      //   ...filterSearch,
+      //   areaFrom: value[0].toString(),
+      //   areaTo: value[1].toString(),
+      // });
     }
+  };
+
+  const onFilterApply = () => {
+    setFilterSearch({
+      ...filterSearch,
+      areaFrom: dataDienTich[0].toString(),
+      areaTo: dataDienTich[1].toString(),
+      priceFrom: dataKhoangGia[0].toString(),
+      priceTo: dataKhoangGia[1].toString(),
+    });
+  };
+
+  const onFilterCancel = () => {
+    setDataDienTich([
+      parseInt(filterSearch.areaFrom),
+      parseInt(filterSearch.areaTo),
+    ]);
+    setDataKhoangGia([
+      parseInt(filterSearch.priceFrom),
+      parseInt(filterSearch.priceTo),
+    ]);
   };
 
   const handleSearch = () => {
     router.push(
-      `/compare-search?projectId=${filterSearch.projectId}&&projectTypeId=${filterSearch.projectTypeId}&&priceTo=${filterSearch.priceTo}&&priceFrom=${filterSearch.priceFrom}&&areaTo=${filterSearch.areaTo}&&areaFrom=${filterSearch.areaFrom}&&categoryId=${filterSearch.categoryId}`
+      `/compare-search?projectId=${filterSearch.projectId}&projectTypeId=${filterSearch.projectTypeId}&priceTo=${filterSearch.priceTo}&priceFrom=${filterSearch.priceFrom}&areaTo=${filterSearch.areaTo}&areaFrom=${filterSearch.areaFrom}&categoryId=${filterSearch.categoryId}`
     );
   };
 
@@ -369,6 +391,8 @@ const SearchCompare = ({
                 hasValue: Boolean(filterSearch.areaFrom),
               },
             ])}
+            handleApply={onFilterApply}
+            handleCancel={onFilterCancel}
           >
             <SliderComponent
               label="Khoảng giá"
