@@ -9,6 +9,7 @@ import SliderSearchKhoangGia from "@components/CustomComponent/SliderComponent/S
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../store/store";
+import { getProjectByType } from "../../../../pages/api/projectApi";
 
 const DynamicBanner = dynamic(() => import("./BannerIndex"), {
   loading: () => <p>...</p>,
@@ -77,6 +78,7 @@ const HomePage = () => {
   const [projectName, setProjectName] = useState<string[]>([]);
   const [valueDienTich, setValueDientich] = useState<number[]>([30, 200]);
   const [valueKhoanGia, setValueKhoangGia] = useState<number[]>([1, 20]);
+  const [projectList, setProjectList] = useState<any[]>([]);
 
   const [filterSearch, setFilterSearch] = useState({
     textSearch: "",
@@ -90,25 +92,37 @@ const HomePage = () => {
     areaTo: "200",
   });
 
-  const { listMenuBarType, listMenuBarProjectType } = useSelector(
+  const { listMenuBarProjectType } = useSelector(
     (state: RootState) => state.menubar
   );
+
+  const fetchProjectByType = async (typeId: string) => {
+    try {
+      const res = await getProjectByType(typeId);
+      if (res.responseCode === "00") {
+        setProjectList(res.responseData);
+        if (res.responseData.length > 0) {
+          setProjectName(res.responseData[0].projectName.split(","));
+          setFilterSearch({
+            ...filterSearch,
+            projectId: res.responseData[0].projectId,
+            projectTypeId: typeId,
+          });
+        }
+      }
+      console.log(res);
+    } catch (e) {
+      console.error(e);
+    } finally {
+    }
+  };
 
   useEffect(() => {
     if (listMenuBarProjectType?.length > 0) {
       setProjectTypeName(listMenuBarProjectType[0].name.split(","));
+      fetchProjectByType(listMenuBarProjectType[0].id);
     }
-    if (listMenuBarType?.length > 0) {
-      setProjectName(listMenuBarType[0].name.split(","));
-    }
-    if (listMenuBarProjectType?.length > 0 && listMenuBarType?.length > 0) {
-      setFilterSearch({
-        ...filterSearch,
-        projectTypeId: listMenuBarProjectType[0].id,
-        projectId: listMenuBarType[0].id,
-      });
-    }
-  }, [listMenuBarProjectType, listMenuBarType]);
+  }, [listMenuBarProjectType]);
 
   const handleSelectProject = (
     event: SelectChangeEvent<typeof projectTypeName>
@@ -118,7 +132,8 @@ const HomePage = () => {
     } = event;
     const data = listMenuBarProjectType.filter((x) => x.name === value);
     setProjectTypeName(typeof value === "string" ? value.split(",") : value);
-    setFilterSearch({ ...filterSearch, projectTypeId: data[0].id });
+    // setFilterSearch({ ...filterSearch, projectTypeId: data[0].id });
+    fetchProjectByType(data[0].id);
   };
 
   const handleSelectProjectName = (
@@ -127,9 +142,9 @@ const HomePage = () => {
     const {
       target: { value },
     } = event;
-    const data = listMenuBarType.filter((x) => x.name === value);
+    const data = projectList.filter((x) => x.projectName === value);
     setProjectName(typeof value === "string" ? value.split(",") : value);
-    setFilterSearch({ ...filterSearch, projectId: data[0].id });
+    setFilterSearch({ ...filterSearch, projectId: data[0].projectId });
   };
 
   const handleChange1 = (
@@ -229,7 +244,9 @@ const HomePage = () => {
             />
             <SelectInputComponent
               label="Dự án"
-              data={listMenuBarType}
+              data={projectList.map((item) => {
+                return { id: item.projectId, name: item.projectName };
+              })}
               value={projectName}
               onChange={handleSelectProjectName}
               placeholder="Chọn dự án"

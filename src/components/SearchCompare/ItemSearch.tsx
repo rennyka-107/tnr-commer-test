@@ -50,6 +50,8 @@ const ItemSearch = ({ data }: searchProps) => {
         projectName: product.projectName,
         name: product.name,
         productId: product.productId,
+        projectId: product.projectId,
+        projectType: product.projectTypeId,
       });
       dispatch(getComparePopUpItem(local));
     } else {

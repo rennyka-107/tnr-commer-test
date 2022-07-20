@@ -45,7 +45,7 @@ const FavoriteProducts = () => {
 return;
     }else {
 		notification({
-			severity: "success",
+			severity: "warning",
 			title: `Chưa có tài khoản`,
 			message: `Bạn cần tạo tài khoản để tiếp tục`,
 		  });

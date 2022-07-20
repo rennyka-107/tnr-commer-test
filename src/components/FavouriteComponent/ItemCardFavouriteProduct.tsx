@@ -5,10 +5,12 @@ import styled from "@emotion/styled";
 import PaddingComponent from "@components/CustomComponent/PagingComponent";
 import Link from "next/link";
 import { ProductsResponse } from "interface/product";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 import { Grid } from "@mui/material";
 import useAddToCart from "hooks/useAddToCart";
 import ContainerSearch from "@components/Container/ContainerSearch";
+import { useDispatch } from "react-redux";
+import { getComparePopUpItem } from "../../../store/productCompareSlice";
 
 interface ProductsProps {
   data?: ProductsResponse[];
@@ -24,6 +26,43 @@ const ProductWrap = styled.div`
 `;
 const ItemCardFavouriteProduct = ({ data }: ProductsProps) => {
   const addToCart = useAddToCart();
+  const router = useRouter();
+  const dispatch = useDispatch();
+
+  const onCompare =
+    (
+      projectId: string,
+      projectType: string,
+      thumbnail: string,
+      projectName: string,
+      name: string,
+      productId: string
+    ) =>
+    () => {
+      dispatch(
+        getComparePopUpItem([
+          {
+            thumbnail: thumbnail,
+            projectName: projectName,
+            name: name,
+            productId: productId,
+            projectId: projectId,
+            projectType: projectType,
+          },
+        ])
+      );
+      router.push({
+        pathname: "/compare-search",
+        query: {
+          projectId: projectId,
+          projectTypeId: projectType,
+          priceTo: "20",
+          priceFrom: "1",
+          areaTo: "200",
+          areaFrom: "30",
+        },
+      });
+    };
 
   return (
     <>
@@ -36,7 +75,7 @@ const ItemCardFavouriteProduct = ({ data }: ProductsProps) => {
               src={product.thumbnail}
               title={product.name}
               subTitle={product.projectLocation}
-			  projectName={product.projectName}
+              projectName={product.projectName}
               dataItem={{
                 item1: product.landArea,
                 item2: product.numBath,
@@ -50,21 +89,7 @@ const ItemCardFavouriteProduct = ({ data }: ProductsProps) => {
               priceSub={product.unitPrice}
               ticketCard={product.category}
               activeSoSanh={true}
-              onCompare={() => {
-                let prods = [];
-                if (typeof window !== "undefined") {
-                  const local = localStorage.getItem("compare-item");
-                  if (local !== null) {
-                    prods = [...JSON.parse(local)];
-                  } else {
-                    localStorage.setItem("compare-item", JSON.stringify(prods));
-                  }
-                }
-                prods.unshift(product);
-                if (prods.length > 3) prods.pop();
-                localStorage.setItem("compare-item", JSON.stringify(prods));
-                Router.push("/compare-product");
-              }}
+              onCompare={onCompare(product.projectId, product.projectTypeId, product.thumbnail, product.projectName, product.name, product.productionId)}
               onClick={() => addToCart(product.id)}
               buyDisabled={product.paymentStatus !== 2}
             />
