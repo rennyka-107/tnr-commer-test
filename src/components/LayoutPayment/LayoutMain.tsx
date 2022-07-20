@@ -1,6 +1,9 @@
 import Container from "@components/Container";
-import { Grid, Typography } from "@mui/material";
+import { IconEmptyShoppingCart } from "@components/Icons";
+import styled from "@emotion/styled";
+import { Button, Grid, Stack, Typography } from "@mui/material";
 import isEmpty from "lodash.isempty";
+import { useRouter } from "next/router";
 import React, { Dispatch, SetStateAction } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../store/store";
@@ -12,23 +15,55 @@ type Props = {
   setScopeRender: Dispatch<SetStateAction<string>>;
 };
 
+const StyledButton = styled(Button)`
+  padding: 16px 32px;
+  gap: 32px;
+  background: #1b3459;
+  border-radius: 8px;
+  width: 339px;
+  height: 53px;
+  text-transform: none;
+  :hover {
+    background: #1b3459;
+  }
+`;
+
+const StyledTitle = styled(Typography)`
+  color: #1b3459;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 16px;
+  text-align: center;
+`;
+
 const LayoutPayment = ({ setScopeRender }: Props) => {
   const { cart } = useSelector((state: RootState) => state.carts);
+  const router = useRouter();
+
+  const onAdd = () => {
+    router.push(
+      `/search?Type=Advanded&textSearch=&provinceId=&projectTypeId=&projectId=&priceFrom=&priceTo=&areaFrom=null&areaTo=null`
+    );
+  };
 
   return isEmpty(cart) ? (
     <Container title={"Giỏ hàng"}>
-      <Grid container columnSpacing={"30px"}>
-        <Typography
-          variant="h6"
-          sx={{
-            fontStyle: "italic",
-            width: "100%",
-            textAlign: "center",
-          }}
-        >
-          Giỏ hàng đang trống
-        </Typography>
-      </Grid>
+      <Stack
+        direction="column"
+        justifyContent="center"
+        alignItems="center"
+        spacing={4}
+      >
+        <IconEmptyShoppingCart />
+        <StyledTitle>
+          Chưa có bất động sản nào trong giỏ hàng
+        </StyledTitle>
+        <StyledButton variant="contained" onClick={onAdd}>
+          Tìm bất động sản ngay
+        </StyledButton>
+      </Stack>
     </Container>
   ) : (
     <Container title={"Thanh toán"}>

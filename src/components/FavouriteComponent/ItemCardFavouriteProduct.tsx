@@ -6,11 +6,12 @@ import PaddingComponent from "@components/CustomComponent/PagingComponent";
 import Link from "next/link";
 import { ProductsResponse } from "interface/product";
 import Router, { useRouter } from "next/router";
-import { Grid } from "@mui/material";
+import { Button, Grid, Stack, Typography } from "@mui/material";
 import useAddToCart from "hooks/useAddToCart";
 import ContainerSearch from "@components/Container/ContainerSearch";
 import { useDispatch } from "react-redux";
 import { getComparePopUpItem } from "../../../store/productCompareSlice";
+import { IconEmptyFav } from "@components/Icons";
 
 interface ProductsProps {
   data?: ProductsResponse[];
@@ -24,6 +25,30 @@ const ProductWrap = styled.div`
   gap: 31px;
   grid-template-columns: repeat(4, 1fr);
 `;
+
+const StyledButton = styled(Button)`
+  padding: 16px 32px;
+  gap: 32px;
+  background: #1b3459;
+  border-radius: 8px;
+  width: 339px;
+  height: 53px;
+  text-transform: none;
+  :hover {
+    background: #1b3459;
+  }
+`;
+
+const StyledTitle = styled(Typography)`
+  color: #1b3459;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 16px;
+  text-align: center;
+`;
+
 const ItemCardFavouriteProduct = ({ data }: ProductsProps) => {
   const addToCart = useAddToCart();
   const router = useRouter();
@@ -64,37 +89,67 @@ const ItemCardFavouriteProduct = ({ data }: ProductsProps) => {
       });
     };
 
+  const onAdd = () => {
+    router.push(
+      `/search?Type=Advanded&textSearch=&provinceId=&projectTypeId=&projectId=&priceFrom=&priceTo=&areaFrom=null&areaTo=null`
+    );
+  };
+
   return (
     <>
       <ContainerSearch title={"Sản phẩm yêu thích"} checkBread={true}>
-        <ProductWrap>
-          {data?.map((product, index) => (
-            <ItemProductCard
-              key={index}
-              id={product.productId}
-              src={product.thumbnail}
-              title={product.name}
-              subTitle={product.projectLocation}
-              projectName={product.projectName}
-              dataItem={{
-                item1: product.landArea,
-                item2: product.numBath,
-                item3: product.numBed,
-                item4: product.doorDirection,
-              }}
-              projectTypeCode={product.projectTypeCode}
-              minFloor={product.minFloor}
-              maxFloor={product.maxFloor}
-              priceListed={product.totalPrice}
-              priceSub={product.unitPrice}
-              ticketCard={product.category}
-              activeSoSanh={true}
-              onCompare={onCompare(product.projectId, product.projectTypeId, product.thumbnail, product.projectName, product.name, product.productionId)}
-              onClick={() => addToCart(product.id)}
-              buyDisabled={product.paymentStatus !== 2}
-            />
-          ))}
-        </ProductWrap>
+        {data.length > 0 ? (
+          <ProductWrap>
+            {data?.map((product, index) => (
+              <ItemProductCard
+                key={index}
+                id={product.productId}
+                src={product.thumbnail}
+                title={product.name}
+                subTitle={product.projectLocation}
+                projectName={product.projectName}
+                dataItem={{
+                  item1: product.landArea,
+                  item2: product.numBath,
+                  item3: product.numBed,
+                  item4: product.doorDirection,
+                }}
+                projectTypeCode={product.projectTypeCode}
+                minFloor={product.minFloor}
+                maxFloor={product.maxFloor}
+                priceListed={product.totalPrice}
+                priceSub={product.unitPrice}
+                ticketCard={product.category}
+                activeSoSanh={true}
+                onCompare={onCompare(
+                  product.projectId,
+                  product.projectTypeId,
+                  product.thumbnail,
+                  product.projectName,
+                  product.name,
+                  product.productionId
+                )}
+                onClick={() => addToCart(product.id)}
+                buyDisabled={product.paymentStatus !== 2}
+              />
+            ))}
+          </ProductWrap>
+        ) : (
+          <Stack
+            direction="column"
+            justifyContent="center"
+            alignItems="center"
+            spacing={4}
+          >
+            <IconEmptyFav />
+            <StyledTitle>
+              Chưa có bất động sản nào được quý khách đưa vào yêu thích
+            </StyledTitle>
+            <StyledButton variant="contained" onClick={onAdd}>
+              Thêm bất động sản yêu thích ngay
+            </StyledButton>
+          </Stack>
+        )}
       </ContainerSearch>
     </>
   );

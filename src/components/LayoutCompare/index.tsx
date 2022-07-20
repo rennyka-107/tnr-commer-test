@@ -77,10 +77,6 @@ const LayoutCompare = (props: Props) => {
     });
   };
 
-  useEffect(() => {
-    console.log(compareItems)
-  })
-
   const renderDataChildren = ({ data }) => {
     return (
       <React.Fragment>

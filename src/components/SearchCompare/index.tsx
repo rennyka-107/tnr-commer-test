@@ -211,21 +211,25 @@ const SearchCompare = ({
     });
   }, [router.query.textSearch]);
 
-  const fetchProjectByType = async (typeId: string) => {
+  const fetchProjectByType = async (
+    typeId: string,
+    updateProject?: boolean
+  ) => {
     try {
       const res = await getProjectByType(typeId);
       if (res.responseCode === "00") {
         setProjectList(res.responseData);
         if (res.responseData.length > 0) {
-          setProductName(res.responseData[0].projectName.split(","));
+          if (updateProject) {
+            setProductName(res.responseData[0].name.split(","));
+          }
           setFilterSearch({
             ...filterSearch,
-            projectId: res.responseData[0].projectId,
+            projectId: updateProject ? res.responseData[0].id : projectId,
             projectTypeId: typeId,
           });
         }
       }
-      console.log(res);
     } catch (e) {
       console.error(e);
     } finally {
@@ -290,7 +294,7 @@ const SearchCompare = ({
     const data = listMenuBarProjectType.filter((x) => x.name === value);
     setProjectName(typeof value === "string" ? value.split(",") : value);
     // setFilterSearch({ ...filterSearch, projectTypeId: data[0].id });
-    fetchProjectByType(data[0].id);
+    fetchProjectByType(data[0].id, true);
   };
 
   const handleSelectProduct = (
@@ -299,9 +303,9 @@ const SearchCompare = ({
     const {
       target: { value },
     } = event;
-    const data = projectList.filter((x) => x.projectName === value);
+    const data = projectList.filter((x) => x.name === value);
     setProductName(typeof value === "string" ? value.split(",") : value);
-    setFilterSearch({ ...filterSearch, projectId: data[0].projectId });
+    setFilterSearch({ ...filterSearch, projectId: data[0].id });
   };
 
   const handleChangeKhoangGia = (event: any) => {
@@ -394,9 +398,7 @@ const SearchCompare = ({
           />
           <SelectSeach
             label="Chọn dự án"
-            data={projectList.map((item) => {
-              return { id: item.projectId, name: item.projectName };
-            })}
+            data={projectList}
             value={productName}
             onChange={handleSelectProduct}
             placeholder="Chọn dự án"
