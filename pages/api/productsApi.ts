@@ -2,9 +2,9 @@ import { PTGType, ProductsType, ParamsProducts } from "interface/product";
 import { CommonResponse, ResponseTypeAPI } from "type/common";
 import HttpClient from "utils/HttpClient";
 export interface BodyListProductII {
-	projectTypeId: any;
-	provinceId:any;
-	projectId: any;
+  projectTypeId: any;
+  provinceId: any;
+  projectId: any;
 }
 export const getListProductApi = async (params: ParamsProducts, data: any) => {
   return HttpClient.post<ResponseTypeAPI, CommonResponse>(
@@ -18,36 +18,32 @@ export const searchListProductByProjectIdApi = async (
   params: ParamsProducts,
   data: any
 ) => {
-
-	const newDataSearch = {
-		
-		projectTypeId: data.projectTypeId === "1" ? "" : data.projectTypeId,
-		provinceId: data.provinceId === "1" ? "" : data.provinceId,
-	  };
-    return HttpClient.post<any, any>(
-      `/api/product/information/advance/search?page=${params.page}&size=${params.size}`,
-      newDataSearch,
-      { withToken: false }
-    );
+  const newDataSearch = {
+    projectTypeId: data.projectTypeId === "1" ? "" : data.projectTypeId,
+    provinceId: data.provinceId === "1" ? "" : data.provinceId,
+  };
+  return HttpClient.post<any, any>(
+    `/api/product/information/advance/search?page=${params.page}&size=${params.size}`,
+    newDataSearch,
+    { withToken: false }
+  );
 };
 
 export const searchListProductByProjectIdApiII = async (
-	params: ParamsProducts,
-	data: any
-  ) => {
-	const newDataSearch = {
-		projectId: data.projectId,
-		projectTypeId: data.projectTypeId === "1" ? "" : data.projectTypeId,
-		provinceId: data.provinceId === "1" ? "" : data.provinceId,
-	  };
-	  return HttpClient.post<any, any>(
-		`/api/product/information/advance/search?page=${params.page}&size=${params.size}`,
-		newDataSearch,
-		{ withToken: false }
-	  );
+  params: ParamsProducts,
+  data: any
+) => {
+  const newDataSearch = {
+    projectId: data.projectId,
+    projectTypeId: data.projectTypeId === "1" ? "" : data.projectTypeId,
+    provinceId: data.provinceId === "1" ? "" : data.provinceId,
   };
-  
-
+  return HttpClient.post<any, any>(
+    `/api/product/information/advance/search?page=${params.page}&size=${params.size}`,
+    newDataSearch,
+    { withToken: false }
+  );
+};
 
 export const getProducById = async (id: any) => {
   return HttpClient.post<any, CommonResponse>(`/api/product/information/${id}`);
@@ -109,4 +105,11 @@ export const getProductOrderConditionApi = async () => {
 
 export const updateViewProduct = async (id: any) => {
   return HttpClient.post<any, CommonResponse>(`api-product-view/${id}`);
+};
+
+export const getRecentlyViewed = async (params: ParamsProducts, data: any) => {
+  return HttpClient.post<any, CommonResponse>(
+    `/api-project/product-recently-viewed-search`,
+    data
+  );
 };

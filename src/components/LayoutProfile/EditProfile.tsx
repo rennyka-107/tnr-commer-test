@@ -4,6 +4,7 @@ import CustomButton from "@components/CustomComponent/CustomButton";
 import HorizontalLine from "@components/CustomComponent/HorizontalLine";
 import Row from "@components/CustomComponent/Row";
 import ControllerDatePicker from "@components/Form/ControllerDatePicker";
+import ControllerReactDatePicker from "@components/Form/ControllerReactDatePicker";
 import ControllerSelectAutoComplete from "@components/Form/ControllerSelectAutoComplete";
 import ControllerTextField from "@components/Form/ControllerTextField";
 import DistricSelect from "@components/Form/DistrictSelect";
@@ -164,14 +165,14 @@ const EditProfile = () => {
         customerTypeId: data.customerTypeId,
         appellation: data.appellation,
         fullname: data.fullname,
-        birth: data.birth && data.birth.split("-").reverse().join("-"),
+        birth: data.birth,
         phone: data.phone,
         email: data.email,
         idNumber: data.idNumber,
         idReceivePlace: data.idReceivePlace,
         idReceiveDate:
           data.idReceiveDate &&
-          data.idReceiveDate.split("-").reverse().join("-"),
+          data.idReceiveDate,
         domicile: data.domicile,
         address: data.address,
         avatar: data.avatar,
@@ -181,6 +182,7 @@ const EditProfile = () => {
         district: data?.district ? Number(data?.district) : "",
         province: data?.province ? Number(data?.province) : "",
         businessRegistration: data?.businessRegistration,
+        businessRegistrationName: data?.businessRegistrationName
       });
     },
 
@@ -233,14 +235,14 @@ const EditProfile = () => {
       customerTypeId: values.customerTypeId,
       appellation: values.appellation,
       fullname: values.fullname,
-      birth: values.birth && values.birth.split("-").reverse().join("-"),
+      birth: values.birth,
       phone: values.phone,
       email: values.email,
       idNumber: values.idNumber,
       idReceivePlace: values.idReceivePlace,
       idReceiveDate:
         values.idReceiveDate &&
-        values.idReceiveDate.split("-").reverse().join("-"),
+        values.idReceiveDate,
       domicile: values.domicile,
       address: values.address,
       avatar: values.avatar,
@@ -352,10 +354,11 @@ const EditProfile = () => {
           </Column>
           <Column>
             <FormGroup sx={{ mb: 2 }} fullWidth>
-              <ControllerDatePicker
+              <ControllerReactDatePicker
                 control={control}
                 name="birth"
                 label="Ngày sinh"
+                maxDate={new Date()}
               />
             </FormGroup>
           </Column>
@@ -413,7 +416,7 @@ const EditProfile = () => {
             <FormGroup sx={{ mb: 2 }} fullWidth>
               <TextFileUpload>Đính kèm giấy CN ĐKDN</TextFileUpload>
               <AttachWrapper>
-                {!!getValues("businessRegistration") && (
+                {!!getValues("businessRegistrationName") && (
                   <a
                     href={getValues("businessRegistration")}
                     target="_blank"
@@ -421,7 +424,7 @@ const EditProfile = () => {
                     download
                   >
                     <UploadButton>
-                      {getNameFile(getValues("businessRegistration"))}
+                      {getNameFile(getValues("businessRegistrationName"))}
                       &nbsp;&nbsp;
                       <IconDownloadPTG />
                     </UploadButton>
@@ -465,10 +468,11 @@ const EditProfile = () => {
           </Column>
           <Column>
             <FormGroup sx={{ mb: 2 }} fullWidth>
-              <ControllerDatePicker
+              <ControllerReactDatePicker
                 control={control}
                 name="idReceiveDate"
                 label="Ngày cấp"
+                maxDate={new Date()}
               />
             </FormGroup>
           </Column>

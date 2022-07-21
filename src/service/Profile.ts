@@ -55,6 +55,7 @@ export interface ProfileI {
   attachPaper: string;
   fileImages?: any;
   businessRegistration?: any;
+  businessRegistrationName?: any
 }
 
 export const getContractByUser = () => {

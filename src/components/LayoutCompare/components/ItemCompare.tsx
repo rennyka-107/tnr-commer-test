@@ -20,6 +20,7 @@ import { useRouter } from "next/router";
 import useAuth from "hooks/useAuth";
 import { removeComparePopUpItem } from "../../../../store/productCompareSlice";
 import useFavourite from "hooks/useFavourite";
+import useAddToCart from "hooks/useAddToCart";
 
 type Props = {
   onClick?: MouseEventHandler<HTMLButtonElement>;
@@ -171,7 +172,7 @@ const ItemCompare = ({ onClick, data }: Props) => {
               justifyContent: "center",
               alignItems: "center",
               backgroundColor:
-                data?.paymentStatus !== "2" ? "#FFFF" : " #ea242a",
+                data?.paymentStatus === "2" && " #ea242a",
             }}
             onClick={onClick}
             disabled={data?.paymentStatus !== "2"}

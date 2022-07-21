@@ -131,7 +131,7 @@ export default function RightListProduct() {
               mt: 2,
               display: "flex",
               overflowX: "auto",
-              width: "500px",
+              width: "100%",
               minHeight: 70,
             }}
           >
@@ -141,66 +141,7 @@ export default function RightListProduct() {
               }
             })}
           </Box>
-          {!isEmpty(Target) && Target.type === "1" && isEmpty(Target.imgMap) && !isEmpty(ListChildTarget) && (
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Typography
-                sx={{
-                  mt: 2,
-                  mb: 2,
-                  color: "#000000",
-                  lineHeight: "21px",
-                  fontSize: "18px",
-                  fontWeight: 500,
-                  width: "100%",
-                  textAlign: "center",
-                }}
-              >
-                Chọn
-              </Typography>
-              <Box
-                sx={{
-                  width: "80%",
-                  display: "flex",
-                  flexWrap: "wrap",
-                  gap: 1,
-                }}
-              >
-                {ListChildTarget.map((item) => (
-                  <Button
-                  key={item.id}
-                    onClick={() => {
-                      dispatch(
-                        setTargetShape({
-                          id: item.id,
-                          level: item.level,
-                        })
-                      );
-                    }}
-                    sx={{
-                      width: "40%",
-                      background: "#F3F4F6",
-                      mt: 1,
-                      ml: 1,
-                      color: "#0E1D34",
-                      "&:hover": {
-                        background: "#1B3459",
-                        color: "#FFFFFF",
-                      },
-                    }}
-                  >
-                    {item.name}
-                  </Button>
-                ))}
-              </Box>
-            </Box>
-          )}
+
           {!isEmpty(Target) && Target.level === "PRODUCT" ? (
             <DetailProduct
               onBack={() =>
@@ -241,6 +182,68 @@ export default function RightListProduct() {
                   {expandMore ? "Thu gọn" : "Xem thêm"}
                 </Button>
               </CardActions>
+            </Box>
+          ) : !isEmpty(Target) &&
+            Target.type === "1" &&
+            isEmpty(Target.imgMap) &&
+            !isEmpty(ListChildTarget) ? (
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Typography
+                sx={{
+                  mt: 2,
+                  mb: 2,
+                  color: "#000000",
+                  lineHeight: "21px",
+                  fontSize: "18px",
+                  fontWeight: 500,
+                  width: "100%",
+                  textAlign: "center",
+                }}
+              >
+                Chọn
+              </Typography>
+              <Box
+                sx={{
+                  width: "80%",
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: 1,
+                }}
+              >
+                {ListChildTarget.map((item) => (
+                  <Button
+                    key={item.id}
+                    onClick={() => {
+                      dispatch(
+                        setTargetShape({
+                          id: item.id,
+                          level: item.level,
+                        })
+                      );
+                    }}
+                    sx={{
+                      width: "40%",
+                      background: "#F3F4F6",
+                      mt: 1,
+                      ml: 1,
+                      color: "#0E1D34",
+                      "&:hover": {
+                        background: "#1B3459",
+                        color: "#FFFFFF",
+                      },
+                    }}
+                  >
+                    {item.name}
+                  </Button>
+                ))}
+              </Box>
             </Box>
           ) : (
             <DynamicProjectInformation {...ProjectInformation} />

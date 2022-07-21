@@ -24,6 +24,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../store/store";
 import { CompareValueFormat } from "utils/CompareValueFormat";
 import _ from "lodash";
+import useAddToCart from "hooks/useAddToCart";
 
 type Props = {};
 
@@ -58,6 +59,7 @@ const LayoutCompare = (props: Props) => {
   const { compareParams, compareItems } = useSelector(
     (state: RootState) => state.productCompareSlice
   );
+  const addToCart = useAddToCart();
   const [filterSearch, setFilterSearch] = useState({
     textSearch: "",
     provinceId: "",
@@ -106,7 +108,7 @@ const LayoutCompare = (props: Props) => {
         <ColStyled style={{ width: 293 }} key={idx}>
           <ItemCompareDynamic
             data={item}
-            onClick={() => router.push(`/payment-cart/${item.productId}`)}
+            onClick={() => addToCart(item.productId)}
           />
         </ColStyled>
       ));
