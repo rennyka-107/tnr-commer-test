@@ -174,6 +174,7 @@ export default function RightListProduct() {
               >
                 {ListChildTarget.map((item) => (
                   <Button
+                  key={item.id}
                     onClick={() => {
                       dispatch(
                         setTargetShape({

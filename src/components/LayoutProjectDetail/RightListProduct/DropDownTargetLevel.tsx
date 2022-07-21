@@ -257,7 +257,7 @@ export default function DropDownTargetLevel({ level }: any) {
           <TextField
             variant="standard"
             {...params}
-            placeholder={`Tất cả ${label}`}
+            placeholder={`Chọn`}
             InputProps={{
               ...params.InputProps,
               style: {
