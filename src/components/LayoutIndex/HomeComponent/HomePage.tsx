@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { Box } from "@mui/system";
 import SelectInputComponent from "@components/CustomComponent/SelectInputComponent";
-import { Button, SelectChangeEvent, Typography } from "@mui/material";
+import { Button, SelectChangeEvent, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import SliderComponent from "@components/CustomComponent/SliderComponent";
@@ -9,6 +9,7 @@ import SliderSearchKhoangGia from "@components/CustomComponent/SliderComponent/S
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../store/store";
+import { getProjectByType } from "../../../../pages/api/projectApi";
 
 const DynamicBanner = dynamic(() => import("./BannerIndex"), {
   loading: () => <p>...</p>,
@@ -77,6 +78,7 @@ const HomePage = () => {
   const [projectName, setProjectName] = useState<string[]>([]);
   const [valueDienTich, setValueDientich] = useState<number[]>([30, 200]);
   const [valueKhoanGia, setValueKhoangGia] = useState<number[]>([1, 20]);
+  const [projectList, setProjectList] = useState<any[]>([]);
 
   const [filterSearch, setFilterSearch] = useState({
     textSearch: "",
@@ -90,25 +92,36 @@ const HomePage = () => {
     areaTo: "200",
   });
 
-  const { listMenuBarType, listMenuBarProjectType } = useSelector(
+  const { listMenuBarProjectType } = useSelector(
     (state: RootState) => state.menubar
   );
+
+  const fetchProjectByType = async (typeId: string) => {
+    try {
+      const res = await getProjectByType(typeId);
+      if (res.responseCode === "00") {
+        setProjectList(res.responseData);
+        if (res.responseData.length > 0) {
+          setProjectName(res.responseData[0].name.split(","));
+          setFilterSearch({
+            ...filterSearch,
+            projectId: res.responseData[0].id,
+            projectTypeId: typeId,
+          });
+        }
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+    }
+  };
 
   useEffect(() => {
     if (listMenuBarProjectType?.length > 0) {
       setProjectTypeName(listMenuBarProjectType[0].name.split(","));
+      fetchProjectByType(listMenuBarProjectType[0].id);
     }
-    if (listMenuBarType?.length > 0) {
-      setProjectName(listMenuBarType[0].name.split(","));
-    }
-    if (listMenuBarProjectType?.length > 0 && listMenuBarType?.length > 0) {
-      setFilterSearch({
-        ...filterSearch,
-        projectTypeId: listMenuBarProjectType[0].id,
-        projectId: listMenuBarType[0].id,
-      });
-    }
-  }, [listMenuBarProjectType, listMenuBarType]);
+  }, [listMenuBarProjectType]);
 
   const handleSelectProject = (
     event: SelectChangeEvent<typeof projectTypeName>
@@ -118,7 +131,8 @@ const HomePage = () => {
     } = event;
     const data = listMenuBarProjectType.filter((x) => x.name === value);
     setProjectTypeName(typeof value === "string" ? value.split(",") : value);
-    setFilterSearch({ ...filterSearch, projectTypeId: data[0].id });
+    // setFilterSearch({ ...filterSearch, projectTypeId: data[0].id });
+    fetchProjectByType(data[0].id);
   };
 
   const handleSelectProjectName = (
@@ -127,7 +141,7 @@ const HomePage = () => {
     const {
       target: { value },
     } = event;
-    const data = listMenuBarType.filter((x) => x.name === value);
+    const data = projectList.filter((x) => x.name === value);
     setProjectName(typeof value === "string" ? value.split(",") : value);
     setFilterSearch({ ...filterSearch, projectId: data[0].id });
   };
@@ -186,8 +200,7 @@ const HomePage = () => {
         <DynamicOnlineSupportSale />
       </div>
       <CompareSwap>
-        {/* <div> */}
-        <div style={{ maxWidth: 350, height: "100%" }}>
+        <Stack direction={"column"}>
           <Typography
             style={{
               fontWeight: 500,
@@ -196,80 +209,74 @@ const HomePage = () => {
               margin: "45px 5px 18px 5px",
             }}
           >
-            So sánh
+            SO SÁNH
           </Typography>
-          <Typography
-            style={{
-              fontWeight: 400,
-              fontSize: 16,
-              color: "#ffffff",
-              margin: "5px 5px 28px 5px",
-            }}
-          >
-            So sánh nhanh các sản phẩm theo tiêu chí lựa chọn của bạn giúp cho
-            bạn dễ dàng chọn được sản phẩm ưng ý cho mình
-          </Typography>
-        </div>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 42,
-            alignItems: "end",
-          }}
-        >
-          <BoxStyled sx={{ minWidth: 120, padding: "0px !important" }}>
-            <SelectInputComponent
-              label="Loại bất động sản"
-              data={listMenuBarProjectType}
-              value={projectTypeName}
-              onChange={handleSelectProject}
-              placeholder="Chọn loại bất động sản"
-              style={{ margin: 0 }}
-            />
-            <SelectInputComponent
-              label="Dự án"
-              data={listMenuBarType}
-              value={projectName}
-              onChange={handleSelectProjectName}
-              placeholder="Chọn dự án"
-            />
-          </BoxStyled>
-          <div style={{ display: "flex", gap: 60 }}>
-            <SliderComponent
-              label="Diện tích (m2)"
-              onChange={handleChange1}
-              numberMin={30}
-              numberMax={200}
-              value={valueDienTich}
-              unit="m2"
-            />
-            <SliderSearchKhoangGia
-              label="Khoảng giá"
-              onChange={handleChange2}
-              numberMin={1}
-              numberMax={20}
-              value={valueKhoanGia}
-              unit="tỷ"
-            />
-          </div>
-          <div>
-            <Button
-              style={{
-                background: "#F2C94C",
-                height: 54,
-                width: 305,
-                marginTop: 10,
-                color: "#000000",
-                textTransform: "none",
-              }}
-              onClick={handleSearchCompare}
-            >
-              So sánh nhanh
-            </Button>
-          </div>
-        </div>
-        {/* </div> */}
+          <Stack direction={"row"} spacing={5}>
+            <Stack direction={"column"}>
+              <BoxStyled sx={{ minWidth: 120, padding: "0px !important" }}>
+                <SelectInputComponent
+                  label="Loại bất động sản"
+                  data={listMenuBarProjectType}
+                  value={projectTypeName}
+                  onChange={handleSelectProject}
+                  placeholder="Chọn loại bất động sản"
+                  style={{ margin: 0 }}
+                />
+                <SelectInputComponent
+                  label="Dự án"
+                  data={projectList}
+                  value={projectName}
+                  onChange={handleSelectProjectName}
+                  placeholder="Chọn dự án"
+                />
+              </BoxStyled>
+              <div style={{ display: "flex", gap: 60 }}>
+                <SliderComponent
+                  label="Diện tích (m2)"
+                  onChange={handleChange1}
+                  numberMin={30}
+                  numberMax={200}
+                  value={valueDienTich}
+                  unit="m2"
+                />
+                <SliderSearchKhoangGia
+                  label="Khoảng giá"
+                  onChange={handleChange2}
+                  numberMin={1}
+                  numberMax={20}
+                  value={valueKhoanGia}
+                  unit="tỷ"
+                />
+              </div>
+            </Stack>
+            <Stack direction={"column"} style={{ maxWidth: 400}}>
+              <Typography
+                style={{
+                  fontWeight: 400,
+                  fontSize: 16,
+                  color: "#ffffff",
+                  margin: "30px 5px 28px 5px",
+                }}
+              >
+                So sánh nhanh các sản phẩm theo tiêu chí lựa chọn của bạn giúp
+                cho bạn dễ dàng chọn được sản phẩm ưng ý cho mình
+              </Typography>
+              <Button
+                style={{
+                  background: "#F2C94C",
+                  height: 54,
+                  width: 305,
+                  marginTop: 10,
+                  color: "#000000",
+                  textTransform: "none",
+                }}
+                onClick={handleSearchCompare}
+              >
+                So sánh nhanh
+              </Button>
+            </Stack>
+          </Stack>
+        </Stack>
       </CompareSwap>
       <DynamicSlider3dShowBottom />
     </>

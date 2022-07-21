@@ -1,6 +1,5 @@
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../store/store";
 import { useEffect, useState } from "react";
@@ -11,12 +10,16 @@ import {
   setImgMap,
   setArrayImgMap,
   setListTarget,
+  setListChildTarget,
 } from "../../../../store/projectMapSlice";
 import isEmpty from "lodash.isempty";
 import {
   apiGetListChildMapByIdLevel,
   apiGetListChildMapByIdParent,
+  apiGetListProductByIdDetail,
 } from "../../../../pages/api/mapProject";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import { Box } from "@mui/material";
 
 export default function DropDownTargetLevel({ level }: any) {
   const Target = useSelector((state: RootState) => state.projectMap.Target);
@@ -50,7 +53,11 @@ export default function DropDownTargetLevel({ level }: any) {
         if (!isEmpty(existLevelValue)) {
           newListTarget = ListTarget.map((tg) => {
             if (tg.level === level.level) {
-              return { name: value.name, level: value.level, levelName: level.name };
+              return {
+                name: value.name,
+                level: value.level,
+                levelName: level.name,
+              };
             }
             return tg;
           });
@@ -62,7 +69,11 @@ export default function DropDownTargetLevel({ level }: any) {
         }
         dispatch(setListTarget(newListTarget));
       } else {
-        dispatch(setListTarget([{ name: value.name, level: value.level, levelName: level.name }]));
+        dispatch(
+          setListTarget([
+            { name: value.name, level: value.level, levelName: level.name },
+          ])
+        );
       }
       if (!isEmpty(value.imgMap) && value.type === "1") {
         let newArray = [];
@@ -94,14 +105,14 @@ export default function DropDownTargetLevel({ level }: any) {
     if (!isEmpty(TargetShape) && TargetShape.level === level.level) {
       const newTarget = formatList.find((data) => data.id === TargetShape.id);
       if (!isEmpty(newTarget)) {
-        dispatch(setTarget(newTarget));
+        dispatch(setTarget({ ...newTarget, level: level.level }));
         if (!isEmpty(newTarget.imgMap) && newTarget.type === "1") {
           dispatch(setImgMap(newTarget.imgMap));
         }
         setValue(newTarget);
       }
     } else {
-      if (!isEmpty(TargetShape) && TargetShape.level === ListLevel.length - 1) {
+      if (!isEmpty(TargetShape) && TargetShape.level === "PRODUCT") {
         const newTarget = ListChild.find((data) => data.id === TargetShape.id);
         dispatch(setTarget(newTarget));
         if (!isEmpty(newTarget.imgMap) && newTarget.type === "1") {
@@ -112,27 +123,33 @@ export default function DropDownTargetLevel({ level }: any) {
     }
   }, [TargetShape]);
 
-  function fetData(datas: any[]) {
+  function fetData(datas: any[], resetProducts: boolean = true) {
     const geojsonArray = [];
-    dispatch(setListChild([]));
+    if (resetProducts) {
+      dispatch(setListChild([]));
+    }
     setValue(null);
-    setFormatList(
-      datas.map((data) => {
-        if (!isEmpty(data.map)) {
-          const geodata = JSON.parse(data.map);
-          geojsonArray.push({
-            ...geodata,
-            properties: {
-              ...geodata.properties,
-              lock: data.status === "1",
-              id: data.id,
-              name: data.name
-            },
-          });
-        }
-        return { ...data, level: level.level };
-      })
-    );
+    const formatData = datas.map((data) => {
+      if (!isEmpty(data.map)) {
+        const geodata = JSON.parse(data.map);
+        geojsonArray.push({
+          ...geodata,
+          properties: {
+            ...geodata.properties,
+            lock: data.status === "1",
+            id: data.id,
+            name: data.name,
+          },
+        });
+      }
+      return { ...data, level: level.level };
+    });
+    setFormatList(formatData);
+    if (!isEmpty(Target) && Target.type === "1" && isEmpty(Target.imgMap)) {
+      dispatch(setListChildTarget(formatData));
+    } else {
+      dispatch(setListChildTarget([]));
+    }
     dispatch(setGeoJsonData(geojsonArray));
   }
 
@@ -177,18 +194,15 @@ export default function DropDownTargetLevel({ level }: any) {
         if (Target.level === level.level - 1) {
           apiGetListChildMapByIdParent(Target.id)
             .then((response) => {
-              fetData(response.responseData);
+              fetData(response.responseData, false);
             })
             .catch((err) => console.log(err));
         } else {
           if (Target.level < level.level) {
             setFormatList([]);
           }
-          if (
-            Target.level === level.level &&
-            Target.level === ListLevel.length - 2
-          ) {
-            apiGetListChildMapByIdParent(Target.id)
+          if (Target.level === level.level) {
+            apiGetListProductByIdDetail(Target.id)
               .then((response) => {
                 const geojsonArray = [];
                 dispatch(
@@ -200,15 +214,16 @@ export default function DropDownTargetLevel({ level }: any) {
                           ...geodata,
                           properties: {
                             ...geodata.properties,
-                            lock: data.status === "1",
+                            status: data.status,
                             id: data.id,
-                            name: data.name
+                            name: data.name,
+                            level: "PRODUCT",
                           },
                         });
                       }
                       return {
                         ...data,
-                        level: ListLevel.length - 1,
+                        level: "PRODUCT",
                       };
                     })
                   )
@@ -223,37 +238,41 @@ export default function DropDownTargetLevel({ level }: any) {
   }, [level, Target]);
 
   return !isEmpty(formatList) ? (
-    <Autocomplete
-      value={value}
-      disablePortal
-      disableClearable
-      id="combo-box-demo"
-      options={formatList}
-      sx={{ width: "300px" }}
-      popupIcon={<KeyboardArrowDownIcon fontSize="medium" />}
-      onChange={(e, value) => {
-        dispatch(setTarget(value));
-        setValue(value);
-      }}
-      renderInput={(params) => (
-        <TextField
-          variant="standard"
-          {...params}
-          placeholder={`Tất cả ${label}`}
-          InputProps={{
-            ...params.InputProps,
-            style: {
-              fontSize: "20px",
-              fontWeight: "400",
-              lineHeight: "23.44px",
-            },
-            disableUnderline: true,
-          }}
-        />
-      )}
-      getOptionLabel={(option) => option.name}
-      isOptionEqualToValue={(option, value) => option.id === value.id}
-    />
+    <Box>
+      <Autocomplete
+        value={value}
+        disablePortal
+        disableClearable
+        id="combo-box-demo"
+        options={formatList}
+        sx={{ minWidth: "250px" }}
+        popupIcon={<ArrowForwardIosIcon fontSize="medium" />}
+        onChange={(e, value) => {
+          if (!isEmpty(value)) {
+            dispatch(setTarget({ ...value, level: level.level }));
+            setValue(value);
+          }
+        }}
+        renderInput={(params) => (
+          <TextField
+            variant="standard"
+            {...params}
+            placeholder={`Tất cả ${label}`}
+            InputProps={{
+              ...params.InputProps,
+              style: {
+                fontSize: "20px",
+                fontWeight: "400",
+                lineHeight: "23.44px",
+              },
+              disableUnderline: true,
+            }}
+          />
+        )}
+        getOptionLabel={(option) => option.name}
+        isOptionEqualToValue={(option, value) => option.id === value.id}
+      />
+    </Box>
   ) : (
     <></>
   );

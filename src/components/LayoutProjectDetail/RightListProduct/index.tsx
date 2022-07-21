@@ -7,6 +7,7 @@ import {
   Button,
   Autocomplete,
   TextField,
+  Typography,
 } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../../../store/store";
@@ -57,10 +58,20 @@ export default function RightListProduct() {
     (state: RootState) => state.projectMap.ListLevel
   );
 
+  const ListTarget = useSelector(
+    (state: RootState) => state.projectMap.ListTarget
+  );
+
+  const ListChildTarget = useSelector(
+    (state: RootState) => state.projectMap.ListChildTarget
+  );
+
   const { listMenuBarType } = useSelector((state: RootState) => state.menubar);
-
+  const OldTarget = useSelector(
+    (state: RootState) => state.projectMap.OldTarget
+  );
   const menuBarType = listMenuBarType?.filter((item) => item.id !== "1");
-
+  console.log(ListTarget, "list target");
   function renderCard() {
     return (
       <Box
@@ -90,8 +101,8 @@ export default function RightListProduct() {
             id="combo-box-demo"
             value={menuBarType.find((item) => item.id === id) ?? null}
             options={menuBarType}
-            sx={{ width: "500px", mt: 3 }}
-            popupIcon={<KeyboardArrowDownIcon fontSize="medium" />}
+            sx={{ width: "100%", mt: 3 }}
+            popupIcon={<KeyboardArrowDownIcon fontSize="large" />}
             onChange={(e, value) => {
               router.push(`/project-detail/${value.id}`);
             }}
@@ -106,7 +117,7 @@ export default function RightListProduct() {
                     fontSize: "28px",
                     fontWeight: "400",
                     lineHeight: "33px",
-                    color: "#0E1D34"
+                    color: "#0E1D34",
                   },
                   disableUnderline: true,
                 }}
@@ -115,20 +126,87 @@ export default function RightListProduct() {
             getOptionLabel={(option: any) => option.name}
             isOptionEqualToValue={(option, value) => option.id === value.id}
           />
-          <Box sx={{ mt: 2 }}>
+          <Box
+            sx={{
+              mt: 2,
+              display: "flex",
+              overflowX: "auto",
+              width: "500px",
+              minHeight: 70,
+            }}
+          >
             {ListLevel.map((level, idx) => {
               if (idx !== 0 && idx !== ListLevel.length - 1) {
                 return <DropDownTargetLevel level={level} key={idx} />;
               }
             })}
           </Box>
-          {!isEmpty(Target) && Target.level === ListLevel.length - 1 ? (
+          {!isEmpty(Target) && Target.type === "1" && isEmpty(Target.imgMap) && !isEmpty(ListChildTarget) && (
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Typography
+                sx={{
+                  mt: 2,
+                  mb: 2,
+                  color: "#000000",
+                  lineHeight: "21px",
+                  fontSize: "18px",
+                  fontWeight: 500,
+                  width: "100%",
+                  textAlign: "center",
+                }}
+              >
+                Chọn
+              </Typography>
+              <Box
+                sx={{
+                  width: "80%",
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: 1,
+                }}
+              >
+                {ListChildTarget.map((item) => (
+                  <Button
+                    onClick={() => {
+                      dispatch(
+                        setTargetShape({
+                          id: item.id,
+                          level: item.level,
+                        })
+                      );
+                    }}
+                    sx={{
+                      width: "40%",
+                      background: "#F3F4F6",
+                      mt: 1,
+                      ml: 1,
+                      color: "#0E1D34",
+                      "&:hover": {
+                        background: "#1B3459",
+                        color: "#FFFFFF",
+                      },
+                    }}
+                  >
+                    {item.name}
+                  </Button>
+                ))}
+              </Box>
+            </Box>
+          )}
+          {!isEmpty(Target) && Target.level === "PRODUCT" ? (
             <DetailProduct
               onBack={() =>
                 dispatch(
                   setTargetShape({
                     id: Target.parentId,
-                    level: Target.level - 1,
+                    level: OldTarget.level,
                   })
                 )
               }

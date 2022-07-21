@@ -43,7 +43,7 @@ const Map = (props: Props) => {
     if (
       !isEmpty(Target) &&
       !isEmpty(Target.map) &&
-      Target.level !== ListLevel.length - 1 &&
+      isEmpty(Target.productionId) &&
       Target.type !== "1"
     ) {
       const formatmap = JSON.parse(Target.map);

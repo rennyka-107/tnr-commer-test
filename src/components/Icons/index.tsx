@@ -76,10 +76,12 @@ export { default as FloorIcon } from "./FloorIcon";
 export { default as IconSuccess } from "./IconSuccess";
 export { default as IconX } from "./IconX";
 export { default as IconTick } from "./IconTick";
-export { default as StrokeHeaderIcon} from './StrokeHeaderIcon';
-export {default as IconDatLich} from './IconDatLich';
-export { default as IconSelectDatLich} from './IconSelectDatLich';
+export { default as StrokeHeaderIcon } from "./StrokeHeaderIcon";
+export { default as IconDatLich } from "./IconDatLich";
+export { default as IconSelectDatLich } from "./IconSelectDatLich";
 export { default as IconHeartFilled } from "./IconHeartFilled";
-export {default as IconAddHearProduct} from './IconAddHearProduct'
-export { default as IconEmail} from './IconEmail'
-export { default as IconLocation} from './IconLocation'
+export { default as IconAddHearProduct } from "./IconAddHearProduct";
+export { default as IconEmail } from "./IconEmail";
+export { default as IconLocation } from "./IconLocation";
+export { default as IconEmptyFav } from "./IconEmptyFav";
+export { default as IconEmptyShoppingCart } from "./IconEmptyShoppingCart";

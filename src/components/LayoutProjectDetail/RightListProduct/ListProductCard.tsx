@@ -4,7 +4,10 @@ import { Box, Grid } from "@mui/material";
 import { ItemProductMap } from "@components/CustomComponent";
 import isEmpty from "lodash.isempty";
 import { useDispatch, useSelector } from "react-redux";
-import { setTargetShape } from "../../../../store/projectMapSlice";
+import {
+  setOldTarget,
+  setTargetShape,
+} from "../../../../store/projectMapSlice";
 import { RootState } from "../../../../store/store";
 
 interface ProductsProps {
@@ -17,9 +20,7 @@ const ContainerProduct = styled.div`
 
 const ListProductCard = ({ data }: ProductsProps) => {
   const dispatch = useDispatch();
-  const ListLevel = useSelector(
-    (state: RootState) => state.projectMap.ListLevel
-  );
+  const Target = useSelector((state: RootState) => state.projectMap.Target);
 
   return (
     <Box
@@ -55,9 +56,12 @@ const ListProductCard = ({ data }: ProductsProps) => {
                     dispatch(
                       setTargetShape({
                         id: product.id,
-                        level: ListLevel.length - 1,
+                        level: "PRODUCT",
                       })
                     );
+                    if (!isEmpty(Target) && isEmpty(Target.productionId)) {
+                      dispatch(setOldTarget(Target));
+                    }
                   }}
                 />
               </ContainerProduct>

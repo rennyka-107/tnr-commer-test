@@ -184,6 +184,7 @@ const DetailProduct = ({ onBack }: Props) => {
   const ListTarget = useSelector(
     (state: RootState) => state.projectMap.ListTarget
   );
+ 
   const [stringNameParent, setStringNameParent] = useState("N/A");
   const router = useRouter();
 
@@ -203,14 +204,6 @@ const DetailProduct = ({ onBack }: Props) => {
     }
   }, [ListTarget]);
 
-  function currencyFormat(num) {
-    if (!num) {
-      return;
-    }
-    return Number(num)
-      .toFixed(0)
-      .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-  }
   return (
     <WrapperContent>
       <WrapperImg>

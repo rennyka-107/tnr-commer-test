@@ -2,11 +2,10 @@ import Page from "@layouts/Page";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
-import { Box, Button } from "@mui/material";
+import { Box } from "@mui/material";
 import { RootState } from "../../store/store";
 import { useDispatch, useSelector } from "react-redux";
-import Container from "@components/Container";
-import  Grid  from "@mui/material/Grid";
+import Grid from "@mui/material/Grid";
 import {
   apiGetInformationProject,
   apiGetListLevelProject,
@@ -45,10 +44,6 @@ const ProjectDetail = () => {
 
   const ListLevel = useSelector(
     (state: RootState) => state.projectMap.ListLevel
-  );
-
-  const ProjectInformation = useSelector(
-    (state: RootState) => state.projectMap.ProjectInformation
   );
 
   const Target = useSelector((state: RootState) => state.projectMap.Target);
@@ -137,20 +132,7 @@ const ProjectDetail = () => {
         description: "TNR Ecommerce Product",
       }}
     >
-      {/* <Container> */}
-        {/* {!isEmpty(Target) ? (
-          <Button
-            sx={{ pt: 0 }}
-            onClick={initialProjectMap}
-            size="small"
-          >
-            Bản đồ dự án
-          </Button>
-        ) : (
-          ""
-        )} */}
-        <Grid sx={{ mt: "127px"}}>{fetchComponent()}</Grid>
-      {/* </Container> */}
+      <Grid sx={{ mt: "127px" }}>{fetchComponent()}</Grid>
     </Page>
   );
 };

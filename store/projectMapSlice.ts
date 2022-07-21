@@ -17,6 +17,9 @@ interface InitialState {
   ListTarget: any[];
   lstOffers: any[];
   Resize: string;
+  OldTarget: any;
+  openModalSale: boolean;
+  ListChildTarget: any[]
 }
 const initialState: InitialState = {
   ProjectInformation: {
@@ -34,7 +37,10 @@ const initialState: InitialState = {
   lstOffers: [],
   ArrayImgMap: [],
   ListTarget: [],
-  Resize: ""
+  Resize: "",
+  OldTarget: null,
+  openModalSale: true,
+  ListChildTarget: []
 };
 
 export const projectMapSlice = createSlice({
@@ -74,6 +80,15 @@ export const projectMapSlice = createSlice({
     setResize: (state, { payload }) => {
       state.Resize = payload;
     },
+    setOldTarget: (state, { payload }) => {
+      state.OldTarget = payload;
+    },
+    setOpenModalSale: (state, {payload}) => {
+      state.openModalSale = payload;
+    },
+    setListChildTarget: (state, {payload}) => {
+      state.ListChildTarget = payload;
+    },
   },
 });
 
@@ -88,7 +103,10 @@ export const {
   setTargetShape,
   setArrayImgMap,
   setListTarget,
-  setResize
+  setResize,
+  setOldTarget,
+  setOpenModalSale,
+  setListChildTarget
 } = projectMapSlice.actions;
 
 export default projectMapSlice.reducer;

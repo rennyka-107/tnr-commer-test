@@ -57,12 +57,15 @@ const ComparePopUp = ({ projectId, projectTypeId }: ComparePopUpProps) => {
       (comparePopUpItem.length > 0 &&
         params &&
         params.projectId === projectId &&
-        params.projectTypeId === projectTypeId)
+        params.projectTypeId === projectTypeId) ||
+      (comparePopUpItem.length > 0 &&
+        projectId === comparePopUpItem[0].projectId &&
+        projectTypeId === comparePopUpItem[0].projectType)
     ) {
       dispatch(setValidCompare(true));
       LocalStorage.set("compare-url", {
-        projectId: projectId,
-        projectTypeId: projectTypeId,
+        projectId: projectId ?? comparePopUpItem[0].projectId,
+        projectTypeId: projectTypeId ?? comparePopUpItem[0].projectType,
         priceTo: "20",
         priceFrom: "1",
         areaTo: "200",

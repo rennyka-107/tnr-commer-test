@@ -20,6 +20,7 @@ import SilderGroup from "@components/CustomComponent/SliderGroupComponent";
 import SliderComponent from "@components/CustomComponent/SliderComponent";
 import { FormatFilterText } from "utils/FormatText";
 import LocalStorage from "utils/LocalStorage";
+import { getProjectByType } from "../../../pages/api/projectApi";
 
 type dataProps = {
   searchData?: searchLocationResponse[];
@@ -104,6 +105,7 @@ const SearchCompare = ({
     areaFrom: (areaFrom as string) ?? "30",
     areaTo: (areaTo as string) ?? "200",
   });
+  const [projectList, setProjectList] = useState<any[]>([]);
   const [valueKhoangGia, setValueKhoangGia] = useState([
     {
       name: "Tất cả",
@@ -167,15 +169,16 @@ const SearchCompare = ({
           ? dataProject[0].name.split(",")
           : dataProject[0].name
       );
+      fetchProjectByType(dataProject[0].id);
     }
-    const dataProduct = listMenuBarType.filter((x) => x.id === projectId);
-    if (!isEmpty(dataProduct)) {
-      setProductName(
-        typeof dataProduct[0].name === "string"
-          ? dataProduct[0].name.split(",")
-          : dataProduct[0].name
-      );
-    }
+    // const dataProduct = listMenuBarType.filter((x) => x.id === projectId);
+    // if (!isEmpty(dataProduct)) {
+    //   setProductName(
+    //     typeof dataProduct[0].name === "string"
+    //       ? dataProduct[0].name.split(",")
+    //       : dataProduct[0].name
+    //   );
+    // }
     if (
       (areaFrom !== "" || areaTo !== "") &&
       typeof areaFrom === "string" &&
@@ -198,7 +201,6 @@ const SearchCompare = ({
     areaTo,
     priceFrom,
     priceTo,
-    listMenuBarType,
     listMenuBarProjectType,
     listMenuLocation,
     listCategory,
@@ -208,6 +210,31 @@ const SearchCompare = ({
       location: router?.query.textSearch,
     });
   }, [router.query.textSearch]);
+
+  const fetchProjectByType = async (
+    typeId: string,
+    updateProject?: boolean
+  ) => {
+    try {
+      const res = await getProjectByType(typeId);
+      if (res.responseCode === "00") {
+        setProjectList(res.responseData);
+        if (res.responseData.length > 0) {
+          if (updateProject) {
+            setProductName(res.responseData[0].name.split(","));
+          }
+          setFilterSearch({
+            ...filterSearch,
+            projectId: updateProject ? res.responseData[0].id : projectId,
+            projectTypeId: typeId,
+          });
+        }
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+    }
+  };
 
   useEffect(() => {
     const data = listMenuLocation.filter(
@@ -257,6 +284,7 @@ const SearchCompare = ({
     setCategoryName(typeof value === "string" ? value.split(",") : value);
     setFilterSearch({ ...filterSearch, categoryId: data[0].id });
   };
+
   const handleSelectProject = (
     event: SelectChangeEvent<typeof projectName>
   ) => {
@@ -265,15 +293,17 @@ const SearchCompare = ({
     } = event;
     const data = listMenuBarProjectType.filter((x) => x.name === value);
     setProjectName(typeof value === "string" ? value.split(",") : value);
-    setFilterSearch({ ...filterSearch, projectTypeId: data[0].id });
+    // setFilterSearch({ ...filterSearch, projectTypeId: data[0].id });
+    fetchProjectByType(data[0].id, true);
   };
+
   const handleSelectProduct = (
     event: SelectChangeEvent<typeof productName>
   ) => {
     const {
       target: { value },
     } = event;
-    const data = listMenuBarType.filter((x) => x.name === value);
+    const data = projectList.filter((x) => x.name === value);
     setProductName(typeof value === "string" ? value.split(",") : value);
     setFilterSearch({ ...filterSearch, projectId: data[0].id });
   };
@@ -368,7 +398,7 @@ const SearchCompare = ({
           />
           <SelectSeach
             label="Chọn dự án"
-            data={listMenuBarType}
+            data={projectList}
             value={productName}
             onChange={handleSelectProduct}
             placeholder="Chọn dự án"
@@ -400,7 +430,7 @@ const SearchCompare = ({
               numberMin={1}
               numberMax={20}
               value={dataKhoangGia}
-              key={'priceRange'}
+              key={"priceRange"}
               unit="tỷ"
               sx={{
                 "& .MuiTypography-root": {
@@ -417,7 +447,7 @@ const SearchCompare = ({
               numberMin={30}
               numberMax={200}
               value={dataDienTich}
-              key={'areaRange'}
+              key={"areaRange"}
               unit="m2"
               sx={{
                 "& .MuiTypography-root": {
