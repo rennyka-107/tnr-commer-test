@@ -118,7 +118,7 @@ const masterReducer = (state, action) => {
       },
 	  paramsSearch: {
 		...action.payload.paramResponse
-	  }
+      }
     };
     return nextState;
   } else {
