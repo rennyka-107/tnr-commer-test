@@ -16,6 +16,7 @@ import { RootState } from "../../store/store";
 import useNotification from "hooks/useNotification";
 import { AlertColor } from "@mui/material";
 import { setNotification } from "../../store/notificationSlice";
+import { useRouter } from "next/router";
 
 // import jwtDecode from 'jwt-decode';
 
@@ -38,6 +39,7 @@ export const AuthenStore = createContext<AuthContextValue | null>(null);
 
 const AuthContext = ({ children }) => {
   const [state, setState] = useState<State>(initialAuthState);
+  const router = useRouter();
   const [rerender, forceUpdate] = useForceUpdate();
   const [deviceToken, setDeviceToken] = useState<string | null>();
   const notification = useNotification();
@@ -73,6 +75,17 @@ const AuthContext = ({ children }) => {
     setToken();
   }, []);
 
+  useEffect(() => {
+    if (router.pathname !== "/search") {
+      localStorage.removeItem("listDataLSProvince");
+      localStorage.removeItem("listParamsLSProvince");
+      localStorage.removeItem("listDataLSProjectType");
+      localStorage.removeItem("listParamsLSProjectType");
+      localStorage.removeItem("listDataLSProject");
+      localStorage.removeItem("listParamsIdProject");
+    }
+  }, [router]);
+
   const loginRequest = async (params: LoginParams) => {
     const { password, username, remember } = params;
     const response = await Login({ password, username });
@@ -99,7 +112,7 @@ const AuthContext = ({ children }) => {
     return response;
   };
 
-//   console.log(deviceToken, "device token")
+  //   console.log(deviceToken, "device token")
 
   const logout = async () => {
     LocalStorage.remove("accessToken", forceUpdate);

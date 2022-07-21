@@ -55,7 +55,7 @@ const CardStyled = styled(Card)`
   width: 350px;
   /* Line/stroke */
   position: relative;
-  border: 0.5px solid #D8D8D8;
+  border: 0.5px solid #d8d8d8;
   border-radius: 20px 20px 20px 20px;
   box-shadow: none !important;
 `;
@@ -171,11 +171,11 @@ const ButtonStyled = styled(Button)`
   background: #ea242a;
   border-radius: 60px;
   :hover {
-    background: #ffffff;
-    box-shadow: 4px 8px 24px #f2f2f5;
-    border: 1px solid #48576d;
+    background: #FEC83C;
+    // box-shadow: 4px 8px 24px #f2f2f5;
+    box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.2);
     border-radius: 60px;
-    color: #48576d;
+    color: #ffffff;
   }
   font-family: "Roboto";
   font-style: normal;
@@ -476,7 +476,7 @@ export default function ItemProductCard({
           <ButtonStyled
             onClick={onClick}
             disabled={buyDisabled}
-            style={{ backgroundColor: buyDisabled ? "#FFFF" : " #ea242a" }}
+            style={{ backgroundColor: buyDisabled ? "#FFFF" : "" }}
           >
             Mua Online&nbsp;
             <IconMuaOnline />
@@ -487,7 +487,7 @@ export default function ItemProductCard({
           <ButtonStyled
             onClick={onClick}
             disabled={buyDisabled}
-            style={{ backgroundColor: buyDisabled ? "#FFFF" : " #ea242a" }}
+            style={{ backgroundColor: buyDisabled ? "#FFFF" : "" }}
           >
             Mua Online&nbsp;
             <IconMuaOnline />

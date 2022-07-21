@@ -805,6 +805,18 @@ a {
     fill: #ea242a;
 }
 
+.icon-huyloc:hover path {
+    fill: #ea242a;
+}
+
+.icon-sapxep:hover path {
+    fill: #ea242a;
+}
+
+.icon-sapxep:hover span {
+    color: #ea242a !important;
+}
+
 
 /* .icon-heart-add:hover {
     view-box: "0 0 101.5 87.52";

@@ -10,6 +10,17 @@ const ImageWithHideOnError = ({ src, fallbackSrc,width, height, ...rest }) => {
     }
   }, [src]);
 
+  function isValidHttpUrl(string) {
+    let url;
+
+    try {
+      url = new URL(string);
+    } catch (_) {
+      return false;
+    }
+
+    return url.protocol === "http:" || url.protocol === "https:";
+  }
   return (
     <Image
       {...rest}
@@ -17,7 +28,7 @@ const ImageWithHideOnError = ({ src, fallbackSrc,width, height, ...rest }) => {
 	  width={width}
 	  height={height}
 	  objectFit="cover"
-      src={imgSrc ? imgSrc : Product3}
+      src={isValidHttpUrl(imgSrc) ? imgSrc : Product3}
       onLoadingComplete={(result) => {
         if (result.naturalWidth === 0) {
           // Broken image

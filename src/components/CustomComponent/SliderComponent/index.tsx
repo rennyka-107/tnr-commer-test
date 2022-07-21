@@ -88,7 +88,6 @@ export default function SliderComponent({
       setValue1([value1[0], Math.max(newValue[1], value1[0] + minDistance)]);
     }
   };
-
   return (
     <Box sx={{ width: 297, ...sx }} style={style}>
       <CustomTittle>{label}</CustomTittle>

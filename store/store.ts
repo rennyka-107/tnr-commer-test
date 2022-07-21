@@ -19,6 +19,7 @@ import specialoffers from "./SpecialOffersSlice";
 import banners from "./bannerSlice";
 import favourites from "./productFavouriteSlice";
 import sendRequest from "./sendRequestSlice";
+import paramsSearch from './paramsSearchSlice'
 
 const combinedReducer = combineReducers({
   menubar,
@@ -39,6 +40,7 @@ const combinedReducer = combineReducers({
   banners,
   favourites,
   sendRequest,
+  paramsSearch
 });
 
 export type RootState = ReturnType<typeof combinedReducer>;
@@ -113,7 +115,10 @@ const masterReducer = (state, action) => {
       },
       sendRequest: {
         ...action.payload.sendRequest
-      }
+      },
+	  paramsSearch: {
+		...action.payload.paramResponse
+	  }
     };
     return nextState;
   } else {

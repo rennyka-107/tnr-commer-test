@@ -23,6 +23,7 @@ const OutlinedInputStyled = styled(OutlinedInput)`
   background-color: white;
 `;
 
+
 function getStyles(name: string, value: readonly string[], theme: Theme) {
   return {
 
@@ -58,7 +59,7 @@ export default function SelectLocationSearch({label, data, onChange,value,placeh
 	const classes = useStyles();
   return (
     <FormControl sx={{ m: 1, width: 300, mt: 3 }} style={style}>
-
+		<Typography>Vị Trí</Typography>
       <Select
         displayEmpty
 		MenuProps={{ classes: { paper: classes.menuPaper } }}
@@ -72,7 +73,6 @@ export default function SelectLocationSearch({label, data, onChange,value,placeh
 
           return selected.join(", ");
         }}
-
         inputProps={{ "aria-label": "Without label" }}
         SelectDisplayProps={{
           style: {
@@ -82,7 +82,6 @@ export default function SelectLocationSearch({label, data, onChange,value,placeh
 			
           },
         }}
-
       >
          {data?.map((name,index) => (
           <MenuItem

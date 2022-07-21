@@ -81,11 +81,11 @@ const ButtonStyled = styled(Button)`
   background: #ea242a;
   border-radius: 60px;
   :hover {
-    background: #ffffff;
+    background: #fcb715;
     box-shadow: 4px 8px 24px #f2f2f5;
-    border: 1px solid #48576d;
+    // border: 1px solid #48576d;
     border-radius: 60px;
-    color: #48576d;
+    color: #ffffff;
   }
   font-family: "Roboto";
   font-style: normal;

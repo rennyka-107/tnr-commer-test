@@ -103,17 +103,6 @@ const handleResetFilter = () => {
     fetchComponent();
   }, [location]);
   return (
-    // <BoxContainer styleCustom={{ borderRadius: 8, display: 'flex', justifyContent: "space-around" }}>
-    //     <DynamicMenuDropdown title="Vị trí" />
-    //     <DynamicMenuDropdown title="Loại"
-    //         data={listMenuBarProjectType}
-    //         onSelect={(values) => {
-    //             onSubmit({ ...body, projectTypeId: values.id })
-    //         }}
-    //     />
-    //     <DynamicMenuDropdown title="Khoảng giá" />
-    //     <DynamicMenuDropdown title="Sắp xếp theo" />
-    // </BoxContainer>
     <div
       style={{ display: "flex", flexDirection: "row", justifyContent: "end" }}
     >

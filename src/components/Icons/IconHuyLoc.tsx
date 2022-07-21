@@ -1,12 +1,14 @@
 const IconHuyLoc = ({
   style,
   disabled,
+  className,
 }: {
   style?: React.CSSProperties;
   disabled?: boolean;
+  className?: any;
 }) => {
   return (
-    <>
+    <div className={className} style={{display: 'flex', justifyContent: 'center', flexDirection: 'row', alignItems: 'center'}}>
       <svg
         width="16"
         height="16"
@@ -21,7 +23,8 @@ const IconHuyLoc = ({
           fill="#1B3459"
         />
       </svg>
-    </>
+      <span style={{ marginLeft: 8 }}>Hủy Lọc</span>
+    </div>
   );
 };
 
