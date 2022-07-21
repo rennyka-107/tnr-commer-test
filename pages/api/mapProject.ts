@@ -30,3 +30,9 @@ export const apiGetListChildMapByIdParent = async (id: string) => {
     `/api/customer/project-level-detail/find-by-parent-id/${id}`
   );
 };
+
+export const apiGetListProductByIdDetail = async (id: string) => {
+  return HttpClient.get<string, CommonResponse>(
+    `/api/customer/project-level-detail/find-prod-by-detail-id/${id}`
+  );
+};

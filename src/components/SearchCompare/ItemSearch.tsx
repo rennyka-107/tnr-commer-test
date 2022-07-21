@@ -14,6 +14,7 @@ import {
   comparePopUpItemI,
 } from "../../../store/productCompareSlice";
 import { RootState } from "../../../store/store";
+import { useRouter } from "next/router";
 
 interface searchProps {
   data?: searchLocationResponse[];
@@ -30,11 +31,13 @@ const ProductWrap = styled.div`
 `;
 const ItemSearch = ({ data }: searchProps) => {
   const dispatch = useDispatch();
-  const { comparePopUpItem } = useSelector(
+  const router = useRouter();
+  const { comparePopUpItem, isValid } = useSelector(
     (state: RootState) => state.productCompareSlice
   );
 
   const onCompare = (product: searchLocationResponse) => () => {
+    if (!isValid) return;
     const local: comparePopUpItemI[] = _.cloneDeep(comparePopUpItem);
     if (local) {
       if (
@@ -47,6 +50,8 @@ const ItemSearch = ({ data }: searchProps) => {
         projectName: product.projectName,
         name: product.name,
         productId: product.productId,
+        projectId: product.projectId,
+        projectType: product.projectTypeId,
       });
       dispatch(getComparePopUpItem(local));
     } else {
@@ -87,7 +92,10 @@ const ItemSearch = ({ data }: searchProps) => {
             }
           />
         ))}
-        <ComparePopUp />
+        <ComparePopUp
+          projectId={router.query.projectId as string}
+          projectTypeId={router.query.projectTypeId as string}
+        />
       </ProductWrap>
     </>
   );

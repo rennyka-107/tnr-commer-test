@@ -24,7 +24,6 @@ const CardContainer = styled.div`
 
 SwiperCore.use([Autoplay, Pagination, Navigation]);
 const SliderSpecialSale = ({ data }: { data?: any[] }) => {
-  console.log(data);
   const renderItems = useMemo(() => {
     return data?.map((el, index) => (
       <SwiperSlide key={index}>

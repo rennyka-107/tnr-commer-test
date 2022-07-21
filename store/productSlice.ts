@@ -13,7 +13,7 @@ interface initialState {
   productFavorite: TBOUTStanding[];
   productFavoriteType: any[];
   productTopByOutStanding: TBOUTStanding[]
-  totalElement: number
+  totalElement: number;
 }
 const initialState = {
   listProductResponse: [],

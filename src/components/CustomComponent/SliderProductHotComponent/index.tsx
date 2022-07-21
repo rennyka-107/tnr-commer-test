@@ -10,10 +10,11 @@ import {
   IconCarsouelRightProduct,
 } from "@components/Icons";
 import ItemProductCard from "../ItemProductCard";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../store/store";
 import useAddToCart from "hooks/useAddToCart";
-
+import { useRouter } from "next/router";
+import { getComparePopUpItem } from "../../../../store/productCompareSlice";
 
 const WrapSlide = styled.div`
   width: 1245px;
@@ -30,6 +31,43 @@ export default function SliderProductHotComponent() {
     (state: RootState) => state.products
   );
   const addToCart = useAddToCart();
+  const router = useRouter();
+  const dispatch = useDispatch();
+
+  const onCompare =
+    (
+      projectId: string,
+      projectType: string,
+      thumbnail: string,
+      projectName: string,
+      name: string,
+      productId: string
+    ) =>
+    () => {
+      dispatch(
+        getComparePopUpItem([
+          {
+            thumbnail: thumbnail,
+            projectName: name,
+            name: projectName,
+            productId: productId,
+            projectId: projectId,
+            projectType: projectType,
+          },
+        ])
+      );
+      router.push({
+        pathname: "/compare-search",
+        query: {
+          projectId: projectId,
+          projectTypeId: projectType,
+          priceTo: "20",
+          priceFrom: "1",
+          areaTo: "200",
+          areaFrom: "30",
+        },
+      });
+    };
 
   return (
     <WrapSlide>
@@ -61,11 +99,11 @@ export default function SliderProductHotComponent() {
               <ItemProductCard
                 key={index}
                 id={item.id}
-				projectName={item.projectName}
+                projectName={item.projectName}
                 src={item.avatar}
                 title={item.name}
                 subTitle={item.projectLocation}
-				activeFavourite={true}
+                activeFavourite={true}
                 dataItem={{
                   item1: item.landArea,
                   item2: item.numBath,
@@ -75,13 +113,21 @@ export default function SliderProductHotComponent() {
                 priceListed={item.price}
                 priceSub={item.unitPrice}
                 ticketCard={item.category}
-				projectTypeCode={item.projectTypeCode}
-				favouriteStatus={item.favouriteStatus}
-				minFloor={item.minFloor}
-				maxFloor={item.maxFloor}
+                projectTypeCode={item.projectTypeCode}
+                favouriteStatus={item.favouriteStatus}
+                minFloor={item.minFloor}
+                maxFloor={item.maxFloor}
                 onClick={() => addToCart(item.id)}
-				activeSoSanh={true}
-                buyDisabled={item?.paymentStatus!==2}
+                activeSoSanh={true}
+                buyDisabled={item?.paymentStatus !== 2}
+                onCompare={onCompare(
+                  item.projectId,
+                  item.projectTypeId,
+                  item.avatar,
+                  item.name,
+                  item.projectName,
+                  item.id
+                )}
               />
             </CardContainer>
           </SwiperSlide>

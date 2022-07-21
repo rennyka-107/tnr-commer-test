@@ -43,14 +43,18 @@ const Search = () => {
   const { checkUp } = useSelector((state: RootState) => state.favourites);
 
   const [searchBody, setSearchBody] = useState<any>({
+    textSearch: textSearch,
     provinceId: provinceId,
     projectTypeId: projectTypeId,
     projectId: projectId,
-    priceFrom: priceFrom,
-    priceTo: priceTo,
-    areaFrom: Number(areaFrom),
-    areaTo: Number(areaTo),
-    textSearch: textSearch,
+    priceFrom: (priceFrom as string) ?? "1",
+    priceTo: (priceTo as string) ?? "20",
+    areaFrom: (areaFrom as string) ?? "30",
+    areaTo: (areaTo as string) ?? "200",
+    provinceIdList: [],
+    projectTypeIdList: [],
+    projectIdList: [],
+    projectCategoryIdList: [],
   });
   const [loading, setLoading] = useState(false);
   const [searchAction, setSearchAction] = useState(false);
@@ -63,17 +67,30 @@ const Search = () => {
   const pageNumber = Math.ceil(totalElement / search.size);
 
   useMemo(() => {
-    if (router.isReady === true) {
-      setSearchBody({
-        provinceId: provinceId ? provinceId : "",
-        projectTypeId: projectTypeId ? projectTypeId : "",
-        projectId: projectId ? projectId : "",
-        priceFrom: priceFrom ? priceFrom + "000000000" : "",
-        priceTo: priceTo ? priceTo + "000000000" : "",
-        areaFrom: Number(areaFrom),
-        areaTo: Number(areaTo),
-        textSearch: textSearch ? textSearch : "",
-      });
+    if (typeof window !== "undefined") {
+      const listProvince = localStorage?.getItem("listParamsLSProvince");
+      const listProjectType = localStorage?.getItem("listParamsLSProjectType");
+      const listParamsIdProject = localStorage?.getItem("listParamsIdProject");
+      if (router.isReady === true) {
+        setSearchBody({
+          provinceId: provinceId ? provinceId : "",
+          projectTypeId: projectTypeId ? projectTypeId : "",
+          projectId: projectId ? projectId : "",
+          priceFrom: (priceFrom as string) ?? "1",
+          priceTo: (priceTo as string) ?? "20",
+          areaFrom: (areaFrom as string) ?? "30",
+          areaTo: (areaTo as string) ?? "200",
+          provinceIdList:
+            listProvince !== "null" ? JSON.parse(listProvince) : [],
+          projectTypeIdList:
+            listProjectType !== "null" ? JSON.parse(listProjectType) : [],
+          projectIdList:
+            listParamsIdProject !== "null"
+              ? JSON.parse(listParamsIdProject)
+              : [],
+          textSearch: textSearch ? textSearch : "",
+        });
+      }
     }
   }, [router]);
 
@@ -119,9 +136,8 @@ const Search = () => {
       console.log(err);
     }
   };
-
   useEffect(() => {
-    if (router.pathname === '/search') {
+    if (router.pathname === "/search") {
       fetchAdvandedSearchListFavorite();
     }
   }, [checkUp]);

@@ -187,7 +187,7 @@ export default function Slider3dShowBottom() {
                   console.log("abc");
                 }}
               >
-                Mua Online&nbsp;
+                Xem tất cả&nbsp;
                 <IconMuaOnline />
               </ButtonStyled>
             </div>

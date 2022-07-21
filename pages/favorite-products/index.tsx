@@ -45,7 +45,7 @@ const FavoriteProducts = () => {
 return;
     }else {
 		notification({
-			severity: "success",
+			severity: "warning",
 			title: `Chưa có tài khoản`,
 			message: `Bạn cần tạo tài khoản để tiếp tục`,
 		  });
@@ -60,7 +60,7 @@ return;
       try {
         const response: any = await getListFavourite();
         if (response.responseCode === "00") {
-          dispatch(getListFavouriteByUser(response.responseData));
+          dispatch(getListFavouriteByUser(response.responseData.content));
           setLoading(false);
         }
       } catch (err) {
@@ -98,7 +98,7 @@ return;
       }}
     >
       <FlexContainer>
-        <div style={{ display: "flex", gap: 31 }}>{fetchComponent()}</div>
+        <div style={{ display: "flex", gap: 31, width: '100%' }}>{fetchComponent()}</div>
       </FlexContainer>
     </Page>
   );

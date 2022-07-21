@@ -14,76 +14,30 @@ export default function ProjectInformation() {
     <Box
       sx={{
         backgroundColor: open ? "rgba(0,0,0,0.4)" : "#FFFFFF",
-        width: "80vw",
-        height: "50vw",
+        width: "100vw",
+        height: "100%",
         position: "absolute",
         top: 0,
-        zIndex: open ? 999 : "unset",
+        zIndex: open ? 991 : "unset",
+        display: "flex",
+        alignItems: "flex-end"
       }}
     >
-      <Box
-        sx={{
-          width: "100%",
-          display: "flex",
-          justifyContent: "center",
-          position: "absolute",
-          bottom: !open ? -15 : "unset",
-          top: open ? 60 : "unset",
-          zIndex: "9999",
-          marginTop: open ? "-20px" : "unset",
-        }}
-      >
-        <Button
-          id="pj-infor"
-          startIcon={
-            <ArrowForwardIosIcon
-              style={{ transform: `rotate(${open ? "90" : "-90"}deg)` }}
-            />
-          }
-          variant="outlined"
-          sx={{
-            border: "none",
-            borderRadius: "8px",
-            color: "#FEC83C",
-            backgroundColor: "#FFFFFF",
-            boxShadow: "0px 8px 15px rgba(0, 0, 0, 0.1)",
-          }}
-          onClick={() => {
-            setOpen(!open);
-          }}
-        >
-          {open ? "Bản đồ" : "Thông tin dự án"}
-        </Button>
-      </Box>
-      <Box
-        sx={{
-          position: "absolute",
-          bottom: 0,
-          width: "100%",
-          height: !open ? "auto" : "900px",
-          background: open ? "#FFFFFF" : "unset",
-          boxShadow: "0px -4px 20px 1px rgba(0, 0, 0, 0.15)",
-          borderRadius: "16px",
-          zIndex: open ? 999 : "unset",
-          overflowY: "auto",
-        }}
-      >
-        {/* <Box
+      {!open && (
+        <Box
           sx={{
             width: "100%",
             display: "flex",
             justifyContent: "center",
-            position: "relative",
-            zIndex: "999",
-            marginTop: open ? "-20px" : "unset",
+            position: "absolute",
+            bottom: -15,
+            zIndex: "900",
           }}
         >
           <Button
             id="pj-infor"
             startIcon={
-              <ArrowForwardIosIcon
-                style={{ transform: `rotate(${open ? "90" : "-90"}deg)` }}
-              />
+              <ArrowForwardIosIcon style={{ transform: `rotate(-90deg)` }} />
             }
             variant="outlined"
             sx={{
@@ -95,11 +49,58 @@ export default function ProjectInformation() {
             }}
             onClick={() => {
               setOpen(!open);
+              window.scrollTo(0, 0);
             }}
           >
-            {open ? "Bản đồ" : "Thông tin dự án"}
+            Thông tin dự án
           </Button>
-        </Box> */}
+        </Box>
+      )}
+      <Box
+        sx={{
+          position: "relative",
+          width: "100%",
+          height: !open ? "auto" : "95%",
+          background: open ? "#FFFFFF" : "unset",
+          boxShadow: "0px -4px 20px 1px rgba(0, 0, 0, 0.15)",
+          borderRadius: "16px",
+          zIndex: open ? 990 : "unset",
+          overflowY: "auto",
+        }}
+      >
+        {open && (
+            <Box
+              sx={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
+                position: "absolute",
+                top: 0
+              }}
+            >
+              <Button
+                id="pj-infor"
+                startIcon={
+                  <ArrowForwardIosIcon
+                    style={{ transform: `rotate(90deg)` }}
+                  />
+                }
+                variant="outlined"
+                sx={{
+                  border: "none",
+                  borderRadius: "8px",
+                  color: "#FEC83C",
+                  backgroundColor: "#FFFFFF",
+                  boxShadow: "0px 8px 15px rgba(0, 0, 0, 0.1)",
+                }}
+                onClick={() => {
+                  setOpen(!open);
+                }}
+              >
+                Bản đồ
+              </Button>
+            </Box>
+        )}
         {open && (
           <>
             <Typography

@@ -32,9 +32,7 @@ const Filter = (props: PropsI) => {
   const { listMenuBarProjectType, listMenuBarType } = useSelector(
     (state: RootState) => state.menubar
   );
-  const menuBarProjectType = listMenuBarType?.filter(
-    (item) => item.id !== "1"
-  );
+  const menuBarProjectType = listMenuBarType?.filter((item) => item.id !== "1");
   const formControler = useForm<FormI>({
     mode: "onChange",
     resolver: yupResolver(yup.object().shape({})),
@@ -43,8 +41,6 @@ const Filter = (props: PropsI) => {
   const { control, handleSubmit, watch, getValues, setValue } = formControler;
 
   useEffect(() => {
-  
-
     if (!!getValues("projectId")) {
       onSubmit({
         ...body,
@@ -64,7 +60,7 @@ const Filter = (props: PropsI) => {
   const statusOptions = [
     { label: "Ngừng bán", value: 4 }, //đã bán
     { label: "Sắp mở bán", value: 99 },
-    { label: "Còn hàng", value: 2 },//mở bán
+    { label: "Còn hàng", value: 2 }, //mở bán
     { label: "Chờ thanh toán", value: 3 },
   ];
 
@@ -94,9 +90,11 @@ const Filter = (props: PropsI) => {
             required
             setValue={formControler.setValue}
             isClear
-            dataSelect={menuBarProjectType?.map((el) => {
-              return { label: el?.name, value: el?.id };
-            })??[]}
+            dataSelect={
+              menuBarProjectType?.map((el) => {
+                return { label: el?.name, value: el?.id };
+              }) ?? []
+            }
             onClick={() => {
               setValue("categoryId", null);
               setValue("projectLevel1", null);
@@ -153,14 +151,23 @@ const Filter = (props: PropsI) => {
                     width: "100%",
                   }}
                 >
-                  <div>
-                    <Checkbox
-                      checked={(
-                        watch("saleProductStatus") as (string | number)[]
-                      ).includes(item?.value)}
-                    />
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      width: "100%",
+                      gap: 2
+                    }}
+                  >
+                    <div>
+                      <Checkbox
+                        checked={(
+                          watch("saleProductStatus") as (string | number)[]
+                        ).includes(item?.value)}
+                      />
+                    </div>
+                    <div>{item.label}</div>
                   </div>
-                  <div>{item.label}</div>
                   <div>{renderIcon(item)}</div>
                 </div>
               );

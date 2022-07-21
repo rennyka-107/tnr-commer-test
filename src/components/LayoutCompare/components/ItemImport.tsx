@@ -20,6 +20,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../store/store";
 import { priceRange } from "constant/filter";
 import { useRouter } from "next/router";
+import LocalStorage from "utils/LocalStorage";
+import {
+  getCompareItem,
+  getComparePopUpItem,
+} from "../../../../store/productCompareSlice";
 
 type Props = {
   onClick?: MouseEventHandler<HTMLButtonElement>;
@@ -114,7 +119,7 @@ const ButtonSearchModalStyled = styled(Button)`
 
 const ItemImport = ({ onChangeFilter, filter }: Props) => {
   const [open, setOpen] = useState<boolean>(false);
-  const { compareParams } = useSelector(
+  const { compareParams, compareItems } = useSelector(
     (state: RootState) => state.productCompareSlice
   );
   const { listMenuBarProjectType, listCategory } = useSelector(
@@ -122,15 +127,32 @@ const ItemImport = ({ onChangeFilter, filter }: Props) => {
   );
   const [priceRangeValue, setPriceRangeValue] = useState<number[]>([0, 0]);
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const handleOnClick = () => {
     // setOpen(true);
+    const param = LocalStorage.get("compare-url");
+    if (!param) return;
+    dispatch(
+      getComparePopUpItem(
+        compareItems.map((item) => {
+          return {
+            projectName: item.projectName,
+            thumbnail: item.thumbnail,
+            name: item.productName,
+            productId: item.productId,
+            projectId: param.projectId,
+            projectType: param.projectTypeId,
+          };
+        })
+      )
+    );
     router.push({
       pathname: `/compare-search`,
       query: {
-        ...filter
-      }
-    })
+        ...param,
+      },
+    });
   };
 
   const handleClickScreen = () => {
@@ -155,10 +177,10 @@ const ItemImport = ({ onChangeFilter, filter }: Props) => {
     router.push({
       pathname: `/compare-search`,
       query: {
-        ...filter
-      }
-    })
-  }
+        ...filter,
+      },
+    });
+  };
 
   return (
     <Box maxWidth={289}>

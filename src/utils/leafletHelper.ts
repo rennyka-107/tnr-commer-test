@@ -1,6 +1,4 @@
-import L from 'leaflet';
-
-import { Circle, LatLngBoundsExpression, PointExpression, Polygon, Rectangle } from "leaflet";
+import L, { Circle, LatLngBoundsExpression, PointExpression, Polygon, Rectangle } from "leaflet";
 
 export function createLockIcon() {
   let svgElement = document.createElementNS(

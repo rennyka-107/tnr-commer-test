@@ -65,7 +65,7 @@ const PopUpItem = ({ data, onRemove }: PopUpItemProps) => {
           }}
           onClick={onRemove}
         >
-          <IconX style={{ stroke: "black", width: "27px", height: "27px" }} />
+          <IconX style={{ stroke: "black", width: "12px", height: "12px" }} />
         </Box>
       </Stack>
     </ItemWrapper>

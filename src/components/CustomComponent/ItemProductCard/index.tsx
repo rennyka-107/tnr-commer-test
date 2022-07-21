@@ -469,9 +469,6 @@ export default function ItemProductCard({
               flexDirection: "row",
               cursor: "pointer",
             }}
-            onClick={() => {
-              router.push(`/compare-product?idCompare=${id}`);
-            }}
           >
             <IconPlusProduct />
             <TextButtonStyled onClick={onCompare}>So sánh</TextButtonStyled>

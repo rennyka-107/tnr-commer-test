@@ -113,7 +113,6 @@ const SliderCategoryIndex = ({ data }: { data?: any[] }) => {
     // }
   };
   const renderItems = useMemo(() => {
-    console.log(menuBarProjectType);
     return menuBarProjectType?.map((item, index) => (
       <SwiperSlide key={index}>
         <WrapContainer>

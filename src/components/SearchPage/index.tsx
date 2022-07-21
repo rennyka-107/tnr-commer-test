@@ -1,28 +1,53 @@
 import styled from "@emotion/styled";
 import { searchLocationResponse } from "interface/searchIF";
 import ItemSearch from "./ItemSearch";
-import { SelectChangeEvent,
+import {
+  Button,
+  Fade,
+  FormControlLabel,
+  IconButton,
+  InputBase,
+  Paper,
+  Popper,
+  PopperPlacementType,
+  Switch,
+  SwitchProps,
 } from "@mui/material";
-import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
-import FormControl from '@mui/material/FormControl';
-import Button from '@mui/material/Button';
+import Typography from "@mui/material/Typography";
+
+import FormControl from "@mui/material/FormControl";
 
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../store/store";
-import ContainerSearch from "@components/Container/ContainerSearch";
 import { makeStyles } from "@mui/styles";
-import SelectSeach from "@components/CustomComponent/SelectInputComponent/SelectSeach";
-import { IconFilterSearch } from "@components/Icons";
-import  isEmpty  from "lodash/isEmpty";
-import SelectLocationSearch from "@components/CustomComponent/SelectInputComponent/SelectLocationSearch";
-
-import SelectKhoanGia from "@components/CustomComponent/SelectInputComponent/SelectKhoanGia";
-import SelectDienTich from "@components/CustomComponent/SelectInputComponent/SelectDienTich";
-import IconResetFilter from "@components/Icons/IconResetFilter";
+import {
+  IconFilterSearch,
+  IconHuyLoc,
+  IconSapxep,
+  SearchIconSearchPage,
+} from "@components/Icons";
+import isEmpty from "lodash/isEmpty";
 import useFavourite from "hooks/useFavourite";
+import ContainerSearchPage from "@components/Container/ContainerSearchPage";
+import LocationMultipeCheckbox from "@components/CustomComponent/ListCheckboxDropdown/LocationMultipeCheckbox";
+import {
+  getListProjectByProjectType,
+  getListProjectTypeByListIdProvince,
+} from "../../../pages/api/paramSearchApi";
+import {
+  getListProjectResponse,
+  getListProjectTypeResponse,
+} from "../../../store/paramsSearchSlice";
+import ProjectTypeCheckboxDropdown from "@components/CustomComponent/ListCheckboxDropdown/ProjectTypeCheckboxDropdown";
+import ProjectDropdown from "@components/CustomComponent/ListCheckboxDropdown/ProjectDropdown";
+import SilderGroup from "@components/CustomComponent/SliderGroupComponent";
+import SliderComponent from "@components/CustomComponent/SliderComponent";
+import { FormatFilterText } from "utils/FormatText";
+import SliderGroupFilterSearch from "@components/CustomComponent/SliderGroupComponent/SliderGroupFilterSearch";
+import NoProductComponent from "@components/CustomComponent/NoProductComponent";
+import SwitchComponent from "./SwitchComponent";
 
 type dataProps = {
   searchData: searchLocationResponse[];
@@ -34,8 +59,6 @@ type dataProps = {
   searchAction: boolean;
   setSearchBody?: any;
 };
-
-const ContainerSearchPage = styled.div``;
 
 const TextTotalSeach = styled(Typography)`
   font-family: "Roboto";
@@ -53,7 +76,17 @@ const NumberTotalStyled = styled(Typography)`
   line-height: 19px;
   color: #000000;
 `;
+const TextStyled = styled(InputBase)`
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16px;
+  width: 245px;
+  /* Shades/Dark 3 */
 
+  color: #8190a7;
+`;
 const useStyles = makeStyles((theme) => ({
   root: {
     "& .MuiInputBase-root": {
@@ -62,6 +95,42 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
+const LinkStyled = styled.a`
+  cursor: pointer;
+  :hover,
+  :hover fill {
+    color: #ea242a;
+  }
+`;
+const TextFilterStyled = styled.span`
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 16px;
+  /* identical to box height, or 100% */
+
+  /* Brand/Main color */
+  :hover {
+    color: #ea242a;
+  }
+  color: #1b3459;
+`;
+
+const PaperStyled = styled(Paper)`
+  position: relative;
+  width: 318px;
+  height: auto;
+
+  /* White */
+
+  background: #ffffff;
+  /* Global */
+
+  box-shadow: 0px 4px 64px 24px rgba(0, 0, 0, 0.06);
+  border-radius: 4px;
+`;
+
 const SearchPage = ({
   searchData,
   totalTextSearch,
@@ -72,8 +141,25 @@ const SearchPage = ({
   const classes = useStyles();
   const router = useRouter();
   const [textSearchValue, setTextSearchValue] = useState<any>("");
-  const { listMenuBarType, listMenuBarProjectType, listMenuLocation } =
-    useSelector((state: RootState) => state.menubar);
+  const dispatch = useDispatch();
+
+  const { listMenuLocation } = useSelector((state: RootState) => state.menubar);
+
+  const { projectTypeListResponse, projectListResponse } = useSelector(
+    (state: RootState) => state.paramsSearch
+  );
+
+  const [checkSelectProvince, setCheckSelectProvince] = useState(false);
+  const [checkSelectProjectType, setCheckSelectProjectType] = useState(false);
+  const [listParamsProvince, setListParamsProvince] = useState([]);
+  const [listParamsProjectType, setParamsProjectType] = useState([]);
+  const [listIdProject, setListIdProject] = useState([]);
+  const [listDataLSProvince, setListDataLSProvince] = useState([]);
+  const [listDataLSProject, setListDataLSProject] = useState([]);
+  const [listDataLSProjectType, setListDataLSProjectType] = useState([]);
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const [openModal, setOpenModal] = useState(false);
+  const [placement, setPlacement] = useState<PopperPlacementType>();
   const {
     textSearch,
     provinceId,
@@ -84,112 +170,26 @@ const SearchPage = ({
     areaFrom,
     areaTo,
   } = router.query;
-
-  const [location, setLocation] = useState<string[]>([]);
-  const [productName, setProductName] = useState<string[]>([]);
-  const [projectName, setProjectName] = useState<string[]>([]);
-  const {checkReload} = useFavourite();
-  const [valueKhoangGia, setValueKhoangGia] = useState([
-    {
-      name: "Tất cả",
-      value: [0,0],
-    },
-    {
-      name: "1 Tỷ - 10 Tỷ",
-      value: [1, 10],
-    },
-    {
-      name: "10 Tỷ - 20 Tỷ",
-      value: [10, 20],
-    },
-    {
-      name: "20 Tỷ - 40 Tỷ",
-      value: [20, 40],
-    },
-  ]);
-  const [valueDienTich, setValueDienTich] = useState([
-    {
-      name: "Tất Cả",
-      value: [],
-    },
-    {
-      name: "30 m2 - 50 m2",
-      value: [30, 50],
-    },
-    {
-      name: "50 m2 - 100 m2",
-      value: [50, 100],
-    },
-    {
-      name: "100 m2 - 150 m2",
-      value: [100, 150],
-    },
-    {
-      name: "150 m2 - 200 m2",
-      value: [150, 200],
-    },
-  ]);
-  const [dataKhoangGia, setDataKhoangGia] = useState<any[]>([]);
-  const [dataDienTich, setDataDienTich] = useState<any[]>([]);
-
   const [filterSearch, setFilterSearch] = useState({
     textSearch: textSearch,
     provinceId: provinceId,
     projectTypeId: projectTypeId,
     projectId: projectId,
-    priceFrom: priceFrom,
-    priceTo: priceTo,
-    areaFrom: areaFrom,
-    areaTo: areaTo,
+    priceFrom: (priceFrom as string) ?? "1",
+    priceTo: (priceTo as string) ?? "20",
+    areaFrom: (areaFrom as string) ?? "30",
+    areaTo: (areaTo as string) ?? "200",
+    // provinceIdList: [],
+    // projectTypeIdList: [],
+    // projectIdList: [],
+    // projectCategoryIdList: [],
   });
-
-  useEffect(() => {
-    const dataLocation = listMenuLocation.filter(
-      (x) => x.ProvinceID === Number(provinceId)
-    );
-    if (!isEmpty(dataLocation)) {
-      setLocation([dataLocation[0].ProvinceName]);
-    }
-
-    const dataProject = listMenuBarProjectType.filter(
-      (x) => x.id === projectTypeId
-    );
-    if (!isEmpty(dataProject)) {
-      setProjectName(
-        typeof dataProject[0].name === "string"
-          ? dataProject[0].name.split(",")
-          : dataProject[0].name
-      );
-    }
-    const dataProduct = listMenuBarType.filter((x) => x.id === projectId);
-    if (!isEmpty(dataProduct)) {
-      setProductName(
-        typeof dataProduct[0].name === "string"
-          ? dataProduct[0].name.split(",")
-          : dataProduct[0].name
-      );
-    }
-    if (areaFrom !== null || areaTo !== null) {
-      setDataDienTich([areaFrom, areaTo]);
-    }
-    if (priceFrom !== "" || priceTo !== "") {
-      setDataKhoangGia([priceFrom, priceTo]);
-    }
-    if (textSearch !== "") {
-      setTextSearchValue(textSearch);
-    }
-  }, [
-    provinceId,
-    projectId,
-    projectTypeId,
-    areaFrom,
-    areaTo,
-    priceFrom,
-    priceTo,
-    listMenuBarType,
-    listMenuBarProjectType,
-    listMenuLocation,
-  ]);
+  const [location, setLocation] = useState<string[]>([]);
+  const [productName, setProductName] = useState<string[]>([]);
+  const [projectName, setProjectName] = useState<string[]>([]);
+  const { checkReload } = useFavourite();
+  const [dataKhoangGia, setDataKhoangGia] = useState<number[]>([1, 20]);
+  const [dataDienTich, setDataDienTich] = useState<number[]>([30, 200]);
 
   const handleChange = (event: any) => {
     const {
@@ -202,56 +202,186 @@ const SearchPage = ({
     setTextSearchValue(value);
   };
 
-  const handleSelectProject = (
-    event: SelectChangeEvent<typeof projectName>
-  ) => {
-    const {
-      target: { value },
-    } = event;
-    const data = listMenuBarProjectType.filter((x) => x.name === value);
-    setProjectName(typeof value === "string" ? value.split(",") : value);
-    setFilterSearch({ ...filterSearch, projectTypeId: data[0].id });
-  };
-  const handleSelectProduct = (
-    event: SelectChangeEvent<typeof productName>
-  ) => {
-    const {
-      target: { value },
-    } = event;
-    const data = listMenuBarType.filter((x) => x.name === value);
-    setProductName(typeof value === "string" ? value.split(",") : value);
-    setFilterSearch({ ...filterSearch, projectId: data[0].id });
+  const handleSelectProduct = (data: any) => {
+    const bodySearch: any = [];
+    const arr: any = [];
+    // data.map((item) => {
+    bodySearch.push(data.id);
+    arr.push(data);
+    // })
+    setListDataLSProject(arr);
+    setListIdProject(bodySearch);
+
+    // console.log(data)
   };
 
-  const handleChangeLocation = (
-    event: SelectChangeEvent<typeof projectName>
-  ) => {
-    const {
-      target: { value },
-    } = event;
-    const data = listMenuLocation.filter((x) => x.ProvinceName === value);
-    setFilterSearch({ ...filterSearch, provinceId: data[0].ProvinceID.toString() });
-    setLocation(typeof value === "string" ? value.split(",") : value);
+  const handleChangeLocation = (data: any) => {
+    const bodySearch: any = [];
+    const arrayData: any = [];
+    data.map((item) => {
+      bodySearch.push(item.ProvinceID.toString());
+      arrayData.push(item);
+    });
+
+    setCheckSelectProvince(true);
+    setListParamsProvince(bodySearch);
+    fetchListProjectType(bodySearch);
+    setListDataLSProvince(arrayData);
+    setListIdProject([]);
+    setListDataLSProjectType([]);
+    setListDataLSProjectType([]);
+    setParamsProjectType([]);
+    fetchListProjectTypeByProvince(bodySearch);
   };
+
+  const handleSelectProject = (dataProjectType: any) => {
+    const bodySearch: any = [];
+    const arrayData: any = [];
+    dataProjectType.map((item) => {
+      bodySearch.push(item.id);
+      arrayData.push(item);
+    });
+    setCheckSelectProjectType(true);
+    fetchListProject(bodySearch);
+    setParamsProjectType(bodySearch);
+    setListDataLSProjectType(arrayData);
+  };
+
+  const fetchListProjectType = async (data: any) => {
+    const body = {
+      provinceIdList: data,
+    };
+    setCheckSelectProvince(false);
+    try {
+      const response: any = await getListProjectTypeByListIdProvince(body);
+      if (response.responseCode === "00") {
+        dispatch(getListProjectTypeResponse(response.responseData));
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const fetchListProjectTypeByProvince = async (data: any) => {
+    const body = {
+      provinceIdList: data,
+    };
+    setCheckSelectProvince(false);
+    try {
+      const response: any = await getListProjectByProjectType(body);
+      if (response.responseCode === "00") {
+        dispatch(getListProjectResponse(response.responseData));
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const fetchListProject = async (data: any) => {
+    const body = {
+      projectTypeIdList: data,
+      provinceIdList: listParamsProvince,
+    };
+    setCheckSelectProjectType(false);
+    try {
+      const response: any = await getListProjectByProjectType(body);
+      if (response.responseCode === "00") {
+        dispatch(getListProjectResponse(response.responseData));
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    if (
+      (areaFrom !== "" || areaTo !== "") &&
+      typeof areaFrom === "string" &&
+      typeof areaTo === "string"
+    ) {
+      setDataDienTich([parseInt(areaFrom), parseInt(areaTo)]);
+    }
+    if (
+      (priceFrom !== "" || priceTo !== "") &&
+      typeof priceFrom === "string" &&
+      typeof priceTo === "string"
+    ) {
+      setDataKhoangGia([parseInt(priceFrom), parseInt(priceTo)]);
+    }
+  }, [areaFrom, areaTo, priceFrom, priceTo]);
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setTextSearchValue(textSearch);
+      const listProvince = localStorage?.getItem("listParamsLSProvince");
+      const listProvinceData = localStorage?.getItem("listDataLSProvince");
+      const listProjectType = localStorage?.getItem("listParamsLSProjectType");
+      const listProjectData = localStorage?.getItem("listDataLSProjectType");
+      const listDataIdProject = localStorage?.getItem("listDataLSProject");
+      const listParamsIdProject = localStorage?.getItem("listParamsIdProject");
+      if (!isEmpty(listProvince)) {
+		fetchListProject(JSON.parse(listProjectType));
+        fetchListProjectType(JSON.parse(listProvince));
+        setListParamsProvince(JSON.parse(listProvince));
+        fetchListProjectTypeByProvince(JSON.parse(listProvince));
+      } else {
+        fetchListProjectType([]);
+		
+      }
+      if (!isEmpty(listProvinceData)) {
+        setListDataLSProvince(JSON.parse(listProvinceData));
+      }
+
+      if (!isEmpty(listProjectType) && !isEmpty(listParamsProjectType)) {
+        fetchListProject(JSON.parse(listProjectType));
+        setParamsProjectType(JSON.parse(listProjectType));
+      } else {
+        fetchListProject([]);
+        localStorage.removeItem("listParamsLSProjectType");
+      }
+      if (!isEmpty(listProjectData)) {
+        setListDataLSProjectType(JSON.parse(listProjectData));
+      } else {
+        localStorage.removeItem("listDataLSProjectType");
+      }
+      if (!isEmpty(listDataIdProject) && !isEmpty(listIdProject)) {
+        setListDataLSProject(JSON.parse(listDataIdProject));
+      } else {
+        localStorage.removeItem("listDataLSProject");
+      }
+      if (!isEmpty(listParamsIdProject)) {
+        setListIdProject(JSON.parse(listParamsIdProject));
+      } else {
+        localStorage.removeItem("listParamsIdProject");
+      }
+    }
+  }, []);
+
+  const onFilterApply = () => {
+    setFilterSearch({
+      ...filterSearch,
+      areaFrom: dataDienTich[0].toString(),
+      areaTo: dataDienTich[1].toString(),
+      priceFrom: dataKhoangGia[0].toString(),
+      priceTo: dataKhoangGia[1].toString(),
+    });
+  };
+
+  const onFilterCancel = () => {
+    setDataDienTich([
+      parseInt(filterSearch.areaFrom),
+      parseInt(filterSearch.areaTo),
+    ]);
+    setDataKhoangGia([
+      parseInt(filterSearch.priceFrom),
+      parseInt(filterSearch.priceTo),
+    ]);
+  };
+
   const handleChangeKhoangGia = (event: any) => {
     const {
       target: { value },
     } = event;
-    // if (value.length === 0) {
-    //   setDataKhoangGia(value);
-    //   setFilterSearch({
-    //     ...filterSearch,
-    //     priceFrom: "",
-    //     priceTo: "",
-    //   });
-    // } else {
-      setDataKhoangGia(value);
-      setFilterSearch({
-        ...filterSearch,
-        priceFrom: value[0].toString(),
-        priceTo: value[1].toString(),
-      });
-    // }
+    setDataKhoangGia(value);
   };
 
   const handleChangeDienTich = (event: any) => {
@@ -261,26 +391,39 @@ const SearchPage = ({
 
     if (value.length === 0) {
       setDataDienTich(value);
-      setFilterSearch({
-        ...filterSearch,
-        areaFrom: "",
-        areaTo: "",
-      });
     } else {
       setDataDienTich(value);
-      setFilterSearch({
-        ...filterSearch,
-        areaFrom: value[0],
-        areaTo: value[1],
-      });
     }
   };
-
   const handleSearch = () => {
+    localStorage.setItem(
+      "listDataLSProvince",
+      JSON.stringify(listDataLSProvince)
+    );
+    localStorage.setItem(
+      "listParamsLSProvince",
+      JSON.stringify(listParamsProvince)
+    );
+    localStorage.setItem(
+      "listDataLSProjectType",
+      JSON.stringify(listDataLSProjectType)
+    );
+    localStorage.setItem(
+      "listParamsLSProjectType",
+      JSON.stringify(listParamsProjectType)
+    );
+    localStorage.setItem(
+      "listDataLSProject",
+      JSON.stringify(listDataLSProject)
+    );
+    localStorage.setItem("listParamsIdProject", JSON.stringify(listIdProject));
+
     router.push(
       `/search?Type=Advanded&&textSearch=${filterSearch.textSearch}&&provinceId=${filterSearch.provinceId}&&projectTypeId=${filterSearch.projectTypeId}&&projectId=${filterSearch.projectId}&&priceFrom=${filterSearch.priceFrom}&&priceTo=${filterSearch.priceTo}&&areaFrom=${filterSearch.areaFrom}&&areaTo=${filterSearch.areaTo}`
     );
     setSearchAction(!searchAction);
+
+
   };
   const handleResetFilter = () => {
     setSearchBody({
@@ -293,106 +436,186 @@ const SearchPage = ({
       areaFrom: null,
       areaTo: null,
     });
+    localStorage.removeItem("listDataLSProvince");
+    localStorage.removeItem("listParamsLSProvince");
+    localStorage.removeItem("listDataLSProjectType");
+    localStorage.removeItem("listParamsLSProjectType");
+    localStorage.removeItem("listDataLSProject");
+    localStorage.removeItem("listParamsIdProject");
     router.push(
       `/search?Type=Advanded&&textSearch=&&provinceId=&&projectTypeId=&&projectId=&&priceFrom=&&priceTo=&&areaFrom=null&&areaTo=null`
     );
   };
 
-  return (
-    <ContainerSearch title={"Kết quả tìm kiếm"} checkBread={true}>
-      <ContainerSearchPage>
-        <div style={{ display: "flex", marginBottom: 31 }}>
-          <div>
-            <FormControl sx={{ m: 1, width: 150, mt: 3 }}>
-              <TextField
-                id="outlined-required"
-                value={textSearchValue}
-                placeholder="Nhập tên dự án , địa chỉ hoặc thành phố"
-                onChange={handleChange}
-                className={classes.root}
-                sx={{
-                  input: {
-                    background: "#ffffff",
-                    borderRadius: 8,
-                  },
-                }}
-                onKeyPress={(ev) => {
-                  if (ev.key === "Enter") {
-                    router.push(
-                      `/search?Type=Advanded&&textSearch=${filterSearch.textSearch}&&provinceId=${filterSearch.provinceId}&&projectTypeId=${filterSearch.projectTypeId}&&projectId=${filterSearch.projectId}&&priceFrom=${filterSearch.priceFrom}&&priceTo=${filterSearch.priceTo}&&areaFrom=${filterSearch.areaFrom}&&areaTo=${filterSearch.areaTo}`
-                    );
-                    ev.preventDefault();
-                  }
-                }}
-              />
-            </FormControl>
+  const handleClickSearch = () => {
+    router.push(
+      `/search?Type=Advanded&&textSearch=${filterSearch.textSearch}&&provinceId=${filterSearch.provinceId}&&projectTypeId=${filterSearch.projectTypeId}&&projectId=${filterSearch.projectId}&&priceFrom=${filterSearch.priceFrom}&&priceTo=${filterSearch.priceTo}&&areaFrom=${filterSearch.areaFrom}&&areaTo=${filterSearch.areaTo}`
+    );
+  };
+  const handleClick =
+    (newPlacement: PopperPlacementType) =>
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl(event.currentTarget);
+      setOpenModal((prev) => placement !== newPlacement || !prev);
+      setPlacement(newPlacement);
+    };
+
+  const fetchComponent = () => {
+    return (
+      <>
+        {!isEmpty(listParamsProjectType) ||
+        !isEmpty(listParamsProvince) ||
+        !isEmpty(listIdProject) ||
+        !isEmpty(textSearch) ? (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              padding: "20px 20px 0px 20px",
+              marginTop: 15,
+              gap: 10,
+            }}
+          >
+            <LinkStyled onClick={handleResetFilter}>
+              <IconHuyLoc className="icon-huyloc" />
+            </LinkStyled>
           </div>
-          <div>
-            <SelectLocationSearch
+        ) : (
+          <></>
+        )}
+      </>
+    );
+  };
+
+  return (
+    <ContainerSearchPage
+      title={"Tìm kiếm bất động sản"}
+      rightContent={
+        <div>
+          <FormControl
+            sx={{ m: 1 }}
+            style={{ display: "flex", flexDirection: "row" }}
+          >
+            <TextStyled
+              className={classes.root}
+              onChange={handleChange}
+              placeholder="Nhập tên hoặc mã sản phẩm/ dự án..."
+              value={textSearchValue}
+              inputProps={{ "aria-label": "search google maps" }}
+              onKeyPress={(ev) => {
+                if (ev.key === "Enter") {
+                  router.push(
+                    `/search?Type=Advanded&&textSearch=${filterSearch.textSearch}&&provinceId=${filterSearch.provinceId}&&projectTypeId=${filterSearch.projectTypeId}&&projectId=${filterSearch.projectId}&&priceFrom=${filterSearch.priceFrom}&&priceTo=${filterSearch.priceTo}&&areaFrom=${filterSearch.areaFrom}&&areaTo=${filterSearch.areaTo}`
+                  );
+                  ev.preventDefault();
+                }
+              }}
+            />
+            <IconButton
+              type="submit"
+              sx={{ p: "10px" }}
+              aria-label="search"
+              onClick={handleClickSearch}
+            >
+              <SearchIconSearchPage />
+            </IconButton>
+          </FormControl>
+        </div>
+      }
+    >
+      <div>
+        <div
+          style={{
+            display: "flex",
+            marginBottom: 31,
+            alignItems: "center",
+            gap: 90,
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "flex-start",
+              gap: 90,
+            }}
+          >
+            <LocationMultipeCheckbox
               label="Vị Trí"
               data={listMenuLocation}
-              value={location}
+              listLocation={location}
               onChange={handleChangeLocation}
               placeholder="Chọn vị trí"
               style={{ width: 150, height: 40 }}
             />
-            <SelectSeach
+            <ProjectTypeCheckboxDropdown
               label="Loại BĐS"
-              data={listMenuBarProjectType}
-              value={projectName}
+              data={projectTypeListResponse}
+              checkSelectProvince={checkSelectProvince}
+              listProjectType={projectName}
               onChange={handleSelectProject}
               placeholder="Loại BĐS"
               style={{ width: 150, height: 40 }}
             />
-            <SelectSeach
+            <ProjectDropdown
               label="Chọn dự án"
-              data={listMenuBarType}
-              value={productName}
+              data={projectListResponse}
+              listProject={productName}
+              checkSelectProvince={checkSelectProvince}
+              checkSelectProjectType={checkSelectProjectType}
               onChange={handleSelectProduct}
               placeholder="Chọn dự án"
               style={{ width: 150, height: 40 }}
             />
-            {/* <SelectSeach
-              label="Block/ Khu"
-              data={[]}
-              value={[]}
-              onChange={() => console.log("abc")}
-              placeholder="Block/ Khu"
-              style={{ width: 150 }}
-            /> */}
-            <SelectKhoanGia
-              label="Khoảng giá"
-              data={valueKhoangGia}
-              value={dataKhoangGia}
-              setDataKhoangGia={setDataKhoangGia}
-              onChange={handleChangeKhoangGia}
-              placeholder="Khoảng giá"
-              style={{ width: 150, height: 40 }}
-            />
-            {/* <SelectSeach
-              label="Phòng"
-              data={[]}
-              value={[]}
-              onChange={() => console.log("abc")}
-              placeholder="Phòng"
-              style={{ width: 150 }}
-            /> */}
-            <SelectDienTich
-              label="Diên tích (m2)"
-              data={valueDienTich}
-              value={dataDienTich}
-              setDataKhoangGia={setDataDienTich}
-              onChange={handleChangeDienTich}
-              placeholder="Diên tích (m2)"
-              style={{ width: 150, height: 40 }}
-            />
+            <SliderGroupFilterSearch
+              label={"Khác"}
+              text={"Bộ lọc khác"}
+              handleApply={onFilterApply}
+              handleCancel={onFilterCancel}
+            >
+              <SliderComponent
+                label="Khoảng giá"
+                onChange={handleChangeKhoangGia}
+                numberMin={1}
+                numberMax={20}
+                value={dataKhoangGia}
+                key={"priceRange"}
+                unit="tỷ"
+                sx={{
+                  "& .MuiTypography-root": {
+                    color: "#1B3459",
+                  },
+                  "& .MuiSlider-valueLabelLabel": {
+                    color: "#1B3459",
+                  },
+                }}
+              />
+              <SliderComponent
+                label="Diện tích (m2)"
+                onChange={handleChangeDienTich}
+                numberMin={30}
+                numberMax={200}
+                value={dataDienTich}
+                key={"areaRange"}
+                unit="m2"
+                sx={{
+                  "& .MuiTypography-root": {
+                    color: "#1B3459",
+                  },
+                  "& .MuiSlider-valueLabelLabel": {
+                    color: "#1B3459",
+                  },
+                }}
+              />
+            </SliderGroupFilterSearch>
           </div>
-          <div style={{ display: "flex", gap: 10 }}>
+          <div style={{ display: "flex" }}>
             <Button
               style={{
                 background: "#1B3459",
                 width: 125,
-                marginTop: 24,
+                marginTop: 35,
                 borderRadius: 8,
                 height: 40,
               }}
@@ -409,39 +632,28 @@ const SearchPage = ({
                 Lọc
               </span>
             </Button>
-            <Button
-              style={{
-                background: "#1B3459",
-                width: 125,
-                marginTop: 24,
-                borderRadius: 8,
-                height: 40,
-              }}
-              onClick={handleResetFilter}
-            >
-              <IconResetFilter />
-              <span
-                style={{
-                  color: "#ffffff",
-                  textTransform: "none",
-                  marginLeft: 5,
-                }}
-              >
-                Reset filter
-              </span>
-            </Button>
+            {fetchComponent()}
           </div>
         </div>
-        <div
-          style={{
-            display: "flex",
-            gap: 10,
-            alignItems: "center",
-            marginBottom: 21,
-          }}
-        >
-          <NumberTotalStyled>{totalTextSearch}</NumberTotalStyled>
-          <TextTotalSeach>Sản phẩm phù hợp kết quả tìm kiếm</TextTotalSeach>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <div
+            style={{
+              display: "flex",
+              gap: 10,
+              alignItems: "center",
+              marginBottom: 21,
+            }}
+          >
+            <NumberTotalStyled>{totalTextSearch}</NumberTotalStyled>
+            <TextTotalSeach>Sản phẩm phù hợp kết quả tìm kiếm</TextTotalSeach>
+          </div>
+          <div>
+            <Button onClick={handleClick("bottom")}>
+              <LinkStyled>
+                <IconSapxep className="icon-sapxep" />
+              </LinkStyled>
+            </Button>
+          </div>
         </div>
         {/* {data.map((item) => ( */}
         {!isEmpty(searchData) ? (
@@ -450,15 +662,28 @@ const SearchPage = ({
           </>
         ) : (
           <>
-            <div style={{ textAlign: "center" }}>
-              <span>Không có kết quả tìm kiếm</span>
-            </div>
+            <NoProductComponent />
           </>
         )}
 
         {/* ))} */}
-      </ContainerSearchPage>
-    </ContainerSearch>
+      </div>
+      <Popper
+        open={openModal}
+        anchorEl={anchorEl}
+        placement={placement}
+        transition
+        style={{ zIndex: 300 }}
+      >
+        {({ TransitionProps }) => (
+          <Fade {...TransitionProps} timeout={350}>
+            <PaperStyled>
+              <SwitchComponent />
+            </PaperStyled>
+          </Fade>
+        )}
+      </Popper>
+    </ContainerSearchPage>
   );
 };
 export default SearchPage;

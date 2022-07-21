@@ -25,8 +25,8 @@ const MapImage = dynamic(() => import("./MapImage"), {
 
 const Map = (props: Props) => {
   const bounds: LatLngBoundsExpression = [
-    [window.innerWidth, window.innerWidth],
-    [-window.innerWidth, -window.innerWidth],
+    [1.3*window.innerWidth, 1.3*window.innerWidth],
+    [-1.3*window.innerWidth, -1.3*window.innerWidth],
   ];
 
   const [layerParent, setLayerParent] = useState<any>(null);
@@ -43,7 +43,7 @@ const Map = (props: Props) => {
     if (
       !isEmpty(Target) &&
       !isEmpty(Target.map) &&
-      Target.level !== ListLevel.length - 1 &&
+      isEmpty(Target.productionId) &&
       Target.type !== "1"
     ) {
       const formatmap = JSON.parse(Target.map);

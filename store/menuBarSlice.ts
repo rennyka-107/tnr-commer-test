@@ -52,17 +52,17 @@ export const menuBarSlice = createSlice({
       state.listMenuBarProjectType = action.payload;
     },
     getListMenuLocation: (state, action) => {
-      const dataLocation = [
-        {
-          syncFrom: "LANDSOFT",
-          syncDate: "22-06-2022 23:00:14",
-          ProvinceID: 1,
-          ProvinceName: "Tất Cả Vị Trí",
-        },
-      ];
+    //   const dataLocation = [
+    //     {
+    //       syncFrom: "LANDSOFT",
+    //       syncDate: "22-06-2022 23:00:14",
+    //       ProvinceID: 1,
+    //       ProvinceName: "Tất Cả Vị Trí",
+    //     },
+    //   ];
       const splice = action.payload.filter((item) => item.ProvinceID !== 1);
-      const newData = dataLocation.concat(splice);
-      state.listMenuLocation = newData;
+    //   const newData = dataLocation.concat(splice);
+      state.listMenuLocation = splice;
     },
     getListCategory: (state, action) => {
       const dataCategory = [

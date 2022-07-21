@@ -2,22 +2,23 @@ import * as React from "react";
 import Button from "@mui/material/Button";
 import { IconSearchAdvan } from "@components/Icons";
 import styled from "@emotion/styled";
-import {
-  Fade,
-  Paper,
-  Popper,
-  PopperPlacementType,
-} from "@mui/material";
+import { Fade, Paper, Popper, PopperPlacementType } from "@mui/material";
 import Box from "@mui/material/Box";
-import  { SelectChangeEvent } from "@mui/material/Select";
+import { SelectChangeEvent } from "@mui/material/Select";
 import { Theme } from "@mui/material/styles";
 import SliderComponent from "@components/CustomComponent/SliderComponent";
 import SelectInputComponent from "@components/CustomComponent/SelectInputComponent";
 import SliderSearchKhoangGia from "@components/CustomComponent/SliderComponent/SliderSearchKhoangGia";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../store/store";
 import { useRouter } from "next/router";
 import SlectLocation from "@components/CustomComponent/SelectInputComponent/SlectLocation";
+import LocationMultipeCheckbox from "@components/CustomComponent/ListCheckboxSearchAdvand/LocationMultipeCheckbox";
+import ProjectTypeCheckboxDropdown from "@components/CustomComponent/ListCheckboxSearchAdvand/ProjectTypeCheckboxDropdown";
+import ProjectDropdown from "@components/CustomComponent/ListCheckboxSearchAdvand/ProjectDropDown";
+import { getListProjectByProjectType, getListProjectTypeByListIdProvince } from "../../../../pages/api/paramSearchApi";
+import { getListProjectResponse, getListProjectTypeResponse } from "../../../../store/paramsSearchSlice";
+import { isEmpty } from "lodash";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 10;
@@ -84,14 +85,27 @@ const minDistance = 10;
 const minDistance2 = 1;
 export default function ModalAdvanSearch() {
   const router = useRouter();
+  const dispatch = useDispatch();
   const { listMenuBarType, listMenuBarProjectType, listMenuLocation } =
     useSelector((state: RootState) => state.menubar);
-
+	const { projectTypeListResponse, projectListResponse } = useSelector(
+		(state: RootState) => state.paramsSearch
+	  );
+	
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );
   const [open, setOpen] = React.useState(false);
   const [placement, setPlacement] = React.useState<PopperPlacementType>();
+
+  const [checkSelectProvince, setCheckSelectProvince] = React.useState(false);
+  const [checkSelectProjectType, setCheckSelectProjectType] = React.useState(false);
+  const [listParamsProvince, setListParamsProvince] = React.useState([]);
+  const [listParamsProjectType, setParamsProjectType] = React.useState([]);
+  const [listIdProject, setListIdProject] = React.useState([]);
+  const [listDataLSProvince, setListDataLSProvince] = React.useState([]);
+  const [listDataLSProject, setListDataLSProject] = React.useState([]);
+  const [listDataLSProjectType, setListDataLSProjectType] = React.useState([]);
 
   const [productName, setProductName] = React.useState<string[]>([]);
   const [projectName, setProjectName] = React.useState<string[]>([]);
@@ -100,14 +114,14 @@ export default function ModalAdvanSearch() {
   const [valueKhoanGia, setValueKhoangGia] = React.useState<number[]>([1, 200]);
 
   const [search, setSearch] = React.useState({
-	textSearch: "",
+    textSearch: "",
     provinceId: "",
     projectTypeId: "",
     projectId: "",
-    priceFrom: '',
+    priceFrom: "",
     priceTo: "",
     areaFrom: null,
-    areaTo: null ,
+    areaTo: null,
   });
   const handleClick =
     (newPlacement: PopperPlacementType) =>
@@ -136,17 +150,24 @@ export default function ModalAdvanSearch() {
     setProjectName(typeof value === "string" ? value.split(",") : value);
   };
 
-  const handleChangeLocation = (
-    event: SelectChangeEvent<typeof projectName>
-  ) => {
-    const {
-      target: { value },
-    } = event;
-    const data = listMenuLocation.filter((x) => x.ProvinceName === value);
-    setSearch({ ...search, provinceId: data[0].ProvinceID.toString() });
-    setLocation(typeof value === "string" ? value.split(",") : value);
-  };
+  const handleChangeLocation = (data: any) => {
+    const bodySearch: any = [];
+    const arrayData: any = [];
+    data.map((item) => {
+      bodySearch.push(item.ProvinceID.toString());
+      arrayData.push(item);
+    });
 
+    setCheckSelectProvince(true);
+    setListParamsProvince(bodySearch);
+    fetchListProjectType(bodySearch);
+    setListDataLSProvince(arrayData);
+    setListIdProject([]);
+    setListDataLSProjectType([]);
+    setListDataLSProjectType([]);
+    setParamsProjectType([]);
+    fetchListProjectTypeByProvince(bodySearch);
+  };
   const handleChange1 = (
     event: Event,
     newValue: number | number[],
@@ -155,19 +176,12 @@ export default function ModalAdvanSearch() {
     if (!Array.isArray(newValue)) {
       return;
     }
-    if (activeThumb === 0) {
-      setValueDientich([
-        Math.min(newValue[0], valueDienTich[1] - minDistance),
-        valueDienTich[1],
-      ]);
-	  setSearch({ ...search, areaFrom:  valueDienTich[0], areaTo :  valueDienTich[1]});
-    } else {
-      setValueDientich([
-        valueDienTich[0],
-        Math.max(newValue[1], valueDienTich[0] + minDistance),
-      ]);
-	  setSearch({ ...search,areaFrom:  valueDienTich[0], areaTo :  valueDienTich[1]});
-    }
+    setValueDientich([newValue[0], newValue[1]]);
+    setSearch({
+      ...search,
+      areaFrom: newValue[0].toString(),
+      areaTo: newValue[1].toString(),
+    });
   };
 
   const handleChange2 = (
@@ -178,28 +192,116 @@ export default function ModalAdvanSearch() {
     if (!Array.isArray(newValue)) {
       return;
     }
+    setValueKhoangGia([newValue[0], newValue[1]]);
+    setSearch({
+      ...search,
+      priceFrom: newValue[0].toString(),
+      priceTo: newValue[1].toString(),
+    });
+  };
 
-    if (activeThumb === 0) {
-      setValueKhoangGia([
-        Math.min(newValue[0], valueKhoanGia[1] - minDistance2),
-        valueKhoanGia[1],
-      ]);
-      setSearch({ ...search,priceFrom : valueKhoanGia[0].toString(),priceTo : valueKhoanGia[1].toString()  });
-    } else {
-      setValueKhoangGia([
-        valueKhoanGia[0],
-        Math.max(newValue[1], valueKhoanGia[0] + minDistance2),
-      ]);
-      setSearch({ ...search,priceFrom : valueKhoanGia[0].toString(),priceTo : valueKhoanGia[1].toString() });
+  const handleSelectProject = (dataProjectType: any) => {
+    const bodySearch: any = [];
+    const arrayData: any = [];
+    dataProjectType.map((item) => {
+      bodySearch.push(item.id);
+      arrayData.push(item);
+    });
+    setCheckSelectProjectType(true);
+    fetchListProject(bodySearch);
+    setParamsProjectType(bodySearch);
+    setListDataLSProjectType(arrayData);
+  };
+  const handleSelectProduct = (data: any) => {
+    const bodySearch: any = [];
+    const arr: any = [];
+    // data.map((item) => {
+    bodySearch.push(data.id);
+    arr.push(data);
+    // })
+    setListDataLSProject(arr);
+    setListIdProject(bodySearch);
+
+    // console.log(data)
+  };
+
+  const fetchListProjectType = async (data: any) => {
+    const body = {
+      provinceIdList: data,
+    };
+    setCheckSelectProvince(false);
+    try {
+      const response: any = await getListProjectTypeByListIdProvince(body);
+      if (response.responseCode === "00") {
+        dispatch(getListProjectTypeResponse(response.responseData));
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const fetchListProjectTypeByProvince = async (data: any) => {
+    const body = {
+      provinceIdList: data,
+    };
+    setCheckSelectProvince(false);
+    try {
+      const response: any = await getListProjectByProjectType(body);
+      if (response.responseCode === "00") {
+        dispatch(getListProjectResponse(response.responseData));
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const fetchListProject = async (data: any) => {
+    const body = {
+      projectTypeIdList: data,
+      provinceIdList: listParamsProvince,
+    };
+    setCheckSelectProjectType(false);
+    try {
+      const response: any = await getListProjectByProjectType(body);
+      if (response.responseCode === "00") {
+        dispatch(getListProjectResponse(response.responseData));
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
 
   const handleSearch = () => {
-    router.push(
-      `/search?Type=Advanded&&textSearch=&&provinceId=${search.provinceId}&&projectTypeId=${search.projectTypeId}&&projectId=${search.projectId}&&priceFrom=${search.priceFrom}&&priceTo=${search.priceTo}&&areaFrom=${search.areaFrom}&&areaTo=${search.areaTo}`
-    );
-  };
+	localStorage.setItem(
+		"listDataLSProvince",
+		JSON.stringify(listDataLSProvince)
+	  );
+	  localStorage.setItem(
+		"listParamsLSProvince",
+		JSON.stringify(listParamsProvince)
+	  );
+	  localStorage.setItem(
+		"listDataLSProjectType",
+		JSON.stringify(listDataLSProjectType)
+	  );
+	  localStorage.setItem(
+		"listParamsLSProjectType",
+		JSON.stringify(listParamsProjectType)
+	  );
+	  localStorage.setItem(
+		"listDataLSProject",
+		JSON.stringify(listDataLSProject)
+	  );
+	  localStorage.setItem("listParamsIdProject", JSON.stringify(listIdProject));
+  
+	  router.push(
+		`/search?Type=Advanded&&textSearch=&&provinceId=${search.provinceId}&&projectTypeId=${search.projectTypeId}&&projectId=${search.projectId}&&priceFrom=${search.priceFrom}&&priceTo=${search.priceTo}&&areaFrom=${search.areaFrom}&&areaTo=${search.areaTo}`
+	  );
 
+  };
+  React.useEffect(() => {
+    fetchListProject([]);
+  }, []);
   return (
     <div>
       <Button onClick={handleClick("bottom")}>
@@ -219,7 +321,34 @@ export default function ModalAdvanSearch() {
             <Paper>
               <BodyContainer>
                 <BoxStyled sx={{ minWidth: 120 }}>
-                  <SlectLocation
+                  <LocationMultipeCheckbox
+                    label="Vị Trí"
+                    data={listMenuLocation}
+                    listLocation={location}
+                    onChange={handleChangeLocation}
+                    placeholder="Chọn vị trí"
+                    style={{ width: 305, height: 54 }}
+                  />
+                  <ProjectTypeCheckboxDropdown
+                    label="Loại BĐS"
+                    data={projectTypeListResponse}
+                    checkSelectProvince={checkSelectProvince}
+                    listProjectType={projectName}
+                    onChange={handleSelectProject}
+                    placeholder="Loại BĐS"
+					style={{ width: 305, height: 54 }}
+                  />
+                  <ProjectDropdown
+                    label="Chọn dự án"
+                    data={projectListResponse}
+                    listProject={productName}
+                    checkSelectProvince={checkSelectProvince}
+                    checkSelectProjectType={checkSelectProjectType}
+                    onChange={handleSelectProduct}
+                    placeholder="Chọn dự án"
+                    style={{ width: 305, height: 54 }}
+                  />
+                  {/* <SlectLocation
                     label="Vị Trí"
                     data={listMenuLocation}
                     value={location}
@@ -241,7 +370,7 @@ export default function ModalAdvanSearch() {
                     value={projectName}
                     onChange={handleChangeProject}
                     placeholder="Chọn Dự án"
-                  />
+                  /> */}
                 </BoxStyled>
                 <BoxStyled
                   style={{

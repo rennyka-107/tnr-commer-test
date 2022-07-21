@@ -18,10 +18,11 @@ import ImageWithHideOnErrorOffers from "hooks/ImageWithHideOnErrorOffers";
 import { isEmpty } from "lodash";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../store/store";
 import Mask3 from "../../../../public/images/mask_g_3.png";
 import SliderSpecialSale from "../SliderSpecialSale.tsx";
+import { setOpenModalSale } from "../../../../store/projectMapSlice";
 type Props = {
   location: string;
   constructArea: number;
@@ -125,10 +126,14 @@ const ProjectInformation = ({
   ownership,
 }: Props) => {
   const Router = useRouter();
+  const dispatch = useDispatch();
   const ProjectInformation = useSelector(
     (state: RootState) => state.projectMap.ProjectInformation
   );
-  const [open, setOpen] = useState(true);
+  const open = useSelector(
+    (state: RootState) => state.projectMap.openModalSale
+  );
+  // const [open, setOpen] = useState(true);
   const classes = useStyle();
   const [value, setValue] = useState(0);
   function renderList() {
@@ -184,7 +189,8 @@ const ProjectInformation = ({
     );
   }
   const handleClose = () => {
-    setOpen(false);
+    // setOpen(false);
+    dispatch(setOpenModalSale(false));
   };
 
   return (
@@ -242,7 +248,7 @@ const ProjectInformation = ({
                 <div
                   onClick={() => Router.push(`/sales/${item.offersId}`)}
                   style={{ cursor: "pointer" }}
-				  key={key}
+                  key={key}
                 >
                   <ImageWithHideOnErrorOffers
                     key={key}
@@ -286,7 +292,7 @@ const ProjectInformation = ({
                 width: 343,
                 borderRadius: 8,
               }}
-			  onClick={handleClose}
+              onClick={handleClose}
             >
               <TextButtonStyled>Đóng</TextButtonStyled>
             </Button>
