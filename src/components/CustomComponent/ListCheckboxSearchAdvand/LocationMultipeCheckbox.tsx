@@ -119,7 +119,7 @@ const TitleStyled = styled(Typography)`
 const useStyles = makeStyles((theme) => ({
   menuPaper: {
     width: 303,
-	marginLeft: 13,
+    marginLeft: 13,
   },
   noBorder: {
     border: "none",
@@ -135,7 +135,6 @@ const LocationMultipeCheckbox = ({
 }: Props) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-  const dataSelectLS = localStorage.getItem("listDataLSProvince");
   const [listDataView, setListDataView] = React.useState([]);
   const [value, setValue] = React.useState<any[]>([]);
   const [pendingValue, setPendingValue] = React.useState<any[]>([]);
@@ -154,10 +153,13 @@ const LocationMultipeCheckbox = ({
     setAnchorEl(null);
   };
   React.useEffect(() => {
-    if (!isEmpty(JSON.parse(dataSelectLS))) {
-      setPendingValue(JSON.parse(dataSelectLS));
+    if (typeof window !== "undefined") {
+      const dataSelectLS = localStorage?.getItem("listDataLSProvince");
+      if (!isEmpty(JSON.parse(dataSelectLS))) {
+        setPendingValue(JSON.parse(dataSelectLS));
+      }
     }
-  }, [dataSelectLS]);
+  }, []);
 
   const open = Boolean(anchorEl);
   const id = open ? "github-label" : undefined;
@@ -171,11 +173,7 @@ const LocationMultipeCheckbox = ({
         multiple
         displayEmpty
         value={pendingValue}
-        input={
-          <OutlinedInputStyled
-            style={{ borderRadius: 8, height: 54}}
-          />
-        }
+        input={<OutlinedInputStyled style={{ borderRadius: 8, height: 54 }} />}
         renderValue={(selected) => {
           if (pendingValue.length === 0) {
             return <span>Chọn Vị trí</span>;

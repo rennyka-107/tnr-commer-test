@@ -76,7 +76,7 @@ const AuthContext = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    if (router.pathname !== "/search") {
+    if (router.pathname !== "/search" && router.pathname !== "/projectTNR" && router.pathname !== "/compare-search") {
       localStorage.removeItem("listDataLSProvince");
       localStorage.removeItem("listParamsLSProvince");
       localStorage.removeItem("listDataLSProjectType");

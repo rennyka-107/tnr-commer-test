@@ -234,12 +234,11 @@ const ButtonStyled = styled(Button)`
   border-radius: 60px;
   padding: 13px;
   :hover {
-    background: #ffffff;
-    box-shadow: 4px 8px 24px #f2f2f5;
-    border: 1px solid #48576d;
+    background: #FEC83C;
+    // box-shadow: 4px 8px 24px #f2f2f5;
+    box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.2);
     border-radius: 60px;
-    color: #48576d;
-    font-weight: 400;
+    color: #ffffff;
   }
   font-family: "Roboto";
   font-style: normal;
@@ -927,7 +926,9 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                     disabled={dataProduct?.paymentStatus !== 2}
                     style={{
                       backgroundColor:
-                        dataProduct?.paymentStatus !== 2 ? "#FFFF" : " #ea242a",
+                        dataProduct?.paymentStatus !== 2 ? "#FFFF" : "#f3f4f6",
+                      color: "#1B3459",
+                      border: "1px solid #1B3459"
                     }}
                   >
                     Giỏ hàng
@@ -939,7 +940,7 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                     disabled={dataProduct?.paymentStatus !== 2}
                     style={{
                       backgroundColor:
-                        dataProduct?.paymentStatus !== 2 ? "#FFFF" : " #ea242a",
+                        dataProduct?.paymentStatus !== 2 ? "#FFFF" : "",
                     }}
                   >
                     Mua Online

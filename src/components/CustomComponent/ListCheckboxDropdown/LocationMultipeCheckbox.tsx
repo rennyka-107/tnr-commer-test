@@ -16,6 +16,7 @@ import {
   SearchIconSearchPage,
 } from "@components/Icons";
 import _, { isEmpty } from "lodash";
+import { useRouter } from "next/router";
 
 interface PopperComponentProps {
   anchorEl?: any;
@@ -132,8 +133,8 @@ const LocationMultipeCheckbox = ({
   style,
 }: Props) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-
-  const dataSelectLS = localStorage.getItem("listDataLSProvince");
+  //   const dataSelectLS = localStorage?.getItem("listDataLSProvince");
+  const router = useRouter();
   const [listDataView, setListDataView] = React.useState([]);
   const [value, setValue] = React.useState<any[]>([]);
   const [pendingValue, setPendingValue] = React.useState<any[]>([]);
@@ -152,10 +153,15 @@ const LocationMultipeCheckbox = ({
     setAnchorEl(null);
   };
   React.useEffect(() => {
-    if (!isEmpty(JSON.parse(dataSelectLS))) {
-      setPendingValue(JSON.parse(dataSelectLS));
+    if (typeof window !== "undefined") {
+      const dataSelectLS = localStorage?.getItem("listDataLSProvince");
+      if (!isEmpty(JSON.parse(dataSelectLS))) {
+        setPendingValue(JSON.parse(dataSelectLS));
+      }else {
+        setPendingValue([]);
+      }
     }
-  }, [dataSelectLS]);
+  }, [router]);
 
   const open = Boolean(anchorEl);
   const id = open ? "github-label" : undefined;

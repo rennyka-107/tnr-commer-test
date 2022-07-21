@@ -11,7 +11,7 @@ import {
   WrapperBoxBorderStyled,
 } from "@components/StyledLayout/styled";
 import styled from "@emotion/styled";
-import { Box, CardMedia } from "@mui/material";
+import { Box, Button, CardMedia } from "@mui/material";
 import React, { MouseEventHandler, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../store/store";
@@ -59,6 +59,32 @@ const IconWrapper = styled(Box)`
   padding: 8px;
   width: 30px;
   height: 28px;
+`;
+
+const ButtonStyled = styled(Button)`
+  width: 164px;
+  height: 48px;
+  background: #ea242a;
+  border-radius: 60px;
+  :hover {
+    background: #fec83c;
+    // box-shadow: 4px 8px 24px #f2f2f5;
+    box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.2);
+    border-radius: 60px;
+    color: #ffffff;
+  }
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 19px;
+  text-align: center;
+  color: #ffffff;
+  text-transform: none;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  margin: 19px 4px 0 4px;
 `;
 
 const ItemCompare = ({ onClick, data }: Props) => {
@@ -162,17 +188,9 @@ const ItemCompare = ({ onClick, data }: Props) => {
           >
             {data?.productName ?? "N/A"}
           </Title22Styled>
-          <ButtonAction
-            style={{
-              width: 164,
-              height: 48,
-              borderRadius: 60,
-              marginTop: 19,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              backgroundColor:
-                data?.paymentStatus === "2" && " #ea242a",
+          <ButtonStyled
+            sx={{
+              backgroundColor: data?.paymentStatus === "2" && "#ea242a",
             }}
             onClick={onClick}
             disabled={data?.paymentStatus !== "2"}
@@ -181,7 +199,7 @@ const ItemCompare = ({ onClick, data }: Props) => {
             <Box width={19} height={19}>
               <IconArrowRight color={"white"} />
             </Box>
-          </ButtonAction>
+          </ButtonStyled>
         </ColStyled>
       </WrapperContent>
 

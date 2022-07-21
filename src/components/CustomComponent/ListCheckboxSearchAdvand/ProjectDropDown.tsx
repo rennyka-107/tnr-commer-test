@@ -141,7 +141,7 @@ const ProjectDropdown = ({
 }: Props) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [listDataView, setListDataView] = React.useState([]);
-  const dataSelectLS = localStorage.getItem("listDataLSProject");
+
   const [value, setValue] = React.useState<any[]>([]);
   const [openSelect, setOpenSelect] = React.useState(true);
   const [pendingValue, setPendingValue] = React.useState<any[]>([]);
@@ -167,11 +167,15 @@ const ProjectDropdown = ({
   }, [checkSelectProvince,checkSelectProjectType]);
 
   React.useEffect(() => {
-    if (!isEmpty(JSON.parse(dataSelectLS))) {
-		const arr = JSON.parse(dataSelectLS)
-      setPendingValue(arr[0]);
-    }
-  }, [dataSelectLS]);
+	if(typeof window !== "undefined"){
+		const dataSelectLS = localStorage?.getItem("listDataLSProject");
+		if (!isEmpty(JSON.parse(dataSelectLS))) {
+			const arr = JSON.parse(dataSelectLS)
+		  setPendingValue(arr[0]);
+		}
+	}
+
+  }, []);
 
   const open = Boolean(anchorEl);
   const id = open ? "github-label" : undefined;

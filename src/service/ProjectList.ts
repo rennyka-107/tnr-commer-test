@@ -14,6 +14,9 @@ export interface BodyListProjectI {
     projectTypeId?: any,
     fromPrice?: 0,
     toPrice?: 0
+	provinceIdList?: any,
+	projectTypeIdList?: any,
+	textSearch?: any,
 }
 
 const LIST_PROJECT = '/api/project/information/search';
@@ -21,7 +24,10 @@ const LIST_PROJECT = '/api/project/information/search';
 export const getListProjectTNR = (params: ParamsListProjectI, body: BodyListProjectI) => {
 	const newBody = {
 		...body,
-		provinceId: body.provinceId === "1" ? "" : body.provinceId
+		provinceId: body.provinceId === "1" ? "" : body.provinceId,
+		provinceIdList: body.provinceIdList ? body.provinceIdList : [],
+		projectTypeIdList: body.projectTypeIdList ? body.projectTypeIdList : [],
+		textSearch: body.textSearch
 	}
     // console.log(body, 'body');
 

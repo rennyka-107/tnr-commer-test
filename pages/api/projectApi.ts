@@ -21,10 +21,10 @@ export const getListTabsProjectApi = async (id: string) => {
   );
 };
 
-export const getProjectByType = async (typeId: string) => {
+export const getProjectByType = async (body: any) => {
   return HttpClient.post<any, CommonResponse>(
     `/api/param/v1/project`,
-    { projectTypeIdList: [typeId] },
+     body, 
     { withToken: true }
   );
 };

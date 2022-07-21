@@ -43,6 +43,7 @@ const CompareSearch = () => {
     categoryId,
   } = router.query;
   const pageNumber = Math.ceil(totalElement / search.size);
+  const [totalElementRS, setTotalElementRS] = useState(0);
   const [searchBody, setSearchBody] = useState<any>({
     projectTypeId: projectTypeId ? projectTypeId : "",
     projectId: projectId ? projectId : "",
@@ -59,15 +60,23 @@ const CompareSearch = () => {
     });
   };
   useEffect(() => {
-    setSearchBody({
-      projectTypeId: projectTypeId ? projectTypeId : "",
-      priceFrom: priceFrom ? priceFrom + "000000000" : "",
-      priceTo: priceTo ? priceTo + "000000000" : "",
-      projectId: projectId ? projectId : "",
-      categoryId: categoryId ? categoryId : "",
-      areaFrom: Number(areaFrom),
-      areaTo: Number(areaTo),
-    });
+    if (typeof window !== "undefined") {
+      const listProjectType = localStorage?.getItem("listParamsLSProjectType");
+      const listParamsIdProject = localStorage?.getItem("listParamsIdProject");
+      setSearchBody({
+        projectTypeId: projectTypeId ? projectTypeId : "",
+        priceFrom: priceFrom ? priceFrom : "",
+        priceTo: priceTo ? priceTo : "",
+        projectId: projectId ? projectId : "",
+        categoryId: categoryId ? categoryId : "",
+        areaFrom: Number(areaFrom),
+        areaTo: Number(areaTo),
+        projectTypeIdList: listProjectType ? JSON.parse(listProjectType) : [],
+        projectIdList: listParamsIdProject
+          ? JSON.parse(listParamsIdProject)
+          : [],
+      });
+    }
   }, [router.query]);
 
   const fetchAdvandedSearchListCompare = async () => {
@@ -79,6 +88,7 @@ const CompareSearch = () => {
         dispatch(getPaggingSearch(response.totalElement));
         if (response.responseCode === "00") {
           setLoading(true);
+          setTotalElementRS(response.totalElement);
         }
       }
     } catch (err) {
@@ -106,9 +116,9 @@ const CompareSearch = () => {
   }, [searchBody, search.page]);
 
   useEffect(() => {
-	if (router.pathname === '/compare-search') {
-    fetchAdvandedSearchListCompareFavourite();
-}
+    if (router.pathname === "/compare-search") {
+      fetchAdvandedSearchListCompareFavourite();
+    }
   }, [checkUp]);
   const fetchComponent = () => {
     return (
@@ -118,6 +128,7 @@ const CompareSearch = () => {
             <DynamicSearchPagesCompare
               searchData={SearchHomeLocation}
               totalElement={pageNumber}
+              totalTextSearch={totalElementRS}
             />
           </>
         ) : (

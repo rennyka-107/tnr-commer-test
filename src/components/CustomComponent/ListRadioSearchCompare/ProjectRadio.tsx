@@ -10,6 +10,7 @@ import Checkbox from "@mui/material/Checkbox";
 import {
   FormControl,
   OutlinedInput,
+  Radio,
   Select,
   TextField,
   Typography,
@@ -21,8 +22,9 @@ import {
   IconSelectDatLich,
   SearchIconSearchPage,
 } from "@components/Icons";
-import { isEmpty } from "lodash";
+import _, { isEmpty } from "lodash";
 import { useRouter } from "next/router";
+import { string } from "yup/lib/locale";
 
 interface PopperComponentProps {
   anchorEl?: any;
@@ -32,12 +34,23 @@ interface PopperComponentProps {
 type Props = {
   label?: string;
   style?: React.CSSProperties;
-  data: MenuBar[];
-  listProject: string[];
-  placeholder?: string;
-  checkSelectProvince?: any;
+  data: any[];
+  listProjectType: string[];
   checkSelectProjectType?: any;
+  placeholder?: string;
   onChange?: any;
+};
+type typeProps = {
+	code: string,
+	countPd: number,
+	description:  string,
+	icon:  string,
+	iconHover:  string,
+	id:  string,
+	name: string,
+	nameDisplay: string,
+	position: number,
+	symbol:  string,
 };
 const StyledAutocompletePopper = styled("div")(({ theme }) => ({
   [`& .${autocompleteClasses.paper}`]: {
@@ -74,7 +87,6 @@ const StyledAutocompletePopper = styled("div")(({ theme }) => ({
 const StyledInput = styled(InputBase)(({ theme }) => ({
   padding: 10,
   width: "100%",
-  textTransform: "lowercase",
   borderBottom: `1px solid ${
     theme.palette.mode === "light" ? "#eaecef" : "#30363d"
   }`,
@@ -106,7 +118,7 @@ const LabelStyled = styled(Typography)`
   font-weight: 400;
   font-size: 14px;
   line-height: 16px;
-  margin-left: 10px;
+
   margin-top: 4px;
   color: #1b3459;
 `;
@@ -133,42 +145,31 @@ const useStyles = makeStyles((theme) => ({
     border: "none",
   },
 }));
-const ProjectDropdown = ({
+const ProjectTypeRadio = ({
   label,
   data,
   onChange,
-  listProject,
+  listProjectType,
   placeholder,
-  checkSelectProvince,
-  style,
   checkSelectProjectType,
+  style,
 }: Props) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [listDataView, setListDataView] = React.useState([]);
   const router = useRouter();
   const [value, setValue] = React.useState<any[]>([]);
-  const [openSelect, setOpenSelect] = React.useState(true);
-  const [pendingValue, setPendingValue] = React.useState<any[]>([]);
+  const [pendingValue, setPendingValue] = React.useState<typeProps[]>([]);
+
   const classes = useStyles();
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setPendingValue(value);
     setAnchorEl(event.currentTarget);
   };
-
-  const handleClose = () => {
-    setValue(pendingValue);
-    onChange(pendingValue);
-    if (anchorEl) {
-      anchorEl.focus();
-    }
-    setOpenSelect(false);
-    setAnchorEl(null);
-  };
-  React.useEffect(() => {
-    if (checkSelectProvince === true || checkSelectProjectType === true) {
-      setPendingValue([]);
-    }
-  }, [checkSelectProvince, checkSelectProjectType]);
+    React.useEffect(() => {
+      if (checkSelectProjectType === true) {
+        setPendingValue([]);
+      }
+    }, [checkSelectProjectType]);
 
   React.useEffect(() => {
     if (typeof window !== "undefined") {
@@ -176,30 +177,33 @@ const ProjectDropdown = ({
       if (!isEmpty(JSON.parse(dataSelectLS))) {
         const arr = JSON.parse(dataSelectLS);
         setPendingValue(arr[0]);
-      }else {
+      } else {
         setPendingValue([]);
       }
     }
   }, [router]);
 
+  const handleClose = () => {
+    setValue(pendingValue);
+    onChange(pendingValue);
+    if (anchorEl) {
+      anchorEl.focus();
+    }
+    setAnchorEl(null);
+  };
+
   const open = Boolean(anchorEl);
   const id = open ? "github-label" : undefined;
-
   return (
-    <FormControl sx={{ m: 1, width: 170, mt: 3 }}>
+    <FormControl sx={{ m: 1, width: 200, mt: 3 }}>
       <TitleStyled>{label}</TitleStyled>
-
       <Select
         labelId="mutiple-select-label"
         // multiple
         displayEmpty
         value={pendingValue}
-        onClick={() => setOpenSelect(true)}
-        input={
-          <OutlinedInputStyled
-            style={{ borderRadius: 8, height: 40, textAlign: "center" }}
-          />
-        }
+        // onClick={() => setOpenSelect(true)}
+        input={<OutlinedInputStyled style={{ borderRadius: 8, height: 40 }} />}
         renderValue={(selected: any) => {
           if (!isEmpty(selected)) {
             return selected.name;
@@ -232,39 +236,112 @@ const ProjectDropdown = ({
                 }
               }}
               value={pendingValue}
-              onChange={(event, newValue: any, reason) => {
-                if (
-                  event.type === "keydown" &&
-                  (event as React.KeyboardEvent).key === "Backspace" &&
-                  reason === "removeOption"
-                ) {
-                  return;
-                }
-                setPendingValue(newValue);
-              }}
+              //   onChange={(event, newValue: any, reason) => {
+              //     if (
+              //       event.type === "keydown" &&
+              //       (event as React.KeyboardEvent).key === "Backspace" &&
+              //       reason === "removeOption"
+              //     ) {
+              //       return;
+              //     }
+              //     setPendingValue(newValue);
+              //   }}
               disableCloseOnSelect
               PopperComponent={PopperComponent}
               renderTags={() => null}
-              noOptionsText="không có dự án"
+              noOptionsText="Không có dự án"
               renderOption={(props, option, { selected, ...elseProps }) => {
-                return (
+                let nodeEle = (
                   <li {...props} style={{ height: 59, alignItems: "center" }}>
-                    {/* <Checkbox
-                    checked={selected}
-                    sx={{
-                      color: "#0063F7",
-                      "&.Mui-checked": {
+                    <Radio
+                      checked={selected}
+                      onChange={(e, checked) => {
+                        if (checked) {
+                          setPendingValue(
+                            // _.uniqBy([...pendingValue, option], "id")
+							option
+                          );
+                        } else {
+							return;
+                        //   setPendingValue(
+                        //     pendingValue.filter((it) => it.id !== option.id)
+                        //   );
+                        }
+                      }}
+                      sx={{
                         color: "#0063F7",
-                      },
-                      width: 24,
-                      height: 24,
-                      marginRight: 2,
-                      marginLeft: 2,
-                    }}
-                  /> */}
+                        "&.Mui-checked": {
+                          color: "#0063F7",
+                        },
+                        width: 24,
+                        height: 24,
+                        marginRight: 2,
+                        marginLeft: 2,
+                      }}
+                    />
                     <LabelStyled>{option.name}</LabelStyled>
                   </li>
                 );
+                const newOb: any  =pendingValue
+                //   pendingValue.forEach((item, index) => {
+                	if (option.id === newOb.id) {
+                	  selected = true;
+                	  nodeEle = (
+                		<li
+                		  {...props}
+                		  style={{ height: 59, alignItems: "center" }}
+                		>
+                		  <Radio
+                			checked={selected}
+                			onChange={(e, checked) => {
+                			  if (checked) {
+                				setPendingValue(
+                				//   _.uniqBy([...pendingValue, item], "id")
+								option
+                				);
+                			  } else {
+								return;
+                				// setPendingValue(
+                				//   pendingValue.filter((it) => it.id !== pendingValue.id)
+                				// );
+                			  }
+                			}}
+                			sx={{
+                			  color: "#0063F7",
+                			  "&.Mui-checked": {
+                				color: "#0063F7",
+                			  },
+                			  width: 24,
+                			  height: 24,
+                			  marginRight: 2,
+                			  marginLeft: 2,
+                			}}
+                		  />
+                		  <LabelStyled>{option.name}</LabelStyled>
+                		</li>
+                	  );
+                	}
+                //   });
+                return nodeEle;
+
+                // return (
+                //   <li {...props} style={{ height: 59, alignItems: "center" }}>
+                //     <Radio
+                //       checked={selected}
+                //       sx={{
+                //         color: "#0063F7",
+                //         "&.Mui-checked": {
+                //           color: "#0063F7",
+                //         },
+                //         width: 24,
+                //         height: 24,
+                //         marginRight: 2,
+                //         marginLeft: 2,
+                //       }}
+                //     />
+                //     <LabelStyled>{option.name}</LabelStyled>
+                //   </li>
+                // );
               }}
               options={[...data]}
               getOptionLabel={(option) => (option.name ? option.name : "")}
@@ -276,6 +353,7 @@ const ProjectDropdown = ({
                     endAdornment={<SearchIconSearchPage />}
                     style={{
                       height: 59,
+                      display: "none",
                       textAlign: "center",
                       width: "95%",
                       borderBottom: "1px solid #F2F2F5",
@@ -291,4 +369,4 @@ const ProjectDropdown = ({
     </FormControl>
   );
 };
-export default ProjectDropdown;
+export default ProjectTypeRadio;

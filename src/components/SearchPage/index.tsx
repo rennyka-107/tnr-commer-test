@@ -309,6 +309,7 @@ const SearchPage = ({
       setDataKhoangGia([parseInt(priceFrom), parseInt(priceTo)]);
     }
   }, [areaFrom, areaTo, priceFrom, priceTo]);
+  
   useEffect(() => {
     if (typeof window !== "undefined") {
       setTextSearchValue(textSearch);

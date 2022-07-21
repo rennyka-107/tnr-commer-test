@@ -9,12 +9,15 @@ import { RootState } from "../../../store/store";
 import ContainerSearch from "@components/Container/ContainerSearch";
 import { makeStyles } from "@mui/styles";
 import SelectSeach from "@components/CustomComponent/SelectInputComponent/SelectSeach";
-import { IconEmptyFav, IconFilterSearch } from "@components/Icons";
+import { IconEmptyFav, IconFilterSearch, IconHuyLoc } from "@components/Icons";
 import { isEmpty } from "lodash";
 import SilderGroup from "@components/CustomComponent/SliderGroupComponent";
 import SliderComponent from "@components/CustomComponent/SliderComponent";
 import { FormatFilterText } from "utils/FormatText";
 import { getProjectByType } from "../../../pages/api/projectApi";
+import ProjectTypeRadio from "@components/CustomComponent/ListRadioSearchCompare/ProjectTypeRadio";
+import SliderGroupFilterSearch from "@components/CustomComponent/SliderGroupComponent/SliderGroupFilterSearch";
+import ProjectRadio from "@components/CustomComponent/ListRadioSearchCompare/ProjectRadio";
 
 type dataProps = {
   searchData?: searchLocationResponse[];
@@ -52,7 +55,13 @@ const StyledTitle = styled(Typography)`
   line-height: 16px;
   text-align: center;
 `;
-
+const LinkStyled = styled.a`
+  cursor: pointer;
+  :hover,
+  :hover fill {
+    color: #ea242a;
+  }
+`;
 const useStyles = makeStyles((theme) => ({
   root: {
     "& .MuiInputBase-root": {
@@ -103,10 +112,17 @@ const SearchCompare = ({
     priceTo: (priceTo as string) ?? "20",
     areaFrom: (areaFrom as string) ?? "30",
     areaTo: (areaTo as string) ?? "200",
+    projectTypeIdList: [],
   });
   const [projectList, setProjectList] = useState<any[]>([]);
   const [dataKhoangGia, setDataKhoangGia] = useState<number[]>([1, 20]);
   const [dataDienTich, setDataDienTich] = useState<number[]>([30, 200]);
+  const [listParamsProjectType, setParamsProjectType] = useState([]);
+  const [listIdProject, setListIdProject] = useState([]);
+  const [listDataLSProvince, setListDataLSProvince] = useState([]);
+  const [listDataLSProject, setListDataLSProject] = useState([]);
+  const [listDataLSProjectType, setListDataLSProjectType] = useState([]);
+  const [checkSelectProjectType, setCheckSelectProjectType] = useState(false);
 
   useEffect(() => {
     const dataProject = listMenuBarProjectType.filter(
@@ -150,12 +166,12 @@ const SearchCompare = ({
     });
   }, [router.query.textSearch]);
 
-  const fetchProjectByType = async (
-    typeId: string,
-    updateProject?: boolean
-  ) => {
+  const fetchProjectByType = async (data: any, updateProject?: boolean) => {
+    const body = {
+      projectTypeIdList: data,
+    };
     try {
-      const res = await getProjectByType(typeId);
+      const res = await getProjectByType(body);
       if (res.responseCode === "00") {
         setProjectList(res.responseData);
         if (res.responseData.length > 0) {
@@ -165,7 +181,7 @@ const SearchCompare = ({
           setFilterSearch({
             ...filterSearch,
             projectId: updateProject ? res.responseData[0].id : projectId,
-            projectTypeId: typeId,
+            projectTypeIdList: data,
           });
         }
       }
@@ -188,26 +204,27 @@ const SearchCompare = ({
     }
   }, [filter]);
 
-  const handleSelectProject = (
-    event: SelectChangeEvent<typeof projectName>
-  ) => {
-    const {
-      target: { value },
-    } = event;
-    const data = listMenuBarProjectType.filter((x) => x.name === value);
-    setProjectName(typeof value === "string" ? value.split(",") : value);
-    fetchProjectByType(data[0].id, true);
+  const handleSelectProject = (dataProjectType: any) => {
+    const bodySearch: any = [];
+    const arrayData: any = [];
+    arrayData.push(dataProjectType);
+    bodySearch.push(dataProjectType.id);
+    setCheckSelectProjectType(true);
+    setParamsProjectType(bodySearch);
+    fetchProjectByType(bodySearch);
+    setListDataLSProjectType(arrayData);
   };
 
-  const handleSelectProduct = (
-    event: SelectChangeEvent<typeof productName>
-  ) => {
-    const {
-      target: { value },
-    } = event;
-    const data = projectList.filter((x) => x.name === value);
-    setProductName(typeof value === "string" ? value.split(",") : value);
-    setFilterSearch({ ...filterSearch, projectId: data[0].id });
+  const handleSelectProduct = (data: any) => {
+    console.log(data);
+    const bodySearch: any = [];
+    const arr: any = [];
+    // data.map((item) => {
+    bodySearch.push(data.id);
+    arr.push(data);
+    // })
+    setListDataLSProject(arr);
+    setListIdProject(bodySearch);
   };
 
   const handleChangeKhoangGia = (event: any) => {
@@ -246,53 +263,136 @@ const SearchCompare = ({
     ]);
   };
 
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const listProjectType = localStorage?.getItem("listParamsLSProjectType");
+      const listProjectData = localStorage?.getItem("listDataLSProjectType");
+      const listDataIdProject = localStorage?.getItem("listDataLSProject");
+      const listParamsIdProject = localStorage?.getItem("listParamsIdProject");
+      const bodyProjectID = JSON.parse(listProjectType);
+      if (!isEmpty(listProjectType)) {
+        fetchProjectByType(bodyProjectID);
+        setParamsProjectType(JSON.parse(listProjectType));
+      } else {
+        fetchProjectByType("");
+        localStorage.removeItem("listParamsLSProjectType");
+      }
+      if (!isEmpty(listProjectData)) {
+        setListDataLSProjectType(JSON.parse(listProjectData));
+      } else {
+        localStorage.removeItem("listDataLSProjectType");
+      }
+      if (!isEmpty(listDataIdProject)) {
+        setListDataLSProject(JSON.parse(listDataIdProject));
+      } else {
+        localStorage.removeItem("listDataLSProject");
+      }
+      if (!isEmpty(listParamsIdProject)) {
+        setListIdProject(JSON.parse(listParamsIdProject));
+      } else {
+        localStorage.removeItem("listParamsIdProject");
+      }
+    }
+  }, []);
+
   const handleSearch = () => {
+    localStorage.setItem(
+      "listDataLSProjectType",
+      JSON.stringify(listDataLSProjectType)
+    );
+    localStorage.setItem(
+      "listParamsLSProjectType",
+      JSON.stringify(listParamsProjectType)
+    );
+    localStorage.setItem(
+      "listDataLSProject",
+      JSON.stringify(listDataLSProject)
+    );
+    localStorage.setItem("listParamsIdProject", JSON.stringify(listIdProject));
+
     router.push(
-      `/compare-search?projectId=${filterSearch.projectId}&projectTypeId=${filterSearch.projectTypeId}&priceTo=${filterSearch.priceTo}&priceFrom=${filterSearch.priceFrom}&areaTo=${filterSearch.areaTo}&areaFrom=${filterSearch.areaFrom}&categoryId=${filterSearch.categoryId}`
+      `/compare-search?priceTo=${filterSearch.priceTo}&priceFrom=${filterSearch.priceFrom}&areaTo=${filterSearch.areaTo}&areaFrom=${filterSearch.areaFrom}&categoryId=${filterSearch.categoryId}`
+    );
+  };
+
+  const handleResetFilter = () => {
+    setFilterSearch({
+      categoryId: "",
+      provinceId: "",
+      projectTypeId: "",
+      projectId: "",
+      priceFrom: "1",
+      priceTo: "20",
+      areaFrom: "30",
+      areaTo: "200",
+      projectTypeIdList: [],
+    });
+    localStorage.removeItem("listDataLSProjectType");
+    localStorage.removeItem("listParamsLSProjectType");
+    localStorage.removeItem("listDataLSProject");
+    localStorage.removeItem("listParamsIdProject");
+    router.push(
+      `/compare-search?priceTo=&priceFrom=&areaTo=&areaFrom=&categoryId=`
+    );
+  };
+
+  const fetchComponent = () => {
+    return (
+      <>
+        {!isEmpty(listParamsProjectType) || !isEmpty(listIdProject) ? (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              marginTop: 15,
+              gap: 10,
+            }}
+          >
+            <LinkStyled onClick={handleResetFilter}>
+              <IconHuyLoc className="icon-huyloc" />
+            </LinkStyled>
+          </div>
+        ) : (
+          <></>
+        )}
+      </>
     );
   };
 
   return (
-    <ContainerSearch
-      title={"So sánh bất động sản"}
-      checkBread={true}
-      // rightContent={fetchRight()}
-    >
+    <ContainerSearch title={"So sánh bất động sản"} checkBread={true}>
       <ContainerSearchPage>
-        <div style={{ display: "flex", gap: 50 }}>
-          <SelectSeach
+        <div
+          style={{
+            display: "flex",
+            gap: 90,
+            alignItems: "center",
+            marginBottom: 43,
+            justifyContent: "space-between",
+          }}
+        >
+          <ProjectTypeRadio
             label="Loại BĐS"
             data={listMenuBarProjectType}
-            value={projectName}
+            // checkSelectProvince={checkSelectProvince}
+            listProjectType={projectName}
             onChange={handleSelectProject}
             placeholder="Loại BĐS"
-            style={{ width: 180, height: 40 }}
+            style={{ width: 150, height: 40 }}
           />
-          <SelectSeach
+          <ProjectRadio
             label="Chọn dự án"
             data={projectList}
-            value={productName}
+            checkSelectProjectType={checkSelectProjectType}
+            listProjectType={productName}
             onChange={handleSelectProduct}
             placeholder="Chọn dự án"
-            style={{ width: 180 }}
+            style={{ width: 150, height: 40 }}
           />
-          <SilderGroup
-            // label={"Khác"}
-            text={FormatFilterText([
-              {
-                text: `${filterSearch.priceFrom} tỷ ~ ${filterSearch.priceTo} tỷ`,
-                hasValue: Boolean(filterSearch.priceFrom),
-              },
-              {
-                text: (
-                  <>
-                    {filterSearch.areaFrom} m<sup>2</sup> -&nbsp;
-                    {filterSearch.areaTo} m<sup>2</sup>
-                  </>
-                ),
-                hasValue: Boolean(filterSearch.areaFrom),
-              },
-            ])}
+          <SliderGroupFilterSearch
+            label={"Khác"}
+            text={"Bộ lọc khác"}
             handleApply={onFilterApply}
             handleCancel={onFilterCancel}
           >
@@ -330,7 +430,7 @@ const SearchCompare = ({
                 },
               }}
             />
-          </SilderGroup>
+          </SliderGroupFilterSearch>
           <Button
             style={{
               background: "#1B3459",
@@ -352,6 +452,7 @@ const SearchCompare = ({
               Lọc
             </span>
           </Button>
+          <div style={{ width: 150 }}>{fetchComponent()}</div>
         </div>
 
         <div
