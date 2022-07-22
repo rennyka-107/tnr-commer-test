@@ -16,9 +16,17 @@ import SlectLocation from "@components/CustomComponent/SelectInputComponent/Slec
 import LocationMultipeCheckbox from "@components/CustomComponent/ListCheckboxSearchAdvand/LocationMultipeCheckbox";
 import ProjectTypeCheckboxDropdown from "@components/CustomComponent/ListCheckboxSearchAdvand/ProjectTypeCheckboxDropdown";
 import ProjectDropdown from "@components/CustomComponent/ListCheckboxSearchAdvand/ProjectDropDown";
-import { getListProjectByProjectType, getListProjectTypeByListIdProvince } from "../../../../pages/api/paramSearchApi";
-import { getListProjectResponse, getListProjectTypeResponse } from "../../../../store/paramsSearchSlice";
+import {
+  getListProjectByProjectType,
+  getListProjectTypeByListIdProvince,
+} from "../../../../pages/api/paramSearchApi";
+import {
+  getListProjectResponse,
+  getListProjectTypeResponse,
+} from "../../../../store/paramsSearchSlice";
 import { isEmpty } from "lodash";
+import GitHubLabel from "@components/CustomComponent/ListCheckboxSearchAdvand/PopperComponent";
+import PopperProjectType from "@components/CustomComponent/ListCheckboxSearchAdvand/PopperProject";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 10;
@@ -88,10 +96,10 @@ export default function ModalAdvanSearch() {
   const dispatch = useDispatch();
   const { listMenuBarType, listMenuBarProjectType, listMenuLocation } =
     useSelector((state: RootState) => state.menubar);
-	const { projectTypeListResponse, projectListResponse } = useSelector(
-		(state: RootState) => state.paramsSearch
-	  );
-	
+  const { projectTypeListResponse, projectListResponse } = useSelector(
+    (state: RootState) => state.paramsSearch
+  );
+
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );
@@ -99,7 +107,8 @@ export default function ModalAdvanSearch() {
   const [placement, setPlacement] = React.useState<PopperPlacementType>();
 
   const [checkSelectProvince, setCheckSelectProvince] = React.useState(false);
-  const [checkSelectProjectType, setCheckSelectProjectType] = React.useState(false);
+  const [checkSelectProjectType, setCheckSelectProjectType] =
+    React.useState(false);
   const [listParamsProvince, setListParamsProvince] = React.useState([]);
   const [listParamsProjectType, setParamsProjectType] = React.useState([]);
   const [listIdProject, setListIdProject] = React.useState([]);
@@ -118,10 +127,10 @@ export default function ModalAdvanSearch() {
     provinceId: "",
     projectTypeId: "",
     projectId: "",
-    priceFrom: "",
-    priceTo: "",
-    areaFrom: null,
-    areaTo: null,
+    priceFrom: ("" as string) ?? "1",
+    priceTo: ("" as string) ?? "20",
+    areaFrom: ("" as string) ?? "30",
+    areaTo: ("" as string) ?? "200",
   });
   const handleClick =
     (newPlacement: PopperPlacementType) =>
@@ -272,32 +281,31 @@ export default function ModalAdvanSearch() {
   };
 
   const handleSearch = () => {
-	localStorage.setItem(
-		"listDataLSProvince",
-		JSON.stringify(listDataLSProvince)
-	  );
-	  localStorage.setItem(
-		"listParamsLSProvince",
-		JSON.stringify(listParamsProvince)
-	  );
-	  localStorage.setItem(
-		"listDataLSProjectType",
-		JSON.stringify(listDataLSProjectType)
-	  );
-	  localStorage.setItem(
-		"listParamsLSProjectType",
-		JSON.stringify(listParamsProjectType)
-	  );
-	  localStorage.setItem(
-		"listDataLSProject",
-		JSON.stringify(listDataLSProject)
-	  );
-	  localStorage.setItem("listParamsIdProject", JSON.stringify(listIdProject));
-  
-	  router.push(
-		`/search?Type=Advanded&&textSearch=&&provinceId=${search.provinceId}&&projectTypeId=${search.projectTypeId}&&projectId=${search.projectId}&&priceFrom=${search.priceFrom}&&priceTo=${search.priceTo}&&areaFrom=${search.areaFrom}&&areaTo=${search.areaTo}`
-	  );
+    localStorage.setItem(
+      "listDataLSProvince",
+      JSON.stringify(listDataLSProvince)
+    );
+    localStorage.setItem(
+      "listParamsLSProvince",
+      JSON.stringify(listParamsProvince)
+    );
+    localStorage.setItem(
+      "listDataLSProjectType",
+      JSON.stringify(listDataLSProjectType)
+    );
+    localStorage.setItem(
+      "listParamsLSProjectType",
+      JSON.stringify(listParamsProjectType)
+    );
+    localStorage.setItem(
+      "listDataLSProject",
+      JSON.stringify(listDataLSProject)
+    );
+    localStorage.setItem("listParamsIdProject", JSON.stringify(listIdProject));
 
+    router.push(
+      `/search?Type=Advanded&&textSearch=&&provinceId=${search.provinceId}&&projectTypeId=${search.projectTypeId}&&projectId=${search.projectId}&&priceFrom=${search.priceFrom}&&priceTo=${search.priceTo}&&areaFrom=${search.areaFrom}&&areaTo=${search.areaTo}`
+    );
   };
   React.useEffect(() => {
     fetchListProject([]);
@@ -321,23 +329,40 @@ export default function ModalAdvanSearch() {
             <Paper>
               <BodyContainer>
                 <BoxStyled sx={{ minWidth: 120 }}>
-                  <LocationMultipeCheckbox
+                  {/* <LocationMultipeCheckbox
                     label="Vị Trí"
                     data={listMenuLocation}
                     listLocation={location}
                     onChange={handleChangeLocation}
                     placeholder="Chọn vị trí"
                     style={{ width: 305, height: 54 }}
-                  />
-                  <ProjectTypeCheckboxDropdown
+                  /> */}
+				  <GitHubLabel 
+				      label="Vị Trí"
+					  data={listMenuLocation}
+					  listLocation={location}
+					  onChange={handleChangeLocation}
+					  placeholder="Chọn vị trí"
+					  style={{ width: 305, height: 54 }}
+				  />
+				    <PopperProjectType 
+				      label="Loại BĐS"
+					  data={projectTypeListResponse}
+					  checkSelectProvince={checkSelectProvince}
+					  listProjectType={projectName}
+					  onChange={handleSelectProject}
+					  placeholder="Loại BĐS"
+					  style={{ width: 305, height: 54 }}
+				  />
+                  {/* <ProjectTypeCheckboxDropdown
                     label="Loại BĐS"
                     data={projectTypeListResponse}
                     checkSelectProvince={checkSelectProvince}
                     listProjectType={projectName}
                     onChange={handleSelectProject}
                     placeholder="Loại BĐS"
-					style={{ width: 305, height: 54 }}
-                  />
+                    style={{ width: 305, height: 54 }}
+                  /> */}
                   <ProjectDropdown
                     label="Chọn dự án"
                     data={projectListResponse}

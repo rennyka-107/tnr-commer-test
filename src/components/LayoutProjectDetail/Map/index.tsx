@@ -23,19 +23,19 @@ const MapImage = dynamic(() => import("./MapImage"), {
   ssr: false,
 });
 
-const Map = (props: Props) => {
+const Map = () => {
   const bounds: LatLngBoundsExpression = [
-    [1.3*window.innerWidth, 1.3*window.innerWidth],
-    [-1.3*window.innerWidth, -1.3*window.innerWidth],
+    [1.3 * window.innerWidth, 1.3 * window.innerWidth],
+    [-1.3 * window.innerWidth, -1.3 * window.innerWidth],
   ];
 
   const [layerParent, setLayerParent] = useState<any>(null);
   const imgMap = useSelector((state: RootState) => state.projectMap.ImgMap);
-  const ListLevel = useSelector(
-    (state: RootState) => state.projectMap.ListLevel
-  );
   const GeoJsonData = useSelector(
     (state: RootState) => state.projectMap.GeoJsonData
+  );
+  const GeoJsonDataProduct = useSelector(
+    (state: RootState) => state.projectMap.GeoJsonDataProduct
   );
   const Target = useSelector((state: RootState) => state.projectMap.Target);
 
@@ -44,7 +44,7 @@ const Map = (props: Props) => {
       !isEmpty(Target) &&
       !isEmpty(Target.map) &&
       isEmpty(Target.productionId) &&
-      Target.type !== "1"
+      (Target.type !== "1" || isEmpty(Target.imgMap))
     ) {
       const formatmap = JSON.parse(Target.map);
       const features = [];
@@ -58,13 +58,21 @@ const Map = (props: Props) => {
         return;
       });
     } else {
-      setLayerParent(null);
+      // if (isEmpty(Target)) {
+        setLayerParent(null);
+      // }
     }
   }, [Target]);
 
   return (
     <CustomMap bounds={bounds} style={{ height: "100%" }}>
-      <DisplayLayers data={GeoJsonData} layerParent={layerParent} />
+      <DisplayLayers
+        data={{
+          type: "FeatureCollection",
+          features: [...GeoJsonData.features, ...GeoJsonDataProduct.features],
+        }}
+        layerParent={layerParent}
+      />
       {imgMap && <MapImage url={imgMap} />}
     </CustomMap>
   );

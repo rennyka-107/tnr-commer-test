@@ -17,7 +17,7 @@ import { makeStyles } from "@mui/styles";
 import ImageWithHideOnErrorOffers from "hooks/ImageWithHideOnErrorOffers";
 import { isEmpty } from "lodash";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../store/store";
 import Mask3 from "../../../../public/images/mask_g_3.png";
@@ -150,12 +150,23 @@ const ProjectInformation = ({
       },
       { key: "Hình thức sở hữu", value: ownership ?? "" },
     ].map(({ key, value }, idx) => (
-      <ListItem sx={{ pl: 0 }} key={idx}>
-        <ListItemIcon sx={{ minWidth: "30px" }}>
-          <IconList />
-        </ListItemIcon>
-        <Typography sx={bold}>{key}</Typography> {": " + value}
-      </ListItem>
+      <Box
+        sx={{ pl: 0, display: "flex", mt: 2, alignItems: "flex-start" }}
+        key={idx}
+      >
+        <Box sx={{ marginLeft: "-.8rem"}}>
+          <IconList
+            style={{
+              marginTop: ".5rem",
+              marginRight: ".5rem",
+              minWidth: "30px",
+            }}
+          />
+        </Box>
+        <Typography sx={bold}>
+          {key} <span style={{ fontWeight: 400 }}>{": " + value}</span>
+        </Typography>
+      </Box>
     ));
   }
 
@@ -230,7 +241,8 @@ const ProjectInformation = ({
         </Tabs>
 
         <TabPanel value={value} index={0}>
-          <List sx={{ pl: 0 }}>{renderList()}</List>
+          <Box>{renderList()}</Box>
+          <Divider sx={{ mt: 2 }} />
           <Box sx={{ mt: 3, mb: 3 }}>
             <Typography
               sx={{ fontWeight: "500", fontSize: "18px", mb: 3 }}
@@ -307,9 +319,10 @@ const ProjectInformation = ({
 
 export default ProjectInformation;
 
-const IconList = () => {
+const IconList = ({ style }: { style?: React.CSSProperties }) => {
   return (
     <svg
+      style={style}
       width="8"
       height="8"
       viewBox="0 0 8 8"

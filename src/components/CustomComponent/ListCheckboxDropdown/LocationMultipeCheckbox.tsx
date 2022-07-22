@@ -208,6 +208,8 @@ const LocationMultipeCheckbox = ({
               }}
               value={pendingValue}
               disableCloseOnSelect
+			  defaultValue={pendingValue[1]}
+			  defaultChecked={pendingValue[1]}
               autoSelect={false}
               PopperComponent={PopperComponent}
               renderTags={() => null}

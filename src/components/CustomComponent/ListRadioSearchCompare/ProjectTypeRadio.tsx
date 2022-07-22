@@ -192,6 +192,10 @@ const ProjectTypeRadio = ({
     setAnchorEl(null);
   };
 
+  const handleOnChange = (e) => {
+	console.log(e)
+  }
+
   const open = Boolean(anchorEl);
   const id = open ? "github-label" : undefined;
   return (
@@ -236,6 +240,7 @@ const ProjectTypeRadio = ({
                 }
               }}
               value={pendingValue}
+			  onChange={handleOnChange} 
               //   onChange={(event, newValue: any, reason) => {
               //     if (
               //       event.type === "keydown" &&
@@ -279,7 +284,7 @@ const ProjectTypeRadio = ({
                         marginLeft: 2,
                       }}
                     />
-                    <LabelStyled>{option.name}</LabelStyled>
+                    <LabelStyled >{option.name}</LabelStyled>
                   </li>
                 );
                 const newOb: any  =pendingValue
@@ -317,7 +322,7 @@ const ProjectTypeRadio = ({
                 			  marginLeft: 2,
                 			}}
                 		  />
-                		  <LabelStyled>{option.name}</LabelStyled>
+                		  <LabelStyled onClick={() => setPendingValue(option)}>{option.name}</LabelStyled>
                 		</li>
                 	  );
                 	}

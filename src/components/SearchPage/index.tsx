@@ -4,14 +4,11 @@ import ItemSearch from "./ItemSearch";
 import {
   Button,
   Fade,
-  FormControlLabel,
   IconButton,
   InputBase,
   Paper,
   Popper,
   PopperPlacementType,
-  Switch,
-  SwitchProps,
 } from "@mui/material";
 import Typography from "@mui/material/Typography";
 
@@ -31,7 +28,6 @@ import {
 import isEmpty from "lodash/isEmpty";
 import useFavourite from "hooks/useFavourite";
 import ContainerSearchPage from "@components/Container/ContainerSearchPage";
-import LocationMultipeCheckbox from "@components/CustomComponent/ListCheckboxDropdown/LocationMultipeCheckbox";
 import {
   getListProjectByProjectType,
   getListProjectTypeByListIdProvince,
@@ -42,12 +38,14 @@ import {
 } from "../../../store/paramsSearchSlice";
 import ProjectTypeCheckboxDropdown from "@components/CustomComponent/ListCheckboxDropdown/ProjectTypeCheckboxDropdown";
 import ProjectDropdown from "@components/CustomComponent/ListCheckboxDropdown/ProjectDropdown";
-import SilderGroup from "@components/CustomComponent/SliderGroupComponent";
 import SliderComponent from "@components/CustomComponent/SliderComponent";
 import { FormatFilterText } from "utils/FormatText";
 import SliderGroupFilterSearch from "@components/CustomComponent/SliderGroupComponent/SliderGroupFilterSearch";
 import NoProductComponent from "@components/CustomComponent/NoProductComponent";
+
 import SwitchComponent from "./SwitchComponent";
+import PopperProjectType from "@components/CustomComponent/ListCheckboxDropdown/PopperProject";
+import PopperComponent from "@components/CustomComponent/ListCheckboxDropdown/PopperComponent";
 
 type dataProps = {
   searchData: searchLocationResponse[];
@@ -102,6 +100,33 @@ const LinkStyled = styled.a`
     color: #ea242a;
   }
 `;
+const fakeData = [
+  {
+    name: "good first issue",
+    color: "#7057ff",
+    description: "Good for newcomers",
+  },
+  {
+    name: "help wanted",
+    color: "#008672",
+    description: "Extra attention is needed",
+  },
+  {
+    name: "priority: critical",
+    color: "#b60205",
+    description: "",
+  },
+  {
+    name: "priority: high",
+    color: "#d93f0b",
+    description: "",
+  },
+  {
+    name: "priority: low",
+    color: "#0e8a16",
+    description: "",
+  },
+];
 const TextFilterStyled = styled.span`
   font-family: "Roboto";
   font-style: normal;
@@ -203,48 +228,54 @@ const SearchPage = ({
   };
 
   const handleSelectProduct = (data: any) => {
-    const bodySearch: any = [];
-    const arr: any = [];
-    // data.map((item) => {
-    bodySearch.push(data.id);
-    arr.push(data);
-    // })
-    setListDataLSProject(arr);
-    setListIdProject(bodySearch);
+    if (!isEmpty(data)) {
+      const bodySearch: any = [];
+      const arr: any = [];
+      // data.map((item) => {
+      bodySearch.push(data.id);
+      arr.push(data);
+      // })
+      setListDataLSProject(arr);
+      setListIdProject(bodySearch);
+    }
 
     // console.log(data)
   };
 
   const handleChangeLocation = (data: any) => {
-    const bodySearch: any = [];
-    const arrayData: any = [];
-    data.map((item) => {
-      bodySearch.push(item.ProvinceID.toString());
-      arrayData.push(item);
-    });
+    if (!isEmpty(data)) {
+      const bodySearch: any = [];
+      const arrayData: any = [];
+      data.map((item) => {
+        bodySearch.push(item.ProvinceID.toString());
+        arrayData.push(item);
+      });
 
-    setCheckSelectProvince(true);
-    setListParamsProvince(bodySearch);
-    fetchListProjectType(bodySearch);
-    setListDataLSProvince(arrayData);
-    setListIdProject([]);
-    setListDataLSProjectType([]);
-    setListDataLSProjectType([]);
-    setParamsProjectType([]);
-    fetchListProjectTypeByProvince(bodySearch);
+      setCheckSelectProvince(true);
+      setListParamsProvince(bodySearch);
+      fetchListProjectType(bodySearch);
+      setListDataLSProvince(arrayData);
+      setListIdProject([]);
+      setListDataLSProjectType([]);
+      setListDataLSProjectType([]);
+      setParamsProjectType([]);
+      fetchListProjectTypeByProvince(bodySearch);
+    }
   };
 
   const handleSelectProject = (dataProjectType: any) => {
-    const bodySearch: any = [];
-    const arrayData: any = [];
-    dataProjectType.map((item) => {
-      bodySearch.push(item.id);
-      arrayData.push(item);
-    });
-    setCheckSelectProjectType(true);
-    fetchListProject(bodySearch);
-    setParamsProjectType(bodySearch);
-    setListDataLSProjectType(arrayData);
+    if (!isEmpty(dataProjectType)) {
+      const bodySearch: any = [];
+      const arrayData: any = [];
+      dataProjectType.map((item) => {
+        bodySearch.push(item.id);
+        arrayData.push(item);
+      });
+      setCheckSelectProjectType(true);
+      fetchListProject(bodySearch);
+      setParamsProjectType(bodySearch);
+      setListDataLSProjectType(arrayData);
+    }
   };
 
   const fetchListProjectType = async (data: any) => {
@@ -309,7 +340,7 @@ const SearchPage = ({
       setDataKhoangGia([parseInt(priceFrom), parseInt(priceTo)]);
     }
   }, [areaFrom, areaTo, priceFrom, priceTo]);
-  
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       setTextSearchValue(textSearch);
@@ -320,13 +351,12 @@ const SearchPage = ({
       const listDataIdProject = localStorage?.getItem("listDataLSProject");
       const listParamsIdProject = localStorage?.getItem("listParamsIdProject");
       if (!isEmpty(listProvince)) {
-		fetchListProject(JSON.parse(listProjectType));
+        fetchListProject(JSON.parse(listProjectType));
         fetchListProjectType(JSON.parse(listProvince));
         setListParamsProvince(JSON.parse(listProvince));
         fetchListProjectTypeByProvince(JSON.parse(listProvince));
       } else {
         fetchListProjectType([]);
-		
       }
       if (!isEmpty(listProvinceData)) {
         setListDataLSProvince(JSON.parse(listProvinceData));
@@ -336,7 +366,6 @@ const SearchPage = ({
         fetchListProject(JSON.parse(listProjectType));
         setParamsProjectType(JSON.parse(listProjectType));
       } else {
-        fetchListProject([]);
         localStorage.removeItem("listParamsLSProjectType");
       }
       if (!isEmpty(listProjectData)) {
@@ -355,7 +384,7 @@ const SearchPage = ({
         localStorage.removeItem("listParamsIdProject");
       }
     }
-  }, []);
+  }, [router]);
 
   const onFilterApply = () => {
     setFilterSearch({
@@ -423,8 +452,6 @@ const SearchPage = ({
       `/search?Type=Advanded&&textSearch=${filterSearch.textSearch}&&provinceId=${filterSearch.provinceId}&&projectTypeId=${filterSearch.projectTypeId}&&projectId=${filterSearch.projectId}&&priceFrom=${filterSearch.priceFrom}&&priceTo=${filterSearch.priceTo}&&areaFrom=${filterSearch.areaFrom}&&areaTo=${filterSearch.areaTo}`
     );
     setSearchAction(!searchAction);
-
-
   };
   const handleResetFilter = () => {
     setSearchBody({
@@ -432,10 +459,10 @@ const SearchPage = ({
       provinceId: "",
       projectTypeId: "",
       projectId: "",
-      priceFrom: "",
-      priceTo: "",
-      areaFrom: null,
-      areaTo: null,
+      priceFrom: (priceFrom as string) ?? "1",
+      priceTo: (priceTo as string) ?? "20",
+      areaFrom: (areaFrom as string) ?? "30",
+      areaTo: (areaTo as string) ?? "200",
     });
     localStorage.removeItem("listDataLSProvince");
     localStorage.removeItem("listParamsLSProvince");
@@ -444,7 +471,7 @@ const SearchPage = ({
     localStorage.removeItem("listDataLSProject");
     localStorage.removeItem("listParamsIdProject");
     router.push(
-      `/search?Type=Advanded&&textSearch=&&provinceId=&&projectTypeId=&&projectId=&&priceFrom=&&priceTo=&&areaFrom=null&&areaTo=null`
+      `/search?Type=Advanded&&textSearch=&&provinceId=&&projectTypeId=&&projectId=&&priceFrom=&&priceTo=&&areaFrom=0&&areaTo=200`
     );
   };
 
@@ -467,6 +494,7 @@ const SearchPage = ({
         {!isEmpty(listParamsProjectType) ||
         !isEmpty(listParamsProvince) ||
         !isEmpty(listIdProject) ||
+		!isEmpty(listDataLSProjectType) ||
         !isEmpty(textSearch) ? (
           <div
             style={{
@@ -542,15 +570,16 @@ const SearchPage = ({
               gap: 90,
             }}
           >
-            <LocationMultipeCheckbox
+            <PopperComponent
               label="Vị Trí"
               data={listMenuLocation}
               listLocation={location}
               onChange={handleChangeLocation}
+              listDataLSProvince={listDataLSProvince}
               placeholder="Chọn vị trí"
               style={{ width: 150, height: 40 }}
             />
-            <ProjectTypeCheckboxDropdown
+            <PopperProjectType
               label="Loại BĐS"
               data={projectTypeListResponse}
               checkSelectProvince={checkSelectProvince}

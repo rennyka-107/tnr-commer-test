@@ -84,6 +84,8 @@ const HomePage = () => {
   const [listIdProject, setListIdProject] = useState([]);
   const [listDataLSProject, setListDataLSProject] = useState([]);
   const [listDataLSProjectType, setListDataLSProjectType] = useState([]);
+  const [saveDataProjectType, setSaveDataProjectType] = useState([]);
+  const [saveDataProject, setSaveDataProject] = useState([])
 
   const [filterSearch, setFilterSearch] = useState({
     textSearch: "",
@@ -109,8 +111,10 @@ const HomePage = () => {
       const res = await getProjectByType(body);
       if (res.responseCode === "00") {
         setProjectList(res.responseData);
+		setSaveDataProject(res.responseData)
         if (res.responseData.length > 0) {
           setProjectName(res.responseData[0].name.split(","));
+		  
           setFilterSearch({
             ...filterSearch,
             projectId: res.responseData[0].id,
@@ -124,20 +128,33 @@ const HomePage = () => {
     }
   };
 
-//   useEffect(() => {
-//     if (listMenuBarProjectType?.length > 0) {
-//       setProjectTypeName(listMenuBarProjectType[0].name.split(","));
+  useEffect(() => {
+    if (listMenuBarProjectType?.length > 0) {
+      setProjectTypeName(listMenuBarProjectType[0].name.split(","));
+      saveDataProjectType.push(listMenuBarProjectType[0]);
+      fetchProjectByType(listMenuBarProjectType[0].id);
+    }
+  }, [listMenuBarProjectType, router]);
+  useEffect(() => {
+    if (!isEmpty(saveDataProjectType)) {
+		setParamsProjectType([saveDataProjectType[0].id]);
+		setListDataLSProjectType([saveDataProjectType[0]]);
+    }
+  }, [saveDataProjectType,listMenuBarProjectType]);
 
-//       fetchProjectByType(listMenuBarProjectType[0].id);
-//     }
-//   }, [listMenuBarProjectType, router]);
+  useEffect(() => {
+	if(!isEmpty(saveDataProject)){
+		setListIdProject([saveDataProject[0].id]);
+		setListDataLSProject([saveDataProject[0]]);
+	}
+  },[saveDataProject,router,listMenuBarProjectType])
 
-//   useEffect(() => {
-//     if (router.pathname !== "/") {
-//       listParamsProjectType.push(listMenuBarProjectType[0].id);
-//       listDataLSProjectType.push(listMenuBarProjectType[0]);
-//     }
-//   }, [router]);
+  //   useEffect(() => {
+  //     if (router.pathname !== "/") {
+  //       listParamsProjectType.push(listMenuBarProjectType[0].id);
+  //       listDataLSProjectType.push(listMenuBarProjectType[0]);
+  //     }
+  //   }, [router]);
 
   const handleSelectProject = (
     event: SelectChangeEvent<typeof projectTypeName>
@@ -216,7 +233,7 @@ const HomePage = () => {
     localStorage.setItem("listParamsIdProject", JSON.stringify(listIdProject));
 
     router.push(
-      `/compare-search?projectId=${filterSearch.projectId}&projectTypeId=${filterSearch.projectTypeId}&priceTo=${filterSearch.priceTo}&priceFrom=${filterSearch.priceFrom}&areaTo=${filterSearch.areaTo}&areaFrom=${filterSearch.areaFrom}&categoryId=${filterSearch.categoryId}`
+      `/compare-search?priceTo=${filterSearch.priceTo}&priceFrom=${filterSearch.priceFrom}&areaTo=${filterSearch.areaTo}&areaFrom=${filterSearch.areaFrom}&categoryId=${filterSearch.categoryId}`
     );
   };
 

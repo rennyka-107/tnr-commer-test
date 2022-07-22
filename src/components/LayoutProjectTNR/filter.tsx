@@ -1,6 +1,7 @@
 import BoxContainer from "@components/CustomComponent/BoxContainer";
 import LocationMultipeCheckbox from "@components/CustomComponent/ListCheckboxDropdown/LocationMultipeCheckbox";
 import ProjectTypeCheckboxDropdown from "@components/CustomComponent/ListCheckboxDropdown/ProjectTypeCheckboxDropdown";
+import PopperProjectType from "@components/CustomComponent/ListCheckboxDropdown/PopperProject";
 import SelectLocationProjectType from "@components/CustomComponent/SelectInputComponent/SelectLocationProjectType";
 import SelectLocationSearch from "@components/CustomComponent/SelectInputComponent/SelectLocationSearch";
 import {
@@ -34,7 +35,7 @@ import {
   getListProjectResponse,
   getListProjectTypeResponse,
 } from "../../../store/paramsSearchSlice";
-
+import PopperComponent from "@components/CustomComponent/ListCheckboxDropdown/PopperComponent";
 import { RootState } from "../../../store/store";
 interface PropsI {
   onSubmit?: (values: BodyListProjectI) => void;
@@ -127,18 +128,19 @@ const Filter = (props: PropsI) => {
   const [listParamsProjectType, setParamsProjectType] = useState([]);
 
   const handleResetFilter = () => {
+	onSubmit({ ...body, provinceId: "", textSearch: "" });
     localStorage.removeItem("listDataLSProvince");
     localStorage.removeItem("listParamsLSProvince");
     localStorage.removeItem("listDataLSProjectType");
     localStorage.removeItem("listParamsLSProjectType");
     setListDataLSProvince([]);
     setListParamsProvince([]);
-	setListDataLSProjectType([]);
-	setParamsProjectType([]);
-	setTextSearchValue("");
+    setListDataLSProjectType([]);
+    setParamsProjectType([]);
+    setTextSearchValue("");
     router.push(`projectTNR?type=&textSearch=""`);
 
-    onSubmit({ ...body, provinceId: "", textSearch: "" });
+ 
   };
 
   useEffect(() => {
@@ -154,8 +156,8 @@ const Filter = (props: PropsI) => {
         fetchListProjectTypeByProvince(JSON.parse(listProvince));
       } else {
         fetchListProjectType([]);
-		setListDataLSProvince([]);
-		setListParamsProvince([]);
+        setListDataLSProvince([]);
+        setListParamsProvince([]);
       }
       if (!isEmpty(listProvinceData)) {
         setListDataLSProvince(JSON.parse(listProvinceData));
@@ -163,8 +165,8 @@ const Filter = (props: PropsI) => {
       if (!isEmpty(listProjectType) && !isEmpty(listParamsProjectType)) {
         setParamsProjectType(JSON.parse(listProjectType));
       } else {
-		setListDataLSProjectType([]);
-		setParamsProjectType([]);
+        setListDataLSProjectType([]);
+        setParamsProjectType([]);
         localStorage.removeItem("listParamsLSProjectType");
       }
       if (!isEmpty(listProjectData)) {
@@ -172,7 +174,6 @@ const Filter = (props: PropsI) => {
       } else {
         localStorage.removeItem("listDataLSProjectType");
       }
-
     }
   }, [router]);
 
@@ -240,7 +241,7 @@ const Filter = (props: PropsI) => {
     }
   };
   const handleClickSearch = () => {
-	router.push(`/projectTNR?type=&textSearch=${textSearchValue}`);
+    router.push(`/projectTNR?type=&textSearch=${textSearchValue}`);
   };
   const handleChange = (event: any) => {
     const {
@@ -297,7 +298,7 @@ const Filter = (props: PropsI) => {
     );
 
     router.push(`/projectTNR?type=`);
-	onSubmit({ ...body, provinceId: "",textSearch: textSearchValue  });
+    onSubmit({ ...body, provinceId: "", textSearch: textSearchValue });
   };
 
   return (
@@ -345,7 +346,7 @@ const Filter = (props: PropsI) => {
             }}
           />
         </FormControl>
-        <LocationMultipeCheckbox
+        {/* <LocationMultipeCheckbox
           label="Vị Trí"
           data={listMenuLocation}
           listLocation={location}
@@ -354,6 +355,24 @@ const Filter = (props: PropsI) => {
           style={{ width: 150, height: 40 }}
         />
         <ProjectTypeCheckboxDropdown
+          label="Loại BĐS"
+          data={projectTypeListResponse}
+          checkSelectProvince={checkSelectProvince}
+          listProjectType={projectName}
+          onChange={handleSelectProject}
+          placeholder="Loại BĐS"
+          style={{ width: 150, height: 40 }}
+        /> */}
+        <PopperComponent
+          label="Vị Trí"
+          data={listMenuLocation}
+          listLocation={location}
+          onChange={handleChangeLocation}
+          listDataLSProvince={listDataLSProvince}
+          placeholder="Chọn vị trí"
+          style={{ width: 150, height: 40 }}
+        />
+        <PopperProjectType
           label="Loại BĐS"
           data={projectTypeListResponse}
           checkSelectProvince={checkSelectProvince}

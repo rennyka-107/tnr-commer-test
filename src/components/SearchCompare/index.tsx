@@ -18,6 +18,8 @@ import { getProjectByType } from "../../../pages/api/projectApi";
 import ProjectTypeRadio from "@components/CustomComponent/ListRadioSearchCompare/ProjectTypeRadio";
 import SliderGroupFilterSearch from "@components/CustomComponent/SliderGroupComponent/SliderGroupFilterSearch";
 import ProjectRadio from "@components/CustomComponent/ListRadioSearchCompare/ProjectRadio";
+import PopperRadioComponent from "@components/CustomComponent/ListRadioSearchCompare/PopperRadioComponent";
+import PopperRadioProject from "@components/CustomComponent/ListRadioSearchCompare/PopperRadioProject";
 
 type dataProps = {
   searchData?: searchLocationResponse[];
@@ -168,7 +170,7 @@ const SearchCompare = ({
 
   const fetchProjectByType = async (data: any, updateProject?: boolean) => {
     const body = {
-      projectTypeIdList: data,
+      projectTypeIdList: data ? data : [],
     };
     try {
       const res = await getProjectByType(body);
@@ -191,18 +193,18 @@ const SearchCompare = ({
     }
   };
 
-  useEffect(() => {
-    const projectIdData = listMenuBarType.filter(
-      (x) => x.id === router.query.projectId
-    );
-    if (!isEmpty(projectIdData)) {
-      setProductName(
-        typeof projectIdData[0].name === "string"
-          ? projectIdData[0].name.split(",")
-          : projectIdData[0].name
-      );
-    }
-  }, [filter]);
+  //   useEffect(() => {
+  //     const projectIdData = listMenuBarType.filter(
+  //       (x) => x.id === router.query.projectId
+  //     );
+  //     if (!isEmpty(projectIdData)) {
+  //       setProductName(
+  //         typeof projectIdData[0].name === "string"
+  //           ? projectIdData[0].name.split(",")
+  //           : projectIdData[0].name
+  //       );
+  //     }
+  //   }, [filter]);
 
   const handleSelectProject = (dataProjectType: any) => {
     const bodySearch: any = [];
@@ -216,15 +218,16 @@ const SearchCompare = ({
   };
 
   const handleSelectProduct = (data: any) => {
-    console.log(data);
-    const bodySearch: any = [];
-    const arr: any = [];
-    // data.map((item) => {
-    bodySearch.push(data.id);
-    arr.push(data);
-    // })
-    setListDataLSProject(arr);
-    setListIdProject(bodySearch);
+    if (data) {
+      const bodySearch: any = [];
+      const arr: any = [];
+      // data.map((item) => {
+      bodySearch.push(data.id);
+      arr.push(data);
+      // })
+      setListDataLSProject(arr);
+      setListIdProject(bodySearch);
+    }
   };
 
   const handleChangeKhoangGia = (event: any) => {
@@ -293,7 +296,7 @@ const SearchCompare = ({
         localStorage.removeItem("listParamsIdProject");
       }
     }
-  }, []);
+  }, [router]);
 
   const handleSearch = () => {
     localStorage.setItem(
@@ -325,7 +328,7 @@ const SearchCompare = ({
       priceTo: "20",
       areaFrom: "30",
       areaTo: "200",
-      projectTypeIdList: [],
+      projectTypeIdList: [""],
     });
     localStorage.removeItem("listDataLSProjectType");
     localStorage.removeItem("listParamsLSProjectType");
@@ -372,7 +375,16 @@ const SearchCompare = ({
             justifyContent: "space-between",
           }}
         >
-          <ProjectTypeRadio
+          {/* <ProjectTypeRadio
+            label="Loại BĐS"
+            data={listMenuBarProjectType}
+            // checkSelectProvince={checkSelectProvince}
+            listProjectType={projectName}
+            onChange={handleSelectProject}
+            placeholder="Loại BĐS"
+            style={{ width: 150, height: 40 }}
+          /> */}
+          <PopperRadioComponent
             label="Loại BĐS"
             data={listMenuBarProjectType}
             // checkSelectProvince={checkSelectProvince}
@@ -381,7 +393,7 @@ const SearchCompare = ({
             placeholder="Loại BĐS"
             style={{ width: 150, height: 40 }}
           />
-          <ProjectRadio
+          <PopperRadioProject
             label="Chọn dự án"
             data={projectList}
             checkSelectProjectType={checkSelectProjectType}
@@ -390,6 +402,15 @@ const SearchCompare = ({
             placeholder="Chọn dự án"
             style={{ width: 150, height: 40 }}
           />
+          {/* <ProjectRadio
+            label="Chọn dự án"
+            data={projectList}
+            checkSelectProjectType={checkSelectProjectType}
+            listProjectType={productName}
+            onChange={handleSelectProduct}
+            placeholder="Chọn dự án"
+            style={{ width: 150, height: 40 }}
+          /> */}
           <SliderGroupFilterSearch
             label={"Khác"}
             text={"Bộ lọc khác"}
