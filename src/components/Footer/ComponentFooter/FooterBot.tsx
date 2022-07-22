@@ -125,7 +125,7 @@ const FooterBot = ({ listMenuBarProjectType, listUserManual }: MenuProps) => {
         <BlockDiv
           style={{ display: "flex", gap: ".5em", flexDirection: "column" }}
         >
-          <TitleTypo style={{ fontSize: "18px" }}>Sản phẩm</TitleTypo>
+          <TitleTypo style={{ fontSize: "18px" }}>SẢN PHẨM</TitleTypo>
           {listMenuBarProjectType?.map((item, index) => (
             <LineInfo2
               key={index}
@@ -140,7 +140,7 @@ const FooterBot = ({ listMenuBarProjectType, listUserManual }: MenuProps) => {
         <BlockDiv
           style={{ display: "flex", gap: ".5em", flexDirection: "column" }}
         >
-          <TitleTypo style={{ fontSize: "18px" }}>Hỗ trợ</TitleTypo>
+          <TitleTypo style={{ fontSize: "18px" }}>HỖ TRỢ</TitleTypo>
           {listUserManual.map((item, index) => (
             <LineInfo2
 			key={index}

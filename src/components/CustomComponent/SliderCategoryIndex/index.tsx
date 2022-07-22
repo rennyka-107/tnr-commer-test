@@ -7,7 +7,12 @@ import DefaultImage from "../../../../public/images/product_1.png";
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/autoplay";
-import { IconPrevProduct, IconNextProduct } from "@components/Icons";
+import {
+  IconPrevProduct,
+  IconNextProduct,
+  IconDecorHome,
+  IconDecorHome2,
+} from "@components/Icons";
 import ImageWithHideOnError from "hooks/ImageWithHideOnError";
 import { Typography } from "@mui/material";
 import { useRouter } from "next/router";
@@ -73,6 +78,7 @@ const TextTitle = styled(Typography)`
   font-weight: 500;
   font-size: 28px;
   line-height: 33px;
+  text-align: center;
   /* identical to box height */
 
   /* Brand/Main color */
@@ -136,8 +142,11 @@ const SliderCategoryIndex = ({ data }: { data?: any[] }) => {
     ));
   }, [menuBarProjectType]);
   return (
-    <>
+    <div style={{ position: "relative" }}>
       <TextTitle>LOẠI BẤT ĐỘNG SẢN</TextTitle>
+      <div style={{ position: "absolute", top: 0 }}>
+        <IconDecorHome />
+      </div>
 
       <div
         style={{
@@ -193,8 +202,12 @@ const SliderCategoryIndex = ({ data }: { data?: any[] }) => {
           // }}
           />
         </div>
+
       </div>
-    </>
+	  <div style={{ position: "absolute", bottom: 0, right: 0 , zIndex: '-1'}}>
+        <IconDecorHome2 />
+      </div>
+    </div>
   );
 };
 export default SliderCategoryIndex;

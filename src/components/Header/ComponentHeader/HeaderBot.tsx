@@ -32,7 +32,7 @@ const BodyContainer = styled.div`
   display: flex;
   height: 100%;
   align-items: center;
-  padding: 0px 50px 0px 167px;
+  padding: 0px 167px 0px 167px;
   justify-content: space-between;
 `;
 const WrapMenuItem = styled.div`

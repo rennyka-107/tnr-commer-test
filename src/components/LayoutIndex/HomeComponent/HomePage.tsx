@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../../store/store";
 import { getProjectByType } from "../../../../pages/api/projectApi";
 import { isEmpty } from "lodash";
+import { IconDecorHome, IconDecorHome2, IconDecorHome3 } from "@components/Icons";
 
 const DynamicBanner = dynamic(() => import("./BannerIndex"), {
   loading: () => <p>...</p>,
@@ -248,8 +249,14 @@ const HomePage = () => {
         <TitleSlide>CHƯƠNG TRÌNH ƯU ĐÃI</TitleSlide>
         <DynamicSliderShowComponent />
       </SaleWrap>
-      <div style={{ padding: 88 }}>
+      <div style={{ position: 'relative',padding: 88 }}>
+	  <div style={{ position: "absolute", top: 9, right: '15%', zIndex: "-1" }}>
+        <IconDecorHome />
+      </div>
         <DynamicOnlineSupportSale />
+		<div style={{ position: "absolute", bottom: 36, left: '18%', zIndex: "-1" }}>
+        <IconDecorHome2 />
+      </div>
       </div>
       <CompareSwap>
         <Stack direction={"column"}>
@@ -330,7 +337,15 @@ const HomePage = () => {
           </Stack>
         </Stack>
       </CompareSwap>
+	  <div style={{position: 'relative', padding: 50}}>
+	  <div style={{ position: "absolute", top: '9%', right: '2%', zIndex: "-1" }}>
+        <IconDecorHome3 />
+      </div>
       <DynamicSlider3dShowBottom />
+	  <div style={{ position: "absolute", bottom: '20%', left: '20%', zIndex: "-1" }}>
+        <IconDecorHome2 />
+      </div>
+	  </div>
     </>
   );
 };
