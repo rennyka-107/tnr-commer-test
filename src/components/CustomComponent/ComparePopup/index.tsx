@@ -9,7 +9,7 @@ import {
   setValidCompare,
 } from "../../../../store/productCompareSlice";
 import { RootState } from "../../../../store/store";
-import _ from "lodash";
+import _, { isEmpty } from "lodash";
 import { useEffect } from "react";
 import LocalStorage from "utils/LocalStorage";
 
@@ -52,20 +52,24 @@ const ComparePopUp = ({ projectId, projectTypeId }: ComparePopUpProps) => {
 
   useEffect(() => {
     const params = LocalStorage.get("compare-url");
+    const projectIdLS = LocalStorage.get("listParamsIdProject");
+    const projectTypeIDLs = LocalStorage.get("listParamsLSProjectType");
+
+    // const arrProjectIdLS = JSON.parse(projectIdLS);
+    // const arrProjectTypeIdLS = JSON.parse(projectTypeIDLs);
+
     if (
       comparePopUpItem.length === 0 ||
-      (comparePopUpItem.length > 0 &&
-        params &&
-        params.projectId === projectId &&
-        params.projectTypeId === projectTypeId) ||
-      (comparePopUpItem.length > 0 &&
-        projectId === comparePopUpItem[0].projectId &&
-        projectTypeId === comparePopUpItem[0].projectType)
+      (!isEmpty(comparePopUpItem) &&
+	  !isEmpty(projectIdLS) &&
+        projectTypeIDLs.length > 0 &&
+        comparePopUpItem[0].projectId === projectIdLS[0] &&
+        comparePopUpItem[0].projectType === projectTypeIDLs[0])
     ) {
       dispatch(setValidCompare(true));
       LocalStorage.set("compare-url", {
-        projectId: projectId ?? comparePopUpItem[0]?.projectId,
-        projectTypeId: projectTypeId ?? comparePopUpItem[0]?.projectType,
+        // projectId: projectId ?? comparePopUpItem[0]?.projectId,
+        // projectTypeId: projectTypeId ?? comparePopUpItem[0]?.projectType,
         priceTo: "20",
         priceFrom: "1",
         areaTo: "200",

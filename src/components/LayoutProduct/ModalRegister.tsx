@@ -8,12 +8,14 @@ import ControllerSelect from "@components/Form/ControllerSelect";
 import ControllerSelectTime from "@components/Form/ControllerSelectTime";
 import ControllerTextField from "@components/Form/ControllerTextField";
 import FormGroup from "@components/Form/FormGroup";
+import { IconX } from "@components/Icons";
 import styled from "@emotion/styled";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   Box,
   Button,
   CircularProgress,
+  Divider,
   MenuItem,
   Modal,
   Select,
@@ -174,22 +176,28 @@ const LineStyled = styled.div`
   border: 1px solid #c7c9d9;
 `;
 const ButtonStyled = styled(Button)`
+  font-family: "Roboto";
   text-transform: none;
-  border-radius: 8px;
-  font-weight: 400;
+  font-style: normal;
+  font-weight: 500;
   font-size: 16px;
-  line-height: 19px;
-  color: #ffffff;
+  line-height: 16px;
+  /* identical to box height, or 100% */
+
+  /* Brand/Main color */
+  border-radius: 8px;
+  color: #1b3459;
   padding: 14px 70px;
   cursor: pointer;
   border: unset;
   width: 100%;
+  height: 54px;
 `;
 const ModalRegister = (props: PropsI) => {
   const { isOpen, onClose, product, toggle } = props;
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
-//   const [rerender, forceUpdate] = useForceUpdate();
+  //   const [rerender, forceUpdate] = useForceUpdate();
   const detailUser = useSelector(
     (state: RootState) => state?.profile?.userInfo
   );
@@ -246,12 +254,12 @@ const ModalRegister = (props: PropsI) => {
   });
 
   useEffect(() => {
-	if(detailUser){
-		setValue('fullname',detailUser.fullname)
-		setValue('email',detailUser.email)
-		setValue('phone',detailUser.phone)
-	}
-  },[detailUser])
+    if (detailUser) {
+      setValue("fullname", detailUser.fullname);
+      setValue("email", detailUser.email);
+      setValue("phone", detailUser.phone);
+    }
+  }, [detailUser]);
   useEffect(() => {
     if (!isOpen) {
       reset();
@@ -269,7 +277,7 @@ const ModalRegister = (props: PropsI) => {
           title: `Đặt lịch`,
           message: "Đặt lịch thành công",
         });
-		setLoading(false);
+        setLoading(false);
         toggle();
       } else {
         notification({
@@ -278,7 +286,7 @@ const ModalRegister = (props: PropsI) => {
           message: response?.responseMessage ?? "Có một số lỗi xảy ra",
         });
       }
-	  setLoading(false);
+      setLoading(false);
     } catch (err) {
       notification({
         severity: "error",
@@ -312,8 +320,24 @@ const ModalRegister = (props: PropsI) => {
           onSubmit={handleSubmit((values) => submitForm(values))}
           autoComplete="off"
         >
-          <div style={{ padding: "10px 0px 10px 0px" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
             <TitleStyled>Đặt lịch tham quan nhà mẫu</TitleStyled>
+            <IconX
+              style={{
+                stroke: "#1B3459",
+                width: "16px",
+                height: "16px",
+                cursor: "pointer",
+              }}
+              onClick={onClose}
+            />
+
             <LineStyled style={{ border: "1px solid #C7C9D9;" }}></LineStyled>
           </div>
 
@@ -393,7 +417,7 @@ const ModalRegister = (props: PropsI) => {
                 disabled={!isEmpty(errors)}
               >
                 {loading === false ? (
-                  <>Đặt lịch</>
+                  <>Xác nhận đặt lịch</>
                 ) : (
                   <CircularProgress
                     style={{ height: 25, width: 25, color: "#ffffff" }}

@@ -172,9 +172,12 @@ const SearchCompare = ({
     const body = {
       projectTypeIdList: data ? data : [],
     };
+    setCheckSelectProjectType(false);
     try {
       const res = await getProjectByType(body);
       if (res.responseCode === "00") {
+        setCheckSelectProjectType(true);
+
         setProjectList(res.responseData);
         if (res.responseData.length > 0) {
           if (updateProject) {
@@ -183,7 +186,7 @@ const SearchCompare = ({
           setFilterSearch({
             ...filterSearch,
             projectId: updateProject ? res.responseData[0].id : projectId,
-            projectTypeIdList: data,
+            // projectTypeIdList: data,
           });
         }
       }
@@ -211,10 +214,11 @@ const SearchCompare = ({
     const arrayData: any = [];
     arrayData.push(dataProjectType);
     bodySearch.push(dataProjectType.id);
+    fetchProjectByType(bodySearch);
     setCheckSelectProjectType(true);
     setParamsProjectType(bodySearch);
-    fetchProjectByType(bodySearch);
     setListDataLSProjectType(arrayData);
+
   };
 
   const handleSelectProduct = (data: any) => {
@@ -324,10 +328,10 @@ const SearchCompare = ({
       provinceId: "",
       projectTypeId: "",
       projectId: "",
-      priceFrom: "1",
-      priceTo: "20",
-      areaFrom: "30",
-      areaTo: "200",
+      priceFrom: (priceFrom as string) ?? "1",
+      priceTo: (priceTo as string) ?? "20",
+      areaFrom: (areaFrom as string) ?? "30",
+      areaTo: (areaTo as string) ?? "200",
       projectTypeIdList: [""],
     });
     localStorage.removeItem("listDataLSProjectType");
@@ -413,7 +417,21 @@ const SearchCompare = ({
           /> */}
           <SliderGroupFilterSearch
             label={"Khác"}
-            text={"Bộ lọc khác"}
+            text={FormatFilterText([
+              {
+                text: `${filterSearch.priceFrom} tỷ ~ ${filterSearch.priceTo} tỷ`,
+                hasValue: Boolean(filterSearch.priceFrom),
+              },
+              {
+                text: (
+                  <>
+                    {filterSearch.areaFrom} m<sup>2</sup> -&nbsp;
+                    {filterSearch.areaTo} m<sup>2</sup>
+                  </>
+                ),
+                hasValue: Boolean(filterSearch.areaFrom),
+              },
+            ])}
             handleApply={onFilterApply}
             handleCancel={onFilterCancel}
           >
@@ -473,7 +491,7 @@ const SearchCompare = ({
               Lọc
             </span>
           </Button>
-          <div style={{ width: 150 }}>{fetchComponent()}</div>
+          {/* <div style={{ width: 150 }}>{fetchComponent()}</div> */}
         </div>
 
         <div
