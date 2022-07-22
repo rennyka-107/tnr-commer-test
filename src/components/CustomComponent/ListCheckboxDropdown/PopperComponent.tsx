@@ -330,14 +330,14 @@ export default function GitHubLabel({
                   </Box>
                 </li>
               )}
-              options={data ? [...data].sort((a, b) => {
+              options={[...data].sort((a, b) => {
                 // Display the selected labels first.
                 let ai = value.indexOf(a);
                 ai = ai === -1 ? value.length + data.indexOf(a) : ai;
                 let bi = value.indexOf(b);
                 bi = bi === -1 ? value.length + data.indexOf(b) : bi;
                 return ai - bi;
-              }): []}
+              })}
               getOptionLabel={(option) => option?.ProvinceName}
               renderInput={(params) => (
                 <StyledInput

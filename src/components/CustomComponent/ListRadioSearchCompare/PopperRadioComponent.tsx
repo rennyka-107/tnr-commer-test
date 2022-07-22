@@ -333,7 +333,7 @@ export default function PopperRadioComponent({
                   </Box>
                 </li>
               )}
-              options={data ? [...data] : []}
+              options={[...data]}
               getOptionLabel={(option: any) => option?.name}
               renderInput={(params) => (
                 <StyledInput

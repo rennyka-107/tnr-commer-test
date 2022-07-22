@@ -191,24 +191,19 @@ export default function PopperRadioProject({
     setAnchorEl(event.currentTarget);
   };
 
-
-  
   React.useEffect(() => {
     const newArray: any = [];
 	const arrayDefault: any = []
-	arrayDefault.push(data[0]);
+	arrayDefault.push(defaultValue);
     if (typeof window !== "undefined") {
       const dataSelectLS = localStorage?.getItem("listDataLSProject");
       const arr: MenuBar[] = JSON.parse(dataSelectLS);
 	  if (!isEmpty(arr)) {
         arr.map((item, index) => {
-          const findItem = data.find((it) => it?.id === item?.id);
-			if(findItem){
-				newArray.push(findItem);
-			}else{
-				newArray.push(data[0]);
-			}
+          const findItem = data.find((it) => it.id === item.id);
+          newArray.push(findItem);
         });
+
         setValue(newArray[0]);
       } else {
         setValue(arrayDefault[0]);
@@ -330,7 +325,7 @@ export default function PopperRadioProject({
                   </Box>
                 </li>
               )}
-              options={data ? [...data] : []}
+              options={[...data]}
               getOptionLabel={(option: any) => option?.name}
               renderInput={(params) => (
                 <StyledInput
