@@ -200,6 +200,17 @@ const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
     }
   };
 
+  const handleSelectTypeProject = (data:any) => {
+	// console.log(data)
+	// const arr: any = [];
+	// arr.push(data);
+	// localStorage.setItem(
+	// 	"listDataLSProjectType",
+	// 	JSON.stringify(arr)
+	//   );
+	Router.replace(`/${PathRoute.ProjectTNR}?type=${data.id}`);
+  }
+
   const pressShortcut = (type: typeShortcut) => {
     switch (type) {
       case "BANG_HANG":
@@ -222,7 +233,7 @@ const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
               title={"Loại bất động sản"}
               data={menuDataProject}
               onSelect={(item) => {
-                Router.replace(`/${PathRoute.ProjectTNR}?type=${item.id}`);
+				handleSelectTypeProject(item)
               }}
             />
           ) : (

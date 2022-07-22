@@ -5,7 +5,7 @@ import LoadingComponent from "@components/LoadingComponent";
 import Page from "@layouts/Page";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import LocalStorage from "utils/LocalStorage";
 import SessionStorage from "utils/SessionStorage";
@@ -48,8 +48,8 @@ const CompareSearch = () => {
     projectTypeId: projectTypeId ? projectTypeId : "",
     projectId: projectId ? projectId : "",
     categoryId: categoryId ? categoryId : "",
-    priceFrom: priceFrom ? priceFrom + "000000000" : "",
-    priceTo: priceTo ? priceTo + "000000000" : "",
+    priceFrom: priceFrom ? priceFrom: "",
+    priceTo: priceTo ? priceTo: "",
     areaFrom: Number(areaFrom),
     areaTo: Number(areaTo),
   });
@@ -59,7 +59,7 @@ const CompareSearch = () => {
       size: 12,
     });
   };
-  useEffect(() => {
+  useMemo(() => {
     if (typeof window !== "undefined") {
       const listProjectType = localStorage?.getItem("listParamsLSProjectType");
       const listParamsIdProject = localStorage?.getItem("listParamsIdProject");
@@ -77,7 +77,7 @@ const CompareSearch = () => {
           : [],
       });
     }
-  }, [router.query]);
+  }, [router]);
 
   const fetchAdvandedSearchListCompare = async () => {
     try {

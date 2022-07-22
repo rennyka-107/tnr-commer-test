@@ -176,6 +176,9 @@ const ProjectTypeCheckboxDropdown = ({
     }
     setAnchorEl(null);
   };
+  const handleChange = (e:any) => {
+	setPendingValue(e)
+  }
 
   const open = Boolean(anchorEl);
   const id = open ? "github-label" : undefined;
@@ -219,7 +222,9 @@ const ProjectTypeCheckboxDropdown = ({
                 }
               }}
               value={pendingValue}
+
               disableCloseOnSelect
+			  onChange={(e,v) => handleChange(v)}
               PopperComponent={PopperComponent}
               renderTags={() => null}
               noOptionsText="Không có loại bất động sản"

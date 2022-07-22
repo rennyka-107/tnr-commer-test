@@ -44,7 +44,7 @@ const LayoutPayment = ({ setScopeRender }: Props) => {
 
   const onAdd = () => {
     router.push(
-      `/search?Type=Advanded&textSearch=&provinceId=&projectTypeId=&projectId=&priceFrom=&priceTo=&areaFrom=null&areaTo=null`
+      `/search?Type=Advanded&textSearch=&provinceId=&projectTypeId=&projectId=&priceFrom=&priceTo=&areaFrom=0&areaTo=200`
     );
   };
 

@@ -65,11 +65,11 @@ const ButtonStyled = styled(Button)`
   background: #ea242a;
   border-radius: 60px;
   :hover {
-    background: #ffffff;
-    box-shadow: 4px 8px 24px #f2f2f5;
-    border: 1px solid #48576d;
+    background: #FEC83C;
+    // box-shadow: 4px 8px 24px #f2f2f5;
+    box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.2);
     border-radius: 60px;
-    color: #48576d;
+    color: #ffffff;
   }
   font-family: "Roboto";
   font-style: normal;
@@ -127,10 +127,14 @@ export default function OnlineSupportSale() {
         </ContainerOSS>
       </WrapOSS>
       <div style={{ marginTop: 50 }}>
-        <ButtonStyled onClick={() => {
-			Router.replace(`/buyingGuide?idUserManual=3e63c59e-7995-4f8b-b553-740d131a052f&&selected=0`)
-		}}>
-         Xem Chi Tiết&nbsp;&nbsp;&nbsp;
+        <ButtonStyled
+          onClick={() => {
+            Router.replace(
+              `/buyingGuide?idUserManual=3e63c59e-7995-4f8b-b553-740d131a052f&&selected=0`
+            );
+          }}
+        >
+          Xem Chi Tiết&nbsp;&nbsp;&nbsp;
           <IconMuaOnline />
         </ButtonStyled>
       </div>

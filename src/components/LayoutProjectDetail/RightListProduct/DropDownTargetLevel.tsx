@@ -11,6 +11,7 @@ import {
   setArrayImgMap,
   setListTarget,
   setListChildTarget,
+  setTargetShape,
 } from "../../../../store/projectMapSlice";
 import isEmpty from "lodash.isempty";
 import {
@@ -20,6 +21,7 @@ import {
 } from "../../../../pages/api/mapProject";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { Box } from "@mui/material";
+import { useRouter } from "next/router";
 
 export default function DropDownTargetLevel({ level }: any) {
   const Target = useSelector((state: RootState) => state.projectMap.Target);
@@ -38,10 +40,17 @@ export default function DropDownTargetLevel({ level }: any) {
   const ListTarget = useSelector(
     (state: RootState) => state.projectMap.ListTarget
   );
+  const allOption = {
+    id: "all-options",
+    level: level.level,
+    name: "Tất cả",
+  };
   const [formatList, setFormatList] = useState<any[]>([]);
   const [value, setValue] = useState<any>(null);
   const dispatch = useDispatch();
-  const [label, setLabel] = useState("");
+  const {
+    query: { id },
+  } = useRouter();
 
   useEffect(() => {
     if (!isEmpty(value)) {
@@ -144,7 +153,9 @@ export default function DropDownTargetLevel({ level }: any) {
       }
       return { ...data, level: level.level };
     });
-    setFormatList(formatData);
+    if (!isEmpty(formatData)) {
+      setFormatList([allOption, ...formatData]);
+    }
     if (!isEmpty(Target) && Target.type === "1" && isEmpty(Target.imgMap)) {
       dispatch(setListChildTarget(formatData));
     } else {
@@ -182,13 +193,16 @@ export default function DropDownTargetLevel({ level }: any) {
 
   useEffect(() => {
     if (!isEmpty(level)) {
-      setLabel(level.name);
-      if (isEmpty(Target) && isEmpty(level.parentId)) {
-        apiGetListChildMapByIdLevel(level.id)
-          .then((response) => {
-            fetData(response.responseData);
-          })
-          .catch((err) => console.log(err));
+      if (isEmpty(Target)) {
+        if (level.level === 1) {
+          apiGetListChildMapByIdLevel(level.id)
+            .then((response) => {
+              fetData(response.responseData);
+            })
+            .catch((err) => console.log(err));
+        } else {
+          setFormatList([]);
+        }
       }
       if (!isEmpty(Target)) {
         if (Target.level === level.level - 1) {
@@ -236,28 +250,43 @@ export default function DropDownTargetLevel({ level }: any) {
       }
     }
   }, [level, Target]);
-
   return !isEmpty(formatList) ? (
     <Box>
       <Autocomplete
         value={value}
         disablePortal
         disableClearable
-        id="combo-box-demo"
+        id={`combo-box-demo-${level.id}`}
         options={formatList}
         sx={{ minWidth: "250px" }}
         popupIcon={<ArrowForwardIosIcon fontSize="medium" />}
-        onChange={(e, value) => {
-          if (!isEmpty(value)) {
-            dispatch(setTarget({ ...value, level: level.level }));
-            setValue(value);
+        getOptionDisabled={(option) =>
+          option.id === "all-options" && isEmpty(value)
+        }
+        onChange={(e, vl) => {
+          if (!isEmpty(vl) && vl.id !== "all-options") {
+            dispatch(setTarget({ ...vl, level: level.level }));
+            setValue(vl);
+          } else {
+            if (!isEmpty(value) && value.parentId !== id) {
+              dispatch(
+                setTargetShape({
+                  id: value.parentId,
+                  level: level.level - 1,
+                })
+              );
+            } else {
+              if (level.level === 1) {
+                dispatch(setTarget(null));
+              }
+            }
           }
         }}
         renderInput={(params) => (
           <TextField
             variant="standard"
             {...params}
-            placeholder={`Chọn`}
+            placeholder={`Tất cả`}
             InputProps={{
               ...params.InputProps,
               style: {
