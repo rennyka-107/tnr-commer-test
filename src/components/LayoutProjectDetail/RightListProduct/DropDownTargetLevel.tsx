@@ -12,6 +12,7 @@ import {
   setListTarget,
   setListChildTarget,
   setTargetShape,
+  setGeoJsonDataProduct,
 } from "../../../../store/projectMapSlice";
 import isEmpty from "lodash.isempty";
 import {
@@ -39,6 +40,9 @@ export default function DropDownTargetLevel({ level }: any) {
   );
   const ListTarget = useSelector(
     (state: RootState) => state.projectMap.ListTarget
+  );
+  const GeoJsonData = useSelector(
+    (state: RootState) => state.projectMap.GeoJsonData
   );
   const allOption = {
     id: "all-options",
@@ -117,6 +121,8 @@ export default function DropDownTargetLevel({ level }: any) {
         dispatch(setTarget({ ...newTarget, level: level.level }));
         if (!isEmpty(newTarget.imgMap) && newTarget.type === "1") {
           dispatch(setImgMap(newTarget.imgMap));
+          dispatch(setGeoJsonData([]));
+          dispatch(setGeoJsonDataProduct([]));
         }
         setValue(newTarget);
       }
@@ -127,17 +133,21 @@ export default function DropDownTargetLevel({ level }: any) {
         if (!isEmpty(newTarget.imgMap) && newTarget.type === "1") {
           dispatch(setImgMap(newTarget.imgMap));
           dispatch(setGeoJsonData([]));
+          dispatch(setGeoJsonDataProduct([]));
         }
       }
     }
   }, [TargetShape]);
 
-  function fetData(datas: any[], resetProducts: boolean = true) {
+  function fetData(
+    datas: any[],
+    resetProducts: boolean = true,
+  ) {
     const geojsonArray = [];
     if (resetProducts) {
       dispatch(setListChild([]));
     }
-    setValue(null);
+      setValue(null);
     const formatData = datas.map((data) => {
       if (!isEmpty(data.map)) {
         const geodata = JSON.parse(data.map);
@@ -203,6 +213,7 @@ export default function DropDownTargetLevel({ level }: any) {
         } else {
           setFormatList([]);
         }
+        dispatch(setGeoJsonDataProduct([]));
       }
       if (!isEmpty(Target)) {
         if (Target.level === level.level - 1) {
@@ -216,6 +227,13 @@ export default function DropDownTargetLevel({ level }: any) {
             setFormatList([]);
           }
           if (Target.level === level.level) {
+            const features = GeoJsonData.features;
+            if(!isEmpty(features)) {
+              const findItem = features.find(item => item.properties.id === Target.id);
+              if(!isEmpty(findItem)) {
+                dispatch(setGeoJsonData([]));
+              }
+            }
             apiGetListProductByIdDetail(Target.id)
               .then((response) => {
                 const geojsonArray = [];
@@ -242,7 +260,7 @@ export default function DropDownTargetLevel({ level }: any) {
                     })
                   )
                 );
-                dispatch(setGeoJsonData(geojsonArray));
+                dispatch(setGeoJsonDataProduct(geojsonArray));
               })
               .catch((err) => console.log(err));
           }
@@ -265,8 +283,8 @@ export default function DropDownTargetLevel({ level }: any) {
         }
         onChange={(e, vl) => {
           if (!isEmpty(vl) && vl.id !== "all-options") {
-            dispatch(setTarget({ ...vl, level: level.level }));
-            setValue(vl);
+            dispatch(setTargetShape({ id: vl.id, level: level.level }));
+            // setValue(vl);
           } else {
             if (!isEmpty(value) && value.parentId !== id) {
               dispatch(

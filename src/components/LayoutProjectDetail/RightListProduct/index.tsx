@@ -71,7 +71,6 @@ export default function RightListProduct() {
     (state: RootState) => state.projectMap.OldTarget
   );
   const menuBarType = listMenuBarType?.filter((item) => item.id !== "1");
-  console.log(ListTarget, "list target");
   function renderCard() {
     return (
       <Box

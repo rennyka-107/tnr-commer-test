@@ -1,5 +1,5 @@
 import * as React from "react";
-import { IconDropDown } from "@components/Icons";
+import { IconDropDown, StrokeHeaderIcon } from "@components/Icons";
 import styled from "@emotion/styled";
 import { Button, ButtonProps, Menu, MenuItem, Typography } from "@mui/material";
 
@@ -81,7 +81,7 @@ export default function MenuDropdownStatus({
           aria-expanded={open ? "true" : undefined}
           onClick={handleClick}
         >
-          <TextButton>{title}</TextButton> <IconDropDown />
+          <TextButton>{title}</TextButton> <StrokeHeaderIcon />
         </Button>
       )}
       <Menu

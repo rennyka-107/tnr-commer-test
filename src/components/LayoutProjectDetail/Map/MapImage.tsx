@@ -41,13 +41,15 @@ const MapImage = ({ url }: Props) => {
   }, [map]);
 
   useEffect(() => {
-    if ((!isEmpty(url) && !isEmpty(originBound)) || isEmpty(Target)) {
-      if (!isEmpty(originBound)) {
+    if (!isEmpty(url) && !isEmpty(originBound)) {
+      if (
+        (!isEmpty(Target) && Target.type === "1" && !isEmpty(Target.imgMap)) ||
+        isEmpty(Target)
+      ) {
         map.fitBounds(originBound);
       }
     }
   }, [url, originBound, Target]);
-
   if (!isEmpty(originBound)) {
     return <ImageOverlay ref={ref} bounds={originBound} url={url} />;
   }

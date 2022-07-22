@@ -31,26 +31,33 @@ const HeaderTitle = styled.span`
 
 const statusTrans = [
 	{
-		id:'1',
+		id:'',
 		value: 'Tất Cả'
 	},
 	{
+		id:'0',
+		value: "Chưa hoàn thành hồ sơ"
+	},
+	{
+		id:'1',
+		value: 'Đã hoàn thiện hồ sơ'
+	},
+	{
 		id:'2',
-		value: "Đang chờ thanh toán"
+		value: 'Hết thời gian thanh toán'
 	},
 	{
 		id:'3',
-		value: 'Đặt chỗ thành công'
+		value: 'Đã duyệt'
 	},
 	{
 		id:'4',
-		value: 'Đặt chỗ thất bại'
+		value: 'Đã tạo phiếu thanh toán'
 	},
 	{
 		id:'5',
-		value: 'Hết thời gian thanh toán'
+		value: 'Đã tạo bản nháp thông tin mua hàng'
 	},
-	
 ]
 
 const ContractManage = () => {
@@ -85,11 +92,11 @@ const ContractManage = () => {
 
   };
   const handleSelectStatus = (e:any) => {
-	if(e.id === "1"){
-		setBodySearch({ ...bodySearch, status: '' });
-	}else {
-		setBodySearch({ ...bodySearch, status: e.value });
-	}
+	// if(e.id === " "){
+	// 	setBodySearch({ ...bodySearch, status: '' });
+	// }else {
+		setBodySearch({ ...bodySearch, status: e.id });
+	// }
   }
 
   return (
@@ -102,6 +109,7 @@ const ContractManage = () => {
               display: "flex",
               padding: "12px 20px",
               borderRadius: 8,
+			  alignItems: 'center'
             }}
           >
             <MenuDropdown

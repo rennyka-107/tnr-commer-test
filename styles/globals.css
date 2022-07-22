@@ -845,13 +845,17 @@ a {
     flex-direction: column !important;
     right: 2% !important;
     gap: 50px !important;
-    margin-bottom: 100px !important;
     padding-right: 33px !important;
     align-items: end !important;
     font-family: 'Roboto';
     font-style: normal;
+    justify-content: flex-end;
+    position: absolute;
     font-weight: 500;
     font-size: 16px;
+    cursor: pointer;
     line-height: 19px;
     color: #DBDEE3;
+    height: 30%;
+    width: 100%;
 }

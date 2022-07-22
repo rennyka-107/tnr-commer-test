@@ -19,7 +19,11 @@ interface InitialState {
   Resize: string;
   OldTarget: any;
   openModalSale: boolean;
-  ListChildTarget: any[]
+  ListChildTarget: any[];
+  GeoJsonDataProduct: {
+    type: string;
+    features: any[];
+  };
 }
 const initialState: InitialState = {
   ProjectInformation: {
@@ -40,7 +44,11 @@ const initialState: InitialState = {
   Resize: "",
   OldTarget: null,
   openModalSale: true,
-  ListChildTarget: []
+  ListChildTarget: [],
+  GeoJsonDataProduct: {
+    type: "FeatureCollection",
+    features: [],
+  },
 };
 
 export const projectMapSlice = createSlice({
@@ -83,11 +91,14 @@ export const projectMapSlice = createSlice({
     setOldTarget: (state, { payload }) => {
       state.OldTarget = payload;
     },
-    setOpenModalSale: (state, {payload}) => {
+    setOpenModalSale: (state, { payload }) => {
       state.openModalSale = payload;
     },
-    setListChildTarget: (state, {payload}) => {
+    setListChildTarget: (state, { payload }) => {
       state.ListChildTarget = payload;
+    },
+    setGeoJsonDataProduct: (state, { payload }) => {
+      state.GeoJsonDataProduct.features = payload;
     },
   },
 });
@@ -106,7 +117,8 @@ export const {
   setResize,
   setOldTarget,
   setOpenModalSale,
-  setListChildTarget
+  setListChildTarget,
+  setGeoJsonDataProduct
 } = projectMapSlice.actions;
 
 export default projectMapSlice.reducer;
