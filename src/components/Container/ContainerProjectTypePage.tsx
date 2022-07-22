@@ -37,7 +37,7 @@ const ContainerProjectTypePage: React.FC<Props> = ({
         <>
           <ContainerWrapper>
             <Breadcrumbs title={title} />
-            <Row customStyle={{ marginBottom: 52, marginTop: 22 }}>
+            <Row customStyle={{ marginBottom: 25, marginTop: 22 }}>
               <Column
                 customStyle={{
                   padding: 0,
@@ -46,10 +46,11 @@ const ContainerProjectTypePage: React.FC<Props> = ({
                   display: "flex",
                 }}
               >
-                {title && <HeaderView>{title}</HeaderView>}
+                {/* {title && <HeaderView>{title}</HeaderView>} */}
+				{rightContent && rightContent}
               </Column>
               <Column customStyle={{ padding: 0}}>
-                {rightContent && rightContent}
+      
               </Column>
             </Row>
             <Box style={style}>{children}</Box>

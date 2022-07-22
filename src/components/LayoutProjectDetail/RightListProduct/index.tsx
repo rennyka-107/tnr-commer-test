@@ -127,6 +127,7 @@ export default function RightListProduct() {
             isOptionEqualToValue={(option, value) => option.id === value.id}
           />
           <Box
+          id="box-dropdown-map"
             sx={{
               mt: 2,
               display: "flex",

@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../store/store";
 import { getProjectByType } from "../../../../pages/api/projectApi";
+import { isEmpty } from "lodash";
 
 const DynamicBanner = dynamic(() => import("./BannerIndex"), {
   loading: () => <p>...</p>,
@@ -79,6 +80,10 @@ const HomePage = () => {
   const [valueDienTich, setValueDientich] = useState<number[]>([30, 200]);
   const [valueKhoanGia, setValueKhoangGia] = useState<number[]>([1, 20]);
   const [projectList, setProjectList] = useState<any[]>([]);
+  const [listParamsProjectType, setParamsProjectType] = useState([]);
+  const [listIdProject, setListIdProject] = useState([]);
+  const [listDataLSProject, setListDataLSProject] = useState([]);
+  const [listDataLSProjectType, setListDataLSProjectType] = useState([]);
 
   const [filterSearch, setFilterSearch] = useState({
     textSearch: "",
@@ -97,8 +102,11 @@ const HomePage = () => {
   );
 
   const fetchProjectByType = async (typeId: string) => {
+    const body = {
+      projectTypeIdList: [typeId],
+    };
     try {
-      const res = await getProjectByType(typeId);
+      const res = await getProjectByType(body);
       if (res.responseCode === "00") {
         setProjectList(res.responseData);
         if (res.responseData.length > 0) {
@@ -116,12 +124,20 @@ const HomePage = () => {
     }
   };
 
-  useEffect(() => {
-    if (listMenuBarProjectType?.length > 0) {
-      setProjectTypeName(listMenuBarProjectType[0].name.split(","));
-      fetchProjectByType(listMenuBarProjectType[0].id);
-    }
-  }, [listMenuBarProjectType]);
+//   useEffect(() => {
+//     if (listMenuBarProjectType?.length > 0) {
+//       setProjectTypeName(listMenuBarProjectType[0].name.split(","));
+
+//       fetchProjectByType(listMenuBarProjectType[0].id);
+//     }
+//   }, [listMenuBarProjectType, router]);
+
+//   useEffect(() => {
+//     if (router.pathname !== "/") {
+//       listParamsProjectType.push(listMenuBarProjectType[0].id);
+//       listDataLSProjectType.push(listMenuBarProjectType[0]);
+//     }
+//   }, [router]);
 
   const handleSelectProject = (
     event: SelectChangeEvent<typeof projectTypeName>
@@ -131,6 +147,9 @@ const HomePage = () => {
     } = event;
     const data = listMenuBarProjectType.filter((x) => x.name === value);
     setProjectTypeName(typeof value === "string" ? value.split(",") : value);
+
+    listParamsProjectType.push(data[0].id);
+    listDataLSProjectType.push(data[0]);
     // setFilterSearch({ ...filterSearch, projectTypeId: data[0].id });
     fetchProjectByType(data[0].id);
   };
@@ -142,6 +161,8 @@ const HomePage = () => {
       target: { value },
     } = event;
     const data = projectList.filter((x) => x.name === value);
+    listIdProject.push(data[0].id);
+    listDataLSProject.push(data[0]);
     setProjectName(typeof value === "string" ? value.split(",") : value);
     setFilterSearch({ ...filterSearch, projectId: data[0].id });
   };
@@ -180,6 +201,20 @@ const HomePage = () => {
   };
 
   const handleSearchCompare = () => {
+    localStorage.setItem(
+      "listDataLSProjectType",
+      JSON.stringify(listDataLSProjectType)
+    );
+    localStorage.setItem(
+      "listParamsLSProjectType",
+      JSON.stringify(listParamsProjectType)
+    );
+    localStorage.setItem(
+      "listDataLSProject",
+      JSON.stringify(listDataLSProject)
+    );
+    localStorage.setItem("listParamsIdProject", JSON.stringify(listIdProject));
+
     router.push(
       `/compare-search?projectId=${filterSearch.projectId}&projectTypeId=${filterSearch.projectTypeId}&priceTo=${filterSearch.priceTo}&priceFrom=${filterSearch.priceFrom}&areaTo=${filterSearch.areaTo}&areaFrom=${filterSearch.areaFrom}&categoryId=${filterSearch.categoryId}`
     );
@@ -249,7 +284,7 @@ const HomePage = () => {
                 />
               </div>
             </Stack>
-            <Stack direction={"column"} style={{ maxWidth: 400}}>
+            <Stack direction={"column"} style={{ maxWidth: 400 }}>
               <Typography
                 style={{
                   fontWeight: 400,

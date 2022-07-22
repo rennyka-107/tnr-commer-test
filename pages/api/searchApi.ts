@@ -40,7 +40,7 @@ export const searchAdvanded = async (data: any, search: SearchParams) => {
     textSearch: data.textSearch,
 	provinceIdList: data.provinceIdList,
 	projectTypeIdList: data.projectTypeIdList ,
-	projectIdList: data.projectIdList
+	projectIdList: data.projectIdList ? data.projectIdList  : []
   };
 
   return HttpClient.post<any, CommonResponse>(

@@ -18,6 +18,7 @@ const useProjectList = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<any>(null);
   const [totalPage, setTotalPage] = useState(0);
+  const [totalElement, setTotalElement] = useState(0);
   const [body, setBody] = useState<BodyListProjectI>({
     projectTypeId: type,
   });
@@ -46,31 +47,41 @@ const useProjectList = () => {
   }, [type]);
 
   useEffect(() => {
-    if (!body) return;
-    const fetch = async () => {
-      setLoading(true);
-      if (!isEmpty(listMenuBarType)) {
-        try {
-          if (typeof body.projectTypeId === "string") {
-            const res = await getListProjectTNR(params, body);
-            setData(res?.responseData);
-            let count = 0;
-            if (res?.responseData.length > 0) {
-              count =
-                Number(res?.responseData?.[0].tongBanGhi) / params.pageSize;
+    // if (!body) return;
+    if (typeof window !== "undefined") {
+      const listProvince = localStorage?.getItem("listParamsLSProvince");
+      const listProjectType = localStorage?.getItem("listParamsLSProjectType");
+      const dataParams = {
+        ...body,
+        provinceIdList: listProvince ? JSON.parse(listProvince) : [],
+        projectTypeIdList: listProjectType ? JSON.parse(listProjectType) : [],
+      };
+      const fetch = async () => {
+        setLoading(true);
+        if (!isEmpty(listMenuBarType)) {
+          try {
+            if (typeof body.projectTypeId === "string") {
+              const res = await getListProjectTNR(params, dataParams);
+              setData(res?.responseData);
+              setTotalElement(res.totalElement);
+              let count = 0;
+              if (res?.responseData.length > 0) {
+                count =
+                  Number(res?.responseData?.[0].tongBanGhi) / params.pageSize;
+              }
+              setTotalPage(Math.ceil(count));
+              if (res?.responseCode === "00") {
+                setLoading(false);
+              }
             }
-            setTotalPage(Math.ceil(count));
-            if (res?.responseCode === "00") {
-              setLoading(false);
-            }
+          } catch (error) {
+            setError(error?.response);
           }
-        } catch (error) {
-          setError(error?.response);
         }
-      }
-    };
-    fetch();
-  }, [body,listMenuBarType]);
+      };
+      fetch();
+    }
+  }, [body]);
 
   return {
     data,
@@ -80,6 +91,7 @@ const useProjectList = () => {
     totalPage,
     changeBody,
     body,
+    totalElement,
     params,
   };
 };
