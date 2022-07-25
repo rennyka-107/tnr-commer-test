@@ -1,7 +1,6 @@
 import {
   IconCardPlusOSS,
   IconClipBoardOSS,
-  IconDecorHome,
   IconMuaOnline,
   IconSearchOSS,
   IconUserOSS,
@@ -66,7 +65,7 @@ const ButtonStyled = styled(Button)`
   background: #ea242a;
   border-radius: 60px;
   :hover {
-    background: #fec83c;
+    background: #FEC83C;
     // box-shadow: 4px 8px 24px #f2f2f5;
     box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.2);
     border-radius: 60px;
@@ -89,9 +88,8 @@ export default function OnlineSupportSale() {
   return (
     <div
       id="huongdan-online"
-      style={{ display: "flex", flexDirection: "column", alignItems: "center" , position: 'relative'}}
+      style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
     >
-
       <TexTopStyled>HƯỚNG DẪN MUA ONLINE</TexTopStyled>
       <WrapOSS>
         <ContainerOSS>

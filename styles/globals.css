@@ -826,32 +826,3 @@ a {
     fill: #ffffff;
     stroke: #ffffff;
 }
-
-.swiper-pagination-bullet {
-    background-color: transparent !important;
-    color: #ffffff !important;
-    opacity: inherit !important;
-}
-
-.swiper-pagination-bullet-active {
-    background-color: transparent !important;
-    text-decoration: underline !important;
-    color: #ffffff !important;
-    opacity: inherit !important;
-}
-
-.swiper-pagination {
-    display: flex !important;
-    flex-direction: column !important;
-    right: 2% !important;
-    gap: 50px !important;
-    margin-bottom: 100px !important;
-    padding-right: 33px !important;
-    align-items: end !important;
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 19px;
-    color: #DBDEE3;
-}

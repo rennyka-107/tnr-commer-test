@@ -37,10 +37,8 @@ const ItemSearch = ({ data }: searchProps) => {
   );
 
   const onCompare = (product: searchLocationResponse) => () => {
-	console.log(product)
     if (!isValid) return;
     const local: comparePopUpItemI[] = _.cloneDeep(comparePopUpItem);
-	console.log(isValid)
     if (local) {
       if (
         local.length >= 3 ||

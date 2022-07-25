@@ -10,7 +10,6 @@ const useAddToCart = () => {
   const Router = useRouter();
   const dispatch = useDispatch();
   const notification = useNotification();
-
   function handleAddToCart(idProduct?: string, redirect: boolean = true) {
     const id = idProduct ? idProduct : LocalStorage.get("cart");
     if (!isEmpty(id)) {

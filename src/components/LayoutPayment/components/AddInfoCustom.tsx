@@ -243,9 +243,9 @@ const AddInfoCustom = (props: Props) => {
 
               <Grid item xs={12}>
                 <LinedStyled mw={670} style={{ margin: "15px 0px 5px" }} />
-                <RowStyled width={670}>
+                {/* <RowStyled width={670}>
                   <Title28Styled>Thông tin cá nhân</Title28Styled>
-                </RowStyled>
+                </RowStyled> */}
               </Grid>
 
               <Grid item xs={6}>

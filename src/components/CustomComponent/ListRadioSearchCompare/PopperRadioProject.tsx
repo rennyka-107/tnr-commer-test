@@ -182,7 +182,7 @@ export default function PopperRadioProject({
   const inputStyles = useInputStyles();
   const router = useRouter();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [value, setValue] = React.useState<MenuBar[]>([]);
+  const [value, setValue] = React.useState<MenuBar[]>([data[0]]);
   const [pendingValue, setPendingValue] = React.useState<MenuBar[]>([]);
   const theme = useTheme();
 

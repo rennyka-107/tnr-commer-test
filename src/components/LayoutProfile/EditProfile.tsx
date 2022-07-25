@@ -25,6 +25,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { imageUrl, InputProps, validateLine } from "utils/constants";
+import { isValidFileImage } from "utils/helper";
 import Regexs from "utils/Regexs";
 import * as yup from "yup";
 import {
@@ -170,9 +171,7 @@ const EditProfile = () => {
         email: data.email,
         idNumber: data.idNumber,
         idReceivePlace: data.idReceivePlace,
-        idReceiveDate:
-          data.idReceiveDate &&
-          data.idReceiveDate,
+        idReceiveDate: data.idReceiveDate && data.idReceiveDate,
         domicile: data.domicile,
         address: data.address,
         avatar: data.avatar,
@@ -182,7 +181,7 @@ const EditProfile = () => {
         district: data?.district ? Number(data?.district) : "",
         province: data?.province ? Number(data?.province) : "",
         businessRegistration: data?.businessRegistration,
-        businessRegistrationName: data?.businessRegistrationName
+        businessRegistrationName: data?.businessRegistrationName,
       });
     },
 
@@ -196,16 +195,26 @@ const EditProfile = () => {
   }, [detailUser]);
 
   const uploadToClient = async (event) => {
-    let formData = new FormData();
-    formData.append("file", event.target.files[0]);
-    formData.append("category", "avatar");
-    setLoadingImg(true);
-    postImage(formData)
-      .then((res) => setValue("avatar", imageUrl + res?.responseData?.dataUrl))
-      .catch((err) => err)
-      .finally(() => {
-        setLoadingImg(false);
-      });
+    if (
+      isValidFileImage(event.target.value, () => {
+        notification({
+          error: "Không đúng định dạng ảnh!",
+        });
+      })
+    ) {
+      let formData = new FormData();
+      formData.append("file", event.target.files[0]);
+      formData.append("category", "avatar");
+      setLoadingImg(true);
+      postImage(formData)
+        .then((res) =>
+          setValue("avatar", imageUrl + res?.responseData?.dataUrl)
+        )
+        .catch((err) => err)
+        .finally(() => {
+          setLoadingImg(false);
+        });
+    }
   };
 
   const uploadFile = async (file) => {
@@ -213,8 +222,8 @@ const EditProfile = () => {
       notification({
         severity: "error",
         message: "File không tồn tại",
-        title: "Upload file"
-      })
+        title: "Upload file",
+      });
     }
     let formDataFile = new FormData();
     formDataFile.append("imageFile", file);
@@ -223,8 +232,8 @@ const EditProfile = () => {
         notification({
           severity: "success",
           title: "Cập nhật thông tin hồ sơ",
-          message: res.responseMessage
-        })
+          message: res.responseMessage,
+        });
         forceUpdate();
       })
       .catch((err) => err);
@@ -240,9 +249,7 @@ const EditProfile = () => {
       email: values.email,
       idNumber: values.idNumber,
       idReceivePlace: values.idReceivePlace,
-      idReceiveDate:
-        values.idReceiveDate &&
-        values.idReceiveDate,
+      idReceiveDate: values.idReceiveDate && values.idReceiveDate,
       domicile: values.domicile,
       address: values.address,
       avatar: values.avatar,
@@ -260,8 +267,8 @@ const EditProfile = () => {
           notification({
             severity: "success",
             title: "Cập nhật file ảnh",
-            message: response.responseMessage
-          })
+            message: response.responseMessage,
+          });
           forceUpdate();
         }
       } catch (error) {
@@ -302,6 +309,7 @@ const EditProfile = () => {
             </IconWrapper>
           </label>
           <input
+            accept="image/*"
             id="image"
             type="file"
             style={{ display: "none" }}
@@ -388,6 +396,7 @@ const EditProfile = () => {
                 fullWidth
                 label="Email"
                 InputProps={InputProps}
+                required
               />
             </FormGroup>
           </Column>

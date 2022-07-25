@@ -89,7 +89,4 @@ export { default as IconLocation } from "./IconLocation";
 export { default as IconEmptyFav } from "./IconEmptyFav";
 export { default as IconEmptyShoppingCart } from "./IconEmptyShoppingCart";
 export {default as IconSapxep} from './IconSapxep';
-export {default as IconSelectDropdownFilter} from './IconSelectDropdownFilter';
-export {default as IconDecorHome} from './IconDecorHome';
-export {default as IconDecorHome2} from './IconDecorHome2';
-export {default as IconDecorHome3} from './IconDecorHome3';
+export {default as IconSelectDropdownFilter} from './IconSelectDropdownFilter'

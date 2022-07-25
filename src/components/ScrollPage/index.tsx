@@ -33,7 +33,7 @@ const ScrollPage = () => {
         style={{
           position: "fixed",
           right: 0,
-          bottom: "10%",
+          top: "40%",
           marginRight: 20,
           zIndex: 500,
         }}
