@@ -11,6 +11,12 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../../store/store";
 import { getProjectByType } from "../../../../pages/api/projectApi";
 import { isEmpty } from "lodash";
+import {
+  IconDecorHome,
+  IconDecorHome2,
+  IconDecorHome3,
+} from "@components/Icons";
+import useProjectRecenly from "hooks/useProjectRecenly";
 
 const DynamicBanner = dynamic(() => import("./BannerIndex"), {
   loading: () => <p>...</p>,
@@ -85,7 +91,8 @@ const HomePage = () => {
   const [listDataLSProject, setListDataLSProject] = useState([]);
   const [listDataLSProjectType, setListDataLSProjectType] = useState([]);
   const [saveDataProjectType, setSaveDataProjectType] = useState([]);
-  const [saveDataProject, setSaveDataProject] = useState([])
+  const [saveDataProject, setSaveDataProject] = useState([]);
+  const { dataProductRecenly } = useProjectRecenly();
 
   const [filterSearch, setFilterSearch] = useState({
     textSearch: "",
@@ -111,10 +118,10 @@ const HomePage = () => {
       const res = await getProjectByType(body);
       if (res.responseCode === "00") {
         setProjectList(res.responseData);
-		setSaveDataProject(res.responseData)
+        setSaveDataProject(res.responseData);
         if (res.responseData.length > 0) {
           setProjectName(res.responseData[0].name.split(","));
-		  
+
           setFilterSearch({
             ...filterSearch,
             projectId: res.responseData[0].id,
@@ -137,17 +144,17 @@ const HomePage = () => {
   }, [listMenuBarProjectType, router]);
   useEffect(() => {
     if (!isEmpty(saveDataProjectType)) {
-		setParamsProjectType([saveDataProjectType[0].id]);
-		setListDataLSProjectType([saveDataProjectType[0]]);
+      setParamsProjectType([saveDataProjectType[0].id]);
+      setListDataLSProjectType([saveDataProjectType[0]]);
     }
-  }, [saveDataProjectType,listMenuBarProjectType]);
+  }, [saveDataProjectType, listMenuBarProjectType]);
 
   useEffect(() => {
-	if(!isEmpty(saveDataProject)){
-		setListIdProject([saveDataProject[0].id]);
-		setListDataLSProject([saveDataProject[0]]);
-	}
-  },[saveDataProject,router,listMenuBarProjectType])
+    if (!isEmpty(saveDataProject)) {
+      setListIdProject([saveDataProject[0].id]);
+      setListDataLSProject([saveDataProject[0]]);
+    }
+  }, [saveDataProject, router, listMenuBarProjectType]);
 
   //   useEffect(() => {
   //     if (router.pathname !== "/") {
@@ -248,8 +255,23 @@ const HomePage = () => {
         <TitleSlide>CHƯƠNG TRÌNH ƯU ĐÃI</TitleSlide>
         <DynamicSliderShowComponent />
       </SaleWrap>
-      <div style={{ padding: 88 }}>
+      <div style={{ position: "relative", padding: 88 }}>
+        <div
+          style={{ position: "absolute", top: 9, right: "15%", zIndex: "-1" }}
+        >
+          <IconDecorHome />
+        </div>
         <DynamicOnlineSupportSale />
+        <div
+          style={{
+            position: "absolute",
+            bottom: 36,
+            left: "18%",
+            zIndex: "-1",
+          }}
+        >
+          <IconDecorHome2 />
+        </div>
       </div>
       <CompareSwap>
         <Stack direction={"column"}>
@@ -330,7 +352,35 @@ const HomePage = () => {
           </Stack>
         </Stack>
       </CompareSwap>
-      <DynamicSlider3dShowBottom />
+      {!isEmpty(dataProductRecenly) ? (
+        <>
+          <div style={{ position: "relative", padding: 50 }}>
+            <div
+              style={{
+                position: "absolute",
+                top: "9%",
+                right: "2%",
+                zIndex: "-1",
+              }}
+            >
+              <IconDecorHome3 />
+            </div>
+            <DynamicSlider3dShowBottom />
+            <div
+              style={{
+                position: "absolute",
+                bottom: "20%",
+                left: "20%",
+                zIndex: "-1",
+              }}
+            >
+              <IconDecorHome2 />
+            </div>
+          </div>
+        </>
+      ) : (
+        <></>
+      )}
     </>
   );
 };

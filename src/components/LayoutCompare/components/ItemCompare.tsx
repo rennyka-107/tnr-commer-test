@@ -42,8 +42,9 @@ const TextMoneyStyled = styled(Text18Styled)({
 });
 
 const BoxInputStyled = styled(Box)({
-  height: 59,
-  padding: "0px 0px 4px 12px",
+  minHeight: 59,
+  height: 'auto',
+  padding: "10px 0px 4px 12px",
   borderBottom: "1px solid #dcdcdc",
   display: "flex",
   alignItems: "end",

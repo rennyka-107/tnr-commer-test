@@ -178,7 +178,7 @@ const ProductCard = (props: Props) => {
         </HeaderTitle>
         <CodeProduct>{item?.bookingCode}</CodeProduct>
         <Row>
-          <Column col={1} customStyle={{ paddingLeft: 0 }}>
+          <Column col={2} customStyle={{ paddingLeft: 0 }}>
             <TextProduct>Khách hàng:</TextProduct>
           </Column>
           <Column col={3} customStyle={{ paddingLeft: 0 }}>
@@ -186,7 +186,7 @@ const ProductCard = (props: Props) => {
           </Column>
         </Row>
         <Row>
-          <Column col={1} customStyle={{ paddingLeft: 0 }}>
+          <Column col={2} customStyle={{ paddingLeft: 0 }}>
             <TextProduct>Mã đặt chỗ:</TextProduct>
           </Column>
           <Column col={3} customStyle={{ paddingLeft: 0 }}>
@@ -194,7 +194,7 @@ const ProductCard = (props: Props) => {
           </Column>
         </Row>
         <Row>
-          <Column col={1} customStyle={{ paddingLeft: 0 }}>
+          <Column col={2} customStyle={{ paddingLeft: 0 }}>
             <TextProduct>Thời gian đặt chỗ:</TextProduct>
           </Column>
           <Column col={3} customStyle={{ paddingLeft: 0 }}>
