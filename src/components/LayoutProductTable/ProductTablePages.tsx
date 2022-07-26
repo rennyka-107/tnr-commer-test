@@ -167,10 +167,10 @@ const ProductTablePages = () => {
   }
   const MouseOver = (event: any) => {
     setIndexHover(event);
-  }
+  };
   const MouseOver2 = (event: any) => {
     setIndexHover2(event);
-  }
+  };
   const fetchComponent = (el: any, idx) => {
     // console.log(el,data)
     return (
@@ -182,15 +182,19 @@ const ProductTablePages = () => {
                 backgroundColor:
                   (el.lotCode === indexHover2 && element.code <= indexHover) ||
                   (el.lotCode <= indexHover2 && element.code === indexHover)
-                    ?  " rgba(0, 99, 247, 0.15)"
+                    ? " rgba(0, 99, 247, 0.15)"
                     : "",
-					zIndex: 100
+                zIndex: 100,
               }}
               align="center"
-              onMouseOver={() => {
+              onMouseOverCapture={() => {
                 MouseOver(element.code);
                 MouseOver2(el.lotCode);
               }}
+			  onMouseLeave={() => {
+				setIndexHover2("");
+				setIndexHover("");
+			  }}
               key={index}
             >
               {element.lstProductData.map((data, i) => (
@@ -281,11 +285,16 @@ const ProductTablePages = () => {
             setBody(values);
           }}
         />
-        <TableContainer component={Paper} sx={{ marginTop: 4 }}>
-          <Table aria-label="simple table">
-            <TableHead style={{ backgroundColor: "#1B3459", color: "#FFFF" }}>
+        <TableContainer
+          component={Paper}
+          sx={{ marginTop: 4, borderRadius: "8px 8px 0px 0px" , maxHeight: 1140}}
+        >
+          <Table stickyHeader aria-label="sticky table">
+            <TableHead>
               <TableRow>
-                <TableCellStyled align="left">
+                <TableCellStyled
+                  style={{ backgroundColor: "#1B3459", color: "#FFFF" }}
+                >
                   <LabelContainer>
                     <div
                       style={{
@@ -300,12 +309,181 @@ const ProductTablePages = () => {
                   </LabelContainer>
                 </TableCellStyled>
                 {data?.lstProductionRow?.map((el, index) => (
-                  <TableCellContent align="center" key={index}>
+                  <TableCellContent
+                    align="center"
+                    key={index}
+                    style={{ backgroundColor: "#1B3459", color: "#FFFF" }}
+                  >
                     {el?.code ?? "no stt"}
                   </TableCellContent>
                 ))}
               </TableRow>
               <TableRow>
+                <TableCellStyled
+                  align="left"
+                  style={{
+                    backgroundColor: "#1B3459",
+                    color: "#FFFF",
+                    top: 58,
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    <IconNumberRoomSleep /> &nbsp; Số phòng ngủ
+                  </div>
+                </TableCellStyled>
+                {data?.lstProductionRow?.map((el, index) => (
+                  <TableCellContent
+                    align="center"
+                    key={index}
+                    style={{
+                      backgroundColor: "#1B3459",
+                      color: "#FFFF",
+                      top: 58,
+                    }}
+                  >
+                    {el?.numBed ?? "no bed"}
+                  </TableCellContent>
+                ))}
+              </TableRow>
+              <TableRow>
+                <TableCellStyled
+                  align="left"
+                  style={{
+                    backgroundColor: "#1B3459",
+                    color: "#FFFF",
+					top: 116,
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    <IconBedProductTable /> &nbsp; Số phòng vệ sinh
+                  </div>
+                </TableCellStyled>
+                {data?.lstProductionRow?.map((el, index) => (
+                  <TableCellContent
+                    align="center"
+                    key={index}
+                    style={{
+                      backgroundColor: "#1B3459",
+                      color: "#FFFF",
+                      top: 116,
+                    }}
+                  >
+                    {el?.numBath ?? 0}
+                  </TableCellContent>
+                ))}
+              </TableRow>
+			  <TableRow>
+                <TableCellStyled
+                  align="left"
+                  style={{
+                    backgroundColor: "#1B3459",
+                    color: "#FFFF",
+					top: 174,
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                                  <IconHuongProductTable /> &nbsp; Hướng logia
+                  </div>
+                </TableCellStyled>
+                {data?.lstProductionRow?.map((el, index) => (
+                  <TableCellContent
+                    align="center"
+                    key={index}
+                    style={{
+                      backgroundColor: "#1B3459",
+                      color: "#FFFF",
+                      top: 174,
+                    }}
+                  >
+                     {el?.doorDirection ?? "no direction"}
+                  </TableCellContent>
+                ))}
+              </TableRow>
+			  <TableRow>
+                <TableCellStyled
+                  align="left"
+                  style={{
+                    backgroundColor: "#1B3459",
+                    color: "#FFFF",
+					top: 232,
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                  <IconDienTichProductTable /> &nbsp; Diện tích (m2)
+                  </div>
+                </TableCellStyled>
+                {data?.lstProductionRow?.map((el, index) => (
+                  <TableCellContent
+                    align="center"
+                    key={index}
+                    style={{
+                      backgroundColor: "#1B3459",
+                      color: "#FFFF",
+                      top: 232,
+                    }}
+                  >
+                      {el.landArea ? el.landArea : ""}
+                  </TableCellContent>
+                ))}
+              </TableRow>
+			  <TableRow>
+                <TableCellStyled
+                  align="left"
+                  style={{
+                    backgroundColor: "#1B3459",
+                    color: "#FFFF",
+					top: 290,
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                   <IconCanGoc /> &nbsp; Căn góc
+                  </div>
+                </TableCellStyled>
+                {data?.lstProductionRow?.map((el, index) => (
+                  <TableCellContent
+                    align="center"
+                    key={index}
+                    style={{
+                      backgroundColor: "#1B3459",
+                      color: "#FFFF",
+                      top: 290,
+                    }}
+                  >
+                     {el.isCornerApartment === 1 ? <Check /> : ""}
+                  </TableCellContent>
+                ))}
+              </TableRow>
+              {/* <TableRow>
                 <TableCellStyled align="left">
                   <div
                     style={{
@@ -394,7 +572,7 @@ const ProductTablePages = () => {
                     {el.isCornerApartment === 1 ? <Check /> : ""}
                   </TableCellContent>
                 ))}
-              </TableRow>
+              </TableRow> */}
             </TableHead>
             {data?.lstDetailRow?.map((el, idx) => (
               <TableRow key={idx}>

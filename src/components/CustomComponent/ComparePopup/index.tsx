@@ -54,7 +54,7 @@ const ComparePopUp = ({ projectId, projectTypeId }: ComparePopUpProps) => {
     const params = LocalStorage.get("compare-url");
     const projectIdLS = LocalStorage.get("listParamsIdProject");
     const projectTypeIDLs = LocalStorage.get("listParamsLSProjectType");
-
+	
     // const arrProjectIdLS = JSON.parse(projectIdLS);
     // const arrProjectTypeIdLS = JSON.parse(projectTypeIDLs);
 
@@ -78,8 +78,9 @@ const ComparePopUp = ({ projectId, projectTypeId }: ComparePopUpProps) => {
       });
     } else {
       dispatch(setValidCompare(false));
+	  console.log("bcdfed")
     }
-  }, [projectId, projectTypeId, comparePopUpItem]);
+  }, [projectId, projectTypeId, comparePopUpItem,router]);
 
   const remove = (id?: string) => () => {
     if (id) {
