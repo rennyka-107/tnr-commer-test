@@ -61,6 +61,7 @@ export interface Param {
 export interface Props {
   userId?: String;
   transKey?: String;
+  numberPhone?: string;
   back: () => void;
   next?: () => void;
 }
@@ -80,9 +81,10 @@ const Confirm = (props: Props) => {
     defaultValues: validationSchema.getDefault(),
   });
 
-  const onSubmit = async () => {
+  const onSubmit = async (values: any) => {
 	setLoading(true);
-    getOTP(props.transKey).then((response) => {
+
+    getOTP(props.transKey,values.confirm).then((response) => {
       if (response.responseCode === "00") {
         props.next();
 		setLoading(false);
@@ -99,7 +101,7 @@ const Confirm = (props: Props) => {
         <IconArrowLeftBlue />
         &nbsp; Quay lại
       </LinkLabel>
-      <form onSubmit={handleSubmit((values) => onSubmit())}>
+      <form onSubmit={handleSubmit((values) => onSubmit(values))}>
         <ConFirm>Xác thực</ConFirm>
         <TypeConFirm>Mời bạn chọn phương thức xác thực</TypeConFirm>
         <RadioGroup>
@@ -109,8 +111,8 @@ const Confirm = (props: Props) => {
               control={control}
 			  disabled={loading}
               options={[
-                { value: 1, label: "Nhận mã qua email" },
-                { value: 2, label: "Nhắn tin tới số ..." },
+                { value: 0, label: "Nhận mã qua email" },
+                { value: 1, label: `Nhắn tin tới số ${props.numberPhone}` },
               ]}
             />
           </Grid>

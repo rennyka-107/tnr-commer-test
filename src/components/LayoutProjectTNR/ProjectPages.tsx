@@ -17,6 +17,7 @@ import ContainerProjectTypePage from "@components/Container/ContainerProjectType
 import NoProductComponent from "@components/CustomComponent/NoProductComponent";
 export interface ProjectInforI {
   id: string;
+
   name: string;
   location: string;
   constructArea: number | null;
@@ -124,6 +125,7 @@ const ProjectPages = () => {
                   <ContainerProduct>
                     <DynamicProductCard
                       id={el.id}
+					  el={el}
                       src={el.avatar}
                       title={el?.name}
                       subTitle={el?.location}

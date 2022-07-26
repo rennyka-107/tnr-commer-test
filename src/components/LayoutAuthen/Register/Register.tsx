@@ -68,6 +68,7 @@ export interface RegisterParam {
 export interface Props {
   setUserId?: (value: string) => void;
   setTransKey?: (value: string) => void;
+  setNumberPhone?: (value: string) => void;
   setKey?: (value: string) => void;
   next?: () => void;
 }
@@ -170,6 +171,7 @@ const Index = (props: Props) => {
           reset();
           props.setUserId(response.responseData?.id);
 		  props.setTransKey(response.responseData?.transKey);
+		  props.setNumberPhone(response.responseData?.phone);
           props.setKey(response.responseData?.keycloakId);
           props.next();
           Route.push({

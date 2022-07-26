@@ -243,15 +243,14 @@ const SearchPage = ({
   };
 
   const handleChangeLocation = (data: any) => {
+    const bodySearch: any = [];
     if (!isEmpty(data)) {
-      const bodySearch: any = [];
       const arrayData: any = [];
       data.map((item) => {
         bodySearch.push(item.ProvinceID.toString());
         arrayData.push(item);
       });
 
-      setCheckSelectProvince(true);
       setListParamsProvince(bodySearch);
       fetchListProjectType(bodySearch);
       setListDataLSProvince(arrayData);
@@ -261,21 +260,26 @@ const SearchPage = ({
       setParamsProjectType([]);
       fetchListProjectTypeByProvince(bodySearch);
     }
+    fetchListProjectTypeByProvince(bodySearch);
+    setCheckSelectProvince(true);
   };
 
   const handleSelectProject = (dataProjectType: any) => {
+    const bodySearch: any = [];
     if (!isEmpty(dataProjectType)) {
-      const bodySearch: any = [];
       const arrayData: any = [];
       dataProjectType.map((item) => {
         bodySearch.push(item.id);
         arrayData.push(item);
       });
-      setCheckSelectProjectType(true);
+
       fetchListProject(bodySearch);
       setParamsProjectType(bodySearch);
       setListDataLSProjectType(arrayData);
     }
+    setCheckSelectProjectType(true);
+    setCheckSelectProvince(true);
+    fetchListProject(bodySearch);
   };
 
   const fetchListProjectType = async (data: any) => {

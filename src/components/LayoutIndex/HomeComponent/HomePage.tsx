@@ -86,7 +86,7 @@ const HomePage = () => {
   const [valueDienTich, setValueDientich] = useState<number[]>([30, 200]);
   const [valueKhoanGia, setValueKhoangGia] = useState<number[]>([1, 20]);
   const [projectList, setProjectList] = useState<any[]>([]);
-  const [listParamsProjectType, setParamsProjectType] = useState([]);
+  const [listParamsProjectType, setParamsProjectType] = useState<any[]>([]);
   const [listIdProject, setListIdProject] = useState([]);
   const [listDataLSProject, setListDataLSProject] = useState([]);
   const [listDataLSProjectType, setListDataLSProjectType] = useState([]);
@@ -142,6 +142,7 @@ const HomePage = () => {
       fetchProjectByType(listMenuBarProjectType[0].id);
     }
   }, [listMenuBarProjectType, router]);
+
   useEffect(() => {
     if (!isEmpty(saveDataProjectType)) {
       setParamsProjectType([saveDataProjectType[0].id]);
@@ -150,12 +151,13 @@ const HomePage = () => {
   }, [saveDataProjectType, listMenuBarProjectType]);
 
   useEffect(() => {
+
     if (!isEmpty(saveDataProject)) {
       setListIdProject([saveDataProject[0].id]);
       setListDataLSProject([saveDataProject[0]]);
     }
   }, [saveDataProject, router, listMenuBarProjectType]);
-
+  console.log(listIdProject,saveDataProject)
   //   useEffect(() => {
   //     if (router.pathname !== "/") {
   //       listParamsProjectType.push(listMenuBarProjectType[0].id);
@@ -172,8 +174,8 @@ const HomePage = () => {
     const data = listMenuBarProjectType.filter((x) => x.name === value);
     setProjectTypeName(typeof value === "string" ? value.split(",") : value);
 
-    listParamsProjectType.push(data[0].id);
-    listDataLSProjectType.push(data[0]);
+    setParamsProjectType([data[0].id]);
+    setListDataLSProjectType([data[0]]);
     // setFilterSearch({ ...filterSearch, projectTypeId: data[0].id });
     fetchProjectByType(data[0].id);
   };

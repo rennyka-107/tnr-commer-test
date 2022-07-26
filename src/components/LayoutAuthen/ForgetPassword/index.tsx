@@ -33,6 +33,7 @@ const Index = () => {
   const [username, setUsername] = useState("");
   const [keyTrans, setKeyTrans] = useState("");
   const[keyForgot, setKeyForgot] = useState("");
+
   const [paramsEndcode, setParamsEndcode] = useState({
     key: "",
     OTP: "",

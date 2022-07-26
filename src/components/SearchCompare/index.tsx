@@ -197,6 +197,14 @@ const SearchCompare = ({
   };
 
   //   useEffect(() => {
+  //     if (!isEmpty(projectList)) {
+  //       const bodyArr: any = [];
+  //       bodyArr.push(projectList[0]);
+  //       localStorage.setItem("listDataLSProject", JSON.stringify(bodyArr));
+  //     }
+  //   }, [projectList]);
+
+  //   useEffect(() => {
   //     const projectIdData = listMenuBarType.filter(
   //       (x) => x.id === router.query.projectId
   //     );
@@ -208,6 +216,19 @@ const SearchCompare = ({
   //       );
   //     }
   //   }, [filter]);
+
+  //   useEffect(() => {
+  //     if (!isEmpty(projectList)) {
+  //       localStorage.setItem(
+  //         "listDataLSProject",
+  //         JSON.stringify([projectList[0]])
+  //       );
+  //       localStorage.setItem(
+  //         "listParamsIdProject",
+  //         JSON.stringify([projectList[0].id])
+  //       );
+  //     }
+  //   }, [projectList]);
 
   const handleSelectProject = (dataProjectType: any) => {
     const bodySearch: any = [];

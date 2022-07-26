@@ -53,6 +53,7 @@ const masterReducer = (state, action) => {
         menuBarProjectList: action.payload.menubar.listMenuBarProjectType,
         listMenuLocation: action.payload.menubar.listMenuLocation,
         listCategory: action.payload.menubar.listCategory,
+		...action.payload.menubar
       },
       products: {
         listProductResponse: action.payload.products.listProductResponse,

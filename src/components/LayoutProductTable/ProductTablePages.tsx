@@ -26,6 +26,7 @@ import {
   IconNumberRoomSleep,
 } from "@components/Icons";
 import { Tooltip } from "@mui/material";
+import { ContactlessOutlined, DriveFileMove } from "@mui/icons-material";
 
 type DetailRowI = {
   countRemaining: number;
@@ -138,6 +139,9 @@ const ProductTablePages = () => {
     lstProductionRow: ProductionRowI[];
   }>();
   const router = useRouter();
+  const [indexHover, setIndexHover] = useState("");
+  const [indexHover2, setIndexHover2] = useState("");
+
   const getProduct = async (body: BodyRequest, cancelToken: any) => {
     // const newValues: BodyRequest = { ...body, saleProductStatus: (body.saleProductStatus as string[]).join(',') }
     const response = await getListProductTable(body, cancelToken);
@@ -161,21 +165,42 @@ const ProductTablePages = () => {
     });
     return itemFormat.substring(0, 4);
   }
-
-  const fetchComponent = (el: any) => {
+  const MouseOver = (event: any) => {
+    setIndexHover(event);
+  }
+  const MouseOver2 = (event: any) => {
+    setIndexHover2(event);
+  }
+  const fetchComponent = (el: any, idx) => {
+    // console.log(el,data)
     return (
       <>
         {data?.lstProductionRow?.map((element, index) => (
           <>
-            <CellContent align="center" key={index}>
+            <CellContent
+              style={{
+                backgroundColor:
+                  (el.lotCode === indexHover2 && element.code <= indexHover) ||
+                  (el.lotCode <= indexHover2 && element.code === indexHover)
+                    ?  " rgba(0, 99, 247, 0.15)"
+                    : "",
+					zIndex: 100
+              }}
+              align="center"
+              onMouseOver={() => {
+                MouseOver(element.code);
+                MouseOver2(el.lotCode);
+              }}
+              key={index}
+            >
               {element.lstProductData.map((data, i) => (
-                <>
+                <TableRow key={index}>
                   {data.lotCode == el.lotCode ? (
-                    renderAction(data)
+                    <div>{renderAction(data)}</div>
                   ) : (
-                    <IconStyled />
+                    <></>
                   )}
-                </>
+                </TableRow>
               ))}
             </CellContent>
           </>
@@ -185,7 +210,6 @@ const ProductTablePages = () => {
   };
 
   const renderAction = (item: ListProductData) => {
-
     switch (item.paymentStatus) {
       case 4:
         return (
@@ -372,8 +396,8 @@ const ProductTablePages = () => {
                 ))}
               </TableRow>
             </TableHead>
-            {data?.lstDetailRow?.map((el) => (
-              <TableRow key={el.lotCode}>
+            {data?.lstDetailRow?.map((el, idx) => (
+              <TableRow key={idx}>
                 <TableCell
                   align="left"
                   sx={{ width: 150, backgroundColor: "rgba(27, 52, 89, 0.12)" }}
@@ -402,7 +426,7 @@ const ProductTablePages = () => {
                     </div>
                   </div>
                 </TableCell>
-                {fetchComponent(el)}
+                {fetchComponent(el, idx)}
               </TableRow>
             ))}
           </Table>

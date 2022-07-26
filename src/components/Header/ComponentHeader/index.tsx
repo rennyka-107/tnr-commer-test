@@ -11,6 +11,8 @@ import {
   getListMenuBarType,
   getListMenuLocation,
   getListCategory,
+  getListProjectTypeFilter,
+  getListMenuBarProjectFilter,
 } from "../../../../store/menuBarSlice";
 import { RootState } from "../../../../store/store";
 import HeaderBot from "./HeaderBot";
@@ -36,6 +38,7 @@ const Header = () => {
         dispatch(getListMenuBarProjectType(responseList.responseData));
         dispatch(getListMenuBarType(res.responseData));
         dispatch(getListMenuLocation(reslocation.responseData));
+		// dispatch(getListMenuBarProjectFilter(res.responseData))
         dispatch(getListCategory(responseCategory.responseData));
       } catch (error) {
         console.log(error);

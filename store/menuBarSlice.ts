@@ -8,13 +8,17 @@ import {
 
 interface InitialState {
   listMenuBarType: MenuBar[];
+  listMenuBarProjectFilter: MenuBar[];
   listMenuBarProjectType: MenuBarProjectType[];
   listMenuLocation: MenuBarLocation[];
   listCategory: CategoryResponse[];
+  listProjectTypeFilter: MenuBarProjectType[];
 }
 const initialState: InitialState = {
   listMenuBarType: [],
+  listMenuBarProjectFilter: [],
   listMenuBarProjectType: [],
+  listProjectTypeFilter: [],
   listMenuLocation: [],
   listCategory: [],
 };
@@ -33,6 +37,17 @@ export const menuBarSlice = createSlice({
       const newDataProject = dataProject.concat(action.payload);
       state.listMenuBarType = action.payload;
     },
+	getListMenuBarProjectFilter: (state, action) => {
+		console.log(action)
+		const dataProject = [
+		  {
+			id: "1",
+			name: "Tất cả dự án",
+		  },
+		];
+		const newDataProject = dataProject.concat(action.payload);
+		state.listMenuBarProjectFilter = newDataProject;
+	  },
     getListMenuBarProjectType: (state, action) => {
       const dataProjectType = [
         {
@@ -51,6 +66,24 @@ export const menuBarSlice = createSlice({
       const newDataType = dataProjectType.concat(action.payload);
       state.listMenuBarProjectType = action.payload;
     },
+	getListProjectTypeFilter: (state, action) => {
+		const dataProjectType = [
+		  {
+			id: "1",
+			name: "Tất Cả",
+			description: "mô tả tất cả các loại ",
+			icon: "http://210.245.85.229:1983/static-data/5c979bae-249b-4b0a-880a-9729cb757a50/0c48b9c7-ddbc-491e-961a-1f0758e648a1/Project_Type/f6caa857-2d8f-421f-bff9-dc120640e745/can-ho-dich-vu.JPG",
+			iconHover:
+			  "http://210.245.85.229:1983/static-data/dc98ba2c-3fc3-4484-9ac0-832f7184c606/0c48b9c7-ddbc-491e-961a-1f0758e648a1/can_ho_hover/f6caa857-2d8f-421f-bff9-dc120640e745/can_ho_hover.png",
+			position: 0,
+  
+			code: "0",
+			nameDisplay: "Tất Cả",
+		  },
+		];
+		const newDataType = dataProjectType.concat(action.payload);
+		state.listProjectTypeFilter = newDataType;
+	  },
     getListMenuLocation: (state, action) => {
     //   const dataLocation = [
     //     {
@@ -82,6 +115,8 @@ export const {
   getListMenuBarType,
   getListMenuBarProjectType,
   getListMenuLocation,
+  getListProjectTypeFilter,
+  getListMenuBarProjectFilter,
   getListCategory
 } = menuBarSlice.actions;
 
