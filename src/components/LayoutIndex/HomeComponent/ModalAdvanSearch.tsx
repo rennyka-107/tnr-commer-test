@@ -127,10 +127,10 @@ export default function ModalAdvanSearch() {
     provinceId: "",
     projectTypeId: "",
     projectId: "",
-    priceFrom: ("" as string) ?? "1",
-    priceTo: ("" as string) ?? "20",
-    areaFrom: ("" as string) ?? "30",
-    areaTo: ("" as string) ?? "200",
+    priceFrom: ("1" as string) ?? "1",
+    priceTo: ("20" as string) ?? "20",
+    areaFrom: ("30" as string) ?? "30",
+    areaTo: ("200" as string) ?? "200",
   });
   const handleClick =
     (newPlacement: PopperPlacementType) =>

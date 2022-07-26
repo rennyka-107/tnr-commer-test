@@ -1,5 +1,6 @@
 import CustomButton from "@components/CustomComponent/CustomButton";
 import ControllerCheckbox from "@components/Form/ControllerCheckbox";
+import ControllerRadio from "@components/Form/ControllerRadio";
 import ControllerTextField from "@components/Form/ControllerTextField";
 import FormGroup from "@components/Form/FormGroup";
 import PasswordTextField from "@components/Form/PasswordTextField";
@@ -86,7 +87,7 @@ const Login = () => {
     }
   }, [isAuthenticated, Route]);
   const notification = useNotification();
-  const { control, handleSubmit } = useForm<LoginParams>({
+  const { control, handleSubmit } = useForm<any>({
     mode: "onChange",
     resolver: yupResolver(validationSchema),
     defaultValues: validationSchema.getDefault(),
@@ -191,6 +192,15 @@ const Login = () => {
             icon={<CircleOutlined />}
             checkedIcon={<CheckCircleOutline />}
           />
+          {/* <ControllerRadio
+              name="remember"
+              control={control}
+			  disabled={loading}
+              options={[
+                { value: 1, label: "Nhận mã qua email" },
+                { value: 2, label: "Nhắn tin tới số ..." },
+              ]}
+            /> */}
         </FormGroup>
         <FormGroup sx={{ mb: 2 }} fullWidth style={{ alignItems: "center" }}>
           <Link href={"#"} passHref>

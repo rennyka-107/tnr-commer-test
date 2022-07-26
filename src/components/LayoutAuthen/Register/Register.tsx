@@ -131,7 +131,7 @@ const Index = (props: Props) => {
     getValues,
     formState: { errors },
     watch,
-  } = useForm<RegisterParam>({
+  } = useForm<any>({
     mode: "onChange",
     resolver: yupResolver(validationSchema),
     defaultValues: validationSchema.getDefault(),

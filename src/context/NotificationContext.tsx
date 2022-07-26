@@ -42,6 +42,7 @@ const AlertMessage = forwardRef<HTMLDivElement, AlertProps>((props, ref) => {
     />
   );
 });
+AlertMessage.displayName = 'AlertMessage';
 interface Config {
   message?: string | null;
   error?: string | null;

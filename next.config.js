@@ -5,8 +5,5 @@ module.exports = {
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
 	domains:['https://tnre-customer-test.vercel.app','http://210.245.85.229:1983'],
 	formats: ['image/avif', 'image/webp'],
-  },
-  future: {
-    webpack5: true,
-  },
+  }
 }

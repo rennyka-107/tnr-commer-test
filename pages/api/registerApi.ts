@@ -7,7 +7,7 @@ export const registerApi = async (data: any) => {
   });
 };
 
-export const getOTP = async (userId: any,otpType: any) => {
+export const getOTP = async (userId: any,otpType?: any) => {
   return HttpClient.get<any, CommonResponse>(
     `/api/v1/verify/get-otp?key=${userId}&otpType=${Number(otpType)}`,
     { withToken: false }
