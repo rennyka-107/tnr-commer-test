@@ -47,6 +47,7 @@ justi
 
 const PopUp = styled(Card)`
   background: #ffffff;
+  box-shadow: 0px 4px 64px 24px rgba(0, 0, 0, 0.06);
   border-radius: 4px;
   position: absolute;
   bottom: 0;
@@ -85,7 +86,7 @@ const SliderGroupFilterSearch: FC<SilderGroupProps> = ({
     <>
       <FormControl
         fullWidth={fullWidth}
-        sx={{ m: 1, width: 'auto', mt: 3, position: "relative", ...sx }}
+        sx={{ m: 1, width: 150, mt: 3, position: "relative", ...sx }}
       >
         <FormLabel title={label} />
         {/* <ClickAwayListener onClickAway={onCancel}> */}

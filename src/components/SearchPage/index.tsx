@@ -498,7 +498,7 @@ const SearchPage = ({
         {!isEmpty(listParamsProjectType) ||
         !isEmpty(listParamsProvince) ||
         !isEmpty(listIdProject) ||
-        !isEmpty(listDataLSProjectType) ||
+		!isEmpty(listDataLSProjectType) ||
         !isEmpty(textSearch) ? (
           <div
             style={{
@@ -604,21 +604,7 @@ const SearchPage = ({
             />
             <SliderGroupFilterSearch
               label={"Khác"}
-              text={FormatFilterText([
-                {
-                  text: `${filterSearch.priceFrom} tỷ ~ ${filterSearch.priceTo} tỷ`,
-                  hasValue: Boolean(filterSearch.priceFrom),
-                },
-                {
-                  text: (
-                    <>
-                      {filterSearch.areaFrom} m<sup>2</sup> -&nbsp;
-                      {filterSearch.areaTo} m<sup>2</sup>
-                    </>
-                  ),
-                  hasValue: Boolean(filterSearch.areaFrom),
-                },
-              ])}
+              text={"Bộ lọc khác"}
               handleApply={onFilterApply}
               handleCancel={onFilterCancel}
             >

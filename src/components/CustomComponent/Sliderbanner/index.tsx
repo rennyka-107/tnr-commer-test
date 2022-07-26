@@ -9,7 +9,7 @@ import "swiper/css";
 import "swiper/css/autoplay";
 import { IconPrevProduct, IconNextProduct } from "@components/Icons";
 import ImageWithHideOnError from "hooks/ImageWithHideOnError";
-import { Button, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import SearchInput from "../SearchInput";
 import ModalAdvanSearch from "@components/LayoutIndex/HomeComponent/ModalAdvanSearch";
 
@@ -73,8 +73,6 @@ const CardContainer = styled.div`
 
 SwiperCore.use([Autoplay, Pagination, Navigation]);
 const Sliderbanner = ({ data }: { data?: any[] }) => {
-
-	
   const renderItems = useMemo(() => {
     return data?.map((el, index) => (
       <SwiperSlide key={index}>
@@ -118,14 +116,6 @@ const Sliderbanner = ({ data }: { data?: any[] }) => {
           }}
           observer={true}
           observeParents={true}
-		  modules={[Pagination]}
-		  pagination={{
-			el: ".swiper-pagination",
-			clickable: true,
-			renderBullet: function (index, className) {
-			  return '<span class="' + className + '">' + `${Number(index) < 10 ? "0" : ""}` + (index + 1)  + "</span>";
-			}
-		  }}
           autoplay={{
             delay: 5000,
             disableOnInteraction: false,
@@ -137,15 +127,11 @@ const Sliderbanner = ({ data }: { data?: any[] }) => {
           {renderItems}
         </Swiper>
       </WrapSlide>
-
 	  <WrapBanner>
         <ContainerBody>
           <div style={{ marginBottom: 20 }}>
             <TextBanner>SỐNG XANH THỊNH VƯỢNG</TextBanner>
             <TextBanner>ĐẤT VÀNG PHỒN VINH</TextBanner>
-			<div>
-			<div className="swiper-pagination"></div>
-			</div>
           </div>
 
           <SearchInput

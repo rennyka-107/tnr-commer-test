@@ -3,16 +3,9 @@ import styled from "@emotion/styled";
 import Input from "@mui/material/Input";
 import CustomButton from "@components/CustomComponent/CustomButton";
 import { postEmailRegister } from "../../../../pages/api/emailApi";
-import { Backdrop, Button, FormGroup, Paper, Typography } from "@mui/material";
+import { Backdrop, Button, Paper, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import useNotification from "hooks/useNotification";
-import { useForm } from "react-hook-form";
-import * as yup from "yup";
-import { validateLine } from "utils/constants";
-import Regexs from "utils/Regexs";
-import { yupResolver } from "@hookform/resolvers/yup";
-import ControllerInputDatLich from "@components/Form/ControllerInputDatLich";
-import ControllerInputRegisterEmail from "@components/Form/ControllerInputRegisterEmail";
 
 const WrapContainerFooterTop = styled.div`
   background: #fec83c;
@@ -132,39 +125,12 @@ const FooterTop = (props: Props) => {
   const handleChange = (event) => {
     setEmailValue(event.target.value);
   };
-  const validationSchema = yup.object().shape({
-    email: yup
-      .string()
-      .trim(validateLine.trim)
-      .required(validateLine.required)
-      .strict(true)
-      .matches(Regexs.email, "Email không đúng")
-      .default(""),
-  });
-
-  const {
-    control,
-    handleSubmit,
-    reset,
-    getValues,
-    formState: { errors },
-    watch,
-    setValue,
-  } = useForm({
-    mode: "onChange",
-    resolver: yupResolver(validationSchema),
-    defaultValues: {
-      email: "",
-    },
-  });
-
-  const handleSumitEmail = async (values: any) => {
+  const handleSumitEmail = async () => {
     try {
-      const response = await postEmailRegister(values);
-      console.log(response);
+      const response = await postEmailRegister(emailValue);
       if (response.responseCode === "00") {
         setOpen(true);
-        setEmailValue("");
+		setEmailValue("")
       } else if (response.responseCode === "9999") {
         notification({
           severity: "error",
@@ -215,62 +181,27 @@ const FooterTop = (props: Props) => {
   return (
     <WrapContainerFooterTop>
       <ChildWrapFooterTop>
-        <form
-          noValidate
-          onSubmit={handleSubmit(handleSumitEmail)}
-          autoComplete="off"
-        >
-          <WrapFlexOne>
-            {fetchBackDrop()}
-            <RegisterInfoLine>
-              Đăng ký để nhận thông tin dự án sớm nhất
-            </RegisterInfoLine>
-
-            <DivInput>
-              <FormGroup style={{height: 50}}>
-                <ControllerInputRegisterEmail
-                  variant="outlined"
-                  hiddenLabel
-                  name="email"
-                  control={control}
-                  placeholder="Email"
-                  required
-                  fullWidth
-                  labelColor="#666666"
-                />
-              </FormGroup>
-            </DivInput>
-            <FormGroup>
-              <div style={{ width: "100%"}}>
-                <CustomButton
-                  style={{ width: "100%" }}
-                  label="Đăng ký"
-                  type="submit"
-                  // onClick={() => handleSumitEmail()}
-                />
-              </div>
-            </FormGroup>
-
-            {/* <DivInput>
-              <Input
-                required
-                sx={{ width: "100%", mb: 2 }}
-                placeholder="Email"
-                // value={emailValue}
-				name="email"
-                // onChange={(e) => handleChange(e)}
-              />
-            </DivInput> */}
-          </WrapFlexOne>
-          {/* <DivButton>
-            <CustomButton
-              style={{ width: "100%" }}
-              label="Đăng ký"
-              type="submit"
-              // onClick={() => handleSumitEmail()}
+        <WrapFlexOne>
+          {fetchBackDrop()}
+          <RegisterInfoLine>
+            Đăng ký để nhận thông tin dự án sớm nhất
+          </RegisterInfoLine>
+          <DivInput>
+            <Input
+              sx={{ width: "100%", mb: 2 }}
+              placeholder="Email"
+			  value={emailValue}
+              onChange={(e) => handleChange(e)}
             />
-          </DivButton> */}
-        </form>
+          </DivInput>
+        </WrapFlexOne>
+        <DivButton>
+          <CustomButton
+            style={{ width: "100%" }}
+            label="Đăng ký"
+            onClick={() => handleSumitEmail()}
+          />
+        </DivButton>
       </ChildWrapFooterTop>
     </WrapContainerFooterTop>
   );
