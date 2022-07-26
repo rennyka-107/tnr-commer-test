@@ -41,14 +41,16 @@ const useProjectList = () => {
       !isEmpty(router.query);
     }
     {
-      setBody({ ...body, projectTypeId: type });
+      setBody({ ...body});
       setParams({ pageNumber: 0, pageSize: 10 });
     }
   }, [type]);
 
   useEffect(() => {
     // if (!body) return;
+	console.log("run")
     if (typeof window !== "undefined") {
+
       const listProvince = localStorage?.getItem("listParamsLSProvince");
       const listProjectType = localStorage?.getItem("listParamsLSProjectType");
       const dataParams = {
@@ -58,9 +60,10 @@ const useProjectList = () => {
       };
       const fetch = async () => {
         setLoading(true);
-        if (!isEmpty(listMenuBarType)) {
+        // if (!isEmpty(listMenuBarType)) {
           try {
-            if (typeof body.projectTypeId === "string") {
+            // if (typeof body.projectTypeId === "string") {
+			// 	console.log("leftRun")
               const res = await getListProjectTNR(params, dataParams);
               setData(res?.responseData);
               setTotalElement(res.totalElement);
@@ -73,11 +76,11 @@ const useProjectList = () => {
               if (res?.responseCode === "00") {
                 setLoading(false);
               }
-            }
+            // }
           } catch (error) {
             setError(error?.response);
           }
-        }
+        // }
       };
       fetch();
     }

@@ -201,14 +201,18 @@ const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
   };
 
   const handleSelectTypeProject = (data:any) => {
+
 	// console.log(data)
-	// const arr: any = [];
-	// arr.push(data);
+	const arr: any = [];
+	arr.push(data.id);
 	// localStorage.setItem(
 	// 	"listDataLSProjectType",
 	// 	JSON.stringify(arr)
 	//   );
-	Router.replace(`/${PathRoute.ProjectTNR}?type=${data.id}`);
+	localStorage.setItem("listParamsLSProjectType", JSON.stringify(arr));
+	localStorage.removeItem("listDataLSProvince");
+    localStorage.removeItem("listParamsLSProvince");
+	Router.push(`/${PathRoute.ProjectTNR}?type=${data.id}`);
   }
 
   const pressShortcut = (type: typeShortcut) => {

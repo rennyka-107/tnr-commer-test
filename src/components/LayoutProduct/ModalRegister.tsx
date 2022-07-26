@@ -60,96 +60,192 @@ const listTime = [
     value: "00:00 AM",
   },
   {
+    label: "00:30 AM",
+    value: "00:30 AM",
+  },
+  {
     label: "01:00 AM",
     value: "01:00 AM",
+  },
+  {
+    label: "01:30 AM",
+    value: "01:30 AM",
   },
   {
     label: "02:00 AM",
     value: "02:00 AM",
   },
   {
+    label: "02:30 AM",
+    value: "02:30 AM",
+  },
+  {
     label: "03:00 AM",
     value: "03:00 AM",
+  },
+  {
+    label: "03:30 AM",
+    value: "03:30 AM",
   },
   {
     label: "04:00 AM",
     value: "04:00 AM",
   },
   {
+    label: "04:30 AM",
+    value: "04:30 AM",
+  },
+  {
     label: "05:00 AM",
     value: "05:00 AM",
+  },
+  {
+    label: "05:30 AM",
+    value: "05:30 AM",
   },
   {
     label: "06:00 AM",
     value: "06:00 AM",
   },
   {
+    label: "06:30 AM",
+    value: "06:30 AM",
+  },
+  {
     label: "07:00 AM",
     value: "07:00 AM",
+  },
+  {
+    label: "07:30 AM",
+    value: "07:30 AM",
   },
   {
     label: "08:00 AM",
     value: "08:00 AM",
   },
   {
+    label: "08:30 AM",
+    value: "08:30 AM",
+  },
+  {
     label: "09:00 AM",
     value: "09:00 AM",
+  },
+  {
+    label: "09:30 AM",
+    value: "09:30 AM",
   },
   {
     label: "10:00 AM",
     value: "10:00 AM",
   },
   {
+    label: "10:30 AM",
+    value: "10:30 AM",
+  },
+  {
     label: "11:00 AM",
     value: "11:00 AM",
+  },
+  {
+    label: "11:30 AM",
+    value: "11:30 AM",
   },
   {
     label: "12:00 PM",
     value: "12:00 PM",
   },
   {
+    label: "12:30 PM",
+    value: "12:30 PM",
+  },
+  {
     label: "13:00 PM",
     value: "13:00 PM",
+  },
+  {
+    label: "13:30 PM",
+    value: "13:30 PM",
   },
   {
     label: "14:00 PM",
     value: "14:00 PM",
   },
   {
+    label: "14:30 PM",
+    value: "14:30 PM",
+  },
+  {
     label: "15:00 PM",
     value: "15:00 PM",
+  },
+  {
+    label: "15:30 PM",
+    value: "15:30 PM",
   },
   {
     label: "16:00 PM",
     value: "16:00 PM",
   },
   {
+    label: "16:30 PM",
+    value: "16:30 PM",
+  },
+  {
     label: "17:00 PM",
     value: "17:00 PM",
+  },
+  {
+    label: "17:30 PM",
+    value: "17:30 PM",
   },
   {
     label: "18:00 PM",
     value: "18:00 PM",
   },
   {
+    label: "18:30 PM",
+    value: "18:30 PM",
+  },
+  {
     label: "19:00 PM",
     value: "19:00 PM",
+  },
+  {
+    label: "19:30 PM",
+    value: "19:30 PM",
   },
   {
     label: "20:00 PM",
     value: "20:00 PM",
   },
   {
+    label: "20:30 PM",
+    value: "20:30 PM",
+  },
+  {
     label: "21:00 PM",
     value: "21:00 PM",
+  },
+  {
+    label: "21:30 PM",
+    value: "21:30 PM",
   },
   {
     label: "22:00 PM",
     value: "22:00 PM",
   },
   {
+    label: "22:30 PM",
+    value: "22:30 PM",
+  },
+  {
     label: "23:00 PM",
     value: "23:00 PM",
+  },
+  {
+    label: "23:30 PM",
+    value: "23:30 PM",
   },
 ];
 
@@ -161,7 +257,7 @@ const TitleStyled = styled.span`
   font-size: 20px;
   line-height: 20px;
   /* identical to box height, or 100% */
-
+  padding: 22px 61px 26px 34px;
   color: #000000;
 `;
 
@@ -312,7 +408,6 @@ const ModalRegister = (props: PropsI) => {
           height: "auto",
           backgroundColor: "#FFFF",
           borderRadius: 10,
-          padding: "20px 50px",
         }}
       >
         <form
@@ -323,8 +418,10 @@ const ModalRegister = (props: PropsI) => {
           <div
             style={{
               display: "flex",
-              justifyContent: "space-between",
+
               alignItems: "center",
+			  borderBottom: "1px solid #c7c9d9",
+
             }}
           >
             <TitleStyled>Đặt lịch tham quan nhà mẫu</TitleStyled>
@@ -338,10 +435,11 @@ const ModalRegister = (props: PropsI) => {
               onClick={onClose}
             />
 
-            <LineStyled style={{ border: "1px solid #C7C9D9;" }}></LineStyled>
           </div>
+            {/* <LineStyled style={{ border: "1px solid #C7C9D9;" }} /> */}
 
-          <FormGroup fullWidth style={{ marginTop: 20 }}>
+          <div style={{padding: "20px 50px"}}>
+		  <FormGroup fullWidth style={{ marginTop: 20 }}>
             <ControllerInputDatLich
               variant="outlined"
               hiddenLabel
@@ -426,6 +524,7 @@ const ModalRegister = (props: PropsI) => {
               </ButtonStyled>
             </div>
           </FormGroup>
+		  </div>
         </form>
       </Box>
     </Modal>
