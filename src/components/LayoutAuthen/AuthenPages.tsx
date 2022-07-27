@@ -119,7 +119,7 @@ const AuthenPages = () => {
         return <DynamicForgetPassword />;
       case "confirm":
         return <DynamicRegister />;
-	
+
       default:
         return null;
     }
@@ -174,7 +174,14 @@ const AuthenPages = () => {
                   }
                 }}
                 indicatorColor="secondary"
-                TabIndicatorProps={{ style: { background: "#FEC83C" } }}
+                TabIndicatorProps={{
+                  style: {
+                    background: "#FEC83C",
+                    maxWidth: "102px",
+                    height: "3px",
+                    marginLeft:"16px"
+                  },
+                }}
                 scrollButtons
                 allowScrollButtonsMobile
               >

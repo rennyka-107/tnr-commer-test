@@ -195,7 +195,7 @@ const Index = (props: Props) => {
             message:
               "Email hoặc số điện thoại đã được sử dụng. Vui lòng thay đổi để tiếp tục!",
           });
-		  setLoading(false);
+          setLoading(false);
         }
       } catch (error) {
         console.log(error);
@@ -225,7 +225,7 @@ const Index = (props: Props) => {
           required
           fullWidth
           label="Họ và tên"
-		  disabled={loading}
+          disabled={loading}
           labelColor="#666666"
         />
       </FormGroup>
@@ -239,7 +239,7 @@ const Index = (props: Props) => {
           required
           fullWidth
           label="Email"
-		  disabled={loading}
+          disabled={loading}
           labelColor="#666666"
         />
       </FormGroup>
@@ -253,7 +253,7 @@ const Index = (props: Props) => {
           fullWidth
           label="Số điện thoại"
           labelColor="#666666"
-		  disabled={loading}
+          disabled={loading}
           required
         />
       </FormGroup>
@@ -266,7 +266,7 @@ const Index = (props: Props) => {
           fullWidth
           label="Mật khẩu"
           labelColor="#666666"
-		  disabled={loading}
+          disabled={loading}
         />
       </FormGroup>
       <FormGroup sx={{ mb: 2 }} fullWidth>
@@ -278,7 +278,7 @@ const Index = (props: Props) => {
           fullWidth
           label="Nhập lại mật khẩu"
           labelColor="#666666"
-		  disabled={loading}
+          disabled={loading}
         />
       </FormGroup>
       <FormGroup sx={{ mb: 2 }} fullWidth>
@@ -287,7 +287,7 @@ const Index = (props: Props) => {
           control={control}
           labelCustom={
             <SpanRadio>
-              Tôi đồng ý với <LinkLabel>Điều khoản và điều kiện</LinkLabel> của
+              Tôi đồng ý với <LinkLabel>Điều kiện và điều khoản</LinkLabel> của
               TNR
             </SpanRadio>
           }

@@ -143,14 +143,25 @@ const FooterBot = ({ listMenuBarProjectType, listUserManual }: MenuProps) => {
           <TitleTypo style={{ fontSize: "18px" }}>HỖ TRỢ</TitleTypo>
           {listUserManual.map((item, index) => (
             <LineInfo2
-			key={index}
+              key={index}
               onClick={() => {
-                Router.replace(`/buyingGuide?idUserManual=${item.id}&&selected=${index}`);
+                Router.replace(
+                  `/buyingGuide?idUserManual=${item.id}&&selected=${index}`
+                );
               }}
             >
-             {item.name}
+              {item.name}
             </LineInfo2>
           ))}
+          <LineInfo2
+            onClick={() => {
+              Router.replace(
+                `/contact`
+              );
+            }}
+          >
+            Liên hệ
+          </LineInfo2>
         </BlockDiv>
         <BlockDiv
           style={{ display: "flex", gap: "2em", flexDirection: "column" }}
@@ -165,7 +176,7 @@ const FooterBot = ({ listMenuBarProjectType, listUserManual }: MenuProps) => {
             width={135}
             height={51}
             alt="image-thuong-hieu"
-			objectFit="cover"
+            objectFit="cover"
           />
         </BlockDiv>
       </WrapContent>
