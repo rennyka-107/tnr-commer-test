@@ -235,6 +235,15 @@ const Login = () => {
             ref={captchaRef}
             onChange={handleChangeCapcha}
           />
+          {/* <ControllerRadio
+              name="remember"
+              control={control}
+			  disabled={loading}
+              options={[
+                { value: 1, label: "Nhận mã qua email" },
+                { value: 2, label: "Nhắn tin tới số ..." },
+              ]}
+            /> */}
         </FormGroup>
 
         <FormGroup sx={{ mb: 2 }} fullWidth style={{ alignItems: "center" }}>
