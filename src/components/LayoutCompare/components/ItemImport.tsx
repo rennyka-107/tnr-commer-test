@@ -129,10 +129,15 @@ const ItemImport = ({ onChangeFilter, filter }: Props) => {
   const router = useRouter();
   const dispatch = useDispatch();
 
+  
+
   const handleOnClick = () => {
     // setOpen(true);
     const param = LocalStorage.get("compare-url");
+	const projectIdLS = LocalStorage.get("listParamsIdProject");
+    const projectTypeIDLs = LocalStorage.get("listParamsLSProjectType");
     if (!param) return;
+
     dispatch(
       getComparePopUpItem(
         compareItems.map((item) => {
@@ -141,8 +146,8 @@ const ItemImport = ({ onChangeFilter, filter }: Props) => {
             thumbnail: item.thumbnail,
             name: item.productName,
             productId: item.productId,
-            projectId: param.projectId,
-            projectType: param.projectTypeId,
+            projectId: projectIdLS[0],
+            projectType: projectTypeIDLs[0],
           };
         })
       )

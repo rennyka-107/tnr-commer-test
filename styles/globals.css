@@ -846,7 +846,7 @@ a {
     right: 2% !important;
     gap: 50px !important;
     padding-right: 33px !important;
-    align-items: end !important;
+    align-items: flex-end !important;
     font-family: 'Roboto';
     font-style: normal;
     justify-content: flex-end;

@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, {
   Navigation,
@@ -21,6 +21,7 @@ import useProjectRecenly from "hooks/useProjectRecenly";
 import isEmpty from "lodash.isempty";
 import ImageWithHideOnError from "hooks/ImageWithHideOnError";
 import { useRouter } from "next/router";
+import LocalStorage from "utils/LocalStorage";
 
 const TextLeftStyled = styled(Typography)`
   font-family: "Roboto";
@@ -119,12 +120,23 @@ const dataFake = [1, 2, 3, 4, 5, 6].map((el) => {
 
 export default function Slider3dShowBottom() {
   const { dataProductRecenly } = useProjectRecenly();
+  const newArrayDataProductRecenly = dataProductRecenly.filter((item) => item.id !== "1")
+  const [LSprojectId, setLSProjectID]  = useState([]);
+  useEffect(() => {
+	newArrayDataProductRecenly.map((item) => {
+		LSprojectId.push(item.id)
+	})
+  },[newArrayDataProductRecenly])
   const Router = useRouter();
   const renderItems = useMemo(() => {
-    return (isEmpty(dataProductRecenly) ? dataFake : dataProductRecenly)?.map(
+    return (isEmpty(newArrayDataProductRecenly) ? dataFake : newArrayDataProductRecenly)?.map(
       (el: any) => (
         <SwiperSlide
-		onClick={() => Router.push(`/products?idProject=${el.id}&&provinceId=&&projectTypeId=`)}
+          onClick={() =>
+            Router.push(
+              `/products?idProject=${el.id}&&provinceId=&&projectTypeId=`
+            )
+          }
           className="swiper-3d"
           style={{
             width: "241px !important",
@@ -157,11 +169,18 @@ export default function Slider3dShowBottom() {
         </SwiperSlide>
       )
     );
-  }, [dataProductRecenly]);
+  }, [newArrayDataProductRecenly]);
+
+  const handleShowAll = () => {
+	localStorage.setItem("listParamsIdProject",JSON.stringify(LSprojectId));
+	Router.push(
+		`/products?idProject=1&&provinceId=&&projectTypeId=`
+	  );
+  }
 
   return (
     <>
-      {!isEmpty(dataProductRecenly) ? (
+      {!isEmpty(newArrayDataProductRecenly) ? (
         <div style={{ marginTop: 101, marginBottom: 130, marginLeft: 337 }}>
           <div>
             <TextTitleStyled>BẤT ĐỘNG SẢN XEM GẦN ĐÂY</TextTitleStyled>
@@ -183,9 +202,7 @@ export default function Slider3dShowBottom() {
                 bibendum.
               </TextLeftStyled>
               <ButtonStyled
-                onClick={() => {
-                  console.log("abc");
-                }}
+                onClick={handleShowAll}
               >
                 Xem tất cả&nbsp;
                 <IconMuaOnline />
@@ -254,7 +271,7 @@ export default function Slider3dShowBottom() {
           </div>
         </div>
       ) : (
-		<></>
+        <></>
       )}
     </>
   );

@@ -3,7 +3,6 @@ import Column from "@components/CustomComponent/Column";
 import CustomButton from "@components/CustomComponent/CustomButton";
 import HorizontalLine from "@components/CustomComponent/HorizontalLine";
 import Row from "@components/CustomComponent/Row";
-import ControllerDatePicker from "@components/Form/ControllerDatePicker";
 import ControllerReactDatePicker from "@components/Form/ControllerReactDatePicker";
 import ControllerSelectAutoComplete from "@components/Form/ControllerSelectAutoComplete";
 import ControllerTextField from "@components/Form/ControllerTextField";
@@ -13,14 +12,13 @@ import { IconDownloadPTG, IconEditWhite } from "@components/Icons";
 import styled from "@emotion/styled";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Button } from "@mui/material";
+import { Box } from "@mui/system";
 import { ProfileI } from "@service/Profile";
-import axios from "axios";
 import ImageWithHideOnError from "hooks/ImageWithHideOnError";
 import useCustomType from "hooks/useCustomtype";
 import useForceUpdate from "hooks/useForceUpdate";
 import useNotification from "hooks/useNotification";
 import useProvinces from "hooks/useProvinces";
-import Image from "next/image";
 import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
@@ -29,7 +27,6 @@ import { isValidFileImage } from "utils/helper";
 import Regexs from "utils/Regexs";
 import * as yup from "yup";
 import {
-  getListCustomerType,
   getUserInfoApi,
   postChangeInfoApi,
   postFile,
@@ -123,6 +120,7 @@ const EditProfile = () => {
       .nullable()
       .trim(validateLine.trim)
       .strict(true)
+      .max(10, "Số điện thoại quá dài")
       .matches(Regexs.phone, "Số điện thoại không đúng")
       .required(validateLine.required)
       .default(""),
@@ -292,16 +290,20 @@ const EditProfile = () => {
           {loadingImg ? (
             <span>....Loading</span>
           ) : (
-            <ImageWithHideOnError
-              className="logo"
-              src={watch("avatar") ?? "/images/avatar.png"}
-              fallbackSrc={"/images/avatar.png"}
-              height={125}
-              width={125}
-              priority
-              unoptimized={true}
-              objectFit="cover"
-            />
+            <Box sx={{ width: 125, height: 125 }}>
+              {detailUser.avatar && (
+                <ImageWithHideOnError
+                  className="logo"
+                  src={watch("avatar") ?? "/images/avatar.png"}
+                  fallbackSrc={"/images/avatar.png"}
+                  height={125}
+                  width={125}
+                  priority
+                  unoptimized={true}
+                  objectFit="cover"
+                />
+              )}
+            </Box>
           )}
           <label htmlFor="image">
             <IconWrapper>

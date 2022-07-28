@@ -9,7 +9,7 @@ import {
   setValidCompare,
 } from "../../../../store/productCompareSlice";
 import { RootState } from "../../../../store/store";
-import _ from "lodash";
+import _, { isEmpty } from "lodash";
 import { useEffect } from "react";
 import LocalStorage from "utils/LocalStorage";
 
@@ -39,43 +39,14 @@ const TextButtonStyled = styled(Typography)`
 `;
 
 interface ComparePopUpProps {
-  projectId: string;
-  projectTypeId: string;
 }
 
-const ComparePopUp = ({ projectId, projectTypeId }: ComparePopUpProps) => {
+const ComparePopUp = ({ }: ComparePopUpProps) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const { comparePopUpItem } = useSelector(
     (state: RootState) => state.productCompareSlice
   );
-
-  useEffect(() => {
-    const params = LocalStorage.get("compare-url");
-    if (
-      comparePopUpItem.length === 0 ||
-      (comparePopUpItem.length > 0 &&
-        params &&
-        params.projectId === projectId &&
-        params.projectTypeId === projectTypeId) ||
-      (comparePopUpItem.length > 0 &&
-        projectId === comparePopUpItem[0].projectId &&
-        projectTypeId === comparePopUpItem[0].projectType)
-    ) {
-      dispatch(setValidCompare(true));
-      LocalStorage.set("compare-url", {
-        projectId: projectId ?? comparePopUpItem[0]?.projectId,
-        projectTypeId: projectTypeId ?? comparePopUpItem[0]?.projectType,
-        priceTo: "20",
-        priceFrom: "1",
-        areaTo: "200",
-        areaFrom: "30",
-        categoryId: "",
-      });
-    } else {
-      dispatch(setValidCompare(false));
-    }
-  }, [projectId, projectTypeId, comparePopUpItem]);
 
   const remove = (id?: string) => () => {
     if (id) {

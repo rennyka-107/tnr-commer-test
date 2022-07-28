@@ -17,6 +17,7 @@ import Product3 from "../../../public/images/product3.png";
 export interface ProjectI {
   id: string;
   src?: any;
+  el?: any[];
   title?: string;
   subTitle?: string;
   onClick?: MouseEventHandler<HTMLButtonElement>;
@@ -122,6 +123,7 @@ export default function ItemProjectCard({
   onClick,
   ticketCard,
   description,
+  el,
 }: ProjectI) {
   const router = useRouter();
   // function currencyFormat(num) {
@@ -130,6 +132,20 @@ export default function ItemProjectCard({
   //     }
   //     return num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
   // }
+  const handleChooseSearch = () => {
+    const listDataLSProject: any = [];
+    const listIdProject: any = [];
+    listDataLSProject.push(el);
+    listIdProject.push(id);
+    localStorage.setItem(
+      "listDataLSProject",
+      JSON.stringify(listDataLSProject)
+    );
+    localStorage.setItem("listParamsIdProject", JSON.stringify(listIdProject));
+    router.push(
+      "/search?Type=Advanded&&textSearch=&&provinceId=&&projectTypeId=&&projectId=&&priceFrom=&&priceTo=&&areaFrom=0&&areaTo=200"
+    );
+  };
   return (
     <CardStyled sx={{ maxWidth: 350, minHeight: 500 }}>
       {/* <IconHeartProduct
@@ -196,11 +212,11 @@ export default function ItemProjectCard({
       /> */}
       <CardContentStyled>
         <div style={{ marginBottom: 7 }}>
-          <Link href={`/products?idProject=${id}&&provinceId=&&projectTypeId=`}>
+          <div onClick={handleChooseSearch}>
             <TextTitleStyled style={{ marginBottom: 10 }}>
               {title}
             </TextTitleStyled>
-          </Link>
+          </div>
           <TextitleBottom>{subTitle}</TextitleBottom>
         </div>
         <LineStyled />

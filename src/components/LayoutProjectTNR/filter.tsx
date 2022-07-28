@@ -16,8 +16,6 @@ import {
   IconButton,
   InputAdornment,
   InputBase,
-  SelectChangeEvent,
-  TextField,
   Typography,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
@@ -25,7 +23,7 @@ import { BodyListProjectI } from "@service/ProjectList";
 import isEmpty from "lodash.isempty";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getListProjectByProjectType,
@@ -113,6 +111,7 @@ const Filter = (props: PropsI) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const router = useRouter();
+  const { type } = router.query;
   const { listMenuBarType, listMenuBarProjectType, listMenuLocation } =
     useSelector((state: RootState) => state.menubar);
   const { projectTypeListResponse, projectListResponse } = useSelector(
@@ -123,12 +122,32 @@ const Filter = (props: PropsI) => {
   const [textSearchValue, setTextSearchValue] = useState<any>("");
   const [listParamsProvince, setListParamsProvince] = useState([]);
   const [listDataLSProvince, setListDataLSProvince] = useState([]);
+  const [dataRouter, setDataRouter] = useState([]);
   const [projectName, setProjectName] = useState<string[]>([]);
-  const [listDataLSProjectType, setListDataLSProjectType] = useState([]);
   const [listParamsProjectType, setParamsProjectType] = useState([]);
+  const [listDataLSProjectType, setListDataLSProjectType] = useState([]);
+
+  useEffect(() => {
+    localStorage.setItem("listParamsLSProjectType", JSON.stringify([type]));
+    setParamsProjectType([type]);
+  }, [router]);
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const filterData = listMenuBarProjectType.filter(
+        (item) => item.id === type
+      );
+      if (filterData) {
+        localStorage.setItem(
+          "listDataLSProjectType",
+          JSON.stringify(filterData)
+        );
+        setListDataLSProjectType(filterData);
+      }
+    }
+  }, [listMenuBarProjectType, type]);
 
   const handleResetFilter = () => {
-	onSubmit({ ...body, provinceId: "", textSearch: "" });
+    onSubmit({ ...body, provinceId: "", textSearch: "", projectTypeId: "" });
     localStorage.removeItem("listDataLSProvince");
     localStorage.removeItem("listParamsLSProvince");
     localStorage.removeItem("listDataLSProjectType");
@@ -139,8 +158,6 @@ const Filter = (props: PropsI) => {
     setParamsProjectType([]);
     setTextSearchValue("");
     router.push(`projectTNR?type=&textSearch=""`);
-
- 
   };
 
   useEffect(() => {
@@ -162,27 +179,31 @@ const Filter = (props: PropsI) => {
       if (!isEmpty(listProvinceData)) {
         setListDataLSProvince(JSON.parse(listProvinceData));
       }
-      if (!isEmpty(listProjectType) && !isEmpty(listParamsProjectType)) {
+      if (
+        (!isEmpty(listProjectType) && !isEmpty(listParamsProjectType)) ||
+        type !== ""
+      ) {
         setParamsProjectType(JSON.parse(listProjectType));
       } else {
         setListDataLSProjectType([]);
         setParamsProjectType([]);
         localStorage.removeItem("listParamsLSProjectType");
       }
-      if (!isEmpty(listProjectData)) {
+      if (!isEmpty(listProjectData) || type !== "") {
         setListDataLSProjectType(JSON.parse(listProjectData));
       } else {
         localStorage.removeItem("listDataLSProjectType");
       }
     }
-  }, [router]);
+  }, [router, listMenuBarProjectType]);
 
   const fetchComponent = () => {
     return (
       <>
         {!isEmpty(listParamsProjectType) ||
         !isEmpty(listParamsProvince) ||
-        !isEmpty(textSearchValue) ? (
+        !isEmpty(textSearchValue) ||
+        type ? (
           <div
             style={{
               display: "flex",
@@ -269,14 +290,16 @@ const Filter = (props: PropsI) => {
   };
 
   const handleSelectProject = (dataProjectType: any) => {
+    // if (dataProjectType) {
     const bodySearch: any = [];
     const arrayData: any = [];
     dataProjectType.map((item) => {
-      bodySearch.push(item.id);
+      bodySearch.push(item?.id);
       arrayData.push(item);
     });
     setParamsProjectType(bodySearch);
     setListDataLSProjectType(arrayData);
+    // }
   };
 
   const handleSearch = () => {
@@ -297,7 +320,13 @@ const Filter = (props: PropsI) => {
       JSON.stringify(listParamsProjectType)
     );
 
-    router.push(`/projectTNR?type=`);
+    router.push(
+      `/projectTNR?type=${
+        listParamsProjectType && listParamsProjectType[0] !== null
+          ? listParamsProjectType[0]
+          : ""
+      }`
+    );
     onSubmit({ ...body, provinceId: "", textSearch: textSearchValue });
   };
 

@@ -8,12 +8,14 @@ import ControllerSelect from "@components/Form/ControllerSelect";
 import ControllerSelectTime from "@components/Form/ControllerSelectTime";
 import ControllerTextField from "@components/Form/ControllerTextField";
 import FormGroup from "@components/Form/FormGroup";
+import { IconX } from "@components/Icons";
 import styled from "@emotion/styled";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   Box,
   Button,
   CircularProgress,
+  Divider,
   MenuItem,
   Modal,
   Select,
@@ -58,96 +60,192 @@ const listTime = [
     value: "00:00 AM",
   },
   {
+    label: "00:30 AM",
+    value: "00:30 AM",
+  },
+  {
     label: "01:00 AM",
     value: "01:00 AM",
+  },
+  {
+    label: "01:30 AM",
+    value: "01:30 AM",
   },
   {
     label: "02:00 AM",
     value: "02:00 AM",
   },
   {
+    label: "02:30 AM",
+    value: "02:30 AM",
+  },
+  {
     label: "03:00 AM",
     value: "03:00 AM",
+  },
+  {
+    label: "03:30 AM",
+    value: "03:30 AM",
   },
   {
     label: "04:00 AM",
     value: "04:00 AM",
   },
   {
+    label: "04:30 AM",
+    value: "04:30 AM",
+  },
+  {
     label: "05:00 AM",
     value: "05:00 AM",
+  },
+  {
+    label: "05:30 AM",
+    value: "05:30 AM",
   },
   {
     label: "06:00 AM",
     value: "06:00 AM",
   },
   {
+    label: "06:30 AM",
+    value: "06:30 AM",
+  },
+  {
     label: "07:00 AM",
     value: "07:00 AM",
+  },
+  {
+    label: "07:30 AM",
+    value: "07:30 AM",
   },
   {
     label: "08:00 AM",
     value: "08:00 AM",
   },
   {
+    label: "08:30 AM",
+    value: "08:30 AM",
+  },
+  {
     label: "09:00 AM",
     value: "09:00 AM",
+  },
+  {
+    label: "09:30 AM",
+    value: "09:30 AM",
   },
   {
     label: "10:00 AM",
     value: "10:00 AM",
   },
   {
+    label: "10:30 AM",
+    value: "10:30 AM",
+  },
+  {
     label: "11:00 AM",
     value: "11:00 AM",
+  },
+  {
+    label: "11:30 AM",
+    value: "11:30 AM",
   },
   {
     label: "12:00 PM",
     value: "12:00 PM",
   },
   {
+    label: "12:30 PM",
+    value: "12:30 PM",
+  },
+  {
     label: "13:00 PM",
     value: "13:00 PM",
+  },
+  {
+    label: "13:30 PM",
+    value: "13:30 PM",
   },
   {
     label: "14:00 PM",
     value: "14:00 PM",
   },
   {
+    label: "14:30 PM",
+    value: "14:30 PM",
+  },
+  {
     label: "15:00 PM",
     value: "15:00 PM",
+  },
+  {
+    label: "15:30 PM",
+    value: "15:30 PM",
   },
   {
     label: "16:00 PM",
     value: "16:00 PM",
   },
   {
+    label: "16:30 PM",
+    value: "16:30 PM",
+  },
+  {
     label: "17:00 PM",
     value: "17:00 PM",
+  },
+  {
+    label: "17:30 PM",
+    value: "17:30 PM",
   },
   {
     label: "18:00 PM",
     value: "18:00 PM",
   },
   {
+    label: "18:30 PM",
+    value: "18:30 PM",
+  },
+  {
     label: "19:00 PM",
     value: "19:00 PM",
+  },
+  {
+    label: "19:30 PM",
+    value: "19:30 PM",
   },
   {
     label: "20:00 PM",
     value: "20:00 PM",
   },
   {
+    label: "20:30 PM",
+    value: "20:30 PM",
+  },
+  {
     label: "21:00 PM",
     value: "21:00 PM",
+  },
+  {
+    label: "21:30 PM",
+    value: "21:30 PM",
   },
   {
     label: "22:00 PM",
     value: "22:00 PM",
   },
   {
+    label: "22:30 PM",
+    value: "22:30 PM",
+  },
+  {
     label: "23:00 PM",
     value: "23:00 PM",
+  },
+  {
+    label: "23:30 PM",
+    value: "23:30 PM",
   },
 ];
 
@@ -159,7 +257,7 @@ const TitleStyled = styled.span`
   font-size: 20px;
   line-height: 20px;
   /* identical to box height, or 100% */
-
+  padding: 22px 61px 26px 34px;
   color: #000000;
 `;
 
@@ -174,22 +272,28 @@ const LineStyled = styled.div`
   border: 1px solid #c7c9d9;
 `;
 const ButtonStyled = styled(Button)`
+  font-family: "Roboto";
   text-transform: none;
-  border-radius: 8px;
-  font-weight: 400;
+  font-style: normal;
+  font-weight: 500;
   font-size: 16px;
-  line-height: 19px;
-  color: #ffffff;
+  line-height: 16px;
+  /* identical to box height, or 100% */
+
+  /* Brand/Main color */
+  border-radius: 8px;
+  color: #1b3459;
   padding: 14px 70px;
   cursor: pointer;
   border: unset;
   width: 100%;
+  height: 54px;
 `;
 const ModalRegister = (props: PropsI) => {
   const { isOpen, onClose, product, toggle } = props;
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
-//   const [rerender, forceUpdate] = useForceUpdate();
+  //   const [rerender, forceUpdate] = useForceUpdate();
   const detailUser = useSelector(
     (state: RootState) => state?.profile?.userInfo
   );
@@ -246,12 +350,12 @@ const ModalRegister = (props: PropsI) => {
   });
 
   useEffect(() => {
-	if(detailUser){
-		setValue('fullname',detailUser.fullname)
-		setValue('email',detailUser.email)
-		setValue('phone',detailUser.phone)
-	}
-  },[detailUser])
+    if (detailUser) {
+      setValue("fullname", detailUser.fullname);
+      setValue("email", detailUser.email);
+      setValue("phone", detailUser.phone);
+    }
+  }, [detailUser]);
   useEffect(() => {
     if (!isOpen) {
       reset();
@@ -269,7 +373,7 @@ const ModalRegister = (props: PropsI) => {
           title: `Đặt lịch`,
           message: "Đặt lịch thành công",
         });
-		setLoading(false);
+        setLoading(false);
         toggle();
       } else {
         notification({
@@ -278,7 +382,7 @@ const ModalRegister = (props: PropsI) => {
           message: response?.responseMessage ?? "Có một số lỗi xảy ra",
         });
       }
-	  setLoading(false);
+      setLoading(false);
     } catch (err) {
       notification({
         severity: "error",
@@ -304,7 +408,6 @@ const ModalRegister = (props: PropsI) => {
           height: "auto",
           backgroundColor: "#FFFF",
           borderRadius: 10,
-          padding: "20px 50px",
         }}
       >
         <form
@@ -312,12 +415,31 @@ const ModalRegister = (props: PropsI) => {
           onSubmit={handleSubmit((values) => submitForm(values))}
           autoComplete="off"
         >
-          <div style={{ padding: "10px 0px 10px 0px" }}>
-            <TitleStyled>Đặt lịch tham quan nhà mẫu</TitleStyled>
-            <LineStyled style={{ border: "1px solid #C7C9D9;" }}></LineStyled>
-          </div>
+          <div
+            style={{
+              display: "flex",
 
-          <FormGroup fullWidth style={{ marginTop: 20 }}>
+              alignItems: "center",
+			  borderBottom: "1px solid #c7c9d9",
+
+            }}
+          >
+            <TitleStyled>Đặt lịch tham quan nhà mẫu</TitleStyled>
+            <IconX
+              style={{
+                stroke: "#1B3459",
+                width: "16px",
+                height: "16px",
+                cursor: "pointer",
+              }}
+              onClick={onClose}
+            />
+
+          </div>
+            {/* <LineStyled style={{ border: "1px solid #C7C9D9;" }} /> */}
+
+          <div style={{padding: "20px 50px"}}>
+		  <FormGroup fullWidth style={{ marginTop: 20 }}>
             <ControllerInputDatLich
               variant="outlined"
               hiddenLabel
@@ -393,7 +515,7 @@ const ModalRegister = (props: PropsI) => {
                 disabled={!isEmpty(errors)}
               >
                 {loading === false ? (
-                  <>Đặt lịch</>
+                  <>Xác nhận đặt lịch</>
                 ) : (
                   <CircularProgress
                     style={{ height: 25, width: 25, color: "#ffffff" }}
@@ -402,6 +524,7 @@ const ModalRegister = (props: PropsI) => {
               </ButtonStyled>
             </div>
           </FormGroup>
+		  </div>
         </form>
       </Box>
     </Modal>

@@ -7,7 +7,7 @@ import useAuth from "hooks/useAuth"
 import LocalStorage from "utils/LocalStorage";
 import SessionStorage from "utils/SessionStorage";
 
-const WithAuth = (WrappedComponent: any) => {
+export default function WithAuth(WrappedComponent: any) {
   // eslint-disable-next-line react/display-name
   return (props: any) => {
     const { isAuthenticated } = useAuth();
@@ -34,4 +34,6 @@ const WithAuth = (WrappedComponent: any) => {
     }
   };
 }
-export default WithAuth;
+export const config = {
+	amp: true,
+  }

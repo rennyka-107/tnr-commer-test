@@ -8,10 +8,12 @@ import { useRouter } from "next/router";
 import ItemProjectCard from "@components/LayoutProjectTNR/ProjectCard";
 import pdfimage from "../../../public/images/pdfimage.png";
 import Image from "next/image";
+import FlexContainer from "@components/CustomComponent/FlexContainer";
+import ContainerProduct from "@components/Container/ContainerProduct";
+import ContainerPolicySales from "@components/Container/ContainerPolicySales";
 
 const ContainerStyled = styled.div`
   display: flex;
-  width: 1200px;
   flex-direction: column;
   gap: 50px;
 `;
@@ -78,31 +80,34 @@ type ItemProps = {
 const PolicySales = ({ listSalePolicy, idPolicy }: Props) => {
   const Router = useRouter();
   return (
-    <>
+    <ContainerPolicySales title={"Chính sách bán hàng"}>
       <ContainerStyled>
-        <TypoGraphyStyled>Chính Sách Bán Hàng</TypoGraphyStyled>
-        {listSalePolicy.map((item: any, index: any) => (
-          <div key={index+ 'key'} style={{ display: "flex", flexDirection: "row" }}>
-            <Image src={pdfimage} width={100} height={100} unoptimized={true} />
-            <div
-              style={{
-                padding: 20,
-                display: "flex",
-                flexDirection: "column",
-                gap: 10,
-              }}
-            >
-              <TitleStyled>{item.name}</TitleStyled>
-              <div>
-                <LinkStyled href={item.pdf} target="_blank">
-                  Xem chính sách
-                </LinkStyled>
-              </div>
+      <TypoGraphyStyled>Chính Sách Bán Hàng</TypoGraphyStyled>
+      {listSalePolicy.map((item: any, index: any) => (
+        <div
+          key={index + "key"}
+          style={{ display: "flex", flexDirection: "row" }}
+        >
+          <Image src={pdfimage} width={100} height={100} unoptimized={true} />
+          <div
+            style={{
+              padding: 20,
+              display: "flex",
+              flexDirection: "column",
+              gap: 10,
+            }}
+          >
+            <TitleStyled>{item.name}</TitleStyled>
+            <div>
+              <LinkStyled href={item.pdf} target="_blank">
+                Xem chính sách
+              </LinkStyled>
             </div>
           </div>
-        ))}
+        </div>
+      ))}
       </ContainerStyled>
-    </>
+    </ContainerPolicySales>
   );
 };
 export default PolicySales;

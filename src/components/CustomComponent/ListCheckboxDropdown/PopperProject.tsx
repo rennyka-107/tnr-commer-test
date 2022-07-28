@@ -143,14 +143,14 @@ const TitleStyled = styled(Typography)`
   color: #8190a7;
 `;
 
-const useInputStyles = makeStyles(() => ({
-  // root: {
+// const useInputStyles = makeStyles(() => ({
+//   // root: {
 
-  // },
-  input: {
-    cursor: "pointer",
-  },
-}));
+//   // },
+//   input: {
+//     cursor: "pointer",
+//   },
+// }));
 
 type TypeProps = {
   label?: string;
@@ -161,10 +161,10 @@ type TypeProps = {
   checkSelectProvince: any;
   listProjectType: string[];
 };
-const defaultValue  =  {
-    id: "111",
-    name: "Chọn dự án",
-  };
+const defaultValue = {
+  id: "",
+  name: "Chọn dự án",
+};
 
 export default function PopperProjectType({
   data,
@@ -175,7 +175,7 @@ export default function PopperProjectType({
   checkSelectProvince,
 }: TypeProps) {
   //   console.log(data);
-  const inputStyles = useInputStyles();
+  //   const inputStyles = useInputStyles();
   const router = useRouter();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [value, setValue] = React.useState<MenuBar[]>([]);
@@ -189,37 +189,40 @@ export default function PopperProjectType({
   React.useEffect(() => {
     if (checkSelectProvince === true) {
       setPendingValue([]);
-	  setValue([]);
+      setValue([]);
     }
   }, [checkSelectProvince]);
 
   React.useEffect(() => {
     const newArray: any = [];
-	const defaultArr: any = [];
-	defaultArr.push(defaultValue)
+    const defaultArr: any = [];
+    defaultArr.push(defaultValue);
     if (typeof window !== "undefined") {
       const dataSelectLS = localStorage?.getItem("listDataLSProjectType");
       const arr: MenuBar[] = JSON.parse(dataSelectLS);
-	  if (!isEmpty(arr)) {
+      if (!isEmpty(arr)) {
         arr.map((item, index) => {
           const findItem = data.find((it) => it.id === item.id);
           newArray.push(findItem);
         });
-
-        setValue(newArray);
-      }else {
-		setValue([])
-	  }
+        if (!newArray) {
+          setValue([]);
+        } else {
+          setValue(newArray);
+        }
+      } else {
+		setValue([]);
+      }
     }
   }, [router, data]);
 
   const handleClose = () => {
     setValue(pendingValue);
-	onChange(pendingValue);
+    onChange(pendingValue);
     if (anchorEl) {
       anchorEl.focus();
     }
-    
+
     setAnchorEl(null);
   };
 
@@ -245,7 +248,7 @@ export default function PopperProjectType({
             aria-describedby={id}
             value={renderValue(value)}
             readOnly
-            classes={inputStyles}
+            // classes={inputStyles}
             onClick={handleClick}
             style={{ borderRadius: 8, height: 40, textAlign: "center" }}
             endAdornment={<IconSelectDropdownFilter />}
@@ -328,14 +331,18 @@ export default function PopperProjectType({
                   </Box>
                 </li>
               )}
-              options={[...data].sort((a, b) => {
-                // Display the selected labels first.
-                let ai = value.indexOf(a);
-                ai = ai === -1 ? value.length + data.indexOf(a) : ai;
-                let bi = value.indexOf(b);
-                bi = bi === -1 ? value.length + data.indexOf(b) : bi;
-                return ai - bi;
-              })}
+              options={
+                data
+                  ? [...data].sort((a, b) => {
+                      // Display the selected labels first.
+                      let ai = value.indexOf(a);
+                      ai = ai === -1 ? value.length + data.indexOf(a) : ai;
+                      let bi = value.indexOf(b);
+                      bi = bi === -1 ? value.length + data.indexOf(b) : bi;
+                      return ai - bi;
+                    })
+                  : []
+              }
               getOptionLabel={(option) => option?.name}
               renderInput={(params) => (
                 <StyledInput

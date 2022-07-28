@@ -182,7 +182,7 @@ export default function PopperRadioProject({
   const inputStyles = useInputStyles();
   const router = useRouter();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [value, setValue] = React.useState<MenuBar[]>([data[0]]);
+  const [value, setValue] = React.useState<MenuBar[]>([]);
   const [pendingValue, setPendingValue] = React.useState<MenuBar[]>([]);
   const theme = useTheme();
 
@@ -191,19 +191,24 @@ export default function PopperRadioProject({
     setAnchorEl(event.currentTarget);
   };
 
+
+  
   React.useEffect(() => {
     const newArray: any = [];
 	const arrayDefault: any = []
-	arrayDefault.push(defaultValue);
+	arrayDefault.push(data[0]);
     if (typeof window !== "undefined") {
       const dataSelectLS = localStorage?.getItem("listDataLSProject");
       const arr: MenuBar[] = JSON.parse(dataSelectLS);
 	  if (!isEmpty(arr)) {
         arr.map((item, index) => {
-          const findItem = data.find((it) => it.id === item.id);
-          newArray.push(findItem);
+          const findItem = data.find((it) => it?.id === item?.id);
+			if(findItem){
+				newArray.push(findItem);
+			}else{
+				newArray.push(data[0]);
+			}
         });
-
         setValue(newArray[0]);
       } else {
         setValue(arrayDefault[0]);
@@ -325,7 +330,7 @@ export default function PopperRadioProject({
                   </Box>
                 </li>
               )}
-              options={[...data]}
+              options={data ? [...data] : []}
               getOptionLabel={(option: any) => option?.name}
               renderInput={(params) => (
                 <StyledInput

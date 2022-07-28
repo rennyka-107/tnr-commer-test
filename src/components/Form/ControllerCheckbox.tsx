@@ -8,9 +8,9 @@ import { Controller } from 'react-hook-form';
 type Props = {
   errors?: FieldErrors;
   error?: boolean;
-  control: Control<any>;
-  name: string;
-  label: string;
+  control?: Control<any>;
+  name?: string;
+  label?: string;
   colorLabel?: string;
   labelCustom?: JSX.Element;
 } & CheckboxProps;

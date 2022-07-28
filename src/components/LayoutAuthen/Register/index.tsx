@@ -27,6 +27,7 @@ const Index = () => {
   const [key, setKey] = useState("");
   const [userId, setUserId] = useState("");
   const [transKey, setTransKey] = useState("");
+  const [numberPhone, setNumberPhone] = useState("");
   const [paramsEndcode, setParamsEndcode] = useState({
     key: "",
     OTP: "",
@@ -66,6 +67,7 @@ const Index = () => {
             setKey={setKey}
             setUserId={setUserId}
 			setTransKey={setTransKey}
+			setNumberPhone={setNumberPhone}
           />
         );
       case "confirm":
@@ -73,6 +75,7 @@ const Index = () => {
           <Confirm
             userId={userId}
 			transKey={transKey}
+			numberPhone={numberPhone}
             back={() => {
               Route.push({
                 pathname: PathRoute.Login,

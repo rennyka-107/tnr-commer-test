@@ -46,25 +46,21 @@ const IconCountryStyle = {
 };
 
 const HeaderTop = () => {
-  const user = SessionStorage.get("accessToken");
+  const accessToken = LocalStorage.get("accessToken");
 
   return (
     <ContainerStyled>
       <WrapContainer>
         <LinkContainer>
           {/* <Link href={`http://localhost:3000${PathRoute.Profile}`} passHref> */}
-          {user !== null ? (
-                        <TextLink
-						onClick={() => {
-						  Router.replace(
-							`/profile`,
-							undefined,
-							{ shallow: true }
-						  );
-						}}
-					  >
-						Về tài khoản
-					  </TextLink>
+          {accessToken !== null ? (
+            <TextLink
+              onClick={() => {
+                Router.replace(`/profile`, undefined, { shallow: true });
+              }}
+            >
+              Về tài khoản
+            </TextLink>
           ) : (
             <TextLink
               onClick={() => {
@@ -83,10 +79,14 @@ const HeaderTop = () => {
           {/* <Link href={`http://localhost:3000${PathRoute.BuyingGuide}`} passHref> */}
           <TextLink
             onClick={() => {
-				Router.replace(`${PathRoute.BuyingGuide}?idUserManual=3e63c59e-7995-4f8b-b553-740d131a052f&&selected=0`, undefined, {
-				  shallow: true,
-				});
-			  }}
+              Router.replace(
+                `${PathRoute.BuyingGuide}?idUserManual=3e63c59e-7995-4f8b-b553-740d131a052f&&selected=0`,
+                undefined,
+                {
+                  shallow: true,
+                }
+              );
+            }}
           >
             Về quy trình mua BĐS Online
           </TextLink>
@@ -100,9 +100,13 @@ const HeaderTop = () => {
           {/* <Link href="" passHref > */}
           <TextLink
             onClick={() => {
-              Router.replace(`${PathRoute.BuyingGuide}?idUserManual=3e63c59e-7995-4f8b-b553-740d131a052f&&selected=0`, undefined, {
-                shallow: true,
-              });
+              Router.replace(
+                `${PathRoute.BuyingGuide}?idUserManual=3e63c59e-7995-4f8b-b553-740d131a052f&&selected=0`,
+                undefined,
+                {
+                  shallow: true,
+                }
+              );
             }}
           >
             Về hỗ trợ

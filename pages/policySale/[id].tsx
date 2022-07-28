@@ -36,9 +36,9 @@ const PolicySale = () => {
       setLoading(true);
       const response = await getListSalePolicyById(id);
       dispatch(getListSalePolicy(response.responseData));
-	  if (response.responseCode === "00") {
-		setLoading(false);
-	  }
+      if (response.responseCode === "00") {
+        setLoading(false);
+      }
     } catch (err) {
       console.log(err);
     }
@@ -47,7 +47,7 @@ const PolicySale = () => {
   useEffect(() => {
     fetchAdvandedSearchList();
   }, [id]);
-  
+
   const fetchComponent = () => {
     return (
       <>
@@ -56,14 +56,14 @@ const PolicySale = () => {
             <LoadingComponent />
           </div>
         ) : (
-          <DynamicPolicySaleId listSalePolicy={listSalePolicy} idPolicy={id}/>
+          <DynamicPolicySaleId listSalePolicy={listSalePolicy} idPolicy={id} />
         )}
       </>
     );
   };
   useEffect(() => {
-	fetchComponent();
-  },[loading])
+    fetchComponent();
+  }, [loading]);
   return (
     <Page
       meta={{
@@ -73,7 +73,7 @@ const PolicySale = () => {
       }}
     >
       <FlexContainer>
-        <Container>{fetchComponent()}</Container>
+       {fetchComponent()}
       </FlexContainer>
     </Page>
   );

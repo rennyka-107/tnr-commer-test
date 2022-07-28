@@ -14,7 +14,7 @@ const Profile = () => {
       meta={{
         title: "TNR Ecommerce Account",
         description: "TNR Ecommerce Account",
-        isHomePage: true,
+        // isHomePage: true,
       }}
     >
       <DynamicProfilePages />

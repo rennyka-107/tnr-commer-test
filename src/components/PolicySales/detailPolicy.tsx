@@ -17,10 +17,10 @@ const TitleStyled = styled(Typography)`
 `;
 const DetailPolicy = ({ detailData }: Props) => {
   return (
-    <>
+    <div>
       <TitleStyled>{detailData.name}</TitleStyled>
       <div dangerouslySetInnerHTML={{ __html: detailData.content }} />
-    </>
+    </div>
   );
 };
 export default DetailPolicy;

@@ -14,6 +14,7 @@ import { getListProject } from "../../store/projectSlice";
 import PaginationComponent from "@components/CustomComponent/PaginationComponent";
 import Row from "@components/CustomComponent/Row";
 import LoadingComponent from "@components/LoadingComponent";
+import useProjectRecenly from "hooks/useProjectRecenly";
 
 const DynamicPageIndex = dynamic(
   () => import("../../src/components/LayoutProduct/ProductPages"),
@@ -24,13 +25,14 @@ const ListProduct = () => {
   const router = useRouter();
   const { idProject, projectTypeId, provinceId } = router.query;
   const dispatch = useDispatch();
-
+  const { dataProductRecenly } = useProjectRecenly();
   const { listProductResponse, totalElement } = useSelector(
     (state: RootState) => state.products
   );
   const { listProjectResponse } = useSelector(
     (state: RootState) => state.projects
   );
+  
 
   const [paramsSearch, setParamsSearch] = useState({
     page: 0,
@@ -58,20 +60,40 @@ const ListProduct = () => {
     try {
       if (provinceId || projectTypeId || idProject) {
         setLoading(false);
-        const paramNew = {
-          provinceId: provinceId,
-          projectTypeId: projectTypeId,
-          projectId: idProject,
-        };
-        const response = await searchListProductByProjectIdApiII(
-          paramsSearch,
-          paramNew
-        );
-        if (response.responseCode === "00") {
-          setLoading(true);
-        }
-        dispatch(getListProduct(response.responseData));
-        dispatch(getPaggingProductSearch(response.totalElement));
+		const listParamsIdProject = localStorage?.getItem("listParamsIdProject");
+        if (idProject !== "1") {
+          const paramNew = {
+            provinceId: provinceId,
+            projectTypeId: projectTypeId,
+            projectId: idProject,
+          };
+
+          const response = await searchListProductByProjectIdApiII(
+            paramsSearch,
+            paramNew
+          );
+          if (response.responseCode === "00") {
+            setLoading(true);
+          }
+          dispatch(getListProduct(response.responseData));
+          dispatch(getPaggingProductSearch(response.totalElement));
+        }else {
+			const paramNew = {
+				provinceId: provinceId,
+				projectTypeId: projectTypeId,
+				projectIdList: JSON.parse(listParamsIdProject),
+			  };
+	
+			  const response = await searchListProductByProjectIdApiII(
+				paramsSearch,
+				paramNew
+			  );
+			  if (response.responseCode === "00") {
+				setLoading(true);
+			  }
+			  dispatch(getListProduct(response.responseData));
+			  dispatch(getPaggingProductSearch(response.totalElement));
+		}
       }
     } catch (error) {
       console.log(error);
@@ -97,7 +119,8 @@ const ListProduct = () => {
 
   useEffect(() => {
     fetchDataProject();
-  }, []);
+  }, [idProject]);
+
   const fetchComponent = () => {
     return (
       <>
