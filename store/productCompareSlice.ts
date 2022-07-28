@@ -37,8 +37,24 @@ export const productCompareSlice = createSlice({
       state.compareItems = action.payload;
     },
     getComparePopUpItem: (state, action) => {
-      LocalStorage.set("compare-item", action.payload);
-      state.comparePopUpItem = action.payload;
+      if (state.comparePopUpItem.length > 0) {
+        const index = action.payload.length - 1;
+        if (
+          Boolean(
+            state.comparePopUpItem.find(
+              (item: comparePopUpItemI) =>
+                item.projectId === action.payload[index].projectId &&
+                item.projectType === action.payload[index].projectType
+            )
+          )
+        ) {
+          state.comparePopUpItem = action.payload;
+          LocalStorage.set("compare-item", action.payload);
+        }
+      } else {
+        state.comparePopUpItem = action.payload;
+        LocalStorage.set("compare-item", action.payload);
+      }
     },
     removeCompareItem: (state, action) => {
       state.compareItems = state.compareItems.filter(

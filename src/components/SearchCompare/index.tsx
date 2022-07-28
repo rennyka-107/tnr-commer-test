@@ -4,7 +4,7 @@ import ItemSearch from "./ItemSearch";
 import { Button, SelectChangeEvent, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../store/store";
 import ContainerSearch from "@components/Container/ContainerSearch";
 import { makeStyles } from "@mui/styles";
@@ -20,6 +20,7 @@ import SliderGroupFilterSearch from "@components/CustomComponent/SliderGroupComp
 import ProjectRadio from "@components/CustomComponent/ListRadioSearchCompare/ProjectRadio";
 import PopperRadioComponent from "@components/CustomComponent/ListRadioSearchCompare/PopperRadioComponent";
 import PopperRadioProject from "@components/CustomComponent/ListRadioSearchCompare/PopperRadioProject";
+import { removeAllComparePopUpItem } from "../../../store/productCompareSlice";
 
 type dataProps = {
   searchData?: searchLocationResponse[];
@@ -125,6 +126,7 @@ const SearchCompare = ({
   const [listDataLSProject, setListDataLSProject] = useState([]);
   const [listDataLSProjectType, setListDataLSProjectType] = useState([]);
   const [checkSelectProjectType, setCheckSelectProjectType] = useState(false);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const dataProject = listMenuBarProjectType.filter(
@@ -152,6 +154,8 @@ const SearchCompare = ({
     ) {
       setDataKhoangGia([parseInt(priceFrom), parseInt(priceTo)]);
     }
+
+
   }, [
     provinceId,
     projectId,

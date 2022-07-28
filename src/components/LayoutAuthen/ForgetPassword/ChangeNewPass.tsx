@@ -189,7 +189,7 @@ const ChangeNewPass = (props: Props) => {
             style={{ background: "#D60000", marginTop: 30 ,}}
             type="submit"
           >
-           {loading === false ? 'Tiếp Tục' : <CircularProgress style={{height: 25, width: 25, color: '#ffffff'}}/>}
+           {loading === false ? 'Hoàn tất' : <CircularProgress style={{height: 25, width: 25, color: '#ffffff'}}/>}
           </ButtonStyled>
           </FormGroup>
         </form>

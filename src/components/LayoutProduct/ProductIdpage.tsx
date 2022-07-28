@@ -974,7 +974,7 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                   </a>
                   <div style={{ border: "1px solid #1B3459" }} />
                   <a
-                    href={`/policySale/${dataProduct.project.id}`}
+                    href={`/policySale/${dataProduct.project.id}?Idproduct=${dataProduct.id}`}
                     style={{ textAlign: "center" }}
                   >
                     <IconClipboardProduct />

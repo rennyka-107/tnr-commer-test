@@ -39,48 +39,14 @@ const TextButtonStyled = styled(Typography)`
 `;
 
 interface ComparePopUpProps {
-  projectId: string;
-  projectTypeId: string;
 }
 
-const ComparePopUp = ({ projectId, projectTypeId }: ComparePopUpProps) => {
+const ComparePopUp = ({ }: ComparePopUpProps) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const { comparePopUpItem } = useSelector(
     (state: RootState) => state.productCompareSlice
   );
-
-  useEffect(() => {
-    const params = LocalStorage.get("compare-url");
-    const projectIdLS = LocalStorage.get("listParamsIdProject");
-    const projectTypeIDLs = LocalStorage.get("listParamsLSProjectType");
-	
-    // const arrProjectIdLS = JSON.parse(projectIdLS);
-    // const arrProjectTypeIdLS = JSON.parse(projectTypeIDLs);
-
-    if (
-      comparePopUpItem.length === 0 ||
-      (!isEmpty(comparePopUpItem) &&
-	  !isEmpty(projectIdLS) &&
-        projectTypeIDLs.length > 0 &&
-        comparePopUpItem[0].projectId === projectIdLS[0] &&
-        comparePopUpItem[0].projectType === projectTypeIDLs[0])
-    ) {
-      dispatch(setValidCompare(true));
-      LocalStorage.set("compare-url", {
-        // projectId: projectId ?? comparePopUpItem[0]?.projectId,
-        // projectTypeId: projectTypeId ?? comparePopUpItem[0]?.projectType,
-        priceTo: "20",
-        priceFrom: "1",
-        areaTo: "200",
-        areaFrom: "30",
-        categoryId: "",
-      });
-    } else {
-      dispatch(setValidCompare(false));
-	  console.log("bcdfed")
-    }
-  }, [projectId, projectTypeId, comparePopUpItem,router]);
 
   const remove = (id?: string) => () => {
     if (id) {

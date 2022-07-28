@@ -37,8 +37,6 @@ const ItemSearch = ({ data }: searchProps) => {
   );
 
   const onCompare = (product: searchLocationResponse) => () => {
-	console.log(isValid)
-    if (!isValid) return;
     const local: comparePopUpItemI[] = _.cloneDeep(comparePopUpItem);
     if (local) {
       if (
@@ -93,10 +91,7 @@ const ItemSearch = ({ data }: searchProps) => {
             }
           />
         ))}
-        <ComparePopUp
-          projectId={router.query.projectId as string}
-          projectTypeId={router.query.projectTypeId as string}
-        />
+        <ComparePopUp/>
       </ProductWrap>
     </>
   );
