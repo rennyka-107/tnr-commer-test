@@ -5,7 +5,6 @@ import Mask3 from "../../../public/images/mask_g_3.png";
 import ContainerSales from "@components/Container/ContainerSales";
 import { useRouter } from "next/router";
 import { Tooltip } from "@mui/material";
-import { useState } from "react";
 
 type Props = {
   data: SpecialOfferI[];
@@ -19,27 +18,15 @@ const ContainerStyled = styled.div`
 
 const SpecialOffersComponent = ({ data }: Props) => {
   const Router = useRouter();
-  const [Breadcrumbs, setBreadcrumbs] = useState([
-    {
-      id: 1,
-      value: "Trang chủ",
-      href: "/",
-    },
-  ]);
-
   return (
-    <ContainerSales
-      title={"Khuyến mãi"}
-      checkBread={true}
-      breaditem={Breadcrumbs}
-    >
+    <ContainerSales title={"Khuyến mại"} checkBread={true}>
       <ContainerStyled>
         {data.map((item, index) => (
-          <Tooltip title={item.name} placement="top" key={index}>
+          <Tooltip title={item.name} placement="top"  key={index}>
             <div
               onClick={() => Router.push(`/sales/${item.id}`)}
               style={{ cursor: "pointer" }}
-              key={index}
+			  key={index}
             >
               <ImageWithHideOnErrorOffers
                 key={index}
