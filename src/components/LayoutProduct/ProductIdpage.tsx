@@ -885,9 +885,11 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                   {dataProduct?.projectTypeCode === "1" ? (
                     <WrapItemCenter>
                       <FloorIcon />
-                      <TextFloorStyled>max</TextFloorStyled>
+                      <TextFloorStyled>min</TextFloorStyled>
                       <TextCenterItem>
-                        <TextFloorValue>{dataProduct?.maxFloor} tầng</TextFloorValue>
+                        <TextFloorValue>
+                          {dataProduct?.minFloor} tầng
+                        </TextFloorValue>
                       </TextCenterItem>
                     </WrapItemCenter>
                   ) : (
@@ -904,12 +906,24 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                       {dataProduct?.landArea ? dataProduct?.landArea : "N/A"} m²
                     </TextCenterItem>
                   </WrapItemCenter>
-                  <WrapItemCenter>
-                    <IconBath />
-                    <TextCenterItem>
-                      {dataProduct?.numBath ? dataProduct?.numBath : "N/A"}
-                    </TextCenterItem>
-                  </WrapItemCenter>
+                  {dataProduct?.projectTypeCode === "1" ? (
+                    <WrapItemCenter>
+                      <FloorIcon />
+                      <TextFloorStyled>max</TextFloorStyled>
+                      <TextCenterItem>
+                        <TextFloorValue>
+                          {dataProduct?.maxFloor} tầng
+                        </TextFloorValue>
+                      </TextCenterItem>
+                    </WrapItemCenter>
+                  ) : (
+                    <WrapItemCenter>
+                      <IconBath />
+                      <TextCenterItem>
+                        {dataProduct?.numBath ? dataProduct?.numBath : "N/A"}
+                      </TextCenterItem>
+                    </WrapItemCenter>
+                  )}
                   <WrapItemCenter>
                     <IconCompass />
                     <TextCenterItem>
@@ -1010,7 +1024,7 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                   </a>
                   <div style={{ border: "1px solid #1B3459" }} />
                   <a
-                    href={`/policySale/${dataProduct.project.id}?Idproduct=${dataProduct.id}`}
+                    href={`/policySale/${dataProduct.project.id}`}
                     style={{ textAlign: "center" }}
                   >
                     <IconClipboardProduct />

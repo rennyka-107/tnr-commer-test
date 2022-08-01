@@ -187,8 +187,8 @@ const HomePage = () => {
       target: { value },
     } = event;
     const data = projectList.filter((x) => x.name === value);
-    setListIdProject([data[0].id]);
-    setListDataLSProject([data[0]]);
+    listIdProject.push(data[0].id);
+    listDataLSProject.push(data[0]);
     setProjectName(typeof value === "string" ? value.split(",") : value);
     setFilterSearch({ ...filterSearch, projectId: data[0].id });
   };

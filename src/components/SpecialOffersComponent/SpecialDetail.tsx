@@ -2,8 +2,6 @@ import ContainerSales from "@components/Container/ContainerSales";
 import { SpecialOfferI } from "interface/SpecialOffers";
 import styled from "@emotion/styled";
 import { Typography } from "@mui/material";
-import { useEffect, useState } from "react";
-import isEmpty from "lodash.isempty";
 
 const TitleStyled = styled(Typography)`
   font-family: "Roboto";
@@ -23,26 +21,8 @@ type Props = {
 };
 
 const SpecialDetail = ({ data }: Props) => {
-  const [Breadcrumbs, setBreadcrumbs] = useState([]);
-
-  useEffect(() => {
-    if (!isEmpty(data)) {
-      setBreadcrumbs([
-        {
-          id: 1,
-          value: "Trang chủ",
-          href: "/",
-        },
-        {
-          id: 2,
-          value: "Khuyến mãi",
-          href: "/sales",
-        },
-      ]);
-    }
-  }, [data]);
   return (
-    <ContainerSales title={data?.name} checkBread={true} breaditem={Breadcrumbs}>
+    <ContainerSales title={data?.name} checkBread={true}>
       <div>
         <TitleStyled>{data?.startDate}</TitleStyled>
         <div style={{ width: "100%", padding: 80 }}>

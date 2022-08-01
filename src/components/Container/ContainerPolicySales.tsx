@@ -1,5 +1,4 @@
 import Breadcrumbs from "@components/Breadscrumbs";
-import BreadCrumsComponent from "@components/Breadscrumbs/BreadCrumsComponent";
 import Column from "@components/CustomComponent/Column";
 import Row from "@components/CustomComponent/Row";
 import styled from "@emotion/styled";
@@ -8,11 +7,6 @@ import React from "react";
 interface Props {
     children: React.ReactNode;
     title?: string;
-	breaditem?: {
-		id: number;
-		value: string;
-		href: string
-	  }[];
     rightContent?: React.ReactNode;
 	checkBread?: boolean;
 }
@@ -30,11 +24,10 @@ const HeaderView = styled.div`
     line-height: 33px;
 `;
 
-const ContainerPolicySales: React.FC<Props> = ({ children, title, rightContent,checkBread ,breaditem}) => {
+const ContainerPolicySales: React.FC<Props> = ({ children, title, rightContent,checkBread }) => {
     return (
         <ContainerWrapper>
-            {/* <Breadcrumbs title={title} /> */}
-			<BreadCrumsComponent breaditem={breaditem} activePage={title}/>
+            <Breadcrumbs title={title} />
             <Row customStyle={{ marginBottom: 50, marginTop: 22 , display: 'flex', justifyContent: 'space-between' }}>
                 {/* <Column customStyle={{ padding: 0, alignItems: "center"}} >
                     {title && <HeaderView>{title}</HeaderView>}

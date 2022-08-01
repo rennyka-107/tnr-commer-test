@@ -31,7 +31,6 @@ const SpecialOfferDetail = () => {
   const { id } = Router.query;
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-
   const [totalPage, setTotalPage] = useState<number>(0);
   const { SearchSpecialOfferById } = useSelector(
     (state: RootState) => state.specialoffers

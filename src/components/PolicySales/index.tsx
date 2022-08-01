@@ -11,12 +11,6 @@ import Image from "next/image";
 import FlexContainer from "@components/CustomComponent/FlexContainer";
 import ContainerProduct from "@components/Container/ContainerProduct";
 import ContainerPolicySales from "@components/Container/ContainerPolicySales";
-import { useEffect, useState } from "react";
-import { getProducById } from "../../../pages/api/productsApi";
-import { useDispatch, useSelector } from "react-redux";
-import { getProductById } from "../../../store/productSlice";
-import { RootState } from "../../../store/store";
-import isEmpty from "lodash.isempty";
 
 const ContainerStyled = styled.div`
   display: flex;
@@ -85,66 +79,33 @@ type ItemProps = {
 
 const PolicySales = ({ listSalePolicy, idPolicy }: Props) => {
   const Router = useRouter();
-  const dispatch = useDispatch();
-  const { Idproduct } = Router.query;
-  const { productByID } = useSelector((state: RootState) => state.products);
-  const [Breadcrumbs, setBreadcrumbs] = useState([]);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const responAPIBYID = await getProducById(Idproduct);
-        dispatch(getProductById(responAPIBYID.responseData));
-      } catch (error) {
-        console.log(error);
-      }
-    })();
-  }, [Idproduct]);
-
-  useEffect(() => {
-    if (!isEmpty(productByID)) {
-      setBreadcrumbs([
-        {
-          id: 1,
-          value: "Trang chủ",
-		  href: '/'
-        },
-        {
-          id: 2,
-          value: productByID.name,
-		  href: `/products/${Idproduct}`
-        },
-      ]);
-    }
-  }, [productByID]);
-
   return (
-    <ContainerPolicySales title={"Chính sách bán hàng"} breaditem={Breadcrumbs}>
+    <ContainerPolicySales title={"Chính sách bán hàng"}>
       <ContainerStyled>
-        <TypoGraphyStyled>Chính Sách Bán Hàng</TypoGraphyStyled>
-        {listSalePolicy.map((item: any, index: any) => (
+      <TypoGraphyStyled>Chính Sách Bán Hàng</TypoGraphyStyled>
+      {listSalePolicy.map((item: any, index: any) => (
+        <div
+          key={index + "key"}
+          style={{ display: "flex", flexDirection: "row" }}
+        >
+          <Image src={pdfimage} width={100} height={100} unoptimized={true} />
           <div
-            key={index + "key"}
-            style={{ display: "flex", flexDirection: "row" }}
+            style={{
+              padding: 20,
+              display: "flex",
+              flexDirection: "column",
+              gap: 10,
+            }}
           >
-            <Image src={pdfimage} width={100} height={100} unoptimized={true} />
-            <div
-              style={{
-                padding: 20,
-                display: "flex",
-                flexDirection: "column",
-                gap: 10,
-              }}
-            >
-              <TitleStyled>{item.name}</TitleStyled>
-              <div>
-                <LinkStyled href={item.pdf} target="_blank">
-                  Xem chính sách
-                </LinkStyled>
-              </div>
+            <TitleStyled>{item.name}</TitleStyled>
+            <div>
+              <LinkStyled href={item.pdf} target="_blank">
+                Xem chính sách
+              </LinkStyled>
             </div>
           </div>
-        ))}
+        </div>
+      ))}
       </ContainerStyled>
     </ContainerPolicySales>
   );
