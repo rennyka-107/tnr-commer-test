@@ -95,16 +95,32 @@ const FileContainer = styled.div`
   justify-content: start;
 `;
 
+interface Option {
+  label: string;
+  value: number;
+}
+
 const EditProfile = () => {
   const [document, setDocument] = useState({ fileName: "", dataUrl: "" });
   const [rerender, forceUpdate] = useForceUpdate();
   const { dataCustomType } = useCustomType();
   const { dataProvinces } = useProvinces();
   const [loadingImg, setLoadingImg] = useState(false);
-  const convertProvinType = (dataProvinces || []).map((item) => ({
-    label: item.ProvinceName,
-    value: item.ProvinceID,
-  }));
+
+  const [convertProvinType, setConvertProvinType] = useState<Option[]>([]);
+
+  useEffect(() => {
+    console.log("dataProvinces", dataProvinces);
+    
+    const convert = dataProvinces.map((item) => ({
+      label: item.provinceName,
+      value: item.provinceId,
+    }));
+    setConvertProvinType(convert);
+  }, [dataProvinces]);
+
+  console.log("dataProvincesdataProvinces", convertProvinType);
+
   const convertCustomerType = (dataCustomType || []).map((item) => ({
     label: item.name,
     value: item.id,

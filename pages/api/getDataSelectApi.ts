@@ -12,3 +12,9 @@ export const apiGetLOT = async (idProject: string) => {
     `/api/customer/project-level-dictionary/find-lv1-by-project-id/${idProject}`
   );
 };
+
+export const apiGetListProjectByProjectType = async (idProjectType: string) => {
+	return HttpClient.get<string, CommonResponse>(
+		`/api/param/board/project/${idProjectType}`
+	  );
+} 

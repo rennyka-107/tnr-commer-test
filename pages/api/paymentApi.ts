@@ -37,3 +37,7 @@ export const apiGetProfileInformation = async () => {
     `api-profile/profile/get-info`
   );
 };
+
+export const apiSendInforMsb = async (data: any) => {
+  return HttpClient.post<any, CommonResponse>(`api/v1/payment/send-lead-msb`, data)
+}

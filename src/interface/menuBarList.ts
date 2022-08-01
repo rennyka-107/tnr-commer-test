@@ -8,6 +8,7 @@ export interface MenuBarProjectType {
 	name: string,
 	iconHover: string,
 	icon: string,
+	code? : string;
 }
 
 export interface MenuBarLocation {

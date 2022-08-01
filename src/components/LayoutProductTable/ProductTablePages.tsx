@@ -18,15 +18,19 @@ import Filter from "./filter";
 import { useRouter } from "next/router";
 import axios from "axios";
 import {
+  FloorIcon,
+  FloorIconProductTable,
   IconBedProductTable,
   IconCanGoc,
   IconDienTichProductTable,
   IconHuongProductTable,
   IconNumberRoom,
   IconNumberRoomSleep,
+  PriceThapTang,
 } from "@components/Icons";
 import { Tooltip } from "@mui/material";
 import { ContactlessOutlined, DriveFileMove } from "@mui/icons-material";
+import ContainerProductTable from "@components/Container/ContainerProductTable";
 
 type DetailRowI = {
   countRemaining: number;
@@ -63,7 +67,7 @@ type ProductionRowI = {
 };
 
 const TableCellStyled = styled(TableCell)`
-  width: 150px;
+  width: 250px;
   border: 1px solid rgba(255, 255, 255, 0.21);
   color: #ffff;
 `;
@@ -152,7 +156,15 @@ const EmptyCartStyled = styled.div`
 `;
 
 const ProductTablePages = () => {
-  const [body, setBody] = useState<BodyRequest>();
+  const [body, setBody] = useState<BodyRequest>({
+	projectId: "",
+    categoryId: "",
+    projectLevel1: "",
+	projectTypeId: "",
+    saleProductStatus: "",
+	projectTypeCode: "",
+	levelDetailName: "",
+  });
   const [data, setData] = useState<{
     lstDetailRow: DetailRowI[];
     lstProductionRow: ProductionRowI[];
@@ -168,10 +180,11 @@ const ProductTablePages = () => {
   };
 
   useEffect(() => {
+    console.log(body);
     const source = axios.CancelToken.source();
-    if (body?.projectId) {
-      getProduct(body, source.token);
-    }
+    // if (body?.projectId) {
+    getProduct(body, source.token);
+    // }
     return () => {
       source.cancel();
     };
@@ -219,6 +232,47 @@ const ProductTablePages = () => {
               {element.lstProductData.map((data, i) => (
                 <TableRow key={index}>
                   {data.lotCode == el.lotCode ? (
+                    <div>{renderAction(data)}</div>
+                  ) : (
+                    <></>
+                  )}
+                </TableRow>
+              ))}
+            </CellContent>
+          </>
+        ))}
+      </>
+    );
+  };
+  const fetchComponentThapTang = (el: any, idx) => {
+    // console.log(el,data)
+    return (
+      <>
+        {data?.lstProductionRow?.map((element, index) => (
+          <>
+            <CellContent
+            //   style={{
+            //     backgroundColor:
+            //       (el.lotCode === indexHover2 && element.code <= indexHover) ||
+            //       (el.lotCode <= indexHover2 && element.code === indexHover)
+            //         ? " rgba(0, 99, 247, 0.15)"
+            //         : "",
+            //     zIndex: 100,
+            //   }}
+            //   align="center"
+            //   onMouseOverCapture={() => {
+            //     MouseOver(element.code);
+            //     MouseOver2(el.lotCode);
+            //   }}
+            //   onMouseLeave={() => {
+            //     setIndexHover2("");
+            //     setIndexHover("");
+            //   }}
+              key={index}
+            >
+              {element.lstProductData.map((data, i) => (
+                <TableRow key={index}>
+                  {data.lotCode == element.lotCode ? (
                     <div>{renderAction(data)}</div>
                   ) : (
                     <></>
@@ -295,180 +349,356 @@ const ProductTablePages = () => {
     }
   };
 
-  console.log("dataaa", data?.lstProductionRow);
+  const fetchTable = () => {
+
+    return (
+      <>
+        {body.projectTypeCode === "2" ? (
+          <>
+            {data && data?.lstProductionRow?.length > 0 ? (
+              <TableContainer
+                component={Paper}
+                style={{ borderRadius: "8px 8px 0px 0px" }}
+              >
+                <Table aria-label="simple table">
+                  <TableHead
+                    style={{ backgroundColor: "#1B3459", color: "#FFFF" }}
+                  >
+                    <TableRow>
+                      <TableCellStyled align="left">
+                        <LabelContainer>
+                          <div
+                            style={{
+                              display: "flex",
+                              flexDirection: "row",
+                              alignItems: "center",
+                            }}
+                          >
+                            {" "}
+                            <IconNumberRoom /> &nbsp; Thứ tự căn
+                          </div>
+                        </LabelContainer>
+                      </TableCellStyled>
+                      {data?.lstProductionRow?.map((el, index) => (
+                        <TableCellContent align="center" key={index}>
+                          {el?.code ?? "no stt"}
+                        </TableCellContent>
+                      ))}
+                    </TableRow>
+                    <TableRow>
+                      <TableCellStyled align="left">
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center",
+                          }}
+                        >
+                          <IconNumberRoomSleep /> &nbsp; Số phòng ngủ
+                        </div>
+                      </TableCellStyled>
+                      {data?.lstProductionRow?.map((el, index) => (
+                        <TableCellContent align="center" key={index}>
+                          {el?.numBed ?? "no bed"}
+                        </TableCellContent>
+                      ))}
+                    </TableRow>
+                    <TableRow>
+                      <TableCellStyled align="left">
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center",
+                          }}
+                        >
+                          <IconBedProductTable /> &nbsp; Số phòng vệ sinh
+                        </div>
+                      </TableCellStyled>
+                      {data?.lstProductionRow?.map((el, index) => (
+                        <TableCellContent align="center" key={index}>
+                          {el?.numBath ?? 0}
+                        </TableCellContent>
+                      ))}
+                    </TableRow>
+                    <TableRow>
+                      <TableCellStyled align="left">
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center",
+                          }}
+                        >
+                          <IconHuongProductTable /> &nbsp; Hướng logia
+                        </div>
+                      </TableCellStyled>
+                      {data?.lstProductionRow?.map((el, index) => (
+                        <TableCellContent align="center" key={index}>
+                          {el?.doorDirection ?? "no direction"}
+                        </TableCellContent>
+                      ))}
+                    </TableRow>
+                    <TableRow>
+                      <TableCellStyled align="left">
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center",
+                          }}
+                        >
+                          <IconDienTichProductTable /> &nbsp; Diện tích (m2)
+                        </div>
+                      </TableCellStyled>
+                      {data?.lstProductionRow?.map((el, index) => (
+                        <TableCellContent align="center" key={index}>
+                          {el.landArea ? el.landArea : ""}
+                        </TableCellContent>
+                      ))}
+                    </TableRow>
+                    <TableRow>
+                      <TableCellStyled align="left">
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center",
+                          }}
+                        >
+                          <IconCanGoc /> &nbsp; Căn góc
+                        </div>
+                      </TableCellStyled>
+                      {data?.lstProductionRow?.map((el, index) => (
+                        <TableCellContent align="center" key={index}>
+                          {el.isCornerApartment === 1 ? <Check /> : ""}
+                        </TableCellContent>
+                      ))}
+                    </TableRow>
+                  </TableHead>
+                  {data?.lstDetailRow?.map((el, idx) => (
+                    <TableRow key={el.lotCode}>
+                      <TableCell
+                        align="left"
+                        sx={{
+                          width: 150,
+                          backgroundColor: "rgba(27, 52, 89, 0.12)",
+                        }}
+                      >
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            width: "100%",
+                          }}
+                        >
+                          <div style={{ marginRight: 10, flex: 1 }}>
+                            <TextTable>{el.lotCode}</TextTable>
+                          </div>
+                          <div style={{ textAlign: "center", flex: 1 }}>
+                            <div>
+                              {el.countRemaining === 0 ? (
+                                <TextRemainCountZero>
+                                  {el.countRemaining}
+                                </TextRemainCountZero>
+                              ) : (
+                                <TextRemainCount>
+                                  {el.countRemaining}
+                                </TextRemainCount>
+                              )}
+                            </div>
+                            <div>Còn lại</div>
+                          </div>
+                        </div>
+                      </TableCell>
+                      {fetchComponent(el, idx)}
+                    </TableRow>
+                  ))}
+                </Table>
+              </TableContainer>
+            ) : (
+              <EmptyCartStyled>
+                <img src="/images/empty.png" alt="" className="img" />
+                <div className="title">
+                  Không có bảng hàng phù hợp kết quả lọc
+                </div>
+              </EmptyCartStyled>
+            )}
+          </>
+        ) : (
+          <>
+            {data && data?.lstProductionRow?.length > 0 ? (
+              <TableContainer
+                component={Paper}
+                style={{ borderRadius: "8px 8px 0px 0px" }}
+              >
+                <Table aria-label="simple table">
+                  <TableHead
+                    style={{ backgroundColor: "#1B3459", color: "#FFFF" }}
+                  >
+                    <TableRow>
+                      <TableCellStyled align="left">
+                        <LabelContainer>
+                          <div
+                            style={{
+                              display: "flex",
+                              flexDirection: "row",
+                              alignItems: "center",
+                            }}
+                          >
+                            {" "}
+                            <IconNumberRoom /> &nbsp; Lô số
+                          </div>
+                        </LabelContainer>
+                      </TableCellStyled>
+                      {data?.lstProductionRow?.map((el, index) => (
+                        <TableCellContent align="center" key={index}>
+                          {el?.code ?? "no stt"}
+                        </TableCellContent>
+                      ))}
+                    </TableRow>
+                    <TableRow>
+                      <TableCellStyled align="left">
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center",
+                          }}
+                        >
+                          <FloorIconProductTable /> &nbsp; Số tầng xây dựng min
+                        </div>
+                      </TableCellStyled>
+                      {data?.lstProductionRow?.map((el, index) => (
+                        <TableCellContent align="center" key={index}>
+                          {el?.numBed ?? "no bed"}
+                        </TableCellContent>
+                      ))}
+                    </TableRow>
+                    <TableRow>
+                      <TableCellStyled align="left">
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center",
+                          }}
+                        >
+                          <FloorIconProductTable /> &nbsp; Số tầng xây dựng max
+                        </div>
+                      </TableCellStyled>
+                      {data?.lstProductionRow?.map((el, index) => (
+                        <TableCellContent align="center" key={index}>
+                          {el?.numBath ?? 0}
+                        </TableCellContent>
+                      ))}
+                    </TableRow>
+                    <TableRow>
+                      <TableCellStyled align="left">
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center",
+                          }}
+                        >
+                          <IconHuongProductTable /> &nbsp; Hướng
+                        </div>
+                      </TableCellStyled>
+                      {data?.lstProductionRow?.map((el, index) => (
+                        <TableCellContent align="center" key={index}>
+                          {el?.doorDirection ?? "no direction"}
+                        </TableCellContent>
+                      ))}
+                    </TableRow>
+                    <TableRow>
+                      <TableCellStyled align="left">
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center",
+                          }}
+                        >
+                          <IconDienTichProductTable /> &nbsp; m2
+                        </div>
+                      </TableCellStyled>
+                      {data?.lstProductionRow?.map((el, index) => (
+                        <TableCellContent align="center" key={index}>
+                          {el.landArea ? el.landArea : ""}
+                        </TableCellContent>
+                      ))}
+                    </TableRow>
+                  </TableHead>
+                  {data?.lstDetailRow?.map((el, idx) => (
+                    <TableRow key={el.lotCode}>
+                      <TableCell
+                        align="left"
+                        sx={{
+                          width: 150,
+                          backgroundColor: "rgba(27, 52, 89, 0.12)",
+                        }}
+                      >
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            width: "100%",
+                          }}
+                        >
+                          <div style={{ marginRight: 10, flex: 1 }}>
+						  <PriceThapTang style={{marginTop: 1}}/> <TextTable style={{marginLeft: 10}}>{el.lotCode}</TextTable>
+                          </div>
+                          <div style={{ textAlign: "center", flex: 1 }}>
+                            <div>
+                              {el.countRemaining === 0 ? (
+                                <TextRemainCountZero>
+                                  {el.countRemaining}
+                                </TextRemainCountZero>
+                              ) : (
+                                <TextRemainCount>
+                                  {el.countRemaining}
+                                </TextRemainCount>
+                              )}
+                            </div>
+                            <div>Còn lại</div>
+                          </div>
+                        </div>
+                      </TableCell>
+                      {fetchComponentThapTang(el, idx)}
+                    </TableRow>
+                  ))}
+                </Table>
+              </TableContainer>
+            ) : (
+              <EmptyCartStyled>
+                <img src="/images/empty.png" alt="" className="img" />
+                <div className="title">
+                  Không có bảng hàng phù hợp kết quả lọc
+                </div>
+              </EmptyCartStyled>
+            )}
+          </>
+        )}
+      </>
+    );
+  };
+
+  useEffect(() => {
+	fetchTable()
+  },[body])
 
   return (
     <FlexContainer>
-      <Container title="Bảng hàng trực tuyến">
+      <ContainerProductTable title="Bảng hàng trực tuyến">
         <Filter
           body={body}
           onSubmit={(values) => {
             setBody(values);
           }}
         />
-        {data?.lstProductionRow.length > 0 ? (
-          <TableContainer component={Paper} sx={{ marginTop: 4 }}>
-            <Table aria-label="simple table">
-              <TableHead style={{ backgroundColor: "#1B3459", color: "#FFFF" }}>
-                <TableRow>
-                  <TableCellStyled align="left">
-                    <LabelContainer>
-                      <div
-                        style={{
-                          display: "flex",
-                          flexDirection: "row",
-                          alignItems: "center",
-                        }}
-                      >
-                        {" "}
-                        <IconNumberRoom /> &nbsp; Thứ tự căn
-                      </div>
-                    </LabelContainer>
-                  </TableCellStyled>
-                  {data?.lstProductionRow?.map((el, index) => (
-                    <TableCellContent align="center" key={index}>
-                      {el?.code ?? "no stt"}
-                    </TableCellContent>
-                  ))}
-                </TableRow>
-                <TableRow>
-                  <TableCellStyled align="left">
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        alignItems: "center",
-                      }}
-                    >
-                      <IconNumberRoomSleep /> &nbsp; Số phòng ngủ
-                    </div>
-                  </TableCellStyled>
-                  {data?.lstProductionRow?.map((el, index) => (
-                    <TableCellContent align="center" key={index}>
-                      {el?.numBed ?? "no bed"}
-                    </TableCellContent>
-                  ))}
-                </TableRow>
-                <TableRow>
-                  <TableCellStyled align="left">
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        alignItems: "center",
-                      }}
-                    >
-                      <IconBedProductTable /> &nbsp; Số phòng vệ sinh
-                    </div>
-                  </TableCellStyled>
-                  {data?.lstProductionRow?.map((el, index) => (
-                    <TableCellContent align="center" key={index}>
-                      {el?.numBath ?? 0}
-                    </TableCellContent>
-                  ))}
-                </TableRow>
-                <TableRow>
-                  <TableCellStyled align="left">
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        alignItems: "center",
-                      }}
-                    >
-                      <IconHuongProductTable /> &nbsp; Hướng logia
-                    </div>
-                  </TableCellStyled>
-                  {data?.lstProductionRow?.map((el, index) => (
-                    <TableCellContent align="center" key={index}>
-                      {el?.doorDirection ?? "no direction"}
-                    </TableCellContent>
-                  ))}
-                </TableRow>
-                <TableRow>
-                  <TableCellStyled align="left">
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        alignItems: "center",
-                      }}
-                    >
-                      <IconDienTichProductTable /> &nbsp; Diện tích (m2)
-                    </div>
-                  </TableCellStyled>
-                  {data?.lstProductionRow?.map((el, index) => (
-                    <TableCellContent align="center" key={index}>
-                      {el.landArea ? el.landArea : ""}
-                    </TableCellContent>
-                  ))}
-                </TableRow>
-                <TableRow>
-                  <TableCellStyled align="left">
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        alignItems: "center",
-                      }}
-                    >
-                      <IconCanGoc /> &nbsp; Căn góc
-                    </div>
-                  </TableCellStyled>
-                  {data?.lstProductionRow?.map((el, index) => (
-                    <TableCellContent align="center" key={index}>
-                      {el.isCornerApartment === 1 ? <Check /> : ""}
-                    </TableCellContent>
-                  ))}
-                </TableRow>
-              </TableHead>
-              {data?.lstDetailRow?.map((el, idx) => (
-                <TableRow key={el.lotCode}>
-                  <TableCell
-                    align="left"
-                    sx={{
-                      width: 150,
-                      backgroundColor: "rgba(27, 52, 89, 0.12)",
-                    }}
-                  >
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        width: "100%",
-                      }}
-                    >
-                      <div style={{ marginRight: 10, flex: 1 }}>
-                        <TextTable>{el.lotCode}</TextTable>
-                      </div>
-                      <div style={{ textAlign: "center", flex: 1 }}>
-                        <div>
-                          {el.countRemaining === 0 ? (
-                            <TextRemainCountZero>
-                              {el.countRemaining}
-                            </TextRemainCountZero>
-                          ) : (
-                            <TextRemainCount>
-                              {el.countRemaining}
-                            </TextRemainCount>
-                          )}
-                        </div>
-                        <div>Còn lại</div>
-                      </div>
-                    </div>
-                  </TableCell>
-                  {fetchComponent(el, idx)}
-                </TableRow>
-              ))}
-            </Table>
-          </TableContainer>
-        ) : (
-          <EmptyCartStyled>
-            <img src="/images/empty.png" alt="" className="img" />
-            <div className="title">Không có bảng hàng phù hợp kết quả lọc</div>
-          </EmptyCartStyled>
-        )}
-      </Container>
+      </ContainerProductTable>
+      <div style={{ padding: 10, width: "100%" }}>{fetchTable()}</div>
     </FlexContainer>
   );
 };

@@ -2,10 +2,13 @@ import { CommonResponse } from "type/common";
 import HttpClient from "utils/HttpClient";
 
 export interface BodyRequest {
-    projectId: string | null;
-    categoryId: string | null;
-    projectLevel1: string | null;
-    saleProductStatus: (string | number)[] | string;
+    projectId?: string | null;
+    categoryId?: string | null;
+    projectLevel1?: string | null;
+	projectTypeId?: string | null;
+    saleProductStatus?: (string | number)[] | string;
+	projectTypeCode?: string | null;
+	levelDetailName?: string | null;
 }
 
 const LIST_PRODUCT = "/api/board/find-board";
