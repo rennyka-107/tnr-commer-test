@@ -155,6 +155,7 @@ const SearchCompare = ({
       setDataKhoangGia([parseInt(priceFrom), parseInt(priceTo)]);
     }
 
+
   }, [
     provinceId,
     projectId,

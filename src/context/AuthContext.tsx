@@ -17,6 +17,7 @@ import useNotification from "hooks/useNotification";
 import { AlertColor } from "@mui/material";
 import { setNotification } from "../../store/notificationSlice";
 import { useRouter } from "next/router";
+import { removeAllComparePopUpItem } from "../../store/productCompareSlice";
 
 // import jwtDecode from 'jwt-decode';
 
@@ -74,6 +75,16 @@ const AuthContext = ({ children }) => {
     };
     setToken();
   }, []);
+
+  useEffect(() => {
+    // return () => {
+		if(router.pathname !== '/compare-search'){
+		  dispatch(removeAllComparePopUpItem({}))
+		  console.log("clearn")
+		}
+		console.log(router)
+	//   }
+  },[router.pathname])
 
   useEffect(() => {
     if (router.pathname !== "/search" && router.pathname !== "/projectTNR" && router.pathname !== "/compare-search" && router.pathname !== "/products" && router.pathname !== "/compare-product") {
