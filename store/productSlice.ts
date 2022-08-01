@@ -117,6 +117,7 @@ const initialState = {
     isCornerApartment: 1,
     idls: null,
     floor: null,
+    productByID: ""
   },
   productTopByOutStanding: [],
   productFavorite: [],

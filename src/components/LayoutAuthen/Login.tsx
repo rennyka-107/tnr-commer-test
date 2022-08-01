@@ -66,8 +66,8 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const Route = useRouter();
   const captchaRef = useRef<ReCAPTCHA>(null);
-  const [token, setToken] = useState<string | null>(null);
-  const [verifySuccess, setVerifySuccess] = useState<boolean>(false);
+  const [token, setToken] = useState<string | null>("de tam"); //bat capcha thi set token = null
+  const [verifySuccess, setVerifySuccess] = useState<boolean>(true); //bat capcha thi setVerifySuccess = false
 
   const validationSchema = yup.object().shape({
     username: yup
@@ -162,8 +162,6 @@ const Login = () => {
     setToken(token);
   };
 
-  console.log("tokkkk", token);
-
   return (
     <Form>
       <form onSubmit={handleSubmit((values) => onSubmit(values))}>
@@ -229,21 +227,13 @@ const Login = () => {
               />
             )}
           </ButtonStyled>
-          <ReCAPTCHA
+          {/* capcha - khong xoa doan comment nay */}
+          {/* <ReCAPTCHA
             style={{ marginTop: "20px" }}
             sitekey={process.env.NEXT_PUBLIC_SITE_KEY}
             ref={captchaRef}
             onChange={handleChangeCapcha}
-          />
-          {/* <ControllerRadio
-              name="remember"
-              control={control}
-			  disabled={loading}
-              options={[
-                { value: 1, label: "Nhận mã qua email" },
-                { value: 2, label: "Nhắn tin tới số ..." },
-              ]}
-            /> */}
+          /> */}
         </FormGroup>
 
         <FormGroup sx={{ mb: 2 }} fullWidth style={{ alignItems: "center" }}>

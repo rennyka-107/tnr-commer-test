@@ -28,8 +28,8 @@ export interface GeneralInfo {
 }
 
 export const getGenralInfoAPI = async () => {
-  return HttpClient.get<null, CommonResponse<GeneralInfo>>(
-    `/api/general-info `,
+  return HttpClient.get<null, CommonResponse<any>>(
+    `/api/static-content/get-all`,
     {
       withToken: false,
     }

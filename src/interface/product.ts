@@ -205,6 +205,7 @@ export interface ResponseSearchById {
   apartmentModelPhotos?: string[] | null;
   thumbnail?: string | null;
   paymentStatus?: string | number | null;
+  projectTypeCode?: string;
 }
 
 ///api/product/information/find-top-by-outstanding

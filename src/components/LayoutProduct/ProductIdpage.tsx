@@ -3,6 +3,7 @@ import isEmpty from "lodash.isempty";
 import { useEffect, useState } from "react";
 
 import {
+  FloorIcon,
   Icon360,
   IconBath,
   IconBedDouble,
@@ -79,6 +80,20 @@ const DynamicPhieuTinhGiaComponent = dynamic(
   () => import("@components/LayoutProduct/PhieuTinhGia"),
   { loading: () => <p>...</p> }
 );
+
+const TextFloorStyled = styled(Typography)`
+  margin-left: 5px;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 14px;
+  /* identical to box height */
+
+  /* Shades/Dark 2 */
+
+  color: #48576d;
+`;
 
 const dataFake = [
   {
@@ -234,7 +249,7 @@ const ButtonStyled = styled(Button)`
   border-radius: 60px;
   padding: 13px;
   :hover {
-    background: #FEC83C;
+    background: #fec83c;
     // box-shadow: 4px 8px 24px #f2f2f5;
     box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.2);
     border-radius: 60px;
@@ -313,6 +328,18 @@ const TextContact = styled(Typography)`
   text-align: right;
 
   /* Brand */
+
+  color: #1b3459;
+`;
+
+const TextFloorValue = styled(Typography)`
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16px;
+
+  /* Brand/Main color */
 
   color: #1b3459;
 `;
@@ -855,9 +882,24 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                 </div>
                 <div style={{ border: " 1px solid #C7C9D9", width: 262 }}></div>
                 <CenterIntemWrap>
+                  {dataProduct?.projectTypeCode === "1" ? (
+                    <WrapItemCenter>
+                      <FloorIcon />
+                      <TextFloorStyled>max</TextFloorStyled>
+                      <TextCenterItem>
+                        <TextFloorValue>{dataProduct?.maxFloor} tầng</TextFloorValue>
+                      </TextCenterItem>
+                    </WrapItemCenter>
+                  ) : (
+                    <WrapItemCenter>
+                      <IconBedDouble />
+                      <TextCenterItem>
+                        {dataProduct?.numBed ? dataProduct?.numBed : "N/A"}
+                      </TextCenterItem>
+                    </WrapItemCenter>
+                  )}
                   <WrapItemCenter>
                     <IconFrame />
-
                     <TextCenterItem>
                       {dataProduct?.landArea ? dataProduct?.landArea : "N/A"} m²
                     </TextCenterItem>
@@ -866,12 +908,6 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                     <IconBath />
                     <TextCenterItem>
                       {dataProduct?.numBath ? dataProduct?.numBath : "N/A"}
-                    </TextCenterItem>
-                  </WrapItemCenter>
-                  <WrapItemCenter>
-                    <IconBedDouble />
-                    <TextCenterItem>
-                      {dataProduct?.numBed ? dataProduct?.numBed : "N/A"}
                     </TextCenterItem>
                   </WrapItemCenter>
                   <WrapItemCenter>
@@ -928,7 +964,7 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                       backgroundColor:
                         dataProduct?.paymentStatus !== 2 ? "#FFFF" : "#f3f4f6",
                       color: "#1B3459",
-                      border: "1px solid #1B3459"
+                      border: "1px solid #1B3459",
                     }}
                   >
                     Giỏ hàng

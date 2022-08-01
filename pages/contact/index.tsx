@@ -13,15 +13,14 @@ import PhoneOutlinedIcon from "@mui/icons-material/PhoneOutlined";
 import { Grid, InputAdornment } from "@mui/material";
 import { Box } from "@mui/system";
 import useNotification from "hooks/useNotification";
-import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
 import { validateLine } from "utils/constants";
 import Regexs from "utils/Regexs";
 import * as yup from "yup";
+import { RootState } from "../../store/store";
 import {
-  createContactAPI,
-  GeneralInfo,
-  getGenralInfoAPI,
+  createContactAPI
 } from "../api/contactApi";
 
 const validationSchema = yup.object().shape({
@@ -64,20 +63,13 @@ interface FormData {
 }
 
 const Contact = () => {
-  const [generalInfo, setGeneralInfo] = useState<GeneralInfo | null>(null);
-
   const { control, handleSubmit, reset } = useForm<FormData>({
     mode: "onSubmit",
     resolver: yupResolver(validationSchema),
     defaultValues: validationSchema.getDefault(),
   });
   const notification = useNotification();
-
-  useEffect(() => {
-    getGenralInfoAPI().then((res) => {
-      setGeneralInfo(res.responseData);
-    });
-  }, []);
+  const generalInfo = useSelector((state: RootState) => state.generalInfo);
 
   const onSubmit = (data: FormData) => {
     console.log("data", data);
@@ -125,19 +117,19 @@ const Contact = () => {
                 <div className="icon">
                   <PhoneIconPage />
                 </div>
-                <div className="label">{generalInfo?.phoneNumber}</div>
+                <div className="label">{generalInfo.phoneNumber}</div>
               </div>
               <div className="contact__item">
                 <div className="icon">
                   <IconEmail />
                 </div>
-                <div className="label">{generalInfo?.email}</div>
+                <div className="label">{generalInfo.email}</div>
               </div>
               <div className="contact__item">
                 <div className="icon">
                   <IconLocation />
                 </div>
-                <div className="label">{generalInfo?.address}</div>
+                <div className="label">{generalInfo.address}</div>
               </div>
               <img src="./images/contact_bg.png" className="image" />
             </StyledContactInfo>

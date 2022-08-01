@@ -50,6 +50,7 @@ import {
   apiGetProfileInformation,
   apiGetQrCode,
   apiSavePaymentInformation,
+  apiSendInforMsb,
   getListPaymenListById,
 } from "../../../pages/api/paymentApi";
 import isEmpty from "lodash.isempty";
@@ -67,6 +68,7 @@ import isEqual from "lodash.isequal";
 import IconWarning from "@components/Icons/IconWarning";
 import LocalStorage from "utils/LocalStorage";
 import { apiUploadFile } from "../../../pages/api/cartApi";
+import PopupBorrowMsb from "./components/PopupBorrowMsb";
 
 type Props = {
   setScopeRender: Dispatch<SetStateAction<string>>;
@@ -103,7 +105,11 @@ const validationSchema = yup.object().shape({
     .required(validateLine.required)
     .trim(validateLine.trim)
     .default(""),
-  phoneNumber: yup.string().required(validateLine.required).default(""),
+  phoneNumber: yup
+    .string()
+    .required(validateLine.required)
+    .max(10, "Số điện thoại không được vượt quá 10 số")
+    .default(""),
   email: yup
     .string()
     .email("Không đúng định dạng email")
@@ -148,6 +154,8 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
   const { cart } = useSelector((state: RootState) => state.carts);
   const { listPayment } = useSelector((state: RootState) => state.payments);
   const [acceptPolicy, setAcceptPolicy] = useState<boolean>(false);
+  const [registerBorrow, setRegisterBorrow] = useState<boolean>(false);
+  const [openBorrowMsbPopup, setOpenBorrowMsbPopup] = useState<boolean>(false);
   const data = useSelector((state: RootState) => state.payments.data);
   const uploadMedia = useSelector(
     (state: RootState) => state.payments.uploadMedia
@@ -313,6 +321,49 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
     getCustomerTypes();
     fetchPaymentMethod();
   }, []);
+
+  function validInforSendMsb() {
+    return (
+      !isEmpty(watch("fullname")) &&
+      !isEmpty(watch("dob")) &&
+      !isEmpty(watch("phoneNumber")) &&
+      !isEmpty(watch("email")) &&
+      !isEmpty(watch("idNumber")) &&
+      !isEmpty(watch("issueDate")) &&
+      !isEmpty(watch("issuePlace")) &&
+      !isEmpty(watch("permanentAddress")) &&
+      !isEmpty(watch("contactAddress")) &&
+      !isEmpty(watch("province")) &&
+      !isEmpty(watch("district"))
+    );
+  }
+
+  function sendInforToMsb() {
+    const sendData = {
+      tenKhachHang: watch("fullname"),
+      ngaySinh: watch("dob"),
+      cmnd: watch("idNumber"),
+      hoKhauThuongTru: watch("permanentAddress"),
+      diaChiLienHe: watch("contactAddress"),
+      tinhTp: watch("province"),
+      quanHuyen: watch("district"),
+      phuongXa: "",
+      dienThoai: watch("phoneNumber"),
+      duAn: cart?.project?.name,
+      loCan: cart?.name,
+      giaTriBds: cart?.totalPrice,
+      chinhSachBanHang: "",
+      phuongThucThanhToan:
+        listPayment.find((item) => item.id === payMethod)?.name ?? "",
+      luaChonUuDai: "",
+      ngayThanhToan: "",
+      note: "",
+      thoiGianYeuCau: "",
+    };
+    apiSendInforMsb(sendData)
+      .then((res) => {console.log(res, "res")})
+      .catch((err) => console.log(err));
+  }
 
   const handleOnSubmit = (values, paymentFlag = 0) => {
     setLoading(true);
@@ -505,7 +556,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
       })
     );
   }
-  
+
   function renderListCustomer() {
     const arrayInfos = [...data.paymentIdentityInfos];
     let paymentIdentityInfos: any[] = [];
@@ -911,6 +962,36 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                   </span>
                 </Text14Styled>
               </RowStyled>
+              <Typography
+                sx={{
+                  ml: "12px",
+                  fontSize: "14px",
+                  lineHeight: "19,63px",
+                  fontWeight: 500,
+                  mt: 3,
+                }}
+              >
+                Mua nhà dễ dàng hơn với khoản vay ưu đãi từ ngân hàng MSB
+              </Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "flex-start",
+                  alignItems: "center",
+                }}
+              >
+                <Checkbox
+                  checked={registerBorrow}
+                  disabled={!validInforSendMsb()}
+                  onChange={(e, checked) => {
+                    setRegisterBorrow(checked);
+                    if (checked) {
+                      setOpenBorrowMsbPopup(true);
+                    }
+                  }}
+                />
+                <Text14Styled>Đăng ký vay ngân hàng</Text14Styled>
+              </Box>
               {(isEmpty(transactionCode) || data.paymentStatus === 0) && (
                 <ButtonAction
                   disabled={
@@ -918,6 +999,15 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                   }
                   margin={"12px auto"}
                   onClick={handleSubmit((values) => handleOnSubmit(values, 1))}
+                  sx={{
+                    "&:hover": {
+                      background: "#FEC83C",
+                      // box-shadow: 4px 8px 24px #f2f2f5;
+                      boxShadow: "0px 0px 10px 1px rgba(0, 0, 0, 0.2)",
+                      // borderRadius: "60px",
+                      color: "#ffffff",
+                    },
+                  }}
                 >
                   <Text18Styled color={"#fff"}>
                     Tạo phiếu thanh toán
@@ -966,17 +1056,20 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                   </Text18Styled>
                 </ButtonStyled>
               )}
-              {/* <ButtonStyled
-                sx={{ marginTop: "12px" }}
-                bg={"white"}
-                border={"1px solid #c7c9d9"}
-                onClick={() => setScopeRender("payment")}
-              >
-                <Text18Styled>Quay lại giỏ hàng</Text18Styled>
-              </ButtonStyled> */}
             </Box>
           </Grid>
         </Grid>
+        <PopupBorrowMsb
+          open={openBorrowMsbPopup}
+          handleClose={() => {
+            setOpenBorrowMsbPopup(false);
+            setRegisterBorrow(false);
+          }}
+          callback={() => {
+            setOpenBorrowMsbPopup(false);
+            sendInforToMsb();
+          }}
+        />
       </form>
     </Container>
   );

@@ -9,7 +9,11 @@ import { responseUserManual } from "interface/userManual";
 import Image from "next/image";
 import Link from "next/link";
 import Router from "next/router";
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getGenralInfoAPI } from "../../../../pages/api/contactApi";
+import { setGeneralInfo } from "../../../../store/generalInfoSlice";
+import { RootState } from "../../../../store/store";
 
 interface ItemValueUserProps {
   id: number;
@@ -94,6 +98,15 @@ const IconsBlock = styled.div`
 type Props = {};
 
 const FooterBot = ({ listMenuBarProjectType, listUserManual }: MenuProps) => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    getGenralInfoAPI().then((res) => {
+      dispatch(setGeneralInfo(res.responseData));
+    });
+  }, []);
+  const generalInfo = useSelector((state: RootState) => state.generalInfo);
+
   return (
     <WrapFooterBot>
       <Link href="https://tnre-customer-test.vercel.app">
@@ -103,18 +116,18 @@ const FooterBot = ({ listMenuBarProjectType, listUserManual }: MenuProps) => {
       </Link>
       <WrapContent>
         <BlockDiv>
-          Công ty Cổ phần Đầu tư Phát triển Bất động sản TNR Holdings Việt Nam
+          {generalInfo.companyName}
           <LineInfoFirst>
             <TitleTypo>Địa chỉ: {""}</TitleTypo>
-            Tầng 26, TNR Tower, 54A Nguyễn Chí Thanh, quận Đống Đa, Hà Nội
+            {generalInfo.address}
           </LineInfoFirst>
           <LineInfo>
             <TitleTypo>Tel: {""}</TitleTypo>
-            024 730 730 99
+            {generalInfo.phoneNumber}
           </LineInfo>
           <LineInfo>
             <TitleTypo>Email: {""}</TitleTypo>
-            tnrholdings@tnrholdings.com.vn
+            {generalInfo.email}
           </LineInfo>
           <LineInfo style={{ marginTop: 5 }}>
             <TitleTypo>
@@ -155,9 +168,7 @@ const FooterBot = ({ listMenuBarProjectType, listUserManual }: MenuProps) => {
           ))}
           <LineInfo2
             onClick={() => {
-              Router.replace(
-                `/contact`
-              );
+              Router.replace(`/contact`);
             }}
           >
             Liên hệ

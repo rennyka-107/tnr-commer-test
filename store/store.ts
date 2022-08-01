@@ -1,3 +1,4 @@
+import { GeneralInfo } from "./../pages/api/contactApi";
 import { combineReducers, configureStore, ThunkAction } from "@reduxjs/toolkit";
 import { createWrapper, HYDRATE } from "next-redux-wrapper";
 import { Action } from "redux";
@@ -19,7 +20,9 @@ import specialoffers from "./SpecialOffersSlice";
 import banners from "./bannerSlice";
 import favourites from "./productFavouriteSlice";
 import sendRequest from "./sendRequestSlice";
-import paramsSearch from './paramsSearchSlice'
+import paramsSearch from "./paramsSearchSlice";
+import generalInfo from "./generalInfoSlice";
+import { TypedUseSelectorHook } from "react-redux";
 
 const combinedReducer = combineReducers({
   menubar,
@@ -40,7 +43,8 @@ const combinedReducer = combineReducers({
   banners,
   favourites,
   sendRequest,
-  paramsSearch
+  paramsSearch,
+  generalInfo,
 });
 
 export type RootState = ReturnType<typeof combinedReducer>;
@@ -53,7 +57,7 @@ const masterReducer = (state, action) => {
         menuBarProjectList: action.payload.menubar.listMenuBarProjectType,
         listMenuLocation: action.payload.menubar.listMenuLocation,
         listCategory: action.payload.menubar.listCategory,
-		...action.payload.menubar
+        ...action.payload.menubar,
       },
       products: {
         listProductResponse: action.payload.products.listProductResponse,
@@ -115,11 +119,14 @@ const masterReducer = (state, action) => {
         ...action.payload.favourites,
       },
       sendRequest: {
-        ...action.payload.sendRequest
+        ...action.payload.sendRequest,
       },
-	  paramsSearch: {
-		...action.payload.paramResponse
-	  }
+      paramsSearch: {
+        ...action.payload.paramResponse,
+      },
+      generalInfo: {
+        ...action.payload.generalInfo,
+      },
     };
     return nextState;
   } else {

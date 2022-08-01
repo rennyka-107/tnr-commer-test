@@ -1,15 +1,15 @@
 import Page from "@layouts/Page";
 import dynamic from "next/dynamic";
-import { getProductTopByStanding } from "./api/productsApi";
-import { getListProductTopByOS } from "../store/productSlice";
-import { apiGetBanner } from "./api/bannerApi";
-import { getTop10Special } from "./api/specialOffersApi";
-import { RootState, wrapper } from "../store/store";
-import { getSearchSpecialOffers } from "../store/SpecialOffersSlice";
-import { getBanner } from "../store/bannerSlice";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useRouter } from "next/router";
+import { getBanner } from "../store/bannerSlice";
+import { getListProductTopByOS } from "../store/productSlice";
+import { getSearchSpecialOffers } from "../store/SpecialOffersSlice";
+import { RootState } from "../store/store";
+import { apiGetBanner } from "./api/bannerApi";
+import { getProductTopByStanding } from "./api/productsApi";
+import { getTop10Special } from "./api/specialOffersApi";
 
 const DynamicHome = dynamic(
   () => import("../src/components/LayoutIndex/HomeComponent/HomePage"),
@@ -49,6 +49,8 @@ const Home = () => {
       fetchOutofStanding();
     }
   }, [checkUp]);
+
+
 
   return (
     <Page

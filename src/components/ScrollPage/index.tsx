@@ -1,7 +1,10 @@
 import { PhoneIconPage, UpIconPage } from "@components/Icons";
 import styled from "@emotion/styled";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../store/store";
 
-const StyledPhoneContainer = styled.div`
+const StyledPhoneContainer = styled.a`
+  display: block;
   width: 40px;
   height: 40px;
   background: #ea242a;
@@ -24,6 +27,8 @@ const StyledUpContainer = styled.div`
   box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.2);
 `;
 const ScrollPage = () => {
+  const generalInfo = useSelector((state: RootState) => state.generalInfo);
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -38,7 +43,10 @@ const ScrollPage = () => {
           zIndex: 500,
         }}
       >
-        <StyledPhoneContainer style={{ marginBottom: 9 }}>
+        <StyledPhoneContainer
+          style={{ marginBottom: 9 }}
+          href={`tel:${generalInfo.phoneNumber}`}
+        >
           <PhoneIconPage />
         </StyledPhoneContainer>
         <StyledUpContainer onClick={scrollToTop}>
