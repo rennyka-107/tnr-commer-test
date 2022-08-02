@@ -113,13 +113,8 @@ const LabelContainer = styled.div`
   width: 150px;
 `;
 
-const IconStyled = styled.span`
-  color: black;
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  // background-color:red;
-  width: 70px;
+const IconStyled = styled.div`
+text-align: center;
 `;
 const PriceStyled = styled.span`
   font-family: "Roboto";
@@ -157,13 +152,13 @@ const EmptyCartStyled = styled.div`
 
 const ProductTablePages = () => {
   const [body, setBody] = useState<BodyRequest>({
-	projectId: "",
+    projectId: "",
     categoryId: "",
     projectLevel1: "",
-	projectTypeId: "",
+    projectTypeId: "",
     saleProductStatus: "",
-	projectTypeCode: "",
-	levelDetailName: "",
+    projectTypeCode: "",
+    levelDetailName: "",
   });
   const [data, setData] = useState<{
     lstDetailRow: DetailRowI[];
@@ -212,8 +207,8 @@ const ProductTablePages = () => {
             <CellContent
               style={{
                 backgroundColor:
-                  (el.lotCode === indexHover2 && element.code <= indexHover) ||
-                  (el.lotCode <= indexHover2 && element.code === indexHover)
+                  (el?.lotCode === indexHover2 && element?.code <= indexHover) ||
+                  (el?.lotCode <= indexHover2 && element?.code === indexHover)
                     ? " rgba(0, 99, 247, 0.15)"
                     : "",
                 zIndex: 100,
@@ -229,14 +224,8 @@ const ProductTablePages = () => {
               }}
               key={index}
             >
-              {element.lstProductData.map((data, i) => (
-                <TableRow key={index}>
-                  {data.lotCode == el.lotCode ? (
-                    <div>{renderAction(data)}</div>
-                  ) : (
-                    <></>
-                  )}
-                </TableRow>
+              {element?.lstProductData.map((data, i) => (
+                <div key={i}>{data?.lotCode == el?.lotCode && <>{renderAction(data)}</>}</div>
               ))}
             </CellContent>
           </>
@@ -251,33 +240,32 @@ const ProductTablePages = () => {
         {data?.lstProductionRow?.map((element, index) => (
           <>
             <CellContent
-            //   style={{
-            //     backgroundColor:
-            //       (el.lotCode === indexHover2 && element.code <= indexHover) ||
-            //       (el.lotCode <= indexHover2 && element.code === indexHover)
-            //         ? " rgba(0, 99, 247, 0.15)"
-            //         : "",
-            //     zIndex: 100,
-            //   }}
-            //   align="center"
-            //   onMouseOverCapture={() => {
-            //     MouseOver(element.code);
-            //     MouseOver2(el.lotCode);
-            //   }}
-            //   onMouseLeave={() => {
-            //     setIndexHover2("");
-            //     setIndexHover("");
-            //   }}
+              //   style={{
+              //     backgroundColor:
+              //       (el.lotCode === indexHover2 && element.code <= indexHover) ||
+              //       (el.lotCode <= indexHover2 && element.code === indexHover)
+              //         ? " rgba(0, 99, 247, 0.15)"
+              //         : "",
+              //     zIndex: 100,
+              //   }}
+              //   align="center"
+              //   onMouseOverCapture={() => {
+              //     MouseOver(element.code);
+              //     MouseOver2(el.lotCode);
+              //   }}
+              //   onMouseLeave={() => {
+              //     setIndexHover2("");
+              //     setIndexHover("");
+              //   }}
+
               key={index}
             >
-              {element.lstProductData.map((data, i) => (
-                <TableRow key={index}>
-                  {data.lotCode == element.lotCode ? (
-                    <div>{renderAction(data)}</div>
-                  ) : (
-                    <></>
+              {element?.lstProductData.map((data, i) => (
+                <div key={i}>
+                  {data?.lotCode == element?.lotCode && (
+                    <div >{renderAction(data)}</div>
                   )}
-                </TableRow>
+                </div>
               ))}
             </CellContent>
           </>
@@ -350,7 +338,6 @@ const ProductTablePages = () => {
   };
 
   const fetchTable = () => {
-
     return (
       <>
         {body.projectTypeCode === "2" ? (
@@ -647,7 +634,10 @@ const ProductTablePages = () => {
                           }}
                         >
                           <div style={{ marginRight: 10, flex: 1 }}>
-						  <PriceThapTang style={{marginTop: 1}}/> <TextTable style={{marginLeft: 10}}>{el.lotCode}</TextTable>
+                            <PriceThapTang style={{ marginTop: 1 }} />{" "}
+                            <TextTable style={{ marginLeft: 10 }}>
+                              {el.lotCode}
+                            </TextTable>
                           </div>
                           <div style={{ textAlign: "center", flex: 1 }}>
                             <div>
@@ -685,8 +675,8 @@ const ProductTablePages = () => {
   };
 
   useEffect(() => {
-	fetchTable()
-  },[body])
+    fetchTable();
+  }, [body]);
 
   return (
     <FlexContainer>

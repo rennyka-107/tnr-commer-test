@@ -11,7 +11,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Checkbox, Grid, Radio, RadioProps } from "@mui/material";
 import { createStyles, makeStyles } from "@mui/styles";
 import { BodyRequest } from "@service/productTable";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { InputProps } from "utils/constants";
@@ -19,6 +19,7 @@ import * as yup from "yup";
 import { resetProjectMap } from "../../../store/projectMapSlice";
 import { RootState } from "../../../store/store";
 import { styled } from "@mui/material/styles";
+import { apiGetProjectTypeBoard } from "../../../pages/api/getDataSelectApi";
 interface PropsI {
   onSubmit?: (values: BodyRequest) => void;
   body?: BodyRequest;
@@ -33,48 +34,58 @@ interface FormI {
   projectId: string;
 }
 const BpIcon = styled("span")(({ theme }) => ({
-	borderRadius: "50%",
-	width: 24,
-	height: 24,
-	border: "1px solid #0063F7",
-	backgroundColor: theme.palette.mode === "dark" ? "#f5f8fa" : "#f5f8fa",
-	".Mui-focusVisible &": {
-	  outline: "2px auto rgba(19,124,189,.6)",
-	  outlineOffset: 2,
-	},
-	"input:hover ~ &": {
-	  backgroundColor: theme.palette.mode === "dark" ? "#f5f8fa" : "#ebf1f5",
-	},
-	"input:disabled ~ &": {
-	  boxShadow: "none",
-	  background:
-		theme.palette.mode === "dark"
-		  ? "rgba(57,75,89,.5)"
-		  : "rgba(206,217,224,.5)",
-	},
-  }));
-  
-  const BpCheckedIcon = styled(BpIcon)({
-	backgroundColor: "#0063F7",
-	backgroundImage:
-	  "linear-gradient(180deg,hsla(0,0%,100%,.1),hsla(0,0%,100%,0))",
-	"&:before": {
-	  display: "block",
-	  width: 22,
-	  height: 22,
-	  backgroundImage: "radial-gradient(#FFFFFF,#FFFFFF 40%,transparent 50%)",
-	  content: '""',
-	},
-	"input:hover ~ &": {
-	  backgroundColor: "#0063F7",
-	},
-  });
+  borderRadius: "50%",
+  width: 24,
+  height: 24,
+  border: "1px solid #0063F7",
+  backgroundColor: theme.palette.mode === "dark" ? "#f5f8fa" : "#f5f8fa",
+  ".Mui-focusVisible &": {
+    outline: "2px auto rgba(19,124,189,.6)",
+    outlineOffset: 2,
+  },
+  "input:hover ~ &": {
+    backgroundColor: theme.palette.mode === "dark" ? "#f5f8fa" : "#ebf1f5",
+  },
+  "input:disabled ~ &": {
+    boxShadow: "none",
+    background:
+      theme.palette.mode === "dark"
+        ? "rgba(57,75,89,.5)"
+        : "rgba(206,217,224,.5)",
+  },
+}));
+
+const BpCheckedIcon = styled(BpIcon)({
+  backgroundColor: "#0063F7",
+  backgroundImage:
+    "linear-gradient(180deg,hsla(0,0%,100%,.1),hsla(0,0%,100%,0))",
+  "&:before": {
+    display: "block",
+    width: 22,
+    height: 22,
+    backgroundImage: "radial-gradient(#FFFFFF,#FFFFFF 40%,transparent 50%)",
+    content: '""',
+  },
+  "input:hover ~ &": {
+    backgroundColor: "#0063F7",
+  },
+});
 const Filter = (props: PropsI) => {
   const { onSubmit, body } = props;
+  const [listMenuBar, setListMenuBar] = useState([]);
   const { listMenuBarProjectType, listMenuBarType } = useSelector(
     (state: RootState) => state.menubar
   );
-  const menuBarProjectType = listMenuBarType?.filter((item) => item.id !== "1");
+
+	useEffect(() => {
+		(async() => {
+			const response = await apiGetProjectTypeBoard();
+			if(response.responseCode === '00'){
+				setListMenuBar(response.responseData)
+			}
+		})();
+	},[])
+
 
   const formControler = useForm<FormI>({
     mode: "onChange",
@@ -83,15 +94,15 @@ const Filter = (props: PropsI) => {
   });
   const { control, handleSubmit, watch, getValues, setValue, reset } =
     formControler;
+	
 
   useEffect(() => {
-    console.log(getValues("projectId"), "projectId");
     // reset("projectId")
     const projectTypeId = getValues("projectTypeId");
     const projectId = getValues("projectId");
 
     if (projectTypeId) {
-      const ProjectTypeSelect = listMenuBarProjectType.filter(
+      const ProjectTypeSelect = listMenuBar.filter(
         (item) => item.id === projectTypeId
       );
       if (!!getValues("projectId")) {
@@ -179,7 +190,7 @@ const Filter = (props: PropsI) => {
             required
             setValue={formControler.setValue}
             dataSelect={
-              listMenuBarProjectType?.map((el) => {
+				listMenuBar?.map((el) => {
                 return { label: el?.name, value: el?.id };
               }) ?? []
             }
@@ -240,6 +251,7 @@ const Filter = (props: PropsI) => {
             setValue={formControler.setValue}
             isClear
             idProject={watch("projectId")}
+            idProjectType={watch("projectTypeId")}
           />
         </FormGroup>
         <FormGroup sx={{ mb: 2, paddingRight: 2 }}>

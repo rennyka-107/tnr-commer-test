@@ -7,9 +7,9 @@ export const apiGetPropductCategory = async (idProject: string) => {
   );
 };
 
-export const apiGetLOT = async (idProject: string) => {
+export const apiGetLOT = async (idProject: string,idProjectType: string) => {
   return HttpClient.get<string, CommonResponse>(
-    `/api/customer/project-level-dictionary/find-lv1-by-project-id/${idProject}`
+    `/api/param/board/level-detail-name/${idProject}/${idProjectType}`
   );
 };
 
@@ -18,3 +18,10 @@ export const apiGetListProjectByProjectType = async (idProjectType: string) => {
 		`/api/param/board/project/${idProjectType}`
 	  );
 } 
+
+export const apiGetProjectTypeBoard = async () => {
+	return HttpClient.get<string, CommonResponse>(
+	  `/api/param/board/project-type`
+	);
+  };
+  

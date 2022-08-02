@@ -13,6 +13,7 @@ interface PropsI {
   idProject: string;
   required?: boolean;
   isClear?: boolean;
+  idProjectType: string;
   style?: any;
 }
 
@@ -22,18 +23,27 @@ interface optionI {
 }
 
 const LOTSelect = (props: PropsI) => {
-  const { control, label, name, setValue, idProject, required, isClear,style } =
-    props;
-	console.log(isClear)
+  const {
+    control,
+    label,
+    name,
+    setValue,
+    idProject,
+    required,
+    isClear,
+    style,
+    idProjectType,
+  } = props;
+  console.log(isClear);
   const [data, setData] = useState<optionI[]>([]);
-  const getList = (id: string) => {
+  const getList = (idProject: string, idProjectType: string) => {
     try {
-      apiGetLOT(id).then((response) => {
+      apiGetLOT(idProject, idProjectType).then((response) => {
         if (response?.responseCode === "00") {
           const temp = response?.responseData?.map((el) => {
             const district: optionI = {
-              label: el?.name,
-              value: el?.name,
+              label: el,
+              value: el,
             };
             return district;
           });
@@ -46,15 +56,15 @@ const LOTSelect = (props: PropsI) => {
   };
 
   useEffect(() => {
-    if (!!idProject) {
-      getList(idProject);
+    if (!!idProject && !!idProjectType) {
+      getList(idProject, idProjectType);
       return;
     }
     if (data?.length != 0) setData([]);
-  }, [idProject]);
+  }, [idProject, idProjectType]);
   return (
     <ControllerSelect
-	style={style}
+      style={style}
       variant="outlined"
       name={name}
       label={label}
