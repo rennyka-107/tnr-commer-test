@@ -1,6 +1,7 @@
 import CustomButton from "@components/CustomComponent/CustomButton";
 import FormGroup from "@components/Form/FormGroup";
 import IconArrowLeftBlue from "@components/Icons/IconArrowLeftBlue";
+import IconCodeFail from "@components/Icons/IconCodeFail";
 import styled from "@emotion/styled";
 import { Button, CircularProgress, Typography } from "@mui/material";
 import Image from "next/image";
@@ -20,7 +21,7 @@ const ConFirm = styled.div`
   font-size: 26px;
   line-height: 30px;
   color: #48576d;
-  margin: 30px 0px 10px 0px;
+  margin: 30px 0px 30px 0px;
 `;
 const LinkLabel = styled.a`
   color: #1f70e8;
@@ -39,12 +40,16 @@ const Content = styled.div`
   margin: 30px 0;
 `;
 const NotiFailed = styled.div`
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 16px;
-  color: #ff3b3b;
-  text-align: center;
-  margin: 30px 0;
+font-weight: 500;
+    font-size: 14px;
+    line-height: 16px;
+    color: #ff3b3b;
+    text-align: center;
+    margin: 30px 0;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    justify-content: center;
 `;
 const Send = styled.a`
   color: #1f70e8;
@@ -68,7 +73,7 @@ const TextNotice = styled.div`
 const ButtonStyled = styled(Button)`
   text-transform: none;
   border-radius: 8px;
-  font-weight: 400;
+  font-weight: 700;
   font-size: 16px;
   line-height: 19px;
   color: #ffffff;
@@ -76,6 +81,13 @@ const ButtonStyled = styled(Button)`
   cursor: pointer;
   border: unset;
   width: 100%;
+`;
+const TypeConFirm = styled.div`
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 21px;
+  color: #48576d;
+  margin-bottom: 30px;
 `;
 export interface Param {
   username: string;
@@ -85,6 +97,7 @@ export interface Props {
   keycloakId?: String;
   userId?: String;
   paramsEndcode?: string;
+  emailRegister?: string;
   keyWidthOTPParams?: string;
   back?: () => void;
   next?: () => void;
@@ -146,7 +159,7 @@ const OTP = (props: Props) => {
           setSuccess(true);
         } else {
           setChecked(false);
-		  setLoading(false);
+          setLoading(false);
         }
       });
     }
@@ -167,19 +180,38 @@ const OTP = (props: Props) => {
         <>
           <LinkLabel onClick={() => props.back()}>
             <IconArrowLeftBlue />
-            &nbsp; Quay lại
+            &nbsp; Trở lại
           </LinkLabel>
           <ConFirm>Nhập mã xác thực</ConFirm>
+          {checked ? (
+            <>
+              {" "}
+              <TypeConFirm>
+                Mã xác nhận đã được gửi tới email {props.emailRegister} của quý
+                khách hàng. Nhập mã xác thực quý khách hàng nhận được dưới đây{" "}
+              </TypeConFirm>
+            </>
+          ) : (
+            <></>
+          )}
+
           <OtpInput
             value={OTP}
             onChange={(otp) => setOTP(otp)}
             numInputs={6}
-            containerStyle={{ justifyContent: "space-between" }}
+            focusStyle={{
+              outline: "none",
+              border: "2px solid #FEC83C",
+              borderRadius: "8px",
+            }}
+            containerStyle={{ justifyContent: "center", gap: 18 }}
             inputStyle={{
               width: 48,
               height: 48,
-              border: "1px solid #C7C9D9",
+              border: checked ? "1.5px solid #C7C9D9" : "1.5px solid #FF3B3B",
               borderRadius: 8,
+              fontSize: 20,
+              fontWeight: 600,
             }}
           />
           {checked ? (
@@ -191,7 +223,11 @@ const OTP = (props: Props) => {
               {time ? "" : <Send onClick={reSend}>Gửi lại mã xác thực</Send>}
             </Content>
           ) : (
-            <NotiFailed>Mã xác thực không chính xác</NotiFailed>
+            <NotiFailed>
+              {" "}
+              <IconCodeFail />
+              Mã xác thực không chính xác
+            </NotiFailed>
           )}
           <FormGroup sx={{ mb: 2 }} fullWidth>
             {/* <CustomButton
@@ -201,9 +237,14 @@ const OTP = (props: Props) => {
               onClick={checkOTP}
             /> */}
             <ButtonStyled
-              style={{ background: "#D60000", marginTop: 30 }}
+              style={{
+                background: OTP.length < 6 ? "#DBDEE3" : "#D60000",
+                marginTop: 30,
+                color: OTP.length < 6 ? "#8190A7" : "#ffffff",
+              }}
               type="button"
               onClick={checkOTP}
+              disabled={OTP.length < 6 ? true : false}
             >
               {loading === false ? (
                 "Hoàn Tất đăng ký"
@@ -224,8 +265,11 @@ const OTP = (props: Props) => {
             height={125}
             style={{ borderRadius: 20 }}
           />
-          <TextNotice style={{display: 'flex', justifyContent: 'center'}}>
-           <Typography style={{maxWidth: 350}}> Chào mừng bạn đến với nền tảng mua BĐS hàng đầu của TNR Holdings</Typography>
+          <TextNotice style={{ display: "flex", justifyContent: "center" }}>
+            <Typography style={{ maxWidth: 350 }}>
+              {" "}
+              Chào mừng bạn đến với nền tảng mua BĐS hàng đầu của TNR Holdings
+            </Typography>
           </TextNotice>
           <FormGroup sx={{ mb: 2 }} fullWidth>
             <CustomButton

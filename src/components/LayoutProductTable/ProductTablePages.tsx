@@ -207,16 +207,16 @@ const ProductTablePages = () => {
             <CellContent
               style={{
                 backgroundColor:
-                  (el?.lotCode === indexHover2 && element?.code <= indexHover) ||
-                  (el?.lotCode <= indexHover2 && element?.code === indexHover)
+                  (idx === idx && index <= index) ||
+                  (idx <= idx && index === index)
                     ? " rgba(0, 99, 247, 0.15)"
                     : "",
                 zIndex: 100,
               }}
               align="center"
               onMouseOverCapture={() => {
-                MouseOver(element.code);
-                MouseOver2(el.lotCode);
+                MouseOver(index);
+                MouseOver2(idx);
               }}
               onMouseLeave={() => {
                 setIndexHover2("");

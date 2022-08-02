@@ -118,7 +118,7 @@ const Index = () => {
           }}
         >
           <IconArrowLeftBlue />
-          &nbsp; Quay lại
+          &nbsp; Trở lại
         </LinkLabel>
       ) : null}
       {render}

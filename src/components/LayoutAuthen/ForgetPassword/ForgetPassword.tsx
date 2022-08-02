@@ -29,17 +29,17 @@ const LinkLabel = styled.a`
   display: flex;
 `;
 const ButtonStyled = styled(Button)`
-text-transform: none;
-border-radius: 8px;
-font-weight: 400;
-font-size: 16px;
-line-height: 19px;
-color: #ffffff;
-padding: 14px 70px;
-cursor: pointer;
-border: unset;
-width:100%;
-`
+  text-transform: none;
+  border-radius: 8px;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 19px;
+  color: #ffffff;
+  padding: 14px 70px;
+  cursor: pointer;
+  border: unset;
+  width: 100%;
+`;
 export interface Params {
   username: string;
   password: string;
@@ -49,7 +49,6 @@ export interface Props {
   next?: () => void;
 }
 const ForgetPassword = (props: Props) => {
-
   const validationSchema = yup.object().shape({
     username: yup
       .string()
@@ -81,16 +80,17 @@ const ForgetPassword = (props: Props) => {
             hiddenLabel
             name="username"
             control={control}
-            placeholder="Số điện thoại hoặc tên đăng nhập"
+            placeholder="Số điện thoại hoặc Email đã đăng ký"
             required
-            fullWidth
-            label="Nhập số điện thoại hoặc tên đăng nhập"
+            fullWidth 
+            label="Nhập Số điện thoại hoặc Email đã đăng ký
+			"
             labelColor="#666666"
           />
         </FormGroup>
         <FormGroup sx={{ mb: 2 }} fullWidth>
-		<ButtonStyled
-            style={{ background: "#D60000", marginTop: 30 ,}}
+          <ButtonStyled
+            style={{ background: "#D60000", marginTop: 30, height: 50 }}
             type="submit"
           >
             Tiếp tục

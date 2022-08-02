@@ -28,6 +28,7 @@ const Index = () => {
   const [userId, setUserId] = useState("");
   const [transKey, setTransKey] = useState("");
   const [numberPhone, setNumberPhone] = useState("");
+  const [emailRegister, setEmailRegister] = useState("");
   const [paramsEndcode, setParamsEndcode] = useState({
     key: "",
     OTP: "",
@@ -68,6 +69,7 @@ const Index = () => {
             setUserId={setUserId}
 			setTransKey={setTransKey}
 			setNumberPhone={setNumberPhone}
+			setEmailRegister={setEmailRegister}
           />
         );
       case "confirm":
@@ -76,6 +78,7 @@ const Index = () => {
             userId={userId}
 			transKey={transKey}
 			numberPhone={numberPhone}
+			emailRegister={emailRegister}
             back={() => {
               Route.push({
                 pathname: PathRoute.Login,
@@ -95,6 +98,7 @@ const Index = () => {
             keycloakId={transKey}
             paramsEndcode={paramsEndcode.OTP}
             keyWidthOTPParams={paramsEndcode.key}
+			emailRegister={emailRegister}
             userId={userId}
             back={() => setType("confirm")}
             next={() => setType("ChangeNewPass")}
