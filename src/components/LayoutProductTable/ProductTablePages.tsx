@@ -207,8 +207,8 @@ const ProductTablePages = () => {
             <CellContent
               style={{
                 backgroundColor:
-                  (idx === idx && index <= index) ||
-                  (idx <= idx && index === index)
+				(idx === indexHover2 && index <= Number(indexHover)) ||
+				(idx <= indexHover2 && index ===  Number(indexHover))
                     ? " rgba(0, 99, 247, 0.15)"
                     : "",
                 zIndex: 100,
