@@ -91,41 +91,44 @@ const ItemSearch = ({ data, buyDisabled }: searchProps) => {
   return (
     <>
       <ProductWrap>
-        {data?.map((product, index) => (
-          <ProductCardSearch
-            onClick={() => addToCart(product.productId)}
-            key={index}
-            id={product.productId}
-            src={product.thumbnail}
-            projectName={product.projectName}
-            title={product.name}
-            subTitle={product.location}
-            activeFavourite={true}
-            dataItem={{
-              item1: product.landArea,
-              item2: product.numBath,
-              item3: product.numBed,
-              item4: product.doorDirection,
-            }}
-            priceListed={product.totalPrice}
-            favouriteStatus={product.favouriteStatus}
-            priceSub={product.unitPrice}
-            ticketCard={product.category}
-            projectTypeCode={product.projectTypeCode}
-            minFloor={product.minFloor}
-            maxFloor={product.maxFloor}
-            activeSoSanh={true}
-            buyDisabled={product?.paymentStatus !== 2}
-            onCompare={onCompare(
-              product.projectId,
-              product.projectTypeId,
-              product.thumbnail,
-              product.name,
-              product.projectName,
-              product.productId
-            )}
-          />
-        ))}
+        {data?.map((product, index) => {
+          console.log("product", product);
+          return (
+            <ProductCardSearch
+              onClick={() => addToCart(product.productId)}
+              key={index}
+              id={product.productId}
+              src={product.thumbnail}
+              projectName={product.projectName}
+              title={product.name}
+              subTitle={product.location}
+              activeFavourite={true}
+              dataItem={{
+                item1: product.landArea,
+                item2: product.numBath,
+                item3: product.numBed,
+                item4: product.doorDirection,
+              }}
+              priceListed={product.totalPrice}
+              favouriteStatus={product.favouriteStatus}
+              priceSub={product.unitPrice}
+              ticketCard={product.category}
+              projectTypeCode={product.projectTypeCode}
+              minFloor={product.minFloor}
+              maxFloor={product.maxFloor}
+              activeSoSanh={true}
+              buyDisabled={product?.paymentStatus !== 2}
+              onCompare={onCompare(
+                product.projectId,
+                product.projectTypeId,
+                product.thumbnail,
+                product.name,
+                product.projectName,
+                product.productId
+              )}
+            />
+          );
+        })}
       </ProductWrap>
     </>
   );

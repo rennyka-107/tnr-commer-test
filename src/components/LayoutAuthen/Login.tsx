@@ -111,8 +111,8 @@ const Login = () => {
         captchaResponse: token,
       });
 
-      if(verifyResponse.responseData) {
-        setVerifySuccess(true)
+      if (verifyResponse.responseData) {
+        setVerifySuccess(true);
       }
     }
 
@@ -214,7 +214,21 @@ const Login = () => {
             type="submit"
           /> */}
           <ButtonStyled
-            style={{ background: "#D60000", marginTop: 10 }}
+            // style={{
+            //   // background: "#D60000",
+            //   marginTop: 10,
+            // }}
+            sx={{
+              background: "#ea242a",
+              "&:hover": {
+                background: "#FEC83C !important",
+                // box-shadow: 4px 8px 24px #f2f2f5;
+                boxShadow: "0px 0px 10px 1px rgba(0, 0, 0, 0.2)",
+                // borderRadius: "60px",
+                color: "#ffffff",
+              },
+              marginTop: "10px"
+            }}
             type="submit"
             disabled={token ? false : true}
           >

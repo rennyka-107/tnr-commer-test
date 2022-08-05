@@ -660,14 +660,16 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
       <form onSubmit={handleSubmit((values) => handleOnSubmit(values))}>
         <Grid container columnSpacing={"30px"} justifyContent={"center"}>
           {!formInfo.open && (
-            <Box style={{ marginBottom: 60 }}>
-              <Stepper alternativeLabel activeStep={0}>
-                {steps.map((label, idx) => (
-                  <Step key={idx}>
-                    <StepLabel>{label}</StepLabel>
-                  </Step>
-                ))}
-              </Stepper>
+            <Box sx={{ width: "100%", display: "flex", justifyContent: 'center' }}>
+              <Box style={{ marginBottom: 60, width: "65%" }}>
+                <Stepper alternativeLabel activeStep={0}>
+                  {steps.map((label, idx) => (
+                    <Step key={idx}>
+                      <StepLabel>{label}</StepLabel>
+                    </Step>
+                  ))}
+                </Stepper>
+              </Box>
             </Box>
           )}
           <Grid item>
@@ -1130,8 +1132,9 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                   margin={"12px auto"}
                   onClick={handleSubmit((values) => handleOnSubmit(values, 1))}
                   sx={{
+                    background: "#ea242a",
                     "&:hover": {
-                      background: "#FEC83C",
+                      background: "#FEC83C !important",
                       // box-shadow: 4px 8px 24px #f2f2f5;
                       boxShadow: "0px 0px 10px 1px rgba(0, 0, 0, 0.2)",
                       // borderRadius: "60px",

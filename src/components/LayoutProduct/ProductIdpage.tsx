@@ -351,29 +351,34 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
   const addToCart = useAddToCart();
 
   const mockDataPhieutinhgia = {
-    ProjectName: "TNR AMALUNA - TRÀ VINH",
-    BlockName: "Liền kề",
-    ProductName: "LK.08.32",
-    DepositDate: "29/04/2022",
-    IsMortgage: true,
-    GroupCusID: 0,
-    ProvinceID: 0,
-    DistrictID: 0,
-    PriceID: 230896,
-    ScheduleID: 1900,
+	ProjectId: 96,
+	ProductId: 51057,
+	DepositDate: "04-08-2022",
+	PriceID: 230872,
+	ScheduleID: 123,
   };
 
   const paramsMock = {
-    ProjectName: dataProduct?.project.name,
-    BlockName: "Liền kề",
-    ProductName: "LK.08.32",
-    DepositDate: "29/04/2022",
-    IsMortgage: true,
-    GroupCusID: 0,
-    ProvinceID: 0,
-    DistrictID: 0,
-    PriceID: 230896,
+    // ProjectName: dataProduct?.project.name,
+    // BlockName: "Liền kề",
+    // ProductName: "LK.08.32",
+    // DepositDate: "29-04-2022",
+    // IsMortgage: true,
+    // GroupCusID: 0,
+    // ProvinceID: 0,
+    // DistrictID: 0,
+    // PriceID: 230896,
+	districtID: 0,
+	projectId: 96,
+	productId: 51057,
+	depositDate: "04-08-2022",
+	isMortgage: true,
+	groupCusID: 0,
+	provinceID: 0,
+	priceID: 230872
   };
+
+
   const listBread = [
     {
       id: 1,
@@ -500,7 +505,6 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
   useEffect(() => {
     fetchPhieuTinhGia();
   }, [productItem]);
-  console.log(handleOpen);
 
   const handleDownloadPhieuTinhGia = () => {
     (async () => {
@@ -958,8 +962,8 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                       Giá niêm yết{" "}
                     </TextBottomStyled>
                     <NumberBottomStyled>
-                      {dataProduct?.price
-                        ? currencyFormat(dataProduct?.price)
+                      {dataProduct?.totalVatPrice
+                        ? currencyFormat(dataProduct?.totalVatPrice)
                         : "N/A"}
                       đ
                     </NumberBottomStyled>
@@ -970,8 +974,8 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                         Giá trị QSDĐ{" "}
                       </TextBottomStyled2>
                       <NumberBottomStyled2>
-                        {dataProduct?.unitPrice
-                          ? currencyFormat(dataProduct?.unitPrice)
+                        {dataProduct?.lurUnitPrice
+                          ? currencyFormat(dataProduct?.lurUnitPrice)
                           : "N/A"}
                         đ/m2
                       </NumberBottomStyled2>

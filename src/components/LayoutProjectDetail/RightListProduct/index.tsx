@@ -135,7 +135,7 @@ export default function RightListProduct() {
               minHeight: 70,
             }}
           >
-            {ListLevel.map((level, idx) => {
+            {!isEmpty(ListLevel) && ListLevel.map((level, idx) => {
               if (idx !== 0 && idx !== ListLevel.length - 1) {
                 return <DropDownTargetLevel level={level} key={idx} />;
               }

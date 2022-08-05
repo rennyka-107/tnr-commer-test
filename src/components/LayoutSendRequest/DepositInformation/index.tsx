@@ -2,9 +2,11 @@ import { Box, Typography } from "@mui/material";
 import React from "react";
 import { currencyFormat } from "utils/helper";
 
-type Props = {};
+type Props = {
+  title: string;
+};
 
-const DepositInformation = (props: Props) => {
+const DepositInformation = ({ title }: Props) => {
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mb: 5 }}>
       <Typography
@@ -15,7 +17,7 @@ const DepositInformation = (props: Props) => {
           color: "#1B3459",
         }}
       >
-        Thông tin đặt cọc sản phẩm yêu cầu thanh lý
+        {title}
       </Typography>
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
         <Typography

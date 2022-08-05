@@ -38,6 +38,8 @@ export interface PTGResponse {
   ListPolicy?: ListPolicyType[];
   ListPromotion?: ListPromotionType[];
   ListSchedule?: ListScheduleType[];
+  TotalMoneyText?: string;
+  ProductQuotation?: number | string;
 }
 
 //interface getListProducts
@@ -98,11 +100,16 @@ export interface ResponseSearchById {
   numBed: number;
   numBath: number;
   doorDirection: string;
+  projectName?: string;
   airConditioner: number;
   swimmingPool: number;
   levelDetailName?: string;
   levelDetailParentName?: string;
+  
   gym: number;
+  projectType?: {
+	name: string;
+  }
   projectLevelDetail: {
     id: string;
     level: string;

@@ -33,37 +33,36 @@ export const searchListProductByProjectIdApiII = async (
   params: ParamsProducts,
   data: any
 ) => {
-	if(data.projectId){
-		const newDataSearch = {
-			projectId: data.projectId,
-			projectTypeId: data.projectTypeId === "1" ? "" : data.projectTypeId,
-			provinceId: data.provinceId === "1" ? "" : data.provinceId,
-		  };
-		  return HttpClient.post<any, any>(
-			`/api/product/information/advance/search?page=${params.page}&size=${params.size}`,
-			newDataSearch,
-			{ withToken: false }
-		  );
-	}else{
-		const newDataSearch = {
-			projectIdList: data.projectIdList,
-			projectTypeId: data.projectTypeId === "1" ? "" : data.projectTypeId,
-			provinceId: data.provinceId === "1" ? "" : data.provinceId,
-		  };
-		  return HttpClient.post<any, any>(
-			`/api/product/information/advance/search?page=${params.page}&size=${params.size}`,
-			newDataSearch,
-			{ withToken: false }
-		  );
-	}
- 
+  if (data.projectId) {
+    const newDataSearch = {
+      projectId: data.projectId,
+      projectTypeId: data.projectTypeId === "1" ? "" : data.projectTypeId,
+      provinceId: data.provinceId === "1" ? "" : data.provinceId,
+    };
+    return HttpClient.post<any, any>(
+      `/api/product/information/advance/search?page=${params.page}&size=${params.size}`,
+      newDataSearch,
+      { withToken: false }
+    );
+  } else {
+    const newDataSearch = {
+      projectIdList: data.projectIdList,
+      projectTypeId: data.projectTypeId === "1" ? "" : data.projectTypeId,
+      provinceId: data.provinceId === "1" ? "" : data.provinceId,
+    };
+    return HttpClient.post<any, any>(
+      `/api/product/information/advance/search?page=${params.page}&size=${params.size}`,
+      newDataSearch,
+      { withToken: false }
+    );
+  }
 };
 
 export const getProducById = async (id: any) => {
   return HttpClient.post<any, CommonResponse>(`/api/product/information/${id}`);
 };
 
-export const getProductPtgApi = async (params: PTGType) => {
+export const getProductPtgApi = async (params: any) => {
   const data = JSON.stringify(params);
   return HttpClient.post<any, CommonResponse>(`/api/v1/landsoft/ptg`, data, {
     withToken: false,
@@ -125,5 +124,20 @@ export const getRecentlyViewed = async (params: ParamsProducts, data: any) => {
   return HttpClient.post<any, CommonResponse>(
     `/api-project/product-recently-viewed-search`,
     data
+  );
+};
+
+export const getPriceListByProductLandsoft = async (id: string) => {
+  return HttpClient.post<any, CommonResponse>(
+    `/api/v1/landsoft/get-price-list/${id}`,
+    {}
+  );
+};
+
+export const getPaymentListByScheduleId = async (body: any) => {
+	console.log(body)
+  return HttpClient.post<any, CommonResponse>(
+    `/api/v1/landsoft/get-payment-list`,
+     body 
   );
 };

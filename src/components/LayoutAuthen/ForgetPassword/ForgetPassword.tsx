@@ -125,3 +125,4 @@ const ForgetPassword = (props: Props) => {
   );
 };
 export default ForgetPassword;
+  

@@ -1,19 +1,59 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Theme, useTheme } from "@mui/material/styles";
 import styled from "@emotion/styled";
-import { Button, Typography } from "@mui/material";
+import { Button, Skeleton, Typography } from "@mui/material";
 
 import { FakeDataTable3, FakeDataTable4 } from "./fakeData";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { IconDropDown } from "@components/Icons";
+import { IconDownloadPTG, IconDropDown } from "@components/Icons";
 import { PTGResponse, ResponseSearchById } from "interface/product";
+import {
+  downloadPhieuTinhGiaAPI,
+  getPaymentListByScheduleId,
+  getPriceListByProductLandsoft,
+} from "../../../pages/api/productsApi";
+import { isEmpty } from "lodash";
 
+interface Price {
+  ApartmentPrice: string;
+  BuildPrice: string;
+  FoundationMoney: string;
+  LandPrice: string;
+  PriceID: number;
+  PriceName: string;
+  TotalLandPrice: string;
+  TotalMoney: string;
+}
+
+interface Payment {
+  ScheduleID: number;
+  LandMoney: number;
+  BuildMoney: number;
+  FoundationMoney: number;
+  TotalMoney: number;
+}
+interface PaymentItem {
+  Amount: string;
+  Amount1: string;
+  Amount2: string;
+  Amount3: string;
+  Date: string;
+  Description: string;
+  Number: number;
+  Percentage1: string;
+  Percentage2: string;
+  Percentage3: string;
+  Type1: number;
+  Type2: number;
+  Type3: number;
+}
 interface PhieuTinhGiaProps {
   productItem?: PTGResponse;
   dataProduct?: ResponseSearchById;
+  //   dataPrice?: Price
 }
 
 const ITEM_HEIGHT = 48;
@@ -83,7 +123,7 @@ const TitleStyled = styled(Typography)`
 const WrapCardItem = styled.div`
   border: 1px solid #d8d8d8;
   border-radius: 20px;
-  padding: 22px 50px 22px 50px;
+  padding: 22px 16px 22px 13px;
 `;
 const WrapItemOnCard = styled.div`
   display: flex;
@@ -101,7 +141,19 @@ const TextLeftOnCardLeft = styled(Typography)`
   text-align: right;
   color: #1b3459;
 `;
+const TextLeftOnCardLeftTypeCaoTang1 = styled(Typography)`
+  width: 50%;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 32px;
+  /* or 178% */
 
+  /* Brand/Main color */
+
+  color: #1b3459;
+`;
 const TextRightOnCardLeft = styled(Typography)`
   width: 50%;
   font-family: "Roboto";
@@ -206,82 +258,301 @@ const ButtonStyled = styled(Button)`
   flex: none;
   order: 0;
   flex-grow: 0;
-  margin: 0px 4px;
-  margin-top: 39px;
+`;
+const TitleSelectStyled = styled(Typography)`
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16px;
+  margin-bottom: 11px;
+  /* Brand */
+
+  color: #1b3459;
 `;
 
 const names = ["Oliver Hansen", "Van Henry", "April Tucker", "Ralph Hubbard"];
 
 const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
   const theme = useTheme();
-  const [personName, setPersonName] = React.useState<string[]>([]);
+  const [loading, setLoading] = React.useState(false);
+  const [paymentName, setPaymentName] = React.useState<string[]>([]);
+  const [priceName, setPriceName] = React.useState<string[]>([]);
+  const [listPaymentItem, setListPaymentItem] = React.useState<PaymentItem[]>(
+    []
+  );
+  const [handleOpen, setHandleOpen] = React.useState(false);
+  const mockDataPhieutinhgia = {
+	ProjectId: 96,
+	ProductId: 51057,
+	DepositDate: "04-08-2022",
+	PriceID: 230872,
+	ScheduleID: 123,
+  };
 
-  const handleChange = (event: SelectChangeEvent<typeof personName>) => {
+  const [filterPriceByName, setFilterPriceByName] = React.useState<Price>({
+    ApartmentPrice: "",
+    BuildPrice: "",
+    FoundationMoney: "",
+    LandPrice: "",
+    PriceID: 0,
+    PriceName: "",
+    TotalLandPrice: "",
+    TotalMoney: "",
+  });
+
+  const [filterPayment, setFilterpayment] = React.useState<Payment>({
+    ScheduleID: 0,
+    LandMoney: 0,
+    BuildMoney: 0,
+    FoundationMoney: 0,
+    TotalMoney: 0,
+  });
+
+  const [listPrice, setListPrice] = React.useState([]);
+
+  const handleChange = (event: SelectChangeEvent<typeof paymentName>) => {
     const {
       target: { value },
     } = event;
-    setPersonName(
+    setPaymentName(
       // On autofill we get a stringified value.
       typeof value === "string" ? value.split(",") : value
     );
+  };
+  const handleChangePrice = (event: SelectChangeEvent<typeof priceName>) => {
+    const {
+      target: { value },
+    } = event;
+    setPriceName(
+      // On autofill we get a stringified value.
+      typeof value === "string" ? value.split(",") : value
+    );
+  };
+
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
+      const response = await getPriceListByProductLandsoft("412");
+      if (response.responseCode === "00") {
+        setListPrice(response.responseData);
+        setPriceName([response.responseData[0].PriceName]);
+        setLoading(false);
+      }
+      // console.log(response)
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      const responsePayment = await getPaymentListByScheduleId(filterPayment);
+      if (responsePayment.responseCode === "00") {
+        setListPaymentItem(responsePayment.responseData);
+      }
+    })();
+  }, [filterPayment]);
+
+  useEffect(() => {
+    const filterData = listPrice.filter(
+      (item) => item.PriceName === priceName[0]
+    );
+    if (!isEmpty(filterData)) {
+      setFilterPriceByName({
+        ApartmentPrice: filterData[0].ApartmentPrice,
+        BuildPrice: filterData[0].BuildPrice,
+        FoundationMoney: filterData[0].FoundationMoney,
+        LandPrice: filterData[0].LandPrice,
+        PriceID: filterData[0].PriceID,
+        PriceName: filterData[0].PriceName,
+        TotalLandPrice: filterData[0].TotalLandPrice,
+        TotalMoney: filterData[0].TotalMoney,
+      });
+    }
+  }, [priceName]);
+
+  useEffect(() => {
+    const filterPaymentSche = productItem.ListSchedule.filter(
+      (item) => item.ScheduleName === paymentName[0]
+    );
+    if (!isEmpty(filterPaymentSche)) {
+      setFilterpayment({
+        ...filterPayment,
+        ScheduleID: filterPaymentSche[0].ScheduleID,
+      });
+    }
+  }, [paymentName]);
+
+  const handleDownloadPhieuTinhGia = () => {
+    (async () => {
+      setLoading(true);
+      setHandleOpen(true);
+      const response: any = await downloadPhieuTinhGiaAPI(mockDataPhieutinhgia);
+		// if(response.responseCode === '00'){
+			var binaryString = window?.atob(response);
+			var binaryLen = binaryString.length;
+			var bytes = new Uint8Array(binaryLen);
+			for (var i = 0; i < binaryLen; i++) {
+			  var ascii = binaryString.charCodeAt(i);
+			  bytes[i] = ascii;
+			}
+			var blob = new Blob([bytes], { type: "application/pdf" });
+			var link = document.createElement("a");
+			link.setAttribute("target", "_blank");
+			link.href = window.URL.createObjectURL(blob);
+			link.click();
+			setLoading(false);
+			setHandleOpen(false);
+		// }
+     
+    })();
   };
 
   function currencyFormat(num) {
     if (!num) {
       return;
     }
-    return Number(num).toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+    return Number(num)
+      .toFixed(0)
+      .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
   }
   return (
     <WrapBodyStyped>
       <ContainerLeft>
-        <TitleStyled>Thông tin lô đất</TitleStyled>
-        <WrapCardItem>
-          <WrapItemOnCard>
-            <TextLeftOnCardLeft>Dự án:</TextLeftOnCardLeft>
-            <TextRightOnCardLeft>
-              {dataProduct?.thongTinDuAn.name}
-            </TextRightOnCardLeft>
-          </WrapItemOnCard>
-          <WrapItemOnCard>
-            <TextLeftOnCardLeft>Loại bất động sản:</TextLeftOnCardLeft>
-            <TextRightOnCardLeft>
-              {dataProduct?.apartmentModel?.name ? dataProduct?.apartmentModel?.name : "N/A"}
-            </TextRightOnCardLeft>
-          </WrapItemOnCard>
-          <WrapItemOnCard>
-            <TextLeftOnCardLeft>Mã lô thương mại:</TextLeftOnCardLeft>
-            <TextRightOnCardLeft>
-              {dataProduct?.lotSymbolCommercial ? dataProduct?.lotSymbolCommercial : "N/A"}
-            </TextRightOnCardLeft>
-          </WrapItemOnCard>
-          <WrapItemOnCard>
-            <TextLeftOnCardLeft>Mã lô phê duyệt:</TextLeftOnCardLeft>
-            <TextRightOnCardLeft>
-              {dataProduct?.lotSymbolLegal}
-            </TextRightOnCardLeft>
-          </WrapItemOnCard>
-          <WrapItemOnCard>
-            <TextLeftOnCardLeft>Khối:</TextLeftOnCardLeft>
-            <TextRightOnCardLeft>N/A</TextRightOnCardLeft>
-          </WrapItemOnCard>
-          <WrapItemOnCard>
-            <TextLeftOnCardLeft>Phân Khu:</TextLeftOnCardLeft>
-            <TextRightOnCardLeft>N/A</TextRightOnCardLeft>
-          </WrapItemOnCard>
-          <WrapItemOnCard>
-            <TextLeftOnCardLeft>Diện tích đất:</TextLeftOnCardLeft>
-            <TextRightOnCardLeft>{dataProduct?.clearArea ? dataProduct?.clearArea : "N/A"}</TextRightOnCardLeft>
-          </WrapItemOnCard>
-          <WrapItemOnCard>
-            <TextLeftOnCardLeft>Diện tích xây dựng:</TextLeftOnCardLeft>
-            <TextRightOnCardLeft>{dataProduct?.buildArea ? dataProduct?.buildArea : "N/A"}</TextRightOnCardLeft>
-          </WrapItemOnCard>
-          <WrapItemOnCard>
-            <TextLeftOnCardLeft>Số tầng:</TextLeftOnCardLeft>
-            <TextRightOnCardLeft>{dataProduct?.floorNum ? dataProduct?.floorNum : "N/A"}</TextRightOnCardLeft>
-          </WrapItemOnCard>
-        </WrapCardItem>
+        {dataProduct.projectTypeCode === "1" ? (
+          <>
+            <TitleStyled>Thông tin lô đất</TitleStyled>
+            <WrapCardItem>
+              <WrapItemOnCard>
+                <TextLeftOnCardLeft>Dự án:</TextLeftOnCardLeft>
+                <TextRightOnCardLeft>
+                  {dataProduct?.projectName}
+                </TextRightOnCardLeft>
+              </WrapItemOnCard>
+              <WrapItemOnCard>
+                <TextLeftOnCardLeft>Loại bất động sản:</TextLeftOnCardLeft>
+                <TextRightOnCardLeft>
+                  {dataProduct?.projectType?.name
+                    ? dataProduct?.projectType?.name
+                    : "N/A"}
+                </TextRightOnCardLeft>
+              </WrapItemOnCard>
+              <WrapItemOnCard>
+                <TextLeftOnCardLeft>Mã lô thương mại:</TextLeftOnCardLeft>
+                <TextRightOnCardLeft>
+                  {dataProduct?.lotSymbolCommercial
+                    ? dataProduct?.lotSymbolCommercial
+                    : "N/A"}
+                </TextRightOnCardLeft>
+              </WrapItemOnCard>
+              <WrapItemOnCard>
+                <TextLeftOnCardLeft>Mã lô phê duyệt:</TextLeftOnCardLeft>
+                <TextRightOnCardLeft>
+                  {dataProduct?.lotSymbolLegal}
+                </TextRightOnCardLeft>
+              </WrapItemOnCard>
+              <WrapItemOnCard>
+                <TextLeftOnCardLeft>Khối:</TextLeftOnCardLeft>
+                <TextRightOnCardLeft>
+                  {dataProduct.levelDetailParentName}
+                </TextRightOnCardLeft>
+              </WrapItemOnCard>
+              <WrapItemOnCard>
+                <TextLeftOnCardLeft>Phân Khu:</TextLeftOnCardLeft>
+                <TextRightOnCardLeft>
+                  {dataProduct.levelDetailName}
+                </TextRightOnCardLeft>
+              </WrapItemOnCard>
+              <WrapItemOnCard>
+                <TextLeftOnCardLeft>Diện tích đất:</TextLeftOnCardLeft>
+                <TextRightOnCardLeft>
+                  {dataProduct?.landArea ? dataProduct?.landArea : "N/A"} m2
+                </TextRightOnCardLeft>
+              </WrapItemOnCard>
+              <WrapItemOnCard>
+                <TextLeftOnCardLeft>Diện tích xây dựng:</TextLeftOnCardLeft>
+                <TextRightOnCardLeft>
+                  {dataProduct?.buildArea ? dataProduct?.buildArea : "N/A"} m2
+                </TextRightOnCardLeft>
+              </WrapItemOnCard>
+              <WrapItemOnCard>
+                <TextLeftOnCardLeft>
+                  Số tầng xây dựng thấp nhất:
+                </TextLeftOnCardLeft>
+                <TextRightOnCardLeft>
+                  {dataProduct?.minFloor ? dataProduct?.minFloor : "N/A"}
+                </TextRightOnCardLeft>
+              </WrapItemOnCard>
+              <WrapItemOnCard>
+                <TextLeftOnCardLeft>
+                  Số tầng xây dựng cao nhất:
+                </TextLeftOnCardLeft>
+                <TextRightOnCardLeft>
+                  {dataProduct?.maxFloor ? dataProduct?.maxFloor : "N/A"}
+                </TextRightOnCardLeft>
+              </WrapItemOnCard>
+            </WrapCardItem>
+          </>
+        ) : (
+          <>
+            <TitleStyled>Thông tin căn hộ</TitleStyled>
+            <WrapCardItem style={{ padding: 37 }}>
+              <WrapItemOnCard>
+                <TextLeftOnCardLeftTypeCaoTang1>
+                  Số căn hộ:
+                </TextLeftOnCardLeftTypeCaoTang1>
+                <TextRightOnCardLeft>
+                  {dataProduct?.name}
+                  {/* A202 */}
+                </TextRightOnCardLeft>
+              </WrapItemOnCard>
+              <WrapItemOnCard>
+                <TextLeftOnCardLeftTypeCaoTang1>
+                  Tầng:
+                </TextLeftOnCardLeftTypeCaoTang1>
+                <TextRightOnCardLeft>
+                  {dataProduct?.floorNum ? dataProduct?.floorNum : "N/A"}
+                </TextRightOnCardLeft>
+              </WrapItemOnCard>
+              <WrapItemOnCard>
+                <TextLeftOnCardLeftTypeCaoTang1>
+                  Tòa:
+                </TextLeftOnCardLeftTypeCaoTang1>
+                <TextRightOnCardLeft>
+                  {dataProduct?.levelDetailName
+                    ? dataProduct?.levelDetailName
+                    : "N/A"}
+                </TextRightOnCardLeft>
+              </WrapItemOnCard>
+              <WrapItemOnCard>
+                <TextLeftOnCardLeftTypeCaoTang1>
+                  Khu:
+                </TextLeftOnCardLeftTypeCaoTang1>
+                <TextRightOnCardLeft>
+                  {dataProduct?.levelDetailParentName
+                    ? dataProduct?.levelDetailParentName
+                    : "N/A"}
+                </TextRightOnCardLeft>
+              </WrapItemOnCard>
+              <WrapItemOnCard>
+                <TextLeftOnCardLeftTypeCaoTang1>
+                  Diện tích thông thủy:
+                </TextLeftOnCardLeftTypeCaoTang1>
+                <TextRightOnCardLeft>
+                  {dataProduct.clearArea ? dataProduct.clearArea : "N/A"} m2
+                </TextRightOnCardLeft>
+              </WrapItemOnCard>
+              <WrapItemOnCard>
+                <TextLeftOnCardLeftTypeCaoTang1>
+                  Diện tích tìm tường:
+                </TextLeftOnCardLeftTypeCaoTang1>
+                <TextRightOnCardLeft>
+                  {dataProduct.wallArea ? dataProduct.wallArea : "N/A"} m2
+                </TextRightOnCardLeft>
+              </WrapItemOnCard>
+            </WrapCardItem>
+          </>
+        )}
+
         <ContainerBottomLeft>
           <div>
             <TitleBottomWrap>Chiết khấu</TitleBottomWrap>
@@ -296,10 +567,11 @@ const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
               flexDirection: "column",
               gap: 15,
               maxHeight: 535,
-              overflowY: FakeDataTable3.length >= 5 ? "scroll" : "hidden",
+              overflowY:
+                productItem.ListPromotion.length >= 5 ? "scroll" : "hidden",
             }}
           >
-            {FakeDataTable3.map((item, index) => (
+            {productItem.ListPromotion.map((item, index) => (
               <div
                 style={{
                   border: "1px solid #D8D8D8",
@@ -319,16 +591,16 @@ const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
                   }}
                 >
                   <TextBoldInWrapBottom>
-                    {item.title}
+                    {item.PromotionName}
                   </TextBoldInWrapBottom>
                   <TextInWrapBottom>
-                    Tỉ lệ chiết khấu: {item.valuechietkhau}&nbsp;%
+                    Tỉ lệ chiết khấu: {item.Value}&nbsp;%
                   </TextInWrapBottom>
                 </div>
                 <div style={{ border: "1px solid #E7E9EC" }} />
                 <div style={{ margin: "auto" }}>
                   <TextBoldInWrapBottom>
-                    {item.toalbill}
+                    - {currencyFormat(item.Amount)}
                   </TextBoldInWrapBottom>
                 </div>
               </div>
@@ -338,212 +610,374 @@ const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
       </ContainerLeft>
 
       <ContainerRight>
-        <TitleStyled>Giá trị nhà ở</TitleStyled>
-        <WrapCardItem>
-          <WrapItemOnCard>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                width: "70%",
-              }}
-            >
-              <TextOnCardRight
-                style={{
-                  color: "#1b3459",
-                  fontWeight: 400,
-                }}
-              >
-                Đơn giá QSDĐ*:
-              </TextOnCardRight>
+        {dataProduct.projectTypeCode === "1" ? (
+          <>
+            <TitleStyled>Giá trị nhà ở</TitleStyled>
+            <WrapCardItem style={{ padding: 34 }}>
+              <TitleSelectStyled>Chọn tiêu chuẩn bàn giao</TitleSelectStyled>
+              <div>
+                <FormControl fullWidth style={{ height: 44, marginBottom: 20 }}>
+                  <Select
+                    labelId="demo-multiple-name-label"
+                    id="demo-multiple-name"
+                    displayEmpty
+                    value={priceName}
+                    onChange={handleChangePrice}
+                    input={
+                      <OutlinedInput style={{ height: 44, borderRadius: 8 }} />
+                    }
+                    renderValue={(selected) => {
+                      console.log(selected);
+                      if (selected.length === 0) {
+                        return <span>Tiêu chuẩn bàn giao</span>;
+                      }
 
-              <TextOnCardRight
-                style={{
-                  color: "#1b3459",
-                  fontWeight: 400,
-                }}
-              >
-                {dataProduct.lurUnitPrice ? dataProduct.lurUnitPrice : "N/A"}
-              </TextOnCardRight>
-            </div>
-            <WrapRightCardText>
-              <TextOnCardRight
-                style={{
-                  color: "#1b3459",
-                  fontWeight: 400,
-                }}
-              >
-                đồng/m2
-              </TextOnCardRight>
-            </WrapRightCardText>
-          </WrapItemOnCard>
-          <WrapItemOnCard>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                width: "70%",
-              }}
-            >
-              <TextOnCardRight
-                style={{
-                  color: "#1b3459",
-                  fontWeight: 400,
-                }}
-              >
-                Tổng giá trị QSDĐ*:
-              </TextOnCardRight>
+                      return selected.join(", ");
+                    }}
+                    IconComponent={(props) => <IconDropDown {...props} />}
+                    MenuProps={MenuProps}
+                    inputProps={{ "aria-label": "Without label" }}
+                    SelectDisplayProps={{
+                      style: {
+                        paddingLeft: 20,
+                      },
+                    }}
+                  >
+                    {listPrice.map((name, index) => (
+                      <MenuItem
+                        key={index}
+                        value={name.PriceName}
+                        // style={getStyles(name.ScheduleID, personName, theme)}
+                      >
+                        {name.PriceName}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </div>
+              <WrapItemOnCard>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    width: "70%",
+                  }}
+                >
+                  <TextOnCardRight
+                    style={{
+                      color: "#1b3459",
+                      fontWeight: 400,
+                    }}
+                  >
+                    Đơn giá QSDĐ*:
+                  </TextOnCardRight>
 
-              <TextOnCardRight
-                style={{
-                  color: "#1b3459",
-                  fontWeight: 400,
-                }}
-              >
-                {dataProduct.lurPrice ? dataProduct.lurPrice : "N/A"}
-              </TextOnCardRight>
-            </div>
-            <WrapRightCardText>
-              <TextOnCardRight
-                style={{
-                  color: "#1b3459",
-                  fontWeight: 400,
-                }}
-              >
-                đồng
-              </TextOnCardRight>
-            </WrapRightCardText>
-          </WrapItemOnCard>
-          <WrapItemOnCard>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                width: "70%",
-              }}
-            >
-              <TextOnCardRight
-                style={{
-                  color: "#1b3459",
-                  fontWeight: 400,
-                }}
-              >
-                Đơn giá xây dựng*:
-              </TextOnCardRight>
+                  <TextOnCardRight
+                    style={{
+                      color: "#1b3459",
+                      fontWeight: 400,
+                    }}
+                  >
+                    {filterPriceByName.LandPrice ? (
+                      <>
+                        {" "}
+                        {filterPriceByName?.LandPrice
+                          ? filterPriceByName?.LandPrice
+                          : "N/A"}
+                      </>
+                    ) : (
+                      <Skeleton width={50} />
+                    )}
+                  </TextOnCardRight>
+                </div>
+                <WrapRightCardText>
+                  <TextOnCardRight
+                    style={{
+                      color: "#1b3459",
+                      fontWeight: 400,
+                    }}
+                  >
+                    đồng/m²
+                  </TextOnCardRight>
+                </WrapRightCardText>
+              </WrapItemOnCard>
+              <WrapItemOnCard>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    width: "70%",
+                  }}
+                >
+                  <TextOnCardRight
+                    style={{
+                      color: "#1b3459",
+                      fontWeight: 400,
+                    }}
+                  >
+                    Tổng giá trị QSDĐ*:
+                  </TextOnCardRight>
 
-              <TextOnCardRight
-                style={{
-                  color: "#1b3459",
-                  fontWeight: 400,
-                }}
-              >
-                {productItem.BuildPrice ? productItem.BuildPrice : "N/A"}
-              </TextOnCardRight>
-            </div>
-            <WrapRightCardText>
-              <TextOnCardRight
-                style={{
-                  color: "#1b3459",
-                  fontWeight: 400,
-                }}
-              >
-                đồng/m2
-              </TextOnCardRight>
-            </WrapRightCardText>
-          </WrapItemOnCard>
-          <WrapItemOnCard>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                width: "70%",
-              }}
-            >
-              <TextOnCardRight
-                style={{
-                  color: "#1b3459",
-                  fontWeight: 400,
-                }}
-              >
-                Tổng giá trị xây dựng*:
-              </TextOnCardRight>
+                  <TextOnCardRight
+                    style={{
+                      color: "#1b3459",
+                      fontWeight: 400,
+                    }}
+                  >
+                    {filterPriceByName.TotalLandPrice ? (
+                      <>
+                        {" "}
+                        {filterPriceByName?.TotalLandPrice
+                          ? filterPriceByName?.TotalLandPrice
+                          : "N/A"}
+                      </>
+                    ) : (
+                      <Skeleton width={50} />
+                    )}
+                  </TextOnCardRight>
+                </div>
+                <WrapRightCardText>
+                  <TextOnCardRight
+                    style={{
+                      color: "#1b3459",
+                      fontWeight: 400,
+                    }}
+                  >
+                    đồng
+                  </TextOnCardRight>
+                </WrapRightCardText>
+              </WrapItemOnCard>
+              <WrapItemOnCard>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    width: "70%",
+                  }}
+                >
+                  <TextOnCardRight
+                    style={{
+                      color: "red",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Tổng giá bán nhà ở*:
+                  </TextOnCardRight>
 
-              <TextOnCardRight
-                style={{
-                  color: "#1b3459",
-                  fontWeight: 400,
-                }}
-              >
-                {productItem.BuildMoney}
-              </TextOnCardRight>
-            </div>
-            <WrapRightCardText>
-              <TextOnCardRight
-                style={{
-                  color: "#1b3459",
-                  fontWeight: 400,
-                }}
-              >
-                đồng
-              </TextOnCardRight>
-            </WrapRightCardText>
-          </WrapItemOnCard>
-          <WrapItemOnCard>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                width: "70%",
-              }}
-            >
-              <TextOnCardRight
-                style={{
-                  color: "red",
-                  fontWeight: "bold",
-                }}
-              >
-                Tổng giá bán nhà ở*:
-              </TextOnCardRight>
+                  <TextOnCardRight
+                    style={{
+                      color: "red",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {filterPriceByName.TotalMoney ? (
+                      <>
+                        {" "}
+                        {filterPriceByName?.TotalMoney
+                          ? filterPriceByName?.TotalMoney
+                          : "N/A"}
+                      </>
+                    ) : (
+                      <Skeleton width={50} />
+                    )}
+                  </TextOnCardRight>
+                </div>
+                <WrapRightCardText>
+                  <TextOnCardRight
+                    style={{
+                      color: "red",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    đồng
+                  </TextOnCardRight>
+                </WrapRightCardText>
+              </WrapItemOnCard>
 
-              <TextOnCardRight
-                style={{
-                  color: "red",
-                  fontWeight: "bold",
-                }}
-              >
-                {productItem.TotalMoney}
-              </TextOnCardRight>
-            </div>
-            <WrapRightCardText>
-              <TextOnCardRight
-                style={{
-                  color: "red",
-                  fontWeight: "bold",
-                }}
-              >
-                đồng
-              </TextOnCardRight>
-            </WrapRightCardText>
-          </WrapItemOnCard>
-
-          <div style={{ marginTop: 10 }}>
-            <Typography
-              style={{ fontSize: 16, fontWeight: 400, fontStyle: "italic" }}
-            >
-              *Đã bao gồm VAT
-            </Typography>
-            <Typography
+              <div style={{ marginTop: 10 }}>
+                <Typography
+                  style={{ fontSize: 16, fontWeight: 400, fontStyle: "italic" }}
+                >
+                  *Đã bao gồm VAT
+                </Typography>
+                {/* <Typography
               style={{ fontSize: 16, fontWeight: 400, fontStyle: "italic" }}
             >
               *Đơn vị tính: vnd
-            </Typography>
-          </div>
-        </WrapCardItem>
+            </Typography> */}
+              </div>
+            </WrapCardItem>
+          </>
+        ) : (
+          <>
+            <TitleStyled>Giá trị căn hộ</TitleStyled>
+            <WrapCardItem style={{ padding: 34 }}>
+              <TitleSelectStyled>Chọn tiêu chuẩn bàn giao</TitleSelectStyled>
+              <div>
+                <FormControl fullWidth style={{ height: 44, marginBottom: 20 }}>
+                  <Select
+                    labelId="demo-multiple-name-label"
+                    id="demo-multiple-name"
+                    displayEmpty
+                    value={priceName}
+                    onChange={handleChangePrice}
+                    input={
+                      <OutlinedInput style={{ height: 44, borderRadius: 8 }} />
+                    }
+                    renderValue={(selected) => {
+                      console.log(selected);
+                      if (selected.length === 0) {
+                        return <span>Tiêu chuẩn bàn giao</span>;
+                      }
+
+                      return selected.join(", ");
+                    }}
+                    IconComponent={(props) => <IconDropDown {...props} />}
+                    MenuProps={MenuProps}
+                    inputProps={{ "aria-label": "Without label" }}
+                    SelectDisplayProps={{
+                      style: {
+                        paddingLeft: 20,
+                      },
+                    }}
+                  >
+                    {listPrice.map((name, index) => (
+                      <MenuItem
+                        key={index}
+                        value={name.PriceName}
+                        // style={getStyles(name.ScheduleID, personName, theme)}
+                      >
+                        {name.PriceName}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </div>
+              <WrapItemOnCard>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    width: "70%",
+                  }}
+                >
+                  <TextOnCardRight
+                    style={{
+                      color: "#1b3459",
+                      fontWeight: 400,
+                    }}
+                  >
+                    Giá trị thông thủy*:
+                  </TextOnCardRight>
+
+                  <TextOnCardRight
+                    style={{
+                      color: "#1b3459",
+                      fontWeight: 400,
+                    }}
+                  >
+                    {filterPriceByName.ApartmentPrice ? (
+                      <>
+                        {" "}
+                        {filterPriceByName?.ApartmentPrice
+                          ? filterPriceByName?.ApartmentPrice
+                          : "N/A"}
+                      </>
+                    ) : (
+                      <Skeleton width={50} />
+                    )}
+                  </TextOnCardRight>
+                </div>
+                <WrapRightCardText>
+                  <TextOnCardRight
+                    style={{
+                      color: "#1b3459",
+                      fontWeight: 400,
+                    }}
+                  >
+                    đồng/m²
+                  </TextOnCardRight>
+                </WrapRightCardText>
+              </WrapItemOnCard>
+              <WrapItemOnCard>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    width: "70%",
+                  }}
+                >
+                  <TextOnCardRight
+                    style={{
+                      color: "red",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Tổng giá bán căn hộ*:
+                  </TextOnCardRight>
+
+                  <TextOnCardRight
+                    style={{
+                      color: "red",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {filterPriceByName.TotalMoney ? (
+                      <>
+                        {" "}
+                        {filterPriceByName?.TotalMoney
+                          ? filterPriceByName?.TotalMoney
+                          : "N/A"}
+                      </>
+                    ) : (
+                      <Skeleton width={50} />
+                    )}
+                  </TextOnCardRight>
+                </div>
+                <WrapRightCardText>
+                  <TextOnCardRight
+                    style={{
+                      color: "red",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    đồng
+                  </TextOnCardRight>
+                </WrapRightCardText>
+              </WrapItemOnCard>
+              <div style={{ marginTop: 10 }}>
+                <Typography
+                  style={{ fontSize: 16, fontWeight: 400, fontStyle: "italic" }}
+                >
+                  *Giá trên đã bao gồm VAT
+                </Typography>
+
+                {/* <Typography
+              style={{ fontSize: 16, fontWeight: 400, fontStyle: "italic" }}
+            >
+              *Đơn vị tính: vnd
+            </Typography> */}
+                <Typography
+                  style={{
+                    textAlign: "left",
+                    fontSize: 14,
+                    fontWeight: 500,
+                    color: "#EA242A",
+                    marginTop: 10,
+                  }}
+                >
+                  2% kinh phí bảo trì căn hộ Bên mua thanh toán ngay khi bàn
+                  giao căn hộ
+                </Typography>
+              </div>
+            </WrapCardItem>
+          </>
+        )}
         <ContainerCenterRight>
           <div>
             <TitleBottomWrap>Tiến độ thanh toán</TitleBottomWrap>
@@ -557,7 +991,7 @@ const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
                 labelId="demo-multiple-name-label"
                 id="demo-multiple-name"
                 displayEmpty
-                value={personName}
+                value={paymentName}
                 onChange={handleChange}
                 input={
                   <OutlinedInput style={{ height: 44, borderRadius: 8 }} />
@@ -578,13 +1012,13 @@ const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
                   },
                 }}
               >
-                {FakeDataTable4.map((name, index) => (
+                {productItem.ListSchedule.map((name, index) => (
                   <MenuItem
                     key={index}
-                    value={name.value1}
+                    value={name.ScheduleName}
                     // style={getStyles(name.ScheduleID, personName, theme)}
                   >
-                    {name.title}
+                    {name.ScheduleName}
                   </MenuItem>
                 ))}
               </Select>
@@ -593,11 +1027,11 @@ const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
           <div
             style={{
               maxHeight: 535,
-              overflowY: FakeDataTable4.length >= 5 ? "scroll" : "hidden",
+              overflowY: listPaymentItem.length >= 5 ? "scroll" : "hidden",
               padding: 20,
             }}
           >
-            {FakeDataTable4.map((item, index) => (
+            {listPaymentItem.map((item, index) => (
               <div
                 style={{
                   display: "flex",
@@ -615,16 +1049,14 @@ const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
                   }}
                 >
                   <div>
-                    <TextCenterRight>{item.title}</TextCenterRight>
-                    <SubTextCenterRight>{item.subTitle}</SubTextCenterRight>
+                    <TextCenterRight>Đợt {item.Number}</TextCenterRight>
+                    <SubTextCenterRight>{item.Description}</SubTextCenterRight>
                   </div>
                   <div>
                     <TextCenterRight>
-                      {currencyFormat(item.value1)}
+                      {currencyFormat(item.Amount)}
                     </TextCenterRight>
-                    <SubTextCenterRight>
-                      {item.value2}% giá trị HĐ
-                    </SubTextCenterRight>
+                    <SubTextCenterRight>% giá trị HĐ</SubTextCenterRight>
                   </div>
                 </div>
                 <div style={{ border: "1px solid #C7C9D9" }} />
@@ -652,7 +1084,7 @@ const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
             <TextCenterRight
               style={{ fontSize: 18, margin: "auto", marginRight: 0 }}
             >
-              {currencyFormat(dataProduct?.price)} vnd
+              {currencyFormat(productItem?.ProductQuotation)} vnd
             </TextCenterRight>
           </div>
           <div style={{ border: "1px solid #C7C9D9" }} />
@@ -664,7 +1096,7 @@ const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
               <Typography
                 style={{ fontSize: 18, fontWeight: 700, color: "#EA242A" }}
               >
-                {productItem.TotalMoney} vnd
+                {currencyFormat(productItem.TotalMoney)} vnd
               </Typography>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -680,11 +1112,21 @@ const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
                   color: "#EA242A",
                 }}
               >
-                Bốn tỷ ba trăm ba mươi mốt triệu chín trăm chín mươi tám nghìn
-                chín trăm đồng
+                {productItem.TotalMoneyText}
               </Typography>
             </div>
           </div>
+          <ButtonStyled
+            style={{ background: "#ffffff", border: "1px solid #FCB715" }}
+			onClick={handleDownloadPhieuTinhGia}
+          >
+            <IconDownloadPTG />
+            <Typography
+              style={{ fontSize: 16, fontWeight: 400, color: "#FCB715" }}
+            >
+              Tải phiếu tính giá
+            </Typography>
+          </ButtonStyled>
           <ButtonStyled
             onClick={() => {
               console.log("abc");

@@ -65,7 +65,6 @@ const IconWrapper = styled(Box)`
 const ButtonStyled = styled(Button)`
   width: 164px;
   height: 48px;
-  background: #ea242a;
   border-radius: 60px;
   :hover {
     background: #fec83c;
@@ -80,7 +79,7 @@ const ButtonStyled = styled(Button)`
   font-size: 16px;
   line-height: 19px;
   text-align: center;
-  color: #ffffff;
+
   text-transform: none;
   flex: none;
   order: 0;
@@ -115,7 +114,7 @@ const ItemCompare = ({ onClick, data }: Props) => {
       },
     });
   };
-
+  console.log(data)
   return (
     <Box width={289}>
       <WrapperContent
@@ -196,7 +195,7 @@ const ItemCompare = ({ onClick, data }: Props) => {
             onClick={onClick}
             disabled={data?.paymentStatus !== "2"}
           >
-            <Text16Styled color={"white"}>Mua Online</Text16Styled>
+            <Text16Styled style={{color: data?.paymentStatus === "2" ? '#ffffff' : 'gray'}}>Mua Online</Text16Styled>
             <Box width={19} height={19}>
               <IconArrowRight color={"white"} />
             </Box>

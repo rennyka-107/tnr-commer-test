@@ -6,6 +6,7 @@ import dynamic from "next/dynamic";
 import React, { useEffect, useState } from "react";
 import { Box, CircularProgress, Typography } from "@mui/material";
 import { useRouter } from "next/router";
+import Subtitle from "@components/Element/Subtitle";
 
 const ChangeApartmentRequest = dynamic(
   () => import("../../src/components/LayoutSendRequest/ChangeApartmentRequest"),
@@ -60,20 +61,55 @@ const SendRequest = () => {
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  function renderTitle() {
+  const renderTitle = () => {
     switch (request) {
       case "change-apartment":
-        return "Thông tin sản phẩm thanh lý";
+        return "Thông tin sản phẩm yêu cầu đổi căn";
+
       case "deposit-refund":
         return "Thông tin sản phẩm hoàn cọc";
-      case "liquidation":
-        return "Thông tin sản phẩm yêu cầu chuyển nhượng";
-      case "transfer":
-        return "Thông tin sản phẩm yêu cầu đổi căn";
-    }
-  }
 
-  function renderRightContent() {
+      case "liquidation":
+        return "Thông tin sản phẩm thanh lý";
+
+      case "transfer":
+        return "Thông tin sản phẩm yêu cầu chuyển nhượng";
+    }
+  };
+
+  const renderBreadcrum = () => {
+    switch (request) {
+      case "change-apartment":
+        return "Gửi yêu cầu đổi căn";
+
+      case "deposit-refund":
+        return "Gửi yêu cầu hoàn cọc";
+
+      case "liquidation":
+        return "Gửi yêu cầu thanh lý";
+
+      case "transfer":
+        return "Gửi yêu cầu chuyển nhượng";
+    }
+  };
+
+  const renderDepositInfomationTitle = () => {
+    switch (request) {
+      case "change-apartment":
+        return "Thông tin đặt cọc sản phẩm yêu cầu đổi căn";
+
+      case "deposit-refund":
+        return "Thông tin đặt cọc sản phẩm yêu cầu hoàn cọc";
+
+      case "liquidation":
+        return "Thông tin đặt cọc sản phẩm yêu cầu thanh lý";
+
+      case "transfer":
+        return "Thông tin đặt cọc sản phẩm chuyển nhượng";
+    }
+  };
+
+  const renderRightContent = () => {
     switch (request) {
       case "change-apartment":
         return <ChangeApartmentRequest />;
@@ -84,7 +120,7 @@ const SendRequest = () => {
       case "transfer":
         return <TransferRequest />;
     }
-  }
+  };
 
   return (
     <Page
@@ -96,21 +132,12 @@ const SendRequest = () => {
     >
       <FlexContainer>
         {!loading ? (
-          <Container title="Gửi yêu cầu thanh lý">
+          <Container title={renderBreadcrum()}>
             <Box sx={{ display: "flex", width: "100%" }}>
               <Box sx={{ width: "50%" }}>
-                <Typography
-                  sx={{
-                    fontSize: "20px",
-                    fontWeight: 500,
-                    lineHeight: "23.44px",
-                    color: "#1B3459",
-                  }}
-                >
-                  {renderTitle()}
-                </Typography>
+                <Subtitle>{renderTitle()}</Subtitle>
                 <ProductInformation />
-                <DepositInformation />
+                <DepositInformation title={renderDepositInfomationTitle()} />
                 <CustomerInformation />
               </Box>
               <Box sx={{ width: "50%" }}>{renderRightContent()}</Box>

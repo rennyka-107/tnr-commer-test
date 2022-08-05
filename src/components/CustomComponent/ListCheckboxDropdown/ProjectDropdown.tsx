@@ -266,7 +266,7 @@ const ProjectDropdown = ({
                   </li>
                 );
               }}
-              options={[...data]}
+              options={data ? [...data] : []}
               getOptionLabel={(option) => (option.name ? option.name : "")}
               renderInput={(params) => {
                 return (

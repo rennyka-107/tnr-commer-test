@@ -68,7 +68,7 @@ export interface RegisterParam {
 export interface Props {
   setUserId?: (value: string) => void;
   setTransKey?: (value: string) => void;
-  setEmailRegister?:(value: string) => void;
+  setEmailRegister?: (value: string) => void;
   setNumberPhone?: (value: string) => void;
   setKey?: (value: string) => void;
   next?: () => void;
@@ -171,9 +171,9 @@ const Index = (props: Props) => {
         if (response.responseCode === "00") {
           reset();
           props.setUserId(response.responseData?.id);
-		  props.setTransKey(response.responseData?.transKey);
-		  props.setNumberPhone(response.responseData?.phone);
-		  props.setEmailRegister(response.responseData?.email);
+          props.setTransKey(response.responseData?.transKey);
+          props.setNumberPhone(response.responseData?.phone);
+          props.setEmailRegister(response.responseData?.email);
           props.setKey(response.responseData?.keycloakId);
           props.next();
           Route.push({
@@ -301,15 +301,27 @@ const Index = (props: Props) => {
       </FormGroup>
       <div style={{ width: "100%" }}>
         <ButtonStyled
-          style={{
-            background:
-              !checked || !isEmpty(errors) || !checkField
-                ? "#D6000080"
-                : "#D60000",
-				color: '#ffffff',
-            marginTop: 30,
-			height: 50
+          sx={{
+            background: "#ea242a",
+            "&:hover": {
+              background: "#FEC83C !important",
+              // box-shadow: 4px 8px 24px #f2f2f5;
+              boxShadow: "0px 0px 10px 1px rgba(0, 0, 0, 0.2)",
+              // borderRadius: "60px",
+              color: "#ffffff",
+            },
+            marginTop: "30px",
+            height: "50px",
           }}
+          // style={{
+          //   background:
+          //     !checked || !isEmpty(errors) || !checkField
+          //       ? "#D6000080"
+          //       : "#D60000",
+          //   color: "#ffffff",
+          //   marginTop: 30,
+          //   height: 50,
+          // }}
           type="submit"
           disabled={!checked || !isEmpty(errors) || !checkField}
         >
