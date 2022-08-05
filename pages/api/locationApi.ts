@@ -21,3 +21,18 @@ export const apiGetListDistrict = async (params: { provinceId: number, pageNumbe
         `api/v1/cadastral/district/${convertToQuery(params)}`
     );
 };
+
+export interface Commune {
+    CommuneID: number;
+    CommuneName: string;
+    districtID: number;
+    syncDate: any
+    syncFrom: any
+}
+
+export const apiGetListCommune = async (districtId: number) => {
+    return HttpClient.get<string, CommonResponse<Commune[]>>(
+        `api/v1/cadastral/commune?districtId=${districtId}`
+
+    );
+};

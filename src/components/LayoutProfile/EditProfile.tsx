@@ -3,6 +3,7 @@ import Column from "@components/CustomComponent/Column";
 import CustomButton from "@components/CustomComponent/CustomButton";
 import HorizontalLine from "@components/CustomComponent/HorizontalLine";
 import Row from "@components/CustomComponent/Row";
+import CommuneSelect from "@components/Form/CommuneSelect";
 import ControllerReactDatePicker from "@components/Form/ControllerReactDatePicker";
 import ControllerSelectAutoComplete from "@components/Form/ControllerSelectAutoComplete";
 import ControllerTextField from "@components/Form/ControllerTextField";
@@ -111,7 +112,7 @@ const EditProfile = () => {
 
   useEffect(() => {
     console.log("dataProvinces", dataProvinces);
-    
+
     const convert = dataProvinces.map((item) => ({
       label: item.provinceName,
       value: item.provinceId,
@@ -154,6 +155,7 @@ const EditProfile = () => {
     (async () => {
       try {
         const responseUser = await getUserInfoApi();
+
         dispatch(getUserInfo(responseUser.responseData));
       } catch (error) {
         console.log(error);
@@ -164,6 +166,8 @@ const EditProfile = () => {
   const detailUser = useSelector(
     (state: RootState) => state?.profile?.userInfo
   );
+
+  console.log("detailUser", detailUser);
 
   const formController = useForm<ProfileI>({
     mode: "onChange",
@@ -196,6 +200,7 @@ const EditProfile = () => {
         province: data?.province ? Number(data?.province) : "",
         businessRegistration: data?.businessRegistration,
         businessRegistrationName: data?.businessRegistrationName,
+        commune: data?.commune ?? "",
       });
     },
 
@@ -271,6 +276,7 @@ const EditProfile = () => {
       attachPaper: document.dataUrl,
       district: values.district,
       province: values.province,
+      commune: values.commune,
     };
 
     (async () => {
@@ -280,7 +286,7 @@ const EditProfile = () => {
         if (response.responseCode === "00") {
           notification({
             severity: "success",
-            title: "Cập nhật file ảnh",
+            title: "Cập nhật hồ sơ",
             message: response.responseMessage,
           });
           forceUpdate();
@@ -558,6 +564,17 @@ const EditProfile = () => {
                 control={control}
                 setValue={setValue}
                 idProvince={Number(watch("province"))}
+              />
+            </FormGroup>
+          </Column>
+          <Column>
+            <FormGroup fullWidth>
+              <CommuneSelect
+                name="commune"
+                label="Xã"
+                control={control}
+                setValue={setValue}
+                districtId={Number(watch("district"))}
               />
             </FormGroup>
           </Column>

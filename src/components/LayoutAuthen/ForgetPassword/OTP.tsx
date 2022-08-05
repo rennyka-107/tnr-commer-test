@@ -53,6 +53,13 @@ cursor: pointer;
 border: unset;
 width:100%;
 `
+const TypeConFirm = styled.div`
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 21px;
+  color: #48576d;
+  margin-bottom: 30px;
+`;
 export interface Param {
   username: string;
   password: string;
@@ -62,6 +69,7 @@ export interface Props {
   paramsEndcode?: string;
   keyForgot?: string;
   keyWidthOTPParams?: string;
+  emailUser: string;
   keyTrans?: String;
   next: () => void;
 }
@@ -141,17 +149,35 @@ const OTP = (props: Props) => {
   return (
     <Form>
       <Label>Nhập mã xác thực</Label>
+	  {checked ? (
+            <>
+              {" "}
+              <TypeConFirm>
+                Mã xác nhận đã được gửi tới email {props.emailUser} của quý
+                khách hàng. Nhập mã xác thực quý khách hàng nhận được dưới đây{" "}
+              </TypeConFirm>
+            </>
+          ) : (
+            <></>
+          )}
       <OtpInput
         value={OTP}
         onChange={(otp) => setOTP(otp)}
         numInputs={6}
-        containerStyle={{ justifyContent: "space-between" }}
-        inputStyle={{
-          width: 48,
-          height: 48,
-          border: "1px solid #C7C9D9",
-          borderRadius: 8,
-        }}
+        focusStyle={{
+			outline: "none",
+			border: "2px solid #FEC83C",
+			borderRadius: "8px",
+		  }}
+		  containerStyle={{ justifyContent: "center", gap: 18 }}
+		  inputStyle={{
+			width: 48,
+			height: 48,
+			border: checked ? "1.5px solid #C7C9D9" : "1.5px solid #FF3B3B",
+			borderRadius: 8,
+			fontSize: 20,
+			fontWeight: 600,
+		  }}
 		isDisabled={loading}
       />
       {checked ? (

@@ -1,12 +1,15 @@
+import { IconSelectDropdownFilter } from "@components/Icons";
 import IconCircleClose from "@components/Icons/IconCircleClose";
 import styled from "@emotion/styled";
 import {
   FormControl,
   FormHelperText,
   MenuItem,
+  Radio,
   Select,
   SelectProps,
 } from "@mui/material";
+import { makeStyles } from "@mui/styles";
 import { isEmpty } from "lodash";
 import React from "react";
 import {
@@ -53,8 +56,23 @@ const RequiredSpan = styled.span`
 const SelectInput = styled(Select)`
   height: 44px;
   border-radius: 8px;
+  "& .muimenuitem-root": {
+    border-bottom: 1px solid black !important;
+  }
 `;
-
+const useStyles = makeStyles((theme) => ({
+  menuPaper: {
+    // width: 250,
+	
+	'& .MuiMenuItem-root': {
+		borderBottom: '1px solid #F2F2F5',
+		minWidth: 318
+	}
+  },
+  noBorder: {
+  
+  },
+}));
 const ErrorText = styled(FormHelperText)`
   color: red;
 `;
@@ -76,7 +94,7 @@ const ControllerSelect = <T extends FieldValues>(props: Props<T>) => {
     renderItemSelect,
     ...rest
   } = props;
-
+  const classes = useStyles();
   const clearSelect = () => {
     if (multiple) {
       setValue(name, []);
@@ -109,6 +127,8 @@ const ControllerSelect = <T extends FieldValues>(props: Props<T>) => {
                 "aria-label": "Without label",
                 ...rest.inputProps,
               }}
+              endAdornment={<IconSelectDropdownFilter />}
+              IconComponent={null}
               renderValue={(val: any) => {
                 if (multiple) {
                   return renderMultiValue(field.value);
@@ -120,7 +140,7 @@ const ControllerSelect = <T extends FieldValues>(props: Props<T>) => {
                   </span>
                 );
               }}
-
+              MenuProps={{ classes: { root: classes.menuPaper  } }}
               displayEmpty
               multiple={multiple}
               {...field}
@@ -129,20 +149,14 @@ const ControllerSelect = <T extends FieldValues>(props: Props<T>) => {
               {dataSelect.map((item) => {
                 if (renderItemSelect) {
                   return (
-                    <MenuItem
-                      value={item.value}
-                      key={item.value}
-                    >
+                    <MenuItem value={item.value} key={item.value}>
                       {renderItemSelect(item)}
                     </MenuItem>
                   );
                 }
                 return (
-                  <MenuItem
-                    value={item.value}
-                    key={item.value}
-                  >
-                    {item.label} 
+                  <MenuItem value={item.value} key={item.value}>
+                    {item.label}
                   </MenuItem>
                 );
               })}

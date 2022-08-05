@@ -139,15 +139,12 @@ export default function DropDownTargetLevel({ level }: any) {
     }
   }, [TargetShape]);
 
-  function fetData(
-    datas: any[],
-    resetProducts: boolean = true,
-  ) {
+  function fetData(datas: any[], resetProducts: boolean = true) {
     const geojsonArray = [];
     if (resetProducts) {
       dispatch(setListChild([]));
     }
-      setValue(null);
+    setValue(null);
     const formatData = datas.map((data) => {
       if (!isEmpty(data.map)) {
         const geodata = JSON.parse(data.map);
@@ -165,6 +162,8 @@ export default function DropDownTargetLevel({ level }: any) {
     });
     if (!isEmpty(formatData)) {
       setFormatList([allOption, ...formatData]);
+    } else {
+      setFormatList([]);
     }
     if (!isEmpty(Target) && Target.type === "1" && isEmpty(Target.imgMap)) {
       dispatch(setListChildTarget(formatData));
@@ -219,6 +218,7 @@ export default function DropDownTargetLevel({ level }: any) {
         if (Target.level === level.level - 1) {
           apiGetListChildMapByIdParent(Target.id)
             .then((response) => {
+              console.log(response, "aaaa");
               fetData(response.responseData, false);
             })
             .catch((err) => console.log(err));
@@ -228,9 +228,11 @@ export default function DropDownTargetLevel({ level }: any) {
           }
           if (Target.level === level.level) {
             const features = GeoJsonData.features;
-            if(!isEmpty(features)) {
-              const findItem = features.find(item => item.properties.id === Target.id);
-              if(!isEmpty(findItem)) {
+            if (!isEmpty(features)) {
+              const findItem = features.find(
+                (item) => item.properties.id === Target.id
+              );
+              if (!isEmpty(findItem)) {
                 dispatch(setGeoJsonData([]));
               }
             }

@@ -145,10 +145,9 @@ const Login = () => {
           setLoading(false);
         }
       } catch (error) {
-        const AxiosError: { message: string } = error;
         notification({
           severity: "error",
-          title: `Login Fail`,
+          title: `Lỗi`,
           message: "Có lỗi xảy ra",
         });
       }
@@ -171,7 +170,7 @@ const Login = () => {
             hiddenLabel
             name="username"
             control={control}
-            placeholder="Tên đăng nhập"
+            placeholder="Nhập SĐT / Email của quý khách hàng"
             required
             fullWidth
             label="Tên đăng nhập"

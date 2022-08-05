@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Autoplay, Pagination, Navigation } from "swiper";
 import styled from "@emotion/styled";
@@ -30,9 +30,17 @@ export default function SliderProductHotComponent() {
   const { productTopByOutStanding } = useSelector(
     (state: RootState) => state.products
   );
+  const { listMenuBarType, listMenuBarProjectType } = useSelector(
+    (state: RootState) => state.menubar
+  );
+  const [dataProjectType, setDataProjectType] = useState([]);
+  const [dataProject, setDataProject] = useState([]);
+
   const addToCart = useAddToCart();
   const router = useRouter();
   const dispatch = useDispatch();
+
+  useEffect(() => {}, []);
 
   const onCompare =
     (
@@ -44,6 +52,29 @@ export default function SliderProductHotComponent() {
       productId: string
     ) =>
     () => {
+      const dataProjectType = listMenuBarProjectType.filter(
+        (item) => item.id === projectType
+      );
+      const dataProject = listMenuBarType.filter(
+        (item) => item.id === projectId
+      );
+      localStorage.setItem(
+        "listDataLSProjectType",
+        JSON.stringify([dataProjectType[0]])
+      );
+      localStorage.setItem(
+        "listParamsLSProjectType",
+        JSON.stringify([dataProjectType[0].id])
+      );
+      localStorage.setItem(
+        "listDataLSProject",
+        JSON.stringify([dataProject[0]])
+      );
+      localStorage.setItem(
+        "listParamsIdProject",
+        JSON.stringify([dataProject[0].id])
+      );
+    //   console.log(dataProjectType, dataProject);
       dispatch(
         getComparePopUpItem([
           {
@@ -56,17 +87,17 @@ export default function SliderProductHotComponent() {
           },
         ])
       );
-      router.push({
-        pathname: "/compare-search",
-        query: {
-          projectId: projectId,
-          projectTypeId: projectType,
-          priceTo: "20",
-          priceFrom: "1",
-          areaTo: "200",
-          areaFrom: "30",
-        },
-      });
+        router.push({
+          pathname: "/compare-search",
+          query: {
+            // projectId: projectId,
+            // projectTypeId: projectType,
+            priceTo: "20",
+            priceFrom: "1",
+            areaTo: "200",
+            areaFrom: "30",
+          },
+        });
     };
 
   return (

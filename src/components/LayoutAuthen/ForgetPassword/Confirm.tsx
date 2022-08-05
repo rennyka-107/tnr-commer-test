@@ -53,6 +53,7 @@ export interface Props {
   username?: String;
   setKeyForgot?: (value: string) => void;
   setKeyTrans?:(value:string) => void;
+  emailUser?: string;
   next?: () => void;
 }
 
@@ -60,11 +61,11 @@ const Confirm = (props: Props) => {
 	const [loading, setLoading] = useState(false);
 
   const validationSchema = yup.object().shape({
-    confirm: yup
-      .string()
-      .strict(true)
-      .required(validateLine.required)
-      .default(""),
+    // confirm: yup
+    //   .string()
+    //   .strict(true)
+    //   .required(validateLine.required)
+    //   .default(""),
   });
   const { control, handleSubmit, setValue, getValues } = useForm<Param>({
     mode: "onChange",
@@ -95,8 +96,8 @@ const Confirm = (props: Props) => {
     <Form>
       <form onSubmit={handleSubmit((values) => onSubmit())}>
         <ConFirm>Xác thực</ConFirm>
-        <TypeConFirm>Mời bạn chọn phương thức xác thực</TypeConFirm>
-        <RadioGroup>
+		<TypeConFirm>Gửi mã xác thực qua email {props.emailUser}</TypeConFirm>
+        {/* <RadioGroup>
           <Grid container>
             <ControllerRadio
               name="confirm"
@@ -108,7 +109,7 @@ const Confirm = (props: Props) => {
               ]}
             />
           </Grid>
-        </RadioGroup>
+        </RadioGroup> */}
         <FormGroup sx={{ mb: 2 }} fullWidth>
           <ButtonStyled
             style={{ background: "#D60000", marginTop: 30 ,}}

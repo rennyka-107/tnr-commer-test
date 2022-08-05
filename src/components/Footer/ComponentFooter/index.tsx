@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {  getListMenuBarProjectTypeApi } from "../../../../pages/api/menuBarApi";
+import { getListMenuBarProjectTypeApi } from "../../../../pages/api/menuBarApi";
 import { getListUserManualApi } from "../../../../pages/api/userManualApi";
 import { getListMenuBarProjectType } from "../../../../store/menuBarSlice";
 import { RootState } from "../../../../store/store";
@@ -9,22 +9,23 @@ import FooterBot from "./FooterBot";
 import FooterTop from "./FooterTop";
 
 const Footer = () => {
-	const dispatch = useDispatch();
-  const {  listMenuBarProjectType } = useSelector(
+  const dispatch = useDispatch();
+  const { listMenuBarProjectType } = useSelector(
     (state: RootState) => state.menubar
   );
   const { listUserManual } = useSelector(
-    (state: RootState) => state.userManual  );
-	const menuBarProjectType = listMenuBarProjectType?.filter(
-		(item) => item.id !== "1"
-	  );
+    (state: RootState) => state.userManual
+  );
+  const menuBarProjectType = listMenuBarProjectType?.filter(
+    (item) => item.id !== "1"
+  );
   useEffect(() => {
     (async () => {
       try {
         // const responseList: any = await getListMenuBarProjectTypeApi();
-		const response = await getListUserManualApi();
+        const response = await getListUserManualApi();
         // dispatch(getListMenuBarProjectType(responseList.responseData));
-		dispatch(getListUserManual(response.responseData));
+        dispatch(getListUserManual(response.responseData));
       } catch (error) {
         console.log(error);
       }
@@ -33,7 +34,10 @@ const Footer = () => {
   return (
     <>
       <FooterTop />
-      <FooterBot listMenuBarProjectType={menuBarProjectType} listUserManual={listUserManual}/>
+      <FooterBot
+        listMenuBarProjectType={menuBarProjectType}
+        listUserManual={listUserManual}
+      />
     </>
   );
 };

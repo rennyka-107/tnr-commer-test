@@ -68,6 +68,7 @@ export interface RegisterParam {
 export interface Props {
   setUserId?: (value: string) => void;
   setTransKey?: (value: string) => void;
+  setEmailRegister?:(value: string) => void;
   setNumberPhone?: (value: string) => void;
   setKey?: (value: string) => void;
   next?: () => void;
@@ -172,6 +173,7 @@ const Index = (props: Props) => {
           props.setUserId(response.responseData?.id);
 		  props.setTransKey(response.responseData?.transKey);
 		  props.setNumberPhone(response.responseData?.phone);
+		  props.setEmailRegister(response.responseData?.email);
           props.setKey(response.responseData?.keycloakId);
           props.next();
           Route.push({
@@ -304,7 +306,9 @@ const Index = (props: Props) => {
               !checked || !isEmpty(errors) || !checkField
                 ? "#D6000080"
                 : "#D60000",
+				color: '#ffffff',
             marginTop: 30,
+			height: 50
           }}
           type="submit"
           disabled={!checked || !isEmpty(errors) || !checkField}

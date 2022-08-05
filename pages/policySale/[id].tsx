@@ -72,9 +72,7 @@ const PolicySale = () => {
         isHomePage: true,
       }}
     >
-      <FlexContainer>
-       {fetchComponent()}
-      </FlexContainer>
+      <FlexContainer>{fetchComponent()}</FlexContainer>
     </Page>
   );
 };

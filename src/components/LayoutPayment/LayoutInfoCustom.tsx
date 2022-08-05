@@ -69,6 +69,7 @@ import IconWarning from "@components/Icons/IconWarning";
 import LocalStorage from "utils/LocalStorage";
 import { apiUploadFile } from "../../../pages/api/cartApi";
 import PopupBorrowMsb from "./components/PopupBorrowMsb";
+import Regexs from "utils/Regexs";
 
 type Props = {
   setScopeRender: Dispatch<SetStateAction<string>>;
@@ -99,7 +100,11 @@ interface InformationBuyer {
 }
 
 const validationSchema = yup.object().shape({
-  fullname: yup.string().required(validateLine.required).default(""),
+  fullname: yup
+    .string()
+    .max(255, "Không được vượt quá 255 ký tự")
+    .required(validateLine.required)
+    .default(""),
   dob: yup
     .string()
     .required(validateLine.required)
@@ -108,25 +113,53 @@ const validationSchema = yup.object().shape({
   phoneNumber: yup
     .string()
     .required(validateLine.required)
+    .matches(Regexs.phone, "Số điện thoại không đúng")
     .max(10, "Số điện thoại không được vượt quá 10 số")
     .default(""),
   email: yup
     .string()
     .email("Không đúng định dạng email")
+    .max(255, "Không được vượt quá 255 ký tự")
     .required(validateLine.required)
     .trim(validateLine.trim)
     .default(""),
-  idNumber: yup.string().required(validateLine.required).default(""),
-  issuePlace: yup.string().required(validateLine.required).default(""),
+  idNumber: yup
+    .string()
+    .required(validateLine.required)
+    .max(255, "Không được vượt quá 255 ký tự")
+    .default(""),
+  issuePlace: yup
+    .string()
+    .max(255, "Không được vượt quá 255 ký tự")
+    .required(validateLine.required)
+    .nullable()
+    .default(""),
   issueDate: yup.string().required(validateLine.required).default(""),
-  permanentAddress: yup.string().required(validateLine.required).default(""),
-  contactAddress: yup.string().default(""),
+  permanentAddress: yup
+    .string()
+    .max(255, "Không được vượt quá 255 ký tự")
+    .required(validateLine.required)
+    .nullable()
+    .default(""),
+  contactAddress: yup
+    .string()
+    .max(255, "Không được vượt quá 255 ký tự")
+    .nullable()
+    .default(""),
   province: yup.string().default(""),
   district: yup.string().default(""),
 });
 
 const LayoutInfoCustom = ({ setScopeRender }: Props) => {
-  const { control, handleSubmit, watch, reset } = useForm<InformationBuyer>({
+  const {
+    control,
+    handleSubmit,
+    watch,
+    reset,
+    trigger,
+    setError,
+    formState: { errors },
+  } = useForm<InformationBuyer>({
     mode: "onChange",
     resolver: yupResolver(validationSchema),
     defaultValues: validationSchema.getDefault(),
@@ -322,22 +355,6 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
     fetchPaymentMethod();
   }, []);
 
-  function validInforSendMsb() {
-    return (
-      !isEmpty(watch("fullname")) &&
-      !isEmpty(watch("dob")) &&
-      !isEmpty(watch("phoneNumber")) &&
-      !isEmpty(watch("email")) &&
-      !isEmpty(watch("idNumber")) &&
-      !isEmpty(watch("issueDate")) &&
-      !isEmpty(watch("issuePlace")) &&
-      !isEmpty(watch("permanentAddress")) &&
-      !isEmpty(watch("contactAddress")) &&
-      !isEmpty(watch("province")) &&
-      !isEmpty(watch("district"))
-    );
-  }
-
   function sendInforToMsb() {
     const sendData = {
       tenKhachHang: watch("fullname"),
@@ -361,8 +378,23 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
       thoiGianYeuCau: "",
     };
     apiSendInforMsb(sendData)
-      .then((res) => {console.log(res, "res")})
-      .catch((err) => console.log(err));
+      .then((res) => {
+        console.log(res, "res");
+        notification({
+          title: "Gửi thông tin vay tới MSB",
+          message: "Thành công",
+          severity: "success",
+        });
+        setRegisterBorrow(false);
+      })
+      .catch((err) => {
+        setRegisterBorrow(false);
+        notification({
+          title: "Gửi thông tin vay tới MSB",
+          message: "Thất bại",
+          severity: "error",
+        });
+      });
   }
 
   const handleOnSubmit = (values, paymentFlag = 0) => {
@@ -619,17 +651,6 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
   }
   return (
     <Container title={"Thanh toán"}>
-      {/* {!formInfo && (
-        <Box style={{ marginBottom: 60 }}>
-          <Stepper alternativeLabel activeStep={1}>
-            {steps.map((label, idx) => (
-              <Step key={idx}>
-                <StepLabel>{label}</StepLabel>
-              </Step>
-            ))}
-          </Stepper>
-        </Box>
-      )} */}
       <Backdrop
         sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={loading}
@@ -638,6 +659,17 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
       </Backdrop>
       <form onSubmit={handleSubmit((values) => handleOnSubmit(values))}>
         <Grid container columnSpacing={"30px"} justifyContent={"center"}>
+          {!formInfo.open && (
+            <Box style={{ marginBottom: 60 }}>
+              <Stepper alternativeLabel activeStep={0}>
+                {steps.map((label, idx) => (
+                  <Step key={idx}>
+                    <StepLabel>{label}</StepLabel>
+                  </Step>
+                ))}
+              </Stepper>
+            </Box>
+          )}
           <Grid item>
             {formInfo.open ? (
               <AddInfoCustom
@@ -750,6 +782,13 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                               variant={"outlined"}
                               name={"fullname"}
                               required
+                              InputProps={{
+                                style: {
+                                  height: "44px",
+                                  border: "1px solid #B8B8B8",
+                                  borderRadius: "8px",
+                                },
+                              }}
                             />
                           </FormGroup>
                         </Grid>
@@ -776,6 +815,13 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                               control={control}
                               variant={"outlined"}
                               name={"phoneNumber"}
+                              InputProps={{
+                                style: {
+                                  height: "44px",
+                                  border: "1px solid #B8B8B8",
+                                  borderRadius: "8px",
+                                },
+                              }}
                               required
                             />
                           </FormGroup>
@@ -789,6 +835,13 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                               control={control}
                               variant={"outlined"}
                               name={"email"}
+                              InputProps={{
+                                style: {
+                                  height: "44px",
+                                  border: "1px solid #B8B8B8",
+                                  borderRadius: "8px",
+                                },
+                              }}
                               required
                             />
                           </FormGroup>
@@ -814,6 +867,13 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                             control={control}
                             variant={"outlined"}
                             name={"idNumber"}
+                            InputProps={{
+                              style: {
+                                height: "44px",
+                                border: "1px solid #B8B8B8",
+                                borderRadius: "8px",
+                              },
+                            }}
                             required
                             width={317}
                             disabled={disabledEditMainUser}
@@ -828,6 +888,13 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                               control={control}
                               variant={"outlined"}
                               name={"email"}
+                              InputProps={{
+                                style: {
+                                  height: "44px",
+                                  border: "1px solid #B8B8B8",
+                                  borderRadius: "8px",
+                                },
+                              }}
                               required
                               disabled
                             />
@@ -840,6 +907,13 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                             label={"Nơi cấp"}
                             control={control}
                             variant={"outlined"}
+                            InputProps={{
+                              style: {
+                                height: "44px",
+                                border: "1px solid #B8B8B8",
+                                borderRadius: "8px",
+                              },
+                            }}
                             name={"issuePlace"}
                             required
                             disabled={disabledEditMainUser}
@@ -864,6 +938,13 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                           <ControllerTextField
                             label={"Địa chỉ thường trú"}
                             control={control}
+                            InputProps={{
+                              style: {
+                                height: "44px",
+                                border: "1px solid #B8B8B8",
+                                borderRadius: "8px",
+                              },
+                            }}
                             variant={"outlined"}
                             name={"permanentAddress"}
                             required
@@ -879,6 +960,13 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                             label={"Địa chỉ liên lạc"}
                             control={control}
                             variant={"outlined"}
+                            InputProps={{
+                              style: {
+                                height: "44px",
+                                border: "1px solid #B8B8B8",
+                                borderRadius: "8px",
+                              },
+                            }}
                             name={"contactAddress"}
                             fullWidth
                             disabled={disabledEditMainUser}
@@ -891,6 +979,13 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                           <ControllerTextField
                             label={"Thành phố/Tỉnh"}
                             control={control}
+                            InputProps={{
+                              style: {
+                                height: "44px",
+                                border: "1px solid #B8B8B8",
+                                borderRadius: "8px",
+                              },
+                            }}
                             variant={"outlined"}
                             name={"province"}
                             disabled={disabledEditMainUser}
@@ -901,6 +996,13 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                         <FormGroup>
                           <ControllerTextField
                             label={"Quận/Huyện"}
+                            InputProps={{
+                              style: {
+                                height: "44px",
+                                border: "1px solid #B8B8B8",
+                                borderRadius: "8px",
+                              },
+                            }}
                             control={control}
                             variant={"outlined"}
                             name={"district"}
@@ -982,11 +1084,39 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
               >
                 <Checkbox
                   checked={registerBorrow}
-                  disabled={!validInforSendMsb()}
                   onChange={(e, checked) => {
-                    setRegisterBorrow(checked);
                     if (checked) {
-                      setOpenBorrowMsbPopup(true);
+                      trigger().then(() => {
+                        if (isEmpty(watch("contactAddress"))) {
+                          console.log("trống contact address");
+                          setError("contactAddress", {
+                            type: "manual",
+                            message: "Không được để trống",
+                          });
+                        }
+                        if (isEmpty(watch("province"))) {
+                          setError("province", {
+                            type: "manual",
+                            message: "Không được để trống",
+                          });
+                        }
+                        if (isEmpty(watch("district"))) {
+                          setError("district", {
+                            type: "manual",
+                            message: "Không được để trống",
+                          });
+                        }
+                        if (
+                          !isEmpty(watch("contactAddress")) &&
+                          !isEmpty(watch("province")) &&
+                          !isEmpty(watch("district"))
+                        ) {
+                          setRegisterBorrow(checked);
+                          setOpenBorrowMsbPopup(true);
+                        } else {
+                          setRegisterBorrow(false);
+                        }
+                      });
                     }
                   }}
                 />

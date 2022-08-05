@@ -62,6 +62,7 @@ export interface Props {
   userId?: String;
   transKey?: String;
   numberPhone?: string;
+  emailRegister?: string;
   back: () => void;
   next?: () => void;
 }
@@ -69,11 +70,11 @@ export interface Props {
 const Confirm = (props: Props) => {
 	const [loading, setLoading] = useState(false);
   const validationSchema = yup.object().shape({
-    confirm: yup
-      .string()
-      .strict(true)
-      .required(validateLine.required)
-      .default(""),
+    // confirm: yup
+    //   .string()
+    //   .strict(true)
+    //   .required(validateLine.required)
+    //   .default(""),
   });
   const { control, handleSubmit} = useForm<Param>({
     mode: "onChange",
@@ -84,7 +85,7 @@ const Confirm = (props: Props) => {
   const onSubmit = async (values: any) => {
 	setLoading(true);
 
-    getOTP(props.transKey,values.confirm).then((response) => {
+    getOTP(props.transKey,0).then((response) => {
       if (response.responseCode === "00") {
         props.next();
 		setLoading(false);
@@ -99,12 +100,12 @@ const Confirm = (props: Props) => {
     <Form>
       <LinkLabel onClick={() => props.back()}>
         <IconArrowLeftBlue />
-        &nbsp; Quay lại
+        &nbsp; Trở lại
       </LinkLabel>
       <form onSubmit={handleSubmit((values) => onSubmit(values))}>
         <ConFirm>Xác thực</ConFirm>
-        <TypeConFirm>Mời bạn chọn phương thức xác thực</TypeConFirm>
-        <RadioGroup>
+        <TypeConFirm>Gửi mã xác thực qua email {props.emailRegister}</TypeConFirm>
+        {/* <RadioGroup>
           <Grid container>
             <ControllerRadio
               name="confirm"
@@ -116,7 +117,7 @@ const Confirm = (props: Props) => {
               ]}
             />
           </Grid>
-        </RadioGroup>
+        </RadioGroup> */}
 
         <FormGroup sx={{ mb: 2 }} fullWidth>
           {/* <CustomButton
@@ -125,10 +126,10 @@ const Confirm = (props: Props) => {
             type="submit"
           /> */}
 		    <ButtonStyled
-            style={{ background: "#D60000", marginTop: 30 ,}}
+            style={{ background: "#D60000", marginTop: 30 ,height: 50}}
             type="submit"
           >
-           {loading === false ? 'Tiếp Tục' : <CircularProgress style={{height: 25, width: 25, color: '#ffffff'}}/>}
+           {loading === false ? 'Gửi mã' : <CircularProgress style={{height: 25, width: 25, color: '#ffffff'}}/>}
           </ButtonStyled>
         </FormGroup>
       </form>

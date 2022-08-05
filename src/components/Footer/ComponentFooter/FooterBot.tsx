@@ -116,10 +116,10 @@ const FooterBot = ({ listMenuBarProjectType, listUserManual }: MenuProps) => {
       </Link>
       <WrapContent>
         <BlockDiv>
-          {generalInfo.companyName}
+          {generalInfo?.companyName ?? ""}
           <LineInfoFirst>
             <TitleTypo>Địa chỉ: {""}</TitleTypo>
-            {generalInfo.address}
+            {generalInfo?.address ?? ""}
           </LineInfoFirst>
           <LineInfo>
             <TitleTypo>Tel: {""}</TitleTypo>
@@ -127,11 +127,11 @@ const FooterBot = ({ listMenuBarProjectType, listUserManual }: MenuProps) => {
           </LineInfo>
           <LineInfo>
             <TitleTypo>Email: {""}</TitleTypo>
-            {generalInfo.email}
+            {generalInfo?.email ?? ""}
           </LineInfo>
           <LineInfo style={{ marginTop: 5 }}>
             <TitleTypo>
-              TNR Version 1.4.2 Copyright © tnrholdings.com.vn {""}
+              TNR Version 1.4.5 Copyright © tnrholdings.com.vn {""}
             </TitleTypo>
           </LineInfo>
         </BlockDiv>
@@ -154,7 +154,7 @@ const FooterBot = ({ listMenuBarProjectType, listUserManual }: MenuProps) => {
           style={{ display: "flex", gap: ".5em", flexDirection: "column" }}
         >
           <TitleTypo style={{ fontSize: "18px" }}>HỖ TRỢ</TitleTypo>
-          {listUserManual.map((item, index) => (
+          {listUserManual?.map((item, index) => (
             <LineInfo2
               key={index}
               onClick={() => {

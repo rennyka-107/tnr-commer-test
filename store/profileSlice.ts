@@ -27,6 +27,7 @@ const initialState = {
     attachPaperThumbnailUrl: "",
     district: "",
     province: "",
+    commune: "",
   },
 };
 

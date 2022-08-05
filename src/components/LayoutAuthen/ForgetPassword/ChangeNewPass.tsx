@@ -186,7 +186,7 @@ const ChangeNewPass = (props: Props) => {
               type="submit"
             /> */}
 			 <ButtonStyled
-            style={{ background: "#D60000", marginTop: 30 ,}}
+            style={{ background: "#D60000", marginTop: 30 ,height: 50}}
             type="submit"
           >
            {loading === false ? 'Hoàn tất' : <CircularProgress style={{height: 25, width: 25, color: '#ffffff'}}/>}
@@ -209,7 +209,7 @@ const ChangeNewPass = (props: Props) => {
           <FormGroup sx={{ mb: 2 }} fullWidth>
             <CustomButton
               label="Đăng nhập"
-              style={{ background: "#D60000" }}
+              style={{ background: "#D60000", height: 50 }}
               type="button"
               onClick={() =>
                 Route.push({

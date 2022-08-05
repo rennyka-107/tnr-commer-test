@@ -22,6 +22,8 @@ import isEmpty from "lodash.isempty";
 import ImageWithHideOnError from "hooks/ImageWithHideOnError";
 import { useRouter } from "next/router";
 import LocalStorage from "utils/LocalStorage";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../store/store";
 
 const TextLeftStyled = styled(Typography)`
   font-family: "Roboto";
@@ -120,63 +122,68 @@ const dataFake = [1, 2, 3, 4, 5, 6].map((el) => {
 
 export default function Slider3dShowBottom() {
   const { dataProductRecenly } = useProjectRecenly();
-  const newArrayDataProductRecenly = dataProductRecenly.filter((item) => item.id !== "1")
-  const [LSprojectId, setLSProjectID]  = useState([]);
+  const newArrayDataProductRecenly = dataProductRecenly.filter(
+    (item) => item.id !== "1"
+  );
+
+  const [LSprojectId, setLSProjectID] = useState([]);
   useEffect(() => {
-	newArrayDataProductRecenly.map((item) => {
-		LSprojectId.push(item.id)
-	})
-  },[newArrayDataProductRecenly])
+    newArrayDataProductRecenly.map((item) => {
+      LSprojectId.push(item.id);
+    });
+  }, [newArrayDataProductRecenly]);
   const Router = useRouter();
+  const generalInfo = useSelector((state: RootState) => state.generalInfo);
+
   const renderItems = useMemo(() => {
-    return (isEmpty(newArrayDataProductRecenly) ? dataFake : newArrayDataProductRecenly)?.map(
-      (el: any) => (
-        <SwiperSlide
-          onClick={() =>
-            Router.push(
-              `/products?idProject=${el.id}&&provinceId=&&projectTypeId=`
-            )
-          }
-          className="swiper-3d"
-          style={{
-            width: "241px !important",
-            height: 342,
-            cursor: "pointer",
-            position: "relative",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundAttachment: "fixed",
-            backgroundRepeat: "no-repeat",
-            filter: "brightness(0.7)",
-          }}
-          key={el.id}
-        >
-          <WrapTopItem>
-            <ImageWithHideOnError
-              className="logo"
-              src={el.avatar ? el.avatar : DefaultImage}
-              fallbackSrc={DefaultImage}
-              width={241}
-              height={342}
-              priority
-              layout="fill"
-              unoptimized={true}
-            />
-            <IconEye style={{ zIndex: 1000 }} />
-            <TextInsideNumber>{el?.viewNum}</TextInsideNumber>
-          </WrapTopItem>
-          <TextInside>{el.name}</TextInside>
-        </SwiperSlide>
-      )
-    );
+    return (
+      isEmpty(newArrayDataProductRecenly)
+        ? dataFake
+        : newArrayDataProductRecenly
+    )?.map((el: any) => (
+      <SwiperSlide
+        onClick={() =>
+          Router.push(
+            `/products?idProject=${el.id}&&provinceId=&&projectTypeId=`
+          )
+        }
+        className="swiper-3d"
+        style={{
+          width: "241px !important",
+          height: 342,
+          cursor: "pointer",
+          position: "relative",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundAttachment: "fixed",
+          backgroundRepeat: "no-repeat",
+          filter: "brightness(0.7)",
+        }}
+        key={el.id}
+      >
+        <WrapTopItem>
+          <ImageWithHideOnError
+            className="logo"
+            src={el.avatar ? el.avatar : DefaultImage}
+            fallbackSrc={DefaultImage}
+            width={241}
+            height={342}
+            priority
+            layout="fill"
+            unoptimized={true}
+          />
+          <IconEye style={{ zIndex: 1000 }} />
+          <TextInsideNumber>{el?.viewNum}</TextInsideNumber>
+        </WrapTopItem>
+        <TextInside>{el.name}</TextInside>
+      </SwiperSlide>
+    ));
   }, [newArrayDataProductRecenly]);
 
   const handleShowAll = () => {
-	localStorage.setItem("listParamsIdProject",JSON.stringify(LSprojectId));
-	Router.push(
-		`/products?idProject=1&&provinceId=&&projectTypeId=`
-	  );
-  }
+    localStorage.setItem("listParamsIdProject", JSON.stringify(LSprojectId));
+    Router.push(`/products?idProject=1&&provinceId=&&projectTypeId=`);
+  };
 
   return (
     <>
@@ -196,14 +203,9 @@ export default function Slider3dShowBottom() {
           >
             <div style={{ width: 300 }}>
               <TextLeftStyled>
-                Mauris, turpis lorem pellentesque laoreet eleifend id
-                scelerisque vulputate massa. Adipiscing blandit ultricies mauris
-                egestas volutpat non. Amet mauris nisl odio mauris suscipit
-                bibendum.
+                {generalInfo?.policyContent ?? ""}
               </TextLeftStyled>
-              <ButtonStyled
-                onClick={handleShowAll}
-              >
+              <ButtonStyled onClick={handleShowAll}>
                 Xem tất cả&nbsp;
                 <IconMuaOnline />
               </ButtonStyled>

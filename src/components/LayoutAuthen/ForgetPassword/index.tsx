@@ -33,6 +33,7 @@ const Index = () => {
   const [username, setUsername] = useState("");
   const [keyTrans, setKeyTrans] = useState("");
   const[keyForgot, setKeyForgot] = useState("");
+  const [emailUser, setEmailUser] = useState("");
 
   const [paramsEndcode, setParamsEndcode] = useState({
     key: "",
@@ -60,6 +61,7 @@ const Index = () => {
         return (
           <ForgetPassword
             setUsername={(value: string) => setUsername(value)}
+			setEmailUser={setEmailUser}
             next={() => setType("confirm")}
           />
         );
@@ -67,6 +69,7 @@ const Index = () => {
         return (
           <Confirm
             username={username}
+			emailUser={emailUser}
 			setKeyForgot={setKeyForgot}
             next={() => setType("OTP")}
             setKeyTrans={setKeyTrans}
@@ -78,6 +81,7 @@ const Index = () => {
 		  keyForgot={keyForgot}
             username={username}
             keyTrans={keyTrans}
+			emailUser={emailUser}
 			paramsEndcode={paramsEndcode.OTP}
             keyWidthOTPParams={paramsEndcode.key}
             next={() => setType("ChangeNewPass")}
@@ -118,7 +122,7 @@ const Index = () => {
           }}
         >
           <IconArrowLeftBlue />
-          &nbsp; Quay lại
+          &nbsp; Trở lại
         </LinkLabel>
       ) : null}
       {render}

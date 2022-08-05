@@ -23,7 +23,7 @@ export interface ContractI {
   phone: string | null;
   placeIssue: string | null;
   province: string | null;
-  totalPrice? : string;
+  totalPrice?: string;
   projectName?: string; // tên dự án
   productName?: string; // tên lô;
   bookingCode?: string; // mã đặt chỗ
@@ -55,7 +55,8 @@ export interface ProfileI {
   attachPaper: string;
   fileImages?: any;
   businessRegistration?: any;
-  businessRegistrationName?: any
+  businessRegistrationName?: any;
+  commune?: string | number;
 }
 
 export const getContractByUser = () => {
@@ -64,7 +65,7 @@ export const getContractByUser = () => {
   );
 };
 
-export const getOrderByUser = ( data: any) => {
+export const getOrderByUser = (data: any) => {
   return HttpClient.post<any, any>(
     `/api-customer/customer-order/find-by-user`,
     data
@@ -72,12 +73,10 @@ export const getOrderByUser = ( data: any) => {
 };
 
 export const getOrderById = (id: any) => {
-	return HttpClient.get<any,any>(
-		`/api/v1/payment/get-payment-info/${id}`
-	)
-}
+  return HttpClient.get<any, any>(`/api/v1/payment/get-payment-info/${id}`);
+};
 
-export const getNotificationByUser = ({page,size}) => {
+export const getNotificationByUser = ({ page, size }) => {
   return HttpClient.get<ResponseTypeAPI, CommonResponse<any>>(
     `${GET_NOTIFICATION}/${page}/${size}`
   );

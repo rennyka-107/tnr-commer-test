@@ -3,11 +3,13 @@ import ControllerTextField from "@components/Form/ControllerTextField";
 import FormGroup from "@components/Form/FormGroup";
 import styled from "@emotion/styled";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Button } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
+import useNotification from "hooks/useNotification";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { validateLine } from "utils/constants";
 import * as yup from "yup";
+import { getEmailRegister } from "../../../../pages/api/changePassword";
 
 const Form = styled.div`
   margin-top: 10px;
@@ -29,27 +31,27 @@ const LinkLabel = styled.a`
   display: flex;
 `;
 const ButtonStyled = styled(Button)`
-text-transform: none;
-border-radius: 8px;
-font-weight: 400;
-font-size: 16px;
-line-height: 19px;
-color: #ffffff;
-padding: 14px 70px;
-cursor: pointer;
-border: unset;
-width:100%;
-`
+  text-transform: none;
+  border-radius: 8px;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 19px;
+  color: #ffffff;
+  padding: 14px 70px;
+  cursor: pointer;
+  border: unset;
+  width: 100%;
+`;
 export interface Params {
   username: string;
   password: string;
 }
 export interface Props {
   setUsername?: (value: String) => void;
+  setEmailUser?: (value: string) => void;
   next?: () => void;
 }
 const ForgetPassword = (props: Props) => {
-
   const validationSchema = yup.object().shape({
     username: yup
       .string()
@@ -59,7 +61,8 @@ const ForgetPassword = (props: Props) => {
       .required(validateLine.required)
       .default(""),
   });
-
+  const [loading, setLoading] = useState(false);
+  const notification = useNotification();
   const { control, handleSubmit } = useForm<Params>({
     mode: "onChange",
     resolver: yupResolver(validationSchema),
@@ -67,8 +70,23 @@ const ForgetPassword = (props: Props) => {
   });
 
   const onSubmit = (values) => {
-    props.setUsername(values.username);
-    props.next();
+    setLoading(true);
+    getEmailRegister(values.username).then((response) => {
+      if (response.responseCode === "00") {
+        props.setEmailUser(response.responseData);
+        props.setUsername(values.username);
+        setLoading(false);
+        props.next();
+      } else {
+        notification({
+          severity: "error",
+          title: `Email hoặc số điện thoại không đúng`,
+          message:
+            "Email hoặc số điện thoại không được sử dụng để đăng ký. Vui lòng thay đổi để tiếp tục!",
+        });
+        setLoading(false);
+      }
+    });
   };
 
   return (
@@ -81,19 +99,25 @@ const ForgetPassword = (props: Props) => {
             hiddenLabel
             name="username"
             control={control}
-            placeholder="Số điện thoại hoặc tên đăng nhập"
+            placeholder="Số điện thoại hoặc Email đã đăng ký"
             required
             fullWidth
-            label="Nhập số điện thoại hoặc tên đăng nhập"
+            label="Nhập Số điện thoại hoặc Email đã đăng ký"
             labelColor="#666666"
           />
         </FormGroup>
         <FormGroup sx={{ mb: 2 }} fullWidth>
-		<ButtonStyled
-            style={{ background: "#D60000", marginTop: 30 ,}}
+          <ButtonStyled
+            style={{ background: "#D60000", marginTop: 30, height: 50 }}
             type="submit"
           >
-            Tiếp tục
+            {loading === false ? (
+              "Tiếp Tục"
+            ) : (
+              <CircularProgress
+                style={{ height: 25, width: 25, color: "#ffffff" }}
+              />
+            )}
           </ButtonStyled>
         </FormGroup>
       </form>

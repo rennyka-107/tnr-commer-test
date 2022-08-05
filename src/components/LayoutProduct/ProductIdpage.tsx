@@ -82,7 +82,8 @@ const DynamicPhieuTinhGiaComponent = dynamic(
 );
 
 const TextFloorStyled = styled(Typography)`
-  margin-left: 5px;
+  margin-top: 7px;
+  margin-left: 3px;
   font-family: "Roboto";
   font-style: normal;
   font-weight: 400;
@@ -867,25 +868,42 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
             <div>
               <WrapRightCard>
                 <TitleRightText>{dataProduct?.name}</TitleRightText>
-                <div
-                  style={{
-                    display: "flex",
-                    gap: 37,
-                    marginBottom: 15,
-                    marginTop: 20,
-                  }}
-                >
-                  <SubRightText>
-                    Tòa {dataProduct?.lotSymbolCommercial}
-                  </SubRightText>
-                  <SubRightText>Tầng {dataProduct?.floorNum}</SubRightText>
-                </div>
+                {dataProduct.projectTypeCode === "2" ? (
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: 37,
+                      marginBottom: 15,
+                      marginTop: 20,
+                    }}
+                  >
+                    <SubRightText>
+                      {dataProduct?.levelDetailParentName}
+                    </SubRightText>
+                    <SubRightText>{dataProduct?.levelDetailName}</SubRightText>
+                  </div>
+                ) : (
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: 37,
+                      marginBottom: 15,
+                      marginTop: 20,
+                    }}
+                  >
+                    <SubRightText>
+                      {dataProduct?.levelDetailParentName}
+                    </SubRightText>
+                  </div>
+                )}
                 <div style={{ border: " 1px solid #C7C9D9", width: 262 }}></div>
                 <CenterIntemWrap>
                   {dataProduct?.projectTypeCode === "1" ? (
                     <WrapItemCenter>
-                      <FloorIcon />
-                      <TextFloorStyled>min</TextFloorStyled>
+                      <div style={{ display: "flex", flexDirection: "row" }}>
+                        <FloorIcon />
+                        <TextFloorStyled>min</TextFloorStyled>
+                      </div>
                       <TextCenterItem>
                         <TextFloorValue>
                           {dataProduct?.minFloor} tầng
@@ -946,17 +964,31 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                       đ
                     </NumberBottomStyled>
                   </div>
-                  <div style={{ display: "flex" }}>
-                    <TextBottomStyled2 style={{ marginRight: 19 }}>
-                      Đơn giá thông thuỷ{" "}
-                    </TextBottomStyled2>
-                    <NumberBottomStyled2>
-                      {dataProduct?.unitPrice
-                        ? currencyFormat(dataProduct?.unitPrice)
-                        : "N/A"}
-                      đ/m2
-                    </NumberBottomStyled2>
-                  </div>
+                  {dataProduct?.projectTypeCode === "1" ? (
+                    <div style={{ display: "flex" }}>
+                      <TextBottomStyled2 style={{ marginRight: 50 }}>
+                        Giá trị QSDĐ{" "}
+                      </TextBottomStyled2>
+                      <NumberBottomStyled2>
+                        {dataProduct?.unitPrice
+                          ? currencyFormat(dataProduct?.unitPrice)
+                          : "N/A"}
+                        đ/m2
+                      </NumberBottomStyled2>
+                    </div>
+                  ) : (
+                    <div style={{ display: "flex" }}>
+                      <TextBottomStyled2 style={{ marginRight: 19 }}>
+                        Đơn giá thông thuỷ{" "}
+                      </TextBottomStyled2>
+                      <NumberBottomStyled2>
+                        {dataProduct?.unitPrice
+                          ? currencyFormat(dataProduct?.unitPrice)
+                          : "N/A"}
+                        đ/m2
+                      </NumberBottomStyled2>
+                    </div>
+                  )}
                 </div>
                 <div
                   style={{
@@ -1024,7 +1056,7 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                   </a>
                   <div style={{ border: "1px solid #1B3459" }} />
                   <a
-                    href={`/policySale/${dataProduct.project.id}`}
+                    href={`/policySale/${dataProduct.project.id}?Idproduct=${dataProduct.id}`}
                     style={{ textAlign: "center" }}
                   >
                     <IconClipboardProduct />

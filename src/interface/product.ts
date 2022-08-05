@@ -100,6 +100,8 @@ export interface ResponseSearchById {
   doorDirection: string;
   airConditioner: number;
   swimmingPool: number;
+  levelDetailName?: string;
+  levelDetailParentName?: string;
   gym: number;
   projectLevelDetail: {
     id: string;
