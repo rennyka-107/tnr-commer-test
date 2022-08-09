@@ -202,13 +202,14 @@ export default function PopperProjectType({
       const arr: MenuBar[] = JSON.parse(dataSelectLS);
       if (!isEmpty(arr)) {
         arr.map((item, index) => {
-          const findItem = data.find((it) => it.id === item.id);
+          const findItem = data.filter((it) => it.id === item.id);
           newArray.push(findItem);
+		  console.log(newArray)
         });
         if (!newArray) {
           setValue([]);
         } else {
-          setValue(newArray);
+          setValue(newArray[0]);
         }
       } else {
 		setValue([]);

@@ -26,7 +26,7 @@ const useProjectList = () => {
     pageNumber: 0,
     pageSize: 10,
   });
-
+  console.log("body",body)
   const changePageNumber = (pageNumber: number) => {
     setParams({ ...params, pageNumber: pageNumber });
   };
@@ -41,7 +41,7 @@ const useProjectList = () => {
       !isEmpty(router.query);
     }
     {
-      setBody({ ...body});
+      setBody({ ...body,projectTypeId: type});
       setParams({ pageNumber: 0, pageSize: 10 });
     }
   }, [type]);

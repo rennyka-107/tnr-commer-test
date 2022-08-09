@@ -83,12 +83,12 @@ const LinkStyled = styled.a`
   }
 `;
 const useStyles = makeStyles((theme) => ({
-  root: {
-    "& .MuiInputBase-root": {
-      borderRadius: "8px",
-      height: 40,
-    },
-  },
+//   root: {
+//     "& .MuiInputBase-root": {
+//       borderRadius: "8px",
+//       height: 40,
+//     },
+//   },
 }));
 
 const LabelStyled = styled(Typography)`
@@ -351,7 +351,7 @@ const Filter = (props: PropsI) => {
         <FormControl sx={{ m: 1, mt: 3 }}>
           <LabelStyled>Tìm kiếm</LabelStyled>
           <TextStyled
-            className={classes.root}
+            // className={classes.root}
             onChange={handleChange}
             placeholder="Nhập tên dự án..."
             value={textSearchValue}

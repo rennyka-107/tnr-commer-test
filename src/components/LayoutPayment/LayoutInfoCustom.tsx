@@ -1,4 +1,3 @@
-import ControllerDatePicker from "@components/Form/ControllerDatePicker";
 import ControllerTextField from "@components/Form/ControllerTextField";
 import { IconEdit, IconPlusCircle } from "@components/Icons";
 import styled from "@emotion/styled";
@@ -70,6 +69,10 @@ import LocalStorage from "utils/LocalStorage";
 import { apiUploadFile } from "../../../pages/api/cartApi";
 import PopupBorrowMsb from "./components/PopupBorrowMsb";
 import Regexs from "utils/Regexs";
+import ControllerSelectAutoComplete from "@components/Form/ControllerSelectAutoComplete";
+import DistricSelect from "@components/Form/DistrictSelect";
+import useProvinces from "hooks/useProvinces";
+import CommuneSelect from "@components/Form/CommuneSelect";
 
 type Props = {
   setScopeRender: Dispatch<SetStateAction<string>>;
@@ -85,6 +88,11 @@ const BoxInfoUserStyled = styled(Box)({
   marginTop: 16,
 });
 
+interface Option {
+  label: string;
+  value: string;
+}
+
 interface InformationBuyer {
   fullname: string;
   dob: string | Date;
@@ -97,6 +105,10 @@ interface InformationBuyer {
   contactAddress: string;
   province: string;
   district: string;
+  commune: string;
+  provinceContactName: string;
+  districtContactName: string;
+  communeContactName: string;
 }
 
 const validationSchema = yup.object().shape({
@@ -146,24 +158,15 @@ const validationSchema = yup.object().shape({
     .max(255, "Không được vượt quá 255 ký tự")
     .nullable()
     .default(""),
-  province: yup.string().default(""),
-  district: yup.string().default(""),
 });
 
 const LayoutInfoCustom = ({ setScopeRender }: Props) => {
-  const {
-    control,
-    handleSubmit,
-    watch,
-    reset,
-    trigger,
-    setError,
-    formState: { errors },
-  } = useForm<InformationBuyer>({
-    mode: "onChange",
-    resolver: yupResolver(validationSchema),
-    defaultValues: validationSchema.getDefault(),
-  });
+  const { control, handleSubmit, watch, reset, trigger, setError, setValue } =
+    useForm<InformationBuyer>({
+      mode: "onChange",
+      resolver: yupResolver(validationSchema),
+      defaultValues: validationSchema.getDefault(),
+    });
 
   const steps = [
     "Ký hợp đồng mua bán",
@@ -203,6 +206,16 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
   const [initialValue, setInitialValue] = useState<any>(null);
   const [disabledEditMainUser, setDisabledEditMainUser] =
     useState<boolean>(false);
+  const { dataProvinces } = useProvinces();
+  const [convertProvinType, setConvertProvinType] = useState<Option[]>([]);
+
+  useEffect(() => {
+    const convert = dataProvinces.map((item) => ({
+      label: item.provinceName,
+      value: item.provinceName,
+    }));
+    setConvertProvinType(convert);
+  }, [dataProvinces]);
 
   async function getInformationUser() {
     try {
@@ -216,7 +229,14 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
           idNumber,
           idReceiveDate: issueDate,
           idReceivePlace: issuePlace,
-          address: permanentAddress,
+          address: contactAddress,
+          domicile :permanentAddress,
+          province,
+          district,
+          commune,
+          provinceContactName,
+          districtContactName,
+          communeContactName,
         } = res.responseData;
         if (isEmpty(transactionCode)) {
           dispatch(
@@ -232,9 +252,13 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                   issueDate,
                   issuePlace,
                   permanentAddress,
-                  contactAddress: "",
-                  province: "",
-                  district: "",
+                  contactAddress,
+                  province,
+                  district,
+                  commune,
+                  provinceContactName,
+                  districtContactName,
+                  communeContactName,
                   mainUser: 1,
                 },
               ],
@@ -299,6 +323,10 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
               contactAddress: watch("contactAddress"),
               province: watch("province"),
               district: watch("district"),
+              commune: watch("commune"),
+              provinceContactName: watch("provinceContactName"),
+              districtContactName: watch("districtContactName"),
+              communeContactName: watch("communeContactName"),
             },
             {
               fullname: info.fullname,
@@ -310,6 +338,10 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
               contactAddress: info.contactAddress,
               province: info.province,
               district: info.district,
+              commune: info.commune,
+              provinceContactName: info.provinceContactName,
+              districtContactName: info.districtContactName,
+              communeContactName: info.communeContactName,
               dob: info.dob,
               issueDate: info.issueDate,
             }
@@ -420,6 +452,10 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
       contactAddress,
       province,
       district,
+      commune,
+      provinceContactName,
+      districtContactName,
+      communeContactName,
       id,
     } = values;
     const formatInfos = data.paymentIdentityInfos.map((info) => {
@@ -436,6 +472,10 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
           contactAddress,
           province,
           district,
+          commune,
+          provinceContactName,
+          districtContactName,
+          communeContactName,
           mainUser: 1,
           id,
         };
@@ -531,6 +571,12 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                     if (!isEmpty(res.responseData)) {
                       dispatch(setQrCode(res.responseData));
                       setScopeRender("transaction_message");
+                    } else {
+                      notification({
+                        message: res.responseMessage,
+                        severity: "error",
+                        title: "Hoàn thiện hồ sơ mua bán",
+                      });
                     }
                   })
                   .catch((err) => console.log(err));
@@ -660,7 +706,9 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
       <form onSubmit={handleSubmit((values) => handleOnSubmit(values))}>
         <Grid container columnSpacing={"30px"} justifyContent={"center"}>
           {!formInfo.open && (
-            <Box sx={{ width: "100%", display: "flex", justifyContent: 'center' }}>
+            <Box
+              sx={{ width: "100%", display: "flex", justifyContent: "center" }}
+            >
               <Box style={{ marginBottom: 60, width: "65%" }}>
                 <Stepper alternativeLabel activeStep={0}>
                   {steps.map((label, idx) => (
@@ -936,10 +984,65 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                         </FormGroup>
                       </Grid>
                       <Grid item xs={12}>
+                        <RowStyled aItems={"baseline"} width={670}>
+                          <Title20Styled
+                            // mw={175}
+                            style={{ whiteSpace: "nowrap" }}
+                          >
+                            Địa chỉ thường trú
+                          </Title20Styled>
+                          <LinedStyled mw={500} />
+                        </RowStyled>
+                      </Grid>
+
+                      <Grid item xs={6}>
+                        <FormGroup>
+                          <ControllerSelectAutoComplete
+                            disabled={disabledEditMainUser}
+                            variant="outlined"
+                            name="province"
+                            label="Thành phố/Tỉnh"
+                            control={control}
+                            setValue={setValue}
+                            options={convertProvinType}
+                            onChangeExtra={() => {
+                              setValue("district", "");
+                              setValue("commune", "");
+                            }}
+                          />
+                        </FormGroup>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <FormGroup>
+                          <DistricSelect
+                            disabled={disabledEditMainUser}
+                            name="district"
+                            label="Quận/Huyện"
+                            control={control}
+                            setValue={setValue}
+                            provinceName={watch("province")}
+                          />
+                        </FormGroup>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <FormGroup>
+                          <CommuneSelect
+                            disabled={disabledEditMainUser}
+                            name="commune"
+                            label="Xã"
+                            control={control}
+                            setValue={setValue}
+                            districtName={watch("district")}
+                            provinceName={watch("province")}
+                          />
+                        </FormGroup>
+                      </Grid>
+                      <Grid item xs={6}>
                         <FormGroup>
                           <ControllerTextField
-                            label={"Địa chỉ thường trú"}
+                            label=" "
                             control={control}
+                            placeholder="Nhập địa chỉ cụ thể"
                             InputProps={{
                               style: {
                                 height: "44px",
@@ -949,17 +1052,68 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                             }}
                             variant={"outlined"}
                             name={"permanentAddress"}
-                            required
                             fullWidth
                             disabled={disabledEditMainUser}
                           />
                         </FormGroup>
                       </Grid>
-
                       <Grid item xs={12}>
+                        <RowStyled aItems={"baseline"} width={670}>
+                          <Title20Styled
+                            // mw={175}
+                            style={{ whiteSpace: "nowrap" }}
+                          >
+                            Địa chỉ liên lạc
+                          </Title20Styled>
+                          <LinedStyled mw={500} />
+                        </RowStyled>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <FormGroup>
+                          <ControllerSelectAutoComplete
+                            disabled={disabledEditMainUser}
+                            variant="outlined"
+                            name="provinceContactName"
+                            label="Thành phố/Tỉnh"
+                            control={control}
+                            setValue={setValue}
+                            options={convertProvinType}
+                            onChangeExtra={() => {
+                              setValue("districtContactName", "");
+                              setValue("communeContactName", "");
+                            }}
+                          />
+                        </FormGroup>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <FormGroup>
+                          <DistricSelect
+                            disabled={disabledEditMainUser}
+                            name="districtContactName"
+                            label="Quận/Huyện"
+                            control={control}
+                            setValue={setValue}
+                            provinceName={watch("provinceContactName")}
+                          />
+                        </FormGroup>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <FormGroup>
+                          <CommuneSelect
+                            disabled={disabledEditMainUser}
+                            name="communeContactName"
+                            label="Xã"
+                            control={control}
+                            setValue={setValue}
+                            districtName={watch("districtContactName")}
+                            provinceName={watch("provinceContactName")}
+                          />
+                        </FormGroup>
+                      </Grid>
+                      <Grid item xs={6}>
                         <FormGroup>
                           <ControllerTextField
-                            label={"Địa chỉ liên lạc"}
+                            label=" "
                             control={control}
                             variant={"outlined"}
                             InputProps={{
@@ -971,43 +1125,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                             }}
                             name={"contactAddress"}
                             fullWidth
-                            disabled={disabledEditMainUser}
-                          />
-                        </FormGroup>
-                      </Grid>
-
-                      <Grid item xs={6}>
-                        <FormGroup>
-                          <ControllerTextField
-                            label={"Thành phố/Tỉnh"}
-                            control={control}
-                            InputProps={{
-                              style: {
-                                height: "44px",
-                                border: "1px solid #B8B8B8",
-                                borderRadius: "8px",
-                              },
-                            }}
-                            variant={"outlined"}
-                            name={"province"}
-                            disabled={disabledEditMainUser}
-                          />
-                        </FormGroup>
-                      </Grid>
-                      <Grid item xs={6}>
-                        <FormGroup>
-                          <ControllerTextField
-                            label={"Quận/Huyện"}
-                            InputProps={{
-                              style: {
-                                height: "44px",
-                                border: "1px solid #B8B8B8",
-                                borderRadius: "8px",
-                              },
-                            }}
-                            control={control}
-                            variant={"outlined"}
-                            name={"district"}
+                            placeholder="Nhập địa chỉ cụ thể"
                             disabled={disabledEditMainUser}
                           />
                         </FormGroup>
@@ -1026,7 +1144,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                     setPayMethod={setPayMethod}
                   />
                 </Box>
-                {!isEmpty(transactionCode) && (
+                {!isEmpty(transactionCode) && data.paymentStatus === 3 && (
                   <Box>
                     <FileUpload setValidUpload={setValidUpload} />
                   </Box>
@@ -1183,7 +1301,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                   }
                 >
                   <Text18Styled>
-                    {!isEmpty(transactionCode) && data.paymentStatus !== 0
+                    {!isEmpty(transactionCode) && data.paymentStatus === 3
                       ? "Hoàn thành hồ sơ"
                       : "Lưu thông tin"}
                   </Text18Styled>

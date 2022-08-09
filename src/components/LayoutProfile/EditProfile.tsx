@@ -10,9 +10,14 @@ import ControllerTextField from "@components/Form/ControllerTextField";
 import DistricSelect from "@components/Form/DistrictSelect";
 import FormGroup from "@components/Form/FormGroup";
 import { IconDownloadPTG, IconEditWhite } from "@components/Icons";
+import {
+  LinedStyled,
+  RowStyled,
+  Title20Styled,
+} from "@components/StyledLayout/styled";
 import styled from "@emotion/styled";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Button } from "@mui/material";
+import { Button, Grid } from "@mui/material";
 import { Box } from "@mui/system";
 import { ProfileI } from "@service/Profile";
 import ImageWithHideOnError from "hooks/ImageWithHideOnError";
@@ -98,7 +103,7 @@ const FileContainer = styled.div`
 
 interface Option {
   label: string;
-  value: number;
+  value: string;
 }
 
 const EditProfile = () => {
@@ -111,16 +116,12 @@ const EditProfile = () => {
   const [convertProvinType, setConvertProvinType] = useState<Option[]>([]);
 
   useEffect(() => {
-    console.log("dataProvinces", dataProvinces);
-
     const convert = dataProvinces.map((item) => ({
       label: item.provinceName,
-      value: item.provinceId,
+      value: item.provinceName,
     }));
     setConvertProvinType(convert);
   }, [dataProvinces]);
-
-  console.log("dataProvincesdataProvinces", convertProvinType);
 
   const convertCustomerType = (dataCustomType || []).map((item) => ({
     label: item.name,
@@ -167,8 +168,6 @@ const EditProfile = () => {
     (state: RootState) => state?.profile?.userInfo
   );
 
-  console.log("detailUser", detailUser);
-
   const formController = useForm<ProfileI>({
     mode: "onChange",
     resolver: yupResolver(validationSchema),
@@ -196,11 +195,20 @@ const EditProfile = () => {
         avatarThumbnailUrl: imageUrl + data.avatarThumbnailUrl,
         attachPaper: imageUrl + data.attachPaper,
         attachPaperThumbnailUrl: imageUrl + data.attachPaperThumbnailUrl,
-        district: data?.district ? Number(data?.district) : "",
-        province: data?.province ? Number(data?.province) : "",
+        district: data?.district ? data?.district : "",
+        province: data?.province ? data?.province : "",
         businessRegistration: data?.businessRegistration,
         businessRegistrationName: data?.businessRegistrationName,
-        commune: data?.commune ?? "",
+        commune: data?.commune ? data?.commune : "",
+        provinceContactName: data?.provinceContactName
+          ? data?.provinceContactName
+          : "",
+        districtContactName: data?.districtContactName
+          ? data?.districtContactName
+          : "",
+        communeContactName: data?.communeContactName
+          ? data?.communeContactName
+          : "",
       });
     },
 
@@ -277,6 +285,9 @@ const EditProfile = () => {
       district: values.district,
       province: values.province,
       commune: values.commune,
+      provinceContactName: values.provinceContactName,
+      districtContactName: values.districtContactName,
+      communeContactName: values.communeContactName,
     };
 
     (async () => {
@@ -510,13 +521,13 @@ const EditProfile = () => {
             </FormGroup>
           </Column>
         </Row>
-        <Row>
+        {/* <Row>
           <Column>
             <FormGroup sx={{ mb: 2 }} fullWidth>
               <ControllerTextField
                 variant="outlined"
                 hiddenLabel
-                name="domicile"
+                name="address"
                 control={control}
                 fullWidth
                 label="Địa chỉ thường trú"
@@ -524,8 +535,285 @@ const EditProfile = () => {
               />
             </FormGroup>
           </Column>
+        </Row> */}
+        <Row >
+          <Column>
+            <RowStyled aItems={"baseline"} width="100%">
+              <Title20Styled
+                // mw={175}
+                style={{ whiteSpace: "nowrap" }}
+              >
+                Địa chỉ thường trú
+              </Title20Styled>
+              <LinedStyled mw={500} />
+            </RowStyled>
+          </Column>
         </Row>
-        <Row>
+        <Row customStyle={{ marginTop: "10px"}}>
+          <Column>
+            <FormGroup>
+              <ControllerSelectAutoComplete
+                variant="outlined"
+                name="province"
+                label="Thành phố/Tỉnh"
+                control={control}
+                setValue={setValue}
+                options={convertProvinType}
+                onChangeExtra={() => {
+                  setValue("district", "");
+                  setValue("commune", "");
+                }}
+              />
+            </FormGroup>
+          </Column>
+          <Column>
+            <FormGroup>
+              <DistricSelect
+                name="district"
+                label="Quận/Huyện"
+                control={control}
+                setValue={setValue}
+                provinceName={watch("province")}
+              />
+            </FormGroup>
+          </Column>
+        </Row>
+        {/* <Grid item xs={6}>
+          <FormGroup>
+            <ControllerSelectAutoComplete
+              variant="outlined"
+              name="province"
+              label="Thành phố/Tỉnh"
+              control={control}
+              setValue={setValue}
+              options={convertProvinType}
+              onChangeExtra={() => {
+                setValue("district", "");
+                setValue("commune", "");
+              }}
+            />
+          </FormGroup>
+        </Grid> */}
+        {/* <Grid item xs={6}>
+          <FormGroup>
+            <DistricSelect
+              name="district"
+              label="Quận/Huyện"
+              control={control}
+              setValue={setValue}
+              provinceName={watch("province")}
+            />
+          </FormGroup>
+        </Grid> */}
+        <Row customStyle={{ marginTop: "10px"}}>
+          <Column>
+            <FormGroup>
+              <CommuneSelect
+                name="commune"
+                label="Xã"
+                control={control}
+                setValue={setValue}
+                districtName={watch("district")}
+                provinceName={watch("province")}
+              />
+            </FormGroup>
+          </Column>
+          <Column>
+            <FormGroup>
+              <ControllerTextField
+                label=" "
+                control={control}
+                placeholder="Nhập địa chỉ cụ thể"
+                InputProps={{
+                  style: {
+                    height: "44px",
+                    border: "1px solid #B8B8B8",
+                    borderRadius: "8px",
+                  },
+                }}
+                variant={"outlined"}
+                name={"domicile"}
+                fullWidth
+              />
+            </FormGroup>
+          </Column>
+        </Row>
+        {/* <Grid item xs={6}>
+          <FormGroup>
+            <CommuneSelect
+              name="commune"
+              label="Xã"
+              control={control}
+              setValue={setValue}
+              districtName={watch("district")}
+              provinceName={watch("province")}
+            />
+          </FormGroup>
+        </Grid> */}
+        {/* <Grid item xs={6}>
+          <FormGroup>
+            <ControllerTextField
+              label=" "
+              control={control}
+              placeholder="Nhập địa chỉ cụ thể"
+              InputProps={{
+                style: {
+                  height: "44px",
+                  border: "1px solid #B8B8B8",
+                  borderRadius: "8px",
+                },
+              }}
+              variant={"outlined"}
+              name={"address"}
+              fullWidth
+            />
+          </FormGroup>
+        </Grid> */}
+        <Row customStyle={{ marginTop: "10px"}}>
+          <Column>
+            <RowStyled aItems={"baseline"} width="100%">
+              <Title20Styled
+                // mw={175}
+                style={{ whiteSpace: "nowrap" }}
+              >
+                Địa chỉ liên lạc
+              </Title20Styled>
+              <LinedStyled mw={500} />
+            </RowStyled>
+          </Column>
+        </Row>
+        {/* <Grid item xs={12}>
+          <RowStyled aItems={"baseline"} width={670}>
+            <Title20Styled
+              // mw={175}
+              style={{ whiteSpace: "nowrap" }}
+            >
+              Địa chỉ liên lạc
+            </Title20Styled>
+            <LinedStyled mw={500} />
+          </RowStyled>
+        </Grid> */}
+        <Row customStyle={{ marginTop: "10px"}}>
+          <Column>
+            <FormGroup>
+              <ControllerSelectAutoComplete
+                variant="outlined"
+                name="provinceContactName"
+                label="Thành phố/Tỉnh"
+                control={control}
+                setValue={setValue}
+                options={convertProvinType}
+                onChangeExtra={() => {
+                  setValue("districtContactName", "");
+                  setValue("communeContactName", "");
+                }}
+              />
+            </FormGroup>
+          </Column>
+          <Column>
+            <FormGroup>
+              <DistricSelect
+                name="districtContactName"
+                label="Quận/Huyện"
+                control={control}
+                setValue={setValue}
+                provinceName={watch("provinceContactName")}
+              />
+            </FormGroup>
+          </Column>
+        </Row>
+        {/* <Grid item xs={6}>
+          <FormGroup>
+            <ControllerSelectAutoComplete
+              variant="outlined"
+              name="provinceContactName"
+              label="Thành phố/Tỉnh"
+              control={control}
+              setValue={setValue}
+              options={convertProvinType}
+              onChangeExtra={() => {
+                setValue("districtContactName", "");
+                setValue("communeContactName", "");
+              }}
+            />
+          </FormGroup>
+        </Grid> */}
+        {/* <Grid item xs={6}>
+          <FormGroup>
+            <DistricSelect
+              name="districtContactName"
+              label="Quận/Huyện"
+              control={control}
+              setValue={setValue}
+              provinceName={watch("provinceContactName")}
+            />
+          </FormGroup>
+        </Grid> */}
+        <Row customStyle={{ marginTop: "10px"}}>
+          <Column>
+            <FormGroup>
+              <CommuneSelect
+                name="communeContactName"
+                label="Xã"
+                control={control}
+                setValue={setValue}
+                districtName={watch("districtContactName")}
+                provinceName={watch("provinceContactName")}
+              />
+            </FormGroup>
+          </Column>
+          <Column>
+            <FormGroup>
+              <ControllerTextField
+                label=" "
+                control={control}
+                variant={"outlined"}
+                InputProps={{
+                  style: {
+                    height: "44px",
+                    border: "1px solid #B8B8B8",
+                    borderRadius: "8px",
+                  },
+                }}
+                name={"address"}
+                fullWidth
+                placeholder="Nhập địa chỉ cụ thể"
+              />
+            </FormGroup>
+          </Column>
+        </Row>
+        {/* <Grid item xs={6}>
+          <FormGroup>
+            <CommuneSelect
+              name="communeContactName"
+              label="Xã"
+              control={control}
+              setValue={setValue}
+              districtName={watch("districtContactName")}
+              provinceName={watch("provinceContactName")}
+            />
+          </FormGroup>
+        </Grid> */}
+        {/* <Grid item xs={6}>
+          <FormGroup>
+            <ControllerTextField
+              label=" "
+              control={control}
+              variant={"outlined"}
+              InputProps={{
+                style: {
+                  height: "44px",
+                  border: "1px solid #B8B8B8",
+                  borderRadius: "8px",
+                },
+              }}
+              name={"address"}
+              fullWidth
+              placeholder="Nhập địa chỉ cụ thể"
+            />
+          </FormGroup>
+        </Grid> */}
+        {/* <Row>
           <Column>
             <FormGroup sx={{ mb: 2 }} fullWidth>
               <ControllerTextField
@@ -563,7 +851,7 @@ const EditProfile = () => {
                 label="Quận/Huyện"
                 control={control}
                 setValue={setValue}
-                idProvince={Number(watch("province"))}
+                provinceName={watch("province")}
               />
             </FormGroup>
           </Column>
@@ -574,11 +862,11 @@ const EditProfile = () => {
                 label="Xã"
                 control={control}
                 setValue={setValue}
-                districtId={Number(watch("district"))}
+                districtName={watch("district")}
               />
             </FormGroup>
           </Column>
-        </Row>
+        </Row> */}
         <Row>
           <Column>
             <CustomButton

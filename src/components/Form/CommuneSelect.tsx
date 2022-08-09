@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { apiGetListCommune, apiGetListDistrict } from "../../../pages/api/locationApi";
+import { apiGetListCommune } from "../../../pages/api/locationApi";
 import ControllerSelectAutoComplete from "./ControllerSelectAutoComplete";
 
 interface PropsI {
@@ -7,45 +7,45 @@ interface PropsI {
   label: string;
   control: any;
   setValue: any;
-  districtId: number;
+  districtName: string;
+  provinceName: string;
+  disabled?: boolean;
 }
 
 interface optionI {
   label: string;
-  value: number;
+  value: string;
 }
 
 const CommuneSelect = (props: PropsI) => {
-  const { control, label, name, setValue, districtId } = props;
+  const { control, label, name, setValue, districtName, provinceName, disabled } = props;
   const [data, setData] = useState<optionI[]>([]);
 
-  const getList = (id: number) => {
+  const getList = (provinceName: string, districtName: string) => {
     try {
-      apiGetListCommune(id).then(
-        (response) => {
-          if (response?.responseCode === "00") {
-            const temp = response?.responseData?.map((el) => {
-              const district: optionI = {
-                label: el.CommuneName,
-                value: el.CommuneID,
-              };
-              return district;
-            });
-            setData(temp);
-          }
+      apiGetListCommune(provinceName, districtName).then((response) => {
+        if (response?.responseCode === "00") {
+          const temp = response?.responseData?.map((el) => {
+            const district: optionI = {
+              label: el.CommuneName,
+              value: el.CommuneName,
+            };
+            return district;
+          });
+          setData(temp);
         }
-      );
+      });
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    if (!!districtId) {
-      getList(districtId);
+    if (!!districtName && !!provinceName) {
+      getList(provinceName, districtName);
     }
-  }, [districtId]);
-  
+  }, [districtName, provinceName]);
+
   return (
     <ControllerSelectAutoComplete
       variant="outlined"
@@ -54,6 +54,7 @@ const CommuneSelect = (props: PropsI) => {
       control={control}
       setValue={setValue}
       options={data}
+      disabled={disabled}
     />
   );
 };

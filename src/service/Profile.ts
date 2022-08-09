@@ -47,8 +47,8 @@ export interface ProfileI {
   idReceiveDate: string;
   domicile: string;
   address: string;
-  district: string | number;
-  province: string | number;
+  district?: string;
+  province?: string;
   avatar: string;
   avatarThumbnailUrl: string;
   attachPaperThumbnailUrl?: string;
@@ -56,7 +56,11 @@ export interface ProfileI {
   fileImages?: any;
   businessRegistration?: any;
   businessRegistrationName?: any;
-  commune?: string | number;
+  commune?: string;
+  contactAddress?: string;
+  provinceContactName?: string;
+  districtContactName?: string;
+  communeContactName?: string;
 }
 
 export const getContractByUser = () => {

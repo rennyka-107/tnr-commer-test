@@ -10,6 +10,7 @@ import {
   Text18Styled,
   Title28Styled,
   WrapperBoxBorderStyled,
+  Title20Styled,
 } from "../../StyledLayout/styled";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
@@ -23,6 +24,10 @@ import ControllerReactDatePicker from "@components/Form/ControllerReactDatePicke
 import { validateLine } from "utils/constants";
 import isEqual from "lodash.isequal";
 import useNotification from "hooks/useNotification";
+import ControllerSelectAutoComplete from "@components/Form/ControllerSelectAutoComplete";
+import DistricSelect from "@components/Form/DistrictSelect";
+import CommuneSelect from "@components/Form/CommuneSelect";
+import useProvinces from "hooks/useProvinces";
 
 type Props = {
   onClose: Function;
@@ -44,28 +49,64 @@ interface InformationCustom {
   contactAddress: string;
   province: string;
   district: string;
+  commune: string;
+  provinceContactName: string;
+  districtContactName: string;
+  communeContactName: string;
 }
 
 const validationSchema = yup.object().shape({
   customerTypeId: yup.string().required(validateLine.required).default(""),
   vocativeId: yup.string().required(validateLine.required).default(""),
-  fullname: yup.string().max(255, "Không được vượt quá 255 ký tự").required(validateLine.required).default(""),
+  fullname: yup
+    .string()
+    .max(255, "Không được vượt quá 255 ký tự")
+    .required(validateLine.required)
+    .default(""),
   dob: yup.string().required(validateLine.required).default(""),
-  phoneNumber: yup.string().max(10, "Không được vượt quá 10 ký tự").required(validateLine.required).default(""),
-  email: yup.string().max(255, "Không được vượt quá 255 ký tự").required(validateLine.required).default(""),
-  idNumber: yup.string().max(255, "Không được vượt quá 255 ký tự").required(validateLine.required).default(""),
-  issuePlace: yup.string().max(255, "Không được vượt quá 255 ký tự").required(validateLine.required).default(""),
+  phoneNumber: yup
+    .string()
+    .max(10, "Không được vượt quá 10 ký tự")
+    .required(validateLine.required)
+    .default(""),
+  email: yup
+    .string()
+    .max(255, "Không được vượt quá 255 ký tự")
+    .required(validateLine.required)
+    .default(""),
+  idNumber: yup
+    .string()
+    .max(255, "Không được vượt quá 255 ký tự")
+    .required(validateLine.required)
+    .default(""),
+  issuePlace: yup
+    .string()
+    .max(255, "Không được vượt quá 255 ký tự")
+    .required(validateLine.required)
+    .default(""),
   issueDate: yup.string().required(validateLine.required).default(""),
-  permanentAddress: yup.string().max(255, "Không được vượt quá 255 ký tự").required(validateLine.required).default(""),
-  contactAddress: yup.string().max(255, "Không được vượt quá 255 ký tự").default(""),
-  province: yup.string().default(""),
-  district: yup.string().default(""),
+  permanentAddress: yup
+    .string()
+    .max(255, "Không được vượt quá 255 ký tự")
+    .required(validateLine.required)
+    .default(""),
+  contactAddress: yup
+    .string()
+    .max(255, "Không được vượt quá 255 ký tự")
+    .default(""),
 });
+
+interface Option {
+  label: string;
+  value: string;
+}
 
 const AddInfoCustom = (props: Props) => {
   const { onClose, idNumber, listCustomerType } = props;
+  const [convertProvinType, setConvertProvinType] = useState<Option[]>([]);
   const data = useSelector((state: RootState) => state.payments.data);
   const dispatch = useDispatch();
+  const { dataProvinces } = useProvinces();
   const [initialValue, setInitialValue] = useState<any>(
     validationSchema.getDefault()
   );
@@ -76,6 +117,14 @@ const AddInfoCustom = (props: Props) => {
       resolver: yupResolver(validationSchema),
       defaultValues: validationSchema.getDefault(),
     });
+
+  useEffect(() => {
+    const convert = dataProvinces.map((item) => ({
+      label: item.provinceName,
+      value: item.provinceName,
+    }));
+    setConvertProvinType(convert);
+  }, [dataProvinces]);
 
   useEffect(() => {
     if (idNumber) {
@@ -202,6 +251,13 @@ const AddInfoCustom = (props: Props) => {
                     variant={"outlined"}
                     name={"fullname"}
                     required
+                    InputProps={{
+                      style: {
+                        height: "44px",
+                        border: "1px solid #B8B8B8",
+                        borderRadius: "8px",
+                      },
+                    }}
                   />
                 </FormGroup>
               </Grid>
@@ -222,6 +278,13 @@ const AddInfoCustom = (props: Props) => {
                 <FormGroup>
                   <ControllerTextField
                     label={"Số điện thoại"}
+                    InputProps={{
+                      style: {
+                        height: "44px",
+                        border: "1px solid #B8B8B8",
+                        borderRadius: "8px",
+                      },
+                    }}
                     control={control}
                     variant={"outlined"}
                     name={"phoneNumber"}
@@ -233,6 +296,13 @@ const AddInfoCustom = (props: Props) => {
                 <FormGroup>
                   <ControllerTextField
                     label={"Email"}
+                    InputProps={{
+                      style: {
+                        height: "44px",
+                        border: "1px solid #B8B8B8",
+                        borderRadius: "8px",
+                      },
+                    }}
                     control={control}
                     variant={"outlined"}
                     name={"email"}
@@ -252,6 +322,13 @@ const AddInfoCustom = (props: Props) => {
                 <FormGroup>
                   <ControllerTextField
                     label={"Số CMND/CCCD"}
+                    InputProps={{
+                      style: {
+                        height: "44px",
+                        border: "1px solid #B8B8B8",
+                        borderRadius: "8px",
+                      },
+                    }}
                     control={control}
                     variant={"outlined"}
                     name={"idNumber"}
@@ -262,6 +339,13 @@ const AddInfoCustom = (props: Props) => {
               <Grid item xs={6}>
                 <FormGroup>
                   <ControllerTextField
+                    InputProps={{
+                      style: {
+                        height: "44px",
+                        border: "1px solid #B8B8B8",
+                        borderRadius: "8px",
+                      },
+                    }}
                     label={"Nơi cấp"}
                     control={control}
                     variant={"outlined"}
@@ -283,8 +367,146 @@ const AddInfoCustom = (props: Props) => {
                   />
                 </FormGroup>
               </Grid>
-
               <Grid item xs={12}>
+                <RowStyled aItems={"baseline"} width={670}>
+                  <Title20Styled
+                    // mw={175}
+                    style={{ whiteSpace: "nowrap" }}
+                  >
+                    Địa chỉ thường trú
+                  </Title20Styled>
+                  <LinedStyled mw={500} />
+                </RowStyled>
+              </Grid>
+
+              <Grid item xs={6}>
+                <FormGroup>
+                  <ControllerSelectAutoComplete
+                    variant="outlined"
+                    name="province"
+                    label="Thành phố/Tỉnh"
+                    control={control}
+                    setValue={setValue}
+                    options={convertProvinType}
+                    onChangeExtra={() => {
+                      setValue("district", "");
+                      setValue("commune", "");
+                    }}
+                  />
+                </FormGroup>
+              </Grid>
+              <Grid item xs={6}>
+                <FormGroup>
+                  <DistricSelect
+                    name="district"
+                    label="Quận/Huyện"
+                    control={control}
+                    setValue={setValue}
+                    provinceName={watch("province")}
+                  />
+                </FormGroup>
+              </Grid>
+              <Grid item xs={6}>
+                <FormGroup>
+                  <CommuneSelect
+                    name="commune"
+                    label="Xã"
+                    control={control}
+                    setValue={setValue}
+                    districtName={watch("district")}
+                    provinceName={watch("province")}
+                  />
+                </FormGroup>
+              </Grid>
+              <Grid item xs={6}>
+                <FormGroup>
+                  <ControllerTextField
+                    label=" "
+                    control={control}
+                    placeholder="Nhập địa chỉ cụ thể"
+                    InputProps={{
+                      style: {
+                        height: "44px",
+                        border: "1px solid #B8B8B8",
+                        borderRadius: "8px",
+                      },
+                    }}
+                    variant={"outlined"}
+                    name={"permanentAddress"}
+                    fullWidth
+                  />
+                </FormGroup>
+              </Grid>
+              <Grid item xs={12}>
+                <RowStyled aItems={"baseline"} width={670}>
+                  <Title20Styled
+                    // mw={175}
+                    style={{ whiteSpace: "nowrap" }}
+                  >
+                    Địa chỉ liên lạc
+                  </Title20Styled>
+                  <LinedStyled mw={500} />
+                </RowStyled>
+              </Grid>
+              <Grid item xs={6}>
+                <FormGroup>
+                  <ControllerSelectAutoComplete
+                    variant="outlined"
+                    name="provinceContactName"
+                    label="Thành phố/Tỉnh"
+                    control={control}
+                    setValue={setValue}
+                    options={convertProvinType}
+                    onChangeExtra={() => {
+                      setValue("districtContactName", "");
+                      setValue("communeContactName", "");
+                    }}
+                  />
+                </FormGroup>
+              </Grid>
+              <Grid item xs={6}>
+                <FormGroup>
+                  <DistricSelect
+                    name="districtContactName"
+                    label="Quận/Huyện"
+                    control={control}
+                    setValue={setValue}
+                    provinceName={watch("provinceContactName")}
+                  />
+                </FormGroup>
+              </Grid>
+              <Grid item xs={6}>
+                <FormGroup>
+                  <CommuneSelect
+                    name="communeContactName"
+                    label="Xã"
+                    control={control}
+                    setValue={setValue}
+                    districtName={watch("districtContactName")}
+                    provinceName={watch("provinceContactName")}
+                  />
+                </FormGroup>
+              </Grid>
+              <Grid item xs={6}>
+                <FormGroup>
+                  <ControllerTextField
+                    label=" "
+                    control={control}
+                    variant={"outlined"}
+                    InputProps={{
+                      style: {
+                        height: "44px",
+                        border: "1px solid #B8B8B8",
+                        borderRadius: "8px",
+                      },
+                    }}
+                    name={"contactAddress"}
+                    fullWidth
+                    placeholder="Nhập địa chỉ cụ thể"
+                  />
+                </FormGroup>
+              </Grid>
+              {/* <Grid item xs={12}>
                 <FormGroup>
                   <ControllerTextField
                     label={"Địa chỉ thường trú"}
@@ -328,7 +550,7 @@ const AddInfoCustom = (props: Props) => {
                     name={"district"}
                   />
                 </FormGroup>
-              </Grid>
+              </Grid> */}
             </Grid>
           </FormControl>
         </WrapperBoxBorderStyled>
@@ -352,9 +574,7 @@ const AddInfoCustom = (props: Props) => {
             style={{ width: 225, marginRight: 35 }}
             onClick={handleSubmit((value) => handleOnSubmit(value))}
           >
-            <Text18Styled color={"#fff"}>
-              Lưu thông tin
-            </Text18Styled>
+            <Text18Styled color={"#fff"}>Lưu thông tin</Text18Styled>
           </ButtonNormalStyled>
         </RowStyled>
       </form>
