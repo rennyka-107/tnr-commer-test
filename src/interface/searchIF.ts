@@ -18,6 +18,7 @@ export interface searchLocationResponse {
   thumbnail: string;
   diaChi: string;
   tongBanGhi: string;
+  build?: boolean;
   projectName: string;
   category: string;
   maxFloor?: number;

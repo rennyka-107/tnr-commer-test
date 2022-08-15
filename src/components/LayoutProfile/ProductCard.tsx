@@ -1,19 +1,27 @@
 import BoxContainer from "@components/CustomComponent/BoxContainer";
 import Column from "@components/CustomComponent/Column";
+import CustomButton from "@components/CustomComponent/CustomButton";
 import Row from "@components/CustomComponent/Row";
+import SelectInputComponent from "@components/CustomComponent/SelectInputComponent";
+import TNRButton from "@components/Element/TNRButton";
 import IconCircleChecked from "@components/Icons/IconCircleChecked";
 import IconCircleClose from "@components/Icons/IconCircleClose";
 import IconWatingCircle from "@components/Icons/IconWatingCircle";
 import styled from "@emotion/styled";
-import { Typography } from "@mui/material";
-import { ContractI } from "@service/Profile";
+import { SelectChangeEvent, Typography } from "@mui/material";
+import { Box } from "@mui/system";
+import { ContractI, getOrderById } from "@service/Profile";
 import ImageWithHideOnError from "hooks/ImageWithHideOnError";
+import useNotification from "hooks/useNotification";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 import FormatFns from "utils/DateFns";
 import { dayOfWeekToString, getDateFromStringDMY } from "utils/helper";
 import Product3 from "../../../public/images/product3.png";
+import { setOrderDetail } from "../../../store/sendRequestSlice";
 
 const DynamicHorizontalLine = dynamic(() =>
   import("@components/CustomComponent/HorizontalLine").then(
@@ -87,9 +95,42 @@ interface Props {
   isLast?: boolean;
 }
 
+type RequestType =
+  | "liquidation"
+  | "deposit-refund"
+  | "transfer"
+  | "change-apartment";
+
+const sendRequestTypes = [
+  {
+    id: "liquidation",
+    name: "Thanh lý",
+  },
+  {
+    id: "deposit-refund",
+    name: "Hoàn cọc",
+  },
+  {
+    id: "transfer",
+    name: "Chuyển nhượng",
+  },
+  {
+    id: "change-apartment",
+    name: "Đổi lô / đổi căn",
+  },
+];
+
+interface RequestParams {
+  id: RequestType;
+  name: string;
+}
+
 const ProductCard = (props: Props) => {
   const { item, isLast } = props;
   const router = useRouter();
+  const [requestType, setRequestType] = useState<RequestParams | null>(null);
+  const dispatch = useDispatch();
+  const notification = useNotification();
 
   const convertDateToString = (date: Date) => {
     const house = FormatFns.format(date, "HH:mm");
@@ -110,6 +151,22 @@ const ProductCard = (props: Props) => {
     router.replace(`/profile?transCode=${code}`);
   };
   console.log(item);
+
+  const handleChangeRequestType = (e: SelectChangeEvent) => {
+    const data = sendRequestTypes.filter((x) => x.name === e.target.value);
+    setRequestType(data[0] as RequestParams);
+  };
+
+  const handleViewRequestDetail = () => {
+    if (!requestType) {
+      notification({
+        severity: "error",
+        message: "Vui lòng chọn yêu cầu giao dịch",
+      });
+    } else {
+      router.replace(`/send-request/${requestType.id}/${item.bookingCode}`);
+    }
+  };
 
   return (
     <BoxContainer
@@ -145,16 +202,11 @@ const ProductCard = (props: Props) => {
             title={"Logo "}
             alt={"Logo "}
             priority
-			style={{borderRadius: 8}}
+            style={{ borderRadius: 8 }}
             unoptimized={true}
           />
         ) : (
-          <ImageProduct
-            src={Product3}
-			height={120}
-            width={180}
-            alt=""
-          />
+          <ImageProduct src={Product3} height={120} width={180} alt="" />
         )}
       </div>
       <ContentProduct>
@@ -322,22 +374,22 @@ const ProductCard = (props: Props) => {
                 Đặt chỗ thành công
               </TextProduct>
             ) : item?.status === "Đã tạo phiếu thanh toán" ? (
-				<TextProduct color="#06C270">
+              <TextProduct color="#06C270">
                 {" "}
                 <div style={{ marginRight: 10 }}>
                   <IconCircleChecked />
                 </div>
                 Đã tạo phiếu thanh toán
               </TextProduct>
-			) : item?.status === "Đã tạo bản nháp thông tin mua hàng" ? (
-				<TextProduct color="#FF3B3B">
+            ) : item?.status === "Đã tạo bản nháp thông tin mua hàng" ? (
+              <TextProduct color="#FF3B3B">
                 <div style={{ marginRight: 10 }}>
                   {" "}
                   <IconCircleClose />
                 </div>
-				Đã tạo bản nháp thông tin mua hàng
+                Đã tạo bản nháp thông tin mua hàng
               </TextProduct>
-			) :(
+            ) : (
               <TextProduct color="#06C270">
                 {" "}
                 <div style={{ marginRight: 10 }}>
@@ -348,6 +400,27 @@ const ProductCard = (props: Props) => {
             )}
           </Column>
         </Row>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "flex-end",
+            ml: "150px",
+            columnGap: "25px",
+          }}
+        >
+          <SelectInputComponent
+            data={sendRequestTypes}
+            value={requestType ? [requestType.name] : []}
+            onChange={handleChangeRequestType}
+            placeholder="Gửi yêu cầu"
+            style={{ margin: 0 }}
+          />
+          <CustomButton
+            style={{ width: "300px", padding: "18px 50px", margin: "8px" }}
+            label="Xem chi tiết"
+            onClick={handleViewRequestDetail}
+          />
+        </Box>
       </ContentProduct>
     </BoxContainer>
   );

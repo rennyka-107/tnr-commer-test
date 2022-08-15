@@ -92,7 +92,6 @@ const ItemSearch = ({ data, buyDisabled }: searchProps) => {
     <>
       <ProductWrap>
         {data?.map((product, index) => {
-          console.log("product", product);
           return (
             <ProductCardSearch
               onClick={() => addToCart(product.productId)}
@@ -102,6 +101,7 @@ const ItemSearch = ({ data, buyDisabled }: searchProps) => {
               projectName={product.projectName}
               title={product.name}
               subTitle={product.location}
+			  build={product.build}
               activeFavourite={true}
               dataItem={{
                 item1: product.landArea,

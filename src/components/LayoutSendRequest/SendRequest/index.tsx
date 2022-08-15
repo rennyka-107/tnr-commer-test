@@ -5,7 +5,7 @@ import {
   Text14Styled,
   Text18Styled,
 } from "@components/StyledLayout/styled";
-import { Box, Button, Checkbox } from "@mui/material";
+import { Box, Button, Checkbox, CircularProgress } from "@mui/material";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -13,9 +13,11 @@ export type SubmitType = "request" | "reject";
 
 interface Props {
   handleClickBtn: (type: SubmitType) => void;
+  text: string;
+  loading?: boolean;
 }
 
-const SendRequest = ({ handleClickBtn }: Props) => {
+const SendRequest = ({ handleClickBtn, text, loading = false }: Props) => {
   const [isAccept, setIsAccept] = useState<boolean>(false);
 
   const handleSendRequest = () => {
@@ -32,8 +34,7 @@ const SendRequest = ({ handleClickBtn }: Props) => {
           onClick={() => setIsAccept(!isAccept)}
         />
         <Text14Styled>
-          Ấn “Gửi yêu cầu Hoàn cọc” đồng nghĩa với việc bạn đồng ý tuân
-          theo&nbsp;
+          Ấn “{text}” đồng nghĩa với việc bạn đồng ý tuân theo&nbsp;
           <span style={{ color: "#0063F7", textDecoration: "underline" }}>
             <Link href={"/"}>Điều Khoản TNR</Link>
           </span>
@@ -44,7 +45,13 @@ const SendRequest = ({ handleClickBtn }: Props) => {
         disabled={!isAccept}
         onClick={handleSendRequest}
       >
-        <Text18Styled color={"#fff"}>Gửi yêu chuyển nhượng</Text18Styled>
+        {loading === false ? (
+          <Text18Styled color={"#fff"}>{text}</Text18Styled>
+        ) : (
+          <CircularProgress
+            style={{ height: 25, width: 25, color: "#ffffff" }}
+          />
+        )}
       </ButtonAction>
       <ButtonAction bg="#FFFFFF" border={"1px solid #c7c9d9"}>
         <Text18Styled>Hủy yêu cầu</Text18Styled>

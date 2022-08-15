@@ -25,6 +25,8 @@ import {
 import Link from "next/link";
 import ImageWithHideOnError from "hooks/ImageWithHideOnError";
 import useFavourite from "hooks/useFavourite";
+import IconCoXay from "@components/Icons/IconCoXay";
+import IconChuaXay from "@components/Icons/IconChuaXay";
 
 type Props = {
   id?: string;
@@ -42,6 +44,7 @@ type Props = {
   priceListed?: string;
   priceSub?: string;
   activeSoSanh?: boolean;
+  build?: boolean;
   onClick?: MouseEventHandler<HTMLButtonElement>;
   onCompare?: MouseEventHandler<HTMLButtonElement>;
   ticketCard?: string;
@@ -57,7 +60,7 @@ const CardStyled = styled(Card)`
   width: 350px;
   /* Line/stroke */
   position: relative;
-  border: 0.5px solid #D8D8D8;
+  border: 0.5px solid #d8d8d8;
   border-radius: 20px 20px 20px 20px;
   box-shadow: none !important;
 `;
@@ -173,7 +176,7 @@ const ButtonStyled = styled(Button)`
   background: #ea242a;
   border-radius: 60px;
   :hover {
-    background: #FEC83C;
+    background: #fec83c;
     // box-shadow: 4px 8px 24px #f2f2f5;
     box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.2);
     border-radius: 60px;
@@ -220,17 +223,16 @@ const TextProjectStyled = styled(Typography)`
   color: #48576d;
 `;
 const TextFloorStyled = styled(Typography)`
-  margin-left: 5px;
-  font-family: "Roboto";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 14px;
-  /* identical to box height */
+margin-left: 5px;
+font-family: "Roboto";
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 16px;
 
-  /* Shades/Dark 2 */
+/* Brand/Main color */
 
-  color: #48576d;
+color: #1b3459;
 `;
 const TextFloorValue = styled(Typography)`
   font-family: "Roboto";
@@ -259,10 +261,11 @@ export default function ProductCardSearch({
   maxFloor,
   ticketCard,
   activeSoSanh,
+  build,
   id,
   buyDisabled,
   favouriteStatus,
-  activeFavourite
+  activeFavourite,
 }: Props) {
   const router = useRouter();
   const { addProductToFavouriteFunction } = useFavourite();
@@ -275,9 +278,10 @@ export default function ProductCardSearch({
       .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
   }
 
+  console.log("build", build);
   return (
     <CardStyled sx={{ maxWidth: 350 }}>
-     {activeFavourite ? (
+      {activeFavourite ? (
         <>
           {favouriteStatus === 0 ? (
             <IconHeartProduct
@@ -306,7 +310,6 @@ export default function ProductCardSearch({
       ) : (
         <></>
       )}
-
 
       {ticketCard ? (
         <div
@@ -363,6 +366,12 @@ export default function ProductCardSearch({
         {/* <LineStyled /> */}
 
         <CenterIntemWrap>
+          <WrapItemCenter>
+            <IconFrame />
+            <TextCenterItem>
+              {dataItem.item1 ? dataItem?.item1 : "N/A"} m²
+            </TextCenterItem>
+          </WrapItemCenter>
           {projectTypeCode === "2" ? (
             <>
               <WrapItemCenter>
@@ -374,20 +383,23 @@ export default function ProductCardSearch({
             </>
           ) : (
             <>
-              <WrapItemCenter>
-                <FloorIcon />
-                <TextFloorStyled>min</TextFloorStyled>
-                <TextCenterItem>
-                  <TextFloorValue>{minFloor} tầng</TextFloorValue>
-                </TextCenterItem>
-              </WrapItemCenter>
+              {build ? (
+                <WrapItemCenter>
+                  <IconCoXay />
+                  <TextFloorStyled>Có xây</TextFloorStyled>
+                </WrapItemCenter>
+              ) : (
+                <WrapItemCenter>
+                  <IconChuaXay />
+                  <TextFloorStyled>Chưa xây</TextFloorStyled>
+                </WrapItemCenter>
+              )}
             </>
           )}
-
           <WrapItemCenter>
-            <IconFrame />
+            <IconCompass />
             <TextCenterItem>
-              {dataItem.item1 ? dataItem?.item1 : "N/A"} m²
+              {dataItem.item4 ? dataItem?.item4 : "N/A"}
             </TextCenterItem>
           </WrapItemCenter>
 
@@ -403,23 +415,20 @@ export default function ProductCardSearch({
           ) : (
             <>
               <>
-                <WrapItemCenter>
-                  <FloorIcon />
-                  <TextFloorStyled>max</TextFloorStyled>
-                  <TextCenterItem>
-                    <TextFloorValue>{maxFloor} tầng</TextFloorValue>
-                  </TextCenterItem>
-                </WrapItemCenter>
+			  {build ? (
+                  <WrapItemCenter>
+                    <FloorIcon />
+                    {/* <TextFloorStyled>max</TextFloorStyled> */}
+                    <TextCenterItem>
+                      <TextFloorValue>{maxFloor} tầng</TextFloorValue>
+                    </TextCenterItem>
+                  </WrapItemCenter>
+                ) : (
+                  <></>
+                )}
               </>
             </>
           )}
-
-          <WrapItemCenter>
-            <IconCompass />
-            <TextCenterItem>
-              {dataItem.item4 ? dataItem?.item4 : "N/A"}
-            </TextCenterItem>
-          </WrapItemCenter>
         </CenterIntemWrap>
         {/* <LineStyled /> */}
         {/* <div style={{ marginTop: 12 }}> */}

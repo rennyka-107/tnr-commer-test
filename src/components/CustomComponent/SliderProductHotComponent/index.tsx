@@ -74,7 +74,7 @@ export default function SliderProductHotComponent() {
         "listParamsIdProject",
         JSON.stringify([dataProject[0].id])
       );
-    //   console.log(dataProjectType, dataProject);
+      //   console.log(dataProjectType, dataProject);
       dispatch(
         getComparePopUpItem([
           {
@@ -87,18 +87,20 @@ export default function SliderProductHotComponent() {
           },
         ])
       );
-        router.push({
-          pathname: "/compare-search",
-          query: {
-            // projectId: projectId,
-            // projectTypeId: projectType,
-            priceTo: "20",
-            priceFrom: "1",
-            areaTo: "200",
-            areaFrom: "30",
-          },
-        });
+      router.push({
+        pathname: "/compare-search",
+        query: {
+          // projectId: projectId,
+          // projectTypeId: projectType,
+          priceTo: "20",
+          priceFrom: "1",
+          areaTo: "200",
+          areaFrom: "30",
+        },
+      });
     };
+
+	// console.log("productTopByOutStanding",productTopByOutStanding)
 
   return (
     <WrapSlide>
@@ -111,6 +113,7 @@ export default function SliderProductHotComponent() {
         autoplay={{
           delay: 2000,
           disableOnInteraction: false,
+          pauseOnMouseEnter: true,
         }}
         navigation={{
           prevEl: ".icon-LeftArow-prod",
@@ -146,6 +149,7 @@ export default function SliderProductHotComponent() {
                 ticketCard={item.category}
                 projectTypeCode={item.projectTypeCode}
                 favouriteStatus={item.favouriteStatus}
+				build={item.build}
                 minFloor={item.minFloor}
                 maxFloor={item.maxFloor}
                 onClick={() => addToCart(item.id)}

@@ -61,7 +61,8 @@ export const WrapperBoxBorderStyled = styled(Box)(
     borderRadius: "20px",
   },
   (props: { mw?: number; padding?: string | number; height?: number }) => ({
-    maxWidth: props.mw ?? 730,
+    maxWidth: props.mw ?? 637,
+
     padding: props.padding ?? "20px 30px",
     height: props.height,
   })

@@ -35,6 +35,9 @@ type Props = {
 
 const TableQuote = ({ width, urlPayment, setScopeRender, item }: Props) => {
   const { cart } = useSelector((state: RootState) => state.carts);
+  const productItem = useSelector(
+	(state: RootState) => state.products.productItem
+  );
 
   return (
     <WrapperBoxBorderStyled mw={width ?? 350} padding={"20px 20px 25px"}>
@@ -42,30 +45,30 @@ const TableQuote = ({ width, urlPayment, setScopeRender, item }: Props) => {
 
       <BoxDetailInfo>
         <RowStyledAgain>
-          <Text14Styled>Giá BĐS</Text14Styled>
+          <Text14Styled>Đơn giá QSDĐ</Text14Styled>
           <Text14Styled>
-            {(!isEmpty(item) && item.landPrice
-              ? currencyFormat(item.landPrice)
+            {(!isEmpty(productItem) 
+              ? currencyFormat(productItem.LandPrice)
               : currencyFormat(cart.totalVatPrice)) ?? "0"}
             đ
           </Text14Styled>
         </RowStyledAgain>
         <RowStyledAgain>
-          <Text14Styled>Thuế VAT</Text14Styled>
+          <Text14Styled>Tổng giá trị QSDĐ</Text14Styled>
           <Text14Styled>
-            {(!isEmpty(item) && item.vat
+            {(!isEmpty(productItem) ? currencyFormat(productItem.LandMoney) : !isEmpty(item) && item.vat
               ? currencyFormat(item.vat)
               : currencyFormat(cart.vat)) ?? "N/A"}
           </Text14Styled>
         </RowStyledAgain>
-        <RowStyledAgain>
+        {/* <RowStyledAgain>
           <Text14Styled>Phí bảo trì</Text14Styled>
           <Text14Styled>
             {(!isEmpty(item) && item.maintainPrice
               ? currencyFormat(item.maintainPrice)
               : currencyFormat(cart.maintainPrice)) ?? "0"}
           </Text14Styled>
-        </RowStyledAgain>
+        </RowStyledAgain> */}
       </BoxDetailInfo>
 
       <LinedStyled />
@@ -74,7 +77,7 @@ const TableQuote = ({ width, urlPayment, setScopeRender, item }: Props) => {
         <RowStyledAgain>
           <Text14Styled>Tổng tiền niêm yết</Text14Styled>
           <Text14Styled>
-            {(!isEmpty(item) && item.totalPrice
+            {(!isEmpty(productItem) ? currencyFormat(productItem.PreTotalMoney) : !isEmpty(item) && item.totalPrice
               ? currencyFormat(item.totalPrice)
               : currencyFormat(cart.totalPrice)) ?? "0"}
           </Text14Styled>
@@ -82,7 +85,7 @@ const TableQuote = ({ width, urlPayment, setScopeRender, item }: Props) => {
         <RowStyledAgain>
           <Text14Styled>Giảm giá</Text14Styled>
           <Text14Styled>
-            {(!isEmpty(item) && item.sales
+            {(!isEmpty(productItem) ? currencyFormat(productItem.PromotionMoney) : !isEmpty(item) && item.sales
               ? currencyFormat(item.sales)
               : currencyFormat(cart.sales)) ?? "0"}
             đ
@@ -91,7 +94,7 @@ const TableQuote = ({ width, urlPayment, setScopeRender, item }: Props) => {
         <RowStyledAgain>
           <Text14Styled>Tổng tiền mua online</Text14Styled>
           <Text18Styled fw={500} style={{ color: "#ea242a" }}>
-            {(!isEmpty(item) && item.totalOnlinePrice
+            {(!isEmpty(productItem) ? currencyFormat(productItem.TotalMoney) :  !isEmpty(item) && item.totalOnlinePrice
               ? currencyFormat(item.totalOnlinePrice)
               : currencyFormat(cart.totalPrice)) ?? "0"}
             đ

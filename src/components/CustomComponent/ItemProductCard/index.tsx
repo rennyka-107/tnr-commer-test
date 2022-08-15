@@ -23,6 +23,8 @@ import {
 } from "@components/Icons";
 import ImageWithHideOnError from "hooks/ImageWithHideOnError";
 import useFavourite from "hooks/useFavourite";
+import IconCoXay from "@components/Icons/IconCoXay";
+import IconChuaXay from "@components/Icons/IconChuaXay";
 
 type Props = {
   id?: string;
@@ -40,6 +42,7 @@ type Props = {
   priceSub?: number;
   favouriteStatus?: number;
   activeSoSanh?: boolean;
+  build?: boolean;
   onClick?: MouseEventHandler<HTMLButtonElement>;
   onCompare?: MouseEventHandler<HTMLButtonElement>;
   ticketCard?: string;
@@ -60,7 +63,7 @@ const CardStyled = styled(Card)`
   box-shadow: none !important;
 `;
 const CardContentStyled = styled(CardContent)`
-  padding: 10px 0px 0px 20px;
+  padding: 10px 0px 0px 24px;
 `;
 const TextTitleStyled = styled.a`
   font-family: "Roboto";
@@ -171,7 +174,7 @@ const ButtonStyled = styled(Button)`
   background: #ea242a;
   border-radius: 60px;
   :hover {
-    background: #FEC83C;
+    background: #fec83c;
     // box-shadow: 4px 8px 24px #f2f2f5;
     box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.2);
     border-radius: 60px;
@@ -222,13 +225,12 @@ const TextFloorStyled = styled(Typography)`
   font-family: "Roboto";
   font-style: normal;
   font-weight: 400;
-  font-size: 12px;
-  line-height: 14px;
-  /* identical to box height */
+  font-size: 14px;
+  line-height: 16px;
 
-  /* Shades/Dark 2 */
+  /* Brand/Main color */
 
-  color: #48576d;
+  color: #1b3459;
 `;
 const TextFloorValue = styled(Typography)`
   font-family: "Roboto";
@@ -256,6 +258,7 @@ export default function ItemProductCard({
   maxFloor,
   ticketCard,
   activeSoSanh,
+  build,
   id,
   buyDisabled,
   favouriteStatus,
@@ -369,6 +372,14 @@ export default function ItemProductCard({
               {dataItem.item2 ? dataItem?.item2 : "N/A"}
             </TextCenterItem>
           </WrapItemCenter> */}
+          <WrapItemCenter>
+            <IconFrame />
+
+            <TextCenterItem>
+              {dataItem.item1 ? dataItem?.item1 : "N/A"} m²
+            </TextCenterItem>
+          </WrapItemCenter>
+
           {projectTypeCode === "2" ? (
             <>
               <WrapItemCenter>
@@ -380,21 +391,23 @@ export default function ItemProductCard({
             </>
           ) : (
             <>
-              <WrapItemCenter>
-                <FloorIcon />
-                <TextFloorStyled>min</TextFloorStyled>
-                <TextCenterItem>
-                  <TextFloorValue>{minFloor} tầng</TextFloorValue>
-                </TextCenterItem>
-              </WrapItemCenter>
+              {build ? (
+                <WrapItemCenter>
+                  <IconCoXay />
+                  <TextCenterItem>Có xây</TextCenterItem>
+                </WrapItemCenter>
+              ) : (
+                <WrapItemCenter>
+                  <IconChuaXay />
+                  <TextCenterItem>Chưa xây</TextCenterItem>
+                </WrapItemCenter>
+              )}
             </>
           )}
-
           <WrapItemCenter>
-            <IconFrame />
-
+            <IconCompass />
             <TextCenterItem>
-              {dataItem.item1 ? dataItem?.item1 : "N/A"} m²
+              {dataItem.item4 ? dataItem?.item4 : "N/A"}
             </TextCenterItem>
           </WrapItemCenter>
           {/* <WrapItemCenter>
@@ -416,23 +429,20 @@ export default function ItemProductCard({
           ) : (
             <>
               <>
-                <WrapItemCenter>
-                  <FloorIcon />
-                  <TextFloorStyled>max</TextFloorStyled>
-                  <TextCenterItem>
-                    <TextFloorValue>{maxFloor} tầng</TextFloorValue>
-                  </TextCenterItem>
-                </WrapItemCenter>
+                {build ? (
+                  <WrapItemCenter>
+                    <FloorIcon />
+                    {/* <TextFloorStyled>max</TextFloorStyled> */}
+                    <TextCenterItem>
+                      <TextFloorValue>{maxFloor} tầng</TextFloorValue>
+                    </TextCenterItem>
+                  </WrapItemCenter>
+                ) : (
+                  <></>
+                )}
               </>
             </>
           )}
-
-          <WrapItemCenter>
-            <IconCompass />
-            <TextCenterItem>
-              {dataItem.item4 ? dataItem?.item4 : "N/A"}
-            </TextCenterItem>
-          </WrapItemCenter>
         </CenterIntemWrap>
         {/* <LineStyled /> */}
         {/* <div style={{ marginTop: 12 }}> */}

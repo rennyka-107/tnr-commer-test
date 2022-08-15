@@ -95,6 +95,10 @@ const AuthContext = ({ children }) => {
       localStorage.removeItem("listDataLSProject");
       localStorage.removeItem("listParamsIdProject");
     }
+	if(router.pathname !== '/payment-cart'){
+		localStorage.removeItem("IdTCBG");
+		localStorage.removeItem("PaymentSelect");
+	}
   }, [router]);
 
   const loginRequest = async (params: LoginParams) => {

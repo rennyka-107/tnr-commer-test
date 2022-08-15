@@ -368,14 +368,14 @@ const AddInfoCustom = (props: Props) => {
                 </FormGroup>
               </Grid>
               <Grid item xs={12}>
-                <RowStyled aItems={"baseline"} width={670}>
+                <RowStyled aItems={"baseline"} width="100%">
                   <Title20Styled
                     // mw={175}
                     style={{ whiteSpace: "nowrap" }}
                   >
                     Địa chỉ thường trú
                   </Title20Styled>
-                  <LinedStyled mw={500} />
+                  <LinedStyled mw={400} />
                 </RowStyled>
               </Grid>
 
@@ -438,14 +438,14 @@ const AddInfoCustom = (props: Props) => {
                 </FormGroup>
               </Grid>
               <Grid item xs={12}>
-                <RowStyled aItems={"baseline"} width={670}>
+                <RowStyled aItems={"baseline"} width="100%">
                   <Title20Styled
                     // mw={175}
                     style={{ whiteSpace: "nowrap" }}
                   >
                     Địa chỉ liên lạc
                   </Title20Styled>
-                  <LinedStyled mw={500} />
+                  <LinedStyled mw={400} />
                 </RowStyled>
               </Grid>
               <Grid item xs={6}>

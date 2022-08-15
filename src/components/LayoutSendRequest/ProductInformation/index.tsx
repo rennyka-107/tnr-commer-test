@@ -1,9 +1,18 @@
 import { Box, CardMedia, Divider, Typography } from "@mui/material";
 import React from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../store/store";
 
-type Props = {};
+type Props = {
+  orderDetail?: any;
+};
 
-const ProductInformation = (props: Props) => {
+const ProductInformation = ({ orderDetail }: Props) => {
+  if (!orderDetail) return <></>;
+
+  const { production } = orderDetail;
+  const { apartmentModel } = production;
+
   return (
     <Box
       sx={{
@@ -22,7 +31,7 @@ const ProductInformation = (props: Props) => {
         component={"img"}
         image={
           // (!isEmpty(item) ? item.thumbnail : cart.thumbnail) ??
-          "/images/product_1.png"
+          production.thumbnail
         }
         alt={"Product photo"}
       />
@@ -44,7 +53,7 @@ const ProductInformation = (props: Props) => {
               fontWeight: 400,
             }}
           >
-            TNR Lam sơn
+            {production.projectName}
           </Typography>
           <Typography
             sx={{
@@ -55,7 +64,7 @@ const ProductInformation = (props: Props) => {
               mt: 3,
             }}
           >
-            LÔ A01
+            {production.lotSymbolLegal}
           </Typography>
           <Box
             sx={{
@@ -72,7 +81,7 @@ const ProductInformation = (props: Props) => {
                 fontWeight: 400,
               }}
             >
-              Tòa A
+              {apartmentModel.name}
             </Typography>
             <Typography
               sx={{
@@ -82,7 +91,8 @@ const ProductInformation = (props: Props) => {
                 fontWeight: 400,
               }}
             >
-              Tầng 26
+              {/* KHong biet field nay */}
+              Tầng 26 
             </Typography>
           </Box>
         </Box>
@@ -115,7 +125,7 @@ const ProductInformation = (props: Props) => {
                 fontWeight: 400,
               }}
             >
-              80 m<sup>2</sup>
+              {apartmentModel.landArea}m<sup>2</sup>
             </Typography>
           </Box>
           <Box
@@ -143,7 +153,7 @@ const ProductInformation = (props: Props) => {
                 fontWeight: 400,
               }}
             >
-              3
+              {apartmentModel.numBed}
             </Typography>
           </Box>
           <Box
@@ -171,7 +181,7 @@ const ProductInformation = (props: Props) => {
                 fontWeight: 400,
               }}
             >
-              2
+              {apartmentModel.numBath}
             </Typography>
           </Box>
           <Box
@@ -199,7 +209,7 @@ const ProductInformation = (props: Props) => {
                 fontWeight: 400,
               }}
             >
-              Nam
+              {production.direction}
             </Typography>
           </Box>
         </Box>

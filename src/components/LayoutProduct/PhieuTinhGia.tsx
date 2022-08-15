@@ -14,8 +14,14 @@ import {
   downloadPhieuTinhGiaAPI,
   getPaymentListByScheduleId,
   getPriceListByProductLandsoft,
+  getProductPtgApi,
 } from "../../../pages/api/productsApi";
 import { isEmpty } from "lodash";
+import { getProductPTG } from "../../../store/productSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../../store/store";
+import moment from "moment";
+import useAddToCart from "hooks/useAddToCart";
 
 interface Price {
   ApartmentPrice: string;
@@ -25,6 +31,7 @@ interface Price {
   PriceID: number;
   PriceName: string;
   TotalLandPrice: string;
+  LandMoney: string;
   TotalMoney: string;
 }
 
@@ -39,6 +46,7 @@ interface PaymentItem {
   Amount: string;
   Amount1: string;
   Amount2: string;
+  percentageString?: string;
   Amount3: string;
   Date: string;
   Description: string;
@@ -53,6 +61,7 @@ interface PaymentItem {
 interface PhieuTinhGiaProps {
   productItem?: PTGResponse;
   dataProduct?: ResponseSearchById;
+  setDataDownloadPtg?: any;
   //   dataPrice?: Price
 }
 
@@ -273,27 +282,49 @@ const TitleSelectStyled = styled(Typography)`
 
 const names = ["Oliver Hansen", "Van Henry", "April Tucker", "Ralph Hubbard"];
 
-const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
+const PhieuTinhGia = ({
+  dataProduct,
+  setDataDownloadPtg,
+}: PhieuTinhGiaProps) => {
   const theme = useTheme();
+  const dispatch = useDispatch();
+  const productItem = useSelector(
+    (state: RootState) => state.products.productItem
+  );
+  const addToCart = useAddToCart();
   const [loading, setLoading] = React.useState(false);
   const [paymentName, setPaymentName] = React.useState<string[]>([]);
   const [priceName, setPriceName] = React.useState<string[]>([]);
   const [listPaymentItem, setListPaymentItem] = React.useState<PaymentItem[]>(
     []
   );
+  // console.log("dataProduct",dataProduct)
   const [handleOpen, setHandleOpen] = React.useState(false);
-  const mockDataPhieutinhgia = {
-	ProjectId: 96,
-	ProductId: 51057,
-	DepositDate: "04-08-2022",
-	PriceID: 230872,
-	ScheduleID: 123,
-  };
+  const [priceIdSelect, setPriceIdSelect] = React.useState(0);
+  const getDateNew = moment(new Date()).format("DD-mm-yyyy");
+  const [dataDwnPtg, setDataDwnPtg] = React.useState({
+    ProjectId: 0,
+    ProductId: 0,
+    DepositDate: "",
+    PriceID: 0,
+    ScheduleID: 0,
+  });
+
+  const [filterPtg, setFilterPtg] = React.useState({
+    projectId: 0,
+    productId: 0,
+    depositDate: "",
+    isMortgage: true,
+    groupCusID: 0,
+    provinceID: 0,
+    priceID: 0,
+  });
 
   const [filterPriceByName, setFilterPriceByName] = React.useState<Price>({
     ApartmentPrice: "",
     BuildPrice: "",
     FoundationMoney: "",
+    LandMoney: "",
     LandPrice: "",
     PriceID: 0,
     PriceName: "",
@@ -310,44 +341,110 @@ const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
   });
 
   const [listPrice, setListPrice] = React.useState([]);
-
+  
   const handleChange = (event: SelectChangeEvent<typeof paymentName>) => {
     const {
       target: { value },
     } = event;
-    setPaymentName(
-      // On autofill we get a stringified value.
-      typeof value === "string" ? value.split(",") : value
-    );
+    setPaymentName(typeof value === "string" ? value.split(",") : value);
   };
+
   const handleChangePrice = (event: SelectChangeEvent<typeof priceName>) => {
     const {
       target: { value },
     } = event;
-    setPriceName(
-      // On autofill we get a stringified value.
-      typeof value === "string" ? value.split(",") : value
-    );
+    setPriceName(typeof value === "string" ? value.split(",") : value);
+
+    const datafilter = listPrice.filter((p) => p.PriceName === value);
+    setPriceIdSelect(datafilter[0].PriceID);
   };
+
+  useEffect(() => {
+    if (!isEmpty(listPrice)) {
+      setPriceIdSelect(listPrice[0].PriceID);
+    }
+  }, [listPrice]);
+
+  useEffect(() => {
+    if (!isEmpty(listPrice)) {
+      setFilterPtg({
+        projectId: Number(dataProduct.project.idls),
+        productId: Number(dataProduct.idls),
+        depositDate: getDateNew,
+        isMortgage: true,
+        groupCusID: 0,
+        provinceID: 0,
+        priceID: priceIdSelect,
+      });
+    }
+  }, [listPrice, priceIdSelect]);
+
+  useEffect(() => {
+    const filterSchedule = productItem.ListSchedule.filter(
+      (sch) => sch.ScheduleName === paymentName[0]
+    );
+    if (!isEmpty(filterSchedule)) {
+      setDataDownloadPtg({
+        ProjectId: Number(dataProduct.project.idls),
+        ProductId: Number(dataProduct.idls),
+        DepositDate: getDateNew,
+        PriceID: priceIdSelect,
+        ScheduleID: filterSchedule[0].ScheduleID,
+      });
+      setDataDwnPtg({
+        ProjectId: Number(dataProduct.project.idls),
+        ProductId: Number(dataProduct.idls),
+        DepositDate: getDateNew,
+        PriceID: priceIdSelect,
+        ScheduleID: filterSchedule[0].ScheduleID,
+      });
+    }
+  }, [productItem, paymentName]);
+
+  useEffect(() => {
+    {
+      (async () => {
+        try {
+          if (filterPtg.projectId !== 0 && filterPtg.priceID !== 0) {
+            const response = await getProductPtgApi(filterPtg);
+            dispatch(getProductPTG(response.responseData));
+            setPaymentName([
+              response.responseData.ListSchedule[0].ScheduleName,
+            ]);
+            setFilterpayment({
+              LandMoney: response.responseData.LandMoney,
+              BuildMoney: response.responseData.BuildMoney,
+              FoundationMoney: response.responseData.FoundationMoney,
+              TotalMoney: response.responseData.TotalMoney,
+              ScheduleID: response.responseData.ListSchedule[0].ScheduleID,
+            });
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      })();
+    }
+  }, [filterPtg, dispatch]);
 
   useEffect(() => {
     (async () => {
       setLoading(true);
-      const response = await getPriceListByProductLandsoft("412");
-      if (response.responseCode === "00") {
+      const response = await getPriceListByProductLandsoft(dataProduct.idls);
+      if (response.responseCode === "00" && !isEmpty(response.responseData)) {
         setListPrice(response.responseData);
         setPriceName([response.responseData[0].PriceName]);
         setLoading(false);
       }
-      // console.log(response)
     })();
   }, []);
 
   useEffect(() => {
     (async () => {
-      const responsePayment = await getPaymentListByScheduleId(filterPayment);
-      if (responsePayment.responseCode === "00") {
-        setListPaymentItem(responsePayment.responseData);
+      if (filterPayment.ScheduleID !== 0) {
+        const responsePayment = await getPaymentListByScheduleId(filterPayment);
+        if (responsePayment.responseCode === "00") {
+          setListPaymentItem(responsePayment.responseData);
+        }
       }
     })();
   }, [filterPayment]);
@@ -356,11 +453,13 @@ const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
     const filterData = listPrice.filter(
       (item) => item.PriceName === priceName[0]
     );
+    // console.log(filterData)
     if (!isEmpty(filterData)) {
       setFilterPriceByName({
         ApartmentPrice: filterData[0].ApartmentPrice,
         BuildPrice: filterData[0].BuildPrice,
         FoundationMoney: filterData[0].FoundationMoney,
+        LandMoney: filterData[0].LandMoney,
         LandPrice: filterData[0].LandPrice,
         PriceID: filterData[0].PriceID,
         PriceName: filterData[0].PriceName,
@@ -386,24 +485,21 @@ const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
     (async () => {
       setLoading(true);
       setHandleOpen(true);
-      const response: any = await downloadPhieuTinhGiaAPI(mockDataPhieutinhgia);
-		// if(response.responseCode === '00'){
-			var binaryString = window?.atob(response);
-			var binaryLen = binaryString.length;
-			var bytes = new Uint8Array(binaryLen);
-			for (var i = 0; i < binaryLen; i++) {
-			  var ascii = binaryString.charCodeAt(i);
-			  bytes[i] = ascii;
-			}
-			var blob = new Blob([bytes], { type: "application/pdf" });
-			var link = document.createElement("a");
-			link.setAttribute("target", "_blank");
-			link.href = window.URL.createObjectURL(blob);
-			link.click();
-			setLoading(false);
-			setHandleOpen(false);
-		// }
-     
+      const response: any = await downloadPhieuTinhGiaAPI(dataDwnPtg);
+      var binaryString = window?.atob(response);
+      var binaryLen = binaryString.length;
+      var bytes = new Uint8Array(binaryLen);
+      for (var i = 0; i < binaryLen; i++) {
+        var ascii = binaryString.charCodeAt(i);
+        bytes[i] = ascii;
+      }
+      var blob = new Blob([bytes], { type: "application/pdf" });
+      var link = document.createElement("a");
+      link.setAttribute("target", "_blank");
+      link.href = window.URL.createObjectURL(blob);
+      link.click();
+      setLoading(false);
+      setHandleOpen(false);
     })();
   };
 
@@ -415,6 +511,14 @@ const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
       .toFixed(0)
       .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
   }
+
+  const handleThanhtoan = () => {
+	addToCart(dataProduct.id)
+	localStorage.setItem("IdTCBG",JSON.stringify(priceIdSelect))
+	localStorage.setItem("PaymentSelect",JSON.stringify(paymentName))
+  }
+
+
   return (
     <WrapBodyStyped>
       <ContainerLeft>
@@ -568,10 +672,10 @@ const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
               gap: 15,
               maxHeight: 535,
               overflowY:
-                productItem.ListPromotion.length >= 5 ? "scroll" : "hidden",
+                productItem?.ListPromotion?.length >= 5 ? "scroll" : "hidden",
             }}
           >
-            {productItem.ListPromotion.map((item, index) => (
+            {productItem?.ListPromotion?.map((item, index) => (
               <div
                 style={{
                   border: "1px solid #D8D8D8",
@@ -627,7 +731,6 @@ const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
                       <OutlinedInput style={{ height: 44, borderRadius: 8 }} />
                     }
                     renderValue={(selected) => {
-                      console.log(selected);
                       if (selected.length === 0) {
                         return <span>Tiêu chuẩn bàn giao</span>;
                       }
@@ -679,11 +782,11 @@ const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
                       fontWeight: 400,
                     }}
                   >
-                    {filterPriceByName.LandPrice ? (
+                    {productItem.LandPrice ? (
                       <>
                         {" "}
-                        {filterPriceByName?.LandPrice
-                          ? filterPriceByName?.LandPrice
+                        {productItem?.LandPrice
+                          ? currencyFormat(productItem?.LandPrice)
                           : "N/A"}
                       </>
                     ) : (
@@ -726,11 +829,11 @@ const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
                       fontWeight: 400,
                     }}
                   >
-                    {filterPriceByName.TotalLandPrice ? (
+                    {productItem.LandMoney ? (
                       <>
                         {" "}
-                        {filterPriceByName?.TotalLandPrice
-                          ? filterPriceByName?.TotalLandPrice
+                        {productItem?.LandMoney
+                          ? currencyFormat(productItem?.LandMoney)
                           : "N/A"}
                       </>
                     ) : (
@@ -749,6 +852,106 @@ const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
                   </TextOnCardRight>
                 </WrapRightCardText>
               </WrapItemOnCard>
+              {dataProduct.build ? (
+                <>
+                  <WrapItemOnCard>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        width: "70%",
+                      }}
+                    >
+                      <TextOnCardRight
+                        style={{
+                          color: "#1b3459",
+                          fontWeight: 400,
+                        }}
+                      >
+                     Đơn giá xây dựng*:
+                      </TextOnCardRight>
+
+                      <TextOnCardRight
+                        style={{
+                          color: "#1b3459",
+                          fontWeight: 400,
+                        }}
+                      >
+                        {productItem.BuildPrice ? (
+                          <>
+                            {" "}
+                            {productItem?.BuildPrice
+                              ? currencyFormat(productItem?.BuildPrice)
+                              : "N/A"}
+                          </>
+                        ) : (
+                          <Skeleton width={50} />
+                        )}
+                      </TextOnCardRight>
+                    </div>
+                    <WrapRightCardText>
+                      <TextOnCardRight
+                        style={{
+                          color: "#1b3459",
+                          fontWeight: 400,
+                        }}
+                      >
+                        đồng
+                      </TextOnCardRight>
+                    </WrapRightCardText>
+                  </WrapItemOnCard>
+                  <WrapItemOnCard>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        width: "70%",
+                      }}
+                    >
+                      <TextOnCardRight
+                        style={{
+                          color: "#1b3459",
+                          fontWeight: 400,
+                        }}
+                      >
+                        Tổng giá trị xây dựng*:
+                      </TextOnCardRight>
+
+                      <TextOnCardRight
+                        style={{
+                          color: "#1b3459",
+                          fontWeight: 400,
+                        }}
+                      >
+                        {productItem.BuildMoney ? (
+                          <>
+                            {" "}
+                            {productItem?.BuildMoney
+                              ? currencyFormat(productItem?.BuildMoney)
+                              : "N/A"}
+                          </>
+                        ) : (
+                          <Skeleton width={50} />
+                        )}
+                      </TextOnCardRight>
+                    </div>
+                    <WrapRightCardText>
+                      <TextOnCardRight
+                        style={{
+                          color: "#1b3459",
+                          fontWeight: 400,
+                        }}
+                      >
+                        đồng
+                      </TextOnCardRight>
+                    </WrapRightCardText>
+                  </WrapItemOnCard>
+                </>
+              ) : (
+                <></>
+              )}
               <WrapItemOnCard>
                 <div
                   style={{
@@ -773,11 +976,11 @@ const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
                       fontWeight: "bold",
                     }}
                   >
-                    {filterPriceByName.TotalMoney ? (
+                    {productItem.TotalMoney ? (
                       <>
                         {" "}
-                        {filterPriceByName?.TotalMoney
-                          ? filterPriceByName?.TotalMoney
+                        {productItem?.TotalMoney
+                          ? currencyFormat(productItem?.TotalMoney)
                           : "N/A"}
                       </>
                     ) : (
@@ -828,7 +1031,6 @@ const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
                       <OutlinedInput style={{ height: 44, borderRadius: 8 }} />
                     }
                     renderValue={(selected) => {
-                      console.log(selected);
                       if (selected.length === 0) {
                         return <span>Tiêu chuẩn bàn giao</span>;
                       }
@@ -1012,7 +1214,7 @@ const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
                   },
                 }}
               >
-                {productItem.ListSchedule.map((name, index) => (
+                {productItem.ListSchedule?.map((name, index) => (
                   <MenuItem
                     key={index}
                     value={name.ScheduleName}
@@ -1052,11 +1254,13 @@ const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
                     <TextCenterRight>Đợt {item.Number}</TextCenterRight>
                     <SubTextCenterRight>{item.Description}</SubTextCenterRight>
                   </div>
-                  <div>
+                  <div style={{ textAlign: "right" }}>
                     <TextCenterRight>
                       {currencyFormat(item.Amount)}
                     </TextCenterRight>
-                    <SubTextCenterRight>% giá trị HĐ</SubTextCenterRight>
+                    <SubTextCenterRight>
+                      {item.percentageString}
+                    </SubTextCenterRight>
                   </div>
                 </div>
                 <div style={{ border: "1px solid #C7C9D9" }} />
@@ -1096,7 +1300,7 @@ const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
               <Typography
                 style={{ fontSize: 18, fontWeight: 700, color: "#EA242A" }}
               >
-                {currencyFormat(productItem.TotalMoney)} vnd
+                {currencyFormat(productItem?.TotalMoney)} vnd
               </Typography>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -1112,13 +1316,13 @@ const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
                   color: "#EA242A",
                 }}
               >
-                {productItem.TotalMoneyText}
+                {productItem?.TotalMoneyText}
               </Typography>
             </div>
           </div>
           <ButtonStyled
             style={{ background: "#ffffff", border: "1px solid #FCB715" }}
-			onClick={handleDownloadPhieuTinhGia}
+            onClick={handleDownloadPhieuTinhGia}
           >
             <IconDownloadPTG />
             <Typography
@@ -1128,9 +1332,7 @@ const PhieuTinhGia = ({ productItem, dataProduct }: PhieuTinhGiaProps) => {
             </Typography>
           </ButtonStyled>
           <ButtonStyled
-            onClick={() => {
-              console.log("abc");
-            }}
+            onClick={handleThanhtoan}
           >
             Thanh Toán
           </ButtonStyled>

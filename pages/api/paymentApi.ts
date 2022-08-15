@@ -33,11 +33,37 @@ export const apiGetCustomerType = async () => {
 };
 
 export const apiGetProfileInformation = async () => {
-  return HttpClient.get<any, CommonResponse>(
-    `api-profile/profile/get-info`
-  );
+  return HttpClient.get<any, CommonResponse>(`api-profile/profile/get-info`);
 };
 
 export const apiSendInforMsb = async (data: any) => {
-  return HttpClient.post<any, CommonResponse>(`api/v1/payment/send-lead-msb`, data)
-}
+  return HttpClient.post<any, CommonResponse>(
+    `api/v1/payment/send-lead-msb`,
+    data
+  );
+};
+
+export const apiLiquidationPikes = async (txcode: string) => {
+  return HttpClient.post<any, CommonResponse>(
+    `/api/v1/payment/send-request/liquidation-pikes/${txcode}`
+  );
+};
+export const apiTransferProductPayment = async (data: any) => {
+  return HttpClient.post<any, CommonResponse>(
+    `/api/v1/payment/send-request/transfer-product-payment`,
+    data
+  );
+};
+
+export const apiDepositRefund = async (txcode: string) => {
+  return HttpClient.post<any, CommonResponse>(
+    `/api/v1/payment/send-request/deposit-refund/${txcode}`
+  );
+};
+
+export const apiChangeProductPayment = async (data: any) => {
+  return HttpClient.post<any, CommonResponse>(
+    `/api/v1/payment/send-request/change-product-payment`,
+    data
+  );
+};

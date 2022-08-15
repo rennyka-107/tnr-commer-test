@@ -73,6 +73,32 @@ import ControllerSelectAutoComplete from "@components/Form/ControllerSelectAutoC
 import DistricSelect from "@components/Form/DistrictSelect";
 import useProvinces from "hooks/useProvinces";
 import CommuneSelect from "@components/Form/CommuneSelect";
+import StepConnector, {
+  stepConnectorClasses,
+} from "@mui/material/StepConnector";
+
+const QontoConnector = styled(StepConnector)(({ theme }) => ({
+  [`&.${stepConnectorClasses.alternativeLabel}`]: {
+    top: 10,
+    left: "calc(-50% + 16px)",
+    right: "calc(50% + 16px)",
+  },
+  [`&.${stepConnectorClasses.active}`]: {
+    [`& .${stepConnectorClasses.line}`]: {
+      borderColor: "#FEC83C",
+    },
+  },
+  [`&.${stepConnectorClasses.completed}`]: {
+    [`& .${stepConnectorClasses.line}`]: {
+      borderColor: "FEC83C",
+    },
+  },
+  [`& .${stepConnectorClasses.line}`]: {
+    borderColor: "#eaeaf0",
+    borderTopWidth: 3,
+    borderRadius: 1,
+  },
+}));
 
 type Props = {
   setScopeRender: Dispatch<SetStateAction<string>>;
@@ -168,16 +194,6 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
       defaultValues: validationSchema.getDefault(),
     });
 
-  const steps = [
-    "Ký hợp đồng mua bán",
-    "Thanh toán đợt 2",
-    "Thanh toán đợt 3",
-    "Thanh toán đợt 4",
-    "Thanh toán đợt 5",
-    "Thanh toán đợt 6",
-    "Thanh toán đợt 7",
-    "Bàn giao giấy chứng nhận",
-  ];
   const router = useRouter();
   const [payMethod, setPayMethod] = useState<string>("");
   const [validUpload, setValidUpload] = useState<boolean>(false);
@@ -196,6 +212,10 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
   const uploadMedia = useSelector(
     (state: RootState) => state.payments.uploadMedia
   );
+  const productItem = useSelector(
+    (state: RootState) => state.products.productItem
+  );
+
   const { isAuthenticated } = useAuth();
   const dispatch = useDispatch();
   const addToCart = useAddToCart();
@@ -217,6 +237,8 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
     setConvertProvinType(convert);
   }, [dataProvinces]);
 
+  console.log(productItem, "productItem");
+
   async function getInformationUser() {
     try {
       const res = await apiGetProfileInformation();
@@ -230,7 +252,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
           idReceiveDate: issueDate,
           idReceivePlace: issuePlace,
           address: contactAddress,
-          domicile :permanentAddress,
+          domicile: permanentAddress,
           province,
           district,
           commune,
@@ -387,6 +409,8 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
     fetchPaymentMethod();
   }, []);
 
+  console.log(productItem.ListPolicy.map((item) => item.PolicyName).join(", "));
+
   function sendInforToMsb() {
     const sendData = {
       tenKhachHang: watch("fullname"),
@@ -394,20 +418,24 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
       cmnd: watch("idNumber"),
       hoKhauThuongTru: watch("permanentAddress"),
       diaChiLienHe: watch("contactAddress"),
-      tinhTp: watch("province"),
-      quanHuyen: watch("district"),
-      phuongXa: "",
+      tinhTp: watch("provinceContactName"),
+      quanHuyen: watch("districtContactName"),
+      phuongXa: watch("communeContactName"),
       dienThoai: watch("phoneNumber"),
       duAn: cart?.project?.name,
       loCan: cart?.name,
-      giaTriBds: cart?.totalPrice,
-      chinhSachBanHang: "",
+      giaTriBds: !isEmpty(productItem)
+        ? productItem?.TotalMoney
+        : cart?.totalPrice,
+      chinhSachBanHang: !isEmpty(productItem)
+        ? productItem.ListPolicy.map((item) => item.PolicyName).join(", ")
+        : "",
       phuongThucThanhToan:
         listPayment.find((item) => item.id === payMethod)?.name ?? "",
-      luaChonUuDai: "",
-      ngayThanhToan: "",
+      luaChonUuDai: "Có",
+      ngayThanhToan: new Date().toLocaleString(),
       note: "",
-      thoiGianYeuCau: "",
+      thoiGianYeuCau: new Date().toLocaleString(),
     };
     apiSendInforMsb(sendData)
       .then((res) => {
@@ -491,32 +519,42 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
       quotationRealt: !isEmpty(transactionCode)
         ? data.quotationRealt
         : {
-            landPrice: totalVatPrice,
-            vat,
-            maintainPrice,
-            totalPrice,
-            sales: "0",
-            nppDiscount: "0",
-            totalOnlinePrice: totalPrice,
+            landPrice: !isEmpty(productItem)
+              ? productItem?.LandPrice
+              : totalVatPrice,
+            vat: !isEmpty(productItem) ? productItem?.VAT : vat,
+            maintainPrice: !isEmpty(productItem)
+              ? productItem?.MaintenanceFee
+              : maintainPrice,
+            totalPrice: !isEmpty(productItem)
+              ? productItem?.TotalMoney
+              : totalPrice,
+            totalOnlinePrice: !isEmpty(productItem)
+              ? productItem?.TotalMoney
+              : totalPrice,
             minEarnestMoney,
             regulationOrderPrice,
           },
-      deposite:
-        billing === 1
-          ? !isEmpty(transactionCode)
-            ? data.quotationRealt.minEarnestMoney
-            : minEarnestMoney
-          : null,
-      totalDeposite:
-        billing !== 1
-          ? !isEmpty(transactionCode)
-            ? data.quotationRealt.regulationOrderPrice
-            : regulationOrderPrice
-          : null,
+      deposite: !isEmpty(transactionCode)
+        ? billing === 1
+          ? data.quotationRealt.minEarnestMoney
+          : data.quotationRealt.regulationOrderPrice
+        : billing === 1
+        ? minEarnestMoney
+        : regulationOrderPrice,
+      totalDeposite: !isEmpty(transactionCode)
+        ? billing === 1
+          ? data.quotationRealt.minEarnestMoney
+          : data.quotationRealt.regulationOrderPrice
+        : billing === 1
+        ? minEarnestMoney
+        : regulationOrderPrice,
       paymentFlag: paymentFlag,
       tnrUserId: null,
       transactionCode: !isEmpty(transactionCode) ? transactionCode : null,
       listUserIdDelete: data.listUserIdDelete,
+      listPaymentPolicy: !isEmpty(productItem) ? productItem?.ListPolicy : [],
+      listPromotion: !isEmpty(productItem) ? productItem?.ListPromotion : [],
     };
     if (!isEmpty(uploadMedia) && !isEmpty(transactionCode)) {
       const data = new FormData();
@@ -705,21 +743,33 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
       </Backdrop>
       <form onSubmit={handleSubmit((values) => handleOnSubmit(values))}>
         <Grid container columnSpacing={"30px"} justifyContent={"center"}>
-          {!formInfo.open && (
-            <Box
-              sx={{ width: "100%", display: "flex", justifyContent: "center" }}
-            >
-              <Box style={{ marginBottom: 60, width: "65%" }}>
-                <Stepper alternativeLabel activeStep={0}>
-                  {steps.map((label, idx) => (
-                    <Step key={idx}>
-                      <StepLabel>{label}</StepLabel>
-                    </Step>
-                  ))}
-                </Stepper>
+          {!formInfo.open &&
+            ((!isEmpty(transactionCode) && data.paymentStatus !== 3) ||
+              isEmpty(transactionCode)) &&
+            !isEmpty(productItem) &&
+            !isEmpty(productItem?.ListSchedule) && (
+              <Box
+                sx={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <Box style={{ marginBottom: 60, width: "65%" }}>
+                  <Stepper
+                    alternativeLabel
+                    activeStep={0}
+                    connector={<QontoConnector />}
+                  >
+                    {productItem.ListSchedule.map((schedule) => (
+                      <Step key={schedule.ScheduleID}>
+                        <StepLabel>{schedule.ScheduleName}</StepLabel>
+                      </Step>
+                    ))}
+                  </Stepper>
+                </Box>
               </Box>
-            </Box>
-          )}
+            )}
           <Grid item>
             {formInfo.open ? (
               <AddInfoCustom
@@ -899,14 +949,14 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                       )}
                       {!disabledEditMainUser && (
                         <Grid item xs={12}>
-                          <RowStyled aItems={"baseline"} width={670}>
+                          <RowStyled aItems={"baseline"} width="100%">
                             <Title20Styled
                               // mw={175}
                               style={{ whiteSpace: "nowrap" }}
                             >
                               Thông tin giấy tờ
                             </Title20Styled>
-                            <LinedStyled mw={500} />
+                            <LinedStyled mw={400} />
                           </RowStyled>
                         </Grid>
                       )}
@@ -984,14 +1034,14 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                         </FormGroup>
                       </Grid>
                       <Grid item xs={12}>
-                        <RowStyled aItems={"baseline"} width={670}>
+                        <RowStyled aItems={"baseline"} width="100%">
                           <Title20Styled
                             // mw={175}
                             style={{ whiteSpace: "nowrap" }}
                           >
                             Địa chỉ thường trú
                           </Title20Styled>
-                          <LinedStyled mw={500} />
+                          <LinedStyled mw={400} />
                         </RowStyled>
                       </Grid>
 
@@ -1058,14 +1108,14 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                         </FormGroup>
                       </Grid>
                       <Grid item xs={12}>
-                        <RowStyled aItems={"baseline"} width={670}>
+                        <RowStyled aItems={"baseline"} width="100%">
                           <Title20Styled
                             // mw={175}
                             style={{ whiteSpace: "nowrap" }}
                           >
                             Địa chỉ liên lạc
                           </Title20Styled>
-                          <LinedStyled mw={500} />
+                          <LinedStyled mw={400} />
                         </RowStyled>
                       </Grid>
                       <Grid item xs={6}>
@@ -1208,8 +1258,13 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                     if (checked) {
                       trigger().then(() => {
                         if (isEmpty(watch("contactAddress"))) {
-                          console.log("trống contact address");
                           setError("contactAddress", {
+                            type: "manual",
+                            message: "Không được để trống",
+                          });
+                        }
+                        if (isEmpty(watch("permanentAddress"))) {
+                          setError("permanentAddress", {
                             type: "manual",
                             message: "Không được để trống",
                           });
@@ -1226,10 +1281,39 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                             message: "Không được để trống",
                           });
                         }
+                        if (isEmpty(watch("commune"))) {
+                          setError("commune", {
+                            type: "manual",
+                            message: "Không được để trống",
+                          });
+                        }
+                        if (isEmpty(watch("provinceContactName"))) {
+                          setError("provinceContactName", {
+                            type: "manual",
+                            message: "Không được để trống",
+                          });
+                        }
+                        if (isEmpty(watch("communeContactName"))) {
+                          setError("communeContactName", {
+                            type: "manual",
+                            message: "Không được để trống",
+                          });
+                        }
+                        if (isEmpty(watch("districtContactName"))) {
+                          setError("districtContactName", {
+                            type: "manual",
+                            message: "Không được để trống",
+                          });
+                        }
                         if (
                           !isEmpty(watch("contactAddress")) &&
                           !isEmpty(watch("province")) &&
-                          !isEmpty(watch("district"))
+                          !isEmpty(watch("district")) &&
+                          !isEmpty(watch("commune")) &&
+                          !isEmpty(watch("permanentAddress")) &&
+                          !isEmpty(watch("provinceContactName")) &&
+                          !isEmpty(watch("communeContactName")) &&
+                          !isEmpty(watch("districtContactName"))
                         ) {
                           setRegisterBorrow(checked);
                           setOpenBorrowMsbPopup(true);

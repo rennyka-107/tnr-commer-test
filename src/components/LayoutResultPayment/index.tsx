@@ -1,24 +1,79 @@
 import Container from "@components/Container";
 import IconError from "@components/Icons/IconError";
+import IconStar from "@components/Icons/IconStar";
 import IconSuccess from "@components/Icons/IconSuccess";
 import {
   ButtonNormalStyled,
   Text18Styled,
 } from "@components/StyledLayout/styled";
-import { Box, Typography } from "@mui/material";
+import styled from "@emotion/styled";
+import { Box, Button, CircularProgress, Typography } from "@mui/material";
+import useNotification from "hooks/useNotification";
 import isEmpty from "lodash.isempty";
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { apiRateTransaction } from "../../../pages/api/rateApi";
 
 type Props = {};
 
+const ButtonStyled = styled(Button)`
+  width: 164px;
+  height: 48px;
+  margin-bottom: -10px;
+  background: #ea242a;
+  border-radius: 60px;
+  :hover {
+    background: #fec83c;
+    // box-shadow: 4px 8px 24px #f2f2f5;
+    box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.2);
+    border-radius: 60px;
+    color: #ffffff;
+  }
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 19px;
+  text-align: center;
+  color: #ffffff;
+  text-transform: none;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  margin-bottom: 30px;
+`;
+
 const LayoutResultPayment = (props: Props) => {
   const router = useRouter();
+  const notification = useNotification();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [stars, setStars] = useState({
+    0: {
+      fillColor: "",
+      clicked: false,
+    },
+    1: {
+      fillColor: "",
+      clicked: false,
+    },
+    2: {
+      fillColor: "",
+      clicked: false,
+    },
+    3: {
+      fillColor: "",
+      clicked: false,
+    },
+    4: {
+      fillColor: "",
+      clicked: false,
+    },
+  });
   const {
-    query: { errorCode },
+    query: { errorCode, transId, billNumber },
   } = router;
   useEffect(() => {
-    if (isEmpty(errorCode)) {
+    if (isEmpty(errorCode) || isEmpty(transId) || isEmpty(billNumber)) {
       router.push("/");
     }
   }, [errorCode]);
@@ -66,13 +121,110 @@ const LayoutResultPayment = (props: Props) => {
             ? "Chúc mừng quý khách đã thực hiện thành công giao dịch. Hệ thống sẽ xử lý và tiến hành xác nhận đơn hàng cho quý khách Cảm ơn Quý khách hàng"
             : "Hết phiên giao dịch!"}
         </Typography>
-        <ButtonNormalStyled
-          bg={"#1b3459"}
-          style={{ width: 225, marginBottom: 30 }}
-          onClick={() => router.push("/")}
+        <Typography
+          sx={{
+            m: "30px",
+            fontWeight: 400,
+            fontSize: "24px",
+            lineHeight: "32px",
+            maxWidth: 450,
+          }}
         >
-          <Text18Styled color={"#fff"}>Về trang chủ</Text18Styled>
-        </ButtonNormalStyled>
+          Bạn thấy chất lượng dịch vụ của chúng tôi như thế nào?
+        </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            gap: 3,
+            mb: "30px",
+            justifyContent: "space-between",
+          }}
+        >
+          {[1, 2, 3, 4, 5].map((nb, idx) => (
+            <IconStar
+              fillColor={stars[idx]["fillColor"]}
+              onMouseOver={() => {
+                const oldStars = { ...stars };
+                for (const key in oldStars) {
+                  if (idx >= Number(key) && !oldStars[key]["clicked"]) {
+                    oldStars[key]["fillColor"] = "#FEC83C";
+                  }
+                }
+                setStars({ ...oldStars });
+              }}
+              onMouseOut={() => {
+                const oldStars = { ...stars };
+                for (const key in oldStars) {
+                  if (idx >= Number(key) && !oldStars[key]["clicked"]) {
+                    oldStars[key]["fillColor"] = "";
+                  }
+                }
+                setStars({ ...oldStars });
+              }}
+              onClick={() => {
+                const oldStars = { ...stars };
+                for (const key in oldStars) {
+                  if (idx >= Number(key)) {
+                    oldStars[key]["fillColor"] = "#FEC83C";
+                    oldStars[key]["clicked"] = true;
+                  } else {
+                    oldStars[key]["fillColor"] = "";
+                    oldStars[key]["clicked"] = false;
+                  }
+                }
+                setStars({ ...oldStars });
+              }}
+              style={{ cursor: "pointer" }}
+            />
+          ))}
+        </Box>
+
+        <ButtonStyled
+          onClick={() => {
+            setLoading(true);
+            let value = 0;
+            for (const key in stars) {
+              if (stars[key]["clicked"]) {
+                value++;
+              }
+            }
+            apiRateTransaction({
+              msbTransID: transId,
+              billNumber,
+              value,
+            })
+              .then((res) => {
+                console.log(res, "Res");
+                if (res.responseCode === "00") {
+                  notification({
+                    severity: "success",
+                    title: "Đánh giá giao dịch",
+                    message: res.responseMessage,
+                  });
+                  router.push("/")
+                } else {
+                  notification({
+                    severity: "error",
+                    title: "Đánh giá giao dịch",
+                    message: res.responseMessage,
+                  });
+                }
+                setLoading(false);
+              })
+              .catch((err) => {
+                notification({
+                  severity: "error",
+                  title: "Đánh giá giao dịch",
+                  message: "Có lỗi xảy ra",
+                });
+                setLoading(false);
+              });
+          }}
+        >
+          <Text18Styled color={"#fff"}>
+            {loading ? <CircularProgress /> : "Gửi đánh giá"}
+          </Text18Styled>
+        </ButtonStyled>
       </Box>
     </Container>
   );

@@ -34,7 +34,6 @@ const LOTSelect = (props: PropsI) => {
     style,
     idProjectType,
   } = props;
-  console.log(isClear);
   const [data, setData] = useState<optionI[]>([]);
   const getList = (idProject: string, idProjectType: string) => {
     try {
@@ -68,6 +67,7 @@ const LOTSelect = (props: PropsI) => {
       variant="outlined"
       name={name}
       label={label}
+	  
       control={control}
       setValue={setValue}
       dataSelect={data}

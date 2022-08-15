@@ -350,34 +350,14 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
   const id = router.asPath.split("/")[2];
   const addToCart = useAddToCart();
 
-  const mockDataPhieutinhgia = {
-	ProjectId: 96,
-	ProductId: 51057,
-	DepositDate: "04-08-2022",
-	PriceID: 230872,
-	ScheduleID: 123,
-  };
 
-  const paramsMock = {
-    // ProjectName: dataProduct?.project.name,
-    // BlockName: "Liền kề",
-    // ProductName: "LK.08.32",
-    // DepositDate: "29-04-2022",
-    // IsMortgage: true,
-    // GroupCusID: 0,
-    // ProvinceID: 0,
-    // DistrictID: 0,
-    // PriceID: 230896,
-	districtID: 0,
-	projectId: 96,
-	productId: 51057,
-	depositDate: "04-08-2022",
-	isMortgage: true,
-	groupCusID: 0,
-	provinceID: 0,
-	priceID: 230872
-  };
-
+  const [dataDownloadPtg, setDataDownloadPtg] = useState({
+	ProjectId: 0,
+	ProductId: 0,
+	DepositDate: "",
+	PriceID: 0,
+	ScheduleID: 0,
+  })
 
   const listBread = [
     {
@@ -398,9 +378,6 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
     (state: RootState) => state?.profile?.userInfo
   );
   const dispatch = useDispatch();
-  const productItem = useSelector(
-    (state: RootState) => state.products.productItem
-  );
   const [tabCardValue, setTabCardValue] = useState(true);
   const [typeBottomShow, setTypeBottomShow] = useState(1);
   const [openModalVideo, setOpenModalVideo] = useState(false);
@@ -437,20 +414,22 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
     }
   };
 
-  useEffect(() => {
-    if (callApi === true) {
-      {
-        (async () => {
-          try {
-            const response = await getProductPtgApi(paramsMock);
-            dispatch(getProductPTG(response.responseData));
-          } catch (error) {
-            console.log(error);
-          }
-        })();
-      }
-    }
-  }, [callApi, dispatch]);
+//   useEffect(() => {
+//     if (callApi === true) {
+//       {
+//         (async () => {
+//           try {
+//             const response = await getProductPtgApi(paramsMock);
+//             dispatch(getProductPTG(response.responseData));
+//           } catch (error) {
+//             console.log(error);
+//           }
+//         })();
+//       }
+//     }
+//   }, [callApi, dispatch]);
+
+
   const fetchUserInfor = async () => {
     const responseUser = await getUserInfoApi();
     dispatch(getUserInfo(responseUser.responseData));
@@ -483,18 +462,19 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
   const fetchPhieuTinhGia = () => {
     return (
       <>
-        {!isEmpty(productItem) ? (
+        {/* {!isEmpty(productItem) ? ( */}
           <DynamicPhieuTinhGiaComponent
-            productItem={productItem}
+            // productItem={productItem}
+			setDataDownloadPtg={setDataDownloadPtg}
             dataProduct={dataProduct}
           />
-        ) : (
+        {/* ) : (
           <>
             <div style={{ textAlign: "center", marginTop: 200 }}>
               <CircularProgress />
             </div>
           </>
-        )}
+        )} */}
       </>
     );
   };
@@ -502,15 +482,15 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
     setHandleOpen(false);
   };
 
-  useEffect(() => {
-    fetchPhieuTinhGia();
-  }, [productItem]);
+//   useEffect(() => {
+//     fetchPhieuTinhGia();
+//   }, [productItem]);
 
   const handleDownloadPhieuTinhGia = () => {
     (async () => {
       setLoading(true);
       setHandleOpen(true);
-      const response: any = await downloadPhieuTinhGiaAPI(mockDataPhieutinhgia);
+      const response: any = await downloadPhieuTinhGiaAPI(dataDownloadPtg);
       var binaryString = window.atob(response);
       var binaryLen = binaryString.length;
       var bytes = new Uint8Array(binaryLen);
@@ -1125,7 +1105,14 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
               <DynamicTabsComponent />
             </>
           ) : (
-            <> {fetchPhieuTinhGia()} </>
+            // <> {fetchPhieuTinhGia()} </>
+			<>
+			       <DynamicPhieuTinhGiaComponent
+            // productItem={productItem}
+			setDataDownloadPtg={setDataDownloadPtg}
+            dataProduct={dataProduct}
+          />
+			</>
           )}
           {/* Tab Components */}
           {fecthBackDrop()}

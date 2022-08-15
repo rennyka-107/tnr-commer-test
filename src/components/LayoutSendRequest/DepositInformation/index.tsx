@@ -1,12 +1,20 @@
 import { Box, Typography } from "@mui/material";
 import React from "react";
+import { useSelector } from "react-redux";
+import DateFns from "utils/DateFns";
 import { currencyFormat } from "utils/helper";
+import { RootState } from "../../../../store/store";
 
 type Props = {
-  title: string;
+  title?: string;
+  orderDetail?: any;
 };
 
-const DepositInformation = ({ title }: Props) => {
+const DepositInformation = ({ title, orderDetail }: Props) => {
+  console.log("orderDetail", orderDetail);
+  
+  if (!orderDetail) return <></>;
+
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mb: 5 }}>
       <Typography
@@ -38,7 +46,7 @@ const DepositInformation = ({ title }: Props) => {
             color: "#1B3459",
           }}
         >
-          SA-05-13/TTĐC/TNRLAMSON
+          {orderDetail.transactionCodeObject.code}
         </Typography>
       </Box>
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -60,7 +68,7 @@ const DepositInformation = ({ title }: Props) => {
             color: "#1B3459",
           }}
         >
-          09:24 | Thứ 2, 09/11/2021
+          {orderDetail.transactionCodeObject.createDate}
         </Typography>
       </Box>
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -82,7 +90,7 @@ const DepositInformation = ({ title }: Props) => {
             color: "#EA242A",
           }}
         >
-          {currencyFormat(20000000)}đ
+          {currencyFormat(orderDetail.totalDeposite)}đ
         </Typography>
       </Box>
     </Box>

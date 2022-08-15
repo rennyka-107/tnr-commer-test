@@ -235,7 +235,7 @@ const Filter = (props: PropsI) => {
             name="projectId"
             label="Dự án"
             control={control}
-            // required
+            required
             setValue={formControler.setValue}
             idProject={watch("projectTypeId")}
             idChecked={watch("projectId")}
@@ -247,7 +247,7 @@ const Filter = (props: PropsI) => {
             name="projectLevel1"
             label="Khu"
             control={control}
-            // required
+            required
             setValue={formControler.setValue}
             isClear
             idProject={watch("projectId")}

@@ -12,13 +12,30 @@ interface initialState {
   productByID: ResponseSearchById[];
   productFavorite: TBOUTStanding[];
   productFavoriteType: any[];
-  productTopByOutStanding: TBOUTStanding[]
+  productTopByOutStanding: TBOUTStanding[];
   totalElement: number;
 }
 const initialState = {
   listProductResponse: [],
   totalElement: 0,
-  productItem: {},
+  productItem: {
+    ListPolicy: [],
+    ListPromotion: [],
+    ListSchedule: [],
+    MaintainanceFee: null,
+    LandPrice: 0,
+    BuildPrice: 0,
+    BuildMoney: 0,
+    LandMoney: 0,
+    ProductPrice: null,
+    ProductQuotation: null,
+    PromotionMoney: null,
+    TotalMoney: null,
+    TotalMoneyText: "",
+    VAT: 0,
+    MaintenanceFee: 0,
+    PreTotalMoney: 0
+  },
   productByID: {
     id: "adf68c39-c5b3-4a80-b806-a2b8a840d4c4",
     name: "Lô A2",
@@ -117,7 +134,7 @@ const initialState = {
     isCornerApartment: 1,
     idls: null,
     floor: null,
-    productByID: ""
+    productByID: "",
   },
   productTopByOutStanding: [],
   productFavorite: [],
@@ -154,9 +171,9 @@ export const productSlice = createSlice({
     getProductOrderCondition: (state, action) => {
       state.productCondition = action.payload;
     },
-	getPaggingProductSearch: (state, action) => {
-		state.totalElement = action.payload
-	}
+    getPaggingProductSearch: (state, action) => {
+      state.totalElement = action.payload;
+    },
   },
 });
 
@@ -169,7 +186,7 @@ export const {
   getProductType,
   getProductLocation,
   getProductOrderCondition,
-  getPaggingProductSearch
+  getPaggingProductSearch,
 } = productSlice.actions;
 
 export default productSlice.reducer;

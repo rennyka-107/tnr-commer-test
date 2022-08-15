@@ -40,6 +40,9 @@ export interface PTGResponse {
   ListSchedule?: ListScheduleType[];
   TotalMoneyText?: string;
   ProductQuotation?: number | string;
+  VAT?: number;
+  MaintenanceFee?: number;
+  PreTotalMoney?: number;
 }
 
 //interface getListProducts
@@ -105,7 +108,7 @@ export interface ResponseSearchById {
   swimmingPool: number;
   levelDetailName?: string;
   levelDetailParentName?: string;
-  
+  build?: boolean;
   gym: number;
   projectType?: {
 	name: string;
@@ -143,6 +146,7 @@ export interface ResponseSearchById {
     id: string;
     name: string;
     location: string;
+	idls?: string;
     constructArea: number;
     density: number;
     type: string;
@@ -229,4 +233,5 @@ export interface TBOUTStanding {
   projectId: string;
   projectName: string;
   projectLocation: string;
+  build?: boolean;
 }

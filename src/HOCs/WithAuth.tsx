@@ -14,6 +14,8 @@ export default function WithAuth(WrappedComponent: any) {
     const Router = useRouter();
     const accessToken = LocalStorage.get('accessToken') || SessionStorage.get('accessToken');
 
+    console.log("withAuth");
+    
     useEffect(() => {
       if (!isAuthenticated && !accessToken) {
         const path = Router.pathname;

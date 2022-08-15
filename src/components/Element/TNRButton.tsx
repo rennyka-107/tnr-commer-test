@@ -1,5 +1,6 @@
 import { Box } from "@mui/system";
 import ClearIcon from "@mui/icons-material/Clear";
+import { forwardRef, MouseEvent } from "react";
 
 interface Props {
   active?: boolean;
@@ -8,32 +9,37 @@ interface Props {
   label?: string;
   hasDelete?: boolean;
   onDelete?: () => void;
+  disabled?: boolean;
   sx?: object;
 }
 
-const TNRButton = ({
-  active = false,
-  handleClick,
-  icon = null,
-  label = "",
-  hasDelete = false,
-  onDelete,
-  sx = {},
-}: Props) => {
+const TNRButton = forwardRef<HTMLDivElement, Props>((props, ref) => {
+  const {
+    active = false,
+    handleClick,
+    icon = null,
+    label = "",
+    hasDelete = false,
+    onDelete,
+    sx = {},
+    disabled = false,
+  } = props;
   const handleClickBtn = () => {
-    if (handleClick) {
+    if (handleClick && !disabled) {
       handleClick();
     }
   };
 
-  const handleClickDeleteBtn = () => {
-    if (onDelete) {
+  const handleClickDeleteBtn = (e: MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    if (onDelete && !disabled) {
       onDelete();
     }
   };
 
   return (
     <Box
+      ref={ref}
       sx={{
         width: "auto",
         background: active ? "#FEC83C" : "#F3F4F6",
@@ -42,9 +48,15 @@ const TNRButton = ({
         display: "flex",
         justifyContent: "space-around",
         alignItems: "center",
-        cursor: "pointer",
+        cursor: disabled ? "default" : "pointer",
         fontWeight: 500,
         gap: 1,
+        ...(!disabled &&
+          !active && {
+            "&:hover": {
+              backgroundColor: "#ffde8c",
+            },
+          }),
         ...sx,
       }}
       onClick={handleClickBtn}
@@ -59,6 +71,6 @@ const TNRButton = ({
       )}
     </Box>
   );
-};
+});
 
 export default TNRButton;

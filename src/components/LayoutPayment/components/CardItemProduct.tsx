@@ -15,7 +15,6 @@ import LocalStorage from "utils/LocalStorage";
 
 const WrapperCardStyled = styled(Box)(
   {
-    width: "100%",
     border: "1px solid #FEC83C",
     borderRadius: "20px",
     display: "flex",
@@ -76,7 +75,7 @@ const CardItemProduct = (props: Props) => {
         <IconRadio />
       </BoxIconRadio>
       <CardMedia
-        style={{ borderRadius: 15 }}
+        style={{ borderRadius: 15 , width: 308}}
         component={"img"}
         width={308}
         height={200}

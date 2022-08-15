@@ -9,7 +9,9 @@ import { RootState } from "../../../../store/store";
 import isEmpty from "lodash.isempty";
 import { setListCustomer } from "../../../../store/sendRequestSlice";
 
-type Props = {};
+type Props = {
+  listCustomer?: any;
+};
 
 const fakeCustomers = [
   {
@@ -98,18 +100,22 @@ const fakeCustomers = [
   },
 ];
 
-const CustomerInformation = (props: Props) => {
-  const [displayCustomerDetail, setDisplayCustomerDetail] = useState<any>(fakeCustomers[0]);
+const CustomerInformation = ({ listCustomer = [] }: Props) => {
+  const [displayCustomerDetail, setDisplayCustomerDetail] = useState<any>(
+    fakeCustomers[0]
+  );
   const [loading, setLoading] = useState<boolean>(false);
   const dispatch = useDispatch();
-  const listCustomer = useSelector(
-    ({ sendRequest }: RootState) => sendRequest.listCustomer
-  );
+
+  console.log("listCustomer", listCustomer);
+
   useEffect(() => {
     if (!isEmpty(listCustomer)) {
       setDisplayCustomerDetail(listCustomer[0]);
     }
   }, [listCustomer]);
+
+  // const displayCustomerDetail = orderDetail.paymentIdentityInfos;
 
   useEffect(() => {
     dispatch(setListCustomer(fakeCustomers));
@@ -126,6 +132,7 @@ const CustomerInformation = (props: Props) => {
     }
   }
   function renderButtonVerify() {
+    // api tai thoi diem lam chua co field vefiry..
     switch (displayCustomerDetail.verify) {
       case true:
         return (
@@ -228,7 +235,7 @@ const CustomerInformation = (props: Props) => {
             </Box>
           </Box>
         );
-      case null:
+      default:
         return (
           <Button
             sx={{
@@ -252,6 +259,8 @@ const CustomerInformation = (props: Props) => {
     }
   }
   function customerTab(customer: any) {
+    console.log("customerTagb", customer);
+
     return (
       <Box
         sx={{
@@ -275,7 +284,7 @@ const CustomerInformation = (props: Props) => {
         }
       >
         {checkVerifyCustomer(customer)}
-        {customer.name}
+        {customer.fullname}
       </Box>
     );
   }
@@ -305,17 +314,23 @@ const CustomerInformation = (props: Props) => {
       </Box>
     );
   }
+
+  console.log("displayCustomerDetail", displayCustomerDetail);
+
   function renderDetailCustomer() {
     return (
       <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mb: 5 }}>
-        {renderRowDetail("Tên khách hàng", displayCustomerDetail.name)}
+        {renderRowDetail("Tên khách hàng", displayCustomerDetail.fullname)}
         {renderRowDetail("Ngày sinh", displayCustomerDetail.dob)}
-        {renderRowDetail("Địa chỉ thường trú", displayCustomerDetail.address)}
+        {renderRowDetail(
+          "Địa chỉ thường trú",
+          displayCustomerDetail.permanentAddress
+        )}
         {renderRowDetail(
           "Địa chỉ liên hệ",
           displayCustomerDetail.contactAddress
         )}
-        {renderRowDetail("Số điện thoại", displayCustomerDetail.phone)}
+        {renderRowDetail("Số điện thoại", displayCustomerDetail.phoneNumber)}
         {renderRowDetail("Email", displayCustomerDetail.email)}
         {renderRowDetail("CCCD", displayCustomerDetail.idNumber)}
         {renderRowDetail("Ngày cấp", displayCustomerDetail.issueDate)}
@@ -384,9 +399,15 @@ const CustomerInformation = (props: Props) => {
           Hướng dẫn sử dụng
         </Typography>
       </Box>
-      <Box>
-        {loading ? <Skeleton variant="rectangular" height={50} width="100%" /> : renderButtonVerify()}
-      </Box>
+      {/* cho confirm */}
+      {/* <Box>
+        {loading ? (
+          <Skeleton variant="rectangular" height={50} width="100%" />
+        ) : (
+          renderButtonVerify()
+        )}
+      </Box> */}
+      {/* cho confirm */}
     </Box>
   );
 };

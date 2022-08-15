@@ -6,7 +6,12 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import styled from "@emotion/styled";
-import { FloorIcon, IconAddHearProduct, IconPlusProduct, IconSuccess } from "../../Icons/index";
+import {
+  FloorIcon,
+  IconAddHearProduct,
+  IconPlusProduct,
+  IconSuccess,
+} from "../../Icons/index";
 import Router, { useRouter } from "next/router";
 import Product3 from "../../../../public/images/product3.png";
 
@@ -19,6 +24,8 @@ import {
 } from "@components/Icons";
 import ImageWithHideOnError from "hooks/ImageWithHideOnError";
 import useFavourite from "hooks/useFavourite";
+import IconCoXay from "@components/Icons/IconCoXay";
+import IconChuaXay from "@components/Icons/IconChuaXay";
 
 type Props = {
   id?: string;
@@ -34,6 +41,7 @@ type Props = {
     item4?: any;
   };
   priceListed?: string;
+  build?: boolean;
   priceSub?: string;
   activeSoSanh?: boolean;
   onClick?: MouseEventHandler<HTMLButtonElement>;
@@ -51,12 +59,12 @@ const CardStyled = styled(Card)`
   width: 350px;
   /* Line/stroke */
   position: relative;
-  border: 0.5px solid #D8D8D8;
+  border: 0.5px solid #d8d8d8;
   border-radius: 20px 20px 20px 20px;
   box-shadow: none !important;
 `;
 const CardContentStyled = styled(CardContent)`
-padding: 10px 0px 0px 20px;
+  padding: 10px 0px 0px 20px;
 `;
 const TextTitleStyled = styled.a`
   font-family: "Roboto";
@@ -253,10 +261,11 @@ export default function ItemCompareSearch({
   minFloor,
   maxFloor,
   activeSoSanh,
+  build,
   id,
   activeFavourite,
   isCompare,
-  favouriteStatus
+  favouriteStatus,
 }: Props) {
   const router = useRouter();
   const { addProductToFavouriteFunction } = useFavourite();
@@ -270,7 +279,7 @@ export default function ItemCompareSearch({
   }
   return (
     <CardStyled sx={{ maxWidth: 350 }}>
-     {activeFavourite ? (
+      {activeFavourite ? (
         <>
           {favouriteStatus === 0 ? (
             <IconHeartProduct
@@ -345,11 +354,11 @@ export default function ItemCompareSearch({
       <CardContentStyled>
         <div style={{ marginBottom: 7 }}>
           <span
-            // onClick={() =>
-            //   Router.push(
-            //     `/products/${id ? id : "adf68c39-c5b3-4a80-b806-a2b8a840d4c4"}`
-            //   )
-            // }
+          // onClick={() =>
+          //   Router.push(
+          //     `/products/${id ? id : "adf68c39-c5b3-4a80-b806-a2b8a840d4c4"}`
+          //   )
+          // }
           >
             <TextTitleStyled style={{ marginBottom: 9 }}>
               {title}
@@ -360,6 +369,13 @@ export default function ItemCompareSearch({
         </div>
         {/* <LineStyled /> */}
         <CenterIntemWrap>
+          <WrapItemCenter>
+            <IconFrame />
+
+            <TextCenterItem>
+              {dataItem.item1 ? dataItem?.item1 : "N/A"} m²
+            </TextCenterItem>
+          </WrapItemCenter>
           {projectTypeCode === "2" ? (
             <>
               <WrapItemCenter>
@@ -371,23 +387,29 @@ export default function ItemCompareSearch({
             </>
           ) : (
             <>
-              <WrapItemCenter>
-                <FloorIcon />
-                <TextFloorStyled>min</TextFloorStyled>
-                <TextCenterItem>
-                  <TextFloorValue>{minFloor} tầng</TextFloorValue>
-                </TextCenterItem>
-              </WrapItemCenter>
+           <>
+              {build ? (
+                <WrapItemCenter>
+                  <IconCoXay />
+                  <TextCenterItem>Có xây</TextCenterItem>
+                </WrapItemCenter>
+              ) : (
+                <WrapItemCenter>
+                  <IconChuaXay />
+                  <TextCenterItem>Chưa xây</TextCenterItem>
+                </WrapItemCenter>
+              )}
+            </>
             </>
           )}
 
           <WrapItemCenter>
-            <IconFrame />
-
+            <IconCompass />
             <TextCenterItem>
-              {dataItem.item1 ? dataItem?.item1 : "N/A"} m²
+              {dataItem.item4 ? dataItem?.item4 : "N/A"}
             </TextCenterItem>
           </WrapItemCenter>
+
           {/* <WrapItemCenter>
             <IconBath />
             <TextCenterItem>
@@ -412,23 +434,20 @@ export default function ItemCompareSearch({
           ) : (
             <>
               <>
-                <WrapItemCenter>
-                  <FloorIcon />
-                  <TextFloorStyled>max</TextFloorStyled>
-                  <TextCenterItem>
-                    <TextFloorValue>{maxFloor} tầng</TextFloorValue>
-                  </TextCenterItem>
-                </WrapItemCenter>
+			  {build ? (
+                  <WrapItemCenter>
+                    <FloorIcon />
+                    {/* <TextFloorStyled>max</TextFloorStyled> */}
+                    <TextCenterItem>
+                      <TextFloorValue>{maxFloor} tầng</TextFloorValue>
+                    </TextCenterItem>
+                  </WrapItemCenter>
+                ) : (
+                  <></>
+                )}
               </>
             </>
           )}
-
-          <WrapItemCenter>
-            <IconCompass />
-            <TextCenterItem>
-              {dataItem.item4 ? dataItem?.item4 : "N/A"}
-            </TextCenterItem>
-          </WrapItemCenter>
         </CenterIntemWrap>
         {/* <LineStyled /> */}
         {/* <div style={{ marginTop: 12 }}> */}
@@ -458,38 +477,39 @@ export default function ItemCompareSearch({
           justifyContent: "space-around",
         }}
       >
-        {isCompare ? (<>
+        {isCompare ? (
+          <>
+            <div
+              style={{
+                gap: 10,
+                display: "flex",
+                flexDirection: "row",
+              }}
+            >
+              <IconSuccess style={{ height: "15px", width: "15px" }} />
+              <TextButtonStyled style={{ color: "#30c270" }}>
+                Đã thêm vào để so sánh
+              </TextButtonStyled>
+            </div>
+          </>
+        ) : (
           <div
-          style={{
-            gap: 10,
-            display: "flex",
-            flexDirection: "row",
-          }}
-        >
-          <IconSuccess style={{ height: '15px', width: '15px' }}/>
-          <TextButtonStyled style={{ color: "#30c270" }}>
-            Đã thêm vào để so sánh
-          </TextButtonStyled>
-        </div>
-        </>) : (
-          <div
-          style={{
-            gap: 10,
-            display: "flex",
-            flexDirection: "row",
-            cursor: "pointer",
-          }}
-          // onClick={() => {
-          //   router.push(`/compare-product?idCompare=${id}`);
-          // }}
-        >
-          <IconPlusProduct />
-          <TextButtonStyled style={{ color: "#0063F7" }} onClick={onCompare}>
-            Thêm sản phẩm so sánh
-          </TextButtonStyled>
-        </div>
+            style={{
+              gap: 10,
+              display: "flex",
+              flexDirection: "row",
+              cursor: "pointer",
+            }}
+            // onClick={() => {
+            //   router.push(`/compare-product?idCompare=${id}`);
+            // }}
+          >
+            <IconPlusProduct />
+            <TextButtonStyled style={{ color: "#0063F7" }} onClick={onCompare}>
+              Thêm sản phẩm so sánh
+            </TextButtonStyled>
+          </div>
         )}
-        
       </CardActions>
       {/* ) : (
         <CardActions style={{ flexDirection: "column", marginBottom: 24 }}>

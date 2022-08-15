@@ -20,8 +20,14 @@ import { validateLine } from "utils/constants";
 import Regexs from "utils/Regexs";
 import styled from "@emotion/styled";
 import AddPerson from "./AddPerson";
-import { useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { nanoid } from "@reduxjs/toolkit";
+import { rest } from "lodash";
+import { useRouter } from "next/router";
+import { apiTransferProductPayment } from "../../../../pages/api/paymentApi";
+import useNotification from "hooks/useNotification";
+import useOnClickOutside from "hooks/useOnClickOutside";
+import LoadingComponent from "@components/LoadingComponent";
 
 const validationSchema = yup.object().shape({
   fullname: yup.string().required(validateLine.required).default(""),
@@ -32,7 +38,7 @@ const validationSchema = yup.object().shape({
     .strict(true)
     .matches(Regexs.email, "Email không đúng")
     .default(""),
-  phone: yup
+  phoneNumber: yup
     .string()
     .nullable()
     .trim(validateLine.trim)
@@ -42,12 +48,12 @@ const validationSchema = yup.object().shape({
     .required(validateLine.required)
     .default(""),
   idNumber: yup.string().required(validateLine.required).nullable().default(""),
-  dateOfIssuance: yup
+  issueDate: yup
     .string()
     .required(validateLine.required)
     .nullable()
     .default(""),
-  locationOfIssuance: yup
+  issuePlace: yup
     .string()
     .required(validateLine.required)
     .nullable()
@@ -58,22 +64,26 @@ interface Props {}
 
 interface FormData {
   fullname: string;
-  phone: string;
+  phoneNumber: string;
   email: string;
   idNumber: string;
-  dateOfIssuance: string;
-  locationOfIssuance: string;
+  issueDate: string;
+  issuePlace: string;
 }
 
-interface PersonItem {
-  name: string;
-  id: string;
+interface PersonItem extends FormData {
+  onyFeId: string;
 }
 
 const TransferRequest = (props: Props) => {
   const [isAddingPerson, setIsAddingPerson] = useState<boolean>(false);
   const [listPersonAdded, setListPersonAdded] = useState<PersonItem[]>([]);
   const [activePerson, setActivePerson] = useState<PersonItem | null>(null);
+  const {
+    query: { txcode },
+  } = useRouter();
+  const addingBtnRef = useRef<HTMLDivElement | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const {
     control,
@@ -88,33 +98,93 @@ const TransferRequest = (props: Props) => {
     resolver: yupResolver(validationSchema),
     defaultValues: validationSchema.getDefault(),
   });
+  const notification = useNotification();
 
   const onSenRequest = (data: FormData) => {
-    console.log("dataaa", data);
+    const newPerson = {
+      onyFeId: nanoid(),
+      ...data,
+    };
+
+    setListPersonAdded([...listPersonAdded, newPerson]);
+    setIsAddingPerson(false);
+    setActivePerson(newPerson);
   };
 
-  const handleClickBtn = (type: SubmitType) => {
-    if (type === "request") {
-      handleSubmit(onSenRequest)();
+  useEffect(() => {
+    if (!activePerson) {
+      //bugg
+      reset({});
+      reset({});
+    } else {
+      reset({
+        ...activePerson,
+      });
     }
+  }, [activePerson, reset]);
+
+  const handleClickBtn = () => {
+    if (!txcode) return;
+    const hasMainUserDate = listPersonAdded.map((person, index) => ({
+      ...person,
+      mainUser: index === 0 ? 1 : 0,
+    }));
+
+    const data = {
+      transactionCode: txcode,
+      paymentCustomerInfoRequestList: hasMainUserDate,
+    };
+    setLoading(true);
+    apiTransferProductPayment(data)
+      .then((res) => {
+        if (res.responseCode === "00") {
+          notification({
+            severity: "success",
+            message: "Gửi yêu cầu chuyển nhượng thành công",
+          });
+        } else {
+          notification({
+            severity: "error",
+            message: res.responseMessage,
+          });
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   const onAddPerson = (value: string) => {
     console.log("adddd", value);
-    setListPersonAdded([
-      ...listPersonAdded,
-      {
-        id: nanoid(),
-        name: value,
-      },
-    ]);
-    setIsAddingPerson(false);
   };
 
-  const onDeletePerson = (id: string) => {
-    const newList = listPersonAdded.filter((person) => person.id !== id);
+  const onDeletePerson = (id: string) => () => {
+    const newList = listPersonAdded.filter((person) => person.onyFeId !== id);
+    setActivePerson(null);
     setListPersonAdded([...newList]);
   };
+
+  const handleClickAddPerson = () => {
+    if (isAddingPerson) {
+      handleSubmit(onSenRequest)();
+    } else {
+      setIsAddingPerson(true);
+      reset({});
+      setActivePerson(null);
+    }
+  };
+
+  const handleViewAddedPerson = (person: PersonItem) => () => {
+    setActivePerson(person);
+  };
+
+  const handleClickOutSide = () => {
+    if (isAddingPerson) {
+      handleSubmit(onSenRequest)();
+    }
+  };
+
+  useOnClickOutside(addingBtnRef, handleClickOutSide);
 
   return (
     <Box>
@@ -136,24 +206,28 @@ const TransferRequest = (props: Props) => {
             }}
           >
             <TNRButton
-              label="Thêm"
+              ref={addingBtnRef}
+              label={isAddingPerson ? "Xác nhận" : "Thêm"}
               icon={<AddIcon />}
-              handleClick={() => setIsAddingPerson(true)}
+              handleClick={handleClickAddPerson}
             />
             {listPersonAdded.map((person) => {
-              const isActive = activePerson && activePerson.id === person.id;
+              const isActive =
+                activePerson && activePerson.onyFeId === person.onyFeId;
               return (
                 <TNRButton
-                  key={person.id}
-                  label={person.name}
-                  handleClick={() => setActivePerson(person)}
+                  key={person.onyFeId}
+                  label={person.fullname}
+                  handleClick={handleViewAddedPerson(person)}
                   active={isActive}
                   hasDelete={isActive}
-                  onDelete={() => onDeletePerson(person.id)}
+                  onDelete={onDeletePerson(person.onyFeId)}
+                  disabled={isAddingPerson}
                 />
               );
             })}
-            {isAddingPerson && <AddPerson onAddPerson={onAddPerson} />}
+            {isAddingPerson && <TNRButton label="Họ và tên..." active />}
+            {/* {isAddingPerson && <AddPerson onAddPerson={onAddPerson} />} */}
           </Box>
 
           <Box
@@ -172,6 +246,8 @@ const TransferRequest = (props: Props) => {
               fullWidth
               label="Họ và tên"
               required
+              focused={isAddingPerson}
+              disabled={Boolean(activePerson)}
             />
             <ControllerTextField
               variant="outlined"
@@ -181,15 +257,17 @@ const TransferRequest = (props: Props) => {
               fullWidth
               label="Email"
               required
+              disabled={Boolean(activePerson)}
             />
             <ControllerTextField
               variant="outlined"
               hiddenLabel
-              name="phone"
+              name="phoneNumber"
               control={control}
               fullWidth
               label="Số điện thoại"
               required
+              disabled={Boolean(activePerson)}
             />
             <ControllerTextField
               variant="outlined"
@@ -199,24 +277,27 @@ const TransferRequest = (props: Props) => {
               fullWidth
               label="Số căn cước công dân"
               required
+              disabled={Boolean(activePerson)}
             />
             <ControllerTextField
               variant="outlined"
               hiddenLabel
-              name="dateOfIssuance"
+              name="issueDate"
               control={control}
               fullWidth
               label="Ngày cấp"
               required
+              disabled={Boolean(activePerson)}
             />
             <ControllerTextField
               variant="outlined"
               hiddenLabel
-              name="locationOfIssuance"
+              name="issuePlace"
               control={control}
               fullWidth
               label="Nơi cấp"
               required
+              disabled={Boolean(activePerson)}
             />
             <Text14Styled>
               Tất cả người được chuyển nhượng sẽ nhận được thông báo qua Email
@@ -226,7 +307,11 @@ const TransferRequest = (props: Props) => {
         </PageBorder>
 
         <PageBorder>
-          <SendRequest handleClickBtn={handleClickBtn} />
+          <SendRequest
+            handleClickBtn={handleClickBtn}
+            text="Gửi yêu cầu chuyển nhượng"
+            loading={loading}
+          />
         </PageBorder>
       </form>
     </Box>

@@ -13,8 +13,10 @@ import Card from "@mui/material/Card";
 import { Box } from "@mui/system";
 import ImageWithHideOnError from "hooks/ImageWithHideOnError";
 import useFavourite from "hooks/useFavourite";
+import Image from "next/image";
 import { Router, useRouter } from "next/router";
 import { MouseEventHandler, ReactNode } from "react";
+import { Product } from "type/common";
 import Product3 from "../../../public/images/product3.png";
 
 interface Props {
@@ -23,31 +25,12 @@ interface Props {
 }
 
 const CartItem = ({ children, item }: Props) => {
-  const {
-    src,
-    title,
-    subTitle,
-    dataItem,
-    priceListed,
-    priceSub,
-    onClick,
-    onCompare,
-    projectName,
-    ticketCard,
-    projectTypeCode,
-    minFloor,
-    maxFloor,
-    activeSoSanh,
-    id,
-    activeFavourite,
-    isCompare,
-    favouriteStatus,
-  } = item;
+  const { thumbnail, ticketCard, id, activeFavourite, favouriteStatus } = item;
 
   const { addProductToFavouriteFunction } = useFavourite();
 
   return (
-    <CardStyled sx={{ maxWidth: 350 }}>
+    <CardStyled sx={{ maxWidth: 350, width: "100%" }}>
       {activeFavourite ? (
         <>
           {favouriteStatus === 0 ? (
@@ -109,7 +92,7 @@ const CartItem = ({ children, item }: Props) => {
       )}
       <ImageWithHideOnError
         className="logo"
-        src={src}
+        src={thumbnail}
         fallbackSrc={Product3}
         height={190}
         width={350}
@@ -234,7 +217,7 @@ CartItem.Price = ({ children, item }: Props) => {
               flex: 2,
             }}
           >
-            {totalPrice}
+            {totalPrice ? totalPrice : "N/A"}
           </Box>
         </Box>
         <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
@@ -260,6 +243,78 @@ CartItem.Price = ({ children, item }: Props) => {
           </Box>
         </Box>
       </StyledPrice>
+    </Box>
+  );
+};
+
+interface SelectProps extends Props {
+  handleSelectItem: (item: any) => void;
+  handleCloseModal: () => void;
+}
+
+CartItem.Select = ({
+  item,
+  handleSelectItem,
+  handleCloseModal,
+}: SelectProps) => {
+  const handleSelect = () => {
+    handleSelectItem(item);
+    handleCloseModal();
+  };
+
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        cursor: "pointer",
+        width: "fit-content",
+        margin: "40px auto 0px auto",
+      }}
+      onClick={handleSelect}
+    >
+      <Image alt="" src="/icons/add_icon.svg" width={15} height={15} />
+      <Box
+        sx={{
+          color: "#0063F7",
+          fontSize: "14px",
+          fontWeight: 400,
+          ml: "12px",
+        }}
+      >
+        Chọn sản phẩm để đổi
+      </Box>
+    </Box>
+  );
+};
+
+interface ChangeSelectProps extends Props {
+  handleOpenModal: () => void;
+}
+
+CartItem.ChangeSelect = ({ item, handleOpenModal }: ChangeSelectProps) => {
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        cursor: "pointer",
+        width: "fit-content",
+        margin: "40px auto 0px auto",
+      }}
+      onClick={handleOpenModal}
+    >
+      <Image alt="" src="/icons/add_icon.svg" width={15} height={15} />
+      <Box
+        sx={{
+          color: "#0063F7",
+          fontSize: "14px",
+          fontWeight: 400,
+          ml: "12px",
+        }}
+      >
+        Đổi sản phẩm
+      </Box>
     </Box>
   );
 };
