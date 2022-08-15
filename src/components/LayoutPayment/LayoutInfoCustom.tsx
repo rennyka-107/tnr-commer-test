@@ -237,8 +237,6 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
     setConvertProvinType(convert);
   }, [dataProvinces]);
 
-  console.log(productItem, "productItem");
-
   async function getInformationUser() {
     try {
       const res = await apiGetProfileInformation();
@@ -408,8 +406,6 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
     getCustomerTypes();
     fetchPaymentMethod();
   }, []);
-
-  console.log(productItem.ListPolicy.map((item) => item.PolicyName).join(", "));
 
   function sendInforToMsb() {
     const sendData = {
@@ -960,7 +956,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                           </RowStyled>
                         </Grid>
                       )}
-                      <Grid item xs={disabledEditMainUser ? 6 : 12}>
+                      <Grid item xs={6}>
                         <FormGroup>
                           <ControllerTextField
                             label={"CCCD/CMND"}
@@ -975,7 +971,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                               },
                             }}
                             required
-                            width={317}
+                            // width={317}
                             disabled={disabledEditMainUser}
                           />
                         </FormGroup>
