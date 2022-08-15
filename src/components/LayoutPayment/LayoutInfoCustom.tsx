@@ -420,7 +420,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
       dienThoai: watch("phoneNumber"),
       duAn: cart?.project?.name,
       loCan: cart?.name,
-      giaTriBds: !isEmpty(productItem)
+      giaTriBds: !isEmpty(productItem) && productItem.TotalMoney !== 0 && productItem.TotalMoney !== null
         ? productItem?.TotalMoney
         : cart?.totalPrice,
       chinhSachBanHang: !isEmpty(productItem)
@@ -515,17 +515,17 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
       quotationRealt: !isEmpty(transactionCode)
         ? data.quotationRealt
         : {
-            landPrice: !isEmpty(productItem)
+            landPrice: !isEmpty(productItem)  && productItem.LandPrice !== 0 && productItem.LandPrice !== null
               ? productItem?.LandPrice
               : totalVatPrice,
-            vat: !isEmpty(productItem) ? productItem?.VAT : vat,
-            maintainPrice: !isEmpty(productItem)
+            vat: !isEmpty(productItem)  && productItem.VAT !== 0 && productItem.VAT !== null ? productItem?.VAT : vat,
+            maintainPrice: !isEmpty(productItem) && productItem.MaintenanceFee !== 0 && productItem.MaintenanceFee !== null 
               ? productItem?.MaintenanceFee
               : maintainPrice,
-            totalPrice: !isEmpty(productItem)
+            totalPrice: !isEmpty(productItem)  && productItem.TotalMoney !== 0 && productItem.TotalMoney !== null 
               ? productItem?.TotalMoney
               : totalPrice,
-            totalOnlinePrice: !isEmpty(productItem)
+            totalOnlinePrice: !isEmpty(productItem)  && productItem.TotalMoney !== 0 && productItem.TotalMoney !== null 
               ? productItem?.TotalMoney
               : totalPrice,
             minEarnestMoney,
