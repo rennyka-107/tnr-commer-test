@@ -142,6 +142,7 @@ const LayoutResultPayment = (props: Props) => {
         >
           {[1, 2, 3, 4, 5].map((nb, idx) => (
             <IconStar
+              key={`${idx}-star`}
               fillColor={stars[idx]["fillColor"]}
               onMouseOver={() => {
                 const oldStars = { ...stars };
@@ -201,7 +202,7 @@ const LayoutResultPayment = (props: Props) => {
                     title: "Đánh giá giao dịch",
                     message: res.responseMessage,
                   });
-                  router.push("/")
+                  router.push("/");
                 } else {
                   notification({
                     severity: "error",
