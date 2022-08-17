@@ -67,3 +67,9 @@ export const apiChangeProductPayment = async (data: any) => {
     data
   );
 };
+
+export const apiValidReferenceCode = async (code: string) => {
+  return HttpClient.get<string, CommonResponse>(
+    `/api/v1/landsoft/get-reference-code/${code}`
+  );
+};

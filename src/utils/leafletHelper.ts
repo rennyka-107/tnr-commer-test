@@ -23,17 +23,23 @@ export function createLockIcon() {
 
 export function getBoundsLockIcon(layer: Polygon | Rectangle | Circle) {
   const circleBounds = layer.getBounds();
-  const northEastBounds = circleBounds.getNorthEast();
-  const southWestBounds = circleBounds.getSouthWest();
+  // const northEastBounds = circleBounds.getNorthEast();
+  // const southWestBounds = circleBounds.getSouthWest();
 
   const topMidPoint = L.bounds(
-    Object.values(northEastBounds).map((vl) => vl - 200) as PointExpression,
+    // Object.values(northEastBounds).map((vl) => vl) as PointExpression,
     // Object.values(northEastBounds) as PointExpression,
+    Object.values(circleBounds.getCenter()).map(
+      (vl) => vl + 20
+    ) as PointExpression,
     Object.values(circleBounds.getCenter()) as PointExpression
   ).getCenter();
   const bottomMidPoint = L.bounds(
     Object.values(circleBounds.getCenter()) as PointExpression,
-    Object.values(southWestBounds).map((vl) => vl + 200) as PointExpression
+    Object.values(circleBounds.getCenter()).map(
+      (vl) => vl - 20
+    ) as PointExpression
+    // Object.values(southWestBounds).map((vl) => vl) as PointExpression
     // Object.values(southWestBounds) as PointExpression
   ).getCenter();
 

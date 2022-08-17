@@ -43,6 +43,8 @@ export interface PTGResponse {
   VAT?: number;
   MaintenanceFee?: number;
   PreTotalMoney?: number;
+  priceId?: number | null;
+  scheduleId?: string | null;
 }
 
 //interface getListProducts
@@ -111,8 +113,8 @@ export interface ResponseSearchById {
   build?: boolean;
   gym: number;
   projectType?: {
-	name: string;
-  }
+    name: string;
+  };
   projectLevelDetail: {
     id: string;
     level: string;
@@ -146,7 +148,7 @@ export interface ResponseSearchById {
     id: string;
     name: string;
     location: string;
-	idls?: string;
+    idls?: string;
     constructArea: number;
     density: number;
     type: string;
@@ -220,7 +222,7 @@ export interface ResponseSearchById {
   paymentStatus?: string | number | null;
   projectTypeCode?: string;
   minFloor?: number;
-  maxFloor?: number
+  maxFloor?: number;
 }
 
 ///api/product/information/find-top-by-outstanding

@@ -43,7 +43,7 @@ interface TabPanelProps {
 const ContainerPJ = styled.div`
   height: auto;
   width: 100%;
-  padding: 31px 31px 0 31px;
+  padding: 1.5rem 1.5rem 0 1.5rem;
   border: 1px solid #c7c9d9;
   min-height: 554px;
   border-radius: 20px;
@@ -55,7 +55,7 @@ const TabStyled = styled(Tab)`
   font-style: normal;
   text-transform: "none";
   font-weight: 500;
-  font-size: 18px;
+  font-size: 1rem;
   line-height: 21px;
   /* identical to box height */
 
@@ -85,6 +85,8 @@ const useStyle = makeStyles({
     // padding: '0px 50px 0px 100px',
     "& .MuiTabs-flexContainer": {
       gap: 20,
+      marginLeft: "1rem",
+      marginTop: "10px"
     },
     "& 	.MuiTabs-indicator": {
       backgroundColor: "#FCB715 !important",
@@ -94,7 +96,7 @@ const useStyle = makeStyles({
       // color: "#000000 !important",
       textTransform: "none",
       fontWeight: 500,
-      fontSize: 22,
+      fontSize: "1.2rem",
     },
   },
   selected: {
@@ -102,7 +104,7 @@ const useStyle = makeStyles({
     color: "#000000 !important",
     textTransform: "none",
     fontWeight: 500,
-    fontSize: 22,
+    fontSize: "1.2rem",
   },
   customBadge: {
     backgroundColor: "#EA242A",
@@ -112,7 +114,7 @@ const useStyle = makeStyles({
   },
 });
 
-const bold = { fontWeight: "500" };
+const bold = { fontWeight: "500", fontSize: ".9rem" };
 
 const ProjectInformation = ({
   location,
@@ -151,7 +153,7 @@ const ProjectInformation = ({
       { key: "Hình thức sở hữu", value: ownership ?? "" },
     ].map(({ key, value }, idx) => (
       <Box
-        sx={{ pl: 0, display: "flex", mt: 2, alignItems: "flex-start" }}
+        sx={{ pl: 0, display: "flex", mt: 1, alignItems: "flex-start" }}
         key={idx}
       >
         <Box sx={{ marginLeft: "-.8rem"}}>
@@ -242,15 +244,15 @@ const ProjectInformation = ({
 
         <TabPanel value={value} index={0}>
           <Box>{renderList()}</Box>
-          <Divider sx={{ mt: 2 }} />
-          <Box sx={{ mt: 3, mb: 3 }}>
+          <Divider sx={{ mt: 1 }} />
+          <Box sx={{ mt: 2 }}>
             <Typography
-              sx={{ fontWeight: "500", fontSize: "18px", mb: 3 }}
+              sx={{ fontWeight: "500", fontSize: "1rem", mb: 1 }}
               color="#FEC83C"
             >
               Mô tả dự án
             </Typography>
-            <Typography>{description ?? ""}</Typography>
+            <Typography sx={{ fontSize: ".9rem"}}>{description ?? ""}</Typography>
           </Box>
         </TabPanel>
         <TabPanel value={value} index={1}>

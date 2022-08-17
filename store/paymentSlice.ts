@@ -27,6 +27,7 @@ interface InitialState {
     listUserIdDelete: string[];
     paymentMediaList: any[];
   };
+  referenceCode: string | null;
 }
 const initialState: InitialState = {
   listPayment: [],
@@ -70,8 +71,9 @@ const initialState: InitialState = {
     production: null,
     paymentStatus: 0,
     listUserIdDelete: [],
-    paymentMediaList: []
+    paymentMediaList: [],
   },
+  referenceCode: null,
 };
 
 export const paymentSlice = createSlice({
@@ -90,9 +92,13 @@ export const paymentSlice = createSlice({
     setUploadMedia: (state, action) => {
       state.uploadMedia = action.payload;
     },
+    setReferenceCode: (state, action) => {
+      state.referenceCode = action.payload;
+    },
   },
 });
 
-export const { setListPayment, setQrCode, setData, setUploadMedia } = paymentSlice.actions;
+export const { setListPayment, setQrCode, setData, setUploadMedia, setReferenceCode } =
+  paymentSlice.actions;
 
 export default paymentSlice.reducer;

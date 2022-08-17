@@ -34,7 +34,9 @@ const initialState = {
     TotalMoneyText: "",
     VAT: 0,
     MaintenanceFee: 0,
-    PreTotalMoney: 0
+    PreTotalMoney: 0,
+    priceId: null,
+    scheduleId: ""
   },
   productByID: {
     id: "adf68c39-c5b3-4a80-b806-a2b8a840d4c4",

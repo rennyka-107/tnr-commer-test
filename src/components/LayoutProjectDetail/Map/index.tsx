@@ -6,8 +6,6 @@ import { RootState } from "../../../../store/store";
 import * as geojson from "geojson";
 import dynamic from "next/dynamic";
 
-type Props = {};
-
 const DisplayLayers = dynamic(() => import("./DisplayLayers"), {
   loading: () => <p>...</p>,
   ssr: false,
@@ -25,8 +23,8 @@ const MapImage = dynamic(() => import("./MapImage"), {
 
 const Map = () => {
   const bounds: LatLngBoundsExpression = [
-    [1.3 * window.innerWidth, 1.3 * window.innerWidth],
-    [-1.3 * window.innerWidth, -1.3 * window.innerWidth],
+    [2 * (window.innerHeight - 150), 1.3 * window.innerWidth],
+    [-2 * (window.innerHeight -150), -1.3 * window.innerWidth],
   ];
 
   const [layerParent, setLayerParent] = useState<any>(null);

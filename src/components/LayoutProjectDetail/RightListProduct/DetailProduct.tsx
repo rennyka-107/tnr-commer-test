@@ -9,6 +9,7 @@ import {
 import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import {
+  FloorIcon,
   IconBath,
   IconBedDouble,
   IconCompass,
@@ -21,6 +22,8 @@ import { RootState } from "../../../../store/store";
 import { useSelector } from "react-redux";
 import isEmpty from "lodash.isempty";
 import { useRouter } from "next/router";
+import IconCoXay from "@components/Icons/IconCoXay";
+import IconChuaXay from "@components/Icons/IconChuaXay";
 
 type Props = {
   onBack?: Function;
@@ -63,6 +66,7 @@ const DividerLine = styled.div`
   height: 0px;
   border: 0.5px solid #c7c9d9;
   margin-bottom: 15px;
+  margin-top: 10px;
 `;
 // const TicketTag = styled(Box)`
 //   padding: 7px 14px;
@@ -129,14 +133,14 @@ const ButtonStyled1 = styled(Button)`
   background: #ffffff;
   border-radius: 60px;
   border: 1px solid #1b3459;
-  :hover {
-    background: #ea242a;
-    box-shadow: 4px 8px 24px #f2f2f5;
-    border: 1px solid #48576d;
-    border-radius: 60px;
-    color: #ffffff;
-    border: unset;
-  }
+  // :hover {
+  //   background: #ea242a;
+  //   box-shadow: 4px 8px 24px #f2f2f5;
+  //   border: 1px solid #48576d;
+  //   border-radius: 60px;
+  //   color: #ffffff;
+  //   border: unset;
+  // }
   font-family: "Roboto";
   font-style: normal;
   font-weight: 400;
@@ -151,17 +155,18 @@ const ButtonStyled1 = styled(Button)`
 `;
 
 const ButtonStyled2 = styled(Button)`
-  width: 9rem;
+  padding: 0 27px;
+  // width: 9rem;
   height: 48px;
   margin-top: 2rem;
   background: #ea242a;
   border-radius: 60px;
   :hover {
-    background: #ffffff;
-    box-shadow: 4px 8px 24px #f2f2f5;
-    border: 1px solid #48576d;
+    background: #fec83c;
+    // box-shadow: 4px 8px 24px #f2f2f5;
+    box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.2);
     border-radius: 60px;
-    color: #48576d;
+    color: #ffffff;
   }
   font-family: "Roboto";
   font-style: normal;
@@ -184,7 +189,7 @@ const DetailProduct = ({ onBack }: Props) => {
   const ListTarget = useSelector(
     (state: RootState) => state.projectMap.ListTarget
   );
- 
+
   const [stringNameParent, setStringNameParent] = useState("N/A");
   const router = useRouter();
 
@@ -221,15 +226,14 @@ const DetailProduct = ({ onBack }: Props) => {
           <IconButton onClick={() => onBack()}>
             <ArrowBackIosIcon />
           </IconButton>
-          <TitleStyled>{Target.name ?? "N/A"}</TitleStyled>
+          <TitleStyled sx={{ ml: 1.5}}>{Target.name ?? "N/A"}</TitleStyled>
         </Box>
-        {ListLevel.length > 0 && (
+        {/* {ListLevel.length > 0 && (
           <TextStyled style={{ margin: "10px auto" }}>
             {ListLevel[0].name}
           </TextStyled>
         )}
         <TextStyled style={{ margin: "10px auto" }}>
-          {/* {stringNameParent} */}
           {Target.location ? Target.location : "N/A"}
         </TextStyled>
         <DividerLine />
@@ -256,6 +260,60 @@ const DetailProduct = ({ onBack }: Props) => {
               {Target.doorDirection ? Target.doorDirection : "N/A"}
             </TextStyled>
           </Grid>
+        </Grid> */}
+        <DividerLine />
+        <Grid sx={{ pb: 2 }} container rowSpacing={1}>
+          <Grid item xs={6} display={"flex"} alignItems={"center"}>
+            <IconFrame />
+            &nbsp;&nbsp;
+            <TextStyled>
+              {Target.landArea ?? "N/A"} m<sup>2</sup>
+            </TextStyled>
+          </Grid>
+          {Target.buildType === "1" && (
+            <>
+              {Target.build ? (
+                <>
+                  <Grid item xs={6} display={"flex"} alignItems={"center"}>
+                    <IconCoXay /> &nbsp;&nbsp;
+                    <TextStyled>Có xây</TextStyled>
+                  </Grid>
+                </>
+              ) : (
+                <>
+                  <Grid item xs={6} display={"flex"} alignItems={"center"}>
+                    <IconChuaXay /> &nbsp;&nbsp;
+                    <TextStyled>Chưa xây</TextStyled>
+                  </Grid>
+                </>
+              )}
+            </>
+          )}
+
+          {Target.buildType === "2" && (
+            <Grid item xs={6} display={"flex"} alignItems={"center"}>
+              <IconBedDouble />
+              &nbsp;&nbsp;<TextStyled>{Target.numBed ?? "N/A"}</TextStyled>
+            </Grid>
+          )}
+          <Grid item xs={6} display={"flex"} alignItems={"center"}>
+            <IconCompass />
+            &nbsp;&nbsp;<TextStyled>{Target.doorDirection ?? "N/A"}</TextStyled>
+          </Grid>
+
+          {Target.buildType === "2" && (
+            <Grid item xs={6} display={"flex"} alignItems={"center"}>
+              <IconBath />
+              &nbsp;&nbsp;<TextStyled>{Target.numBath ?? "N/A"}</TextStyled>
+            </Grid>
+          )}
+          {Target.buildType === "1" && Target.build && (
+            <Grid item xs={6} display={"flex"} alignItems={"center"}>
+              <FloorIcon />
+              &nbsp;&nbsp;
+              <TextStyled>{Target.maxFloor ?? "N/A"} Tầng</TextStyled>
+            </Grid>
+          )}
         </Grid>
         {/* <div style={{ marginTop: 12 }}>
           <div style={{ display: "flex", marginBottom: 14 }}>
@@ -280,7 +338,13 @@ const DetailProduct = ({ onBack }: Props) => {
             onClick={() => {
               router.push(`/compare-product?idCompare=${Target.id}`);
             }}
-            startIcon={<IconPlusCircle style={{ width: 16, height: 16 }} />}
+            startIcon={
+              <IconPlusCircle
+                style={{ width: 16, height: 16 }}
+                stroke="#0063F7"
+              />
+            }
+            sx={{ border: "none !important", color: "#0063F7 !important" }}
           >
             So sánh
           </ButtonStyled1>

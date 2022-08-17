@@ -4,8 +4,9 @@ import styled from "@emotion/styled";
 import { Button, Grid, Stack, Typography } from "@mui/material";
 import isEmpty from "lodash.isempty";
 import { useRouter } from "next/router";
-import React, { Dispatch, SetStateAction } from "react";
-import { useSelector } from "react-redux";
+import React, { Dispatch, SetStateAction, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setReferenceCode } from "../../../store/paymentSlice";
 import { RootState } from "../../../store/store";
 import CardItemProduct from "./components/CardItemProduct";
 import CartPayment from "./components/CartPayment";
@@ -41,6 +42,11 @@ const StyledTitle = styled(Typography)`
 const LayoutPayment = ({ setScopeRender }: Props) => {
   const { cart } = useSelector((state: RootState) => state.carts);
   const router = useRouter();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setReferenceCode(null));
+  }, []);
 
   const onAdd = () => {
     router.push(
@@ -57,9 +63,7 @@ const LayoutPayment = ({ setScopeRender }: Props) => {
         spacing={4}
       >
         <IconEmptyShoppingCart />
-        <StyledTitle>
-          Chưa có bất động sản nào trong giỏ hàng
-        </StyledTitle>
+        <StyledTitle>Chưa có bất động sản nào trong giỏ hàng</StyledTitle>
         <StyledButton variant="contained" onClick={onAdd}>
           Tìm bất động sản ngay
         </StyledButton>

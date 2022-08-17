@@ -1,6 +1,6 @@
 import React from "react";
 
-const IconPlusCircle = ({ style }: { style?: React.CSSProperties }) => {
+const IconPlusCircle = ({ style, stroke }: { style?: React.CSSProperties, stroke?: string }) => {
   return (
     <svg
       width="44"
@@ -10,9 +10,9 @@ const IconPlusCircle = ({ style }: { style?: React.CSSProperties }) => {
       xmlns="http://www.w3.org/2000/svg"
       style={style}
     >
-      <circle cx="22" cy="22" r="21.5" fill="white" stroke="#EA242A" />
-      <path d="M12.2227 22H22.0004H31.7782" stroke="#EA242A" />
-      <path d="M22 31.7773V21.9996V12.2218" stroke="#EA242A" />
+      <circle cx="22" cy="22" r="21.5" fill="white" stroke={stroke ?? "#EA242A"} />
+      <path d="M12.2227 22H22.0004H31.7782" stroke={stroke ?? "#EA242A"} />
+      <path d="M22 31.7773V21.9996V12.2218" stroke={stroke ?? "#EA242A"} />
     </svg>
   );
 };

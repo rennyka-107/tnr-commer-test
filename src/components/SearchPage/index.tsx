@@ -499,7 +499,11 @@ const SearchPage = ({
         !isEmpty(listParamsProvince) ||
         !isEmpty(listIdProject) ||
         !isEmpty(listDataLSProjectType) ||
-        !isEmpty(textSearch) ? (
+        !isEmpty(textSearch) ||
+        !isEmpty(filterSearch.priceFrom) ||
+        !isEmpty(filterSearch.priceTo) ||
+        !isEmpty(filterSearch.areaFrom) ||
+        !isEmpty(filterSearch.areaTo) ? (
           <div
             style={{
               display: "flex",
@@ -612,8 +616,8 @@ const SearchPage = ({
                 {
                   text: (
                     <>
-                      {filterSearch.areaFrom} m<sup>2</sup> -&nbsp;
-                      {filterSearch.areaTo} m<sup>2</sup>
+                      {filterSearch.areaFrom} m2 -&nbsp;
+                      {filterSearch.areaTo} m2
                     </>
                   ),
                   hasValue: Boolean(filterSearch.areaFrom),

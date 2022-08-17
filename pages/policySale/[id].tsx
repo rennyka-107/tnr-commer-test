@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getListSalePolicy } from "../../store/salePolicySlice";
 import { RootState } from "../../store/store";
 import LoadingComponent from "@components/LoadingComponent";
+import isEmpty from "lodash.isempty";
 
 const Container = styled.div`
   padding: 29px 0px;
@@ -30,6 +31,7 @@ const PolicySale = () => {
 
   const { id } = router.query;
   const [loading, setLoading] = useState(true);
+  console.log(listSalePolicy, loading, "!@3");
 
   const fetchAdvandedSearchList = async () => {
     try {
@@ -45,7 +47,9 @@ const PolicySale = () => {
   };
 
   useEffect(() => {
-    fetchAdvandedSearchList();
+    if (!isEmpty(id)) {
+      fetchAdvandedSearchList();
+    }
   }, [id]);
 
   const fetchComponent = () => {
@@ -61,9 +65,7 @@ const PolicySale = () => {
       </>
     );
   };
-  useEffect(() => {
-    fetchComponent();
-  }, [loading]);
+
   return (
     <Page
       meta={{

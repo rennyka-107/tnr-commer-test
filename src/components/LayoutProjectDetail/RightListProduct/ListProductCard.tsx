@@ -12,13 +12,14 @@ import { RootState } from "../../../../store/store";
 
 interface ProductsProps {
   data?: ProductsResponse[];
+  expandMore: boolean;
 }
 const ContainerProduct = styled.div`
   display: flex;
   justify-content: flex-start;
 `;
 
-const ListProductCard = ({ data }: ProductsProps) => {
+const ListProductCard = ({ data, expandMore }: ProductsProps) => {
   const dispatch = useDispatch();
   const Target = useSelector((state: RootState) => state.projectMap.Target);
 
@@ -37,7 +38,7 @@ const ListProductCard = ({ data }: ProductsProps) => {
             display: "grid",
             gridAutoColumns: "23rem",
             // gridTemplateRows: "2fr",
-            overflowX: "auto",
+            overflowX: expandMore ? "auto" : "unset",
           }}
         >
           {data.map((product, index) => (

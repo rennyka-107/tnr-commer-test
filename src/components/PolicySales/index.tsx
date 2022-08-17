@@ -118,6 +118,8 @@ const PolicySales = ({ listSalePolicy, idPolicy }: Props) => {
     }
   }, [productByID]);
 
+  console.log(listSalePolicy, "sale ")
+
   return (
     <ContainerPolicySales title={"Chính sách bán hàng"} breaditem={Breadcrumbs}>
       <ContainerStyled>

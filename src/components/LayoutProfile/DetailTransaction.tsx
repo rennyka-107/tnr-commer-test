@@ -117,7 +117,6 @@ const DetailTransaction = () => {
   }
 
   const fecthComponent = () => {
-	console.log(data)
     return (
       <>
         {isEmpty(data) ? (

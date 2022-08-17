@@ -28,9 +28,8 @@ interface SilderGroupProps {
 }
 
 const StyledDiv = styled("div")`
-display: flex;
-flex-direction: row; 
-justi
+  display: flex;
+  flex-direction: row;
   background-color: white;
   border: 1px solid #c7c9d9;
   border-radius: 8px;
@@ -39,6 +38,7 @@ justi
   justify-content: space-between;
   padding: 7px 21px;
   gap: 10px;
+
   cursor: pointer;
   :hover {
     border-color: #1b3459;
@@ -53,6 +53,13 @@ const PopUp = styled(Card)`
   transform: translate(0%, 100%);
   padding: 20px;
   z-index: 11;
+`;
+const StyledText = styled.span`
+  width: 150px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
 `;
 
 const SliderGroupFilterSearch: FC<SilderGroupProps> = ({
@@ -85,13 +92,14 @@ const SliderGroupFilterSearch: FC<SilderGroupProps> = ({
     <>
       <FormControl
         fullWidth={fullWidth}
-        sx={{ m: 1, width: 'auto', mt: 3, position: "relative", ...sx }}
+        sx={{ m: 1, width: "auto", mt: 3, position: "relative", ...sx }}
       >
         <FormLabel title={label} />
         {/* <ClickAwayListener onClickAway={onCancel}> */}
         <div>
           <StyledDiv onClick={onOpen}>
-            {text} <IconSelectDropdown style={{ width: 9, height: 9 }} />
+            <StyledText>{text}</StyledText>{" "}
+            <IconSelectDropdown style={{ width: 9, height: 9 }} />
           </StyledDiv>
           <PopUp hidden={!openFilter}>
             <Stack direction={"column"} spacing={spacing}>

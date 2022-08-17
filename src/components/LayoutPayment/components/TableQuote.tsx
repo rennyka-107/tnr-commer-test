@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import { Box } from "@mui/material";
 import Link from "next/link";
 import React, { Dispatch, SetStateAction } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../store/store";
 import {
   ButtonAction,
@@ -17,6 +17,9 @@ import {
 } from "../../StyledLayout/styled";
 import { currencyFormat } from "utils/helper";
 import { isEmpty } from "lodash";
+import { apiValidReferenceCode } from "../../../../pages/api/paymentApi";
+import useNotification from "hooks/useNotification";
+import { setReferenceCode } from "../../../../store/paymentSlice";
 
 const BoxDetailInfo = styled(Box)({
   marginTop: 15,
@@ -38,7 +41,11 @@ const TableQuote = ({ width, urlPayment, setScopeRender, item }: Props) => {
   const productItem = useSelector(
     (state: RootState) => state.products.productItem
   );
-
+  const referenceCode = useSelector(
+    (state: RootState) => state.payments.referenceCode
+  );
+  const notification = useNotification();
+  const dispatch = useDispatch();
   return (
     <WrapperBoxBorderStyled mw={width ?? 350} padding={"20px 20px 25px"}>
       <Title28Styled>Báo giá</Title28Styled>
@@ -47,7 +54,9 @@ const TableQuote = ({ width, urlPayment, setScopeRender, item }: Props) => {
         <RowStyledAgain>
           <Text14Styled>Đơn giá QSDĐ</Text14Styled>
           <Text14Styled>
-            {(!isEmpty(productItem) && productItem.LandPrice !== 0 && productItem.LandPrice !== null
+            {(!isEmpty(productItem) &&
+            productItem.LandPrice !== 0 &&
+            productItem.LandPrice !== null
               ? currencyFormat(productItem.LandPrice)
               : !isEmpty(item)
               ? currencyFormat(item.landPrice)
@@ -58,7 +67,9 @@ const TableQuote = ({ width, urlPayment, setScopeRender, item }: Props) => {
         <RowStyledAgain>
           <Text14Styled>Tổng giá trị QSDĐ</Text14Styled>
           <Text14Styled>
-            {(!isEmpty(productItem) && productItem.LandMoney !== 0 && productItem.LandMoney !== null
+            {(!isEmpty(productItem) &&
+            productItem.LandMoney !== 0 &&
+            productItem.LandMoney !== null
               ? currencyFormat(productItem.LandMoney)
               : !isEmpty(item) && item.landMoney
               ? currencyFormat(item.landMoney)
@@ -81,7 +92,9 @@ const TableQuote = ({ width, urlPayment, setScopeRender, item }: Props) => {
         <RowStyledAgain>
           <Text14Styled>Tổng tiền niêm yết</Text14Styled>
           <Text14Styled>
-            {(!isEmpty(productItem) && productItem.PreTotalMoney !== 0 && productItem.PreTotalMoney !== null
+            {(!isEmpty(productItem) &&
+            productItem.PreTotalMoney !== 0 &&
+            productItem.PreTotalMoney !== null
               ? currencyFormat(productItem.PreTotalMoney)
               : !isEmpty(item) && item.totalPrice
               ? currencyFormat(item.totalPrice)
@@ -91,7 +104,9 @@ const TableQuote = ({ width, urlPayment, setScopeRender, item }: Props) => {
         <RowStyledAgain>
           <Text14Styled>Giảm giá</Text14Styled>
           <Text14Styled>
-            {(!isEmpty(productItem) && productItem.PromotionMoney !== 0 && productItem.PromotionMoney !== null
+            {(!isEmpty(productItem) &&
+            productItem.PromotionMoney !== 0 &&
+            productItem.PromotionMoney !== null
               ? currencyFormat(productItem.PromotionMoney)
               : !isEmpty(item) && item.promotionMoney
               ? currencyFormat(item.promotionMoney)
@@ -102,7 +117,9 @@ const TableQuote = ({ width, urlPayment, setScopeRender, item }: Props) => {
         <RowStyledAgain>
           <Text14Styled>Tổng tiền mua online</Text14Styled>
           <Text18Styled fw={500} style={{ color: "#ea242a" }}>
-            {(!isEmpty(productItem) && productItem.TotalMoney !== 0 && productItem.TotalMoney !== null
+            {(!isEmpty(productItem) &&
+            productItem.TotalMoney !== 0 &&
+            productItem.TotalMoney !== null
               ? currencyFormat(productItem.TotalMoney)
               : !isEmpty(item) && item.totalOnlinePrice
               ? currencyFormat(item.totalOnlinePrice)
@@ -146,12 +163,42 @@ const TableQuote = ({ width, urlPayment, setScopeRender, item }: Props) => {
                 <a style={{ color: "#0063F7", textDecoration: "underline" }}>
                   ĐĂNG NHẬP
                 </a>
-              </Link>{" "}
+              </Link>
               để lưu thông tin thanh toán
             </Text12ItalicStyled>
           </RowStyledAgain>
           <RowStyled>
-            <ButtonAction onClick={() => setScopeRender(urlPayment)}>
+            <ButtonAction
+              onClick={() => {
+                if (!isEmpty(referenceCode)) {
+                  apiValidReferenceCode(referenceCode)
+                    .then((res) => {
+                      if (res.responseData) {
+                        setScopeRender(urlPayment);
+                      } else {
+                        notification({
+                          severity: "error",
+                          title: "Xác thực mã giới thiệu",
+                          message: "Mã giới thiệu không hợp lệ!",
+                        });
+                      }
+                    })
+                    .catch((err) =>
+                      notification({
+                        severity: "error",
+                        title: "Xác thực mã giới thiệu",
+                        message: "Có lỗi xảy ra",
+                      })
+                    );
+                } else {
+                  notification({
+                    severity: "error",
+                    title: "Xác thực mã giới thiệu",
+                    message: "Mã giới thiệu không được trống!",
+                  });
+                }
+              }}
+            >
               <Text18Styled color={"white"}>Tiếp tục thanh toán</Text18Styled>
             </ButtonAction>
           </RowStyled>

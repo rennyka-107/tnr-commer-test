@@ -41,12 +41,15 @@ const DisplayLayers = ({ data, layerParent }: Props) => {
         : layer.getLatLngs()[0];
       const newLatLng = layer.feature.properties.radius
         ? {
-            lat: (oldLatLng.lat * 0.65 * window.innerWidth) / 700,
+            // lat: (oldLatLng.lat * 0.65 * window.innerWidth) / 700,
             lng: (oldLatLng.lng * 0.65 * window.innerWidth) / 700,
+            lat: (oldLatLng.lat * (window.innerHeight - 150)) / 700,
           }
         : oldLatLng.map((ll: any) => ({
-            lat: (ll.lat * 0.65 * window.innerWidth) / 700,
             lng: (ll.lng * 0.65 * window.innerWidth) / 700,
+            lat: (ll.lat * (window.innerHeight - 150)) / 700,
+            // lat: (ll.lat * 0.65 * window.innerWidth) / 700,
+            // lng: (ll.lng * (window.innerHeight - 150)) / 700,
           }));
       const newLayer = layer.feature.properties.radius
         ? new L.Circle(
@@ -141,12 +144,14 @@ const DisplayLayers = ({ data, layerParent }: Props) => {
         : layerParent.getLatLngs()[0];
       const newLatLng = layerParent.feature.properties.radius
         ? {
-            lat: (oldLatLng.lat * 0.65 * window.innerWidth) / 700,
             lng: (oldLatLng.lng * 0.65 * window.innerWidth) / 700,
+            lat: (oldLatLng.lat * (window.innerHeight - 150)) / 700,
           }
         : oldLatLng.map((ll: any) => ({
-            lat: (ll.lat * 0.65 * window.innerWidth) / 700,
             lng: (ll.lng * 0.65 * window.innerWidth) / 700,
+            lat: (ll.lat * (window.innerHeight - 150)) / 700,
+            // lat: (ll.lat * 0.65 * window.innerWidth) / 700,
+            // lng: (ll.lng * (window.innerHeight - 150)) / 700,
           }));
       const newLayer = layerParent.feature.properties.radius
         ? new L.Circle(

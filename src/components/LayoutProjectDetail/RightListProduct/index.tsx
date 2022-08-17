@@ -76,7 +76,8 @@ export default function RightListProduct() {
       <Box
         sx={{
           width: expandMore ? "95vw" : "30vw",
-          height: "65vw",
+          // height: "65vw",
+          height: "calc(100vh - 150px)",
           borderRadius: "8px 0px 0px 8px",
           position: "absolute",
           zIndex: 990,
@@ -86,7 +87,8 @@ export default function RightListProduct() {
         <Card
           sx={{
             width: "100%",
-            height: "65vw",
+            // height: "65vw",
+            height: "calc(100vh - 150px)",
             pl: 4,
             pr: 4,
             boxShadow: "unset",
@@ -113,8 +115,8 @@ export default function RightListProduct() {
                 InputProps={{
                   ...params.InputProps,
                   style: {
-                    fontSize: "28px",
-                    fontWeight: "400",
+                    fontSize: "1.25rem",
+                    fontWeight: "500",
                     lineHeight: "33px",
                     color: "#0E1D34",
                   },
@@ -126,20 +128,21 @@ export default function RightListProduct() {
             isOptionEqualToValue={(option, value) => option.id === value.id}
           />
           <Box
-          id="box-dropdown-map"
+            id="box-dropdown-map"
             sx={{
               mt: 2,
               display: "flex",
               overflowX: "auto",
               width: "100%",
-              minHeight: 70,
+              minHeight: 50,
             }}
           >
-            {!isEmpty(ListLevel) && ListLevel.map((level, idx) => {
-              if (idx !== 0 && idx !== ListLevel.length - 1) {
-                return <DropDownTargetLevel level={level} key={idx} />;
-              }
-            })}
+            {!isEmpty(ListLevel) &&
+              ListLevel.map((level, idx) => {
+                if (idx !== 0 && idx !== ListLevel.length - 1) {
+                  return <DropDownTargetLevel level={level} key={idx} />;
+                }
+              })}
           </Box>
 
           {!isEmpty(Target) && Target.level === "PRODUCT" ? (
@@ -166,7 +169,7 @@ export default function RightListProduct() {
               }}
             >
               <CardContent sx={{ pt: 0, pl: 0 }}>
-                <ListProductCard data={ListChild} />
+                <ListProductCard data={ListChild} expandMore={expandMore} />
               </CardContent>
               <CardActions sx={{ pt: 0 }} disableSpacing>
                 <Button
@@ -246,7 +249,9 @@ export default function RightListProduct() {
               </Box>
             </Box>
           ) : (
-            <DynamicProjectInformation {...ProjectInformation} />
+            isEmpty(Target) && (
+              <DynamicProjectInformation {...ProjectInformation} />
+            )
           )}
         </Card>
       </Box>

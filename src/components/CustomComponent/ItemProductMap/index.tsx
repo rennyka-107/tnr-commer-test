@@ -2,12 +2,15 @@ import React, { MouseEventHandler } from "react";
 import styled from "@emotion/styled";
 import { Box, CardMedia, Grid, Typography } from "@mui/material";
 import {
+	FloorIcon,
   IconBath,
   IconBedDouble,
   IconCompass,
   IconFrame,
 } from "@components/Icons";
 import { currencyFormat } from "utils/helper";
+import IconCoXay from "@components/Icons/IconCoXay";
+import IconChuaXay from "@components/Icons/IconChuaXay";
 
 interface Props {
   src?: any;
@@ -16,20 +19,20 @@ interface Props {
 }
 
 const WrapperContent = styled(Box)`
-  width: 100%;
+  width: 15vw;
   height: auto;
   border: 1px solid #d8d8d8;
   border-radius: 20px;
   background: #fff;
   box-shadow: none;
   position: relative;
-  padding: 197px 25px 0px;
+  padding: 6rem 25px 0px;
   margin-top: 15px;
   cursor: pointer;
 `;
 const WrapperImg = styled(Box)`
   width: 100%;
-  height: 195px;
+  height: 6rem;
   border-radius: 20px 20px 0px 0px;
   position: absolute;
   top: -15px;
@@ -39,15 +42,16 @@ const TitleStyled = styled(Typography)`
   font-family: "Roboto";
   font-style: normal;
   font-weight: 500;
-  font-size: 22px;
-  line-height: 26px;
+  font-size: 1rem;
+  line-height: 1rem;
   color: #1b3459;
+  margin-bottom: 1rem;
 `;
 const TextStyled = styled(Typography)`
   font-family: "Roboto";
   font-style: normal;
   font-weight: 400;
-  font-size: 14px;
+  font-size: .8rem;
   line-height: 16px;
   color: #1b3459;
 `;
@@ -75,7 +79,7 @@ const TextBottomStyled = styled(Typography)`
   font-family: "Roboto";
   font-style: normal;
   font-weight: 400;
-  font-size: 14px;
+  font-size: .8rem;
   line-height: 21px;
 
   /* Brand */
@@ -100,14 +104,14 @@ const ItemProductMap = ({ onClick, data }: Props) => {
       <WrapperImg>
         <CardMedia
           component="img"
-          height={195}
+          // height={195}
           image={data.thumbnail ? data.thumbnail : "/images/product_1.png"}
           alt="img product"
-          style={{ borderRadius: "20px 20px 0px 0px" }}
+          style={{ borderRadius: "20px 20px 0px 0px", height: "6rem" }}
         />
       </WrapperImg>
       <TitleStyled>{data.name ?? "N/A"}</TitleStyled>
-      <div
+      {/* <div
         style={{ display: "flex", margin: "14px 0", alignItems: "flex-end" }}
       >
         <TextBottomStyled style={{ marginRight: 40 }}>
@@ -117,14 +121,8 @@ const ItemProductMap = ({ onClick, data }: Props) => {
           {currencyFormat(data.price ?? 0)}đ
         </NumberBottomStyled>
       </div>
-      <DividerLine />
+      <DividerLine /> */}
       <Grid sx={{ pb: 2 }} container rowSpacing={1}>
-        {data.type === "1" && (
-          <Grid item xs={6} display={"flex"} alignItems={"center"}>
-            <IconBedDouble />
-            &nbsp;&nbsp;<TextStyled>{data.numBed ?? "N/A"}</TextStyled>
-          </Grid>
-        )}
         <Grid item xs={6} display={"flex"} alignItems={"center"}>
           <IconFrame />
           &nbsp;&nbsp;
@@ -132,16 +130,49 @@ const ItemProductMap = ({ onClick, data }: Props) => {
             {data.landArea ?? "N/A"} m<sup>2</sup>
           </TextStyled>
         </Grid>
-        {data.type === "1" && (
+        {data.buildType === "1" && (
+          <>
+            {data.build ? (
+              <>
+                <Grid item xs={6} display={"flex"} alignItems={"center"}>
+                  <IconCoXay /> &nbsp;&nbsp;
+                  <TextStyled>Có xây</TextStyled>
+                </Grid>
+              </>
+            ) : (
+              <>
+                <Grid item xs={6} display={"flex"} alignItems={"center"}>
+                  <IconChuaXay /> &nbsp;&nbsp;
+                  <TextStyled>Chưa xây</TextStyled>
+                </Grid>
+              </>
+            )}
+          </>
+        )}
+	
+        {data.buildType === "2" && (
           <Grid item xs={6} display={"flex"} alignItems={"center"}>
-            <IconBath />
-            &nbsp;&nbsp;<TextStyled>{data.numBath ?? "N/A"}</TextStyled>
+            <IconBedDouble />
+            &nbsp;&nbsp;<TextStyled>{data.numBed ?? "N/A"}</TextStyled>
           </Grid>
         )}
         <Grid item xs={6} display={"flex"} alignItems={"center"}>
           <IconCompass />
           &nbsp;&nbsp;<TextStyled>{data.doorDirection ?? "N/A"}</TextStyled>
         </Grid>
+
+        {data.buildType === "2" && (
+          <Grid item xs={6} display={"flex"} alignItems={"center"}>
+            <IconBath />
+            &nbsp;&nbsp;<TextStyled>{data.numBath ?? "N/A"}</TextStyled>
+          </Grid>
+        )}
+			 {data.buildType === "1" && data.build && (
+			  <Grid item xs={6} display={"flex"} alignItems={"center"}>
+			  <FloorIcon />
+			  &nbsp;&nbsp;<TextStyled>{data.maxFloor ?? "N/A"} Tầng</TextStyled>
+			</Grid>
+		 ) }
       </Grid>
     </WrapperContent>
   );

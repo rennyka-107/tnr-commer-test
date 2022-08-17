@@ -105,7 +105,7 @@ const ProjectDetail = () => {
               <Box
                 sx={{
                   width: "65vw",
-                  height: "65vw",
+                  height: "calc(100vh - 150px)",
                 }}
               >
                 <DynamicMap />

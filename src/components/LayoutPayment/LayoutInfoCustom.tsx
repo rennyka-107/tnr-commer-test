@@ -215,6 +215,9 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
   const productItem = useSelector(
     (state: RootState) => state.products.productItem
   );
+  const referenceCode = useSelector(
+    (state: RootState) => state.payments.referenceCode
+  );
 
   const { isAuthenticated } = useAuth();
   const dispatch = useDispatch();
@@ -420,9 +423,12 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
       dienThoai: watch("phoneNumber"),
       duAn: cart?.project?.name,
       loCan: cart?.name,
-      giaTriBds: !isEmpty(productItem) && productItem.TotalMoney !== 0 && productItem.TotalMoney !== null
-        ? productItem?.TotalMoney
-        : cart?.totalPrice,
+      giaTriBds:
+        !isEmpty(productItem) &&
+        productItem.TotalMoney !== 0 &&
+        productItem.TotalMoney !== null
+          ? productItem?.TotalMoney
+          : cart?.totalPrice,
       chinhSachBanHang: !isEmpty(productItem)
         ? productItem.ListPolicy.map((item) => item.PolicyName).join(", ")
         : "",
@@ -452,6 +458,8 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
         });
       });
   }
+
+  console.log(productItem, "productItem")
 
   const handleOnSubmit = (values, paymentFlag = 0) => {
     setLoading(true);
@@ -515,19 +523,36 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
       quotationRealt: !isEmpty(transactionCode)
         ? data.quotationRealt
         : {
-            landPrice: !isEmpty(productItem)  && productItem.LandPrice !== 0 && productItem.LandPrice !== null
-              ? productItem?.LandPrice
-              : totalVatPrice,
-            vat: !isEmpty(productItem)  && productItem.VAT !== 0 && productItem.VAT !== null ? productItem?.VAT : vat,
-            maintainPrice: !isEmpty(productItem) && productItem.MaintenanceFee !== 0 && productItem.MaintenanceFee !== null 
-              ? productItem?.MaintenanceFee
-              : maintainPrice,
-            totalPrice: !isEmpty(productItem)  && productItem.TotalMoney !== 0 && productItem.TotalMoney !== null 
-              ? productItem?.TotalMoney
-              : totalPrice,
-            totalOnlinePrice: !isEmpty(productItem)  && productItem.TotalMoney !== 0 && productItem.TotalMoney !== null 
-              ? productItem?.TotalMoney
-              : totalPrice,
+            landPrice:
+              !isEmpty(productItem) &&
+              productItem.LandPrice !== 0 &&
+              productItem.LandPrice !== null
+                ? productItem?.LandPrice
+                : totalVatPrice,
+            vat:
+              !isEmpty(productItem) &&
+              productItem.VAT !== 0 &&
+              productItem.VAT !== null
+                ? productItem?.VAT
+                : vat,
+            maintainPrice:
+              !isEmpty(productItem) &&
+              productItem.MaintenanceFee !== 0 &&
+              productItem.MaintenanceFee !== null
+                ? productItem?.MaintenanceFee
+                : maintainPrice,
+            totalPrice:
+              !isEmpty(productItem) &&
+              productItem.TotalMoney !== 0 &&
+              productItem.TotalMoney !== null
+                ? productItem?.TotalMoney
+                : totalPrice,
+            totalOnlinePrice:
+              !isEmpty(productItem) &&
+              productItem.TotalMoney !== 0 &&
+              productItem.TotalMoney !== null
+                ? productItem?.TotalMoney
+                : totalPrice,
             minEarnestMoney,
             regulationOrderPrice,
           },
@@ -551,6 +576,9 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
       listUserIdDelete: data.listUserIdDelete,
       listPaymentPolicy: !isEmpty(productItem) ? productItem?.ListPolicy : [],
       listPromotion: !isEmpty(productItem) ? productItem?.ListPromotion : [],
+      referenceCode,
+      priceId: !isEmpty(productItem) ? productItem?.priceId : null,
+      scheduleId: !isEmpty(productItem) ? productItem?.scheduleId : "",
     };
     if (!isEmpty(uploadMedia) && !isEmpty(transactionCode)) {
       const data = new FormData();

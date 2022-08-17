@@ -310,7 +310,7 @@ export default function DropDownTargetLevel({ level }: any) {
             InputProps={{
               ...params.InputProps,
               style: {
-                fontSize: "20px",
+                fontSize: "1rem",
                 fontWeight: "400",
                 lineHeight: "23.44px",
               },

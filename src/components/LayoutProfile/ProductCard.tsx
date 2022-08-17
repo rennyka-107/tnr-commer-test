@@ -132,6 +132,8 @@ const ProductCard = (props: Props) => {
   const dispatch = useDispatch();
   const notification = useNotification();
 
+  console.log("item", item);
+
   const convertDateToString = (date: Date) => {
     const house = FormatFns.format(date, "HH:mm");
     const day = FormatFns.format(date, "dd/MM/yyyy");
@@ -150,7 +152,6 @@ const ProductCard = (props: Props) => {
   const handleChooseItem = (code: string) => {
     router.replace(`/profile?transCode=${code}`);
   };
-  console.log(item);
 
   const handleChangeRequestType = (e: SelectChangeEvent) => {
     const data = sendRequestTypes.filter((x) => x.name === e.target.value);
@@ -258,9 +259,9 @@ const ProductCard = (props: Props) => {
           </Column>
         </Row>
         <DynamicHorizontalLine />
-        {item?.status === "Đặt chỗ thành công" ||
-        item?.status === "Đang chờ thanh toán" ||
-        item?.status === "Đã hoàn thiện hồ sơ" ? (
+        {item?.status === "1" ||
+        item?.status === "3" ||
+        item?.status === "4" ? (
           <>
             <Row>
               <Column col={1} customStyle={{ paddingLeft: 0 }}>
@@ -333,23 +334,23 @@ const ProductCard = (props: Props) => {
             <TextProduct>Trạng thái:</TextProduct>
           </Column>
           <Column col={3} customStyle={{ paddingLeft: 0 }}>
-            {item?.status === "Đặt chỗ thành công" ? (
-              <TextProduct color="#06C270">
+            {item?.status === "0" ? (
+              <TextProduct color="#FF3B3B">
                 {" "}
                 <div style={{ marginRight: 10 }}>
-                  <IconCircleChecked />
+                  <IconCircleClose />
                 </div>
-                Đặt chỗ thành công
+                Chưa hoàn thành hồ sơ mua bán
               </TextProduct>
-            ) : item?.status === "Đang chờ thanh toán" ? (
-              <TextProduct color="#FEC83C">
+            ) : item?.status === "1" ? (
+              <TextProduct color="#06C270">
                 <div style={{ marginRight: 10 }}>
                   {" "}
-                  <IconWatingCircle />
+                  <IconCircleChecked />
                 </div>
-                Đang chờ thanh toán
+                Đã hoàn thiện hồ sơ
               </TextProduct>
-            ) : item?.status === "Hết thời gian thanh toán" ? (
+            ) : item?.status === "2" ? (
               <TextProduct color="#FF3B3B">
                 <div style={{ marginRight: 10 }}>
                   {" "}
@@ -357,23 +358,15 @@ const ProductCard = (props: Props) => {
                 </div>
                 Hết thời gian thanh toán
               </TextProduct>
-            ) : item?.status === "Chưa hoàn thành hồ sơ" ? (
-              <TextProduct color="#FF3B3B">
+            ) : item?.status === "3" ? (
+              <TextProduct color="#06C270">
                 <div style={{ marginRight: 10 }}>
                   {" "}
                   <IconCircleClose />
                 </div>
-                Chưa hoàn thành hồ sơ mua bán
+                Đã duyệt
               </TextProduct>
-            ) : item?.status === "Đặt chỗ thành công" ? (
-              <TextProduct color="#06C270">
-                {" "}
-                <div style={{ marginRight: 10 }}>
-                  <IconCircleChecked />
-                </div>
-                Đặt chỗ thành công
-              </TextProduct>
-            ) : item?.status === "Đã tạo phiếu thanh toán" ? (
+            ) : item?.status === "4" ? (
               <TextProduct color="#06C270">
                 {" "}
                 <div style={{ marginRight: 10 }}>
@@ -381,22 +374,16 @@ const ProductCard = (props: Props) => {
                 </div>
                 Đã tạo phiếu thanh toán
               </TextProduct>
-            ) : item?.status === "Đã tạo bản nháp thông tin mua hàng" ? (
-              <TextProduct color="#FF3B3B">
-                <div style={{ marginRight: 10 }}>
-                  {" "}
-                  <IconCircleClose />
-                </div>
-                Đã tạo bản nháp thông tin mua hàng
-              </TextProduct>
-            ) : (
+            ) : item?.status === "5" ? (
               <TextProduct color="#06C270">
                 {" "}
                 <div style={{ marginRight: 10 }}>
                   <IconCircleChecked />
                 </div>
-                Đã hoàn thiện hồ sơ
+                Đã tạo bản nháp thông tin mua hàng
               </TextProduct>
+            ) : (
+              <></>
             )}
           </Column>
         </Row>

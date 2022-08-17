@@ -12,6 +12,7 @@ import {
   LinedStyled,
 } from "../../StyledLayout/styled";
 import LocalStorage from "utils/LocalStorage";
+import { useRouter } from "next/router";
 
 const WrapperCardStyled = styled(Box)(
   {
@@ -59,6 +60,7 @@ type Props = {};
 
 const CardItemProduct = (props: Props) => {
   const { cart } = useSelector((state: RootState) => state.carts);
+  const router = useRouter();
   const dispatch = useDispatch();
 
   return (
@@ -75,12 +77,15 @@ const CardItemProduct = (props: Props) => {
         <IconRadio />
       </BoxIconRadio>
       <CardMedia
-        style={{ borderRadius: 15 , width: 308}}
+        style={{ borderRadius: 15, width: 308, cursor: "pointer" }}
         component={"img"}
         width={308}
         height={200}
         image={cart.thumbnail ?? "images/product_1.png"}
         alt={"photo product"}
+        onClick={() => {
+          router.push(`/products/${cart?.id}`);
+        }}
       />
       <Box style={{ width: 235, marginLeft: 30 }}>
         <Title28Styled>{cart.name ?? "N/A"}</Title28Styled>

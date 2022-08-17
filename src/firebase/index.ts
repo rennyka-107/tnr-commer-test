@@ -1,4 +1,4 @@
-import LocalStorage from 'utils/LocalStorage';
+import LocalStorage from "utils/LocalStorage";
 /* eslint-disable no-unused-vars */
 // Import the functions you need from the SDKs you need
 import { initializeApp, getApps, getApp } from "firebase/app";
@@ -15,6 +15,13 @@ const firebaseConfig = {
   messagingSenderId: "1001041679463",
   appId: "1:1001041679463:web:d0fdd2fc178aa51d85f0c2",
   measurementId: "G-CVN2TGF3VM",
+  // apiKey: process.env.NEXT_PUBLIC_API_KEY,
+  // authDomain: process.env.NEXT_PUBLIC_AUTH_DOMAIN,
+  // projectId: process.env.NEXT_PUBLIC_PROJECT_ID,
+  // storageBucket: process.env.NEXT_PUBLIC_STORAGE_BUCKET,
+  // messagingSenderId: process.env.NEXT_PUBLIC_MESSAGING_SENDER_ID,
+  // appId: process.env.NEXT_PUBLIC_APP_ID,
+  // measurementId: process.env.NEXT_PUBLIC_MEASUREMENT_ID,
 };
 
 // Initialize Firebase
@@ -28,6 +35,7 @@ const firebaseCloudMessaging = {
   onMessage: async () => {
     const messaging = getMessaging();
     onMessage(messaging, (payload) => {
+      console.log(messaging, "hahaha")
       const dispatch = store.dispatch as Function;
       dispatch(setNotification(payload));
     });
@@ -47,7 +55,7 @@ const firebaseCloudMessaging = {
           if (currentToken) {
             // Send the token to your server and update the UI if necessary
             // save the token in your database
-            console.log(currentToken, "current token")
+            console.log(currentToken, "current token");
             LocalStorage.set("fcm_token", currentToken);
           } else {
             // Show permission request UI

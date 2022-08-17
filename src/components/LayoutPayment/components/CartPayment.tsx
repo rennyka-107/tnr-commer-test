@@ -27,6 +27,7 @@ import SelectRadioComponent from "@components/CustomComponent/ListRadioPaymentCa
 import SelectCheckboxComponent from "@components/CustomComponent/ListRadioPaymentCartComponent/SelectCheckboxComponent";
 import { getProductPTG } from "../../../../store/productSlice";
 import { IconDropDown } from "@components/Icons";
+import { setReferenceCode } from "../../../../store/paymentSlice";
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -98,7 +99,6 @@ const CartPayment = (props: Props) => {
     }
   }, [listPrice]);
 
-  console.log("paymentPrice",paymentPrice)
   //   useEffect(() => {
   //     if (typeof window !== "undefined") {
   //       const dataSelectLS = localStorage?.getItem("PaymentSelect");
@@ -192,7 +192,11 @@ const CartPayment = (props: Props) => {
           <TextField
             placeholder="Nhập mã"
             fullWidth
-			required
+            required
+            onChange={(e) => {
+              console.log(e.target.value, "value")
+              dispatch(setReferenceCode(e.target.value));
+            }}
             style={{ maxWidth: 317, marginLeft: 21 }}
           />
         </RowStyled>
