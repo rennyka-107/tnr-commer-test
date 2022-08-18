@@ -103,7 +103,7 @@ const ChangePassword = () => {
                     />
                 </FormGroup>
                 <CustomButton label="Cập nhật"
-                    style={{ background: "#1B3459", width: 255 }}
+                    style={{ width: 255 }}
                     type="submit"
                 />
             </form>

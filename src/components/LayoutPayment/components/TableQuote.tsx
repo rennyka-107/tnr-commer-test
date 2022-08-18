@@ -169,6 +169,15 @@ const TableQuote = ({ width, urlPayment, setScopeRender, item }: Props) => {
           </RowStyledAgain>
           <RowStyled>
             <ButtonAction
+              sx={{
+                "&:hover": {
+                  background: "#FEC83C !important",
+                  // box-shadow: 4px 8px 24px #f2f2f5;
+                  boxShadow: "0px 0px 10px 1px rgba(0, 0, 0, 0.2)",
+                  // borderRadius: "60px",
+                  color: "#ffffff",
+                },
+              }}
               onClick={() => {
                 if (!isEmpty(referenceCode)) {
                   apiValidReferenceCode(referenceCode)

@@ -871,7 +871,7 @@ const EditProfile = () => {
           <Column>
             <CustomButton
               label="Cập nhật"
-              style={{ background: "#1B3459", width: 255, marginTop: 47 }}
+              style={{ width: 255, marginTop: 47 }}
               type="submit"
             />
           </Column>

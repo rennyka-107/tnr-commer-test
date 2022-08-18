@@ -73,7 +73,7 @@ const LayoutResultPayment = (props: Props) => {
     query: { errorCode, transId, billNumber },
   } = router;
   useEffect(() => {
-    if (isEmpty(errorCode) || isEmpty(transId) || isEmpty(billNumber)) {
+    if (isEmpty(errorCode)) {
       router.push("/");
     }
   }, [errorCode]);
@@ -113,119 +113,158 @@ const LayoutResultPayment = (props: Props) => {
             fontSize: "14px",
             fontWeight: 500,
             lineHeight: "16.41px",
-            m: "30px",
+            mt: "30px",
             maxWidth: 450,
           }}
         >
           {errorCode === "0"
-            ? "Chúc mừng quý khách đã thực hiện thành công giao dịch. Hệ thống sẽ xử lý và tiến hành xác nhận đơn hàng cho quý khách Cảm ơn Quý khách hàng"
+            ? "Chúc mừng quý khách đã thực hiện thành công giao dịch. Hệ thống sẽ xử lý và tiến hành xác nhận đơn hàng cho quý khách."
             : "Hết phiên giao dịch!"}
         </Typography>
-        <Typography
-          sx={{
-            m: "30px",
-            fontWeight: 400,
-            fontSize: "24px",
-            lineHeight: "32px",
-            maxWidth: 450,
-          }}
-        >
-          Bạn thấy chất lượng dịch vụ của chúng tôi như thế nào?
-        </Typography>
-        <Box
-          sx={{
-            display: "flex",
-            gap: 3,
-            mb: "30px",
-            justifyContent: "space-between",
-          }}
-        >
-          {[1, 2, 3, 4, 5].map((nb, idx) => (
-            <IconStar
-              key={`${idx}-star`}
-              fillColor={stars[idx]["fillColor"]}
-              onMouseOver={() => {
-                const oldStars = { ...stars };
-                for (const key in oldStars) {
-                  if (idx >= Number(key) && !oldStars[key]["clicked"]) {
-                    oldStars[key]["fillColor"] = "#FEC83C";
-                  }
-                }
-                setStars({ ...oldStars });
+        {errorCode === "0" && (
+          <Typography
+            sx={{
+              fontSize: "14px",
+              fontWeight: 500,
+              lineHeight: "16.41px",
+              maxWidth: 450,
+              mb: "30px",
+            }}
+          >
+            Cảm ơn Quý khách hàng
+          </Typography>
+        )}
+        {isEmpty(transId) || isEmpty(billNumber) ? (
+          <Button
+            sx={{
+              borderRadius: "8px",
+              background: "#1B3459",
+              color: "#FFFFFF",
+              fontSize: "1.1rem",
+              fontWeight: 400,
+              lineHeight: "21px",
+              p: "14px 58px",
+              mb: "30px",
+              "&:hover": {
+                background: "#FEC83C",
+                // box-shadow: 4px 8px 24px #f2f2f5;
+                boxShadow: "0px 0px 10px 1px rgba(0, 0, 0, 0.2)",
+                color: "#ffffff",
+              },
+            }}
+            onClick={() => router.push("/")}
+          >
+            Về trang chủ
+          </Button>
+        ) : (
+          <>
+            <Typography
+              sx={{
+                m: "30px",
+                fontWeight: 400,
+                fontSize: "24px",
+                lineHeight: "32px",
+                maxWidth: 450,
               }}
-              onMouseOut={() => {
-                const oldStars = { ...stars };
-                for (const key in oldStars) {
-                  if (idx >= Number(key) && !oldStars[key]["clicked"]) {
-                    oldStars[key]["fillColor"] = "";
-                  }
-                }
-                setStars({ ...oldStars });
+            >
+              Bạn thấy chất lượng dịch vụ của chúng tôi như thế nào?
+            </Typography>
+            <Box
+              sx={{
+                display: "flex",
+                gap: 3,
+                mb: "30px",
+                justifyContent: "space-between",
               }}
-              onClick={() => {
-                const oldStars = { ...stars };
-                for (const key in oldStars) {
-                  if (idx >= Number(key)) {
-                    oldStars[key]["fillColor"] = "#FEC83C";
-                    oldStars[key]["clicked"] = true;
-                  } else {
-                    oldStars[key]["fillColor"] = "";
-                    oldStars[key]["clicked"] = false;
-                  }
-                }
-                setStars({ ...oldStars });
-              }}
-              style={{ cursor: "pointer" }}
-            />
-          ))}
-        </Box>
+            >
+              {[1, 2, 3, 4, 5].map((nb, idx) => (
+                <IconStar
+                  key={`${idx}-star`}
+                  fillColor={stars[idx]["fillColor"]}
+                  onMouseOver={() => {
+                    const oldStars = { ...stars };
+                    for (const key in oldStars) {
+                      if (idx >= Number(key) && !oldStars[key]["clicked"]) {
+                        oldStars[key]["fillColor"] = "#FEC83C";
+                      }
+                    }
+                    setStars({ ...oldStars });
+                  }}
+                  onMouseOut={() => {
+                    const oldStars = { ...stars };
+                    for (const key in oldStars) {
+                      if (idx >= Number(key) && !oldStars[key]["clicked"]) {
+                        oldStars[key]["fillColor"] = "";
+                      }
+                    }
+                    setStars({ ...oldStars });
+                  }}
+                  onClick={() => {
+                    const oldStars = { ...stars };
+                    for (const key in oldStars) {
+                      if (idx >= Number(key)) {
+                        oldStars[key]["fillColor"] = "#FEC83C";
+                        oldStars[key]["clicked"] = true;
+                      } else {
+                        oldStars[key]["fillColor"] = "";
+                        oldStars[key]["clicked"] = false;
+                      }
+                    }
+                    setStars({ ...oldStars });
+                  }}
+                  style={{ cursor: "pointer" }}
+                />
+              ))}
+            </Box>
 
-        <ButtonStyled
-          onClick={() => {
-            setLoading(true);
-            let value = 0;
-            for (const key in stars) {
-              if (stars[key]["clicked"]) {
-                value++;
-              }
-            }
-            apiRateTransaction({
-              msbTransID: transId,
-              billNumber,
-              value,
-            })
-              .then((res) => {
-                console.log(res, "Res");
-                if (res.responseCode === "00") {
-                  notification({
-                    severity: "success",
-                    title: "Đánh giá giao dịch",
-                    message: res.responseMessage,
-                  });
-                  router.push("/");
-                } else {
-                  notification({
-                    severity: "error",
-                    title: "Đánh giá giao dịch",
-                    message: res.responseMessage,
-                  });
+            <ButtonStyled
+              onClick={() => {
+                setLoading(true);
+                let value = 0;
+                for (const key in stars) {
+                  if (stars[key]["clicked"]) {
+                    value++;
+                  }
                 }
-                setLoading(false);
-              })
-              .catch((err) => {
-                notification({
-                  severity: "error",
-                  title: "Đánh giá giao dịch",
-                  message: "Có lỗi xảy ra",
-                });
-                setLoading(false);
-              });
-          }}
-        >
-          <Text18Styled color={"#fff"}>
-            {loading ? <CircularProgress /> : "Gửi đánh giá"}
-          </Text18Styled>
-        </ButtonStyled>
+                apiRateTransaction({
+                  msbTransID: transId,
+                  billNumber,
+                  value,
+                })
+                  .then((res) => {
+                    console.log(res, "Res");
+                    if (res.responseCode === "00") {
+                      notification({
+                        severity: "success",
+                        title: "Đánh giá giao dịch",
+                        message: res.responseMessage,
+                      });
+                      router.push("/");
+                    } else {
+                      notification({
+                        severity: "error",
+                        title: "Đánh giá giao dịch",
+                        message: res.responseMessage,
+                      });
+                    }
+                    setLoading(false);
+                  })
+                  .catch((err) => {
+                    notification({
+                      severity: "error",
+                      title: "Đánh giá giao dịch",
+                      message: "Có lỗi xảy ra",
+                    });
+                    setLoading(false);
+                  });
+              }}
+            >
+              <Text18Styled color={"#fff"}>
+                {loading ? <CircularProgress /> : "Gửi đánh giá"}
+              </Text18Styled>
+            </ButtonStyled>
+          </>
+        )}
       </Box>
     </Container>
   );

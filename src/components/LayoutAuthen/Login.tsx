@@ -141,7 +141,7 @@ const Login = () => {
             title: "Đăng Nhập",
           });
           //reset token when submit
-          captchaRef.current.reset();
+          // captchaRef.current.reset();
           setLoading(false);
         }
       } catch (error) {
@@ -152,7 +152,7 @@ const Login = () => {
         });
       }
     } else {
-      captchaRef.current.reset();
+      // captchaRef.current.reset();
       setToken(null);
     }
   };

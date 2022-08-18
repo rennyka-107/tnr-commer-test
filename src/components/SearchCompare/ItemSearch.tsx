@@ -77,7 +77,7 @@ const ItemSearch = ({ data }: searchProps) => {
               item3: product.numBed,
               item4: product.doorDirection,
             }}
-			build={product.build}
+            build={product.build}
             priceListed={product.totalPrice}
             projectTypeCode={product.projectTypeCode}
             minFloor={product.minFloor}
@@ -92,7 +92,7 @@ const ItemSearch = ({ data }: searchProps) => {
             }
           />
         ))}
-        <ComparePopUp/>
+        <ComparePopUp />
       </ProductWrap>
     </>
   );

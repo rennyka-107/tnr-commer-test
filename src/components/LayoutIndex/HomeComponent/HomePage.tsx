@@ -151,13 +151,11 @@ const HomePage = () => {
   }, [saveDataProjectType, listMenuBarProjectType]);
 
   useEffect(() => {
-
     if (!isEmpty(saveDataProject)) {
       setListIdProject([saveDataProject[0].id]);
       setListDataLSProject([saveDataProject[0]]);
     }
   }, [saveDataProject, router, listMenuBarProjectType]);
-  console.log(listIdProject,saveDataProject)
   //   useEffect(() => {
   //     if (router.pathname !== "/") {
   //       listParamsProjectType.push(listMenuBarProjectType[0].id);
@@ -325,7 +323,10 @@ const HomePage = () => {
                 />
               </div>
             </Stack>
-            <Stack direction={"column"} style={{ maxWidth: 400 , marginBottom: 55}}>
+            <Stack
+              direction={"column"}
+              style={{ maxWidth: 400, marginBottom: 55 }}
+            >
               <Typography
                 style={{
                   fontWeight: 400,

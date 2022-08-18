@@ -289,7 +289,7 @@ const Index = (props: Props) => {
           control={control}
           labelCustom={
             <SpanRadio>
-              Tôi đồng ý với <LinkLabel>Điều kiện và điều khoản</LinkLabel> của
+              Tôi đồng ý với <LinkLabel href="/buyingGuide?idUserManual=edef9816-8924-4857-ad52-7afc9124aqBV">Điều kiện và điều khoản</LinkLabel> của
               TNR
             </SpanRadio>
           }

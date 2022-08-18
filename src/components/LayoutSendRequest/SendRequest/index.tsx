@@ -36,7 +36,7 @@ const SendRequest = ({ handleClickBtn, text, loading = false }: Props) => {
         <Text14Styled>
           Ấn “{text}” đồng nghĩa với việc bạn đồng ý tuân theo&nbsp;
           <span style={{ color: "#0063F7", textDecoration: "underline" }}>
-            <Link href={"/"}>Điều Khoản TNR</Link>
+            <Link href={"/buyingGuide?idUserManual=edef9816-8924-4857-ad52-7afc9124aqBV"}>Điều Khoản TNR</Link>
           </span>
         </Text14Styled>
       </RowStyled>

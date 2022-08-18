@@ -94,22 +94,15 @@ const BuyingGuideComponent = ({ data }: PropsUserManual) => {
     (state: RootState) => state.userManual
   );
   const [isloading, setIsLoading] = useState(true);
-  const { idUserManual, selected } = Router.query;
+  const { idUserManual } = Router.query;
   const classes = useStyles();
-  const [selectedIndex, setSelectedIndex] = useState<number>(null);
   const [indexSelected, setIndexSelected] = useState<number>(null);
-
-  useEffect(() => {
-    setIndexSelected(Number(selected));
-  }, [selected]);
 
   const handleListItemClick = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    index: number,
     idSelect: string
   ) => {
-	Router.replace(`/buyingGuide?idUserManual=${idSelect}&&selected=${index}`);
-    setSelectedIndex(index);
+    Router.replace(`/buyingGuide?idUserManual=${idSelect}`);
   };
 
   const fetchDataSelect = async (id: any) => {
@@ -126,7 +119,6 @@ const BuyingGuideComponent = ({ data }: PropsUserManual) => {
   };
 
   useEffect(() => {
-
     fetchDataSelect(idUserManual);
   }, [idUserManual]);
 
@@ -163,49 +155,61 @@ const BuyingGuideComponent = ({ data }: PropsUserManual) => {
   }, [isloading]);
 
   const renderLeft = () => {
-	return (
-		<>
-		  {!isEmpty(data) && (
-			<ItemLeft>
-			<BoxContainer styleCustom={{ backgroundColor: "#F3F4F6" }}>
-			  <List
-				component="nav"
-				aria-labelledby="nested-list-subheader"
-				className={classes.root}
-			  >
-				{data.map((item, index) => (
-				  <ListItem
-					key={index}
-					selected={indexSelected === index}
-					onClick={(event) =>
-					  handleListItemClick(event, index, item.id)
-					}
-				  >
-					<ListItemIcon style={{ minWidth: 30 }}>
-					  <img src={item.iconUrl} style={{ width: 17, height: 17 }} />
-					</ListItemIcon>
-					<ListItemText
-					  style={{
-						color:
-						  indexSelected === index
-							? "rgb(27, 52, 89)"
-							: "rgb(129, 144, 167)",
-						fontWeight: "500 !important",
-					  }}
-					  primary={item.name}
-					/>
-				  </ListItem>
-				))}
-			  </List>
-			</BoxContainer>
-		  </ItemLeft>
-		  )}
-		</>
-	  );
-  }
+    return (
+      <>
+        {!isEmpty(data) && (
+          <ItemLeft>
+            <BoxContainer styleCustom={{ backgroundColor: "#F3F4F6" }}>
+              <List
+                component="nav"
+                aria-labelledby="nested-list-subheader"
+                className={classes.root}
+              >
+                {data.map((item, index) => (
+                  <ListItem
+                    key={index}
+                    selected={indexSelected === index}
+                    onClick={(event) => handleListItemClick(event, item.id)}
+                  >
+                    <ListItemIcon style={{ minWidth: 30 }}>
+                      <img
+                        src={item.iconUrl}
+                        style={{ width: 17, height: 17 }}
+                      />
+                    </ListItemIcon>
+                    <ListItemText
+                      style={{
+                        color:
+                          indexSelected === index
+                            ? "rgb(27, 52, 89)"
+                            : "rgb(129, 144, 167)",
+                        fontWeight: "500 !important",
+                      }}
+                      primary={item.name}
+                    />
+                  </ListItem>
+                ))}
+              </List>
+            </BoxContainer>
+          </ItemLeft>
+        )}
+      </>
+    );
+  };
   useEffect(() => {
-	renderLeft()
-  },[selected])
+    renderLeft();
+  }, [indexSelected]);
+
+  useEffect(() => {
+    if (!isEmpty(idUserManual) && !isEmpty(data)) {
+      data.forEach((item, idx) => {
+        if (item.id === idUserManual) {
+          setIndexSelected(idx);
+        }
+      });
+    }
+  }, [idUserManual, data]);
+  
   return (
     <>
       <Container>

@@ -459,8 +459,6 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
       });
   }
 
-  console.log(productItem, "productItem")
-
   const handleOnSubmit = (values, paymentFlag = 0) => {
     setLoading(true);
     const {
@@ -594,7 +592,9 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
               title: "Hoàn thành hồ sơ",
               message: response.responseMessage,
             });
-            router.push("/profile");
+            router.push(
+              "/result-payment?errorCode=0"
+            );
           } else {
             notification({
               severity: "error",
@@ -1254,7 +1254,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                   <span
                     style={{ color: "#0063F7", textDecoration: "underline" }}
                   >
-                    <Link href={"/"}>Điều Khoản TNR</Link>
+                    <Link href={"/buyingGuide?idUserManual=edef9816-8924-4857-ad52-7afc9124aqBV"}>Điều Khoản TNR</Link>
                   </span>
                 </Text14Styled>
               </RowStyled>
