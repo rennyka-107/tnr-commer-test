@@ -324,7 +324,7 @@ const EditProfile = () => {
             <span>....Loading</span>
           ) : (
             <Box sx={{ width: 125, height: 125 }}>
-              {detailUser.avatar && (
+              {detailUser?.avatar && (
                 <ImageWithHideOnError
                   className="logo"
                   src={watch("avatar") ?? "/images/avatar.png"}
@@ -373,8 +373,8 @@ const EditProfile = () => {
                 control={control}
                 setValue={formController.setValue}
                 options={[
-                  { label: "Ông", value: 1 },
-                  { label: "Bà", value: 2 },
+                  { label: "Ông", value: "1" },
+                  { label: "Bà", value: "2" },
                 ]}
               />
             </FormGroup>
@@ -536,7 +536,7 @@ const EditProfile = () => {
             </FormGroup>
           </Column>
         </Row> */}
-        <Row >
+        <Row>
           <Column>
             <RowStyled aItems={"baseline"} width="100%">
               <Title20Styled
@@ -549,7 +549,7 @@ const EditProfile = () => {
             </RowStyled>
           </Column>
         </Row>
-        <Row customStyle={{ marginTop: "10px"}}>
+        <Row customStyle={{ marginTop: "10px" }}>
           <Column>
             <FormGroup>
               <ControllerSelectAutoComplete
@@ -605,7 +605,7 @@ const EditProfile = () => {
             />
           </FormGroup>
         </Grid> */}
-        <Row customStyle={{ marginTop: "10px"}}>
+        <Row customStyle={{ marginTop: "10px" }}>
           <Column>
             <FormGroup>
               <CommuneSelect
@@ -669,7 +669,7 @@ const EditProfile = () => {
             />
           </FormGroup>
         </Grid> */}
-        <Row customStyle={{ marginTop: "10px"}}>
+        <Row customStyle={{ marginTop: "10px" }}>
           <Column>
             <RowStyled aItems={"baseline"} width="100%">
               <Title20Styled
@@ -693,7 +693,7 @@ const EditProfile = () => {
             <LinedStyled mw={500} />
           </RowStyled>
         </Grid> */}
-        <Row customStyle={{ marginTop: "10px"}}>
+        <Row customStyle={{ marginTop: "10px" }}>
           <Column>
             <FormGroup>
               <ControllerSelectAutoComplete
@@ -749,7 +749,7 @@ const EditProfile = () => {
             />
           </FormGroup>
         </Grid> */}
-        <Row customStyle={{ marginTop: "10px"}}>
+        <Row customStyle={{ marginTop: "10px" }}>
           <Column>
             <FormGroup>
               <CommuneSelect

@@ -136,6 +136,7 @@ const Search = () => {
       console.log(err);
     }
   };
+  
   useEffect(() => {
     if (router.pathname === "/search") {
       fetchAdvandedSearchListFavorite();

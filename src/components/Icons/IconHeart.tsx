@@ -21,6 +21,8 @@ const TotalItemsContainer = styled.span`
 
 
 const IconHeart = ({ style,total }: { style?: React.CSSProperties,total?: number }) => {
+  console.log("cartcartcart", total);
+
   return (
     <WrapIconBagContainer>
       <svg

@@ -1,4 +1,5 @@
 import Container from "@components/Container";
+import ContainerRequestTranfer from "@components/Container/ContainerRequestTranfer";
 import FlexContainer from "@components/CustomComponent/FlexContainer";
 import Subtitle from "@components/Element/Subtitle";
 import Page from "@layouts/Page";
@@ -146,7 +147,7 @@ const SendRequest = () => {
     >
       <FlexContainer>
         {!loading ? (
-          <Container title={renderBreadcrum()}>
+          <ContainerRequestTranfer title={renderBreadcrum()}>
             <Box sx={{ display: "flex", width: "100%" }}>
               <Box sx={{ width: "50%" }}>
                 <Subtitle>{renderTitle()}</Subtitle>
@@ -161,13 +162,13 @@ const SendRequest = () => {
               </Box>
               <Box sx={{ width: "50%" }}>{renderRightContent()}</Box>
             </Box>
-          </Container>
+          </ContainerRequestTranfer>
         ) : (
-          <Container title={"Gửi yêu cầu"}>
+          <ContainerRequestTranfer title={"Gửi yêu cầu"}>
             <div style={{ textAlign: "center", margin: "200px 0px" }}>
               <CircularProgress />
             </div>
-          </Container>
+          </ContainerRequestTranfer>
         )}
       </FlexContainer>
     </Page>

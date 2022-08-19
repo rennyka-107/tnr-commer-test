@@ -12,10 +12,12 @@ import {
   LinedStyled,
 } from "../../StyledLayout/styled";
 import LocalStorage from "utils/LocalStorage";
-import { useRouter } from "next/router";
+import Router, { useRouter } from "next/router";
+import Link from "next/link";
 
 const WrapperCardStyled = styled(Box)(
   {
+    cursor: "pointer",
     border: "1px solid #FEC83C",
     borderRadius: "20px",
     display: "flex",
@@ -63,10 +65,16 @@ const CardItemProduct = (props: Props) => {
   const router = useRouter();
   const dispatch = useDispatch();
 
+  const handleViewDetail = () => {
+    if (!cart || !cart?.id) return;
+    Router.push(`products/${cart.id}`);
+  };
+
   return (
-    <WrapperCardStyled>
+    <WrapperCardStyled onClick={handleViewDetail}>
       <BoxIconClose
-        onClick={() => {
+        onClick={(e) => {
+          e.stopPropagation();
           dispatch(getCart({}));
           LocalStorage.remove("cart");
         }}

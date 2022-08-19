@@ -95,3 +95,4 @@ export {default as IconDecorHome2} from './IconDecorHome2';
 export {default as IconDecorHome3} from './IconDecorHome3';
 export {default as FloorIconProductTable} from './FloorIconProductTable';
 export {default as PriceThapTang} from './PriceThapTang'
+export {default as IconBackTransation} from './IconBackTransation'

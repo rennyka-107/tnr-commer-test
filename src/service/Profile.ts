@@ -6,6 +6,8 @@ const GET_CONTRACT = "api/customer/customer-order/find-by-user";
 const GET_NOTIFICATION = "/api-noti/notification/get-notice-for-user";
 const CHANGE_PASSWORD = "/api-account/v1/account/change-password";
 const UPDATE_PROFILE = "api-profile/profile/update";
+
+
 export interface ContractI {
   address: string | null;
   avatar: string | null;
@@ -22,17 +24,26 @@ export interface ContractI {
   permanentAddress: string | null;
   phone: string | null;
   placeIssue: string | null;
+  productId: string;
   province: string | null;
+  uuid?: string;
   totalPrice?: string;
+  transactionId?: string;
+  paymentStatus?: string;
+  paymentStatusString?: string;
   projectName?: string; // tên dự án
   productName?: string; // tên lô;
   bookingCode?: string; // mã đặt chỗ
   bookingTime?: string; // thời gian đặt chỗ
   deposited?: string; // số tiền đã cọc
   paid?: number; // số tiền đã thanh toán
+  totalDeposite?: string;
+  amountLeft?: string;
+  deposite?: string;
   remaining?: number; // số tiền còn lại
   status?: number | string; // trạng thái
   productionImage?: string | null;
+  paymentIdentityInfos: any;
 }
 
 export interface ProfileI {
@@ -78,6 +89,13 @@ export const getOrderByUser = (data: any) => {
 
 export const getOrderById = (id: any) => {
   return HttpClient.get<any, any>(`/api/v1/payment/get-payment-info/${id}`);
+};
+
+export const getOrderDetail = (body: any) => {
+  return HttpClient.post<ResponseTypeAPI, any>(
+    `/api/v1/payment/history-detail`,
+    body
+  );
 };
 
 export const getNotificationByUser = ({ page, size }) => {

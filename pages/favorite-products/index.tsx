@@ -13,7 +13,6 @@ import { getListFavouriteByUser } from "../../store/productFavouriteSlice";
 import { RootState } from "../../store/store";
 import { getListFavourite } from "../api/FavouriteApi";
 
-
 const DynamicItemProductComponent = dynamic(
   () => import("@components/FavouriteComponent/ItemCardFavouriteProduct"),
   { loading: () => <p>...</p> }
@@ -41,17 +40,17 @@ const FavoriteProducts = () => {
   );
 
   useEffect(() => {
-    if (LocalStorage.get("accessToken")|| SessionStorage.get("accessToken")) {
-return;
-    }else {
-		notification({
-			severity: "warning",
-			title: `Chưa có tài khoản`,
-			message: `Bạn cần tạo tài khoản để tiếp tục`,
-		  });
-     
-		Router.push(`/authen?prePath=%2Fprofile&tabIndex=register`);
-	}
+    if (LocalStorage.get("accessToken") || SessionStorage.get("accessToken")) {
+      return;
+    } else {
+      notification({
+        severity: "warning",
+        title: `Chưa có tài khoản`,
+        message: `Bạn cần tạo tài khoản để tiếp tục`,
+      });
+
+      Router.push(`/authen?prePath=%2Fprofile&tabIndex=register`);
+    }
   }, []);
 
   const fetchFavouriteByUser = async () => {
@@ -81,7 +80,9 @@ return;
             <LoadingComponent />
           </div>
         ) : (
-          <DynamicItemProductComponent data={listFavouriteByUser} />
+          <div style={{ display: "flex", gap: 31, width: "100%", alignItems: 'center' }}>
+            <DynamicItemProductComponent data={listFavouriteByUser} />
+          </div>
         )}
       </>
     );
@@ -98,7 +99,7 @@ return;
       }}
     >
       <FlexContainer>
-        <div style={{ display: "flex", gap: 31, width: '100%' }}>{fetchComponent()}</div>
+     {fetchComponent()}
       </FlexContainer>
     </Page>
   );

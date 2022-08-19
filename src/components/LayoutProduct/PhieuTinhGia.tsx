@@ -504,6 +504,7 @@ const PhieuTinhGia = ({
   };
 
   function currencyFormat(num) {
+	console.log(num)
     if (!num) {
       return;
     }
@@ -529,7 +530,7 @@ const PhieuTinhGia = ({
               <WrapItemOnCard>
                 <TextLeftOnCardLeft>Dự án:</TextLeftOnCardLeft>
                 <TextRightOnCardLeft>
-                  {dataProduct?.projectName}
+                  {dataProduct?.projectName ? dataProduct?.projectName : "N/A"}
                 </TextRightOnCardLeft>
               </WrapItemOnCard>
               <WrapItemOnCard>
@@ -551,19 +552,19 @@ const PhieuTinhGia = ({
               <WrapItemOnCard>
                 <TextLeftOnCardLeft>Mã lô phê duyệt:</TextLeftOnCardLeft>
                 <TextRightOnCardLeft>
-                  {dataProduct?.lotSymbolLegal}
+                  {dataProduct?.lotSymbolLegal ? dataProduct?.lotSymbolLegal :"N/A"}
                 </TextRightOnCardLeft>
               </WrapItemOnCard>
               <WrapItemOnCard>
                 <TextLeftOnCardLeft>Khối:</TextLeftOnCardLeft>
                 <TextRightOnCardLeft>
-                  {dataProduct.levelDetailParentName}
+                  {dataProduct.levelDetailParentName ? dataProduct.levelDetailParentName : "N/A"}
                 </TextRightOnCardLeft>
               </WrapItemOnCard>
               <WrapItemOnCard>
                 <TextLeftOnCardLeft>Phân Khu:</TextLeftOnCardLeft>
                 <TextRightOnCardLeft>
-                  {dataProduct.levelDetailName}
+                  {dataProduct.levelDetailName ? dataProduct.levelDetailName :"N/A"}
                 </TextRightOnCardLeft>
               </WrapItemOnCard>
               <WrapItemOnCard>
@@ -697,14 +698,14 @@ const PhieuTinhGia = ({
                   <TextBoldInWrapBottom>
                     {item.PromotionName}
                   </TextBoldInWrapBottom>
-                  <TextInWrapBottom>
+                  {/* <TextInWrapBottom>
                     Tỉ lệ chiết khấu: {item.Value}&nbsp;%
-                  </TextInWrapBottom>
+                  </TextInWrapBottom> */}
                 </div>
                 <div style={{ border: "1px solid #E7E9EC" }} />
                 <div style={{ margin: "auto" }}>
                   <TextBoldInWrapBottom>
-                    - {currencyFormat(item.Amount)}
+                   {item.Amount ?  `- ${currencyFormat(item.Amount) }`: "N/A"}
                   </TextBoldInWrapBottom>
                 </div>
               </div>

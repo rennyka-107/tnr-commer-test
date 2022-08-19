@@ -4,6 +4,7 @@ import Row from "@components/CustomComponent/Row";
 import LoadingComponent from "@components/LoadingComponent";
 import Page from "@layouts/Page";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -25,7 +26,8 @@ const HotProduct = () => {
   const { SearchHomeLocation, totalElement } = useSelector(
     (state: RootState) => state.searchs
   );
-
+  const { checkUp } = useSelector((state: RootState) => state.favourites);
+  const router = useRouter();
   const [params, setParams] = useState({
     page: 0,
     size: 12,
@@ -48,6 +50,27 @@ const HotProduct = () => {
       console.log(err);
     }
   };
+
+  const fetchAdvandedSearchListFavorite = async () => {
+     try {
+    //   setLoading(false);
+      const response = await searchAdvandedHotProduct(searchBody, params);
+      dispatch(getSearchHomeLocation(response.responseData));
+      dispatch(getPaggingSearch(response.totalElement));
+    //   if (response.responseCode === "00") {
+    //     // setLoading(true);
+    //   }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  
+  useEffect(() => {
+    if (router.pathname === "/hot-products") {
+      fetchAdvandedSearchListFavorite();
+    }
+  }, [checkUp]);
+
   useEffect(() => {
     fetchDataHotProducts();
   }, [params]);

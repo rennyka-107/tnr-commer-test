@@ -97,8 +97,9 @@ const ItemCardFavouriteProduct = ({ data }: ProductsProps) => {
 
   return (
     <>
-      <ContainerSearch title={"Sản phẩm yêu thích"} checkBread={true}>
-        {data.length > 0 ? (
+      <ContainerSearch title={"Sản phẩm yêu thích"} checkBread={true}  >
+        <div>
+		{data.length > 0 ? (
           <ProductWrap>
             {data?.map((product, index) => (
               <ItemProductCard
@@ -150,6 +151,7 @@ const ItemCardFavouriteProduct = ({ data }: ProductsProps) => {
             </StyledButton>
           </Stack>
         )}
+		</div>
       </ContainerSearch>
     </>
   );

@@ -45,7 +45,6 @@ const TableQuote = ({ width, urlPayment, setScopeRender, item }: Props) => {
     (state: RootState) => state.payments.referenceCode
   );
   const notification = useNotification();
-  const dispatch = useDispatch();
   return (
     <WrapperBoxBorderStyled mw={width ?? 350} padding={"20px 20px 25px"}>
       <Title28Styled>Báo giá</Title28Styled>

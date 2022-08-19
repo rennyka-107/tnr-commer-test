@@ -139,6 +139,7 @@ const AddInfoCustom = (props: Props) => {
     }
   }, [data, idNumber]);
   const handleOnSubmit = (values) => {
+    
     const { paymentIdentityInfos } = data;
     if (!isEmpty(idNumber)) {
       let valid = true;

@@ -76,6 +76,7 @@ import CommuneSelect from "@components/Form/CommuneSelect";
 import StepConnector, {
   stepConnectorClasses,
 } from "@mui/material/StepConnector";
+import { format, parse } from "date-fns";
 
 const QontoConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -413,7 +414,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
   function sendInforToMsb() {
     const sendData = {
       tenKhachHang: watch("fullname"),
-      ngaySinh: watch("dob"),
+      ngaySinh: format(parse(watch("dob") as string, "dd-MM-yyyy", new Date()), "dd/MM/yyyy"),
       cmnd: watch("idNumber"),
       hoKhauThuongTru: watch("permanentAddress"),
       diaChiLienHe: watch("contactAddress"),
@@ -430,14 +431,14 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
           ? productItem?.TotalMoney
           : cart?.totalPrice,
       chinhSachBanHang: !isEmpty(productItem)
-        ? productItem.ListPolicy.map((item) => item.PolicyName).join(", ")
+        ? !isEmpty(productItem.ListPolicy) ? productItem.ListPolicy.map((item) => item.PolicyName).join(", ") : "Không có"
         : "",
       phuongThucThanhToan:
         listPayment.find((item) => item.id === payMethod)?.name ?? "",
       luaChonUuDai: "Có",
-      ngayThanhToan: new Date().toLocaleString(),
+      ngayThanhToan: format(new Date(), "dd/MM/yyyy"),
       note: "",
-      thoiGianYeuCau: new Date().toLocaleString(),
+      thoiGianYeuCau: format(new Date(), "dd/MM/yyyy hh:mm:ss"),
     };
     apiSendInforMsb(sendData)
       .then((res) => {

@@ -102,17 +102,17 @@ const Product = () => {
   );
 };
 
-export const getServerSideProps = wrapper.getServerSideProps(
-  (store) => async (context) => {
-    try {
-      const idProduct = context.params.productId;
-      const response = await getProducById(idProduct);
-      const dispatch = store.dispatch as Function
-      dispatch(getProductById(response.responseData));
-    } catch (err) {}
-    return {
-      props: {},
-    };
-  }
-);
+// export const getServerSideProps = wrapper.getServerSideProps(
+//   (store) => async (context) => {
+//     try {
+//       const idProduct = context.params.productId;
+//       const response = await getProducById(idProduct);
+//       const dispatch = store.dispatch as Function
+//       dispatch(getProductById(response.responseData));
+//     } catch (err) {}
+//     return {
+//       props: {},
+//     };
+//   }
+// );
 export default Product;

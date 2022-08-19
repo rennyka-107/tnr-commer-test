@@ -8,7 +8,7 @@ import IconCircleChecked from "@components/Icons/IconCircleChecked";
 import IconCircleClose from "@components/Icons/IconCircleClose";
 import IconWatingCircle from "@components/Icons/IconWatingCircle";
 import styled from "@emotion/styled";
-import { SelectChangeEvent, Typography } from "@mui/material";
+import { Button, SelectChangeEvent, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { ContractI, getOrderById } from "@service/Profile";
 import ImageWithHideOnError from "hooks/ImageWithHideOnError";
@@ -132,8 +132,6 @@ const ProductCard = (props: Props) => {
   const dispatch = useDispatch();
   const notification = useNotification();
 
-  console.log("item", item);
-
   const convertDateToString = (date: Date) => {
     const house = FormatFns.format(date, "HH:mm");
     const day = FormatFns.format(date, "dd/MM/yyyy");
@@ -149,13 +147,16 @@ const ProductCard = (props: Props) => {
       .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
   }
 
-  const handleChooseItem = (code: string) => {
-    router.replace(`/profile?transCode=${code}`);
+  const handleChooseItem = (item: ContractI) => {
+    router.replace(
+      `/profile?transCode=${item.bookingCode}&transactionId=${item.transactionId}&uuid=${item.uuid}&productId=${item.productId}`
+    );
   };
 
   const handleChangeRequestType = (e: SelectChangeEvent) => {
     const data = sendRequestTypes.filter((x) => x.name === e.target.value);
     setRequestType(data[0] as RequestParams);
+    router.replace(`/send-request/${data[0].id}/${item.bookingCode}`);
   };
 
   const handleViewRequestDetail = () => {
@@ -213,7 +214,7 @@ const ProductCard = (props: Props) => {
       <ContentProduct>
         <HeaderTitle
           style={{ cursor: "pointer" }}
-          onClick={() => handleChooseItem(item.bookingCode)}
+          onClick={() => handleChooseItem(item)}
         >
           <TitleProject>{item?.projectName || "TNR"}</TitleProject>
           <TitleTime>
@@ -224,7 +225,7 @@ const ProductCard = (props: Props) => {
           </TitleTime>
         </HeaderTitle>
         <HeaderTitle
-          onClick={() => handleChooseItem(item.bookingCode)}
+          onClick={() => handleChooseItem(item)}
           style={{ marginBottom: 20, cursor: "pointer" }}
         >
           <TitleProduct>{item?.productName || "Lô A06"}</TitleProduct>
@@ -259,9 +260,13 @@ const ProductCard = (props: Props) => {
           </Column>
         </Row>
         <DynamicHorizontalLine />
-        {item?.status === "1" ||
-        item?.status === "3" ||
-        item?.status === "4" ? (
+        {item?.paymentStatus === "12" ||
+        item?.paymentStatus === "14" ||
+        item?.paymentStatus === "16" ||
+        item?.paymentStatus === "18" ||
+        item?.paymentStatus === "19" ||
+        item?.paymentStatus === "20" ||
+        item?.paymentStatus === "21" ? (
           <>
             <Row>
               <Column col={1} customStyle={{ paddingLeft: 0 }}>
@@ -302,7 +307,7 @@ const ProductCard = (props: Props) => {
               </Column>
               <Column col={3} customStyle={{ paddingLeft: 0 }}>
                 <TextProduct color="#EA242A">
-                  {currencyFormat(item?.totalPrice)}&nbsp;đ
+                  {currencyFormat(item?.totalDeposite)}&nbsp;đ
                 </TextProduct>
               </Column>
             </Row>
@@ -312,7 +317,7 @@ const ProductCard = (props: Props) => {
               </Column>
               <Column col={3} customStyle={{ paddingLeft: 0 }}>
                 <TextProduct color="#EA242A">
-                  {currencyFormat(item?.totalPrice)}&nbsp;đ
+                  {currencyFormat(item?.deposite)}&nbsp;đ
                 </TextProduct>
               </Column>
             </Row>
@@ -322,7 +327,7 @@ const ProductCard = (props: Props) => {
               </Column>
               <Column col={3} customStyle={{ paddingLeft: 0 }}>
                 <TextProduct color="#EA242A">
-                  {currencyFormat(item?.totalPrice)}&nbsp;đ
+                  {currencyFormat(item?.amountLeft)}&nbsp;đ
                 </TextProduct>
               </Column>
             </Row>
@@ -334,7 +339,36 @@ const ProductCard = (props: Props) => {
             <TextProduct>Trạng thái:</TextProduct>
           </Column>
           <Column col={3} customStyle={{ paddingLeft: 0 }}>
-            {item?.status === "0" ? (
+            <TextProduct
+              color={
+                item?.paymentStatus === "12" ||
+                item?.paymentStatus === "14" ||
+                item?.paymentStatus === "16" ||
+                item?.paymentStatus === "18" ||
+                item?.paymentStatus === "19" ||
+                item?.paymentStatus === "20" ||
+                item?.paymentStatus === "21"
+                  ? "#06C270"
+                  : "#FF3B3B"
+              }
+            >
+              {" "}
+              <div style={{ marginRight: 10 }}>
+                {item?.paymentStatus === "12" ||
+                item?.paymentStatus === "14" ||
+                item?.paymentStatus === "16" ||
+                item?.paymentStatus === "18" ||
+                item?.paymentStatus === "19" ||
+                item?.paymentStatus === "20" ||
+                item?.paymentStatus === "21" ? (
+                  <IconCircleChecked />
+                ) : (
+                  <IconCircleClose />
+                )}
+              </div>
+              {item?.paymentStatusString}
+            </TextProduct>
+            {/* {item?.status === "0" ? (
               <TextProduct color="#FF3B3B">
                 {" "}
                 <div style={{ marginRight: 10 }}>
@@ -362,7 +396,7 @@ const ProductCard = (props: Props) => {
               <TextProduct color="#06C270">
                 <div style={{ marginRight: 10 }}>
                   {" "}
-                  <IconCircleClose />
+                  <IconCircleChecked />
                 </div>
                 Đã duyệt
               </TextProduct>
@@ -382,30 +416,89 @@ const ProductCard = (props: Props) => {
                 </div>
                 Đã tạo bản nháp thông tin mua hàng
               </TextProduct>
+            ) : item?.status === "6" ? (
+              <TextProduct color="#06C270">
+                {" "}
+                <div style={{ marginRight: 10 }}>
+                  <IconCircleChecked />
+                </div>
+                Thanh lý cọc
+              </TextProduct>
+            ) : item?.status === "7" ? (
+              <TextProduct color="#06C270">
+                {" "}
+                <div style={{ marginRight: 10 }}>
+                  <IconCircleChecked />
+                </div>
+                Hoàn cọc
+              </TextProduct>
+            ) : item?.status === "8" ? (
+              <TextProduct color="#06C270">
+                {" "}
+                <div style={{ marginRight: 10 }}>
+                  <IconCircleChecked />
+                </div>
+                Đổi lô, căn
+              </TextProduct>
+            ) : item?.status === "9" ? (
+              <TextProduct color="#06C270">
+                {" "}
+                <div style={{ marginRight: 10 }}>
+                  <IconCircleChecked />
+                </div>
+                Chuyển nhượng
+              </TextProduct>
             ) : (
               <></>
-            )}
+            )} */}
           </Column>
         </Row>
         <Box
           sx={{
             display: "flex",
-            alignItems: "flex-end",
-            ml: "150px",
+            alignItems: item.paymentStatus === "0" ? "center" : "flex-end",
+            ml: item.paymentStatus === "0" ? "0px" : "150px",
             columnGap: "25px",
           }}
         >
-          <SelectInputComponent
-            data={sendRequestTypes}
-            value={requestType ? [requestType.name] : []}
-            onChange={handleChangeRequestType}
-            placeholder="Gửi yêu cầu"
-            style={{ margin: 0 }}
-          />
+          {item.paymentStatus === "0" ? (
+            <>
+              <Button
+                style={{
+                  height: 48,
+                  width: 186,
+                  background: "#FEC83C",
+                  textTransform: "none",
+                  color: "#0E1D34",
+                  fontSize: 16,
+                  fontWeight: 500,
+                  borderRadius: 8,
+                }}
+                onClick={() =>
+                  router.push(
+                    `/payment-cart?transactionCode=${item.bookingCode}`
+                  )
+                }
+              >
+                Hoàn Thiện hồ sơ
+              </Button>
+            </>
+          ) : (
+            <>
+              <SelectInputComponent
+                data={sendRequestTypes}
+                value={requestType ? [requestType.name] : []}
+                onChange={handleChangeRequestType}
+                placeholder="Gửi yêu cầu"
+                style={{ margin: 0 }}
+              />
+            </>
+          )}
+
           <CustomButton
             style={{ width: "300px", padding: "18px 50px", margin: "8px" }}
             label="Xem chi tiết"
-            onClick={handleViewRequestDetail}
+            onClick={() => handleChooseItem(item)}
           />
         </Box>
       </ContentProduct>

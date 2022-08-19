@@ -4,6 +4,7 @@ import { ContractI, getContractByUser, getOrderByUser } from "@service/Profile";
 import MenuDropdown from "ItemComponents/MenuDropdown";
 import MenuDropdownStatus from "ItemComponents/MenuDropdownStatus";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../store/store";
@@ -63,6 +64,7 @@ const statusTrans = [
 const ContractManage = () => {
   const [contracts, setContracts] = useState<ContractI[]>([]);
   const { listMenuBarType } = useSelector((state: RootState) => state.menubar);
+  const router = useRouter();
 
   const [bodySearch, setBodySearch] = useState<any>({
     projectId: "",
@@ -81,7 +83,7 @@ const ContractManage = () => {
 
   useEffect(() => {
     getContract();
-  }, [bodySearch]);
+  }, [bodySearch,router]);
 
   const handleSelectProject = (e: any) => {
 	if(e.id === "1"){

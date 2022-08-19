@@ -86,11 +86,12 @@ const ProfilePages = () => {
     | "editProfile"
     | "detailTransaction"
   >("contract");
+  console.log(activeTab)
 
   const renderRightContent = useMemo(() => {
     switch (activeTab) {
       case "contract":
-        return <DynamicContractManage />;
+        return <DynamicContractManage  />;
       case "notification":
         return <DynamicNotification />;
       case "changePassword":
@@ -98,7 +99,7 @@ const ProfilePages = () => {
       case "editProfile":
         return <DynamicEditProfile />;
       case "detailTransaction":
-        return <DetailTransaction />;
+        return <DetailTransaction setActiveTab={setActiveTab}/>;
       default:
         return null;
     }

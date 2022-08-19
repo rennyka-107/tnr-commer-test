@@ -278,7 +278,6 @@ export default function ProductCardSearch({
       .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
   }
 
-  console.log("build", build);
   return (
     <CardStyled sx={{ maxWidth: 350 }}>
       {activeFavourite ? (

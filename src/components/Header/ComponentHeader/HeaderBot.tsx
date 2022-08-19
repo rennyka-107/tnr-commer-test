@@ -131,10 +131,11 @@ const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
   const Router = useRouter();
   const [checkSale, setCheckSale] = useState(false);
   const { cart } = useSelector((state: RootState) => state.carts);
-  const [listFavourite, setListFavourite] = useState<any[]>([]);
+  const [listFavourite, setListFavourite] = useState<any>();
   const { title, typeAction } = useSelector(
     (state: RootState) => state?.shortcut
   );
+
   const { checkUp } = useSelector((state: RootState) => state.favourites);
   const fetchFavourite = async () => {
     try {
@@ -200,20 +201,19 @@ const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
     }
   };
 
-  const handleSelectTypeProject = (data:any) => {
-
-	// console.log(data)
-	const arr: any = [];
-	arr.push(data.id);
-	// localStorage.setItem(
-	// 	"listDataLSProjectType",
-	// 	JSON.stringify(arr)
-	//   );
-	localStorage.setItem("listParamsLSProjectType", JSON.stringify(arr));
-	localStorage.removeItem("listDataLSProvince");
+  const handleSelectTypeProject = (data: any) => {
+    // console.log(data)
+    const arr: any = [];
+    arr.push(data.id);
+    // localStorage.setItem(
+    // 	"listDataLSProjectType",
+    // 	JSON.stringify(arr)
+    //   );
+    localStorage.setItem("listParamsLSProjectType", JSON.stringify(arr));
+    localStorage.removeItem("listDataLSProvince");
     localStorage.removeItem("listParamsLSProvince");
-	Router.push(`/${PathRoute.ProjectTNR}?type=${data.id}`);
-  }
+    Router.push(`/${PathRoute.ProjectTNR}?type=${data.id}`);
+  };
 
   const pressShortcut = (type: typeShortcut) => {
     switch (type) {
@@ -237,7 +237,7 @@ const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
               title={"Loại bất động sản"}
               data={menuDataProject}
               onSelect={(item) => {
-				handleSelectTypeProject(item)
+                handleSelectTypeProject(item);
               }}
             />
           ) : (
@@ -330,9 +330,7 @@ const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
             />
             <Link href="/favorite-products">
               <a>
-                <IconHeart
-                  total={!isEmpty(listFavourite) ? listFavourite.length : 0}
-                />
+                <IconHeart total={listFavourite?.numberOfElements} />
               </a>
             </Link>
             <Link href="/payment-cart">

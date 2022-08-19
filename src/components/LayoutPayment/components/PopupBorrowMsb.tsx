@@ -12,6 +12,7 @@ type Props = {
 };
 
 const PopupBorrowMsb = ({ open, handleClose, callback }: Props) => {
+
   return (
     <Dialog
       open={open}

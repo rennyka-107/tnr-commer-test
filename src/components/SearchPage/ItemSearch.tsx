@@ -9,6 +9,11 @@ import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../store/store";
 import { getComparePopUpItem } from "../../../store/productCompareSlice";
+import LocalStorage from "utils/LocalStorage";
+import useNotification from "hooks/useNotification";
+import { useState } from "react";
+import ConfirmDialog from "./ConfirmDialog";
+import { isEmpty } from "lodash";
 
 interface searchProps {
   data?: searchLocationResponse[];
@@ -30,6 +35,10 @@ const ItemSearch = ({ data, buyDisabled }: searchProps) => {
   const { listMenuBarType, listMenuBarProjectType } = useSelector(
     (state: RootState) => state.menubar
   );
+  const { cart } = useSelector((state: RootState) => state.carts);
+  const notification = useNotification();
+  const [openConfirmDialog, setOpenConfirmDialog] = useState<boolean>(false);
+  const [tempCart, setTempCart] = useState<searchLocationResponse | null>(null);
 
   const onCompare =
     (
@@ -88,20 +97,46 @@ const ItemSearch = ({ data, buyDisabled }: searchProps) => {
       });
     };
 
+  const handleCloseConfirmDialog = () => {
+    setOpenConfirmDialog(false);
+  };
+
+  const handleAddToCart = (product: searchLocationResponse) => () => {
+    // addToCart(product.productId);
+    console.log("addd", product);
+    console.log("cart123123", cart, isEmpty(cart));
+    if (cart && cart.id === product.productId) {
+      notification({
+        severity: "success",
+        message: "Sản phẩm này đã có sẵn trong giỏ hàng",
+      });
+    } else if (isEmpty(cart)) {
+      addToCart(product.productId);
+    } else {
+      setTempCart(product);
+      setOpenConfirmDialog(true);
+    }
+  };
+
+  const handleChangeCartITem = (product: searchLocationResponse) => () => {
+    addToCart(product.productId);
+    setOpenConfirmDialog(false);
+  };
+
   return (
     <>
       <ProductWrap>
         {data?.map((product, index) => {
           return (
             <ProductCardSearch
-              onClick={() => addToCart(product.productId)}
+              onClick={handleAddToCart(product)}
               key={index}
               id={product.productId}
               src={product.thumbnail}
               projectName={product.projectName}
               title={product.name}
               subTitle={product.location}
-			  build={product.build}
+              build={product.build}
               activeFavourite={true}
               dataItem={{
                 item1: product.landArea,
@@ -130,6 +165,12 @@ const ItemSearch = ({ data, buyDisabled }: searchProps) => {
           );
         })}
       </ProductWrap>
+      <ConfirmDialog
+        open={openConfirmDialog}
+        handleClose={handleCloseConfirmDialog}
+        handleConfirm={handleChangeCartITem}
+        tempCart={tempCart}
+      />
     </>
   );
 };

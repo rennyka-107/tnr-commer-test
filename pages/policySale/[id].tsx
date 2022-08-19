@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getListSalePolicy } from "../../store/salePolicySlice";
 import { RootState } from "../../store/store";
 import LoadingComponent from "@components/LoadingComponent";
-import isEmpty from "lodash.isempty";
+import  isEmpty  from "lodash.isempty";
 
 const Container = styled.div`
   padding: 29px 0px;
@@ -34,15 +34,17 @@ const PolicySale = () => {
   console.log(listSalePolicy, loading, "!@3");
 
   const fetchAdvandedSearchList = async () => {
-    try {
-      setLoading(true);
-      const response = await getListSalePolicyById(id);
-      dispatch(getListSalePolicy(response.responseData));
-      if (response.responseCode === "00") {
-        setLoading(false);
+    if (!isEmpty(id)) {
+      try {
+        setLoading(true);
+        const response = await getListSalePolicyById(id);
+        dispatch(getListSalePolicy(response.responseData));
+        if (response.responseCode === "00") {
+          setLoading(false);
+        }
+      } catch (err) {
+        console.log(err);
       }
-    } catch (err) {
-      console.log(err);
     }
   };
 
