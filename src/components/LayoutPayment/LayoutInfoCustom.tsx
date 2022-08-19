@@ -414,7 +414,10 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
   function sendInforToMsb() {
     const sendData = {
       tenKhachHang: watch("fullname"),
-      ngaySinh: format(parse(watch("dob") as string, "dd-MM-yyyy", new Date()), "dd/MM/yyyy"),
+      ngaySinh: format(
+        parse(watch("dob") as string, "dd-MM-yyyy", new Date()),
+        "dd/MM/yyyy"
+      ),
       cmnd: watch("idNumber"),
       hoKhauThuongTru: watch("permanentAddress"),
       diaChiLienHe: watch("contactAddress"),
@@ -431,7 +434,9 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
           ? productItem?.TotalMoney
           : cart?.totalPrice,
       chinhSachBanHang: !isEmpty(productItem)
-        ? !isEmpty(productItem.ListPolicy) ? productItem.ListPolicy.map((item) => item.PolicyName).join(", ") : "Không có"
+        ? !isEmpty(productItem.ListPolicy)
+          ? productItem.ListPolicy.map((item) => item.PolicyName).join(", ")
+          : "Không có"
         : "",
       phuongThucThanhToan:
         listPayment.find((item) => item.id === payMethod)?.name ?? "",
@@ -593,9 +598,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
               title: "Hoàn thành hồ sơ",
               message: response.responseMessage,
             });
-            router.push(
-              "/result-payment?errorCode=0"
-            );
+            router.push("/result-payment?errorCode=0");
           } else {
             notification({
               severity: "error",
@@ -1255,7 +1258,13 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                   <span
                     style={{ color: "#0063F7", textDecoration: "underline" }}
                   >
-                    <Link href={"/buyingGuide?idUserManual=edef9816-8924-4857-ad52-7afc9124aqBV"}>Điều Khoản TNR</Link>
+                    <Link
+                      href={
+                        "/buyingGuide?idUserManual=edef9816-8924-4857-ad52-7afc9124aqBV"
+                      }
+                    >
+                      Điều Khoản TNR
+                    </Link>
                   </span>
                 </Text14Styled>
               </RowStyled>
@@ -1395,6 +1404,16 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                       : "white"
                   }
                   border={"1px solid #c7c9d9"}
+                  sx={{
+                    background: "#ea242a",
+                    "&:hover": {
+                      background: "#FEC83C !important",
+                      // box-shadow: 4px 8px 24px #f2f2f5;
+                      boxShadow: "0px 0px 10px 1px rgba(0, 0, 0, 0.2)",
+                      // borderRadius: "60px",
+                      color: "#ffffff",
+                    },
+                  }}
                   disabled={
                     isEqual(
                       initialValue?.paymentIdentityInfos,

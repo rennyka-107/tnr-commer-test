@@ -134,7 +134,7 @@ const LayoutResultPayment = (props: Props) => {
             Cảm ơn Quý khách hàng
           </Typography>
         )}
-        {isEmpty(transId) || isEmpty(billNumber) ? (
+        {!isEmpty(transId) && !isEmpty(billNumber) ? (
           <Button
             sx={{
               borderRadius: "8px",
