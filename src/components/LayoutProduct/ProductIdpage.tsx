@@ -596,7 +596,7 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                   }}
                 >
                   <iframe
-                    src={dataProduct?.video ?? dataProduct.project.video}
+                    src={dataProduct?.video ?? dataProduct?.project?.video}
                     style={{ width: "100%", height: "100%" }}
                     frameBorder={"0"}
                     allow="autoplay; encrypted-media"

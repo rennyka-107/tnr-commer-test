@@ -170,6 +170,10 @@ const TextRightOnCardLeft = styled(Typography)`
   font-weight: 400;
   font-size: 18px;
   line-height: 38px;
+  /* or 211% */
+
+  /* Brand/Main color */
+
   color: #1b3459;
 `;
 
@@ -233,13 +237,18 @@ const TextCenterRight = styled(Typography)`
   margin-bottom: 9px;
 `;
 const SubTextCenterRight = styled(Typography)`
-  font-family: "Roboto";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 18px;
-  color: #1b3459;
-  text-align: right;
+font-family: 'Roboto';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 18px;
+/* or 129% */
+
+text-align: right;
+
+/* Brand/Main color */
+
+color: #1B3459;
 `;
 
 const ButtonStyled = styled(Button)`
@@ -341,7 +350,7 @@ const PhieuTinhGia = ({
   });
 
   const [listPrice, setListPrice] = React.useState([]);
-  
+
   const handleChange = (event: SelectChangeEvent<typeof paymentName>) => {
     const {
       target: { value },
@@ -504,7 +513,7 @@ const PhieuTinhGia = ({
   };
 
   function currencyFormat(num) {
-	console.log(num)
+    console.log(num);
     if (!num) {
       return;
     }
@@ -514,11 +523,10 @@ const PhieuTinhGia = ({
   }
 
   const handleThanhtoan = () => {
-	addToCart(dataProduct.id)
-	localStorage.setItem("IdTCBG",JSON.stringify(priceIdSelect))
-	localStorage.setItem("PaymentSelect",JSON.stringify(paymentName))
-  }
-
+    addToCart(dataProduct.id);
+    localStorage.setItem("IdTCBG", JSON.stringify(priceIdSelect));
+    localStorage.setItem("PaymentSelect", JSON.stringify(paymentName));
+  };
 
   return (
     <WrapBodyStyped>
@@ -552,19 +560,25 @@ const PhieuTinhGia = ({
               <WrapItemOnCard>
                 <TextLeftOnCardLeft>Mã lô phê duyệt:</TextLeftOnCardLeft>
                 <TextRightOnCardLeft>
-                  {dataProduct?.lotSymbolLegal ? dataProduct?.lotSymbolLegal :"N/A"}
+                  {dataProduct?.lotSymbolLegal
+                    ? dataProduct?.lotSymbolLegal
+                    : "N/A"}
                 </TextRightOnCardLeft>
               </WrapItemOnCard>
               <WrapItemOnCard>
                 <TextLeftOnCardLeft>Khối:</TextLeftOnCardLeft>
                 <TextRightOnCardLeft>
-                  {dataProduct.levelDetailParentName ? dataProduct.levelDetailParentName : "N/A"}
+                  {dataProduct.levelDetailParentName
+                    ? dataProduct.levelDetailParentName
+                    : "N/A"}
                 </TextRightOnCardLeft>
               </WrapItemOnCard>
               <WrapItemOnCard>
                 <TextLeftOnCardLeft>Phân Khu:</TextLeftOnCardLeft>
                 <TextRightOnCardLeft>
-                  {dataProduct.levelDetailName ? dataProduct.levelDetailName :"N/A"}
+                  {dataProduct.levelDetailName
+                    ? dataProduct.levelDetailName
+                    : "N/A"}
                 </TextRightOnCardLeft>
               </WrapItemOnCard>
               <WrapItemOnCard>
@@ -705,7 +719,7 @@ const PhieuTinhGia = ({
                 <div style={{ border: "1px solid #E7E9EC" }} />
                 <div style={{ margin: "auto" }}>
                   <TextBoldInWrapBottom>
-                   {item.Amount ?  `- ${currencyFormat(item.Amount) }`: "N/A"}
+                    {item.Amount ? `- ${currencyFormat(item.Amount)}` : "N/A"}
                   </TextBoldInWrapBottom>
                 </div>
               </div>
@@ -870,7 +884,7 @@ const PhieuTinhGia = ({
                           fontWeight: 400,
                         }}
                       >
-                     Đơn giá xây dựng*:
+                        Đơn giá xây dựng*:
                       </TextOnCardRight>
 
                       <TextOnCardRight
@@ -1289,7 +1303,7 @@ const PhieuTinhGia = ({
             <TextCenterRight
               style={{ fontSize: 18, margin: "auto", marginRight: 0 }}
             >
-              {currencyFormat(productItem?.ProductQuotation)} vnd
+              {currencyFormat(productItem?.PreTotalMoney)} vnd
             </TextCenterRight>
           </div>
           <div style={{ border: "1px solid #C7C9D9" }} />
@@ -1332,11 +1346,7 @@ const PhieuTinhGia = ({
               Tải phiếu tính giá
             </Typography>
           </ButtonStyled>
-          <ButtonStyled
-            onClick={handleThanhtoan}
-          >
-            Thanh Toán
-          </ButtonStyled>
+          <ButtonStyled onClick={handleThanhtoan}>Thanh Toán</ButtonStyled>
         </ContainerCenterRight>
       </ContainerRight>
     </WrapBodyStyped>

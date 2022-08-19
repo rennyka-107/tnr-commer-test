@@ -9,9 +9,14 @@ import SessionStorage from "utils/SessionStorage";
 import { getListProduct, getProductById } from "../../store/productSlice";
 import { getListTabsProject } from "../../store/projectSlice";
 import { RootState, wrapper } from "../../store/store";
-import { getListProductApi, getProducById, updateViewProduct } from "../api/productsApi";
+import {
+  getListProductApi,
+  getProducById,
+  updateViewProduct,
+} from "../api/productsApi";
 import { getListTabsProjectApi } from "../api/projectApi";
 import LoadingComponent from "@components/LoadingComponent";
+import { isEmpty } from "lodash";
 
 const DynamicProductId = dynamic(
   () => import("../../src/components/LayoutProduct/ProductIdpage"),
@@ -39,13 +44,14 @@ const Product = () => {
   useEffect(() => {
     (async () => {
       try {
-        const response = await getListProductApi(paramsSearch, searchList);
+       if(!isEmpty(productId)){
+		const response = await getListProductApi(paramsSearch, searchList);
         dispatch(getListProduct(response.responseData));
         const responAPIBYID = await getProducById(productId);
         const accessToken =
           LocalStorage.get("accessToken") || SessionStorage.get("accessToken");
-        if(!!responAPIBYID?.responseData?.id&&accessToken){
-          const response=updateViewProduct(responAPIBYID?.responseData?.id);
+        if (!!responAPIBYID?.responseData?.id && accessToken) {
+          const response = updateViewProduct(responAPIBYID?.responseData?.id);
         }
         dispatch(getProductById(responAPIBYID.responseData));
 
@@ -56,6 +62,7 @@ const Product = () => {
         ) {
           setLoading(true);
         }
+	   }
       } catch (error) {
         console.log(error);
       }
@@ -63,13 +70,15 @@ const Product = () => {
   }, [router, dispatch]);
 
   useEffect(() => {
-    (async () => {
-      const responsListTab = await getListTabsProjectApi(
-        productByID?.project.id
-      );
+    if (!isEmpty(productByID?.project.id)) {
+      (async () => {
+        const responsListTab = await getListTabsProjectApi(
+          productByID?.project.id
+        );
 
-      dispatch(getListTabsProject(responsListTab.responseData));
-    })();
+        dispatch(getListTabsProject(responsListTab.responseData));
+      })();
+    }
   }, [productByID]);
 
   const fetchComponent = () => {

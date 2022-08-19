@@ -87,7 +87,7 @@ const AuthContext = ({ children }) => {
   },[router.pathname])
 
   useEffect(() => {
-    if (router.pathname !== "/search" && router.pathname !== "/projectTNR" && router.pathname !== "/compare-search" && router.pathname !== "/products" && router.pathname !== "/compare-product") {
+    if (router.pathname !== "/search" && router.pathname !== "/projectTNR" && router.pathname !== "/compare-search" && router.pathname !== "/products" && router.pathname !== "/compare-product" && router.pathname !== "/favorite-products") {
       localStorage.removeItem("listDataLSProvince");
       localStorage.removeItem("listParamsLSProvince");
       localStorage.removeItem("listDataLSProjectType");

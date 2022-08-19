@@ -142,6 +142,7 @@ const BuyingGuideComponent = ({ data }: PropsUserManual) => {
           </>
         ) : (
           <div
+            className="content-project-view ck-content"
             dangerouslySetInnerHTML={{
               __html: userManualById.userManualContent.content,
             }}
@@ -209,7 +210,7 @@ const BuyingGuideComponent = ({ data }: PropsUserManual) => {
       });
     }
   }, [idUserManual, data]);
-  
+
   return (
     <>
       <Container>

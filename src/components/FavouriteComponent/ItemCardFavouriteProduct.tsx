@@ -9,9 +9,10 @@ import Router, { useRouter } from "next/router";
 import { Button, Grid, Stack, Typography } from "@mui/material";
 import useAddToCart from "hooks/useAddToCart";
 import ContainerSearch from "@components/Container/ContainerSearch";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getComparePopUpItem } from "../../../store/productCompareSlice";
 import { IconEmptyFav } from "@components/Icons";
+import { RootState } from "../../../store/store";
 
 interface ProductsProps {
   data?: ProductsResponse[];
@@ -50,6 +51,9 @@ const StyledTitle = styled(Typography)`
 `;
 
 const ItemCardFavouriteProduct = ({ data }: ProductsProps) => {
+  const { listMenuBarType, listMenuBarProjectType } = useSelector(
+    (state: RootState) => state.menubar
+  );
   const addToCart = useAddToCart();
   const router = useRouter();
   const dispatch = useDispatch();
@@ -64,23 +68,59 @@ const ItemCardFavouriteProduct = ({ data }: ProductsProps) => {
       productId: string
     ) =>
     () => {
+      const dataProjectType = listMenuBarProjectType.filter(
+        (item) => item.id === projectType
+      );
+      const dataProject = listMenuBarType.filter(
+        (item) => item.id === projectId
+      );
+      localStorage.setItem(
+        "listDataLSProjectType",
+        JSON.stringify([dataProjectType[0]])
+      );
+      localStorage.setItem(
+        "listParamsLSProjectType",
+        JSON.stringify([dataProjectType[0].id])
+      );
+      localStorage.setItem(
+        "listDataLSProject",
+        JSON.stringify([dataProject[0]])
+      );
+      localStorage.setItem(
+        "listParamsIdProject",
+        JSON.stringify([dataProject[0].id])
+      );
+      //   console.log(dataProjectType, dataProject);
       dispatch(
         getComparePopUpItem([
           {
             thumbnail: thumbnail,
-            projectName: projectName,
-            name: name,
+            projectName: name,
+            name: projectName,
             productId: productId,
             projectId: projectId,
             projectType: projectType,
           },
         ])
       );
+      // () => {
+      //   dispatch(
+      //     getComparePopUpItem([
+      //       {
+      //         thumbnail: thumbnail,
+      //         projectName: projectName,
+      //         name: name,
+      //         productId: productId,
+      //         projectId: projectId,
+      //         projectType: projectType,
+      //       },
+      //     ])
+      //   );
       router.push({
         pathname: "/compare-search",
         query: {
-          projectId: projectId,
-          projectTypeId: projectType,
+        //   projectId: projectId,
+        //   projectTypeId: projectType,
           priceTo: "20",
           priceFrom: "1",
           areaTo: "200",
@@ -97,61 +137,61 @@ const ItemCardFavouriteProduct = ({ data }: ProductsProps) => {
 
   return (
     <>
-      <ContainerSearch title={"Sản phẩm yêu thích"} checkBread={true}  >
+      <ContainerSearch title={"Sản phẩm yêu thích"} checkBread={true}>
         <div>
-		{data.length > 0 ? (
-          <ProductWrap>
-            {data?.map((product, index) => (
-              <ItemProductCard
-                key={index}
-                id={product.productId}
-                src={product.thumbnail}
-                title={product.name}
-                subTitle={product.projectLocation}
-                projectName={product.projectName}
-                dataItem={{
-                  item1: product.landArea,
-                  item2: product.numBath,
-                  item3: product.numBed,
-                  item4: product.doorDirection,
-                }}
-                projectTypeCode={product.projectTypeCode}
-                minFloor={product.minFloor}
-                maxFloor={product.maxFloor}
-                priceListed={product.totalPrice}
-                priceSub={product.unitPrice}
-                ticketCard={product.category}
-                activeSoSanh={true}
-                onCompare={onCompare(
-                  product.projectId,
-                  product.projectTypeId,
-                  product.thumbnail,
-                  product.projectName,
-                  product.name,
-                  product.productionId
-                )}
-                onClick={() => addToCart(product.id)}
-                buyDisabled={product.paymentStatus !== 2}
-              />
-            ))}
-          </ProductWrap>
-        ) : (
-          <Stack
-            direction="column"
-            justifyContent="center"
-            alignItems="center"
-            spacing={4}
-          >
-            <IconEmptyFav />
-            <StyledTitle>
-              Chưa có bất động sản nào được quý khách đưa vào yêu thích
-            </StyledTitle>
-            <StyledButton variant="contained" onClick={onAdd}>
-              Thêm bất động sản yêu thích ngay
-            </StyledButton>
-          </Stack>
-        )}
-		</div>
+          {data.length > 0 ? (
+            <ProductWrap>
+              {data?.map((product, index) => (
+                <ItemProductCard
+                  key={index}
+                  id={product.productId}
+                  src={product.thumbnail}
+                  title={product.name}
+                  subTitle={product.projectLocation}
+                  projectName={product.projectName}
+                  dataItem={{
+                    item1: product.landArea,
+                    item2: product.numBath,
+                    item3: product.numBed,
+                    item4: product.doorDirection,
+                  }}
+                  projectTypeCode={product.projectTypeCode}
+                  minFloor={product.minFloor}
+                  maxFloor={product.maxFloor}
+                  priceListed={product.totalPrice}
+                  priceSub={product.unitPrice}
+                  ticketCard={product.category}
+                  activeSoSanh={true}
+                  onCompare={onCompare(
+                    product.projectId,
+                    product.projectTypeId,
+                    product.thumbnail,
+                    product.projectName,
+                    product.name,
+                    product.productionId
+                  )}
+                  onClick={() => addToCart(product.id)}
+                  buyDisabled={product.paymentStatus !== 2}
+                />
+              ))}
+            </ProductWrap>
+          ) : (
+            <Stack
+              direction="column"
+              justifyContent="center"
+              alignItems="center"
+              spacing={4}
+            >
+              <IconEmptyFav />
+              <StyledTitle>
+                Chưa có bất động sản nào được quý khách đưa vào yêu thích
+              </StyledTitle>
+              <StyledButton variant="contained" onClick={onAdd}>
+                Thêm bất động sản yêu thích ngay
+              </StyledButton>
+            </Stack>
+          )}
+        </div>
       </ContainerSearch>
     </>
   );
