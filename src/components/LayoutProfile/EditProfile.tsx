@@ -11,13 +11,15 @@ import DistricSelect from "@components/Form/DistrictSelect";
 import FormGroup from "@components/Form/FormGroup";
 import { IconDownloadPTG, IconEditWhite } from "@components/Icons";
 import {
+  ButtonAction,
   LinedStyled,
   RowStyled,
+  Text18Styled,
   Title20Styled,
 } from "@components/StyledLayout/styled";
 import styled from "@emotion/styled";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Button, Grid } from "@mui/material";
+import { Button, CircularProgress, Grid } from "@mui/material";
 import { Box } from "@mui/system";
 import { ProfileI } from "@service/Profile";
 import ImageWithHideOnError from "hooks/ImageWithHideOnError";
@@ -112,6 +114,7 @@ const EditProfile = () => {
   const { dataCustomType } = useCustomType();
   const { dataProvinces } = useProvinces();
   const [loadingImg, setLoadingImg] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const [convertProvinType, setConvertProvinType] = useState<Option[]>([]);
 
@@ -291,6 +294,7 @@ const EditProfile = () => {
     };
 
     (async () => {
+      setLoading(true);
       try {
         const response = await postChangeInfoApi(body);
         dispatch(changeProfile(response.responseData));
@@ -304,6 +308,8 @@ const EditProfile = () => {
         }
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false);
       }
     })();
   };
@@ -869,11 +875,20 @@ const EditProfile = () => {
         </Row> */}
         <Row>
           <Column>
-            <CustomButton
-              label="Cập nhật"
-              style={{ width: 255, marginTop: 47 }}
+            {/* <ButtonAction>Cập nhật</ButtonAction> */}
+            <StyledEditProfileBtn
               type="submit"
-            />
+              sx={{ my: 2 }}
+              disabled={loading}
+            >
+              {!loading ? (
+                <Text18Styled color={"#fff"}>Cập nhật</Text18Styled>
+              ) : (
+                <CircularProgress
+                  style={{ height: 25, width: 25, color: "#ffffff" }}
+                />
+              )}
+            </StyledEditProfileBtn>
           </Column>
         </Row>
       </BoxContainer>
@@ -882,3 +897,12 @@ const EditProfile = () => {
 };
 
 export default EditProfile;
+
+const StyledEditProfileBtn = styled(ButtonAction)({
+  width: 255,
+  marginTop: 47,
+  backgroundColor: "#1b3459",
+  "&:hover": {
+    backgroundColor: "#fcc83c",
+  },
+});

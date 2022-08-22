@@ -3,6 +3,7 @@ import CartItem from "@components/Element/CartItem";
 import PageBorder from "@components/Element/PageBorder";
 import Subtitle from "@components/Element/Subtitle";
 import { Box, Dialog, Divider, Grid } from "@mui/material";
+import { getOrderByUser } from "@service/Profile";
 import useNotification from "hooks/useNotification";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -44,6 +45,22 @@ const ChangeApartmentRequest = ({ orderDetail }: Props) => {
     size: 12,
   });
   const [total, setTotal] = useState<number>(0);
+  const [contact, setContact] = useState<any>();
+
+  const getContract = async () => {
+    const data = new FormData();
+    data.append("projectId", "");
+    data.append("status", "");
+
+    const response = await getOrderByUser(data);
+    const contacts = response?.responseData ?? [];
+    const contact = contacts.find((contact) => contact.bookingCode === txcode);
+    setContact(contact);
+  };
+
+  useEffect(() => {
+    getContract();
+  }, []);
 
   useEffect(() => {
     console.log("orderDetail", orderDetail);
@@ -92,11 +109,15 @@ const ChangeApartmentRequest = ({ orderDetail }: Props) => {
     });
   };
   const handleClickBtn = () => {
-    if (!itemSelect || !txcode) return;
+    if (!itemSelect || !contact) return;
 
     const data = {
-      transactionCode: txcode,
       newProductId: itemSelect.productId,
+      transactionId: contact.transactionId,
+      transactionCodeLandSoft: contact.transactionCodeLandSoft,
+      productId: contact.productId,
+      customerIdentity: contact.idNumber,
+      customerName: contact.fullname,
     };
 
     setLoading(true);

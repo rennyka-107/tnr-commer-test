@@ -38,7 +38,6 @@ const useProjectRecenly = () => {
   const getList = () => {
     try {
       getProjectRecenly().then((response) => {
-        console.log('response', response);
         
         if (response?.responseCode === "00") {
 			const dataProject = [

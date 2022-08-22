@@ -582,7 +582,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
       listPromotion: !isEmpty(productItem) ? productItem?.ListPromotion : [],
       referenceCode,
       priceId: !isEmpty(productItem) ? productItem?.priceId : null,
-      scheduleId: !isEmpty(productItem) ? productItem?.scheduleId : "",
+      scheduleId: !isEmpty(productItem.ListSchedule) ? productItem?.ListSchedule[0]["ScheduleID"] : "",
     };
     if (!isEmpty(uploadMedia) && !isEmpty(transactionCode)) {
       const data = new FormData();

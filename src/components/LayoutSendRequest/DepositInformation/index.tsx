@@ -14,6 +14,7 @@ const DepositInformation = ({ title, orderDetail }: Props) => {
   console.log("orderDetail", orderDetail);
   
   if (!orderDetail) return <></>;
+  
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mb: 5 }}>
@@ -90,7 +91,7 @@ const DepositInformation = ({ title, orderDetail }: Props) => {
             color: "#EA242A",
           }}
         >
-          {currencyFormat(orderDetail.totalDeposite)}đ
+          {currencyFormat(orderDetail.deposite)}đ
         </Typography>
       </Box>
     </Box>

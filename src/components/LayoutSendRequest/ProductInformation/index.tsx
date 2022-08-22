@@ -209,7 +209,7 @@ const ProductInformation = ({ orderDetail }: Props) => {
                 fontWeight: 400,
               }}
             >
-              {production.direction}
+              {production.doorDirection}
             </Typography>
           </Box>
         </Box>

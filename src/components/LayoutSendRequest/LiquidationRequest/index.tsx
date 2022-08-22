@@ -1,11 +1,12 @@
 import PageBorder from "@components/Element/PageBorder";
+import { getOrderByUser } from "@service/Profile";
 import useNotification from "hooks/useNotification";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { apiLiquidationPikes } from "../../../../pages/api/paymentApi";
+import { RootState } from "../../../../store/store";
 import SendRequest from "../SendRequest";
-
-type Props = {};
 
 const LiquidationRequest = () => {
   const {
@@ -13,11 +14,34 @@ const LiquidationRequest = () => {
   } = useRouter();
   const notification = useNotification();
   const [loading, setLoading] = useState<boolean>(false);
+  const [contact, setContact] = useState<any>();
+
+  const getContract = async () => {
+    const data = new FormData();
+    data.append("projectId", "");
+    data.append("status", "");
+
+    const response = await getOrderByUser(data);
+    const contacts = response?.responseData ?? [];
+    const contact = contacts.find((contact) => contact.bookingCode === txcode);
+    setContact(contact);
+  };
+
+  useEffect(() => {
+    getContract();
+  }, []);
 
   const handleClickBtn = () => {
-    if (!txcode) return;
+    if (!contact) return;
+
     setLoading(true);
-    apiLiquidationPikes(txcode as string)
+    apiLiquidationPikes({
+      transactionId: contact.transactionId,
+      transactionCodeLandSoft: contact.transactionCodeLandSoft,
+      productId: contact.productId,
+      customerIdentity: contact.idNumber,
+      customerName: contact.fullname,
+    })
       .then((res) => {
         if (res.responseCode === "00") {
           notification({
@@ -30,6 +54,12 @@ const LiquidationRequest = () => {
             message: res.responseMessage,
           });
         }
+      })
+      .catch((error) => {
+        notification({
+          severity: "error",
+          message: "Có lỗi sảy ra",
+        });
       })
       .finally(() => {
         setLoading(false);

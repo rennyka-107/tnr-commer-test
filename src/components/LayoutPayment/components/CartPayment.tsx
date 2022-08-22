@@ -165,7 +165,12 @@ const CartPayment = (props: Props) => {
         try {
           if (filterPtg.projectId !== 0 && filterPtg.priceID !== 0) {
             const response = await getProductPtgApi(filterPtg);
-            dispatch(getProductPTG(response.responseData));
+            dispatch(
+              getProductPTG({
+                ...response.responseData,
+                priceId: filterPtg.priceID,
+              })
+            );
             // setPaymentPrice([
             //   response.responseData.ListSchedule[0].ScheduleName,
             // ]);
@@ -194,7 +199,6 @@ const CartPayment = (props: Props) => {
             fullWidth
             required
             onChange={(e) => {
-              console.log(e.target.value, "value")
               dispatch(setReferenceCode(e.target.value));
             }}
             style={{ maxWidth: 317, marginLeft: 21 }}

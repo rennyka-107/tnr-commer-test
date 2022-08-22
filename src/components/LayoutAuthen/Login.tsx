@@ -1,6 +1,4 @@
-import CustomButton from "@components/CustomComponent/CustomButton";
 import ControllerCheckbox from "@components/Form/ControllerCheckbox";
-import ControllerRadio from "@components/Form/ControllerRadio";
 import ControllerTextField from "@components/Form/ControllerTextField";
 import FormGroup from "@components/Form/FormGroup";
 import PasswordTextField from "@components/Form/PasswordTextField";
@@ -11,9 +9,8 @@ import { Button, CircularProgress } from "@mui/material";
 import {
   LoginSuccess,
   ResponseLoginModel,
-  verifyCapchaToken,
+  verifyCapchaToken
 } from "@service/auth";
-import axios from "axios";
 import useAuth from "hooks/useAuth";
 import useNotification from "hooks/useNotification";
 import Link from "next/link";
@@ -67,7 +64,7 @@ const Login = () => {
   const Route = useRouter();
   const captchaRef = useRef<ReCAPTCHA>(null);
   const [token, setToken] = useState<string | null>("de tam"); //bat capcha thi set token = null
-  const [verifySuccess, setVerifySuccess] = useState<boolean>(true); //bat capcha thi setVerifySuccess = false
+  const [verifySuccess, setVerifySuccess] = useState<boolean>(true); //bat capcha thi setVerifySuccess = false∏
 
   const validationSchema = yup.object().shape({
     username: yup
@@ -227,7 +224,7 @@ const Login = () => {
                 // borderRadius: "60px",
                 color: "#ffffff",
               },
-              marginTop: "10px"
+              marginTop: "10px",
             }}
             type="submit"
             disabled={token ? false : true}

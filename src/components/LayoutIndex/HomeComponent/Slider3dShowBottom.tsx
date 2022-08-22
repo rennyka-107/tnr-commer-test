@@ -144,7 +144,7 @@ export default function Slider3dShowBottom() {
       <SwiperSlide
         onClick={() =>
           Router.push(
-            `/products?idProject=${el.id}&&provinceId=&&projectTypeId=`
+            `/recently-view`
           )
         }
         className="swiper-3d"
@@ -182,7 +182,7 @@ export default function Slider3dShowBottom() {
 
   const handleShowAll = () => {
     localStorage.setItem("listParamsIdProject", JSON.stringify(LSprojectId));
-    Router.push(`/products?idProject=1&&provinceId=&&projectTypeId=`);
+    Router.push(`/recently-view`);
   };
 
   return (

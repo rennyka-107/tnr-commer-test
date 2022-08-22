@@ -22,6 +22,7 @@ import favourites from "./productFavouriteSlice";
 import sendRequest from "./sendRequestSlice";
 import paramsSearch from "./paramsSearchSlice";
 import generalInfo from "./generalInfoSlice";
+import orderByUser from "./orderByUserSlice";
 import { TypedUseSelectorHook } from "react-redux";
 
 const combinedReducer = combineReducers({
@@ -45,6 +46,7 @@ const combinedReducer = combineReducers({
   sendRequest,
   paramsSearch,
   generalInfo,
+  orderByUser
 });
 
 export type RootState = ReturnType<typeof combinedReducer>;
@@ -127,6 +129,10 @@ const masterReducer = (state, action) => {
       generalInfo: {
         ...action.payload.generalInfo,
       },
+      orderByUser: {
+        ...action.payload.orderByUser,
+      },
+
     };
     return nextState;
   } else {

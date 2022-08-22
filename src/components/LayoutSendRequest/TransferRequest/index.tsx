@@ -28,6 +28,7 @@ import { apiTransferProductPayment } from "../../../../pages/api/paymentApi";
 import useNotification from "hooks/useNotification";
 import useOnClickOutside from "hooks/useOnClickOutside";
 import LoadingComponent from "@components/LoadingComponent";
+import { getOrderByUser } from "@service/Profile";
 
 const validationSchema = yup.object().shape({
   fullname: yup.string().required(validateLine.required).default(""),
@@ -100,6 +101,22 @@ const TransferRequest = (props: Props) => {
   });
   const notification = useNotification();
 
+  const [contact, setContact] = useState<any>();
+
+  const getContract = async () => {
+    const data = new FormData();
+    data.append("projectId", "");
+    data.append("status", "");
+
+    const response = await getOrderByUser(data);
+    const contacts = response?.responseData ?? [];
+    const contact = contacts.find((contact) => contact.bookingCode === txcode);
+    setContact(contact);
+  };
+
+  useEffect(() => {
+    getContract();
+  }, []);
   const onSenRequest = (data: FormData) => {
     const newPerson = {
       onyFeId: nanoid(),
@@ -124,15 +141,20 @@ const TransferRequest = (props: Props) => {
   }, [activePerson, reset]);
 
   const handleClickBtn = () => {
-    if (!txcode) return;
+    if (!contact) return;
+
     const hasMainUserDate = listPersonAdded.map((person, index) => ({
       ...person,
       mainUser: index === 0 ? 1 : 0,
     }));
 
     const data = {
-      transactionCode: txcode,
       paymentCustomerInfoRequestList: hasMainUserDate,
+      transactionId: contact.transactionId,
+      transactionCodeLandSoft: contact.transactionCodeLandSoft,
+      productId: contact.productId,
+      customerIdentity: contact.idNumber,
+      customerName: contact.fullname,
     };
     setLoading(true);
     apiTransferProductPayment(data)

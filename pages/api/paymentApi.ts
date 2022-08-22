@@ -43,9 +43,18 @@ export const apiSendInforMsb = async (data: any) => {
   );
 };
 
-export const apiLiquidationPikes = async (txcode: string) => {
+interface LiquidationPikesParams {
+  transactionId: number;
+  transactionCodeLandSoft: string;
+  productId: string;
+  customerIdentity: string;
+  customerName: string;
+}
+
+export const apiLiquidationPikes = async (params: LiquidationPikesParams) => {
   return HttpClient.post<any, CommonResponse>(
-    `/api/v1/payment/send-request/liquidation-pikes/${txcode}`
+    `/api/v1/payment/send-request/liquidation-pikes`,
+    params
   );
 };
 export const apiTransferProductPayment = async (data: any) => {
@@ -55,9 +64,18 @@ export const apiTransferProductPayment = async (data: any) => {
   );
 };
 
-export const apiDepositRefund = async (txcode: string) => {
+interface DepositRefundParams {
+  transactionId: number;
+  transactionCodeLandSoft: string;
+  productId: string;
+  customerIdentity: string;
+  customerName: string;
+}
+
+export const apiDepositRefund = async (params: DepositRefundParams) => {
   return HttpClient.post<any, CommonResponse>(
-    `/api/v1/payment/send-request/deposit-refund/${txcode}`
+    `/api/v1/payment/send-request/deposit-refund`,
+    params
   );
 };
 

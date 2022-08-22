@@ -7,12 +7,10 @@ import {
   getListMenuBarProjectTypeApi,
 } from "../../../../pages/api/menuBarApi";
 import {
+  getListCategory,
   getListMenuBarProjectType,
   getListMenuBarType,
   getListMenuLocation,
-  getListCategory,
-  getListProjectTypeFilter,
-  getListMenuBarProjectFilter,
 } from "../../../../store/menuBarSlice";
 import { RootState } from "../../../../store/store";
 import HeaderBot from "./HeaderBot";
@@ -20,8 +18,9 @@ import HeaderTop from "./HeaderTop";
 
 const Header = () => {
   const dispatch = useDispatch();
-  const { listMenuBarType, listMenuBarProjectType } =
-    useSelector((state: RootState) => state.menubar);
+  const { listMenuBarType, listMenuBarProjectType } = useSelector(
+    (state: RootState) => state.menubar
+  );
 
   const menuBarProjectType = listMenuBarProjectType?.filter(
     (item) => item.id !== "1"
@@ -35,10 +34,11 @@ const Header = () => {
         const res: any = await getListMenuBarProject();
         const reslocation: any = await getListLocation();
         const responseCategory: any = await getListCategoryApi();
+
         dispatch(getListMenuBarProjectType(responseList.responseData));
         dispatch(getListMenuBarType(res.responseData));
         dispatch(getListMenuLocation(reslocation.responseData));
-		// dispatch(getListMenuBarProjectFilter(res.responseData))
+        // dispatch(getListMenuBarProjectFilter(res.responseData))
         dispatch(getListCategory(responseCategory.responseData));
       } catch (error) {
         console.log(error);
