@@ -44,8 +44,18 @@ const LayoutQRCode = () => {
           Quý khách vui lòng hoàn thiện hồ sơ mua bán trong vòng 12 tiếng để
           được nhận phiếu đặt hàng
         </Text18ItalicStyled>
+        <Text18Styled sx={{ mt: "20px"}} color={"#1b3459"}>Cám ơn Quý khách</Text18Styled>
         <ButtonNormalStyled
-          style={{ width: 225 }}
+          sx={{
+            maxWidth: 225,
+            mt: "20px",
+            "&:hover": {
+              background: "#FEC83C !important",
+              // box-shadow: 4px 8px 24px #f2f2f5;
+              boxShadow: "0px 0px 10px 1px rgba(0, 0, 0, 0.2)",
+              // borderRadius: "60px",
+            },
+          }}
           bg={"#1b3459"}
           onClick={() => {
             router.push("/");

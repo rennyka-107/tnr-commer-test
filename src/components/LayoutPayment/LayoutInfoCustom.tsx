@@ -1415,13 +1415,11 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                   border={"1px solid #c7c9d9"}
                   sx={{
                     background: "#ea242a",
-                    color: "white",
                     "&:hover": {
                       background: "#FEC83C !important",
                       // box-shadow: 4px 8px 24px #f2f2f5;
                       boxShadow: "0px 0px 10px 1px rgba(0, 0, 0, 0.2)",
                       // borderRadius: "60px",
-                      color: "#ffffff",
                     },
                   }}
                   disabled={
@@ -1438,7 +1436,17 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                     !validUpload
                   }
                 >
-                  <Text18Styled>
+                  <Text18Styled
+                    sx={{
+                      color:
+                        !isEmpty(transactionCode) && data.paymentStatus === 3
+                          ? "#FFFFFF !important"
+                          : "",
+                      "&:hover": {
+                        color: "#FFFFFF !important"
+                      },
+                    }}
+                  >
                     {!isEmpty(transactionCode) && data.paymentStatus === 3
                       ? "Hoàn thành hồ sơ"
                       : "Lưu thông tin"}
