@@ -18,6 +18,7 @@ import { AlertColor } from "@mui/material";
 import { setNotification } from "../../store/notificationSlice";
 import { useRouter } from "next/router";
 import { removeAllComparePopUpItem } from "../../store/productCompareSlice";
+import { setData } from "../../store/paymentSlice";
 
 // import jwtDecode from 'jwt-decode';
 
@@ -45,6 +46,7 @@ const AuthContext = ({ children }) => {
   const [deviceToken, setDeviceToken] = useState<string | null>();
   const notification = useNotification();
   const dispatch = useDispatch();
+  const data = useSelector((state: RootState) => state.payments.data);
   const [mounted, setMounted] = useState(false);
   if (mounted) {
     firebaseCloudMessaging.onMessage();
@@ -78,27 +80,37 @@ const AuthContext = ({ children }) => {
 
   useEffect(() => {
     // return () => {
-		if(router.pathname !== '/compare-search'){
-		  dispatch(removeAllComparePopUpItem({}))
-		  console.log("clearn")
-		}
-		console.log(router)
-	//   }
-  },[router.pathname])
+    if (router.pathname !== "/compare-search") {
+      dispatch(removeAllComparePopUpItem({}));
+      console.log("clearn");
+    }
+    console.log(router);
+    //   }
+  }, [router.pathname]);
 
   useEffect(() => {
-    if (router.pathname !== "/search" && router.pathname !== "/projectTNR" && router.pathname !== "/compare-search" && router.pathname !== "/products" && router.pathname !== "/compare-product" && router.pathname !== "/favorite-products") {
+    if (
+      router.pathname !== "/search" &&
+      router.pathname !== "/projectTNR" &&
+      router.pathname !== "/compare-search" &&
+      router.pathname !== "/products" &&
+      router.pathname !== "/compare-product" &&
+      router.pathname !== "/favorite-products"
+    ) {
       localStorage.removeItem("listDataLSProvince");
       localStorage.removeItem("listParamsLSProvince");
       localStorage.removeItem("listDataLSProjectType");
       localStorage.removeItem("listParamsLSProjectType");
       localStorage.removeItem("listDataLSProject");
       localStorage.removeItem("listParamsIdProject");
+	  localStorage.removeItem("typeProduct"),
+	  localStorage.removeItem("typeSaleProduct")
+
     }
-	if(router.pathname !== '/payment-cart'){
-		localStorage.removeItem("IdTCBG");
-		localStorage.removeItem("PaymentSelect");
-	}
+    if (router.pathname !== "/payment-cart") {
+      localStorage.removeItem("IdTCBG");
+      localStorage.removeItem("PaymentSelect");
+    }
   }, [router]);
 
   const loginRequest = async (params: LoginParams) => {
@@ -135,6 +147,32 @@ const AuthContext = ({ children }) => {
     SessionStorage.remove("accessToken", forceUpdate);
     SessionStorage.remove("refreshToken");
     const deviceToken = await LocalStorage.get("fcm_token");
+    dispatch(
+      setData({
+        ...data,
+        paymentIdentityInfos: [
+          {
+            mainUser: 1,
+            customerTypeId: "",
+            vocativeId: "",
+            fullname: "",
+            dob: "",
+            phoneNumber: "",
+            email: "",
+            idNumber: "",
+            issueDate: "",
+            issuePlace: "",
+            permanentAddress: "",
+            contactAddress: "",
+            province: "",
+            district: "",
+            provinceContactName: "",
+            districtContactName: "",
+            communeContactName: "",
+          },
+        ],
+      })
+    );
     await sendNotificationToken({
       deviceToken: deviceToken as string,
       action: 0,

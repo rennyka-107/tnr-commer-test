@@ -27,10 +27,11 @@ import useCustomType from "hooks/useCustomtype";
 import useForceUpdate from "hooks/useForceUpdate";
 import useNotification from "hooks/useNotification";
 import useProvinces from "hooks/useProvinces";
+import isEqual from "lodash.isequal";
 import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { imageUrl, InputProps, validateLine } from "utils/constants";
+import { InputProps, validateLine } from "utils/constants";
 import { isValidFileImage } from "utils/helper";
 import Regexs from "utils/Regexs";
 import * as yup from "yup";
@@ -115,6 +116,7 @@ const EditProfile = () => {
   const { dataProvinces } = useProvinces();
   const [loadingImg, setLoadingImg] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [initialValue, setInitialValue] = useState<any>();
 
   const [convertProvinType, setConvertProvinType] = useState<Option[]>([]);
 
@@ -145,7 +147,16 @@ const EditProfile = () => {
       .matches(Regexs.phone, "Số điện thoại không đúng")
       .required(validateLine.required)
       .default(""),
-    idNumber: yup.string().required(validateLine.required).nullable(),
+    idNumber: yup
+      .string()
+      .nullable()
+      .trim(validateLine.trim)
+      .strict(true)
+      .max(12, "Số CMND quá dài")
+      .min(12, "Số CMND quá ngắn")
+      .matches(Regexs.phone, "Số CMND không đúng")
+      .required(validateLine.required)
+      .default(""),
     email: yup
       .string()
       .nullable()
@@ -182,7 +193,7 @@ const EditProfile = () => {
 
   const resetAsyncForm = useCallback(
     async (data) => {
-      reset({
+      const newData = {
         customerTypeId: data.customerTypeId,
         appellation: data.appellation,
         fullname: data.fullname,
@@ -195,9 +206,6 @@ const EditProfile = () => {
         domicile: data.domicile,
         address: data.address,
         avatar: data.avatar,
-        avatarThumbnailUrl: imageUrl + data.avatarThumbnailUrl,
-        attachPaper: imageUrl + data.attachPaper,
-        attachPaperThumbnailUrl: imageUrl + data.attachPaperThumbnailUrl,
         district: data?.district ? data?.district : "",
         province: data?.province ? data?.province : "",
         businessRegistration: data?.businessRegistration,
@@ -212,7 +220,9 @@ const EditProfile = () => {
         communeContactName: data?.communeContactName
           ? data?.communeContactName
           : "",
-      });
+      };
+      reset(newData);
+      setInitialValue(newData);
     },
 
     [reset]
@@ -225,26 +235,32 @@ const EditProfile = () => {
   }, [detailUser]);
 
   const uploadToClient = async (event) => {
-    if (
-      isValidFileImage(event.target.value, () => {
-        notification({
-          error: "Không đúng định dạng ảnh!",
-        });
-      })
-    ) {
+    // if (
+    //   isValidFileImage(event.target.value, () => {
+    //     notification({
+    //       error: "Không đúng định dạng ảnh!",
+    //     });
+    //   })
+    // ) {
       let formData = new FormData();
       formData.append("file", event.target.files[0]);
       formData.append("category", "avatar");
       setLoadingImg(true);
       postImage(formData)
-        .then((res) =>
-          setValue("avatar", imageUrl + res?.responseData?.dataUrl)
+        .then((res) => {
+          setValue("avatar", res?.responseData?.dataUrl);
+        })
+        .catch((err) =>
+          notification({
+            title: "Cập nhật ảnh đại diện",
+            severity: "error",
+            message: "Có lỗi xảy ra!",
+          })
         )
-        .catch((err) => err)
         .finally(() => {
           setLoadingImg(false);
         });
-    }
+    // }
   };
 
   const uploadFile = async (file) => {
@@ -252,21 +268,37 @@ const EditProfile = () => {
       notification({
         severity: "error",
         message: "File không tồn tại",
-        title: "Upload file",
+        title: "Cập nhật giấy CN ĐKDN",
       });
     }
     let formDataFile = new FormData();
     formDataFile.append("imageFile", file);
     postFile(formDataFile)
       .then((res) => {
-        notification({
-          severity: "success",
-          title: "Cập nhật thông tin hồ sơ",
-          message: res.responseMessage,
-        });
+        if (res.responseCode === "00") {
+          notification({
+            severity: "success",
+            title: "Cập nhật giấy CN ĐKDN",
+            message: res.responseMessage,
+          });
+        } else {
+          setValue("fileImages", "");
+          notification({
+            severity: "error",
+            title: "Cập nhật giấy CN ĐKDN",
+            message: res.responseMessage,
+          });
+        }
         forceUpdate();
       })
-      .catch((err) => err);
+      .catch((err) => {
+        setValue("fileImages", "");
+        notification({
+          severity: "success",
+          title: "Cập nhật giấy CN ĐKDN",
+          message: "Có lỗi xảy ra",
+        });
+      });
   };
 
   const onSubmit = async (values: any) => {
@@ -283,7 +315,6 @@ const EditProfile = () => {
       domicile: values.domicile,
       address: values.address,
       avatar: values.avatar,
-      avatarThumbnailUrl: values.avatarThumbnailUrl,
       attachPaper: document.dataUrl,
       district: values.district,
       province: values.province,
@@ -305,9 +336,19 @@ const EditProfile = () => {
             message: response.responseMessage,
           });
           forceUpdate();
+        } else {
+          notification({
+            severity: "error",
+            title: "Cập nhật hồ sơ",
+            message: response.responseMessage,
+          });
         }
       } catch (error) {
-        console.log(error);
+        notification({
+          severity: "error",
+          title: "Cập nhật hồ sơ",
+          message: "Có lỗi xảy ra!",
+        });
       } finally {
         setLoading(false);
       }
@@ -493,6 +534,7 @@ const EditProfile = () => {
                     type="file"
                     style={{ display: "none" }}
                     onChange={(event) => {
+                      console.log(event.target.files[0], "123")
                       setValue("fileImages", event?.target?.files?.[0]);
                       uploadFile(event?.target?.files?.[0]);
                     }}
@@ -879,7 +921,7 @@ const EditProfile = () => {
             <StyledEditProfileBtn
               type="submit"
               sx={{ my: 2 }}
-              disabled={loading}
+              disabled={loading || isEqual(initialValue, watch())}
             >
               {!loading ? (
                 <Text18Styled color={"#fff"}>Cập nhật</Text18Styled>

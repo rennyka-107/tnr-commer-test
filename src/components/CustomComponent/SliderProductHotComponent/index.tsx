@@ -100,7 +100,9 @@ export default function SliderProductHotComponent() {
       });
     };
 
-	// console.log("productTopByOutStanding",productTopByOutStanding)
+  console.log("productTopByOutStanding", productTopByOutStanding);
+
+  // console.log("productTopByOutStanding",productTopByOutStanding)
 
   return (
     <WrapSlide>
@@ -149,7 +151,7 @@ export default function SliderProductHotComponent() {
                 ticketCard={item.category}
                 projectTypeCode={item.projectTypeCode}
                 favouriteStatus={item.favouriteStatus}
-				build={item.build}
+                build={item.build}
                 minFloor={item.minFloor}
                 maxFloor={item.maxFloor}
                 onClick={() => addToCart(item.id)}

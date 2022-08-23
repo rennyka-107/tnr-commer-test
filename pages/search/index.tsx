@@ -55,6 +55,8 @@ const Search = () => {
     projectTypeIdList: [],
     projectIdList: [],
     projectCategoryIdList: [],
+	isPayment:0,
+	sortType: 0
   });
   const [loading, setLoading] = useState(false);
   const [searchAction, setSearchAction] = useState(false);
@@ -71,6 +73,8 @@ const Search = () => {
       const listProvince = localStorage?.getItem("listParamsLSProvince");
       const listProjectType = localStorage?.getItem("listParamsLSProjectType");
       const listParamsIdProject = localStorage?.getItem("listParamsIdProject");
+	  const typeProduct = localStorage?.getItem("typeProduct");
+      const typeSaleProduct = localStorage?.getItem("typeSaleProduct");
       if (router.isReady === true) {
         setSearchBody({
           provinceId: provinceId ? provinceId : "",
@@ -89,6 +93,8 @@ const Search = () => {
               ? JSON.parse(listParamsIdProject)
               : [],
           textSearch: textSearch ? textSearch : "",
+		  isPayment: JSON.parse(typeSaleProduct),
+		  sortType: JSON.parse(typeProduct)
         });
       }
     }
@@ -102,6 +108,7 @@ const Search = () => {
   };
 
   const fetchAdvandedSearchList = async () => {
+
     try {
       if (router.isReady === true) {
         setLoading(false);

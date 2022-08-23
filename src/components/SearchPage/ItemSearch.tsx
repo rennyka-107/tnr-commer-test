@@ -1,6 +1,5 @@
 import _ from "lodash";
 
-import Product2 from "../../../public/images/product2.png";
 import styled from "@emotion/styled";
 import { searchLocationResponse } from "interface/searchIF";
 import ProductCardSearch from "@components/CustomComponent/ItemProductCard/ProductCardSearch";
@@ -9,7 +8,6 @@ import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../store/store";
 import { getComparePopUpItem } from "../../../store/productCompareSlice";
-import LocalStorage from "utils/LocalStorage";
 import useNotification from "hooks/useNotification";
 import { useState } from "react";
 import ConfirmDialog from "./ConfirmDialog";

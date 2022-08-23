@@ -11,6 +11,11 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+type TypeProps = {
+	setTypeProduct: (value: string) => void;
+	setTypeSaleProduct: (value: string) => void
+}
+
 const TextStyled = styled(Typography)`
   font-family: "Roboto";
   font-style: normal;
@@ -143,7 +148,21 @@ const TextRadioStyled = styled(Typography)`
   color: #1b3459;
 `;
 
-const SwitchComponent = () => {
+const SwitchComponent = ({setTypeProduct,setTypeSaleProduct}: TypeProps) => {
+	const typeProduct = localStorage?.getItem("typeProduct");
+	const typeSaleProduct = localStorage?.getItem("typeSaleProduct");
+	
+	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setTypeProduct((event.target as HTMLInputElement).value);
+	  };
+	
+	  const handleChangeTop = (e: any) => {
+		if(e.target.checked === true){
+			setTypeSaleProduct('0')
+		}else{
+			setTypeSaleProduct('1')
+		}
+	  }
   const BpRadio = (props: RadioProps) => {
     return (
       <Radio
@@ -172,38 +191,39 @@ const SwitchComponent = () => {
         }}
       >
         <TextStyled>Sản phẩm đang mở bán lên đầu</TextStyled>
-        <IOSSwitch defaultChecked />
+        <IOSSwitch defaultChecked={JSON.parse(typeSaleProduct) ===  '0' ? true : false} onChange={handleChangeTop}/>
       </div>
       {/* <div style={{ padding: "15px 20px 15px 20px" }}> */}
         <FormControl style={{width: '100%'}}>
           <RadioGroup
-            defaultValue="female"
+            defaultValue={JSON.parse(typeProduct)}
             aria-labelledby="demo-customized-radios"
             name="customized-radios"
+			onChange={handleChange}
           >
             <div style={{ borderBottom: "1px solid #F2F2F5" ,  padding: "5px 20px"}}>
               <FormControlLabel
-                value="female"
+                value="0"
                 control={<BpRadio />}
                 label={<TextRadioStyled>Mới nhất</TextRadioStyled>}
               />
             </div>
 			<div style={{ borderBottom: "1px solid #F2F2F5" ,  padding: "5px 20px"}}>
             <FormControlLabel
-              value="male"
+              value="1"
               control={<BpRadio />}
               label={<TextRadioStyled>Cũ nhất</TextRadioStyled>}
             />
 			</div>
 			 <div style={{ borderBottom: "1px solid #F2F2F5" ,  padding: "5px 20px"}}>
             <FormControlLabel
-              value="other"
+              value="2"
               control={<BpRadio />}
               label={<TextRadioStyled>Giá cao - thấp</TextRadioStyled>}
             /></div>
 			 <div style={{ borderBottom: "1px solid #F2F2F5" ,  padding:"5px 0px 5px 20px"}}>
             <FormControlLabel
-              value="other2"
+              value="3"
               control={<BpRadio />}
               label={<TextRadioStyled>Giá thấp - cao</TextRadioStyled>}
             /></div>

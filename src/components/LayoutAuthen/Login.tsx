@@ -58,6 +58,26 @@ export interface LoginParams {
   remember?: any;
 }
 
+const validationSchema = yup.object().shape({
+  username: yup
+    .string()
+    .required(validateLine.required)
+    .trim(validateLine.trim)
+    .strict(true)
+    .max(255, "Tài khoản không được chứa quá 255 ký tự")
+    .default(""),
+  password: yup
+    .string()
+    .required(validateLine.required)
+    .trim(validateLine.trim)
+    .strict(true)
+    .min(8, "Mật khẩu không được chứa ít hơn 8 ký tự")
+    .max(255, "Mật khẩu không được chứa quá 255 ký tự")
+    // .matches(Regexs.password, validateLine.regexPassword)
+    .default(""),
+  remember: yup.boolean().default(false),
+});
+
 const Login = () => {
   const { login, isAuthenticated } = useAuth();
   const [loading, setLoading] = useState(false);
@@ -65,26 +85,6 @@ const Login = () => {
   const captchaRef = useRef<ReCAPTCHA>(null);
   const [token, setToken] = useState<string | null>("de tam"); //bat capcha thi set token = null
   const [verifySuccess, setVerifySuccess] = useState<boolean>(true); //bat capcha thi setVerifySuccess = false∏
-
-  const validationSchema = yup.object().shape({
-    username: yup
-      .string()
-      .trim(validateLine.trim)
-      .strict(true)
-      .max(255, "Tài khoản không được chứa quá 255 ký tự")
-      .required(validateLine.required)
-      .default(""),
-    password: yup
-      .string()
-      .trim(validateLine.trim)
-      .strict(true)
-      .min(8, "Mật khẩu không được chứa ít hơn 8 ký tự")
-      .max(255, "Mật khẩu không được chứa quá 255 ký tự")
-      // .matches(Regexs.password, validateLine.regexPassword)
-      .required(validateLine.required)
-      .default(""),
-    remember: yup.boolean().default(false),
-  });
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -99,7 +99,7 @@ const Login = () => {
     resolver: yupResolver(validationSchema),
     defaultValues: validationSchema.getDefault(),
   });
-
+  
   const onSubmit = async (values) => {
     if (!token) return;
 

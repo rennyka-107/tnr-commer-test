@@ -185,6 +185,9 @@ const SearchPage = ({
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [openModal, setOpenModal] = useState(false);
   const [placement, setPlacement] = useState<PopperPlacementType>();
+  const [typeProduct, setTypeProduct] = useState('0');
+  const [typeSaleProduct, setTypeSaleProduct] = useState('0')
+
   const {
     textSearch,
     provinceId,
@@ -204,6 +207,8 @@ const SearchPage = ({
     priceTo: (priceTo as string) ?? "20",
     areaFrom: (areaFrom as string) ?? "30",
     areaTo: (areaTo as string) ?? "200",
+	// isPayment: 0,
+	// sortType: 0
     // provinceIdList: [],
     // projectTypeIdList: [],
     // projectIdList: [],
@@ -451,7 +456,8 @@ const SearchPage = ({
       JSON.stringify(listDataLSProject)
     );
     localStorage.setItem("listParamsIdProject", JSON.stringify(listIdProject));
-
+	localStorage.setItem("typeProduct", JSON.stringify(typeProduct));
+	localStorage.setItem("typeSaleProduct", JSON.stringify(typeSaleProduct));
     router.push(
       `/search?Type=Advanded&&textSearch=${filterSearch.textSearch}&&provinceId=${filterSearch.provinceId}&&projectTypeId=${filterSearch.projectTypeId}&&projectId=${filterSearch.projectId}&&priceFrom=${filterSearch.priceFrom}&&priceTo=${filterSearch.priceTo}&&areaFrom=${filterSearch.areaFrom}&&areaTo=${filterSearch.areaTo}`
     );
@@ -474,6 +480,9 @@ const SearchPage = ({
     localStorage.removeItem("listParamsLSProjectType");
     localStorage.removeItem("listDataLSProject");
     localStorage.removeItem("listParamsIdProject");
+	localStorage.removeItem("typeProduct"),
+	localStorage.removeItem("typeSaleProduct")
+	
     router.push(
       `/search?Type=Advanded&&textSearch=&&provinceId=&&projectTypeId=&&projectId=&&priceFrom=&&priceTo=&&areaFrom=0&&areaTo=200`
     );
@@ -730,7 +739,7 @@ const SearchPage = ({
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={350}>
             <PaperStyled>
-              <SwitchComponent />
+              <SwitchComponent setTypeProduct={setTypeProduct} setTypeSaleProduct={setTypeSaleProduct}/>
             </PaperStyled>
           </Fade>
         )}

@@ -28,6 +28,7 @@ import ControllerSelectAutoComplete from "@components/Form/ControllerSelectAutoC
 import DistricSelect from "@components/Form/DistrictSelect";
 import CommuneSelect from "@components/Form/CommuneSelect";
 import useProvinces from "hooks/useProvinces";
+import Regexs from "utils/Regexs";
 
 type Props = {
   onClose: Function;
@@ -66,17 +67,24 @@ const validationSchema = yup.object().shape({
   dob: yup.string().required(validateLine.required).default(""),
   phoneNumber: yup
     .string()
-    .max(10, "Không được vượt quá 10 ký tự")
     .required(validateLine.required)
+    .matches(Regexs.phone, "Số điện thoại không đúng")
+    .max(10, "Số điện thoại không được vượt quá 10 số")
     .default(""),
   email: yup
     .string()
+    .email("Không đúng định dạng email")
     .max(255, "Không được vượt quá 255 ký tự")
     .required(validateLine.required)
+    .trim(validateLine.trim)
     .default(""),
   idNumber: yup
     .string()
-    .max(255, "Không được vượt quá 255 ký tự")
+    .trim(validateLine.trim)
+    .strict(true)
+    .max(12, "Số CMND quá dài")
+    .min(12, "Số CMND quá ngắn")
+    .matches(Regexs.phone, "Số CMND không đúng")
     .required(validateLine.required)
     .default(""),
   issuePlace: yup
@@ -139,7 +147,6 @@ const AddInfoCustom = (props: Props) => {
     }
   }, [data, idNumber]);
   const handleOnSubmit = (values) => {
-    
     const { paymentIdentityInfos } = data;
     if (!isEmpty(idNumber)) {
       let valid = true;

@@ -307,7 +307,7 @@ const ModalRegister = (props: PropsI) => {
       .required(validateLine.required)
       .min(3, "Họ tên không được chứa ít hơn 3 ký tự")
       .matches(validateVietnameseName(), "Họ và tên không đúng định dạng")
-      .max(255)
+      .max(255, "Tên không được quá 255 ký tự")
       .default(""),
     email: yup
       .string()
@@ -322,7 +322,7 @@ const ModalRegister = (props: PropsI) => {
       .strict(true)
       .matches(Regexs.phone, "Số điện thoại không đúng")
       .min(10, "Số điện thoại không được dưới 10 số")
-      .max(12, "Số điện thoại không được nhiều hơn 12 số")
+      .max(10, "Số điện thoại không được nhiều hơn 10 số")
       .required(validateLine.required)
       .default(""),
     date: yup.string().required("không được bỏ trống"),

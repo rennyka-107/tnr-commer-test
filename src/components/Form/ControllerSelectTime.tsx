@@ -8,6 +8,7 @@ import {
   Select,
   SelectProps,
 } from "@mui/material";
+import { makeStyles } from "@mui/styles";
 import { isEmpty } from "lodash";
 import React from "react";
 import {
@@ -60,6 +61,12 @@ const ErrorText = styled(FormHelperText)`
   color: red;
 `;
 
+const useStyles = makeStyles(theme => ({
+	menuPaper: {
+	  maxHeight: 400
+	}
+  }));
+
 const ControllerSelectTime = <T extends FieldValues>(props: Props<T>) => {
   const {
     width,
@@ -77,7 +84,7 @@ const ControllerSelectTime = <T extends FieldValues>(props: Props<T>) => {
     renderItemSelect,
     ...rest
   } = props;
-
+  const classes = useStyles();
   const clearSelect = () => {
     if (multiple) {
       setValue(name, []);
@@ -94,7 +101,7 @@ const ControllerSelectTime = <T extends FieldValues>(props: Props<T>) => {
   };
 
   return (
-    <Container style={{ width: width ?? "100%" }}>
+    <Container style={{ width: width ?? "100%",}}>
       {label && (
         <LabelSpan color={labelColor}>
           {label}
@@ -109,7 +116,8 @@ const ControllerSelectTime = <T extends FieldValues>(props: Props<T>) => {
                 className = className.replace("MuiSelect-iconOpen", "");
                 return <IconSelectDatLich />;
               }}
-              value={field?.value}
+			  style={{maxHeight: 300}}
+
               inputProps={{
                 "aria-label": "Without label",
                 ...rest.inputProps,
@@ -126,6 +134,7 @@ const ControllerSelectTime = <T extends FieldValues>(props: Props<T>) => {
                 );
               }}
               displayEmpty
+			  MenuProps={{ classes: { paper: classes.menuPaper } }}
               multiple={multiple}
               {...field}
               {...rest}

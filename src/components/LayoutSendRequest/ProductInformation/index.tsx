@@ -13,6 +13,9 @@ const ProductInformation = ({ orderDetail }: Props) => {
   const { production } = orderDetail;
   const { apartmentModel } = production;
 
+  console.log("production", production);
+  
+
   return (
     <Box
       sx={{

@@ -164,8 +164,12 @@ const validationSchema = yup.object().shape({
     .default(""),
   idNumber: yup
     .string()
+    .trim(validateLine.trim)
+    .strict(true)
+    .max(12, "Số CMND quá dài")
+    .min(12, "Số CMND quá ngắn")
+    .matches(Regexs.phone, "Số CMND không đúng")
     .required(validateLine.required)
-    .max(255, "Không được vượt quá 255 ký tự")
     .default(""),
   issuePlace: yup
     .string()
@@ -409,6 +413,9 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
   useEffect(() => {
     getCustomerTypes();
     fetchPaymentMethod();
+    return () => {
+      dispatch(setData({ ...data, paymentStatus: 0 }));
+    };
   }, []);
 
   function sendInforToMsb() {
@@ -582,7 +589,9 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
       listPromotion: !isEmpty(productItem) ? productItem?.ListPromotion : [],
       referenceCode,
       priceId: !isEmpty(productItem) ? productItem?.priceId : null,
-      scheduleId: !isEmpty(productItem.ListSchedule) ? productItem?.ListSchedule[0]["ScheduleID"] : "",
+      scheduleId: !isEmpty(productItem.ListSchedule)
+        ? productItem?.ListSchedule[0]["ScheduleID"]
+        : "",
     };
     if (!isEmpty(uploadMedia) && !isEmpty(transactionCode)) {
       const data = new FormData();
@@ -1406,6 +1415,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                   border={"1px solid #c7c9d9"}
                   sx={{
                     background: "#ea242a",
+                    color: "white",
                     "&:hover": {
                       background: "#FEC83C !important",
                       // box-shadow: 4px 8px 24px #f2f2f5;

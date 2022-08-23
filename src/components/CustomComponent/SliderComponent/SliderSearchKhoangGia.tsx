@@ -40,6 +40,12 @@ const SliderSyled = styled(Slider)`
   .MuiSlider-valueLabelCircle{
 	padding: 0px 0px px 0px;
   }
+  .MuiSlider-thumb[data-index="0"] .MuiSlider-valueLabelOpen{
+    left: -10px;
+  }
+  .MuiSlider-thumb[data-index="1"] .MuiSlider-valueLabelOpen{
+    right: -10px;
+  }
 `;
 const CustomTittle = styled(Typography)`
   font-family: "Roboto";
@@ -51,7 +57,9 @@ const CustomTittle = styled(Typography)`
 
   color: #ffffff;
 `;
+const TextValueStyled = styled.span`
 
+`
 
 const minDistance = 1;
 const marks = [
@@ -61,7 +69,7 @@ const marks = [
 	},
 	{
 	  value: 20,
-	  label: '20°C',
+	  label: '20 tỷ',
 	},
   ];
 export default function SliderSearchKhoangGia({label,numberMin,numberMax,unit,onChange,value}) {
@@ -92,6 +100,7 @@ export default function SliderSearchKhoangGia({label,numberMin,numberMax,unit,on
   return (
     <Box sx={{ width: 297 }}>
       <CustomTittle>{label}</CustomTittle>
+	 
       <SliderSyled
         getAriaLabel={() => "Minimum distance"}
         value={value}
@@ -100,6 +109,7 @@ export default function SliderSearchKhoangGia({label,numberMin,numberMax,unit,on
         onChange={onChange}
         valueLabelDisplay="on"
         valueLabelFormat={valuetext}
+
         disableSwap
       />
     </Box>

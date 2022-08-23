@@ -52,6 +52,9 @@ const initialState: InitialState = {
         contactAddress: "",
         province: "",
         district: "",
+        provinceContactName: "",
+        districtContactName: "",
+        communeContactName: "",
       },
     ],
     quotationRealt: {
@@ -98,7 +101,12 @@ export const paymentSlice = createSlice({
   },
 });
 
-export const { setListPayment, setQrCode, setData, setUploadMedia, setReferenceCode } =
-  paymentSlice.actions;
+export const {
+  setListPayment,
+  setQrCode,
+  setData,
+  setUploadMedia,
+  setReferenceCode,
+} = paymentSlice.actions;
 
 export default paymentSlice.reducer;

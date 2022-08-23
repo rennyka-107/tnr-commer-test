@@ -1,16 +1,12 @@
 import ContainerProduct from "@components/Container/ContainerProduct";
 import FlexContainer from "@components/CustomComponent/FlexContainer";
-import PaginationComponent from "@components/CustomComponent/PaginationComponent";
-import Row from "@components/CustomComponent/Row";
-import LoadingComponent from "@components/LoadingComponent";
 import Page from "@layouts/Page";
 import { Box } from "@mui/system";
 import useProjectRecenly from "hooks/useProjectRecenly";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import { useDispatch } from "react-redux";
-import { getProjectRecenly } from "../api/profileApi";
 
 interface ListRecentlyViewProps {}
 

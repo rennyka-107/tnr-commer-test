@@ -400,7 +400,7 @@ export default function ModalAdvanSearch() {
                 <BoxStyled
                   style={{
                     justifyContent: "space-between",
-                    padding: "0px 75px 40px 48px",
+                    padding: "0px 98px 40px 48px",
                     alignItems: "center",
                   }}
                 >

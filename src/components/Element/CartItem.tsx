@@ -7,6 +7,8 @@ import {
   IconFrame,
   IconHeartProduct,
 } from "@components/Icons";
+import IconChuaXay from "@components/Icons/IconChuaXay";
+import IconCoXay from "@components/Icons/IconCoXay";
 import styled from "@emotion/styled";
 import { Button, CardContent, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
@@ -25,7 +27,8 @@ interface Props {
 }
 
 const CartItem = ({ children, item }: Props) => {
-  const { thumbnail, ticketCard, id, activeFavourite, favouriteStatus } = item;
+  const { projectAvatar, ticketCard, id, activeFavourite, favouriteStatus } =
+    item;
 
   const { addProductToFavouriteFunction } = useFavourite();
 
@@ -92,7 +95,7 @@ const CartItem = ({ children, item }: Props) => {
       )}
       <ImageWithHideOnError
         className="logo"
-        src={thumbnail}
+        src={projectAvatar}
         fallbackSrc={Product3}
         height={190}
         width={350}
@@ -110,24 +113,32 @@ const CartItem = ({ children, item }: Props) => {
 export default CartItem;
 
 CartItem.Title = ({ item }: Props) => {
-  const { title, subTitle, projectName, id } = item;
+  const { title, location, name, id, projectName } = item;
   const router = useRouter();
 
   return (
     <div style={{ marginBottom: 7 }}>
       <span onClick={() => router.push(`/products/${id}`)}>
         <TextTitleStyled style={{ marginBottom: 9 }}>{title}</TextTitleStyled>
-        <TextProjectStyled>{projectName}</TextProjectStyled>
+        <TextProjectStyled>{name}</TextProjectStyled>
       </span>
-      <TextitleBottom>{subTitle ? subTitle : "N/A"}</TextitleBottom>
+      <TextitleBottom>{projectName ? projectName : "N/A"}</TextitleBottom>
+      <TextitleBottom>{location ? location : "N/A"}</TextitleBottom>
     </div>
   );
 };
 
 CartItem.GeneralInfo = ({ children, item }: Props) => {
-  const { dataItem, projectTypeCode, minFloor, maxFloor } = item;
+  const { dataItem, projectTypeCode, minFloor, maxFloor, build } = item;
   return (
     <CenterIntemWrap>
+      <WrapItemCenter>
+        <IconFrame />
+        <TextCenterItem>
+          {item?.landArea ? item.landArea : "N/A"} m²
+        </TextCenterItem>
+      </WrapItemCenter>
+
       {projectTypeCode === "2" ? (
         <>
           <WrapItemCenter>
@@ -139,20 +150,24 @@ CartItem.GeneralInfo = ({ children, item }: Props) => {
         </>
       ) : (
         <>
-          <WrapItemCenter>
-            <FloorIcon />
-            <TextFloorStyled>min</TextFloorStyled>
-            <TextCenterItem>
-              <TextFloorValue>{minFloor} tầng</TextFloorValue>
-            </TextCenterItem>
-          </WrapItemCenter>
+          {build ? (
+            <WrapItemCenter>
+              <IconCoXay />
+              <TextCenterItem>Có xây</TextCenterItem>
+            </WrapItemCenter>
+          ) : (
+            <WrapItemCenter>
+              <IconChuaXay />
+              <TextCenterItem>Chưa xây</TextCenterItem>
+            </WrapItemCenter>
+          )}
         </>
       )}
 
       <WrapItemCenter>
-        <IconFrame />
+        <IconCompass /> 
         <TextCenterItem>
-          {item?.landArea ? item.landArea : "N/A"} m²
+          {item?.doorDirection ? item.doorDirection : "N/A"}
         </TextCenterItem>
       </WrapItemCenter>
 
@@ -167,24 +182,19 @@ CartItem.GeneralInfo = ({ children, item }: Props) => {
         </>
       ) : (
         <>
-          <>
+          {build ? (
             <WrapItemCenter>
               <FloorIcon />
-              <TextFloorStyled>max</TextFloorStyled>
+              {/* <TextFloorStyled>max</TextFloorStyled> */}
               <TextCenterItem>
-                <TextFloorValue>{maxFloor} tầng</TextFloorValue>
+                <TextFloorValue>{`${maxFloor ? `${maxFloor} tầng` : "N/A"}`} </TextFloorValue>
               </TextCenterItem>
             </WrapItemCenter>
-          </>
+          ) : (
+            <></>
+          )}
         </>
       )}
-
-      <WrapItemCenter>
-        <IconCompass />
-        <TextCenterItem>
-          {item?.doorDirection ? item.doorDirection : "N/A"}
-        </TextCenterItem>
-      </WrapItemCenter>
     </CenterIntemWrap>
   );
 };
@@ -194,7 +204,7 @@ CartItem.ContentWrap = ({ children }: Props) => {
 };
 
 CartItem.Price = ({ children, item }: Props) => {
-  const { unitPrice, totalPrice } = item;
+  const { unitPrice, totalPrice, projectTypeCode } = item;
   return (
     <Box sx={{ mt: 2 }}>
       <StyledPrice>
@@ -217,31 +227,35 @@ CartItem.Price = ({ children, item }: Props) => {
               flex: 2,
             }}
           >
-            {totalPrice ? totalPrice : "N/A"}
+            {totalPrice ? `${totalPrice}đ` : "N/A"}
           </Box>
         </Box>
-        <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
-          <Box
-            sx={{
-              color: "#1B3459",
-              fontSize: "14px",
-              fontWeight: 400,
-              flex: 2,
-            }}
-          >
-            Đơn giá thông thuỷ
+        {projectTypeCode === "1" ? (
+          <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}></Box>
+        ) : (
+          <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
+            <Box
+              sx={{
+                color: "#1B3459",
+                fontSize: "14px",
+                fontWeight: 400,
+                flex: 2,
+              }}
+            >
+              Đơn giá thông thuỷ
+            </Box>
+            <Box
+              sx={{
+                color: "#D60000;",
+                fontSize: "12px",
+                fontWeight: 400,
+                flex: 2,
+              }}
+            >
+              {unitPrice}đ/m2
+            </Box>
           </Box>
-          <Box
-            sx={{
-              color: "#D60000;",
-              fontSize: "12px",
-              fontWeight: 400,
-              flex: 2,
-            }}
-          >
-            {unitPrice}đ/m2
-          </Box>
-        </Box>
+        )}
       </StyledPrice>
     </Box>
   );
@@ -356,7 +370,7 @@ const TextitleBottom = styled(Typography)`
 
   /* Brand/Text */
 
-  color: #0e1d34;
+  color: #8190a7;
 `;
 const LineStyled = styled.div`
   width: 302px;

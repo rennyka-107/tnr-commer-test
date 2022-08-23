@@ -170,7 +170,7 @@ const ItemCardFavouriteProduct = ({ data }: ProductsProps) => {
                     product.name,
                     product.productionId
                   )}
-                  onClick={() => addToCart(product.id)}
+                  onClick={() => addToCart(product.productionId)}
                   buyDisabled={product.paymentStatus !== 2}
                 />
               ))}
