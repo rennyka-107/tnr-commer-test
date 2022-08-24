@@ -29,6 +29,13 @@ import useNotification from "hooks/useNotification";
 import useOnClickOutside from "hooks/useOnClickOutside";
 import LoadingComponent from "@components/LoadingComponent";
 import { getOrderByUser } from "@service/Profile";
+import ControllerDatePicker from "@components/Form/ControllerDatePicker";
+import ControllerDatePickerThamQuan from "@components/Form/ControllerDatePickerThamQuan";
+import ControllerDateTimeDatLich from "@components/Form/ControllerDateTimeDatLich";
+import ControllerInputDatLich from "@components/Form/ControllerInputDatLich";
+import ControllerReactDatePicker from "@components/Form/ControllerReactDatePicker";
+import DateFns from "utils/DateFns";
+import { format, parse } from "date-fns";
 
 const validationSchema = yup.object().shape({
   fullname: yup.string().required(validateLine.required).default(""),
@@ -110,6 +117,8 @@ const TransferRequest = (props: Props) => {
 
     const response = await getOrderByUser(data);
     const contacts = response?.responseData ?? [];
+    console.log("contacts", contacts);
+
     const contact = contacts.find((contact) => contact.bookingCode === txcode);
     setContact(contact);
   };
@@ -121,6 +130,7 @@ const TransferRequest = (props: Props) => {
     const newPerson = {
       onyFeId: nanoid(),
       ...data,
+      issueDate: DateFns.changeFormatDate(data.issueDate),
     };
 
     setListPersonAdded([...listPersonAdded, newPerson]);
@@ -141,6 +151,8 @@ const TransferRequest = (props: Props) => {
   }, [activePerson, reset]);
 
   const handleClickBtn = () => {
+    console.log("contactcontact", contact);
+
     if (!contact) return;
 
     const hasMainUserDate = listPersonAdded.map((person, index) => ({
@@ -206,7 +218,7 @@ const TransferRequest = (props: Props) => {
     }
   };
 
-  useOnClickOutside(addingBtnRef, handleClickOutSide);
+  // useOnClickOutside(addingBtnRef, handleClickOutSide);
 
   return (
     <Box>
@@ -252,80 +264,78 @@ const TransferRequest = (props: Props) => {
             {/* {isAddingPerson && <AddPerson onAddPerson={onAddPerson} />} */}
           </Box>
 
-          <Box
-            sx={{
-              mt: 4,
-              display: "flex",
-              flexDirection: "column",
-              rowGap: 2,
-            }}
-          >
-            <ControllerTextField
-              variant="outlined"
-              hiddenLabel
-              name="fullname"
-              control={control}
-              fullWidth
-              label="Họ và tên"
-              required
-              focused={isAddingPerson}
-              disabled={Boolean(activePerson)}
-            />
-            <ControllerTextField
-              variant="outlined"
-              hiddenLabel
-              name="email"
-              control={control}
-              fullWidth
-              label="Email"
-              required
-              disabled={Boolean(activePerson)}
-            />
-            <ControllerTextField
-              variant="outlined"
-              hiddenLabel
-              name="phoneNumber"
-              control={control}
-              fullWidth
-              label="Số điện thoại"
-              required
-              disabled={Boolean(activePerson)}
-            />
-            <ControllerTextField
-              variant="outlined"
-              hiddenLabel
-              name="idNumber"
-              control={control}
-              fullWidth
-              label="Số căn cước công dân"
-              required
-              disabled={Boolean(activePerson)}
-            />
-            <ControllerTextField
-              variant="outlined"
-              hiddenLabel
-              name="issueDate"
-              control={control}
-              fullWidth
-              label="Ngày cấp"
-              required
-              disabled={Boolean(activePerson)}
-            />
-            <ControllerTextField
-              variant="outlined"
-              hiddenLabel
-              name="issuePlace"
-              control={control}
-              fullWidth
-              label="Nơi cấp"
-              required
-              disabled={Boolean(activePerson)}
-            />
-            <Text14Styled>
-              Tất cả người được chuyển nhượng sẽ nhận được thông báo qua Email
-              và SMS khi yêu cầu thành công
-            </Text14Styled>
-          </Box>
+          {isAddingPerson && (
+            <Box
+              sx={{
+                mt: 4,
+                display: "flex",
+                flexDirection: "column",
+                rowGap: 2,
+              }}
+            >
+              <ControllerTextField
+                variant="outlined"
+                hiddenLabel
+                name="fullname"
+                control={control}
+                fullWidth
+                label="Họ và tên"
+                required
+                focused={isAddingPerson}
+                disabled={Boolean(activePerson)}
+              />
+              <ControllerTextField
+                variant="outlined"
+                hiddenLabel
+                name="email"
+                control={control}
+                fullWidth
+                label="Email"
+                required
+                disabled={Boolean(activePerson)}
+              />
+              <ControllerTextField
+                variant="outlined"
+                hiddenLabel
+                name="phoneNumber"
+                control={control}
+                fullWidth
+                label="Số điện thoại"
+                required
+                disabled={Boolean(activePerson)}
+              />
+              <ControllerTextField
+                variant="outlined"
+                hiddenLabel
+                name="idNumber"
+                control={control}
+                fullWidth
+                label="Số căn cước công dân"
+                required
+                disabled={Boolean(activePerson)}
+              />
+              <ControllerDatePicker
+                control={control}
+                name="issueDate"
+                label="Ngày cấp"
+              />
+
+              <ControllerTextField
+                variant="outlined"
+                hiddenLabel
+                name="issuePlace"
+                control={control}
+                fullWidth
+                label="Nơi cấp"
+                required
+                disabled={Boolean(activePerson)}
+              />
+              <Text14Styled>
+                Tất cả người được chuyển nhượng sẽ nhận được thông báo qua Email
+                và SMS khi yêu cầu thành công
+              </Text14Styled>
+            </Box>
+          )}
         </PageBorder>
 
         <PageBorder>

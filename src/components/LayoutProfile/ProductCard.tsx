@@ -230,7 +230,9 @@ const ProductCard = (props: Props) => {
         >
           <TitleProduct>{item?.productName || "Lô A06"}</TitleProduct>
         </HeaderTitle>
-        <CodeProduct>{item?.bookingCode}</CodeProduct>
+        <CodeProduct>
+          {item?.transactionCodeLandSoft || item?.bookingCode}
+        </CodeProduct>
         <Row>
           <Column col={2} customStyle={{ paddingLeft: 0 }}>
             <TextProduct>Khách hàng:</TextProduct>
@@ -244,7 +246,9 @@ const ProductCard = (props: Props) => {
             <TextProduct>Mã đặt chỗ:</TextProduct>
           </Column>
           <Column col={3} customStyle={{ paddingLeft: 0 }}>
-            <TextProduct>{item?.bookingCode}</TextProduct>
+            <TextProduct>
+              {item?.transactionCodeLandSoft || item?.bookingCode}
+            </TextProduct>
           </Column>
         </Row>
         <Row>

@@ -395,6 +395,8 @@ const DetailTransaction = ({ setActiveTab }: Props) => {
     );
   }
   const fecthComponent = () => {
+    console.log("datadatadata", );
+    
     return (
       <>
         {isEmpty(data) ? (
