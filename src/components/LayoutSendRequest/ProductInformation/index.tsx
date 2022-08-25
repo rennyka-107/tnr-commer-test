@@ -84,7 +84,7 @@ const ProductInformation = ({ orderDetail }: Props) => {
                 fontWeight: 400,
               }}
             >
-              {apartmentModel.name}
+              {apartmentModel?.name}
             </Typography>
             <Typography
               sx={{
@@ -128,7 +128,7 @@ const ProductInformation = ({ orderDetail }: Props) => {
                 fontWeight: 400,
               }}
             >
-              {apartmentModel.landArea}m<sup>2</sup>
+              {apartmentModel?.landArea}m<sup>2</sup>
             </Typography>
           </Box>
           <Box
@@ -156,7 +156,7 @@ const ProductInformation = ({ orderDetail }: Props) => {
                 fontWeight: 400,
               }}
             >
-              {apartmentModel.numBed}
+              {apartmentModel?.numBed}
             </Typography>
           </Box>
           <Box
@@ -184,7 +184,7 @@ const ProductInformation = ({ orderDetail }: Props) => {
                 fontWeight: 400,
               }}
             >
-              {apartmentModel.numBath}
+              {apartmentModel?.numBath}
             </Typography>
           </Box>
           <Box

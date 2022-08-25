@@ -78,15 +78,29 @@ const LayoutCompare = (props: Props) => {
       ...value,
     });
   };
+  function currencyFormat(num) {
+	console.log(num)
+    if (!num) {
+      return;
+    }
+    return Number(num)
+      .toFixed(0)
+      .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+  }
 
   const renderDataChildren = ({ data }) => {
+	console.log("data",data)
     return (
       <React.Fragment>
         {data.map((item, index) => (
           <ColStyled style={{ width: 293 }} key={index}>
             <BoxInputStyled width={293} paddingLeft={"14px"}>
               <Text18Styled color={"#1b3459"} style={{ lineHeight: "31px" }}>
-                {CompareValueFormat(item.value, item.key)}
+                {item.key.trim()  === "totalPrice" ? (
+                  <>{currencyFormat(item.value)}đ</>
+                ) : (
+                  <>{CompareValueFormat(item.value, item.key)}</>
+                )}
               </Text18Styled>
             </BoxInputStyled>
           </ColStyled>

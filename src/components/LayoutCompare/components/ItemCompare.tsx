@@ -114,7 +114,15 @@ const ItemCompare = ({ onClick, data }: Props) => {
       },
     });
   };
-  console.log(data)
+  function currencyFormat(num) {
+    if (!num) {
+      return;
+    }
+    return Number(num)
+      .toFixed(0)
+      .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+  }
+
   return (
     <Box width={289}>
       <WrapperContent
@@ -209,7 +217,8 @@ const ItemCompare = ({ onClick, data }: Props) => {
           <BoxInputStyled key={item.id}>
             {item.keyMap.trim() === "totalPrice" ? (
               <TitleMoneyStyled>
-                {CompareValueFormat(data[item.keyMap], item.keyMap)}
+                {/* {CompareValueFormat(data[item.keyMap], item.keyMap)} */}
+				{currencyFormat(data[item.keyMap])} đ
               </TitleMoneyStyled>
             ) : (
               <TextMoneyStyled>

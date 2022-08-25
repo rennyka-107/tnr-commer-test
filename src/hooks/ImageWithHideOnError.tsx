@@ -3,7 +3,6 @@ import Image from "next/image";
 import Product3 from "../../public/images/product3.png";
 const ImageWithHideOnError = ({ src, fallbackSrc, width, height, ...rest }) => {
   const [imgSrc, set_imgSrc] = useState(src);
-
   useEffect(() => {
     if (src) {
       set_imgSrc(src);

@@ -83,7 +83,6 @@ const validationSchema = yup.object().shape({
     .trim(validateLine.trim)
     .strict(true)
     .max(12, "Số CMND quá dài")
-    .min(12, "Số CMND quá ngắn")
     .matches(Regexs.phone, "Số CMND không đúng")
     .required(validateLine.required)
     .default(""),

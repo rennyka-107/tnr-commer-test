@@ -65,7 +65,7 @@ export const getProducById = async (id: any) => {
 
 export const getProductPtgApi = async (params: any) => {
   const data = JSON.stringify(params);
-  return HttpClient.post<any, CommonResponse>(`/api/v1/landsoft/ptg`, data, {
+  return HttpClient.post<any, CommonResponse>(`/api/v1/landsoft/sync/ptg`, data, {
     withToken: false,
   });
 };

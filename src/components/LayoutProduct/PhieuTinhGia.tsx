@@ -25,6 +25,7 @@ import useAddToCart from "hooks/useAddToCart";
 
 interface Price {
   ApartmentPrice: string;
+  levelDetailGrandfatherName?: string;
   BuildPrice: string;
   FoundationMoney: string;
   LandPrice: string;
@@ -320,12 +321,7 @@ const PhieuTinhGia = ({
   });
 
   const [filterPtg, setFilterPtg] = React.useState({
-    projectId: 0,
-    productId: 0,
-    depositDate: "",
-    isMortgage: true,
-    groupCusID: 0,
-    provinceID: 0,
+    productId: '0',
     priceID: 0,
   });
 
@@ -377,12 +373,7 @@ const PhieuTinhGia = ({
   useEffect(() => {
     if (!isEmpty(listPrice)) {
       setFilterPtg({
-        projectId: Number(dataProduct.project.idls),
-        productId: Number(dataProduct.idls),
-        depositDate: getDateNew,
-        isMortgage: true,
-        groupCusID: 0,
-        provinceID: 0,
+        productId: dataProduct.id,
         priceID: priceIdSelect,
       });
     }
@@ -414,7 +405,7 @@ const PhieuTinhGia = ({
     {
       (async () => {
         try {
-          if (filterPtg.projectId !== 0 && filterPtg.priceID !== 0) {
+          if (filterPtg.priceID !== 0) {
             const response = await getProductPtgApi(filterPtg);
             dispatch(getProductPTG(response.responseData));
             setPaymentName([
@@ -629,7 +620,7 @@ const PhieuTinhGia = ({
                   Tầng:
                 </TextLeftOnCardLeftTypeCaoTang1>
                 <TextRightOnCardLeft>
-                  {dataProduct?.floorNum ? dataProduct?.floorNum : "N/A"}
+                  {dataProduct?.levelDetailName ? dataProduct?.levelDetailName : "N/A"}
                 </TextRightOnCardLeft>
               </WrapItemOnCard>
               <WrapItemOnCard>
@@ -637,8 +628,8 @@ const PhieuTinhGia = ({
                   Tòa:
                 </TextLeftOnCardLeftTypeCaoTang1>
                 <TextRightOnCardLeft>
-                  {dataProduct?.levelDetailName
-                    ? dataProduct?.levelDetailName
+                  {dataProduct?.levelDetailParentName
+                    ? dataProduct?.levelDetailParentName
                     : "N/A"}
                 </TextRightOnCardLeft>
               </WrapItemOnCard>
@@ -647,8 +638,8 @@ const PhieuTinhGia = ({
                   Khu:
                 </TextLeftOnCardLeftTypeCaoTang1>
                 <TextRightOnCardLeft>
-                  {dataProduct?.levelDetailParentName
-                    ? dataProduct?.levelDetailParentName
+                  {dataProduct?.levelDetailGrandfatherName
+                    ? dataProduct?.levelDetailGrandfatherName
                     : "N/A"}
                 </TextRightOnCardLeft>
               </WrapItemOnCard>

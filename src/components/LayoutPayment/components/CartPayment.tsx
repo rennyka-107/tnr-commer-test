@@ -53,12 +53,7 @@ const CartPayment = (props: Props) => {
   const [priceIdSelect, setPriceIdSelect] = React.useState(0);
 
   const [filterPtg, setFilterPtg] = React.useState({
-    projectId: 0,
-    productId: 0,
-    depositDate: "",
-    isMortgage: true,
-    groupCusID: 0,
-    provinceID: 0,
+    productId: '0',
     priceID: 0,
   });
 
@@ -133,12 +128,7 @@ const CartPayment = (props: Props) => {
   useEffect(() => {
     // if (!isEmpty(listPrice)) {
     setFilterPtg({
-      projectId: Number(cart.project.idls),
-      productId: Number(cart.idls),
-      depositDate: "",
-      isMortgage: true,
-      groupCusID: 0,
-      provinceID: 0,
+      productId: cart.id,
       priceID: priceIdSelect,
     });
     // }
@@ -163,7 +153,7 @@ const CartPayment = (props: Props) => {
     {
       (async () => {
         try {
-          if (filterPtg.projectId !== 0 && filterPtg.priceID !== 0) {
+          if (filterPtg.priceID !== 0) {
             const response = await getProductPtgApi(filterPtg);
             dispatch(
               getProductPTG({

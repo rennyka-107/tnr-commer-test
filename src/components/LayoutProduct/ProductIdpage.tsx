@@ -291,6 +291,7 @@ const ButtonYellowStyledDisbaled = styled(Button)`
   border: 2px solid #f3f4f6;
   border-radius: 8px;
   padding: 20px 29px 14px 20px;
+  background-color: #1B3459;
 `;
 const TextInSideButtonYellow = styled(Typography)`
   margin-left: 14px;
@@ -317,8 +318,8 @@ const TextInSideButtonYellowDisabled = styled(Typography)`
   text-transform: none;
 
   /* Brand */
-
-  color: #c7c9d9;
+  
+  color: #FFFFFF;
 `;
 const TextContact = styled(Typography)`
   font-family: "Roboto";
@@ -1036,7 +1037,7 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                     style={{ textAlign: "center" }}
                   >
                     <IconHeadSetProduct />
-                    <TextContact>Liên hệ khách hàng</TextContact>
+                    <TextContact>Liên hệ tư vấn viên</TextContact>
                   </a>
                   <div style={{ border: "1px solid #1B3459" }} />
                   <a

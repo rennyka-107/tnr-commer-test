@@ -110,6 +110,8 @@ export interface ResponseSearchById {
   swimmingPool: number;
   levelDetailName?: string;
   levelDetailParentName?: string;
+  levelDetailGrandfatherName?: string;
+  lot_code?: string;
   build?: boolean;
   gym: number;
   projectType?: {

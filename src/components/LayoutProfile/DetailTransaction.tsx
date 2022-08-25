@@ -213,24 +213,24 @@ type RequestType =
   | "change-apartment";
 
 const sendRequestTypes = [
-	{
-	  id: "liquidation",
-	  name: "Thanh lý",
-	},
-	{
-	  id: "deposit-refund",
-	  name: "Hoàn cọc",
-	},
-	{
-	  id: "transfer",
-	  name: "Chuyển nhượng",
-	},
-	{
-	  id: "change-apartment",
-	  name: "Đổi lô / đổi căn",
-	},
-  ];
-  
+  {
+    id: "liquidation",
+    name: "Thanh lý",
+  },
+  {
+    id: "deposit-refund",
+    name: "Hoàn cọc",
+  },
+  {
+    id: "transfer",
+    name: "Chuyển nhượng",
+  },
+  {
+    id: "change-apartment",
+    name: "Đổi lô / đổi căn",
+  },
+];
+
 function createData(
   name: string,
   calories: number,
@@ -241,15 +241,15 @@ function createData(
   return { name, calories, fat, carbs, protein };
 }
 interface RequestParams {
-	id: RequestType;
-	name: string;
-  }
-  
+  id: RequestType;
+  name: string;
+}
+
 const rows = [createData("Frozen", 159, 6.0, 24, 4.0)];
 
 const DetailTransaction = ({ setActiveTab }: Props) => {
   const router = useRouter();
-  const { transCode, transactionId, uuid, productId } = router.query;
+  const { transCode, transactionId, uuid, productId, transactionCodeLandSoft } = router.query;
   const [data, setData] = useState<any[any]>([]);
   const [displayCustomerDetail, setDisplayCustomerDetail] = useState<any>(
     fakeCustomers[0]
@@ -305,11 +305,11 @@ const DetailTransaction = ({ setActiveTab }: Props) => {
         return <MoreHorizIcon />;
     }
   }
-  
+
   const handleChangeRequestType = (e: SelectChangeEvent) => {
     const dataFind = sendRequestTypes.filter((x) => x.name === e.target.value);
     setRequestType(dataFind[0] as RequestParams);
-	router.replace(`/send-request/${dataFind[0].id}/${transCode}`);
+    router.replace(`/send-request/${dataFind[0].id}/${transCode}`);
   };
 
   function customerTab(customer: any) {
@@ -381,6 +381,8 @@ const DetailTransaction = ({ setActiveTab }: Props) => {
       </Box>
     );
   }
+  console.log("transactionCodeLandSoft", transactionCodeLandSoft, transCode);
+  
 
   function renderDetailCustomer() {
     return (
@@ -395,12 +397,12 @@ const DetailTransaction = ({ setActiveTab }: Props) => {
     );
   }
   const fecthComponent = () => {
-    console.log("datadatadata", );
-    
+    console.log("datadatadata", data);
+
     return (
       <>
         {isEmpty(data) ? (
-          <div style={{alignItems: 'center', display: 'flex', marginTop: 50}}>
+          <div style={{ alignItems: "center", display: "flex", marginTop: 50 }}>
             <LoadingComponent />
           </div>
         ) : (
@@ -408,7 +410,11 @@ const DetailTransaction = ({ setActiveTab }: Props) => {
             <div style={{ display: "flex", flexDirection: "row", gap: 50 }}>
               <ImageWithHideOnError
                 className="logo"
-                src={!isEmpty(data.productionImage) ? data.productionImage : Product3}
+                src={
+                  !isEmpty(data.productionImage)
+                    ? data.productionImage
+                    : Product3
+                }
                 fallbackSrc={Product3}
                 height={199}
                 width={350}
@@ -546,7 +552,9 @@ const DetailTransaction = ({ setActiveTab }: Props) => {
                     alignItems: "end",
                   }}
                 >
-                  <TextRightTop>{data.billNumber}</TextRightTop>
+                  <TextRightTop>
+                    {transactionCodeLandSoft || transCode || data.billNumber}
+                  </TextRightTop>
                   <TextRightTop>
                     {convertDateToString(
                       getDateFromStringDMY(data.createdAt) ?? new Date()
@@ -898,23 +906,22 @@ const DetailTransaction = ({ setActiveTab }: Props) => {
   return (
     <BoxContainer
       HeaderCustom={
-        <div style={{display: 'flex', justifyContent: 'space-between'}}>
-		<HeaderContainer>
-          <IconBackTransation
-            style={{ cursor: "pointer" }}
-            onClick={() => setActiveTab("contract")}
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <HeaderContainer>
+            <IconBackTransation
+              style={{ cursor: "pointer" }}
+              onClick={() => setActiveTab("contract")}
+            />
+            <HeaderTitle>Chi tiết giao dịch</HeaderTitle>
+          </HeaderContainer>
+          <SelectInputTwo
+            data={sendRequestTypes}
+            value={requestType ? [requestType.name] : []}
+            onChange={handleChangeRequestType}
+            placeholder="Gửi yêu cầu"
+            style={{ margin: 0 }}
           />
-          <HeaderTitle>Chi tiết giao dịch</HeaderTitle>
-		
-        </HeaderContainer>
-		  <SelectInputTwo
-		  data={sendRequestTypes}
-		  value={requestType ? [requestType.name] : []}
-		  onChange={handleChangeRequestType}
-		  placeholder="Gửi yêu cầu"
-		  style={{ margin: 0 }}
-		/>
-		</div>
+        </div>
       }
       styleCustom={{ padding: "21px 24px" }}
     >

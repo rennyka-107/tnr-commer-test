@@ -148,9 +148,16 @@ const ProductCard = (props: Props) => {
   }
 
   const handleChooseItem = (item: ContractI) => {
-    router.replace(
-      `/profile?transCode=${item.bookingCode}&transactionId=${item.transactionId}&uuid=${item.uuid}&productId=${item.productId}`
-    );
+    if(item.transactionCodeLandSoft) {
+      router.replace(
+        `/profile?transCode=${item.bookingCode}&transactionCodeLandSoft=${item.transactionCodeLandSoft}&transactionId=${item.transactionId}&uuid=${item.uuid}&productId=${item.productId}`
+      );
+    } else {
+      router.replace(
+        `/profile?transCode=${item.bookingCode}&transactionId=${item.transactionId}&uuid=${item.uuid}&productId=${item.productId}`
+      );
+    }
+   
   };
 
   const handleChangeRequestType = (e: SelectChangeEvent) => {

@@ -19,7 +19,7 @@ import {
 } from "@components/StyledLayout/styled";
 import styled from "@emotion/styled";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Button, CircularProgress, Grid } from "@mui/material";
+import { Backdrop, Button, CircularProgress, Grid } from "@mui/material";
 import { Box } from "@mui/system";
 import { ProfileI } from "@service/Profile";
 import ImageWithHideOnError from "hooks/ImageWithHideOnError";
@@ -114,7 +114,6 @@ const EditProfile = () => {
   const [rerender, forceUpdate] = useForceUpdate();
   const { dataCustomType } = useCustomType();
   const { dataProvinces } = useProvinces();
-  const [loadingImg, setLoadingImg] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [initialValue, setInitialValue] = useState<any>();
 
@@ -153,7 +152,6 @@ const EditProfile = () => {
       .trim(validateLine.trim)
       .strict(true)
       .max(12, "Số CMND quá dài")
-      .min(12, "Số CMND quá ngắn")
       .matches(Regexs.phone, "Số CMND không đúng")
       .required(validateLine.required)
       .default(""),
@@ -235,31 +233,25 @@ const EditProfile = () => {
   }, [detailUser]);
 
   const uploadToClient = async (event) => {
-    // if (
-    //   isValidFileImage(event.target.value, () => {
-    //     notification({
-    //       error: "Không đúng định dạng ảnh!",
-    //     });
-    //   })
-    // ) {
-      let formData = new FormData();
-      formData.append("file", event.target.files[0]);
-      formData.append("category", "avatar");
-      setLoadingImg(true);
-      postImage(formData)
-        .then((res) => {
-          setValue("avatar", res?.responseData?.dataUrl);
+    setLoading(true);
+    let formData = new FormData();
+    formData.append("file", event.target.files[0]);
+    formData.append("category", "avatar");
+    setLoading(true);
+    postImage(formData)
+      .then((res) => {
+        setValue("avatar", res?.responseData?.dataUrl);
+      })
+      .catch((err) =>
+        notification({
+          title: "Cập nhật ảnh đại diện",
+          severity: "error",
+          message: "Có lỗi xảy ra!",
         })
-        .catch((err) =>
-          notification({
-            title: "Cập nhật ảnh đại diện",
-            severity: "error",
-            message: "Có lỗi xảy ra!",
-          })
-        )
-        .finally(() => {
-          setLoadingImg(false);
-        });
+      )
+      .finally(() => {
+        setLoading(false);
+      });
     // }
   };
 
@@ -271,6 +263,7 @@ const EditProfile = () => {
         title: "Cập nhật giấy CN ĐKDN",
       });
     }
+    setLoading(true)
     let formDataFile = new FormData();
     formDataFile.append("imageFile", file);
     postFile(formDataFile)
@@ -290,9 +283,11 @@ const EditProfile = () => {
           });
         }
         forceUpdate();
+        setLoading(false)
       })
       .catch((err) => {
         setValue("fileImages", "");
+        setLoading(false);
         notification({
           severity: "success",
           title: "Cập nhật giấy CN ĐKDN",
@@ -362,29 +357,35 @@ const EditProfile = () => {
 
   return (
     <form onSubmit={handleSubmit((values) => onSubmit(values))}>
+      <Backdrop
+        sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <BoxContainer
         titleHeader="Chỉnh sửa hồ sơ"
         styleCustom={{ padding: "21px 24px" }}
       >
         <AvataContainer>
-          {loadingImg ? (
+          {/* {loadingImg ? (
             <span>....Loading</span>
-          ) : (
-            <Box sx={{ width: 125, height: 125 }}>
-              {detailUser?.avatar && (
-                <ImageWithHideOnError
-                  className="logo"
-                  src={watch("avatar") ?? "/images/avatar.png"}
-                  fallbackSrc={"/images/avatar.png"}
-                  height={125}
-                  width={125}
-                  priority
-                  unoptimized={true}
-                  objectFit="cover"
-                />
-              )}
-            </Box>
-          )}
+          ) : ( */}
+          <Box sx={{ width: 125, height: 125 }}>
+            {detailUser?.avatar && (
+              <ImageWithHideOnError
+                className="logo"
+                src={watch("avatar") ?? "/images/avatar.png"}
+                fallbackSrc={"/images/avatar.png"}
+                height={125}
+                width={125}
+                priority
+                unoptimized={true}
+                objectFit="cover"
+              />
+            )}
+          </Box>
+          {/* )} */}
           <label htmlFor="image">
             <IconWrapper>
               <IconEditWhite />
@@ -534,7 +535,7 @@ const EditProfile = () => {
                     type="file"
                     style={{ display: "none" }}
                     onChange={(event) => {
-                      console.log(event.target.files[0], "123")
+                      console.log(event.target.files[0], "123");
                       setValue("fileImages", event?.target?.files?.[0]);
                       uploadFile(event?.target?.files?.[0]);
                     }}
