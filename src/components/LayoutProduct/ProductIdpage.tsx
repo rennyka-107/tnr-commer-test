@@ -291,7 +291,7 @@ const ButtonYellowStyledDisbaled = styled(Button)`
   border: 2px solid #f3f4f6;
   border-radius: 8px;
   padding: 20px 29px 14px 20px;
-  background-color: #1B3459;
+  background-color: #1b3459;
 `;
 const TextInSideButtonYellow = styled(Typography)`
   margin-left: 14px;
@@ -318,8 +318,8 @@ const TextInSideButtonYellowDisabled = styled(Typography)`
   text-transform: none;
 
   /* Brand */
-  
-  color: #FFFFFF;
+
+  color: #ffffff;
 `;
 const TextContact = styled(Typography)`
   font-family: "Roboto";
@@ -351,14 +351,13 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
   const id = router.asPath.split("/")[2];
   const addToCart = useAddToCart();
 
-
   const [dataDownloadPtg, setDataDownloadPtg] = useState({
-	ProjectId: 0,
-	ProductId: 0,
-	DepositDate: "",
-	PriceID: 0,
-	ScheduleID: 0,
-  })
+    ProjectId: 0,
+    ProductId: 0,
+    DepositDate: "",
+    PriceID: 0,
+    ScheduleID: 0,
+  });
 
   const listBread = [
     {
@@ -415,21 +414,20 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
     }
   };
 
-//   useEffect(() => {
-//     if (callApi === true) {
-//       {
-//         (async () => {
-//           try {
-//             const response = await getProductPtgApi(paramsMock);
-//             dispatch(getProductPTG(response.responseData));
-//           } catch (error) {
-//             console.log(error);
-//           }
-//         })();
-//       }
-//     }
-//   }, [callApi, dispatch]);
-
+  //   useEffect(() => {
+  //     if (callApi === true) {
+  //       {
+  //         (async () => {
+  //           try {
+  //             const response = await getProductPtgApi(paramsMock);
+  //             dispatch(getProductPTG(response.responseData));
+  //           } catch (error) {
+  //             console.log(error);
+  //           }
+  //         })();
+  //       }
+  //     }
+  //   }, [callApi, dispatch]);
 
   const fetchUserInfor = async () => {
     const responseUser = await getUserInfoApi();
@@ -464,11 +462,11 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
     return (
       <>
         {/* {!isEmpty(productItem) ? ( */}
-          <DynamicPhieuTinhGiaComponent
-            // productItem={productItem}
-			setDataDownloadPtg={setDataDownloadPtg}
-            dataProduct={dataProduct}
-          />
+        <DynamicPhieuTinhGiaComponent
+          // productItem={productItem}
+          setDataDownloadPtg={setDataDownloadPtg}
+          dataProduct={dataProduct}
+        />
         {/* ) : (
           <>
             <div style={{ textAlign: "center", marginTop: 200 }}>
@@ -483,9 +481,9 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
     setHandleOpen(false);
   };
 
-//   useEffect(() => {
-//     fetchPhieuTinhGia();
-//   }, [productItem]);
+  //   useEffect(() => {
+  //     fetchPhieuTinhGia();
+  //   }, [productItem]);
 
   const handleDownloadPhieuTinhGia = () => {
     (async () => {
@@ -985,10 +983,11 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                 >
                   <ButtonStyled
                     onClick={() => {
-                      localStorage.setItem(
-                        "cart-id",
-                        JSON.stringify(dataProduct.id)
-                      );
+                      // localStorage.setItem(
+                      //   "cart-id",
+                      //   JSON.stringify(dataProduct.id)
+                      // );
+                      addToCart(id);
                     }}
                     disabled={dataProduct?.paymentStatus !== 2}
                     style={{
@@ -1107,13 +1106,13 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
             </>
           ) : (
             // <> {fetchPhieuTinhGia()} </>
-			<>
-			       <DynamicPhieuTinhGiaComponent
-            // productItem={productItem}
-			setDataDownloadPtg={setDataDownloadPtg}
-            dataProduct={dataProduct}
-          />
-			</>
+            <>
+              <DynamicPhieuTinhGiaComponent
+                // productItem={productItem}
+                setDataDownloadPtg={setDataDownloadPtg}
+                dataProduct={dataProduct}
+              />
+            </>
           )}
           {/* Tab Components */}
           {fecthBackDrop()}
