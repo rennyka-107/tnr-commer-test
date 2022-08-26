@@ -232,8 +232,6 @@ const EditProfile = () => {
     }
   }, [detailUser]);
 
-  console.log(watch("customerTypeId"), "customer type id");
-
   const uploadToClient = async (event) => {
     // setLoading(true);
     let formData = new FormData();
@@ -276,6 +274,15 @@ const EditProfile = () => {
             title: "Cập nhật giấy CN ĐKDN",
             message: res.responseMessage,
           });
+          setValue(
+            "businessRegistrationName",
+            res.responseData?.businessRegistrationName
+          );
+          setInitialValue({
+            ...watch(),
+            businessRegistrationName:
+              res.responseData?.businessRegistrationName,
+          });
         } else {
           setValue("fileImages", "");
           notification({
@@ -284,7 +291,6 @@ const EditProfile = () => {
             message: res.responseMessage,
           });
         }
-        // forceUpdate();
         setLoading(false);
       })
       .catch((err) => {
