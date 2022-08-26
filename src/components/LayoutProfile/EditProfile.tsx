@@ -237,7 +237,6 @@ const EditProfile = () => {
     let formData = new FormData();
     formData.append("file", event.target.files[0]);
     formData.append("category", "avatar");
-    setLoading(true);
     postImage(formData)
       .then((res) => {
         setValue("avatar", res?.responseData?.dataUrl);
