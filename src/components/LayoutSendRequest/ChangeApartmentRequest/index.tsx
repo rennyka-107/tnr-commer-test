@@ -28,6 +28,10 @@ interface Params {
 export interface Filter {
   isPayment: number;
   sortType: number;
+  projectId: string;
+  paymentStatus: number;
+  priceFrom: string;
+  priceTo: string;
 }
 
 const ChangeApartmentRequest = ({ orderDetail }: Props) => {
@@ -45,7 +49,10 @@ const ChangeApartmentRequest = ({ orderDetail }: Props) => {
     size: 12,
   });
   const [total, setTotal] = useState<number>(0);
+  const [totalElement, setTotalElement] = useState<number>(0);
   const [contact, setContact] = useState<any>();
+  const [searchTextLoading, setSearchTextLoading] = useState<boolean>(false);
+  const [filterName, setFilterName] = useState<string>("");
 
   const getContract = async () => {
     const data = new FormData();
@@ -75,6 +82,10 @@ const ChangeApartmentRequest = ({ orderDetail }: Props) => {
     } else {
       newFilter = {
         projectIdList: [orderDetail.production.project.id],
+        projectId: orderDetail.production.project.id,
+        paymentStatus: 2,
+        priceFrom: orderDetail.production.price,
+        priceTo: "100000000000",
       };
     }
 
@@ -82,6 +93,7 @@ const ChangeApartmentRequest = ({ orderDetail }: Props) => {
       if (res.responseCode === "00") {
         setProductList(res.responseData);
         setTotal(Math.floor(res.totalElement / params.size) || 1);
+        setTotalElement(res.totalElement);
       }
     });
   }, [params, filter, orderDetail]);
@@ -100,13 +112,23 @@ const ChangeApartmentRequest = ({ orderDetail }: Props) => {
     setItemSelect(item);
   };
 
-  console.log("itemSelect", itemSelect, productList);
   const handleEnterProductCode = (value: string) => () => {
+    setSearchTextLoading(true);
     getListProduct(params, {
       textSearch: value,
-    }).then((res) => {
-      console.log("test", res);
-    });
+    })
+      .then((res) => {
+        if (res.responseCode === "00") {
+          setProductList(res.responseData);
+          setTotal(Math.floor(res.totalElement / params.size) || 1);
+          setTotalElement(res.totalElement);
+
+          setOpen(true);
+        }
+      })
+      .finally(() => {
+        setSearchTextLoading(false);
+      });
   };
   const handleClickBtn = () => {
     if (!itemSelect || !contact) return;
@@ -118,6 +140,7 @@ const ChangeApartmentRequest = ({ orderDetail }: Props) => {
       productId: contact.productId,
       customerIdentity: contact.idNumber,
       customerName: contact.fullname,
+      transactionCode: txcode,
     };
 
     setLoading(true);
@@ -141,9 +164,20 @@ const ChangeApartmentRequest = ({ orderDetail }: Props) => {
   };
 
   const handleChangeFilter = (newFilter: Filter) => {
-    console.log("newFilter", newFilter);
     setFilter(newFilter);
   };
+
+  const handleFilterName = (value: string) => {
+    setFilterName(value);
+  };
+
+  console.log(productList);
+
+  const productListViewer = productList.filter((product) =>
+    product.lotSymbolCommercial
+      .toLocaleLowerCase()
+      .includes(filterName.toLocaleLowerCase())
+  );
 
   return (
     <Box>
@@ -155,7 +189,10 @@ const ChangeApartmentRequest = ({ orderDetail }: Props) => {
         <Subtitle sx={{ mb: 4 }}>Thông tin sản phẩm muốn đổi sang</Subtitle>
         {!itemSelect ? (
           <Fragment>
-            <NomalForm handleEnterProductCode={handleEnterProductCode} />
+            <NomalForm
+              handleEnterProductCode={handleEnterProductCode}
+              searchTextLoading={searchTextLoading}
+            />
             <Box sx={{ my: 2, textAlign: "center", fontSize: "16px" }}>
               Hoặc
             </Box>
@@ -185,7 +222,7 @@ const ChangeApartmentRequest = ({ orderDetail }: Props) => {
         />
       </PageBorder>
 
-      <Dialog open={open} onClose={handleCloseModal} maxWidth="lg">
+      <Dialog open={open} onClose={handleCloseModal} maxWidth="lg" fullWidth>
         <Box
           sx={{
             fontWeight: 400,
@@ -197,11 +234,21 @@ const ChangeApartmentRequest = ({ orderDetail }: Props) => {
           Sản phẩm cùng dự án có thể đổi
         </Box>
 
-        <FilterSection handleChangeFilter={handleChangeFilter} total={total} />
+        <FilterSection
+          handleChangeFilter={handleChangeFilter}
+          total={total}
+          totalElement={totalElement}
+          handleFilterName={handleFilterName}
+        />
 
         <Box sx={{ p: "20px 40px" }}>
           <Grid container sx={{ rowGap: 2 }} spacing={2}>
-            {productList.map((item, index) => (
+            {productListViewer.length < 1 && (
+              <Box sx={{ textAlign: "center", width: "100%", my: 3 }}>
+                Không tìm thấy sản phẩm nào
+              </Box>
+            )}
+            {productListViewer.map((item, index) => (
               <Grid
                 item
                 key={index}

@@ -19,11 +19,12 @@ import {
 } from "@components/Icons";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { RootState } from "../../../../store/store";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import isEmpty from "lodash.isempty";
 import { useRouter } from "next/router";
 import IconCoXay from "@components/Icons/IconCoXay";
 import IconChuaXay from "@components/Icons/IconChuaXay";
+import { getComparePopUpItem } from "../../../../store/productCompareSlice";
 
 type Props = {
   onBack?: Function;
@@ -183,31 +184,12 @@ const ButtonStyled2 = styled(Button)`
 
 const DetailProduct = ({ onBack }: Props) => {
   const Target = useSelector((state: RootState) => state.projectMap.Target);
-  const ListLevel = useSelector(
-    (state: RootState) => state.projectMap.ListLevel
-  );
-  const ListTarget = useSelector(
-    (state: RootState) => state.projectMap.ListTarget
+  const dispatch = useDispatch();
+  const { listMenuBarType, listMenuBarProjectType } = useSelector(
+    (state: RootState) => state.menubar
   );
 
-  const [stringNameParent, setStringNameParent] = useState("N/A");
   const router = useRouter();
-
-  useEffect(() => {
-    if (!isEmpty(ListTarget)) {
-      let nameParents = "";
-      const arrayTarget = [...ListTarget];
-      arrayTarget.sort((a, b) => a.level - b.level);
-      arrayTarget.forEach((tg, idx) => {
-        if (idx === 0) {
-          nameParents = tg.levelName + " " + tg.name;
-        } else {
-          nameParents = nameParents + " - " + tg.levelName + " " + tg.name;
-        }
-      });
-      setStringNameParent(nameParents);
-    }
-  }, [ListTarget]);
 
   return (
     <WrapperContent>
@@ -226,41 +208,9 @@ const DetailProduct = ({ onBack }: Props) => {
           <IconButton onClick={() => onBack()}>
             <ArrowBackIosIcon />
           </IconButton>
-          <TitleStyled sx={{ ml: 1.5}}>{Target.name ?? "N/A"}</TitleStyled>
+          <TitleStyled sx={{ ml: 1.5 }}>{Target.name ?? "N/A"}</TitleStyled>
         </Box>
-        {/* {ListLevel.length > 0 && (
-          <TextStyled style={{ margin: "10px auto" }}>
-            {ListLevel[0].name}
-          </TextStyled>
-        )}
-        <TextStyled style={{ margin: "10px auto" }}>
-          {Target.location ? Target.location : "N/A"}
-        </TextStyled>
-        <DividerLine />
-        <Grid sx={{ pb: 2 }} container rowSpacing={1}>
-          <Grid item xs={6} display={"flex"} alignItems={"center"}>
-            <IconBedDouble />
-            &nbsp;&nbsp;<TextStyled>{Target.numBed ?? "N/A"}</TextStyled>
-          </Grid>
-          <Grid item xs={6} display={"flex"} alignItems={"center"}>
-            <IconFrame />
-            &nbsp;&nbsp;
-            <TextStyled>
-              {Target.landArea ?? "N/A"} m<sup>2</sup>
-            </TextStyled>
-          </Grid>
-          <Grid item xs={6} display={"flex"} alignItems={"center"}>
-            <IconBath />
-            &nbsp;&nbsp;<TextStyled>{Target.numBath ?? "N/A"}</TextStyled>
-          </Grid>
-          <Grid item xs={6} display={"flex"} alignItems={"center"}>
-            <IconCompass />
-            &nbsp;&nbsp;
-            <TextStyled>
-              {Target.doorDirection ? Target.doorDirection : "N/A"}
-            </TextStyled>
-          </Grid>
-        </Grid> */}
+
         <DividerLine />
         <Grid sx={{ pb: 2 }} container rowSpacing={1}>
           <Grid item xs={6} display={"flex"} alignItems={"center"}>
@@ -315,28 +265,53 @@ const DetailProduct = ({ onBack }: Props) => {
             </Grid>
           )}
         </Grid>
-        {/* <div style={{ marginTop: 12 }}>
-          <div style={{ display: "flex", marginBottom: 14 }}>
-            <TextBottomStyled style={{ marginRight: 40 }}>
-              Giá niêm yết{" "}
-            </TextBottomStyled>
-            <NumberBottomStyled>
-              {currencyFormat(3018933000)}đ
-            </NumberBottomStyled>
-          </div>
-          <div style={{ display: "flex" }}>
-            <TextBottomStyled2 style={{ marginRight: 19 }}>
-              Đơn giá thông thuỷ{" "}
-            </TextBottomStyled2>
-            <NumberBottomStyled2>
-              {currencyFormat(40580174)}đ/m2
-            </NumberBottomStyled2>
-          </div>
-        </div> */}
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
           <ButtonStyled1
             onClick={() => {
-              router.push(`/compare-product?idCompare=${Target.id}`);
+              const dataProjectType = listMenuBarProjectType.filter(
+                (item) => item.id === Target.projectType
+              );
+              const dataProject = listMenuBarType.filter(
+                (item) => item.id === Target.projectId
+              );
+              localStorage.setItem(
+                "listDataLSProjectType",
+                JSON.stringify([dataProjectType[0]])
+              );
+              localStorage.setItem(
+                "listParamsLSProjectType",
+                JSON.stringify([dataProjectType[0].id])
+              );
+              localStorage.setItem(
+                "listDataLSProject",
+                JSON.stringify([dataProject[0]])
+              );
+              localStorage.setItem(
+                "listParamsIdProject",
+                JSON.stringify([dataProject[0].id])
+              );
+              dispatch(
+                getComparePopUpItem([
+                  {
+                    thumbnail: Target.thumbnail,
+                    projectName: Target.name,
+                    name: Target.projectName,
+                    productId: Target.id,
+                    projectId: Target.projectId,
+                    projectType: Target.projectType,
+                  },
+                ])
+              );
+              router.push({
+                pathname: "/compare-search",
+                query: {
+                  priceTo: "20",
+                  priceFrom: "1",
+                  areaTo: "200",
+                  areaFrom: "30",
+                },
+              });
+              // };
             }}
             startIcon={
               <IconPlusCircle

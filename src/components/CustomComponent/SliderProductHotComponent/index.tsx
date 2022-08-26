@@ -100,10 +100,6 @@ export default function SliderProductHotComponent() {
       });
     };
 
-  console.log("productTopByOutStanding", productTopByOutStanding);
-
-  // console.log("productTopByOutStanding",productTopByOutStanding)
-
   return (
     <WrapSlide>
       <IconCarsouelLeftProduct style={{ cursor: "pointer" }} />

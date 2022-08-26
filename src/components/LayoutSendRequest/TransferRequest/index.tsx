@@ -150,9 +150,7 @@ const TransferRequest = (props: Props) => {
     }
   }, [activePerson, reset]);
 
-  const handleClickBtn = () => {
-    console.log("contactcontact", contact);
-
+  const sendRequestApi = () => {
     if (!contact) return;
 
     const hasMainUserDate = listPersonAdded.map((person, index) => ({
@@ -161,6 +159,7 @@ const TransferRequest = (props: Props) => {
     }));
 
     const data = {
+      transactionCode: txcode,
       paymentCustomerInfoRequestList: hasMainUserDate,
       transactionId: contact.transactionId,
       transactionCodeLandSoft: contact.transactionCodeLandSoft,
@@ -186,6 +185,13 @@ const TransferRequest = (props: Props) => {
       .finally(() => {
         setLoading(false);
       });
+  };
+
+  const handleClickBtn = () => {
+    if (isAddingPerson) {
+      handleClickAddPerson();
+    }
+    sendRequestApi();
   };
 
   const onAddPerson = (value: string) => {

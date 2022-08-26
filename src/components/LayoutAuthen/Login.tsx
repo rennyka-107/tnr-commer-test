@@ -237,7 +237,7 @@ const Login = () => {
               />
             )}
           </ButtonStyled>
-          {/* capcha - khong xoa doan comment nay */}
+          {/* ki nao dung captcha thi mo comment ra */}
           {/* <ReCAPTCHA
             style={{ marginTop: "20px" }}
             sitekey={process.env.NEXT_PUBLIC_SITE_KEY}

@@ -28,17 +28,20 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Container = styled.div`
-  padding: 29px 0px;
+  padding: 29px 167px;
   margin-top: 127px;
   display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100vw;
 `;
 const ItemLeft = styled.div`
   padding-right: 15px;
-  width: 300px;
+  width: 20vw;
 `;
 const ItemRight = styled.div`
   padding-left: 15px;
-  width: 824px;
+  width: 65vw;
 `;
 
 const ListItem = withStyles({

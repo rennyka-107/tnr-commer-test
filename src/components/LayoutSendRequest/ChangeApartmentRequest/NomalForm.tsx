@@ -1,14 +1,17 @@
 import TNRButton from "@components/Element/TNRButton";
+import { ButtonAction, Text18Styled } from "@components/StyledLayout/styled";
 import styled from "@emotion/styled";
+import { CircularProgress } from "@mui/material";
 
 import { Box } from "@mui/system";
 import { useState } from "react";
 
 interface Props {
   handleEnterProductCode: (value: string) => () => void;
+  searchTextLoading: boolean;
 }
 
-const NomalForm = ({ handleEnterProductCode }: Props) => {
+const NomalForm = ({ handleEnterProductCode, searchTextLoading }: Props) => {
   const [value, setValue] = useState<string>("");
 
   return (
@@ -18,15 +21,21 @@ const NomalForm = ({ handleEnterProductCode }: Props) => {
         sx={{ display: "flex", columnGap: 1, width: "100%", flexWrap: "wrap" }}
       >
         <StyledInput value={value} onChange={(e) => setValue(e.target.value)} />
-        <TNRButton
-          label="Chọn"
-          handleClick={handleEnterProductCode(value)}
-          sx={{
-            backgroundColor: "#1B3459",
-            color: "#fff",
-            padding: "12px 24px",
-          }}
-        />
+        <Box>
+          <ButtonAction
+            sx={{ backgroundColor: "#1B3459 !important", minWidth: "100px" }}
+            disabled={searchTextLoading}
+            onClick={handleEnterProductCode(value)}
+          >
+            {!searchTextLoading ? (
+              <Text18Styled color={"#fff"}>Chọn</Text18Styled>
+            ) : (
+              <CircularProgress
+                style={{ height: 25, width: 25, color: "#ffffff" }}
+              />
+            )}
+          </ButtonAction>
+        </Box>
       </Box>
     </Box>
   );

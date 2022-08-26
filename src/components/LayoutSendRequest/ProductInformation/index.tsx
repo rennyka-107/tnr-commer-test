@@ -14,7 +14,6 @@ const ProductInformation = ({ orderDetail }: Props) => {
   const { apartmentModel } = production;
 
   console.log("production", production);
-  
 
   return (
     <Box
@@ -34,7 +33,7 @@ const ProductInformation = ({ orderDetail }: Props) => {
         component={"img"}
         image={
           // (!isEmpty(item) ? item.thumbnail : cart.thumbnail) ??
-          production.thumbnail
+          production.apartmentModel.image || production.project.avatar
         }
         alt={"Product photo"}
       />
@@ -95,7 +94,7 @@ const ProductInformation = ({ orderDetail }: Props) => {
               }}
             >
               {/* KHong biet field nay */}
-              Tầng 26 
+              Tầng {production.viewNum}
             </Typography>
           </Box>
         </Box>

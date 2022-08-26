@@ -90,6 +90,7 @@ const Notification = () => {
             fontSize: "12px",
             lineHeight: "15px",
             color: "#8190A7",
+            whiteSpace: "nowrap",
           }}
         >
           {item.noticeAt}
@@ -172,7 +173,9 @@ const Notification = () => {
           <React.Fragment key={idx}>{ItemCard(item)}</React.Fragment>
         ))
       ) : (
-        <Typography sx={{ mt: 2, width: "100%", textAlign: "center"}}>Không có thông báo</Typography>
+        <Typography sx={{ mt: 2, width: "100%", textAlign: "center" }}>
+          Không có thông báo
+        </Typography>
       )}
       {paginate.total > 1 && renderPaginate()}
     </BoxContainer>

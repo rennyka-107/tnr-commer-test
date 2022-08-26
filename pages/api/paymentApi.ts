@@ -49,6 +49,7 @@ interface LiquidationPikesParams {
   productId: string;
   customerIdentity: string;
   customerName: string;
+  transactionCode: string | string[];
 }
 
 export const apiLiquidationPikes = async (params: LiquidationPikesParams) => {
@@ -70,6 +71,7 @@ interface DepositRefundParams {
   productId: string;
   customerIdentity: string;
   customerName: string;
+  transactionCode: string | string[];
 }
 
 export const apiDepositRefund = async (params: DepositRefundParams) => {

@@ -37,6 +37,7 @@ const DepositRefundRequest = (props: Props) => {
     if (!txcode) return;
     setLoading(true);
     apiDepositRefund({
+      transactionCode: txcode,
       transactionId: contact.transactionId,
       transactionCodeLandSoft: contact.transactionCodeLandSoft,
       productId: contact.productId,

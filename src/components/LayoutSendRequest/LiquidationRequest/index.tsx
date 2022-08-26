@@ -36,6 +36,7 @@ const LiquidationRequest = () => {
 
     setLoading(true);
     apiLiquidationPikes({
+      transactionCode: txcode,
       transactionId: contact.transactionId,
       transactionCodeLandSoft: contact.transactionCodeLandSoft,
       productId: contact.productId,
@@ -65,6 +66,9 @@ const LiquidationRequest = () => {
         setLoading(false);
       });
   };
+
+  console.log("contact", contact);
+
   return (
     <PageBorder>
       <SendRequest

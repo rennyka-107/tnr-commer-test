@@ -2,6 +2,7 @@ import { FormControlLabel, Radio, RadioGroup, Switch } from "@mui/material";
 import { Box, styled } from "@mui/system";
 import Image from "next/image";
 import { ChangeEvent, useEffect, useState } from "react";
+import SearchForm from "./SearchForm";
 // 0: //Mới nhất
 // 1: //Cũ nhất
 // 2: //Giá cao-thấp
@@ -11,9 +12,11 @@ type RadioType = "0" | "1" | "2" | "3";
 interface Props {
   handleChangeFilter: (filter: any) => void;
   total: number;
+  totalElement: number;
+  handleFilterName: (value: string) => void;
 }
 
-const FilterSection = ({ handleChangeFilter, total }: Props) => {
+const FilterSection = ({ handleChangeFilter, total, totalElement, handleFilterName }: Props) => {
   const [openFilter, setOpenFilter] = useState<boolean>(false);
   const [radioValue, setRadioValue] = useState<RadioType>("0");
   const [switchValue, setSwitchValue] = useState<boolean>(true);
@@ -40,6 +43,7 @@ const FilterSection = ({ handleChangeFilter, total }: Props) => {
         display: "flex",
         justifyContent: "space-between",
         m: "20px 48px 0 48px",
+        alignItems: "center",
       }}
     >
       <Box
@@ -47,11 +51,20 @@ const FilterSection = ({ handleChangeFilter, total }: Props) => {
           fontWeight: 400,
           fontSize: "14px",
           display: "flex",
+          alignItems: "center",
         }}
       >
-        <Box sx={{ fontWeight: 700, fontSize: "16", mr: 1 }}>{total}</Box>
-        <Box sx={{ color: "#8190A7" }}>Sản phẩm có thể đổi</Box>
+        <Box sx={{ display: "flex", mr: 4 }}>
+          <Box sx={{ fontWeight: 700, fontSize: "16", mr: 1 }}>
+            {totalElement}
+          </Box>
+          <Box sx={{ color: "#8190A7" }}>Sản phẩm có thể đổi</Box>
+        </Box>
+        <Box>
+          <SearchForm handleFilter={handleFilterName} />
+        </Box>
       </Box>
+
       <Box
         sx={{
           display: "flex",

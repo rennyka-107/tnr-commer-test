@@ -2,6 +2,7 @@ import Container from "@components/Container";
 import ContainerRequestTranfer from "@components/Container/ContainerRequestTranfer";
 import FlexContainer from "@components/CustomComponent/FlexContainer";
 import Subtitle from "@components/Element/Subtitle";
+import WithAuth from "@HOCs/WithAuth";
 import Page from "@layouts/Page";
 import { Box, CircularProgress } from "@mui/material";
 import { getOrderById } from "@service/Profile";
@@ -175,4 +176,4 @@ const SendRequest = () => {
   );
 };
 
-export default SendRequest;
+export default WithAuth(SendRequest);
