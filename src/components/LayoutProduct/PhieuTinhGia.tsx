@@ -1337,7 +1337,15 @@ const PhieuTinhGia = ({
               Tải phiếu tính giá
             </Typography>
           </ButtonStyled>
-          <ButtonStyled onClick={handleThanhtoan}>Thanh Toán</ButtonStyled>
+          <ButtonStyled
+            disabled={dataProduct?.paymentStatus !== 2}
+            style={{
+              backgroundColor: dataProduct?.paymentStatus !== 2 ? "#FFFF" : "",
+            }}
+            onClick={handleThanhtoan}
+          >
+            Thanh Toán
+          </ButtonStyled>
         </ContainerCenterRight>
       </ContainerRight>
     </WrapBodyStyped>

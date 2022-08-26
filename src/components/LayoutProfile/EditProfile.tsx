@@ -232,8 +232,10 @@ const EditProfile = () => {
     }
   }, [detailUser]);
 
+  console.log(watch("customerTypeId"), "customer type id");
+
   const uploadToClient = async (event) => {
-    setLoading(true);
+    // setLoading(true);
     let formData = new FormData();
     formData.append("file", event.target.files[0]);
     formData.append("category", "avatar");
@@ -250,7 +252,7 @@ const EditProfile = () => {
         })
       )
       .finally(() => {
-        setLoading(false);
+        // setLoading(false);
       });
     // }
   };
@@ -263,7 +265,7 @@ const EditProfile = () => {
         title: "Cập nhật giấy CN ĐKDN",
       });
     }
-    setLoading(true)
+    setLoading(true);
     let formDataFile = new FormData();
     formDataFile.append("imageFile", file);
     postFile(formDataFile)
@@ -282,8 +284,8 @@ const EditProfile = () => {
             message: res.responseMessage,
           });
         }
-        forceUpdate();
-        setLoading(false)
+        // forceUpdate();
+        setLoading(false);
       })
       .catch((err) => {
         setValue("fileImages", "");

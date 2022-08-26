@@ -98,7 +98,6 @@ const DisplayLayers = ({ data, layerParent }: Props) => {
       }
 
       newLayer.on("click", function (e: any) {
-        // if (!layer.feature.properties.lock) {
         dispatch(
           setTargetShape({
             id: layer.feature.properties.id,
@@ -114,7 +113,6 @@ const DisplayLayers = ({ data, layerParent }: Props) => {
         if (!isEmpty(Target) && isEmpty(Target.productionId)) {
           dispatch(setOldTarget(Target));
         }
-        // }
       });
       newLayer.on("mouseover", function (e: any) {
         newLayer.setStyle({

@@ -146,16 +146,30 @@ export default function RightListProduct() {
           </Box>
 
           {!isEmpty(Target) && Target.level === "PRODUCT" ? (
-            <DetailProduct
-              onBack={() =>
-                dispatch(
-                  setTargetShape({
-                    id: Target.parentId,
-                    level: OldTarget.level,
-                  })
-                )
-              }
-            />
+            <Box>
+              <DetailProduct
+                onBack={() =>
+                  dispatch(
+                    setTargetShape({
+                      id: Target.parentId,
+                      level: OldTarget.level,
+                    })
+                  )
+                }
+              />
+              <Button
+                startIcon={
+                  <ArrowBackIcon
+                    sx={{ transform: expandMore ? "rotate(180deg)" : "" }}
+                  />
+                }
+                sx={{ pt: 0 }}
+                onClick={() => setExpandMore(!expandMore)}
+                size="small"
+              >
+                {expandMore ? "Thu gọn" : "Xem thêm"}
+              </Button>
+            </Box>
           ) : !isEmpty(ListChild) ? (
             <Box
               sx={{

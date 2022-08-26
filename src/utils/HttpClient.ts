@@ -3,7 +3,7 @@ import type {
   AxiosError,
   AxiosInstance,
   AxiosRequestConfig,
-  AxiosResponse
+  AxiosResponse,
 } from "axios";
 import axios from "axios";
 import isEmpty from "lodash/isEmpty";
@@ -11,9 +11,7 @@ import { baseURL } from "./constants";
 import LocalStorage from "./LocalStorage";
 import SessionStorage from "./SessionStorage";
 
-
-
-declare module 'axios' {
+declare module "axios" {
   export interface AxiosRequestConfig {
     withToken?: boolean;
   }
@@ -60,8 +58,9 @@ class Axios {
             LocalStorage.get("refreshToken") ||
             SessionStorage.get("refreshToken");
           try {
-
-            const response = await refreshAccessToken(refreshToken);
+            const { responseData: response } = await refreshAccessToken(
+              refreshToken
+            );
             if ((response as LoginSuccess).access_token) {
               if (!isEmpty(LocalStorage.get("accessToken"))) {
                 LocalStorage.set(
@@ -91,7 +90,6 @@ class Axios {
               }
               return httpInstance(error.config);
             }
-
           } catch (err) {
             LocalStorage.remove("accessToken");
             LocalStorage.remove("refreshToken");

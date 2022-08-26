@@ -31,7 +31,8 @@ export const Login = (params: LoginParams) => {
 
 export const refreshAccessToken = async (refreshToken: string) => {
   return HttpClient.post<string, any>(
-    "http://auth.tnr-online.com:1993/auth/realms/tnr-customersite/protocol/openid-connect/token",
+    // "http://auth.tnr-online.com:1993/auth/realms/tnr-customersite/protocol/openid-connect/token",
+    "/api/user/refresh-token",
     stringify(
       convertCamelCaseKeysToSnakeCase({
         refreshToken,

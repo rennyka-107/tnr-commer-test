@@ -41,7 +41,7 @@ const Map = () => {
     if (
       !isEmpty(Target) &&
       !isEmpty(Target.map) &&
-      isEmpty(Target.productionId) &&
+      // isEmpty(Target.productionId) &&
       (Target.type !== "1" || isEmpty(Target.imgMap))
     ) {
       const formatmap = JSON.parse(Target.map);

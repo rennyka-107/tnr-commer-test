@@ -40,6 +40,7 @@ const ItemLeft = styled.div`
   width: 20vw;
 `;
 const ItemRight = styled.div`
+  word-break: break-all;
   padding-left: 15px;
   width: 65vw;
 `;
