@@ -252,6 +252,8 @@ const EditProfile = () => {
     // }
   };
 
+  console.log(watch("avatar"), 123)
+
   const uploadFile = async (file) => {
     if (!file) {
       notification({
@@ -377,7 +379,7 @@ const EditProfile = () => {
             <CircularProgress />
           ) : (
             <Box sx={{ width: 125, height: 125 }}>
-              {detailUser?.avatar && (
+              {/* {detailUser?.avatar && ( */}
                 <ImageWithHideOnError
                   className="logo"
                   src={watch("avatar") ?? "/images/avatar.png"}
@@ -388,7 +390,7 @@ const EditProfile = () => {
                   unoptimized={true}
                   objectFit="cover"
                 />
-              )}
+              {/* )} */}
             </Box>
           )}
           {!loadingImg && (

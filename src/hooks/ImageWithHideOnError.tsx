@@ -9,6 +9,8 @@ const ImageWithHideOnError = ({ src, fallbackSrc, width, height, ...rest }) => {
     }
   }, [src]);
 
+  console.log(imgSrc, "img src")
+
   function isValidHttpUrl(string) {
     let url;
 
