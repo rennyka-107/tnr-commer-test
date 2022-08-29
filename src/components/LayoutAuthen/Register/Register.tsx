@@ -155,55 +155,49 @@ const Index = (props: Props) => {
   ]);
 
   const onSubmit = async (data: any) => {
-    const body = {
-      id: null,
-      fullName: data.fullName,
-      password: data.password,
-      email: data.email,
-      phone: data.phoneNumber,
-    };
-    (async () => {
-      try {
-        setLoading(true);
-        const response = await registerApi(body);
+		setLoading(true);
+		const body = {
+			id: null,
+			fullName: data.fullName,
+			password: data.password,
+			email: data.email,
+			phone: data.phoneNumber,
+		};
+		try {
+			const response = await registerApi(body);
 
-        dispatch(registerAcc(response.responseData));
-        if (response.responseCode === "00") {
-          reset();
-          props.setUserId(response.responseData?.id);
-          props.setTransKey(response.responseData?.transKey);
-          props.setNumberPhone(response.responseData?.phone);
-          props.setEmailRegister(response.responseData?.email);
-          props.setKey(response.responseData?.keycloakId);
-          props.next();
-          Route.push({
-            pathname: PathRoute.Login,
-            query: {
-              prePath: Route.pathname,
-              tabIndex: "confirm",
-            },
-          });
-          notification({
-            message:
-              "Đăng ký tài khoản thành công. Vui lòng chọn phương thức xác thực!",
-            severity: "success",
-            title: "Đăng ký tài khoản",
-          });
-          setLoading(false);
-        } else {
-          notification({
-            severity: "error",
-            title: `Đăng ký thất bại`,
-            message:
-              "Email hoặc số điện thoại đã được sử dụng. Vui lòng thay đổi để tiếp tục!",
-          });
-          setLoading(false);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    })();
-  };
+			dispatch(registerAcc(response.responseData));
+		
+				reset();
+				props.setUserId(response.responseData?.id);
+				props.setTransKey(response.responseData?.transKey);
+				props.setNumberPhone(response.responseData?.phone);
+				props.setEmailRegister(response.responseData?.email);
+				props.setKey(response.responseData?.keycloakId);
+				props.next();
+				Route.push({
+					pathname: PathRoute.Login,
+					query: {
+						prePath: Route.pathname,
+						tabIndex: "confirm",
+					},
+				});
+				notification({
+					message: "Đăng ký tài khoản thành công. Vui lòng chọn phương thức xác thực!",
+					severity: "success",
+					title: "Đăng ký tài khoản",
+				});
+			
+		} catch (error) {
+			notification({
+				severity: "error",
+				title: "Đăng ký thất bại",
+				message: "Email hoặc số điện thoại đã được sử dụng. Vui lòng thay đổi để tiếp tục!",
+			});
+		} finally{
+      setLoading(false);
+    }
+	};
 
   return (
     <form

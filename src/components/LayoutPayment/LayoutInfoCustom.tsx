@@ -629,11 +629,11 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
         apiSavePaymentInformation(formatData)
           .then((res) => {
             if (!isEmpty(res.responseData)) {
-              notification({
-                message: "Lưu thông tin hồ sơ mua bán thành công!",
-                severity: "success",
-                title: "Hoàn thiện hồ sơ mua bán",
-              });
+              // notification({
+              //   message: "Lưu thông tin hồ sơ mua bán thành công!",
+              //   severity: "success",
+              //   title: "Hoàn thiện hồ sơ mua bán",
+              // });
               LocalStorage.remove("cart");
               addToCart();
               if (
