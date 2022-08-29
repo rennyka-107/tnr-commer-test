@@ -114,6 +114,7 @@ const EditProfile = () => {
   const [rerender, forceUpdate] = useForceUpdate();
   const { dataCustomType } = useCustomType();
   const { dataProvinces } = useProvinces();
+  const [loadingImg, setLoadingImg] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [initialValue, setInitialValue] = useState<any>();
 
@@ -189,42 +190,39 @@ const EditProfile = () => {
   const { control, handleSubmit, reset, setValue, watch, getValues } =
     formController;
 
-  const resetAsyncForm = useCallback(
-    async (data) => {
-      const newData = {
-        customerTypeId: data.customerTypeId,
-        appellation: data.appellation,
-        fullname: data.fullname,
-        birth: data.birth,
-        phone: data.phone,
-        email: data.email,
-        idNumber: data.idNumber,
-        idReceivePlace: data.idReceivePlace,
-        idReceiveDate: data.idReceiveDate && data.idReceiveDate,
-        domicile: data.domicile,
-        address: data.address,
-        avatar: data.avatar,
-        district: data?.district ? data?.district : "",
-        province: data?.province ? data?.province : "",
-        businessRegistration: data?.businessRegistration,
-        businessRegistrationName: data?.businessRegistrationName,
-        commune: data?.commune ? data?.commune : "",
-        provinceContactName: data?.provinceContactName
-          ? data?.provinceContactName
-          : "",
-        districtContactName: data?.districtContactName
-          ? data?.districtContactName
-          : "",
-        communeContactName: data?.communeContactName
-          ? data?.communeContactName
-          : "",
-      };
-      reset(newData);
-      setInitialValue(newData);
-    },
-
-    [reset]
-  );
+  const resetAsyncForm = (data) => {
+    console.log(data, "data");
+    const newData = {
+      customerTypeId: data.customerTypeId,
+      appellation: data.appellation,
+      fullname: data.fullname,
+      birth: data.birth,
+      phone: data.phone,
+      email: data.email,
+      idNumber: data.idNumber,
+      idReceivePlace: data.idReceivePlace,
+      idReceiveDate: data.idReceiveDate && data.idReceiveDate,
+      domicile: data.domicile,
+      address: data.address,
+      avatar: data.avatar,
+      district: data?.district ? data?.district : "",
+      province: data?.province ? data?.province : "",
+      businessRegistration: data?.businessRegistration,
+      businessRegistrationName: data?.businessRegistrationName,
+      commune: data?.commune ? data?.commune : "",
+      provinceContactName: data?.provinceContactName
+        ? data?.provinceContactName
+        : "",
+      districtContactName: data?.districtContactName
+        ? data?.districtContactName
+        : "",
+      communeContactName: data?.communeContactName
+        ? data?.communeContactName
+        : "",
+    };
+    reset(newData);
+    setInitialValue(newData);
+  };
 
   useEffect(() => {
     if (detailUser?.email) {
@@ -233,7 +231,7 @@ const EditProfile = () => {
   }, [detailUser]);
 
   const uploadToClient = async (event) => {
-    // setLoading(true);
+    setLoadingImg(true);
     let formData = new FormData();
     formData.append("file", event.target.files[0]);
     formData.append("category", "avatar");
@@ -249,7 +247,7 @@ const EditProfile = () => {
         })
       )
       .finally(() => {
-        // setLoading(false);
+        setLoadingImg(false);
       });
     // }
   };
@@ -375,36 +373,40 @@ const EditProfile = () => {
         styleCustom={{ padding: "21px 24px" }}
       >
         <AvataContainer>
-          {/* {loadingImg ? (
-            <span>....Loading</span>
-          ) : ( */}
-          <Box sx={{ width: 125, height: 125 }}>
-            {detailUser?.avatar && (
-              <ImageWithHideOnError
-                className="logo"
-                src={watch("avatar") ?? "/images/avatar.png"}
-                fallbackSrc={"/images/avatar.png"}
-                height={125}
-                width={125}
-                priority
-                unoptimized={true}
-                objectFit="cover"
-              />
-            )}
-          </Box>
-          {/* )} */}
-          <label htmlFor="image">
-            <IconWrapper>
-              <IconEditWhite />
-            </IconWrapper>
-          </label>
-          <input
-            accept="image/*"
-            id="image"
-            type="file"
-            style={{ display: "none" }}
-            onChange={uploadToClient}
-          />
+          {loadingImg ? (
+            <CircularProgress />
+          ) : (
+            <Box sx={{ width: 125, height: 125 }}>
+              {detailUser?.avatar && (
+                <ImageWithHideOnError
+                  className="logo"
+                  src={watch("avatar") ?? "/images/avatar.png"}
+                  fallbackSrc={"/images/avatar.png"}
+                  height={125}
+                  width={125}
+                  priority
+                  unoptimized={true}
+                  objectFit="cover"
+                />
+              )}
+            </Box>
+          )}
+          {!loadingImg && (
+            <label htmlFor="image">
+              <IconWrapper>
+                <IconEditWhite />
+              </IconWrapper>
+            </label>
+          )}
+          {!loadingImg && (
+            <input
+              accept="image/*"
+              id="image"
+              type="file"
+              style={{ display: "none" }}
+              onChange={uploadToClient}
+            />
+          )}
         </AvataContainer>
         <Row>
           <Column>

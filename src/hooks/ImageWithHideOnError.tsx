@@ -31,7 +31,7 @@ const ImageWithHideOnError = ({ src, fallbackSrc, width, height, ...rest }) => {
       onLoadingComplete={(result) => {
         if (result.naturalWidth === 0) {
           // Broken image
-          set_imgSrc(fallbackSrc);
+          // set_imgSrc(fallbackSrc);
         }
       }}
       onError={() => {
