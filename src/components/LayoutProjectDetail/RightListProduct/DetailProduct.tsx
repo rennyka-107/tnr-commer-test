@@ -294,8 +294,8 @@ const DetailProduct = ({ onBack }: Props) => {
                 getComparePopUpItem([
                   {
                     thumbnail: Target.thumbnail,
-                    projectName: Target.name,
-                    name: Target.projectName,
+                    name: Target.name,
+                    projectName: Target.projectName,
                     productId: Target.id,
                     projectId: Target.projectId,
                     projectType: Target.projectType,
