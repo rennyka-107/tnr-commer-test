@@ -34,6 +34,10 @@ const BodyContainer = styled.div`
   align-items: center;
   padding: 0px 167px 0px 167px;
   justify-content: space-between;
+  @media screen and (max-width: 1280px) {
+	padding: 0px 40px 0px 40px;
+	justify-content: space-around;
+  }
 `;
 const WrapMenuItem = styled.div`
   display: flex;
@@ -48,6 +52,7 @@ const TextLink = styled.a`
   font-size: 16px;
   line-height: 19px;
   color: #0e1d34;
+  
 `;
 const WrapRightItem = styled.div`
   display: flex;

@@ -17,10 +17,14 @@ import { useSelector } from "react-redux";
 import ImageWithHideOnError from "hooks/ImageWithHideOnError";
 import ImageWithHideOnErrorOffers from "hooks/ImageWithHideOnErrorOffers";
 import { useRouter } from "next/router";
+import { useMediaQuery } from "@mui/material";
 const WrapSlide = styled.div`
-  width: 1245px;
-  display: flex;
-  align-items: center;
+
+display: flex;
+align-items: center;
+@media only screen and (max-width: 1100px) {
+	width: 850px;
+  }
 `;
 const CardContainer = styled.div`
   height: 224px;
@@ -34,7 +38,7 @@ export default function SliderShowComponent() {
   const { SearchSpecialOffer } = useSelector(
     (state: RootState) => state.specialoffers
   );
-
+  const matches = useMediaQuery('(max-width:1100px)');
   return (
     <>
       {SearchSpecialOffer && SearchSpecialOffer.length > 0 ? (
@@ -43,8 +47,8 @@ export default function SliderShowComponent() {
           <Swiper
             spaceBetween={10}
             speed={5000}
-            centeredSlides={true}
-            slidesPerView={3}
+            centeredSlides={matches ? false : true}
+            slidesPerView={matches ? 2 : 3}
             autoplay={{
               delay: 5000,
               disableOnInteraction: false,
@@ -58,7 +62,7 @@ export default function SliderShowComponent() {
             observer={true}
             observeParents={true}
             // modules={[Autoplay, Pagination, Navigation]}
-            className="mySwiper"
+            className="mySwiper-CTUD"
             style={{ width: 1113 }}
           >
             {SearchSpecialOffer.map((item, index) => (

@@ -25,7 +25,7 @@ const IconCarsouelRightProduct = ({
 		  />
 		  <path
 			d="M23 18.9336L30 25.0002L23 31.0669"
-			stroke="#1B3459"
+			stroke="#C7C9D9"
 			strokeLinecap="square"
 		  />
 		</svg>

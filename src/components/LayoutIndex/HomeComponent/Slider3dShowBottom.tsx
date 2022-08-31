@@ -25,6 +25,26 @@ import LocalStorage from "utils/LocalStorage";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../store/store";
 
+const MarginContainerStyled = styled.div`
+  margin-top: 101px;
+  margin-bottom: 130px;
+  margin-left: 337px;
+  @media only screen and (max-width: 1280px) {
+	margin: 20px;
+  }
+`;
+
+const ContainerStyled = styled.div`
+  width: 100%;
+  height: 481px;
+  display: flex;
+  align-items: center;
+  @media only screen and (max-width: 1280px) {
+	flex-direction: column-reverse;
+	height: auto;
+  }
+`;
+
 const TextLeftStyled = styled(Typography)`
   font-family: "Roboto";
   font-style: normal;
@@ -43,7 +63,7 @@ const ButtonStyled = styled(Button)`
   background: #ea242a;
   border-radius: 60px;
   :hover {
-    background: #FEC83C;
+    background: #fec83c;
     // box-shadow: 4px 8px 24px #f2f2f5;
     box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.2);
     border-radius: 60px;
@@ -110,6 +130,14 @@ const TextInsideNumber = styled(Typography)`
 
   color: #ffffff;
 `;
+
+const ContainerText = styled.div`
+width: 300px;
+@media only screen and (max-width: 1280px) {
+	width: 700px;
+	text-align: center;
+}
+`
 SwiperCore.use([Navigation, Pagination, EffectCoverflow, Autoplay]);
 const dataFake = [1, 2, 3, 4, 5, 6].map((el) => {
   return {
@@ -142,11 +170,7 @@ export default function Slider3dShowBottom() {
         : newArrayDataProductRecenly
     )?.map((el: any) => (
       <SwiperSlide
-        onClick={() =>
-          Router.push(
-            `/recently-view`
-          )
-        }
+        onClick={() => Router.push(`/recently-view`)}
         className="swiper-3d"
         style={{
           width: "241px !important",
@@ -188,20 +212,12 @@ export default function Slider3dShowBottom() {
   return (
     <>
       {!isEmpty(newArrayDataProductRecenly) ? (
-        <div style={{ marginTop: 101, marginBottom: 130, marginLeft: 337 }}>
+        <MarginContainerStyled>
           <div>
             <TextTitleStyled>BẤT ĐỘNG SẢN XEM GẦN ĐÂY</TextTitleStyled>
           </div>
-          <div
-            style={{
-              width: "100%",
-              height: 481,
-              display: "flex",
-              //   justifyContent: "right",
-              alignItems: "center",
-            }}
-          >
-            <div style={{ width: 300 }}>
+          <ContainerStyled>
+            <ContainerText >
               <TextLeftStyled>
                 {generalInfo?.policyContent ?? ""}
               </TextLeftStyled>
@@ -209,7 +225,7 @@ export default function Slider3dShowBottom() {
                 Xem tất cả&nbsp;
                 <IconMuaOnline />
               </ButtonStyled>
-            </div>
+            </ContainerText>
             <div style={{ width: "100%", height: 470, position: "relative" }}>
               <IconSliderYellowLeft
                 className="y-left"
@@ -244,6 +260,7 @@ export default function Slider3dShowBottom() {
                 }}
                 spaceBetween={45}
                 slideToClickedSlide={true}
+                className="mySwiper"
                 // breakpoints={{
                 //   // when window width is >= 640px
                 //   640: {
@@ -270,8 +287,8 @@ export default function Slider3dShowBottom() {
                 }}
               />
             </div>
-          </div>
-        </div>
+          </ContainerStyled>
+        </MarginContainerStyled>
       ) : (
         <></>
       )}

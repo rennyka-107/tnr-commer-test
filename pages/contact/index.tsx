@@ -43,7 +43,9 @@ const validationSchema = yup.object().shape({
     .string()
     .trim(validateLine.trim)
     .strict(true)
-    .max(255, "Tài khoản không được chứa quá 255 ký tự")
+    .matches(Regexs.phone, "Số điện thoại không đúng")
+    .min(10, "Số điện thoại không được dưới 10 số")
+    .max(10, "Số điện thoại không được nhiều hơn 10 số")
     .required(validateLine.required)
     .default(""),
   content: yup
@@ -73,24 +75,24 @@ const Contact = () => {
 
   const onSubmit = (data: FormData) => {
     console.log("data", data);
-    createContactAPI({
-      ...data,
-    })
-      .then((res) => {
-        if (res.responseCode === "00") {
-          notification({
-            severity: "success",
-            message: `Chúng tôi đã nhận được thông tin của bạn`,
-          });
-          reset(validationSchema.getDefault());
-        }
-      })
-      .catch(() => {
-        notification({
-          severity: "success",
-          message: `Có lỗi sảy ra, xin vui lòng thử lại sau`,
-        });
-      });
+    // createContactAPI({
+    //   ...data,
+    // })
+    //   .then((res) => {
+    //     if (res.responseCode === "00") {
+    //       notification({
+    //         severity: "success",
+    //         message: `Chúng tôi đã nhận được thông tin của bạn`,
+    //       });
+    //       reset(validationSchema.getDefault());
+    //     }
+    //   })
+    //   .catch(() => {
+    //     notification({
+    //       severity: "success",
+    //       message: `Có lỗi sảy ra, xin vui lòng thử lại sau`,
+    //     });
+    //   });
   };
 
   return (

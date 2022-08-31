@@ -116,6 +116,8 @@ export interface ResponseSearchById {
   gym: number;
   projectType?: {
     name: string;
+    id: string;
+    nameDisplay: string;
   };
   projectLevelDetail: {
     id: string;
@@ -171,6 +173,7 @@ export interface ResponseSearchById {
     video?: string;
     hotline?: string;
   };
+  projectTypeId: string;
   homeNum: string;
   wallArea: number;
   clearArea: number;

@@ -15,15 +15,24 @@ import { RootState } from "../../../../store/store";
 import useAddToCart from "hooks/useAddToCart";
 import { useRouter } from "next/router";
 import { getComparePopUpItem } from "../../../../store/productCompareSlice";
+import ConfirmDialog from "@components/SearchPage/ConfirmDialog";
+import { searchLocationResponse } from "interface/searchIF";
+import { isEmpty } from "lodash";
+import useNotification from "hooks/useNotification";
+import { useMediaQuery } from "@mui/material";
 
 const WrapSlide = styled.div`
-  width: 1245px;
   display: flex;
   align-items: center;
 `;
 const CardContainer = styled.div`
   background-size: cover;
   border-radius: 10px;
+`;
+
+const LeftIconStyled = styled(IconCarsouelLeftProduct)`
+  cursor: pointer;
+
 `;
 SwiperCore.use([Autoplay, Pagination, Navigation]);
 export default function SliderProductHotComponent() {
@@ -33,8 +42,13 @@ export default function SliderProductHotComponent() {
   const { listMenuBarType, listMenuBarProjectType } = useSelector(
     (state: RootState) => state.menubar
   );
+  const matches = useMediaQuery('(max-width:1100px)');
   const [dataProjectType, setDataProjectType] = useState([]);
   const [dataProject, setDataProject] = useState([]);
+  const [openConfirmDialog, setOpenConfirmDialog] = useState<boolean>(false);
+  const [tempCart, setTempCart] = useState<searchLocationResponse | null>(null);
+  const { cart } = useSelector((state: RootState) => state.carts);
+  const notification = useNotification();
 
   const addToCart = useAddToCart();
   const router = useRouter();
@@ -100,14 +114,37 @@ export default function SliderProductHotComponent() {
       });
     };
 
+  const handleAddToCart = (product: any) => () => {
+    if (cart && cart.id === product.id) {
+      notification({
+        severity: "success",
+        message: "Sản phẩm này đã có sẵn trong giỏ hàng",
+      });
+    } else if (isEmpty(cart)) {
+      addToCart(product.id);
+    } else {
+      setTempCart(product);
+      setOpenConfirmDialog(true);
+    }
+  };
+
+  const handleChangeCartITem = (product: any) => () => {
+    addToCart(product.id);
+    setOpenConfirmDialog(false);
+  };
+
+  const handleCloseConfirmDialog = () => {
+    setOpenConfirmDialog(false);
+  };
+
   return (
     <WrapSlide>
-      <IconCarsouelLeftProduct style={{ cursor: "pointer" }} />
+      <LeftIconStyled />
       <Swiper
         spaceBetween={10}
         speed={6000}
         centeredSlides={false}
-        slidesPerView={3}
+        slidesPerView={matches ? 2 : 3}
         autoplay={{
           delay: 2000,
           disableOnInteraction: false,
@@ -122,8 +159,8 @@ export default function SliderProductHotComponent() {
         observer={true}
         observeParents={true}
         // modules={[Autoplay, Pagination, Navigation]}
-        className="mySwiper"
-        style={{ width: 1113 }}
+        className="mySwiper-BDSNB"
+    
       >
         {productTopByOutStanding.map((item, index) => (
           <SwiperSlide key={index}>
@@ -150,7 +187,7 @@ export default function SliderProductHotComponent() {
                 build={item.build}
                 minFloor={item.minFloor}
                 maxFloor={item.maxFloor}
-                onClick={() => addToCart(item.id)}
+                onClick={handleAddToCart(item)}
                 activeSoSanh={true}
                 buyDisabled={item?.paymentStatus !== 2}
                 onCompare={onCompare(
@@ -167,6 +204,12 @@ export default function SliderProductHotComponent() {
         ))}
       </Swiper>
       <IconCarsouelRightProduct style={{ cursor: "pointer" }} />
+      <ConfirmDialog
+        open={openConfirmDialog}
+        handleClose={handleCloseConfirmDialog}
+        handleConfirm={handleChangeCartITem}
+        tempCart={tempCart}
+      />
     </WrapSlide>
   );
 }

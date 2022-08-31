@@ -1,3 +1,4 @@
+import { fromPairs } from "lodash";
 
 export { default as IconCountry } from "./IconCountry";
 export { default as Logo } from "./Logo";
@@ -94,5 +95,7 @@ export {default as IconDecorHome} from './IconDecorHome';
 export {default as IconDecorHome2} from './IconDecorHome2';
 export {default as IconDecorHome3} from './IconDecorHome3';
 export {default as FloorIconProductTable} from './FloorIconProductTable';
-export {default as PriceThapTang} from './PriceThapTang'
-export {default as IconBackTransation} from './IconBackTransation'
+export {default as PriceThapTang} from './PriceThapTang';
+export {default as IconBackTransation} from './IconBackTransation';
+export {default as IconTKBDSDrownmin} from './IconTKBDSDrownmin';
+export {default as IconDMDrown} from './IconDMDrown';

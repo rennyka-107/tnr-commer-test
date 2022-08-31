@@ -54,7 +54,7 @@ const MenuProps = {
   },
 };
 
-export default function SelectInputComponent({
+const SelectInputWithId = ({
   label,
   data,
   onChange,
@@ -62,7 +62,7 @@ export default function SelectInputComponent({
   placeholder,
   typeOfLocation,
   disabled = false,
-}: Props) {
+}: Props) => {
   const theme = useTheme();
 
   return (
@@ -91,16 +91,18 @@ export default function SelectInputComponent({
           },
         }}
       >
-        {data?.map((name, index) => (
+        {data?.map((item, index) => (
           <MenuItem
             key={index}
-            value={name.name}
-            style={getStyles(name.name, value, theme)}
+            value={item.id}
+            style={getStyles(item.name, value, theme)}
           >
-            {name.name}
+            {item.name}
           </MenuItem>
         ))}
       </Select>
     </FormControl>
   );
 }
+
+export default SelectInputWithId;

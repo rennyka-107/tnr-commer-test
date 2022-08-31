@@ -7,6 +7,12 @@ const GET_NOTIFICATION = "/api-noti/notification/get-notice-for-user";
 const CHANGE_PASSWORD = "/api-account/v1/account/change-password";
 const UPDATE_PROFILE = "api-profile/profile/update";
 
+interface PaymentRequest {
+  isView: boolean;
+  requestId: number;
+  requestType: string;
+}
+
 export interface ContractI {
   address: string | null;
   avatar: string | null;
@@ -44,6 +50,7 @@ export interface ContractI {
   productionImage?: string | null;
   paymentIdentityInfos: any;
   transactionCodeLandSoft?: string;
+  paymentRequestTypeResponseList: PaymentRequest[];
 }
 
 export interface ProfileI {

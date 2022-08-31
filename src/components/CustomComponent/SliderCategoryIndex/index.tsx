@@ -25,10 +25,13 @@ const WrapSlide = styled.div`
   position: relative;
 `;
 const CardContainer = styled.div`
-  height: 224px;
-  width: 360px;
-  background-size: cover;
-  border-radius: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 100px;
+  @media screen and (max-width: 1280px) {
+	gap: 5px;
+  }
 `;
 const WrapContainer = styled.div`
   display: flex;
@@ -148,14 +151,15 @@ const SliderCategoryIndex = ({ data }: { data?: any[] }) => {
         <IconDecorHome />
       </div>
 
-      <div
+      {/* <div
         style={{
           display: "flex",
           flexDirection: "row",
           alignItems: "center",
           gap: 100,
         }}
-      >
+      > */}
+      <CardContainer>
         <div style={{ height: 85 }}>
           <IconPrevProduct
           //   style={{
@@ -202,9 +206,9 @@ const SliderCategoryIndex = ({ data }: { data?: any[] }) => {
           // }}
           />
         </div>
-
-      </div>
-	  <div style={{ position: "absolute", bottom: 0, right: 0 , zIndex: '-1'}}>
+      </CardContainer>
+      {/* </div> */}
+      <div style={{ position: "absolute", bottom: 0, right: 0, zIndex: "-1" }}>
         <IconDecorHome2 />
       </div>
     </div>

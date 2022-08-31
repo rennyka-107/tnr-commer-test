@@ -15,6 +15,20 @@ const ProductInformation = ({ orderDetail }: Props) => {
 
   console.log("production", production);
 
+  const renderLandArea = () => {
+    if (production?.landArea) {
+      if (production.landArea === "0") {
+        return "N/A";
+      } else {
+        return (
+          <div>
+            {production.landArea}m<sup>2</sup>
+          </div>
+        );
+      }
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -33,7 +47,7 @@ const ProductInformation = ({ orderDetail }: Props) => {
         component={"img"}
         image={
           // (!isEmpty(item) ? item.thumbnail : cart.thumbnail) ??
-          production.apartmentModel.image || production.project.avatar
+          production?.apartmentModel?.image || production?.project?.avatar
         }
         alt={"Product photo"}
       />
@@ -55,7 +69,7 @@ const ProductInformation = ({ orderDetail }: Props) => {
               fontWeight: 400,
             }}
           >
-            {production.projectName}
+            {production?.projectName}
           </Typography>
           <Typography
             sx={{
@@ -66,7 +80,7 @@ const ProductInformation = ({ orderDetail }: Props) => {
               mt: 3,
             }}
           >
-            {production.lotSymbolLegal}
+            {production?.lotSymbolLegal}
           </Typography>
           <Box
             sx={{
@@ -94,7 +108,7 @@ const ProductInformation = ({ orderDetail }: Props) => {
               }}
             >
               {/* KHong biet field nay */}
-              Tầng {production.viewNum}
+              Tầng {production?.viewNum}
             </Typography>
           </Box>
         </Box>
@@ -127,7 +141,7 @@ const ProductInformation = ({ orderDetail }: Props) => {
                 fontWeight: 400,
               }}
             >
-              {apartmentModel?.landArea}m<sup>2</sup>
+              {renderLandArea()}
             </Typography>
           </Box>
           <Box
@@ -155,7 +169,7 @@ const ProductInformation = ({ orderDetail }: Props) => {
                 fontWeight: 400,
               }}
             >
-              {apartmentModel?.numBed}
+              {apartmentModel?.numBed || "N/A"}
             </Typography>
           </Box>
           <Box
@@ -183,7 +197,7 @@ const ProductInformation = ({ orderDetail }: Props) => {
                 fontWeight: 400,
               }}
             >
-              {apartmentModel?.numBath}
+              {apartmentModel?.numBath || "N/A"}
             </Typography>
           </Box>
           <Box
@@ -211,7 +225,7 @@ const ProductInformation = ({ orderDetail }: Props) => {
                 fontWeight: 400,
               }}
             >
-              {production.doorDirection}
+              {production?.doorDirection || "N/A"}
             </Typography>
           </Box>
         </Box>

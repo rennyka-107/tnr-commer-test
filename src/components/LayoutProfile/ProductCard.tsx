@@ -3,6 +3,7 @@ import Column from "@components/CustomComponent/Column";
 import CustomButton from "@components/CustomComponent/CustomButton";
 import Row from "@components/CustomComponent/Row";
 import SelectInputComponent from "@components/CustomComponent/SelectInputComponent";
+import SelectInputWithId from "@components/CustomComponent/SelectInputComponent/SelectInputWithId";
 import TNRButton from "@components/Element/TNRButton";
 import IconCircleChecked from "@components/Icons/IconCircleChecked";
 import IconCircleClose from "@components/Icons/IconCircleClose";
@@ -16,7 +17,7 @@ import useNotification from "hooks/useNotification";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import FormatFns from "utils/DateFns";
 import { dayOfWeekToString, getDateFromStringDMY } from "utils/helper";
@@ -103,25 +104,35 @@ type RequestType =
 
 const sendRequestTypes = [
   {
-    id: "liquidation",
+    id: 0,
+    code: "liquidation",
     name: "Thanh lý",
   },
   {
-    id: "deposit-refund",
+    id: 1,
+    code: "deposit-refund",
     name: "Hoàn cọc",
   },
   {
-    id: "transfer",
+    id: 3,
+    code: "transfer",
     name: "Chuyển nhượng",
   },
   {
-    id: "change-apartment",
+    id: 2,
+    code: "change-apartment",
     name: "Đổi lô / đổi căn",
   },
 ];
 
 interface RequestParams {
-  id: RequestType;
+  code: RequestType;
+  name: string;
+  id: number;
+}
+
+interface PaymentRequestType {
+  id: string;
   name: string;
 }
 
@@ -129,8 +140,9 @@ const ProductCard = (props: Props) => {
   const { item, isLast } = props;
   const router = useRouter();
   const [requestType, setRequestType] = useState<RequestParams | null>(null);
-  const dispatch = useDispatch();
-  const notification = useNotification();
+  const [paymentRequestTypeRes, setPaymentRequestTypeRes] = useState<
+    PaymentRequestType[]
+  >([]);
 
   const convertDateToString = (date: Date) => {
     const house = FormatFns.format(date, "HH:mm");
@@ -148,7 +160,7 @@ const ProductCard = (props: Props) => {
   }
 
   const handleChooseItem = (item: ContractI) => {
-    if(item.transactionCodeLandSoft) {
+    if (item.transactionCodeLandSoft) {
       router.replace(
         `/profile?transCode=${item.bookingCode}&transactionCodeLandSoft=${item.transactionCodeLandSoft}&transactionId=${item.transactionId}&uuid=${item.uuid}&productId=${item.productId}`
       );
@@ -157,25 +169,29 @@ const ProductCard = (props: Props) => {
         `/profile?transCode=${item.bookingCode}&transactionId=${item.transactionId}&uuid=${item.uuid}&productId=${item.productId}`
       );
     }
-   
   };
 
   const handleChangeRequestType = (e: SelectChangeEvent) => {
-    const data = sendRequestTypes.filter((x) => x.name === e.target.value);
+    const data = sendRequestTypes.filter(
+      (x) => x.id.toString() === e.target.value
+    );
     setRequestType(data[0] as RequestParams);
-    router.replace(`/send-request/${data[0].id}/${item.bookingCode}`);
-  };
 
-  const handleViewRequestDetail = () => {
-    if (!requestType) {
-      notification({
-        severity: "error",
-        message: "Vui lòng chọn yêu cầu giao dịch",
-      });
-    } else {
-      router.replace(`/send-request/${requestType.id}/${item.bookingCode}`);
+    if (data.length > 0) {
+      router.replace(`/send-request/${data[0].code}/${item.bookingCode}`);
     }
   };
+
+  useEffect(() => {
+    const paymentRequestList = props.item.paymentRequestTypeResponseList.map(
+      (paymentRequest) => ({
+        id: `${paymentRequest.requestId}`,
+        name: paymentRequest.requestType,
+      })
+    );
+
+    setPaymentRequestTypeRes(paymentRequestList);
+  }, [props.item]);
 
   return (
     <BoxContainer
@@ -496,12 +512,13 @@ const ProductCard = (props: Props) => {
             </>
           ) : (
             <>
-              <SelectInputComponent
-                data={sendRequestTypes}
+              <SelectInputWithId
+                data={paymentRequestTypeRes}
                 value={requestType ? [requestType.name] : []}
                 onChange={handleChangeRequestType}
                 placeholder="Gửi yêu cầu"
                 style={{ margin: 0 }}
+                disabled={paymentRequestTypeRes.length === 0}
               />
             </>
           )}

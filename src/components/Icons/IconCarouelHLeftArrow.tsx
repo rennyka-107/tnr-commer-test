@@ -11,10 +11,10 @@ const IconCarouelHLeftArrow = ({ style }: { style?: React.CSSProperties }) => {
         style={style}
         className="icon icon-LeftArow"
       >
-        <ellipse cx="25" cy="25" rx="25" ry="25" fill="#48576D" className="ellipse icon-elippse" />
+        <ellipse cx="25" cy="25" rx="25" ry="25"     fill="#F3F4F6" className="ellipse icon-elippse" />
         <path
           d="M27 31.0664L20 24.9998L27 18.9331"
-          stroke="#1B3459"
+		  stroke="#C7C9D9"
           strokeLinecap="square"
         />
       </svg>

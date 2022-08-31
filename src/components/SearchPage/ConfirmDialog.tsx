@@ -11,8 +11,8 @@ import { searchLocationResponse } from "interface/searchIF";
 interface Props {
   handleClose: () => void;
   open: boolean;
-  handleConfirm: (tempCart: searchLocationResponse) => () => void;
-  tempCart: searchLocationResponse | null;
+  handleConfirm: (tempCart: searchLocationResponse | string) => () => void;
+  tempCart: searchLocationResponse | string | null;
 }
 
 const ConfirmDialog = ({
@@ -21,8 +21,6 @@ const ConfirmDialog = ({
   handleConfirm,
   tempCart,
 }: Props) => {
-
-
   return (
     <Dialog
       open={open}

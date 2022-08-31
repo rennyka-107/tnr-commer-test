@@ -2,11 +2,14 @@ import {
   IconCardPlusOSS,
   IconClipBoardOSS,
   IconDecorHome,
+  IconDMDrown,
   IconMuaOnline,
   IconSearchOSS,
+  IconTKBDSDrownmin,
   IconUserOSS,
   IconYellowStepOSS,
 } from "@components/Icons";
+import IconDKDNDrown from "@components/Icons/IconDKDNDrown";
 import styled from "@emotion/styled";
 import { Button, Typography } from "@mui/material";
 import Router from "next/router";
@@ -15,7 +18,20 @@ const WrapOSS = styled.div`
   display: flex;
   gap: 30px;
   justify-content: center;
+  @media only screen and (max-width: 1250px) {
+	display: none;
+  }
 `;
+const WrapOSS2 = styled.div`
+display:grid;
+grid-template-columns: 300px 300px;
+grid-row: auto auto;
+grid-column-gap: 20px;
+grid-row-gap: 20px;
+@media only screen and (min-width: 1250px) {
+	display: none;
+  }
+`
 const TexTopStyled = styled.div`
   font-family: "Roboto";
   font-style: normal;
@@ -128,6 +144,42 @@ export default function OnlineSupportSale() {
           </CardItem>
         </ContainerOSS>
       </WrapOSS>
+	  <WrapOSS2>
+        <ContainerOSS>
+          <CardItem>
+            <TextCard>Đăng ký/Đăng nhập</TextCard>
+            <IconUserOSS />
+          </CardItem>
+          <IconDKDNDrown
+            style={{ position: "absolute", right: "-15px", top: "39%" }}
+          />
+        </ContainerOSS>
+        <ContainerOSS>
+          <CardItem>
+            <TextCard>Tìm kiếm BĐS</TextCard>
+            <IconSearchOSS />
+          </CardItem>
+          <IconTKBDSDrownmin
+            style={{ position: "absolute", right: "45%", bottom: "-10px" }}
+          />
+        </ContainerOSS>
+		<ContainerOSS>
+          <CardItem>
+            <TextCard>Hoàn tất đơn hàng</TextCard>
+            <IconClipBoardOSS />
+          </CardItem>
+        </ContainerOSS>
+        <ContainerOSS>
+          <CardItem>
+            <TextCard>Đặt mua</TextCard>
+            <IconCardPlusOSS />
+          </CardItem>
+          <IconDMDrown
+            style={{ position: "absolute", left: "-15px", top: "39%" }}
+          />
+        </ContainerOSS>
+
+      </WrapOSS2>
       <div style={{ marginTop: 50 }}>
         <ButtonStyled
           onClick={() => {

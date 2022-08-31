@@ -20,12 +20,12 @@ const IconCarouelHRightArrow = ({
           rx="25"
           ry="25"
           transform="rotate(-180 25 25)"
-          fill="#48576D"
+          fill="#F3F4F6"
           className="ellipse icon-elippse"
         />
         <path
           d="M23 18.9336L30 25.0002L23 31.0669"
-          stroke="#1B3459"
+          stroke="#C7C9D9"
           strokeLinecap="square"
         />
       </svg>

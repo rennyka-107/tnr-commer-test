@@ -48,6 +48,9 @@ import ModalRegister from "./ModalRegister";
 import { getUserInfoApi } from "../../../pages/api/profileApi";
 import { getUserInfo } from "../../../store/profileSlice";
 import useForceUpdate from "hooks/useForceUpdate";
+import useNotification from "hooks/useNotification";
+import ConfirmDialog from "@components/SearchPage/ConfirmDialog";
+import PathRoute from "utils/PathRoute";
 
 interface ProductsProps {
   listProject?: ProjectResponse[];
@@ -96,44 +99,6 @@ const TextFloorStyled = styled(Typography)`
   color: #48576d;
 `;
 
-const dataFake = [
-  {
-    src: Product1,
-    title: "TNR Stars Lam Sơn",
-    subTitle: "90 đường Láng, Thịnh Quang, Đống Đa, Hà Nội",
-    item1: "02",
-    item2: "02",
-    item3: "80",
-    item4: "Đông Nam",
-    priceListed: 3018933000,
-    priceSub: 40580174,
-    ticketCard: "TRN Star",
-  },
-  {
-    src: Product2,
-    title: "TNR Stars Lam Sơn",
-    subTitle: "90 đường Láng, Thịnh Quang, Đống Đa, Hà Nội",
-    item1: "02",
-    item2: "02",
-    item3: "80",
-    item4: "Đông Nam",
-    priceListed: 3018933000,
-    priceSub: 40580174,
-    ticketCard: "TRN Star",
-  },
-  {
-    src: Product3,
-    title: "TNR Stars Lam Sơn",
-    subTitle: "90 đường Láng, Thịnh Quang, Đống Đa, Hà Nội",
-    item1: "02",
-    item2: "02",
-    item3: "80",
-    item4: "Đông Nam",
-    priceListed: 3018933000,
-    priceSub: 40580174,
-    ticketCard: "TNR Grand Palace",
-  },
-];
 
 const TextHeaderStyled = styled(Typography)`
   font-family: "Roboto";
@@ -347,6 +312,7 @@ const TextFloorValue = styled(Typography)`
 `;
 
 const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
+  console.log({dataProduct})
   const router = useRouter();
   const id = router.asPath.split("/")[2];
   const addToCart = useAddToCart();
@@ -358,25 +324,24 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
     PriceID: 0,
     ScheduleID: 0,
   });
-
   const listBread = [
     {
       id: 1,
       value: "Trang chủ",
+      path: '/'
     },
     {
       id: 2,
-      value: "Đất nền",
+      value: dataProduct.projectType.name,
+      path: `/${PathRoute.ProjectTNR}?type=${dataProduct.projectType.id}`
     },
     {
       id: 3,
-      value: "Tiểu khu",
+      value: dataProduct.projectName,
+      path: `/search?Type=Advanded&projectId=${dataProduct.project.id}`
     },
   ];
-  const [rerender, forceUpdate] = useForceUpdate();
-  const detailUser = useSelector(
-    (state: RootState) => state?.profile?.userInfo
-  );
+
   const dispatch = useDispatch();
   const [tabCardValue, setTabCardValue] = useState(true);
   const [typeBottomShow, setTypeBottomShow] = useState(1);
@@ -385,6 +350,8 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
   const [handleOpen, setHandleOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [callApi, setCallApi] = useState(false);
+  const [tempCartId, setTempCartId] = useState<string | null>(null);
+  const [openConfirmDialog, setOpenConfirmDialog] = useState<boolean>(false);
 
   const [numberRoom, setNumberRoom] = useState({
     num: "S.202",
@@ -396,6 +363,8 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
     open: false,
     anchor: null,
   });
+  const { cart } = useSelector((state: RootState) => state.carts);
+  const notification = useNotification();
 
   const convertRoom = (type: string): string => {
     switch (type) {
@@ -522,6 +491,31 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
       setHandleOpen(false);
     }
   }, [loading]);
+
+  const handleAddToCart = (id: string) => () => {
+    // addToCart(product.productId);
+    if (cart && cart.id === id) {
+      notification({
+        severity: "success",
+        message: "Sản phẩm này đã có sẵn trong giỏ hàng",
+      });
+    } else if (isEmpty(cart)) {
+      addToCart(id);
+    } else {
+      setTempCartId(id);
+      setOpenConfirmDialog(true);
+    }
+  };
+
+  const handleCloseConfirmDialog = () => {
+    setOpenConfirmDialog(false);
+  };
+
+  const handleChangeCartITem = (id: string) => () => {
+    addToCart(id);
+    setOpenConfirmDialog(false);
+  };
+
   return (
     <>
       <FlexContainer>
@@ -982,13 +976,14 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                   }}
                 >
                   <ButtonStyled
-                    onClick={() => {
-                      // localStorage.setItem(
-                      //   "cart-id",
-                      //   JSON.stringify(dataProduct.id)
-                      // );
-                      addToCart(id);
-                    }}
+                    // onClick={() => {
+                    //   // localStorage.setItem(
+                    //   //   "cart-id",
+                    //   //   JSON.stringify(dataProduct.id)
+                    //   // );
+                    //   addToCart(id);
+                    // }}
+                    onClick={handleAddToCart(id)}
                     disabled={dataProduct?.paymentStatus !== 2}
                     style={{
                       backgroundColor:
@@ -1000,9 +995,10 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                     Giỏ hàng
                   </ButtonStyled>
                   <ButtonStyled
-                    onClick={() => {
-                      addToCart(id);
-                    }}
+                    // onClick={() => {
+                    //   addToCart(id);
+                    // }}
+                    onClick={handleAddToCart(id)}
                     disabled={dataProduct?.paymentStatus !== 2}
                     style={{
                       backgroundColor:
@@ -1118,6 +1114,12 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
           {fecthBackDrop()}
         </div>
       </FlexContainer>
+      <ConfirmDialog
+        open={openConfirmDialog}
+        handleClose={handleCloseConfirmDialog}
+        handleConfirm={handleChangeCartITem}
+        tempCart={tempCartId}
+      />
     </>
   );
 };

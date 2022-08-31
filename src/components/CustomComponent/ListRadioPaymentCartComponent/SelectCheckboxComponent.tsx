@@ -245,11 +245,11 @@ export default function SelectCheckboxComponent({
 
   const renderValue = (event: any) => {
     if (event.length === 0) {
-      return `Đã chọn ${data.length} chiết khấu`;
+      return `Đã chọn ${data?.length} chiết khấu`;
     } else {
       //   const arr: any = [];
       //   data.map((item) => arr.push(item?.PromotionName));
-      return `Đã chọn ${data.length} chiết khấu`;
+      return `Đã chọn ${data?.length} chiết khấu`;
     }
   };
   function currencyFormat(num) {
@@ -346,7 +346,7 @@ export default function SelectCheckboxComponent({
                   </div>
                 </li>
               )}
-              options={data ?? [...data]}
+              options={data}
               // 	.sort((a, b) => {
               //     // Display the selected labels first.
               //     let ai = value.indexOf(a);
