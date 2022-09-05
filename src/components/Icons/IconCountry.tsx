@@ -9,6 +9,7 @@ const IconCountry = ({ style }: { style?: React.CSSProperties }) => {
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         xmlnsXlink="http://www.w3.org/1999/xlink"
+		className="icon-country"
       >
         <circle
           cx="10"

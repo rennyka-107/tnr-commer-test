@@ -898,7 +898,7 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                   <WrapItemCenter>
                     <IconFrame />
                     <TextCenterItem>
-                      {dataProduct?.landArea ? dataProduct?.landArea : "N/A"} m²
+                      {dataProduct?.landArea ? dataProduct?.clearArea : "N/A"} m²
                     </TextCenterItem>
                   </WrapItemCenter>
                   {dataProduct?.projectTypeCode === "1" ? (

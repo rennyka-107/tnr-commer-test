@@ -1,5 +1,12 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { CloseIcon, IconBag, IconHeart, IconUser, Logo, MenuIcon } from "@components/Icons";
+import {
+  CloseIcon,
+  IconBag,
+  IconHeart,
+  IconUser,
+  Logo,
+  MenuIcon,
+} from "@components/Icons";
 import styled from "@emotion/styled";
 import { Button, Skeleton, useMediaQuery } from "@mui/material";
 import useAuth from "hooks/useAuth";
@@ -20,7 +27,17 @@ import { getListFavourite } from "../../../../pages/api/FavouriteApi";
 import LocalStorage from "utils/LocalStorage";
 import SessionStorage from "utils/SessionStorage";
 import DrawerMobile from "./DrawerMobile";
-import { HeaderContainer, ButtonBuyHelp, ContainerNavTop, IconAccountWrap, ResponsiveLayout, TextLink, WrapMenuItem, WrapRightItem, ContentLeftHeader } from "./styled";
+import {
+  HeaderContainer,
+  ButtonBuyHelp,
+  ContainerNavTop,
+  IconAccountWrap,
+  ResponsiveLayout,
+  TextLink,
+  WrapMenuItem,
+  WrapRightItem,
+  ContentLeftHeader,
+} from "./styled";
 import { MenuMoblie } from "./MenuMoblie/MenuMoblie";
 
 const lbds = [
@@ -81,6 +98,8 @@ const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
   const { title, typeAction } = useSelector(
     (state: RootState) => state?.shortcut
   );
+  const userToken = LocalStorage.get("accessToken");
+  console.log(userToken);
 
   const { checkUp } = useSelector((state: RootState) => state.favourites);
   const fetchFavourite = async () => {
@@ -147,7 +166,7 @@ const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
     }
   };
 
- const handleSelectTypeProject = (data: any) => {
+  const handleSelectTypeProject = (data: any) => {
     const arr: any = [];
     arr.push(data.id);
 
@@ -157,9 +176,9 @@ const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
     Router.push(`/${PathRoute.ProjectTNR}?type=${data.id}`);
   };
 
-const handleToggleMenuMoblie = () => {
-  setIsOpenMenu(!isOpenMenu)
-}
+  const handleToggleMenuMoblie = () => {
+    setIsOpenMenu(!isOpenMenu);
+  };
   const pressShortcut = (type: typeShortcut) => {
     switch (type) {
       case "BANG_HANG":
@@ -175,123 +194,147 @@ const handleToggleMenuMoblie = () => {
   };
   const fetchListDropdown = () => {
     return (
-        <ContentLeftHeader>
-          {!isEmpty(menuDataProject) ? (
-            <MenuDropdown
-              title={"Loại bất động sản"}
-              data={menuDataProject}
-              onSelect={(item) => {
-                handleSelectTypeProject(item);
-              }}
-            />
-          ) : (
-            <Skeleton
-              animation="wave"
-              style={{ width: 200, height: 42, opacity: "40%" }}
-            />
-          )}
-          {!isEmpty(menuData) ? (
-            <MenuDropdown
-              title={"Dự Án"}
-              data={menuData}
-              onSelect={(item) => {
-                // Router.replace(`/products?idProject=${item.id}`);
-                Router.replace(`/project-detail/${item.id}`);
-              }}
-            />
-          ) : (
-            <Skeleton
-              animation="wave"
-              style={{ width: 111, height: 42, opacity: "40%" }}
-            />
-          )}
-          {!isEmpty(menuDataProject) ? (
-            <Button onClick={() => scrollView()}>
-              <TextLink>Khuyến mãi</TextLink>
-            </Button>
-          ) : (
-            <Skeleton
-              animation="wave"
-              style={{ width: 111, height: 42, opacity: "40%" }}
-            />
-          )}
-          {!isEmpty(menuDataProject) ? (
-            <Button>
-              <Link
-                href={"https://tnrvietnam.com.vn/sites/tnr/tin-tuc/"}
-                passHref
-              >
-                <TextLink target={"_blank"}>Tin tức</TextLink>
-              </Link>
-            </Button>
-          ) : (
-            <Skeleton
-              animation="wave"
-              style={{ width: 111, height: 42, opacity: "40%" }}
-            />
-          )}
-        </ContentLeftHeader>
+      <ContentLeftHeader>
+        {!isEmpty(menuDataProject) ? (
+          <MenuDropdown
+            title={"Loại bất động sản"}
+            data={menuDataProject}
+            onSelect={(item) => {
+              handleSelectTypeProject(item);
+            }}
+          />
+        ) : (
+          <Skeleton
+            animation="wave"
+            style={{ width: 200, height: 42, opacity: "40%" }}
+          />
+        )}
+        {!isEmpty(menuData) ? (
+          <MenuDropdown
+            title={"Dự Án"}
+            data={menuData}
+            onSelect={(item) => {
+              // Router.replace(`/products?idProject=${item.id}`);
+              Router.replace(`/project-detail/${item.id}`);
+            }}
+          />
+        ) : (
+          <Skeleton
+            animation="wave"
+            style={{ width: 111, height: 42, opacity: "40%" }}
+          />
+        )}
+        {!isEmpty(menuDataProject) ? (
+          <Button onClick={() => scrollView()}>
+            <TextLink>Khuyến mãi</TextLink>
+          </Button>
+        ) : (
+          <Skeleton
+            animation="wave"
+            style={{ width: 111, height: 42, opacity: "40%" }}
+          />
+        )}
+        {!isEmpty(menuDataProject) ? (
+          <Button>
+            <Link
+              href={"https://tnrvietnam.com.vn/sites/tnr/tin-tuc/"}
+              passHref
+            >
+              <TextLink target={"_blank"}>Tin tức</TextLink>
+            </Link>
+          </Button>
+        ) : (
+          <Skeleton
+            animation="wave"
+            style={{ width: 111, height: 42, opacity: "40%" }}
+          />
+        )}
+      </ContentLeftHeader>
     );
   };
 
   return (
     <Fragment>
-    <ContainerNavTop>
-    <ResponsiveLayout>
-      <HeaderContainer>
-        <WrapMenuItem >
-          <Link href="/">
-            <a>
-              <Logo />
-            </a>
-          </Link>
-             {fetchListDropdown()}
-        </WrapMenuItem>
-        <WrapRightItem>
-          <ButtonBuyHelp onClick={() => pressShortcut(typeAction)}>
-            <span>{title}</span>
-          </ButtonBuyHelp>
-          <IconAccountWrap>
-            {/* <span
+      <ContainerNavTop>
+        <ResponsiveLayout>
+          <HeaderContainer>
+            <WrapMenuItem>
+              <Link href="/">
+                <a>
+                  <Logo />
+                </a>
+              </Link>
+              {fetchListDropdown()}
+            </WrapMenuItem>
+            <WrapRightItem>
+              <ButtonBuyHelp onClick={() => pressShortcut(typeAction)}>
+                <span>{title}</span>
+              </ButtonBuyHelp>
+              <IconAccountWrap>
+                {/* <span
               onClick={() => {
                 Router.push({ pathname: PathRoute.Profile });
               }}
             >
               <IconUser />
             </span> */}
-            <MenuDropdown
-              customButton={
-                <span
-                  onClick={() => {
-                    Router.push({ pathname: PathRoute.Profile });
-                  }}
-                >
-                  <IconUser />
-                </span>
-              }
-              data={menuUser}
-              title=""
-              onSelect={handleNavigateUser}
-            />
-            <Link href="/favorite-products">
-              <a>
-                <IconHeart total={listFavourite?.numberOfElements} />
-              </a>
-            </Link>
-            <Link href="/payment-cart">
-              <a>
-                <IconBag total={!isEmpty(cart) ? 1 : 0} />
-              </a>
-            </Link>
-          <div onClick={handleToggleMenuMoblie} className='menu-icon'>
-            {isOpenMenu ? <CloseIcon/> : <MenuIcon/>}
-          </div>
-          </IconAccountWrap>
-        </WrapRightItem>
-      </HeaderContainer>
-    </ResponsiveLayout>
-    </ContainerNavTop>
-    {isOpenMenu && <MenuMoblie onSelect={handleSelectTypeProject}/>}
+                {userToken !== null ? (
+                  <>
+                    <MenuDropdown
+                      customButton={
+                        <IconUser />
+                        // <span
+                        //   onClick={() => {
+                        //     Router.push({ pathname: PathRoute.Profile });
+                        //   }}
+                        // >
+                        //   <IconUser />
+                        // </span>
+                      }
+                      data={menuUser}
+                      title=""
+                      onSelect={handleNavigateUser}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <MenuDropdown
+					 customButton={
+                        // <IconUser />
+                        <span
+                          onClick={() => {
+                            Router.push({ pathname: PathRoute.Profile });
+                          }}
+                        >
+                          <IconUser />
+                        </span>
+                      }
+                      data={menuUser}
+                      title=""
+                      onSelect={handleNavigateUser}
+                    />
+                  </>
+                )}
+
+                <Link href="/favorite-products">
+                  <a>
+                    <IconHeart total={listFavourite?.numberOfElements} />
+                  </a>
+                </Link>
+                <Link href="/payment-cart">
+                  <a>
+                    <IconBag total={!isEmpty(cart) ? 1 : 0} />
+                  </a>
+                </Link>
+                <div onClick={handleToggleMenuMoblie} className="menu-icon">
+                  {isOpenMenu ? <CloseIcon /> : <MenuIcon />}
+                </div>
+              </IconAccountWrap>
+            </WrapRightItem>
+          </HeaderContainer>
+        </ResponsiveLayout>
+      </ContainerNavTop>
+      {isOpenMenu && <MenuMoblie onSelect={handleSelectTypeProject} />}
     </Fragment>
   );
 };

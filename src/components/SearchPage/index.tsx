@@ -9,6 +9,7 @@ import {
   Paper,
   Popper,
   PopperPlacementType,
+  useMediaQuery,
 } from "@mui/material";
 import Typography from "@mui/material/Typography";
 
@@ -156,6 +157,49 @@ const PaperStyled = styled(Paper)`
   border-radius: 4px;
 `;
 
+const ContainerFilter = styled.div`
+  display: flex;
+  margin-bottom: 31px;
+  gap: 90px;
+  align-items: center;
+  @media screen and (max-width: 1260px) {
+    gap: 30px;
+  }
+  @media screen and (max-width: 1204px) {
+    flex-direction: column;
+	gap: 1px;
+	
+  }
+`;
+
+const FlexContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: 90px;
+  @media screen and (max-width: 1680px) {
+    gap: 70px;
+  }
+  @media screen and (max-width: 1630px) {
+    gap: 60px;
+  }
+  @media screen and (max-width: 1600px) {
+    gap: 50px;
+  }
+  @media screen and (max-width: 1560px) {
+    gap: 32px;
+  }
+  @media screen and (max-width: 1300px) {
+    gap: 25px;
+  }
+  @media screen and (max-width: 1260px) {
+    gap: 20px;
+  }
+  @media screen and (max-width: 800px) {
+    gap: 5px;
+  }
+`;
+
 const SearchPage = ({
   searchData,
   totalTextSearch,
@@ -165,6 +209,7 @@ const SearchPage = ({
 }: dataProps) => {
   const classes = useStyles();
   const router = useRouter();
+  const matches = useMediaQuery("(max-width:1204px)");
   const [textSearchValue, setTextSearchValue] = useState<any>("");
   const dispatch = useDispatch();
 
@@ -185,8 +230,8 @@ const SearchPage = ({
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [openModal, setOpenModal] = useState(false);
   const [placement, setPlacement] = useState<PopperPlacementType>();
-  const [typeProduct, setTypeProduct] = useState('0');
-  const [typeSaleProduct, setTypeSaleProduct] = useState('0')
+  const [typeProduct, setTypeProduct] = useState("0");
+  const [typeSaleProduct, setTypeSaleProduct] = useState("0");
 
   const {
     textSearch,
@@ -207,8 +252,8 @@ const SearchPage = ({
     priceTo: (priceTo as string) ?? "20",
     areaFrom: (areaFrom as string) ?? "30",
     areaTo: (areaTo as string) ?? "200",
-	// isPayment: 0,
-	// sortType: 0
+    // isPayment: 0,
+    // sortType: 0
     // provinceIdList: [],
     // projectTypeIdList: [],
     // projectIdList: [],
@@ -456,8 +501,8 @@ const SearchPage = ({
       JSON.stringify(listDataLSProject)
     );
     localStorage.setItem("listParamsIdProject", JSON.stringify(listIdProject));
-	localStorage.setItem("typeProduct", JSON.stringify(typeProduct));
-	localStorage.setItem("typeSaleProduct", JSON.stringify(typeSaleProduct));
+    localStorage.setItem("typeProduct", JSON.stringify(typeProduct));
+    localStorage.setItem("typeSaleProduct", JSON.stringify(typeSaleProduct));
     router.push(
       `/search?Type=Advanded&&textSearch=${filterSearch.textSearch}&&provinceId=${filterSearch.provinceId}&&projectTypeId=${filterSearch.projectTypeId}&&projectId=${filterSearch.projectId}&&priceFrom=${filterSearch.priceFrom}&&priceTo=${filterSearch.priceTo}&&areaFrom=${filterSearch.areaFrom}&&areaTo=${filterSearch.areaTo}`
     );
@@ -480,9 +525,9 @@ const SearchPage = ({
     localStorage.removeItem("listParamsLSProjectType");
     localStorage.removeItem("listDataLSProject");
     localStorage.removeItem("listParamsIdProject");
-	localStorage.removeItem("typeProduct"),
-	localStorage.removeItem("typeSaleProduct")
-	
+    localStorage.removeItem("typeProduct"),
+      localStorage.removeItem("typeSaleProduct");
+
     router.push(
       `/search?Type=Advanded&&textSearch=&&provinceId=&&projectTypeId=&&projectId=&&priceFrom=&&priceTo=&&areaFrom=0&&areaTo=200`
     );
@@ -511,15 +556,15 @@ const SearchPage = ({
         !isEmpty(textSearch) ||
         !isEmpty(filterSearch.priceFrom) ||
         !isEmpty(filterSearch.priceTo) ||
-        !isEmpty(filterSearch.areaFrom) ||
+        (!isEmpty(filterSearch.areaFrom) && filterSearch.areaFrom !== '0')  ||
         !isEmpty(filterSearch.areaTo) ? (
           <div
             style={{
               display: "flex",
               flexDirection: "row",
               alignItems: "center",
-              padding: "20px 20px 0px 20px",
-              marginTop: 15,
+              padding: matches ? "10px 20px 0px 20px" : "20px 20px 0px 20px",
+              marginTop: matches ? 0 : 15,
               gap: 10,
             }}
           >
@@ -571,22 +616,8 @@ const SearchPage = ({
       }
     >
       <div>
-        <div
-          style={{
-            display: "flex",
-            marginBottom: 31,
-            alignItems: "center",
-            gap: 90,
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "flex-start",
-              gap: 90,
-            }}
-          >
+        <ContainerFilter>
+          <FlexContainer>
             <PopperComponent
               label="Vị Trí"
               data={listMenuLocation}
@@ -594,7 +625,7 @@ const SearchPage = ({
               onChange={handleChangeLocation}
               listDataLSProvince={listDataLSProvince}
               placeholder="Chọn vị trí"
-              style={{ width: 150, height: 40 }}
+              //   style={{ width: 150, height: 40 }}
             />
             <PopperProjectType
               label="Loại BĐS"
@@ -603,7 +634,7 @@ const SearchPage = ({
               listProjectType={projectName}
               onChange={handleSelectProject}
               placeholder="Loại BĐS"
-              style={{ width: 150, height: 40 }}
+              //   style={{ width: 150, height: 40 }}
             />
             <ProjectDropdown
               label="Chọn dự án"
@@ -613,7 +644,7 @@ const SearchPage = ({
               checkSelectProjectType={checkSelectProjectType}
               onChange={handleSelectProduct}
               placeholder="Chọn dự án"
-              style={{ width: 150, height: 40 }}
+              //   style={{ width: 150, height: 40 }}
             />
             <SliderGroupFilterSearch
               label={"Khác"}
@@ -670,13 +701,13 @@ const SearchPage = ({
                 }}
               />
             </SliderGroupFilterSearch>
-          </div>
+          </FlexContainer>
           <div style={{ display: "flex" }}>
             <Button
               style={{
                 background: "#1B3459",
                 width: 125,
-                marginTop: 35,
+                marginTop: matches ? 10 : 35,
                 borderRadius: 8,
                 height: 40,
               }}
@@ -695,7 +726,7 @@ const SearchPage = ({
             </Button>
             {fetchComponent()}
           </div>
-        </div>
+        </ContainerFilter>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <div
             style={{
@@ -739,7 +770,10 @@ const SearchPage = ({
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={350}>
             <PaperStyled>
-              <SwitchComponent setTypeProduct={setTypeProduct} setTypeSaleProduct={setTypeSaleProduct}/>
+              <SwitchComponent
+                setTypeProduct={setTypeProduct}
+                setTypeSaleProduct={setTypeSaleProduct}
+              />
             </PaperStyled>
           </Fade>
         )}

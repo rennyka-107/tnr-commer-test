@@ -592,6 +592,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
         ? productItem?.ListSchedule[0]["ScheduleID"]
         : "",
     };
+
     if (!isEmpty(uploadMedia) && !isEmpty(transactionCode)) {
       const data = new FormData();
       uploadMedia.forEach((media) => {
@@ -640,26 +641,129 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                 !isEmpty(res.responseData?.transactionCode) &&
                 paymentFlag === 0
               ) {
-                apiGetQrCode(res.responseData?.transactionCode)
-                  .then((res) => {
-                    if (!isEmpty(res.responseData)) {
-                      dispatch(setQrCode(res.responseData));
-                      setScopeRender("transaction_message");
-                    } else {
-                      notification({
-                        message: res.responseMessage,
-                        severity: "error",
-                        title: "Hoàn thiện hồ sơ mua bán",
+                if (payMethod === "2F19283D-4384-43B7-805F-556BAAbcn447") {
+                  if (!isEmpty(uploadMedia)) {
+                    const data = new FormData();
+                    uploadMedia.forEach((media) => {
+                      data.append("multipartFileList", media);
+                    });
+                    data.append("paymentCode", transactionCode as string);
+                    apiUploadFile(data)
+                      .then((response) => {
+                        if (response.responseCode === "00") {
+                          notification({
+                            severity: "success",
+                            title: "Tạo phiếu thanh toán",
+                            message: "Tạo phiếu thanh toán thành công!",
+                          });
+                          apiGetQrCode(res.responseData?.transactionCode)
+                            .then((res) => {
+                              if (!isEmpty(res.responseData)) {
+                                dispatch(setQrCode(res.responseData));
+                                setScopeRender("transaction_message");
+                              } else {
+                                notification({
+                                  message: res.responseMessage,
+                                  severity: "error",
+                                  title: "Hoàn thiện hồ sơ mua bán",
+                                });
+                              }
+                            })
+                            .catch((err) => console.log(err));
+                        } else {
+                          notification({
+                            severity: "error",
+                            title: "Tạo phiếu thanh toán",
+                            message: response.responseMessage,
+                          });
+                        }
+                        setLoading(false);
+                      })
+                      .catch((err) => {
+                        notification({
+                          severity: "error",
+                          title: "Tạo phiếu thanh toán",
+                          message: "Có lỗi xảy ra",
+                        });
+                        setLoading(false);
                       });
-                    }
-                  })
-                  .catch((err) => console.log(err));
+                  } else {
+                    notification({
+                      severity: "error",
+                      title: "Tạo phiếu thanh toán",
+                      message:
+                        "Bạn cần upload giấy tờ xác thực thanh toán Mobile Banking",
+                    });
+                  }
+                } else {
+                  apiGetQrCode(res.responseData?.transactionCode)
+                    .then((res) => {
+                      if (!isEmpty(res.responseData)) {
+                        dispatch(setQrCode(res.responseData));
+                        setScopeRender("transaction_message");
+                      } else {
+                        notification({
+                          message: res.responseMessage,
+                          severity: "error",
+                          title: "Hoàn thiện hồ sơ mua bán",
+                        });
+                      }
+                    })
+                    .catch((err) => console.log(err));
+                }
               }
               if (
                 !isEmpty(res.responseData?.msbRedirectLink) &&
                 paymentFlag !== 0
               ) {
                 window.location.href = res.responseData?.msbRedirectLink;
+                return;
+              }
+              if (
+                res.responseCode === "00" &&
+                payMethod === "2F19283D-4384-43B7-805F-556BAAbcn447" &&
+                paymentFlag !== 0
+              ) {
+                if (!isEmpty(uploadMedia)) {
+                  const data = new FormData();
+                  uploadMedia.forEach((media) => {
+                    data.append("multipartFileList", media);
+                  });
+                  data.append("paymentCode", transactionCode as string);
+                  apiUploadFile(data)
+                    .then((response) => {
+                      if (response.responseCode === "00") {
+                        notification({
+                          severity: "success",
+                          title: "Tạo phiếu thanh toán",
+                          message: "Tạo phiếu thanh toán thành công!",
+                        });
+                        router.push("/profile");
+                      } else {
+                        notification({
+                          severity: "error",
+                          title: "Tạo phiếu thanh toán",
+                          message: response.responseMessage,
+                        });
+                      }
+                      setLoading(false);
+                    })
+                    .catch((err) => {
+                      notification({
+                        severity: "error",
+                        title: "Tạo phiếu thanh toán",
+                        message: "Có lỗi xảy ra",
+                      });
+                      setLoading(false);
+                    });
+                } else {
+                  notification({
+                    severity: "error",
+                    title: "Tạo phiếu thanh toán",
+                    message:
+                      "Bạn cần upload giấy tờ xác thực thanh toán Mobile Banking",
+                  });
+                }
               }
             } else {
               notification({
@@ -687,6 +791,8 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
       }
     }
   };
+
+  console.log(productItem, !isEmpty(productItem.ListSchedule), "hahah");
 
   function removeCustomer(id: string) {
     const paymentIdentityInfos = [...data.paymentIdentityInfos];
@@ -1230,7 +1336,8 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                     setPayMethod={setPayMethod}
                   />
                 </Box>
-                {!isEmpty(transactionCode) && data.paymentStatus === 3 && (
+                {((!isEmpty(transactionCode) && data.paymentStatus === 3) ||
+                  payMethod === "2F19283D-4384-43B7-805F-556BAAbcn447") && (
                   <Box>
                     <FileUpload setValidUpload={setValidUpload} />
                   </Box>
@@ -1442,7 +1549,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                           ? "#FFFFFF !important"
                           : "",
                       "&:hover": {
-                        color: "#FFFFFF !important"
+                        color: "#FFFFFF !important",
                       },
                     }}
                   >

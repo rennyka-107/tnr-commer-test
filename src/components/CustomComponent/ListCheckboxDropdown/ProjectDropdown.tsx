@@ -186,7 +186,7 @@ const ProjectDropdown = ({
   const id = open ? "github-label" : undefined;
 
   return (
-    <FormControl sx={{ m: 1, width: 170, mt: 3 }}>
+    <FormControl sx={{ m: 1, width: 'auto', mt: 3 }}>
       <TitleStyled>{label}</TitleStyled>
 
       <Select

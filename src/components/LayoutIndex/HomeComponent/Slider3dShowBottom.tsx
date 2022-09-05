@@ -260,7 +260,7 @@ export default function Slider3dShowBottom() {
                 }}
                 spaceBetween={45}
                 slideToClickedSlide={true}
-                className="mySwiper"
+                className="mySwiper-BDSXGD"
                 // breakpoints={{
                 //   // when window width is >= 640px
                 //   640: {

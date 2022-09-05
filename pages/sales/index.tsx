@@ -34,7 +34,7 @@ const SpecialOffers = () => {
 
   const [params, setParams] = useState({
     page: 0,
-    size: 9,
+    size: 12,
   });
 
   const fetchAllSpecialSales = async () => {
@@ -43,7 +43,7 @@ const SpecialOffers = () => {
       const response = await getTopAllSpecial(params);
       if (response.responseCode === "00") {
         dispatch(getAllSearchSpecialOffers(response.responseData.content));
-        setTotalPage(response.responseData.totalPage);
+        setTotalPage(response.responseData.totalPages);
         setLoading(false);
       }
     } catch (err) {

@@ -14,6 +14,10 @@ const ContainerWrapper = styled.div`
     padding:29px 164px;
     margin-top: 127px;
     width:100%;
+	@media screen and (max-width: 1500px) {
+		padding:20px 50px 20px 50px;
+	}
+	
 `;
 
 const HeaderView = styled.div`

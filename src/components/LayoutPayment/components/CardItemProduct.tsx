@@ -107,7 +107,7 @@ const CardItemProduct = (props: Props) => {
         <RowStyledAgain>
           <Text14Styled>Diện tích</Text14Styled>
           <Text14Styled>
-            {cart.landArea ?? "N/A"} m<sup>2</sup>
+            {cart.clearArea ?? "N/A"} m<sup>2</sup>
           </Text14Styled>
         </RowStyledAgain>
         <RowStyledAgain>

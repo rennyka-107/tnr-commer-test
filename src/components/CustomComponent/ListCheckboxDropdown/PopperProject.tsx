@@ -242,7 +242,7 @@ export default function PopperProjectType({
 
   return (
     <React.Fragment>
-      <Box sx={{ width: 221, fontSize: 13 }}>
+      <Box sx={{ width: 'auto', fontSize: 13 }}>
         <FormControl sx={{ m: 1, width: 150, mt: 3 }}>
           <TitleStyled>Loại BĐS</TitleStyled>
           <OutlinedInputStyled

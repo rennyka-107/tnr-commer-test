@@ -941,6 +941,22 @@ a {
     }
 }
 
+@media only screen and (max-width: 1000px) {
+    .mySwiper-BDSNB {
+        width: 800px;
+    }
+}
+
+@media only screen and (max-width: 850px) {
+    .mySwiper-BDSNB {
+        width: 750px;
+        margin-right: -30px !important;
+    }
+    .mySwiper-BDSNB .swiper-slide {
+        margin-right: 10px !important;
+    }
+}
+
 @media only screen and (min-width: 1280px) {
     .mySwiper-BDSNB {
         width: 1113px;
@@ -959,15 +975,25 @@ a {
     }
 }
 
-@media only screen and (min-width: 1280px) {
+@media only screen and (max-width: 1110px) {
     .mySwiper-CTUD {
-        width: 1113px;
+        width: 900px !important;
     }
 }
 
-@media only screen and (min-width: 1110px) {
+@media only screen and (max-width: 950px) {
     .mySwiper-CTUD {
-        width: 900px;
+        width: 750px !important;
+        margin-right: -100px !important;
+    }
+}
+
+@media only screen and (max-width: 850px) {
+    .mySwiper-CTUD {
+        width: 690px !important;
+    }
+    .mySwiper-CTUD .swiper-slide {
+        margin-right: 70px !important;
     }
 }
 
@@ -982,7 +1008,7 @@ a {
         z-index: 300;
         position: absolute;
         right: 10%;
-        background: #F3F4F6;
+        background: #f3f4f6;
         border-radius: 50px;
     }
 }
@@ -998,7 +1024,37 @@ a {
         z-index: 300;
         position: absolute;
         right: 10%;
-        background: #F3F4F6;
+        background: #f3f4f6;
         border-radius: 50px;
+    }
+}
+
+@media only screen and (max-width: 1000px) {
+    .mySwiper-Category {
+        width: 750px !important;
+    }
+}
+
+@media only screen and (max-width: 800px) {
+    .mySwiper-Category {
+        width: 700px !important;
+    }
+}
+
+@media only screen and (max-width: 1000px) {
+    .icon-country {
+        display: none !important;
+    }
+}
+
+@media only screen and (max-width: 1000px) {
+    .mySwiper-BDSXGD {
+        margin-right: 120px !important;
+    }
+}
+
+@media only screen and (max-width: 1000px) {
+    .swiper-3d .swiper-wrapper {
+        margin-left: 0px !important;
     }
 }

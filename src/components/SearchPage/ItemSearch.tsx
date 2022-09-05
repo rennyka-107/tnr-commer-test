@@ -25,6 +25,19 @@ const ProductWrap = styled.div`
   display: grid;
   gap: 31px;
   grid-template-columns: repeat(4, 1fr);
+  @media screen and (max-width: 1700px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @media screen and (max-width: 1204px) {
+    padding: 0px 75px 60px 60px;
+    display: inline-grid;
+    grid-template-columns: repeat(2, 0.3fr);
+  }
+  @media screen and (max-width: 800px) {
+    padding: 0px 30px 50px 30px;
+    display: inline-grid;
+    grid-template-columns: repeat(2, 0.1fr);
+  }
 `;
 const ItemSearch = ({ data, buyDisabled }: searchProps) => {
   const addToCart = useAddToCart();
@@ -123,46 +136,48 @@ const ItemSearch = ({ data, buyDisabled }: searchProps) => {
 
   return (
     <>
+        <div style={{display: 'flex', justifyContent:'center', alignItems: 'center'}}>
       <ProductWrap>
-        {data?.map((product, index) => {
-          return (
-            <ProductCardSearch
-              onClick={handleAddToCart(product)}
-              key={index}
-              id={product.productId}
-              src={product.thumbnail}
-              projectName={product.projectName}
-              title={product.name}
-              subTitle={product.location}
-              build={product.build}
-              activeFavourite={true}
-              dataItem={{
-                item1: product.landArea,
-                item2: product.numBath,
-                item3: product.numBed,
-                item4: product.doorDirection,
-              }}
-              priceListed={product.totalPrice}
-              favouriteStatus={product.favouriteStatus}
-              priceSub={product.unitPrice}
-              ticketCard={product.category}
-              projectTypeCode={product.projectTypeCode}
-              minFloor={product.minFloor}
-              maxFloor={product.maxFloor}
-              activeSoSanh={true}
-              buyDisabled={product?.paymentStatus !== 2}
-              onCompare={onCompare(
-                product.projectId,
-                product.projectTypeId,
-                product.thumbnail,
-                product.name,
-                product.projectName,
-                product.productId
-              )}
-            />
-          );
-        })}
+          {data?.map((product, index) => {
+            return (
+              <ProductCardSearch
+                onClick={handleAddToCart(product)}
+                key={index}
+                id={product.productId}
+                src={product.thumbnail}
+                projectName={product.projectName}  
+                title={product.name}
+                subTitle={product.location}
+                build={product.build}
+                activeFavourite={true}
+                dataItem={{
+                  item1: product.landArea,
+                  item2: product.numBath,
+                  item3: product.numBed,
+                  item4: product.doorDirection,
+                }}
+                priceListed={product.totalPrice}
+                favouriteStatus={product.favouriteStatus}
+                priceSub={product.unitPrice}
+                ticketCard={product.category}
+                projectTypeCode={product.projectTypeCode}
+                minFloor={product.minFloor}
+                maxFloor={product.maxFloor}
+                activeSoSanh={true}
+                buyDisabled={product?.paymentStatus !== 2}
+                onCompare={onCompare(
+                  product.projectId,
+                  product.projectTypeId,
+                  product.thumbnail,
+                  product.name,
+                  product.projectName,
+                  product.productId
+                )}
+              />
+            );
+          })}
       </ProductWrap>
+        </div>
       <ConfirmDialog
         open={openConfirmDialog}
         handleClose={handleCloseConfirmDialog}

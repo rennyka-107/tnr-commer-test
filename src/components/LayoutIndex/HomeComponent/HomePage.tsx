@@ -373,7 +373,7 @@ const HomePage = () => {
             >
               <IconDecorHome3 />
             </div>
-            {/* <DynamicSlider3dShowBottom /> */}
+            <DynamicSlider3dShowBottom />
             <div
               style={{
                 position: "absolute",

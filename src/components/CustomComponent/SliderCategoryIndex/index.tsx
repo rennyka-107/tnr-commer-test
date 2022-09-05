@@ -189,7 +189,7 @@ const SliderCategoryIndex = ({ data }: { data?: any[] }) => {
             // 	disableOnInteraction: false,
             //   }}
             //   modules={[Autoplay, Pagination, Navigation]}
-            className="mySwiper"
+            className="mySwiper-Category"
             style={{ maxWidth: 900, width: 900, height: 160 }}
           >
             {renderItems}

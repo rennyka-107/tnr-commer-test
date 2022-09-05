@@ -22,9 +22,6 @@ const WrapSlide = styled.div`
 
 display: flex;
 align-items: center;
-@media only screen and (max-width: 1110px) {
-	width: 850px;
-  }
 `;
 const CardContainer = styled.div`
   height: 224px;
