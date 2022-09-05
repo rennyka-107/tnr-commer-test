@@ -147,7 +147,7 @@ const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
     }
   };
 
-  const handleSelectTypeProject = (data: any) => {
+ const handleSelectTypeProject = (data: any) => {
     const arr: any = [];
     arr.push(data.id);
 
@@ -291,7 +291,7 @@ const handleToggleMenuMoblie = () => {
       </HeaderContainer>
     </ResponsiveLayout>
     </ContainerNavTop>
-    {isOpenMenu && <MenuMoblie/>}
+    {isOpenMenu && <MenuMoblie onSelect={handleSelectTypeProject}/>}
     </Fragment>
   );
 };

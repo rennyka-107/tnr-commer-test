@@ -1,15 +1,13 @@
-import { ArrowDownIcon } from "@components/Icons";
 import styled from "@emotion/styled";
 import { Button, Skeleton } from "@mui/material";
-import MenuDropdown from "ItemComponents/MenuDropdown";
+import { MenuBar, MenuBarProjectType } from "interface/menuBarList";
 import isEmpty from "lodash.isempty";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { Fragment, useState } from "react";
+import React, { Fragment } from "react";
 import { useSelector } from "react-redux";
-import PathRoute from "utils/PathRoute";
 import { RootState } from "../../../../../store/store";
-import { TextLink, DropdownStyled } from "../styled";
+import { TextLink } from "../styled";
 import ListContents from "./ListContents";
 
 const MenuMoblieStyled = styled.div`
@@ -23,28 +21,22 @@ const MenuMoblieStyled = styled.div`
 	}
 `;
 
-export const MenuMoblie = () => {
+export const MenuMoblie = ({
+	onSelect,
+}: {
+	onSelect: (data: MenuBarProjectType | MenuBar) => void;
+}) => {
 	const { listMenuBarType, listMenuBarProjectType } = useSelector(
 		(state: RootState) => state.menubar
-	);
+		);
+		const menuBarProjectType = listMenuBarProjectType?.filter((item) => item.id !== "1");
+		const menuBarType = listMenuBarType?.filter((item) => item.id !== "1");
 	const Router = useRouter();
 
-	const menuBarProjectType = listMenuBarProjectType?.filter((item) => item.id !== "1");
-	const menuBarType = listMenuBarType?.filter((item) => item.id !== "1");
-
-	const handleSelectTypeProject = (data: any) => {
-		const arr: any = [];
-		arr.push(data.id);
-
-		localStorage.setItem("listParamsLSProjectType", JSON.stringify(arr));
-		localStorage.removeItem("listDataLSProvince");
-		localStorage.removeItem("listParamsLSProvince");
-		Router.push(`/${PathRoute.ProjectTNR}?type=${data.id}`);
-	};
 	const scrollView = () => {
-		Router.push("/sales");
-	};
-
+    Router.push("/sales");
+  };
+	
 	return (
 		<Fragment>
 			<MenuMoblieStyled>
@@ -52,7 +44,7 @@ export const MenuMoblie = () => {
 					<ListContents
 						type="Loại bất động sản"
 						list={menuBarProjectType}
-						onClick={handleSelectTypeProject}
+						onClick={onSelect}
 					/>
 				) : (
 					<Skeleton animation="wave" style={{ width: 200, height: 42, opacity: "40%" }} />
