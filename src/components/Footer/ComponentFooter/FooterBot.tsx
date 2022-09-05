@@ -60,7 +60,7 @@ const BlockDiv = styled.div`
     width: 30%;
   }
 
-  @media (max-width: 1100px) {
+  @media (max-width: 1110px) {
     :nth-child(1) {
       width: 100%;
     }

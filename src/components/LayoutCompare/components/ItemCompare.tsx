@@ -21,11 +21,13 @@ import useAuth from "hooks/useAuth";
 import { removeComparePopUpItem } from "../../../../store/productCompareSlice";
 import useFavourite from "hooks/useFavourite";
 import useAddToCart from "hooks/useAddToCart";
+import { CompareParamsI } from "../../../../pages/api/compareApi";
 
 type Props = {
   onClick?: MouseEventHandler<HTMLButtonElement>;
   data?: object | any;
 };
+
 const TitleMoneyStyled = styled(Title28Styled)({
   fontSize: 24,
   lineHeight: "31px",
@@ -122,6 +124,17 @@ const ItemCompare = ({ onClick, data }: Props) => {
       .toFixed(0)
       .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
   }
+  
+  const ValueCompare = (item: CompareParamsI) => {
+      if (item.keyMap.trim() === "totalPrice")
+        return <TitleMoneyStyled>{currencyFormat(data[item.keyMap])} đ</TitleMoneyStyled>;
+      if (item.keyMap.trim() === "landArea")
+        return <TextMoneyStyled> {CompareValueFormat(data[item.keyMap], item.keyMap)} m2</TextMoneyStyled>;
+      else
+        return <TextMoneyStyled>
+          {CompareValueFormat(data[item.keyMap], item.keyMap)}
+        </TextMoneyStyled>;
+  }
 
   return (
     <Box width={289}>
@@ -213,20 +226,11 @@ const ItemCompare = ({ onClick, data }: Props) => {
 
       {compareParams
         .filter((item) => item.type === "Thông tin chung")
-        .map((item) => (
-          <BoxInputStyled key={item.id}>
-            {item.keyMap.trim() === "totalPrice" ? (
-              <TitleMoneyStyled>
-                {/* {CompareValueFormat(data[item.keyMap], item.keyMap)} */}
-				{currencyFormat(data[item.keyMap])} đ
-              </TitleMoneyStyled>
-            ) : (
-              <TextMoneyStyled>
-                {CompareValueFormat(data[item.keyMap], item.keyMap)}
-              </TextMoneyStyled>
-            )}
-          </BoxInputStyled>
-        ))}
+        .map((item) => 
+        <BoxInputStyled key={item.id}>
+        {ValueCompare(item)}
+        </BoxInputStyled>
+        )}
     </Box>
   );
 };

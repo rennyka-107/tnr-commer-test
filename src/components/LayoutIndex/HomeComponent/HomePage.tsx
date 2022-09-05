@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { Box } from "@mui/system";
 import SelectInputComponent from "@components/CustomComponent/SelectInputComponent";
-import { Button, SelectChangeEvent, Stack, Typography } from "@mui/material";
+import { Button, SelectChangeEvent, Stack, Typography, useMediaQuery } from "@mui/material";
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import SliderComponent from "@components/CustomComponent/SliderComponent";
@@ -68,6 +68,9 @@ const CompareSwap = styled.div`
   align-items: center;
   gap: 100px;
   flex-direction: row;
+  @media only screen and (max-width: 1110px) {
+	height: 484px;
+  }
 `;
 const BoxStyled = styled(Box)`
 padding: 40px;
@@ -80,6 +83,7 @@ const minDistance2 = 1;
 
 const HomePage = () => {
   const router = useRouter();
+  const matches = useMediaQuery('(max-width:1110px)');
   const [projectTypeName, setProjectTypeName] = useState<string[]>([]);
   const [categoryName, setCategoryName] = useState<string[]>([]);
   const [projectName, setProjectName] = useState<string[]>([]);
@@ -280,12 +284,12 @@ const HomePage = () => {
               fontWeight: 500,
               fontSize: 28,
               color: "#ffffff",
-              margin: "45px 5px 18px 5px",
+              margin: matches ? "45px 5px 0px 5px" : "45px 5px 18px 5px",
             }}
           >
             SO SÁNH
           </Typography>
-          <Stack direction={"row"} spacing={5}>
+          <Stack direction={matches ? "column" : "row"} spacing={5}>
             <Stack direction={"column"}>
               <BoxStyled sx={{ minWidth: 120, padding: "0px !important" }}>
                 <SelectInputComponent
@@ -324,15 +328,16 @@ const HomePage = () => {
               </div>
             </Stack>
             <Stack
-              direction={"column"}
-              style={{ maxWidth: 400, marginBottom: 55 }}
+              direction={matches ? "row" : "column"}
+              style={{ maxWidth: matches ? 700 : 400, marginBottom: 55 }}
             >
               <Typography
                 style={{
                   fontWeight: 400,
                   fontSize: 16,
                   color: "#ffffff",
-                  margin: "30px 5px 28px 5px",
+                  margin: matches ? "30px 50px 28px 5px" : "30px 5px 28px 5px",
+				  width: matches ? 300 : 'auto'
                 }}
               >
                 So sánh nhanh các sản phẩm theo tiêu chí lựa chọn của bạn giúp

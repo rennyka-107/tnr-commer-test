@@ -42,7 +42,7 @@ export default function SliderProductHotComponent() {
   const { listMenuBarType, listMenuBarProjectType } = useSelector(
     (state: RootState) => state.menubar
   );
-  const matches = useMediaQuery('(max-width:1100px)');
+  const matches = useMediaQuery('(max-width:1110px)');
   const [dataProjectType, setDataProjectType] = useState([]);
   const [dataProject, setDataProject] = useState([]);
   const [openConfirmDialog, setOpenConfirmDialog] = useState<boolean>(false);

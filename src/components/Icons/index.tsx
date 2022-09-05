@@ -99,3 +99,6 @@ export {default as PriceThapTang} from './PriceThapTang';
 export {default as IconBackTransation} from './IconBackTransation';
 export {default as IconTKBDSDrownmin} from './IconTKBDSDrownmin';
 export {default as IconDMDrown} from './IconDMDrown';
+export {default as MenuIcon} from './MenuIcon';
+export {default as CloseIcon} from './CloseIcon';
+export {default as ArrowDownIcon} from './ArrowDownIcon';

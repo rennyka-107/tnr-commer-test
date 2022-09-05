@@ -90,13 +90,13 @@ const ItemCardFavouriteProduct = ({ data }: ProductsProps) => {
         "listParamsIdProject",
         JSON.stringify([dataProject[0].id])
       );
-      //   console.log(dataProjectType, dataProject);
+    
       dispatch(
         getComparePopUpItem([
           {
             thumbnail: thumbnail,
-            projectName: name,
-            name: projectName,
+            projectName:projectName,
+            name: name,
             productId: productId,
             projectId: projectId,
             projectType: projectType,

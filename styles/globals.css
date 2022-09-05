@@ -935,7 +935,7 @@ a {
     }
 }
 
-@media only screen and (max-width: 1100px) {
+@media only screen and (max-width: 1110px) {
     .mySwiper-BDSNB {
         width: 900px;
     }
@@ -965,7 +965,7 @@ a {
     }
 }
 
-@media only screen and (min-width: 1100px) {
+@media only screen and (min-width: 1110px) {
     .mySwiper-CTUD {
         width: 900px;
     }

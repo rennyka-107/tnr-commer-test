@@ -15,6 +15,7 @@ import {
 import { RootState } from "../../../../store/store";
 import HeaderBot from "./HeaderBot";
 import HeaderTop from "./HeaderTop";
+import styled from "@emotion/styled";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -45,13 +46,19 @@ const Header = () => {
       }
     })();
   }, [dispatch]);
-
+  
+  const HeaderWrapperStyled = styled.div`
+  position: fixed;
+  width: 100%;
+  z-index: 1000;
+  box-shadow: 0px -4px 20px 1px rgba(0, 0, 0, 0.15);
+  `
   return (
-    <div style={{ position: "fixed", width: "100%", zIndex: 1000 }}>
+    <HeaderWrapperStyled>
       <HeaderTop />
       <HeaderBot menuDataProject={menuBarProjectType} menuData={menuBarType} />
       {/* {meta?.isSearchPage && <HeaderNavSearch />} */}
-    </div>
+    </HeaderWrapperStyled>
   );
 };
 

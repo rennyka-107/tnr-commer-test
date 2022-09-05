@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { IconBag, IconHeart, IconUser, Logo } from "@components/Icons";
+import React, { Fragment, useEffect, useState } from "react";
+import { CloseIcon, IconBag, IconHeart, IconUser, Logo, MenuIcon } from "@components/Icons";
 import styled from "@emotion/styled";
-import { Button, Skeleton } from "@mui/material";
+import { Button, Skeleton, useMediaQuery } from "@mui/material";
 import useAuth from "hooks/useAuth";
 import MenuDropdown from "ItemComponents/MenuDropdown";
 import Link from "next/link";
@@ -19,71 +19,9 @@ import {
 import { getListFavourite } from "../../../../pages/api/FavouriteApi";
 import LocalStorage from "utils/LocalStorage";
 import SessionStorage from "utils/SessionStorage";
-
-const ContainerNavTop = styled.div`
-  height: 93px;
-  box-sizing: border-box;
-  background: #ffffff;
-  border: 1px solid #f3f4f6;
-  box-shadow: 0px -4px 20px 1px rgba(0, 0, 0, 0.15);
-`;
-
-const BodyContainer = styled.div`
-  display: flex;
-  height: 100%;
-  align-items: center;
-  padding: 0px 167px 0px 167px;
-  justify-content: space-between;
-  @media screen and (max-width: 1280px) {
-	padding: 0px 40px 0px 40px;
-	justify-content: space-around;
-  }
-`;
-const WrapMenuItem = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 20px;
-`;
-const TextLink = styled.a`
-  text-transform: none;
-  font-family: "Roboto";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 19px;
-  color: #0e1d34;
-  
-`;
-const WrapRightItem = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 50px;
-`;
-const ButtonBuyHelp = styled(Button)`
-  height: 39px;
-  width: 145px;
-  background: #ffffff;
-  border: 1px solid #ea242a;
-  border-radius: 8px;
-  padding: 8px 25px;
-  font-family: "Roboto";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 13px;
-  line-height: 15px;
-  text-align: center;
-  color: #0e1d34;
-  text-transform: none;
-
-  :hover {
-    background: #ea242a;
-    color: #ffffff;
-  }
-`;
-const IconAccountWrap = styled.div`
-  display: flex;
-  gap: 30px;
-`;
+import DrawerMobile from "./DrawerMobile";
+import { HeaderContainer, ButtonBuyHelp, ContainerNavTop, IconAccountWrap, ResponsiveLayout, TextLink, WrapMenuItem, WrapRightItem, ContentLeftHeader } from "./styled";
+import { MenuMoblie } from "./MenuMoblie/MenuMoblie";
 
 const lbds = [
   {
@@ -134,7 +72,10 @@ interface MenuProps {
 
 const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
   const Router = useRouter();
+
+  const matches = useMediaQuery("(max-width:1110px)");
   const [checkSale, setCheckSale] = useState(false);
+  const [isOpenMenu, setIsOpenMenu] = useState(false);
   const { cart } = useSelector((state: RootState) => state.carts);
   const [listFavourite, setListFavourite] = useState<any>();
   const { title, typeAction } = useSelector(
@@ -207,19 +148,18 @@ const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
   };
 
   const handleSelectTypeProject = (data: any) => {
-    // console.log(data)
     const arr: any = [];
     arr.push(data.id);
-    // localStorage.setItem(
-    // 	"listDataLSProjectType",
-    // 	JSON.stringify(arr)
-    //   );
+
     localStorage.setItem("listParamsLSProjectType", JSON.stringify(arr));
     localStorage.removeItem("listDataLSProvince");
     localStorage.removeItem("listParamsLSProvince");
     Router.push(`/${PathRoute.ProjectTNR}?type=${data.id}`);
   };
 
+const handleToggleMenuMoblie = () => {
+  setIsOpenMenu(!isOpenMenu)
+}
   const pressShortcut = (type: typeShortcut) => {
     switch (type) {
       case "BANG_HANG":
@@ -235,8 +175,7 @@ const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
   };
   const fetchListDropdown = () => {
     return (
-      <>
-        <div style={{ display: "flex", gap: 35, marginLeft: 38 }}>
+        <ContentLeftHeader>
           {!isEmpty(menuDataProject) ? (
             <MenuDropdown
               title={"Loại bất động sản"}
@@ -291,21 +230,22 @@ const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
               style={{ width: 111, height: 42, opacity: "40%" }}
             />
           )}
-        </div>
-      </>
+        </ContentLeftHeader>
     );
   };
 
   return (
+    <Fragment>
     <ContainerNavTop>
-      <BodyContainer>
-        <WrapMenuItem>
+    <ResponsiveLayout>
+      <HeaderContainer>
+        <WrapMenuItem >
           <Link href="/">
             <a>
               <Logo />
             </a>
           </Link>
-          {fetchListDropdown()}
+             {fetchListDropdown()}
         </WrapMenuItem>
         <WrapRightItem>
           <ButtonBuyHelp onClick={() => pressShortcut(typeAction)}>
@@ -343,10 +283,16 @@ const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
                 <IconBag total={!isEmpty(cart) ? 1 : 0} />
               </a>
             </Link>
+          <div onClick={handleToggleMenuMoblie} className='menu-icon'>
+            {isOpenMenu ? <CloseIcon/> : <MenuIcon/>}
+          </div>
           </IconAccountWrap>
         </WrapRightItem>
-      </BodyContainer>
+      </HeaderContainer>
+    </ResponsiveLayout>
     </ContainerNavTop>
+    {isOpenMenu && <MenuMoblie/>}
+    </Fragment>
   );
 };
 

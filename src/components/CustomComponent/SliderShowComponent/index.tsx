@@ -22,7 +22,7 @@ const WrapSlide = styled.div`
 
 display: flex;
 align-items: center;
-@media only screen and (max-width: 1100px) {
+@media only screen and (max-width: 1110px) {
 	width: 850px;
   }
 `;
@@ -38,7 +38,7 @@ export default function SliderShowComponent() {
   const { SearchSpecialOffer } = useSelector(
     (state: RootState) => state.specialoffers
   );
-  const matches = useMediaQuery('(max-width:1100px)');
+  const matches = useMediaQuery('(max-width:1110px)');
   return (
     <>
       {SearchSpecialOffer && SearchSpecialOffer.length > 0 ? (

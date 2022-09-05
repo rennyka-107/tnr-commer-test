@@ -23,6 +23,7 @@ export type DropDownProps = {
 const MenuItemStyled = styled(MenuItem)`
   max-height: 300px;
   height: 53px;
+  
 `;
 const TextInline = styled(Typography)`
   font-family: "Roboto";
@@ -30,11 +31,10 @@ const TextInline = styled(Typography)`
   font-weight: 400;
   font-size: 14px;
   line-height: 16px;
-  /* identical to box height */
-
-  /* Brand */
-
   color: #1b3459;
+  @media screen and (max-width: 1024px) {
+    font-size: 14px;
+	}
 `;
 
 const TextButton = styled.span`
@@ -45,6 +45,9 @@ const TextButton = styled.span`
   line-height: 19px;
   color: #0e1d34;
   text-transform: none;
+  @media screen and (max-width: 1024px) {
+    font-size: 14px;
+	}
 `;
 
 export default function MenuDropdown({
