@@ -640,6 +640,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
             message:
               "Bạn cần upload giấy tờ xác thực thanh toán Mobile Banking",
           });
+          setLoading(false);
           return;
         }
         apiSavePaymentInformation(formatData)
