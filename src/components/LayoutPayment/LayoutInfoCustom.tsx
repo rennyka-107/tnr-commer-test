@@ -627,6 +627,16 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
         });
     } else {
       try {
+        if (
+          payMethod === "2F19283D-4384-43B7-805F-556BAAbcn447" &&
+          isEmpty(uploadMedia)
+        ) {
+          notification({
+            severity: "error",
+            title: paymentFlag === 0 ? "Lưu thông tin hồ sơ" : "Tạo phiếu thanh toán",
+            message: "Bạn cần upload giấy tờ xác thực thanh toán Mobile Banking",
+          });
+        }
         apiSavePaymentInformation(formatData)
           .then((res) => {
             if (!isEmpty(res.responseData)) {
