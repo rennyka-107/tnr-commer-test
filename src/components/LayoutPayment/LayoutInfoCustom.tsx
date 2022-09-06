@@ -633,9 +633,14 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
         ) {
           notification({
             severity: "error",
-            title: paymentFlag === 0 ? "Lưu thông tin hồ sơ" : "Tạo phiếu thanh toán",
-            message: "Bạn cần upload giấy tờ xác thực thanh toán Mobile Banking",
+            title:
+              paymentFlag === 0
+                ? "Lưu thông tin hồ sơ"
+                : "Tạo phiếu thanh toán",
+            message:
+              "Bạn cần upload giấy tờ xác thực thanh toán Mobile Banking",
           });
+          return;
         }
         apiSavePaymentInformation(formatData)
           .then((res) => {
