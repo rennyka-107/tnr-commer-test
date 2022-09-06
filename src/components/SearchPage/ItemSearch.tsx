@@ -151,7 +151,7 @@ const ItemSearch = ({ data, buyDisabled }: searchProps) => {
                 build={product.build}
                 activeFavourite={true}
                 dataItem={{
-                  item1: product.landArea,
+                  item1: product.projectTypeCode === "1" ? product.buildArea : product.clearArea,
                   item2: product.numBath,
                   item3: product.numBed,
                   item4: product.doorDirection,

@@ -99,7 +99,6 @@ const TextFloorStyled = styled(Typography)`
   color: #48576d;
 `;
 
-
 const TextHeaderStyled = styled(Typography)`
   font-family: "Roboto";
   font-style: normal;
@@ -312,7 +311,7 @@ const TextFloorValue = styled(Typography)`
 `;
 
 const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
-  console.log({dataProduct})
+  console.log({ dataProduct });
   const router = useRouter();
   const id = router.asPath.split("/")[2];
   const addToCart = useAddToCart();
@@ -328,17 +327,17 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
     {
       id: 1,
       value: "Trang chủ",
-      path: '/'
+      path: "/",
     },
     {
       id: 2,
       value: dataProduct.projectType.name,
-      path: `/${PathRoute.ProjectTNR}?type=${dataProduct.projectType.id}`
+      path: `/${PathRoute.ProjectTNR}?type=${dataProduct.projectType.id}`,
     },
     {
       id: 3,
       value: dataProduct.projectName,
-      path: `/search?Type=Advanded&projectId=${dataProduct.project.id}`
+      path: `/search?Type=Advanded&projectId=${dataProduct.project.id}`,
     },
   ];
 
@@ -895,12 +894,24 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                       </TextCenterItem>
                     </WrapItemCenter>
                   )}
-                  <WrapItemCenter>
-                    <IconFrame />
-                    <TextCenterItem>
-                      {dataProduct?.landArea ? dataProduct?.clearArea : "N/A"} m²
-                    </TextCenterItem>
-                  </WrapItemCenter>
+                  {dataProduct?.projectTypeCode === "1" ? (
+                    <WrapItemCenter>
+                      <IconFrame />
+                      <TextCenterItem>
+                        {dataProduct?.buildArea ? dataProduct?.buildArea : "N/A"}{" "}
+                        m²
+                      </TextCenterItem>
+                    </WrapItemCenter>
+                  ) : (
+                    <WrapItemCenter>
+                      <IconFrame />
+                      <TextCenterItem>
+                        {dataProduct?.clearArea ? dataProduct?.clearArea : "N/A"}{" "}
+                        m²
+                      </TextCenterItem>
+                    </WrapItemCenter>
+                  )}
+
                   {dataProduct?.projectTypeCode === "1" ? (
                     <WrapItemCenter>
                       <FloorIcon />

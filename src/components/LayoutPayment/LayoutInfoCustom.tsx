@@ -313,6 +313,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
       if (!isEmpty(res.responseData)) {
         dispatch(setData(res.responseData));
         setInitialValue(res.responseData);
+        setPayMethod(res.responseData?.paymentMethodId);
         setDisabledEditMainUser(true);
       } else {
         notification({
@@ -599,6 +600,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
         data.append("multipartFileList", media);
       });
       data.append("paymentCode", transactionCode as string);
+      data.append("isMobileBanking", "0");
       apiUploadFile(data)
         .then((response) => {
           if (!isEmpty(response.responseData)) {
@@ -651,8 +653,6 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
               //   severity: "success",
               //   title: "Hoàn thiện hồ sơ mua bán",
               // });
-              LocalStorage.remove("cart");
-              addToCart();
               if (
                 !isEmpty(res.responseData?.transactionCode) &&
                 paymentFlag === 0
@@ -663,7 +663,11 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                     uploadMedia.forEach((media) => {
                       data.append("multipartFileList", media);
                     });
-                    data.append("paymentCode", transactionCode as string);
+                    data.append(
+                      "paymentCode",
+                      res.responseData?.transactionCode as string
+                    );
+                    data.append("isMobileBanking", "1");
                     apiUploadFile(data)
                       .then((response) => {
                         if (response.responseCode === "00") {
@@ -676,8 +680,12 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                             .then((res) => {
                               if (!isEmpty(res.responseData)) {
                                 dispatch(setQrCode(res.responseData));
+                                setLoading(false);
+                                LocalStorage.remove("cart");
+                                addToCart();
                                 setScopeRender("transaction_message");
                               } else {
+                                setLoading(false);
                                 notification({
                                   message: res.responseMessage,
                                   severity: "error",
@@ -687,13 +695,13 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                             })
                             .catch((err) => console.log(err));
                         } else {
+                          setLoading(false);
                           notification({
                             severity: "error",
                             title: "Tạo phiếu thanh toán",
                             message: response.responseMessage,
                           });
                         }
-                        setLoading(false);
                       })
                       .catch((err) => {
                         notification({
@@ -716,6 +724,9 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                     .then((res) => {
                       if (!isEmpty(res.responseData)) {
                         dispatch(setQrCode(res.responseData));
+                        LocalStorage.remove("cart");
+                        addToCart();
+                        setLoading(false);
                         setScopeRender("transaction_message");
                       } else {
                         notification({
@@ -745,7 +756,11 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                   uploadMedia.forEach((media) => {
                     data.append("multipartFileList", media);
                   });
-                  data.append("paymentCode", transactionCode as string);
+                  data.append(
+                    "paymentCode",
+                    res.responseData?.transactionCode as string
+                  );
+                  data.append("isMobileBanking", "1");
                   apiUploadFile(data)
                     .then((response) => {
                       if (response.responseCode === "00") {
@@ -754,6 +769,8 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                           title: "Tạo phiếu thanh toán",
                           message: "Tạo phiếu thanh toán thành công!",
                         });
+                        LocalStorage.remove("cart");
+                        addToCart();
                         router.push("/profile");
                       } else {
                         notification({
@@ -773,6 +790,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                       setLoading(false);
                     });
                 } else {
+                  setLoading(false);
                   notification({
                     severity: "error",
                     title: "Tạo phiếu thanh toán",
@@ -782,12 +800,12 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                 }
               }
             } else {
+              setLoading(false);
               notification({
                 error: res.responseMessage,
                 title: "Hoàn thiện hồ sơ mua bán",
               });
             }
-            setLoading(false);
           })
           .catch((err) => {
             notification({
@@ -807,8 +825,6 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
       }
     }
   };
-
-  console.log(productItem, !isEmpty(productItem.ListSchedule), "hahah");
 
   function removeCustomer(id: string) {
     const paymentIdentityInfos = [...data.paymentIdentityInfos];

@@ -69,6 +69,7 @@ const CardItemProduct = (props: Props) => {
     if (!cart || !cart?.id) return;
     Router.push(`products/${cart.id}`);
   };
+  console.log(cart);
 
   return (
     <WrapperCardStyled onClick={handleViewDetail}>
@@ -106,9 +107,21 @@ const CardItemProduct = (props: Props) => {
         <LinedStyled borderColor={"#1b3459"} style={{ marginTop: 15 }} />
         <RowStyledAgain>
           <Text14Styled>Diện tích</Text14Styled>
-          <Text14Styled>
-            {cart.clearArea ?? "N/A"} m<sup>2</sup>
-          </Text14Styled>
+          {cart.projectTypeCode === "1" ? (
+            <>
+              {" "}
+              <Text14Styled>
+                {cart.buildArea ?? "N/A"} m<sup>2</sup>
+              </Text14Styled>
+            </>
+          ) : (
+            <>
+              {" "}
+              <Text14Styled>
+                {cart.clearArea ?? "N/A"} m<sup>2</sup>
+              </Text14Styled>
+            </>
+          )}
         </RowStyledAgain>
         <RowStyledAgain>
           <Text14Styled>Phòng ngủ</Text14Styled>

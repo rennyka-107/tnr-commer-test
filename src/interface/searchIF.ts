@@ -18,6 +18,8 @@ export interface searchLocationResponse {
   thumbnail: string;
   diaChi: string;
   tongBanGhi: string;
+  buildArea: string;
+  clearArea: string;
   build?: boolean;
   projectName: string;
   category: string;
