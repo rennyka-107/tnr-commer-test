@@ -9,7 +9,7 @@ import { Button, CircularProgress } from "@mui/material";
 import {
   LoginSuccess,
   ResponseLoginModel,
-  verifyCapchaToken
+  verifyCapchaToken,
 } from "@service/auth";
 import useAuth from "hooks/useAuth";
 import useNotification from "hooks/useNotification";
@@ -83,8 +83,8 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const Route = useRouter();
   const captchaRef = useRef<ReCAPTCHA>(null);
-  const [token, setToken] = useState<string | null>("de tam"); //bat capcha thi set token = null
-  const [verifySuccess, setVerifySuccess] = useState<boolean>(true); //bat capcha thi setVerifySuccess = false∏
+  const [token, setToken] = useState<string | null>(null);
+  const [verifySuccess, setVerifySuccess] = useState<boolean>(false);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -99,20 +99,8 @@ const Login = () => {
     resolver: yupResolver(validationSchema),
     defaultValues: validationSchema.getDefault(),
   });
-  
+
   const onSubmit = async (values) => {
-    if (!token) return;
-
-    if (!verifySuccess) {
-      const verifyResponse = await verifyCapchaToken({
-        captchaResponse: token,
-      });
-
-      if (verifyResponse.responseData) {
-        setVerifySuccess(true);
-      }
-    }
-
     if (verifySuccess) {
       setLoading(true);
       setVerifySuccess(true);
@@ -138,7 +126,7 @@ const Login = () => {
             title: "Đăng Nhập",
           });
           //reset token when submit
-          // captchaRef.current.reset();
+          captchaRef.current.reset();
           setLoading(false);
         }
       } catch (error) {
@@ -154,7 +142,18 @@ const Login = () => {
     }
   };
 
-  const handleChangeCapcha = (token: string | null) => {
+  const handleChangeCapcha = async (token: string | null) => {
+    if (!token) return;
+
+    if (!verifySuccess) {
+      const verifyResponse = await verifyCapchaToken({
+        captchaResponse: token,
+      });
+
+      if (verifyResponse.responseData) {
+        setVerifySuccess(true);
+      }
+    }
     setToken(token);
   };
 
@@ -237,13 +236,13 @@ const Login = () => {
               />
             )}
           </ButtonStyled>
-          {/* ki nao dung captcha thi mo comment ra */}
-          {/* <ReCAPTCHA
+          {/* check login false 3 lan thi moi dung captcha */}
+          <ReCAPTCHA
             style={{ marginTop: "20px" }}
             sitekey={process.env.NEXT_PUBLIC_SITE_KEY}
             ref={captchaRef}
             onChange={handleChangeCapcha}
-          /> */}
+          />
         </FormGroup>
 
         <FormGroup sx={{ mb: 2 }} fullWidth style={{ alignItems: "center" }}>

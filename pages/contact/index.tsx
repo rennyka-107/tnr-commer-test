@@ -3,6 +3,7 @@ import FlexContainer from "@components/CustomComponent/FlexContainer";
 import ControllerTextField from "@components/Form/ControllerTextField";
 import FormGroup from "@components/Form/FormGroup";
 import { IconEmail, IconLocation, PhoneIconPage } from "@components/Icons";
+import { ButtonAction, Text18Styled } from "@components/StyledLayout/styled";
 import styled from "@emotion/styled";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Page from "@layouts/Page";
@@ -10,18 +11,17 @@ import CommentOutlinedIcon from "@mui/icons-material/CommentOutlined";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import PhoneOutlinedIcon from "@mui/icons-material/PhoneOutlined";
-import { Grid, InputAdornment } from "@mui/material";
+import { CircularProgress, Grid, InputAdornment } from "@mui/material";
 import { Box } from "@mui/system";
 import useNotification from "hooks/useNotification";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { validateLine } from "utils/constants";
 import Regexs from "utils/Regexs";
 import * as yup from "yup";
 import { RootState } from "../../store/store";
-import {
-  createContactAPI
-} from "../api/contactApi";
+import { createContactAPI } from "../api/contactApi";
 
 const validationSchema = yup.object().shape({
   name: yup
@@ -72,27 +72,31 @@ const Contact = () => {
   });
   const notification = useNotification();
   const generalInfo = useSelector((state: RootState) => state.generalInfo);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const onSubmit = (data: FormData) => {
-    console.log("data", data);
-    // createContactAPI({
-    //   ...data,
-    // })
-    //   .then((res) => {
-    //     if (res.responseCode === "00") {
-    //       notification({
-    //         severity: "success",
-    //         message: `Chúng tôi đã nhận được thông tin của bạn`,
-    //       });
-    //       reset(validationSchema.getDefault());
-    //     }
-    //   })
-    //   .catch(() => {
-    //     notification({
-    //       severity: "success",
-    //       message: `Có lỗi sảy ra, xin vui lòng thử lại sau`,
-    //     });
-    //   });
+    setLoading(true);
+    createContactAPI({
+      ...data,
+    })
+      .then((res) => {
+        if (res.responseCode === "00") {
+          notification({
+            severity: "success",
+            message: `Chúng tôi đã nhận được thông tin của bạn`,
+          });
+          reset(validationSchema.getDefault());
+        }
+      })
+      .catch(() => {
+        notification({
+          severity: "success",
+          message: `Có lỗi sảy ra, xin vui lòng thử lại sau`,
+        });
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
@@ -237,11 +241,15 @@ const Contact = () => {
                 </Grid>
 
                 <div className="submit-btn">
-                  <CustomButton
-                    label="Gửi tin nhắn"
-                    style={{ background: "#D60000", width: "fit-content" }}
-                    type="submit"
-                  />
+                  <ButtonAction sx={{ my: 2, maxWidth: "300px" }} type="submit">
+                    {!loading ? (
+                      <Text18Styled color={"#fff"}>Gửi tin nhắn</Text18Styled>
+                    ) : (
+                      <CircularProgress
+                        style={{ height: 25, width: 25, color: "#ffffff" }}
+                      />
+                    )}
+                  </ButtonAction>
                 </div>
               </form>
             </StyledForm>

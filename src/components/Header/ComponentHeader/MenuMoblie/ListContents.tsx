@@ -15,7 +15,7 @@ const ListContents = ({
 	onClick,
 }: {
 	list: MenuBarProjectType[] | MenuBar[];
-	type: "Loại bất động sản" | "Dự Án";
+	type: "Loại bất động sản" | "Dự án";
 	onClick: (data: MenuBarProjectType | MenuBar) => void;
 }) => {
 	const [isExpand, setIsExpand] = useState(false);

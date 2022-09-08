@@ -211,7 +211,7 @@ const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
         )}
         {!isEmpty(menuData) ? (
           <MenuDropdown
-            title={"Dự Án"}
+            title={"Dự án"}
             data={menuData}
             onSelect={(item) => {
               // Router.replace(`/products?idProject=${item.id}`);

@@ -29,6 +29,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { validateLine } from "utils/constants";
+import DateFns from "utils/DateFns";
 import { validateVietnameseName } from "utils/helper";
 import Regexs from "utils/Regexs";
 import * as yup from "yup";
@@ -325,7 +326,10 @@ const ModalRegister = (props: PropsI) => {
       .max(10, "Số điện thoại không được nhiều hơn 10 số")
       .required(validateLine.required)
       .default(""),
-    date: yup.string().required("không được bỏ trống"),
+    date: yup
+      .date()
+      .required("không được bỏ trống")
+      .min(DateFns.getP(), "Không được chọn ngày trong quá khứ"),
     time: yup.string().required("không được bỏ trống"),
   });
   const {
@@ -420,8 +424,7 @@ const ModalRegister = (props: PropsI) => {
               display: "flex",
 
               alignItems: "center",
-			  borderBottom: "1px solid #c7c9d9",
-
+              borderBottom: "1px solid #c7c9d9",
             }}
           >
             <TitleStyled>Đặt lịch tham quan nhà mẫu</TitleStyled>
@@ -434,97 +437,96 @@ const ModalRegister = (props: PropsI) => {
               }}
               onClick={onClose}
             />
-
           </div>
-            {/* <LineStyled style={{ border: "1px solid #C7C9D9;" }} /> */}
+          {/* <LineStyled style={{ border: "1px solid #C7C9D9;" }} /> */}
 
-          <div style={{padding: "20px 50px"}}>
-		  <FormGroup fullWidth style={{ marginTop: 20 }}>
-            <ControllerInputDatLich
-              variant="outlined"
-              hiddenLabel
-              name="fullname"
-              control={control}
-              placeholder="Họ và tên"
-              required
-              fullWidth
-              label="Họ và tên"
-              labelColor="#666666"
-            />
-          </FormGroup>
-          <FormGroup fullWidth>
-            <ControllerInputDatLich
-              variant="outlined"
-              hiddenLabel
-              name="email"
-              control={control}
-              placeholder="Email"
-              required
-              fullWidth
-              label="Email"
-              labelColor="#666666"
-            />
-          </FormGroup>
-          <FormGroup fullWidth>
-            <ControllerInputDatLich
-              variant="outlined"
-              hiddenLabel
-              name="phone"
-              control={control}
-              placeholder="Số điện thoại"
-              required
-              fullWidth
-              label="Số điện thoại"
-              labelColor="#666666"
-            />
-          </FormGroup>
-          <FormGroup fullWidth>
-            <ControllerDatePickerThamQuan
-              label={"Ngày tham quan"}
-              control={control}
-              name={"date"}
-              required
-            />
-            {/* <ControllerDatePicker
+          <div style={{ padding: "20px 50px" }}>
+            <FormGroup fullWidth style={{ marginTop: 20 }}>
+              <ControllerInputDatLich
+                variant="outlined"
+                hiddenLabel
+                name="fullname"
+                control={control}
+                placeholder="Họ và tên"
+                required
+                fullWidth
+                label="Họ và tên"
+                labelColor="#666666"
+              />
+            </FormGroup>
+            <FormGroup fullWidth>
+              <ControllerInputDatLich
+                variant="outlined"
+                hiddenLabel
+                name="email"
+                control={control}
+                placeholder="Email"
+                required
+                fullWidth
+                label="Email"
+                labelColor="#666666"
+              />
+            </FormGroup>
+            <FormGroup fullWidth>
+              <ControllerInputDatLich
+                variant="outlined"
+                hiddenLabel
+                name="phone"
+                control={control}
+                placeholder="Số điện thoại"
+                required
+                fullWidth
+                label="Số điện thoại"
+                labelColor="#666666"
+              />
+            </FormGroup>
+            <FormGroup fullWidth>
+              <ControllerDatePickerThamQuan
+                label={"Ngày tham quan"}
+                control={control}
+                name={"date"}
+                required
+              />
+              {/* <ControllerDatePicker
                 control={control}
                 name="date"
                 label="Ngày tham quan"
               /> */}
-          </FormGroup>
-          <FormGroup fullWidth>
-            <ControllerSelectTime
-              variant="outlined"
-              name="time"
-              label="Chọn giờ tham quan"
-              control={control}
-              setValue={setValue}
-              dataSelect={listTime}
-              required={true}
-              isClear={true}
-            />
-          </FormGroup>
+            </FormGroup>
+            <FormGroup fullWidth>
+              <ControllerSelectTime
+                variant="outlined"
+                name="time"
+                label="Chọn giờ tham quan"
+                control={control}
+                setValue={setValue}
+                dataSelect={listTime}
+                required={true}
+                isClear={true}
+              />
+            </FormGroup>
 
-          <FormGroup>
-            <div style={{ width: "100%", marginTop: 20 }}>
-              <ButtonStyled
-                style={{
-                  background: !isEmpty(errors) ? "#D6000080" : "#FEC83C",
-                  color: !isEmpty(errors) ? "#ffffff" : "#1B3459",
-                }}
-                type="submit"
-                disabled={!isEmpty(errors)}
-              >
-                {loading === false ? (
-                  <>Xác nhận đặt lịch</>
-                ) : (
-                  <CircularProgress
-                    style={{ height: 25, width: 25, color: "#ffffff" }}
-                  />
-                )}
-              </ButtonStyled>
-            </div>
-          </FormGroup>
-		  </div>
+            <FormGroup>
+              <div style={{ width: "100%", marginTop: 20 }}>
+                <ButtonStyled
+                  style={{
+                    background: !isEmpty(errors) ? "#D6000080" : "#FEC83C",
+                    color: !isEmpty(errors) ? "#ffffff" : "#1B3459",
+                  }}
+                  type="submit"
+                  disabled={!isEmpty(errors)}
+                >
+                  {loading === false ? (
+                    <>Xác nhận đặt lịch</>
+                  ) : (
+                    <CircularProgress
+                      style={{ height: 25, width: 25, color: "#ffffff" }}
+                    />
+                  )}
+                </ButtonStyled>
+              </div>
+            </FormGroup>
+          </div>
         </form>
       </Box>
     </Modal>

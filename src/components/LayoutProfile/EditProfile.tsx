@@ -153,7 +153,7 @@ const EditProfile = () => {
       .trim(validateLine.trim)
       .strict(true)
       .max(12, "Số CMND quá dài")
-      .matches(Regexs.phone, "Số CMND không đúng")
+      .matches(Regexs.idNumber, "Số CMND không đúng")
       .required(validateLine.required)
       .default(""),
     email: yup
@@ -252,8 +252,6 @@ const EditProfile = () => {
     // }
   };
 
-  console.log(watch("avatar"), 123)
-
   const uploadFile = async (file) => {
     if (!file) {
       notification({
@@ -277,11 +275,11 @@ const EditProfile = () => {
             "businessRegistrationName",
             res.responseData?.businessRegistrationName
           );
-          setInitialValue({
-            ...watch(),
-            businessRegistrationName:
-              res.responseData?.businessRegistrationName,
-          });
+          // setInitialValue({
+          //   ...watch(),
+          //   businessRegistrationName:
+          //     res.responseData?.businessRegistrationName,
+          // });
         } else {
           setValue("fileImages", "");
           notification({

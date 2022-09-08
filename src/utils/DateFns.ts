@@ -16,6 +16,7 @@ import setMinutes from "date-fns/setMinutes";
 import isAfter from "date-fns/isAfter";
 import subMinutes from "date-fns/subMinutes";
 import endOfDay from "date-fns/endOfDay";
+
 class DateFns {
   public formatDateTime(date: Date, pattern: string) {
     return format(date, pattern);
@@ -106,8 +107,13 @@ class DateFns {
   }
 
   changeFormatDate(oldDate: string) {
-    if(!oldDate) return null;
+    if (!oldDate) return null;
     return oldDate.toString().split("-").reverse().join("-");
+  }
+
+  public getP(): Date {
+    const date = new Date();
+    return set(date, { hours: 0, minutes: 0, seconds: 0, milliseconds: 0 });
   }
 }
 

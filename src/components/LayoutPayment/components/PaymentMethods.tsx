@@ -19,6 +19,7 @@ import styled from "@emotion/styled";
 import { RootState } from "../../../../store/store";
 import { useSelector } from "react-redux";
 import { isEmpty } from "lodash";
+import { useRouter } from "next/router";
 
 const BoxCheckStyled = styled(Box)(
   {
@@ -42,7 +43,12 @@ type Props = {
 const PaymentMethods = ({ payMethod, setPayMethod }: Props) => {
   const { listPayment } = useSelector((state: RootState) => state.payments);
   const { cart } = useSelector((state: RootState) => state.carts);
-  
+  const {
+    query: { transactionCode },
+  } = useRouter();
+
+  console.log(payMethod, "paymethod")
+
   return (
     <WrapperBoxBorderStyled className="custom-billing-information">
       <Title28Styled>Phương thức thanh toán</Title28Styled>
@@ -61,6 +67,7 @@ const PaymentMethods = ({ payMethod, setPayMethod }: Props) => {
                     color={payMethod === pm.id ? "#FCB715" : "#C7C9D9"}
                   >
                     <FormControlLabel
+                      disabled={!isEmpty(transactionCode)}
                       sx={{ minWidth: "100%" }}
                       componentsProps={{
                         typography: {

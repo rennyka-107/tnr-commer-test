@@ -515,6 +515,8 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
     setOpenConfirmDialog(false);
   };
 
+  const generalInfo = useSelector((state: RootState) => state.generalInfo);
+
   return (
     <>
       <FlexContainer>
@@ -1035,11 +1037,7 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                   }}
                 >
                   <a
-                    href={`tel:+84${(
-                      dataProduct?.project.hotline ??
-                      dataProduct?.defaultPhoneNumber ??
-                      "0123456789"
-                    )?.substring(1)}`}
+                    href={`tel:${generalInfo.phoneNumber}`}
                     style={{ textAlign: "center" }}
                   >
                     <IconHeadSetProduct />

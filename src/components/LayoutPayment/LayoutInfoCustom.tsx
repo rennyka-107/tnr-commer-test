@@ -167,7 +167,7 @@ const validationSchema = yup.object().shape({
     .trim(validateLine.trim)
     .strict(true)
     .max(12, "Số CMND quá dài")
-    .matches(Regexs.phone, "Số CMND không đúng")
+    .matches(Regexs.idNumber, "Số CMND không đúng")
     .required(validateLine.required)
     .default(""),
   issuePlace: yup
@@ -389,7 +389,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
   }, [data]);
 
   useEffect(() => {
-    if (!isEmpty(listPayment)) {
+    if (!isEmpty(listPayment) && isEmpty(payMethod)) {
       setPayMethod(listPayment[0]["id"]);
     }
   }, [listPayment]);
@@ -631,7 +631,8 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
       try {
         if (
           payMethod === "2F19283D-4384-43B7-805F-556BAAbcn447" &&
-          isEmpty(uploadMedia)
+          isEmpty(uploadMedia) &&
+          isEmpty(transactionCode)
         ) {
           notification({
             severity: "error",
@@ -1369,7 +1370,8 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                   />
                 </Box>
                 {((!isEmpty(transactionCode) && data.paymentStatus === 3) ||
-                  payMethod === "2F19283D-4384-43B7-805F-556BAAbcn447") && (
+                  (payMethod === "2F19283D-4384-43B7-805F-556BAAbcn447" &&
+                    isEmpty(transactionCode))) && (
                   <Box>
                     <FileUpload setValidUpload={setValidUpload} />
                   </Box>

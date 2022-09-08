@@ -19,7 +19,8 @@ import styled from "@emotion/styled";
 import { RootState } from "../../../../store/store";
 import { useSelector } from "react-redux";
 import { currencyFormat } from "utils/helper";
-import { isEmpty } from "lodash";
+import isEmpty from "lodash.isempty";
+import { useRouter } from "next/router";
 
 const BoxInputStyled = styled(Box)(
   {
@@ -47,6 +48,9 @@ const BillingInfo = ({ setBilling, billing }: Props) => {
     "#FCB715",
     "#C7C9D9",
   ]);
+  const {
+    query: { transactionCode },
+  } = useRouter();
   const data = useSelector((state: RootState) => state.payments.data);
   useEffect(() => {
     setColorActive(
@@ -54,17 +58,36 @@ const BillingInfo = ({ setBilling, billing }: Props) => {
     );
   }, [billing]);
 
+  useEffect(() => {
+    if (
+      !isEmpty(transactionCode) &&
+      !isEmpty(data) &&
+      !isEmpty(data?.deposite)
+    ) {
+      setBilling(
+        !isEmpty(data.quotationRealt)
+          ? data?.quotationRealt?.minEarnestMoney === data?.deposite
+            ? 1
+            : 2
+          : cart.minEarnestMoney === data?.deposite
+          ? 1
+          : 2
+      );
+    }
+  }, [transactionCode, data?.deposite]);
+
   return (
     <WrapperBoxBorderStyled className="custom-billing-information">
       <Title28Styled>Thông tin thanh toán</Title28Styled>
       <FormControl style={{ width: "100%" }}>
         <RadioGroup
-          defaultValue={billing}
+          value={billing}
           onChange={(event) => setBilling(+event.target.value)}
         >
           <Grid container spacing={"30px"}>
             <Grid item xs={6}>
               <FormControlLabel
+                disabled={!isEmpty(transactionCode)}
                 value={1}
                 control={<Radio />}
                 label={<Text18Styled>Số tiền đặt hàng tối thiểu</Text18Styled>}
@@ -80,6 +103,7 @@ const BillingInfo = ({ setBilling, billing }: Props) => {
             </Grid>
             <Grid item xs={6}>
               <FormControlLabel
+                disabled={!isEmpty(transactionCode)}
                 value={2}
                 control={<Radio />}
                 label={<Text18Styled>Tổng tiền đặt hàng</Text18Styled>}

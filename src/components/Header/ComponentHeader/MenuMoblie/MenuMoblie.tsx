@@ -51,7 +51,7 @@ export const MenuMoblie = ({
 				)}
 				{!isEmpty(menuBarType) ? (
 					<ListContents
-						type="Dự Án"
+						type="Dự án"
 						list={menuBarType}
 						onClick={(item) => {
 							Router.replace(`/project-detail/${item.id}`);
