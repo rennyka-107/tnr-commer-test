@@ -40,9 +40,9 @@ const ItemProduct = ({ data }: ProductsProps) => {
               item3: product.numBed,
               item4: product.doorDirection,
             }}
-			projectTypeCode={product.projectTypeCode}
-			minFloor={product.minFloor}
-			maxFloor={product.maxFloor}
+            projectTypeCode={product.projectTypeCode}
+            minFloor={product.minFloor}
+            maxFloor={product.maxFloor}
             priceListed={product.totalPrice}
             priceSub={product.unitPrice}
             ticketCard={product.category}
@@ -63,7 +63,7 @@ const ItemProduct = ({ data }: ProductsProps) => {
               Router.push("/compare-product");
             }}
             onClick={() => addToCart(product.id)}
-            buyDisabled={product.paymentStatus!==2}
+            buyDisabled={product.paymentStatus !== 2}
           />
         ))}
       </ProductWrap>

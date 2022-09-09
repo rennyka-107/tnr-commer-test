@@ -506,13 +506,13 @@ const ProductCard = (props: Props) => {
                   borderRadius: 8,
                 }}
                 onClick={() => {
-                  // setDialog({
-                  //   open: true,
-                  //   transactionCode: item.bookingCode,
-                  // });
-                    router.push(
-                    `/payment-cart?transactionCode=${item.bookingCode}`
-                  );
+                  setDialog({
+                    open: true,
+                    transactionCode: item.bookingCode,
+                  });
+                  //   router.push(
+                  //   `/payment-cart?transactionCode=${item.bookingCode}`
+                  // );
                 }}
               >
                 Hoàn Thiện hồ sơ

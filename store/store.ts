@@ -46,7 +46,7 @@ const combinedReducer = combineReducers({
   sendRequest,
   paramsSearch,
   generalInfo,
-  orderByUser
+  orderByUser,
 });
 
 export type RootState = ReturnType<typeof combinedReducer>;
@@ -132,7 +132,6 @@ const masterReducer = (state, action) => {
       orderByUser: {
         ...action.payload.orderByUser,
       },
-
     };
     return nextState;
   } else {

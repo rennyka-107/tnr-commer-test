@@ -31,6 +31,21 @@ interface InitialState {
     priceId: string | null | number;
   };
   referenceCode: string | null;
+  fileIdNumberFront: {
+    file: File | string | null;
+    path: string | null;
+    name: string | null;
+  };
+  fileIdNumberBehind: {
+    file: File | string | null;
+    path: string | null;
+    name: string | null;
+  };
+  fileIdNumberHouseHold: {
+    file: File | string | null;
+    path: string | null;
+    name: string | null;
+  };
 }
 const initialState: InitialState = {
   listPayment: [],
@@ -83,6 +98,9 @@ const initialState: InitialState = {
     referenceCode: "",
   },
   referenceCode: null,
+  fileIdNumberFront: { file: null, path: "", name: "" },
+  fileIdNumberBehind: { file: null, path: "", name: "" },
+  fileIdNumberHouseHold: { file: null, path: "", name: "" },
 };
 
 export const paymentSlice = createSlice({
@@ -104,6 +122,24 @@ export const paymentSlice = createSlice({
     setReferenceCode: (state, action) => {
       state.referenceCode = action.payload;
     },
+    setFileFinishTransaction: (state, { payload: { type, file } }) => {
+      switch (type) {
+        case 0:
+          state.fileIdNumberFront = file;
+          return;
+        case 1:
+          state.fileIdNumberBehind = file;
+          return;
+        case 2:
+          state.fileIdNumberHouseHold = file;
+          return;
+      }
+    },
+    resetAllFileFinishTransaction: (state) => {
+      state.fileIdNumberFront = { file: null, path: "", name: "" };
+      state.fileIdNumberBehind = { file: null, path: "", name: "" };
+      state.fileIdNumberHouseHold = { file: null, path: "", name: "" };
+    },
   },
 });
 
@@ -113,6 +149,8 @@ export const {
   setData,
   setUploadMedia,
   setReferenceCode,
+  setFileFinishTransaction,
+  resetAllFileFinishTransaction
 } = paymentSlice.actions;
 
 export default paymentSlice.reducer;
