@@ -305,10 +305,10 @@ const DetailProduct = ({ onBack }: Props) => {
               router.push({
                 pathname: "/compare-search",
                 query: {
-                  priceTo: "20",
-                  priceFrom: "1",
-                  areaTo: "200",
-                  areaFrom: "30",
+                  priceTo: "50",
+                  priceFrom: "0",
+                  areaTo: "1000",
+                  areaFrom: "0",
                 },
               });
               // };

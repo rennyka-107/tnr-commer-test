@@ -83,8 +83,8 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const Route = useRouter();
   const captchaRef = useRef<ReCAPTCHA>(null);
-  const [token, setToken] = useState<string | null>(null);
-  const [verifySuccess, setVerifySuccess] = useState<boolean>(false);
+  const [token, setToken] = useState<string | null>("123"); //dung captcha thi de thanh null
+  const [verifySuccess, setVerifySuccess] = useState<boolean>(true); // dung captcha thi de thanh false
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -101,6 +101,8 @@ const Login = () => {
   });
 
   const onSubmit = async (values) => {
+    console.log("verifySuccess", verifySuccess);
+
     if (verifySuccess) {
       setLoading(true);
       setVerifySuccess(true);
@@ -126,7 +128,7 @@ const Login = () => {
             title: "Đăng Nhập",
           });
           //reset token when submit
-          captchaRef.current.reset();
+          // captchaRef.current.reset();
           setLoading(false);
         }
       } catch (error) {
@@ -138,23 +140,20 @@ const Login = () => {
       }
     } else {
       // captchaRef.current.reset();
-      setToken(null);
+      // setToken(null);
     }
   };
 
   const handleChangeCapcha = async (token: string | null) => {
-    if (!token) return;
-
-    if (!verifySuccess) {
-      const verifyResponse = await verifyCapchaToken({
-        captchaResponse: token,
-      });
-
-      if (verifyResponse.responseData) {
-        setVerifySuccess(true);
-      }
-    }
     setToken(token);
+
+    const verifyResponse = await verifyCapchaToken({
+      captchaResponse: token,
+    });
+
+    if (verifyResponse.responseData) {
+      setVerifySuccess(true);
+    }
   };
 
   return (
@@ -226,7 +225,7 @@ const Login = () => {
               marginTop: "10px",
             }}
             type="submit"
-            disabled={token ? false : true}
+            disabled={(token ? false : true) || !verifySuccess}
           >
             {loading === false ? (
               "Đăng nhập"
@@ -237,12 +236,12 @@ const Login = () => {
             )}
           </ButtonStyled>
           {/* check login false 3 lan thi moi dung captcha */}
-          <ReCAPTCHA
+          {/* <ReCAPTCHA
             style={{ marginTop: "20px" }}
             sitekey={process.env.NEXT_PUBLIC_SITE_KEY}
             ref={captchaRef}
             onChange={handleChangeCapcha}
-          />
+          /> */}
         </FormGroup>
 
         <FormGroup sx={{ mb: 2 }} fullWidth style={{ alignItems: "center" }}>

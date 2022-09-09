@@ -87,7 +87,9 @@ const BillingInfo = ({ setBilling, billing }: Props) => {
           <Grid container spacing={"30px"}>
             <Grid item xs={6}>
               <FormControlLabel
-                disabled={!isEmpty(transactionCode)}
+                disabled={
+                  !isEmpty(transactionCode) && data?.paymentStatus !== 0
+                }
                 value={1}
                 control={<Radio />}
                 label={<Text18Styled>Số tiền đặt hàng tối thiểu</Text18Styled>}
@@ -103,7 +105,9 @@ const BillingInfo = ({ setBilling, billing }: Props) => {
             </Grid>
             <Grid item xs={6}>
               <FormControlLabel
-                disabled={!isEmpty(transactionCode)}
+                disabled={
+                  !isEmpty(transactionCode) && data?.paymentStatus !== 0
+                }
                 value={2}
                 control={<Radio />}
                 label={<Text18Styled>Tổng tiền đặt hàng</Text18Styled>}

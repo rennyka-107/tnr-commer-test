@@ -587,14 +587,26 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
       listUserIdDelete: data.listUserIdDelete,
       listPaymentPolicy: !isEmpty(productItem) ? productItem?.ListPolicy : [],
       listPromotion: !isEmpty(productItem) ? productItem?.ListPromotion : [],
-      referenceCode,
-      priceId: !isEmpty(productItem) ? productItem?.priceId : null,
-      scheduleId: !isEmpty(productItem.ListSchedule)
+      referenceCode: !isEmpty(transactionCode)
+        ? data?.referenceCode
+        : referenceCode,
+      priceId: !isEmpty(transactionCode)
+        ? data?.priceId
+        : !isEmpty(productItem)
+        ? productItem?.priceId
+        : null,
+      scheduleId: !isEmpty(transactionCode)
+        ? data?.scheduleId
+        : !isEmpty(productItem.ListSchedule)
         ? productItem?.ListSchedule[0]["ScheduleID"]
         : "",
     };
 
-    if (!isEmpty(uploadMedia) && !isEmpty(transactionCode)) {
+    if (
+      !isEmpty(uploadMedia) &&
+      !isEmpty(transactionCode) &&
+      data.paymentStatus === 3
+    ) {
       const data = new FormData();
       uploadMedia.forEach((media) => {
         data.append("multipartFileList", media);
@@ -609,6 +621,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
               title: "Hoàn thành hồ sơ",
               message: response.responseMessage,
             });
+
             router.push("/result-payment?errorCode=0");
           } else {
             notification({
@@ -659,7 +672,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                 paymentFlag === 0
               ) {
                 if (payMethod === "2F19283D-4384-43B7-805F-556BAAbcn447") {
-                  if (!isEmpty(uploadMedia)) {
+                  if (!isEmpty(uploadMedia) && data.paymentStatus !== 0) {
                     const data = new FormData();
                     uploadMedia.forEach((media) => {
                       data.append("multipartFileList", media);
@@ -713,12 +726,32 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                         setLoading(false);
                       });
                   } else {
-                    notification({
-                      severity: "error",
-                      title: "Tạo phiếu thanh toán",
-                      message:
-                        "Bạn cần upload giấy tờ xác thực thanh toán Mobile Banking",
-                    });
+                    if (data.paymentStatus !== 0) {
+                      notification({
+                        severity: "error",
+                        title: "Tạo phiếu thanh toán",
+                        message:
+                          "Bạn cần upload giấy tờ xác thực thanh toán Mobile Banking",
+                      });
+                    } else {
+                      apiGetQrCode(res.responseData?.transactionCode)
+                        .then((res) => {
+                          if (!isEmpty(res.responseData)) {
+                            dispatch(setQrCode(res.responseData));
+                            LocalStorage.remove("cart");
+                            addToCart();
+                            setLoading(false);
+                            setScopeRender("transaction_message");
+                          } else {
+                            notification({
+                              message: res.responseMessage,
+                              severity: "error",
+                              title: "Hoàn thiện hồ sơ mua bán",
+                            });
+                          }
+                        })
+                        .catch((err) => console.log(err));
+                    }
                   }
                 } else {
                   apiGetQrCode(res.responseData?.transactionCode)
@@ -772,7 +805,11 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                         });
                         LocalStorage.remove("cart");
                         addToCart();
-                        router.push("/profile");
+                        router.push(
+                          payMethod === "2F19283D-4384-43B7-805F-556BAAbcn447"
+                            ? "/"
+                            : "/profile"
+                        );
                       } else {
                         notification({
                           severity: "error",
@@ -1371,7 +1408,9 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                 </Box>
                 {((!isEmpty(transactionCode) && data.paymentStatus === 3) ||
                   (payMethod === "2F19283D-4384-43B7-805F-556BAAbcn447" &&
-                    isEmpty(transactionCode))) && (
+                    (isEmpty(transactionCode) ||
+                      (!isEmpty(transactionCode) &&
+                        data?.paymentStatus === 0)))) && (
                   <Box>
                     <FileUpload setValidUpload={setValidUpload} />
                   </Box>
@@ -1563,17 +1602,32 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                     },
                   }}
                   disabled={
-                    isEqual(
+                    (isEqual(
                       initialValue?.paymentIdentityInfos,
                       data.paymentIdentityInfos
                     ) &&
-                    isEqual(
-                      initialValue.paymentIdentityInfos.find(
-                        (info) => info.mainUser === 1
-                      ),
-                      { ...watch() }
-                    ) &&
-                    !validUpload
+                      isEqual(
+                        initialValue.paymentIdentityInfos.find(
+                          (info) => info.mainUser === 1
+                        ),
+                        { ...watch() }
+                      ) &&
+                      !isEmpty(transactionCode) &&
+                      ((billing === 1 &&
+                        data?.deposite ===
+                          data?.quotationRealt?.minEarnestMoney) ||
+                        (billing === 2 &&
+                          data?.deposite ===
+                            data?.quotationRealt?.regulationOrderPrice)) &&
+                      payMethod === data?.paymentMethodId &&
+                      !validUpload) ||
+                    (isEmpty(transactionCode) &&
+                      !isEmpty(uploadMedia) &&
+                      payMethod === "2F19283D-4384-43B7-805F-556BAAbcn447") ||
+                    (!isEmpty(transactionCode) &&
+                      !isEmpty(uploadMedia) &&
+                      data.paymentStatus === 0 &&
+                      payMethod === "2F19283D-4384-43B7-805F-556BAAbcn447")
                   }
                 >
                   <Text18Styled

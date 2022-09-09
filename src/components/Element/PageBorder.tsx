@@ -1,9 +1,10 @@
+import { CSSProperties } from "@mui/styled-engine";
 import { Box } from "@mui/system";
 import { ReactNode } from "react";
 
 interface Props {
   children: ReactNode;
-  sx?: object;
+  sx?: CSSProperties;
 }
 
 const PageBorder = ({ children, sx = {} }: Props) => {

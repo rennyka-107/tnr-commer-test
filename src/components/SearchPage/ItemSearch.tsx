@@ -12,6 +12,7 @@ import useNotification from "hooks/useNotification";
 import { useState } from "react";
 import ConfirmDialog from "./ConfirmDialog";
 import { isEmpty } from "lodash";
+import LocalStorage from "utils/LocalStorage";
 
 interface searchProps {
   data?: searchLocationResponse[];
@@ -100,11 +101,20 @@ const ItemSearch = ({ data, buyDisabled }: searchProps) => {
         query: {
           // projectId: projectId,
           // projectTypeId: projectType,
-          priceTo: "20",
-          priceFrom: "1",
-          areaTo: "200",
-          areaFrom: "30",
+          priceTo: "50",
+          priceFrom: "0",
+          areaTo: "1000",
+          areaFrom: "0",
         },
+      });
+	  LocalStorage.set("compare-url", {
+        projectId: projectId,
+        projectTypeId: projectType,
+        priceTo: "50",
+        priceFrom: "0",
+        areaTo: "1000",
+        areaFrom: "0",
+        categoryId: "",
       });
     };
 

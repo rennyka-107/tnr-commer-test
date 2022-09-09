@@ -23,6 +23,7 @@ import FormatFns from "utils/DateFns";
 import { dayOfWeekToString, getDateFromStringDMY } from "utils/helper";
 import Product3 from "../../../public/images/product3.png";
 import { setOrderDetail } from "../../../store/sendRequestSlice";
+import DialogFinishProfileTransaction from "./DialogFinishProfileTransaction";
 
 const DynamicHorizontalLine = dynamic(() =>
   import("@components/CustomComponent/HorizontalLine").then(
@@ -143,7 +144,10 @@ const ProductCard = (props: Props) => {
   const [paymentRequestTypeRes, setPaymentRequestTypeRes] = useState<
     PaymentRequestType[]
   >([]);
-
+  const [dialog, setDialog] = useState<{
+    open: boolean;
+    transactionCode: string | null;
+  }>({ open: false, transactionCode: null });
   const convertDateToString = (date: Date) => {
     const house = FormatFns.format(date, "HH:mm");
     const day = FormatFns.format(date, "dd/MM/yyyy");
@@ -501,11 +505,15 @@ const ProductCard = (props: Props) => {
                   fontWeight: 500,
                   borderRadius: 8,
                 }}
-                onClick={() =>
-                  router.push(
+                onClick={() => {
+                  // setDialog({
+                  //   open: true,
+                  //   transactionCode: item.bookingCode,
+                  // });
+                    router.push(
                     `/payment-cart?transactionCode=${item.bookingCode}`
-                  )
-                }
+                  );
+                }}
               >
                 Hoàn Thiện hồ sơ
               </Button>
@@ -527,6 +535,16 @@ const ProductCard = (props: Props) => {
             style={{ width: "300px", padding: "18px 50px", margin: "8px" }}
             label="Xem chi tiết"
             onClick={() => handleChooseItem(item)}
+          />
+          <DialogFinishProfileTransaction
+            open={dialog.open}
+            onClose={() =>
+              setDialog({
+                open: false,
+                transactionCode: null,
+              })
+            }
+            transactionCode={dialog.transactionCode}
           />
         </Box>
       </ContentProduct>

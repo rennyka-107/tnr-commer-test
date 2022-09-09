@@ -52,6 +52,15 @@ const ItemSearch = ({ data }: searchProps) => {
         projectId: product.projectId,
         projectType: product.projectTypeId,
       });
+      LocalStorage.set("compare-url", {
+        projectId: product.projectId,
+        projectTypeId: product.projectTypeId,
+        priceTo: "50",
+        priceFrom: "0",
+        areaTo: "1000",
+        areaFrom: "0",
+        categoryId: "",
+      });
       dispatch(getComparePopUpItem(local));
     } else {
       dispatch(getComparePopUpItem([product]));

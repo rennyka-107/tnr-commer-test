@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getComparePopUpItem } from "../../../store/productCompareSlice";
 import { IconEmptyFav } from "@components/Icons";
 import { RootState } from "../../../store/store";
+import LocalStorage from "utils/LocalStorage";
 
 interface ProductsProps {
   data?: ProductsResponse[];
@@ -121,11 +122,20 @@ const ItemCardFavouriteProduct = ({ data }: ProductsProps) => {
         query: {
         //   projectId: projectId,
         //   projectTypeId: projectType,
-          priceTo: "20",
-          priceFrom: "1",
-          areaTo: "200",
-          areaFrom: "30",
+          priceTo: "50",
+          priceFrom: "0",
+          areaTo: "1000",
+          areaFrom: "0",
         },
+      });
+	  LocalStorage.set("compare-url", {
+        projectId: projectId,
+        projectTypeId: projectType,
+        priceTo: "50",
+        priceFrom: "0",
+        areaTo: "1000",
+        areaFrom: "0",
+        categoryId: "",
       });
     };
 

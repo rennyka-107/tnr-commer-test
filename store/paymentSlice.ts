@@ -26,6 +26,9 @@ interface InitialState {
     paymentStatus: number;
     listUserIdDelete: string[];
     paymentMediaList: any[];
+    scheduleId: string | null | number;
+    referenceCode: string | null;
+    priceId: string | null | number;
   };
   referenceCode: string | null;
 }
@@ -75,6 +78,9 @@ const initialState: InitialState = {
     paymentStatus: 0,
     listUserIdDelete: [],
     paymentMediaList: [],
+    scheduleId: "",
+    priceId: "",
+    referenceCode: "",
   },
   referenceCode: null,
 };

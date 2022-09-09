@@ -32,7 +32,7 @@ const TNRButton = forwardRef<HTMLDivElement, Props>((props, ref) => {
 
   const handleClickDeleteBtn = (e: MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
-    if (onDelete && !disabled) {
+    if (onDelete) {
       onDelete();
     }
   };

@@ -20,6 +20,7 @@ import { searchLocationResponse } from "interface/searchIF";
 import { isEmpty } from "lodash";
 import useNotification from "hooks/useNotification";
 import { useMediaQuery } from "@mui/material";
+import LocalStorage from "utils/LocalStorage";
 
 const WrapSlide = styled.div`
   display: flex;
@@ -106,11 +107,20 @@ export default function SliderProductHotComponent() {
         query: {
           // projectId: projectId,
           // projectTypeId: projectType,
-          priceTo: "20",
-          priceFrom: "1",
-          areaTo: "200",
-          areaFrom: "30",
+          priceTo: "50",
+          priceFrom: "0",
+          areaTo: "1000",
+          areaFrom: "0",
         },
+      });
+	  LocalStorage.set("compare-url", {
+        projectId: projectId,
+        projectTypeId: projectType,
+        priceTo: "50",
+        priceFrom: "0",
+        areaTo: "1000",
+        areaFrom: "0",
+        categoryId: "",
       });
     };
 

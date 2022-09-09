@@ -13,6 +13,7 @@ type Props = {};
 const DepositRefundRequest = (props: Props) => {
   const {
     query: { txcode },
+    replace,
   } = useRouter();
   const notification = useNotification();
   const [loading, setLoading] = useState<boolean>(false);
@@ -50,11 +51,13 @@ const DepositRefundRequest = (props: Props) => {
             severity: "success",
             message: "Gửi yêu cầu thanh yêu cầu hoàn cọc thành công",
           });
+          replace("/send-request/success");
         } else {
           notification({
             severity: "error",
             message: res.responseMessage,
           });
+          replace("/send-request/failure");
         }
       })
       .finally(() => {

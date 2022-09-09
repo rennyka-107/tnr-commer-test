@@ -37,6 +37,7 @@ export interface Filter {
 const ChangeApartmentRequest = ({ orderDetail }: Props) => {
   const {
     query: { txcode },
+    replace,
   } = useRouter();
   const notification = useNotification();
   const [loading, setLoading] = useState<boolean>(false);
@@ -151,11 +152,13 @@ const ChangeApartmentRequest = ({ orderDetail }: Props) => {
             severity: "success",
             message: "Gửi yêu cầu đổi căn thành công",
           });
+          replace("/send-request/success");
         } else {
           notification({
             severity: "error",
             message: res.responseMessage,
           });
+          replace("/send-request/failure");
         }
       })
       .finally(() => {

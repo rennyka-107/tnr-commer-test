@@ -1,46 +1,32 @@
 import PageBorder from "@components/Element/PageBorder";
 import Subtitle from "@components/Element/Subtitle";
 import TNRButton from "@components/Element/TNRButton";
-import {
-  ButtonAction,
-  ButtonStyled,
-  RowStyled,
-  Text14Styled,
-  Text18Styled,
-} from "@components/StyledLayout/styled";
-import { Box, Checkbox } from "@mui/material";
-import Link from "next/link";
-import SendRequest, { SubmitType } from "../SendRequest";
-import AddIcon from "@mui/icons-material/Add";
-import ControllerTextField from "@components/Form/ControllerTextField";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { validateLine } from "utils/constants";
-import Regexs from "utils/Regexs";
-import styled from "@emotion/styled";
-import AddPerson from "./AddPerson";
-import { Fragment, useEffect, useRef, useState } from "react";
-import { nanoid } from "@reduxjs/toolkit";
-import { rest } from "lodash";
-import { useRouter } from "next/router";
-import { apiTransferProductPayment } from "../../../../pages/api/paymentApi";
-import useNotification from "hooks/useNotification";
-import useOnClickOutside from "hooks/useOnClickOutside";
-import LoadingComponent from "@components/LoadingComponent";
-import { getOrderByUser } from "@service/Profile";
 import ControllerDatePicker from "@components/Form/ControllerDatePicker";
-import ControllerDatePickerThamQuan from "@components/Form/ControllerDatePickerThamQuan";
-import ControllerDateTimeDatLich from "@components/Form/ControllerDateTimeDatLich";
-import ControllerInputDatLich from "@components/Form/ControllerInputDatLich";
-import ControllerReactDatePicker from "@components/Form/ControllerReactDatePicker";
+import ControllerTextField from "@components/Form/ControllerTextField";
+import {
+  Text14Styled
+} from "@components/StyledLayout/styled";
+import { yupResolver } from "@hookform/resolvers/yup";
+import AddIcon from "@mui/icons-material/Add";
+import { Box } from "@mui/material";
+import { nanoid } from "@reduxjs/toolkit";
+import { getOrderByUser } from "@service/Profile";
+import useNotification from "hooks/useNotification";
+import { useRouter } from "next/router";
+import { useEffect, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
+import { validateLine } from "utils/constants";
 import DateFns from "utils/DateFns";
-import { format, parse } from "date-fns";
+import Regexs from "utils/Regexs";
+import * as yup from "yup";
+import { apiTransferProductPayment } from "../../../../pages/api/paymentApi";
+import SendRequest from "../SendRequest";
 
 const validationSchema = yup.object().shape({
   fullname: yup.string().required(validateLine.required).default(""),
   email: yup
     .string()
+    .required(validateLine.required)
     .nullable()
     .trim(validateLine.trim)
     .strict(true)
@@ -89,6 +75,7 @@ const TransferRequest = (props: Props) => {
   const [activePerson, setActivePerson] = useState<PersonItem | null>(null);
   const {
     query: { txcode },
+    replace,
   } = useRouter();
   const addingBtnRef = useRef<HTMLDivElement | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -153,6 +140,15 @@ const TransferRequest = (props: Props) => {
   const sendRequestApi = () => {
     if (!contact) return;
 
+    if (listPersonAdded.length === 0) {
+      notification({
+        severity: "warning",
+        message: "Yêu cầu có tối thiểu một người được chuyển nhượng",
+      });
+
+      return;
+    }
+
     const hasMainUserDate = listPersonAdded.map((person, index) => ({
       ...person,
       mainUser: index === 0 ? 1 : 0,
@@ -175,11 +171,13 @@ const TransferRequest = (props: Props) => {
             severity: "success",
             message: "Gửi yêu cầu chuyển nhượng thành công",
           });
+          replace("/send-request/success");
         } else {
           notification({
             severity: "error",
             message: res.responseMessage,
           });
+          replace("/send-request/failure");
         }
       })
       .finally(() => {
@@ -187,11 +185,16 @@ const TransferRequest = (props: Props) => {
       });
   };
 
-  const handleClickBtn = () => {
+  const handleClickBtn = async () => {
     if (isAddingPerson) {
-      handleClickAddPerson();
+      console.log("please");
+      notification({
+        severity: "warning",
+        message: "Vui lòng nhấn xác nhận trước khi gửi yêu cầu",
+      });
+    } else {
+      sendRequestApi();
     }
-    sendRequestApi();
   };
 
   const onAddPerson = (value: string) => {
@@ -204,7 +207,7 @@ const TransferRequest = (props: Props) => {
     setListPersonAdded([...newList]);
   };
 
-  const handleClickAddPerson = () => {
+  const handleClickAddPerson = async () => {
     if (isAddingPerson) {
       handleSubmit(onSenRequest)();
     } else {
@@ -260,7 +263,7 @@ const TransferRequest = (props: Props) => {
                   label={person.fullname}
                   handleClick={handleViewAddedPerson(person)}
                   active={isActive}
-                  hasDelete={isActive}
+                  hasDelete={true}
                   onDelete={onDeletePerson(person.onyFeId)}
                   disabled={isAddingPerson}
                 />

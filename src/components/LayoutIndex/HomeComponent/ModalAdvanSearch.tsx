@@ -59,6 +59,7 @@ const TextBannerBottom = styled.span`
   font-size: 16px;
   line-height: 19px;
   /* identical to box height */s
+  z-index: 1000;
 
   text-align: right;
 
@@ -119,18 +120,18 @@ export default function ModalAdvanSearch() {
   const [productName, setProductName] = React.useState<string[]>([]);
   const [projectName, setProjectName] = React.useState<string[]>([]);
   const [location, setLocation] = React.useState<string[]>([]);
-  const [valueDienTich, setValueDientich] = React.useState<number[]>([30, 200]);
-  const [valueKhoanGia, setValueKhoangGia] = React.useState<number[]>([1, 200]);
+  const [valueDienTich, setValueDientich] = React.useState<number[]>([0, 1000]);
+  const [valueKhoanGia, setValueKhoangGia] = React.useState<number[]>([0, 200]);
 
   const [search, setSearch] = React.useState({
     textSearch: "",
     provinceId: "",
     projectTypeId: "",
     projectId: "",
-    priceFrom: ("1" as string) ?? "1",
-    priceTo: ("20" as string) ?? "20",
-    areaFrom: ("30" as string) ?? "30",
-    areaTo: ("200" as string) ?? "200",
+    priceFrom: ("0" as string) ?? "0",
+    priceTo: ("50" as string) ?? "50",
+    areaFrom: ("0" as string) ?? "0",
+    areaTo: ("1000" as string) ?? "1000",
   });
   const handleClick =
     (newPlacement: PopperPlacementType) =>
@@ -312,9 +313,9 @@ export default function ModalAdvanSearch() {
   }, []);
   return (
     <div>
-      <Button onClick={handleClick("bottom")}>
+      <Button onClick={handleClick("bottom")} style={{zIndex: 1000}}>
         <IconSearchAdvan />
-        <TextBannerBottom>Tìm kiếm nâng cao</TextBannerBottom>
+        <TextBannerBottom >Tìm kiếm nâng cao</TextBannerBottom>
       </Button>
 
       <Popper
@@ -337,23 +338,23 @@ export default function ModalAdvanSearch() {
                     placeholder="Chọn vị trí"
                     style={{ width: 305, height: 54 }}
                   /> */}
-				  <GitHubLabel 
-				      label="Vị Trí"
-					  data={listMenuLocation}
-					  listLocation={location}
-					  onChange={handleChangeLocation}
-					  placeholder="Chọn vị trí"
-					  style={{ width: 305, height: 54 }}
-				  />
-				    <PopperProjectType 
-				      label="Loại BĐS"
-					  data={projectTypeListResponse}
-					  checkSelectProvince={checkSelectProvince}
-					  listProjectType={projectName}
-					  onChange={handleSelectProject}
-					  placeholder="Loại BĐS"
-					  style={{ width: 305, height: 54 }}
-				  />
+                  <GitHubLabel
+                    label="Vị Trí"
+                    data={listMenuLocation}
+                    listLocation={location}
+                    onChange={handleChangeLocation}
+                    placeholder="Chọn vị trí"
+                    style={{ width: 305, height: 54 }}
+                  />
+                  <PopperProjectType
+                    label="Loại BĐS"
+                    data={projectTypeListResponse}
+                    checkSelectProvince={checkSelectProvince}
+                    listProjectType={projectName}
+                    onChange={handleSelectProject}
+                    placeholder="Loại BĐS"
+                    style={{ width: 305, height: 54 }}
+                  />
                   {/* <ProjectTypeCheckboxDropdown
                     label="Loại BĐS"
                     data={projectTypeListResponse}
@@ -408,16 +409,16 @@ export default function ModalAdvanSearch() {
                     <SliderComponent
                       label="Diện tích (m2)"
                       onChange={handleChange1}
-                      numberMin={30}
-                      numberMax={200}
+                      numberMin={0}
+                      numberMax={1000}
                       value={valueDienTich}
                       unit="m2"
                     />
                     <SliderSearchKhoangGia
                       label="Khoảng giá"
                       onChange={handleChange2}
-                      numberMin={1}
-                      numberMax={20}
+                      numberMin={0}
+                      numberMax={50}
                       value={valueKhoanGia}
                       unit="tỷ"
                     />

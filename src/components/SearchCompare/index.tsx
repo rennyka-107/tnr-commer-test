@@ -1,7 +1,16 @@
 import styled from "@emotion/styled";
 import { searchLocationResponse } from "interface/searchIF";
 import ItemSearch from "./ItemSearch";
-import { Button, SelectChangeEvent, Stack, Typography } from "@mui/material";
+import {
+  Button,
+  Fade,
+  Paper,
+  Popper,
+  PopperPlacementType,
+  SelectChangeEvent,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,7 +18,12 @@ import { RootState } from "../../../store/store";
 import ContainerSearch from "@components/Container/ContainerSearch";
 import { makeStyles } from "@mui/styles";
 import SelectSeach from "@components/CustomComponent/SelectInputComponent/SelectSeach";
-import { IconEmptyFav, IconFilterSearch, IconHuyLoc } from "@components/Icons";
+import {
+  IconEmptyFav,
+  IconFilterSearch,
+  IconHuyLoc,
+  IconSapxep,
+} from "@components/Icons";
 import { isEmpty } from "lodash";
 import SilderGroup from "@components/CustomComponent/SliderGroupComponent";
 import SliderComponent from "@components/CustomComponent/SliderComponent";
@@ -21,6 +35,7 @@ import ProjectRadio from "@components/CustomComponent/ListRadioSearchCompare/Pro
 import PopperRadioComponent from "@components/CustomComponent/ListRadioSearchCompare/PopperRadioComponent";
 import PopperRadioProject from "@components/CustomComponent/ListRadioSearchCompare/PopperRadioProject";
 import { removeAllComparePopUpItem } from "../../../store/productCompareSlice";
+import SwitchComponent from "@components/SearchCompare/SwitchComponent";
 
 type dataProps = {
   searchData?: searchLocationResponse[];
@@ -65,6 +80,21 @@ const LinkStyled = styled.a`
     color: #ea242a;
   }
 `;
+
+const PaperStyled = styled(Paper)`
+  position: relative;
+  width: 318px;
+  height: auto;
+
+  /* White */
+
+  background: #ffffff;
+  /* Global */
+
+  box-shadow: 0px 4px 64px 24px rgba(0, 0, 0, 0.06);
+  border-radius: 4px;
+`;
+
 const useStyles = makeStyles((theme) => ({
   root: {
     "& .MuiInputBase-root": {
@@ -106,20 +136,22 @@ const SearchCompare = ({
   } = router.query;
   const [productName, setProductName] = useState<string[]>([]);
   const [projectName, setProjectName] = useState<string[]>([]);
+  const [typeProduct, setTypeProduct] = useState("0");
+  const [typeSaleProduct, setTypeSaleProduct] = useState("0");
   const [filterSearch, setFilterSearch] = useState({
     categoryId: categoryId,
     provinceId: provinceId,
     projectTypeId: projectTypeId,
     projectId: projectId,
-    priceFrom: (priceFrom as string) ?? "1",
-    priceTo: (priceTo as string) ?? "20",
-    areaFrom: (areaFrom as string) ?? "30",
+    priceFrom: (priceFrom as string) ?? "0",
+    priceTo: (priceTo as string) ?? "50",
+    areaFrom: (areaFrom as string) ?? "0",
     areaTo: (areaTo as string) ?? "200",
     projectTypeIdList: [],
   });
   const [projectList, setProjectList] = useState<any[]>([]);
-  const [dataKhoangGia, setDataKhoangGia] = useState<number[]>([1, 20]);
-  const [dataDienTich, setDataDienTich] = useState<number[]>([30, 200]);
+  const [dataKhoangGia, setDataKhoangGia] = useState<number[]>([0, 50]);
+  const [dataDienTich, setDataDienTich] = useState<number[]>([0, 1000]);
   const [listParamsProjectType, setParamsProjectType] = useState([]);
   const [listIdProject, setListIdProject] = useState([]);
   const [listDataLSProvince, setListDataLSProvince] = useState([]);
@@ -127,7 +159,9 @@ const SearchCompare = ({
   const [listDataLSProjectType, setListDataLSProjectType] = useState([]);
   const [checkSelectProjectType, setCheckSelectProjectType] = useState(false);
   const dispatch = useDispatch();
-
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const [openModal, setOpenModal] = useState(false);
+  const [placement, setPlacement] = useState<PopperPlacementType>();
   useEffect(() => {
     const dataProject = listMenuBarProjectType.filter(
       (x) => x.id === projectTypeId
@@ -154,8 +188,6 @@ const SearchCompare = ({
     ) {
       setDataKhoangGia([parseInt(priceFrom), parseInt(priceTo)]);
     }
-
-
   }, [
     provinceId,
     projectId,
@@ -166,6 +198,7 @@ const SearchCompare = ({
     priceTo,
     listMenuBarProjectType,
   ]);
+
   useEffect(() => {
     setFilter({
       location: router?.query.textSearch,
@@ -243,7 +276,6 @@ const SearchCompare = ({
     setCheckSelectProjectType(true);
     setParamsProjectType(bodySearch);
     setListDataLSProjectType(arrayData);
-
   };
 
   const handleSelectProduct = (data: any) => {
@@ -341,11 +373,20 @@ const SearchCompare = ({
       JSON.stringify(listDataLSProject)
     );
     localStorage.setItem("listParamsIdProject", JSON.stringify(listIdProject));
-
+    localStorage.setItem("typeProduct", JSON.stringify(typeProduct));
+    localStorage.setItem("typeSaleProduct", JSON.stringify(typeSaleProduct));
     router.push(
       `/compare-search?priceTo=${filterSearch.priceTo}&priceFrom=${filterSearch.priceFrom}&areaTo=${filterSearch.areaTo}&areaFrom=${filterSearch.areaFrom}&categoryId=${filterSearch.categoryId}`
     );
   };
+
+  const handleClick =
+    (newPlacement: PopperPlacementType) =>
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl(event.currentTarget);
+      setOpenModal((prev) => placement !== newPlacement || !prev);
+      setPlacement(newPlacement);
+    };
 
   const handleResetFilter = () => {
     setFilterSearch({
@@ -353,16 +394,18 @@ const SearchCompare = ({
       provinceId: "",
       projectTypeId: "",
       projectId: "",
-      priceFrom: (priceFrom as string) ?? "1",
-      priceTo: (priceTo as string) ?? "20",
-      areaFrom: (areaFrom as string) ?? "30",
-      areaTo: (areaTo as string) ?? "200",
+      priceFrom: (priceFrom as string) ?? "0",
+      priceTo: (priceTo as string) ?? "50",
+      areaFrom: (areaFrom as string) ?? "0",
+      areaTo: (areaTo as string) ?? "1000",
       projectTypeIdList: [""],
     });
     localStorage.removeItem("listDataLSProjectType");
     localStorage.removeItem("listParamsLSProjectType");
     localStorage.removeItem("listDataLSProject");
     localStorage.removeItem("listParamsIdProject");
+    // localStorage.removeItem("typeProduct"),
+    // localStorage.removeItem("typeSaleProduct");
     router.push(
       `/compare-search?priceTo=&priceFrom=&areaTo=&areaFrom=&categoryId=`
     );
@@ -402,6 +445,7 @@ const SearchCompare = ({
             alignItems: "center",
             marginBottom: 43,
             justifyContent: "space-between",
+			marginRight: 22,
           }}
         >
           {/* <ProjectTypeRadio
@@ -463,8 +507,8 @@ const SearchCompare = ({
             <SliderComponent
               label="Khoảng giá"
               onChange={handleChangeKhoangGia}
-              numberMin={1}
-              numberMax={20}
+              numberMin={0}
+              numberMax={50}
               value={dataKhoangGia}
               key={"priceRange"}
               unit="tỷ"
@@ -480,8 +524,8 @@ const SearchCompare = ({
             <SliderComponent
               label="Diện tích (m2)"
               onChange={handleChangeDienTich}
-              numberMin={30}
-              numberMax={200}
+              numberMin={0}
+              numberMax={1000}
               value={dataDienTich}
               key={"areaRange"}
               unit="m2"
@@ -518,17 +562,26 @@ const SearchCompare = ({
           </Button>
           {/* <div style={{ width: 150 }}>{fetchComponent()}</div> */}
         </div>
-
-        <div
-          style={{
-            display: "flex",
-            gap: 10,
-            alignItems: "center",
-            marginBottom: 21,
-          }}
-        >
-          <NumberTotalStyled>{totalTextSearch}</NumberTotalStyled>
-          <TextTotalSeach>Sản phẩm phù hợp kết quả tìm kiếm</TextTotalSeach>
+        <div style={{ display: "flex", justifyContent: "space-between" ,marginRight: 22,}}>
+          <div
+            style={{
+              display: "flex",
+              gap: 10,
+              alignItems: "center",
+              marginBottom: 21,
+			  
+            }}
+          >
+            <NumberTotalStyled>{totalTextSearch}</NumberTotalStyled>
+            <TextTotalSeach>Sản phẩm phù hợp kết quả tìm kiếm</TextTotalSeach>
+          </div>
+          <div>
+            <Button onClick={handleClick("bottom")}>
+              <LinkStyled>
+                <IconSapxep className="icon-sapxep" />
+              </LinkStyled>
+            </Button>
+          </div>
         </div>
         {/* {data.map((item) => ( */}
         {!isEmpty(searchData) ? (
@@ -550,7 +603,26 @@ const SearchCompare = ({
         )}
 
         {/* ))} */}
+		<Popper
+        open={openModal}
+        anchorEl={anchorEl}
+        placement={placement}
+        transition
+        style={{ zIndex: 300 }}
+      >
+        {({ TransitionProps }) => (
+          <Fade {...TransitionProps} timeout={350}>
+            <PaperStyled>
+              <SwitchComponent
+                setTypeProduct={setTypeProduct}
+                setTypeSaleProduct={setTypeSaleProduct}
+              />
+            </PaperStyled>
+          </Fade>
+        )}
+      </Popper>
       </ContainerSearchPage>
+
     </ContainerSearch>
   );
 };

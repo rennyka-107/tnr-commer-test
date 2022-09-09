@@ -43,11 +43,12 @@ type Props = {
 const PaymentMethods = ({ payMethod, setPayMethod }: Props) => {
   const { listPayment } = useSelector((state: RootState) => state.payments);
   const { cart } = useSelector((state: RootState) => state.carts);
+  const data = useSelector((state: RootState) => state.payments.data);
   const {
     query: { transactionCode },
   } = useRouter();
 
-  console.log(payMethod, "paymethod")
+  console.log(payMethod, "paymethod");
 
   return (
     <WrapperBoxBorderStyled className="custom-billing-information">
@@ -67,7 +68,9 @@ const PaymentMethods = ({ payMethod, setPayMethod }: Props) => {
                     color={payMethod === pm.id ? "#FCB715" : "#C7C9D9"}
                   >
                     <FormControlLabel
-                      disabled={!isEmpty(transactionCode)}
+                      disabled={
+                        !isEmpty(transactionCode) && data?.paymentStatus !== 0
+                      }
                       sx={{ minWidth: "100%" }}
                       componentsProps={{
                         typography: {

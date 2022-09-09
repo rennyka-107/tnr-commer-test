@@ -167,8 +167,7 @@ const ContainerFilter = styled.div`
   }
   @media screen and (max-width: 1204px) {
     flex-direction: column;
-	gap: 1px;
-	
+    gap: 1px;
   }
 `;
 
@@ -233,6 +232,8 @@ const SearchPage = ({
   const [typeProduct, setTypeProduct] = useState("0");
   const [typeSaleProduct, setTypeSaleProduct] = useState("0");
 
+
+
   const {
     textSearch,
     provinceId,
@@ -248,10 +249,10 @@ const SearchPage = ({
     provinceId: provinceId,
     projectTypeId: projectTypeId,
     projectId: projectId,
-    priceFrom: (priceFrom as string) ?? "1",
-    priceTo: (priceTo as string) ?? "20",
-    areaFrom: (areaFrom as string) ?? "30",
-    areaTo: (areaTo as string) ?? "200",
+    priceFrom: (priceFrom as string) ?? "0",
+    priceTo: (priceTo as string) ?? "50",
+    areaFrom: (areaFrom as string) ?? "0",
+    areaTo: (areaTo as string) ?? "1000",
     // isPayment: 0,
     // sortType: 0
     // provinceIdList: [],
@@ -263,8 +264,8 @@ const SearchPage = ({
   const [productName, setProductName] = useState<string[]>([]);
   const [projectName, setProjectName] = useState<string[]>([]);
   const { checkReload } = useFavourite();
-  const [dataKhoangGia, setDataKhoangGia] = useState<number[]>([1, 20]);
-  const [dataDienTich, setDataDienTich] = useState<number[]>([30, 200]);
+  const [dataKhoangGia, setDataKhoangGia] = useState<number[]>([0, 50]);
+  const [dataDienTich, setDataDienTich] = useState<number[]>([0, 1000]);
 
   const handleChange = (event: any) => {
     const {
@@ -479,6 +480,7 @@ const SearchPage = ({
       setDataDienTich(value);
     }
   };
+
   const handleSearch = () => {
     localStorage.setItem(
       "listDataLSProvince",
@@ -508,16 +510,17 @@ const SearchPage = ({
     );
     setSearchAction(!searchAction);
   };
+
   const handleResetFilter = () => {
     setSearchBody({
       textSearch: "",
       provinceId: "",
       projectTypeId: "",
       projectId: "",
-      priceFrom: (priceFrom as string) ?? "1",
-      priceTo: (priceTo as string) ?? "20",
-      areaFrom: (areaFrom as string) ?? "30",
-      areaTo: (areaTo as string) ?? "200",
+      priceFrom: (priceFrom as string) ?? "0",
+      priceTo: (priceTo as string) ?? "50",
+      areaFrom: (areaFrom as string) ?? "0",
+      areaTo: (areaTo as string) ?? "1000",
     });
     localStorage.removeItem("listDataLSProvince");
     localStorage.removeItem("listParamsLSProvince");
@@ -525,11 +528,11 @@ const SearchPage = ({
     localStorage.removeItem("listParamsLSProjectType");
     localStorage.removeItem("listDataLSProject");
     localStorage.removeItem("listParamsIdProject");
-    localStorage.removeItem("typeProduct"),
+    localStorage.removeItem("typeProduct");
       localStorage.removeItem("typeSaleProduct");
 
     router.push(
-      `/search?Type=Advanded&&textSearch=&&provinceId=&&projectTypeId=&&projectId=&&priceFrom=&&priceTo=&&areaFrom=0&&areaTo=200`
+      `/search?Type=Advanded&&textSearch=&&provinceId=&&projectTypeId=&&projectId=&&priceFrom=&&priceTo=&&areaFrom=0&&areaTo=1000`
     );
   };
 
@@ -556,7 +559,7 @@ const SearchPage = ({
         !isEmpty(textSearch) ||
         !isEmpty(filterSearch.priceFrom) ||
         !isEmpty(filterSearch.priceTo) ||
-        (!isEmpty(filterSearch.areaFrom) && filterSearch.areaFrom !== '0')  ||
+        (!isEmpty(filterSearch.areaFrom) && filterSearch.areaFrom !== "0") ||
         !isEmpty(filterSearch.areaTo) ? (
           <div
             style={{
@@ -669,8 +672,8 @@ const SearchPage = ({
               <SliderComponent
                 label="Khoảng giá"
                 onChange={handleChangeKhoangGia}
-                numberMin={1}
-                numberMax={20}
+                numberMin={0}
+                numberMax={50}
                 value={dataKhoangGia}
                 key={"priceRange"}
                 unit="tỷ"
@@ -686,8 +689,8 @@ const SearchPage = ({
               <SliderComponent
                 label="Diện tích (m2)"
                 onChange={handleChangeDienTich}
-                numberMin={30}
-                numberMax={200}
+                numberMin={0}
+                numberMax={1000}
                 value={dataDienTich}
                 key={"areaRange"}
                 unit="m2"
@@ -727,7 +730,7 @@ const SearchPage = ({
             {fetchComponent()}
           </div>
         </ContainerFilter>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <div style={{ display: "flex", justifyContent: "space-between",marginRight: 30 }}>
           <div
             style={{
               display: "flex",

@@ -12,9 +12,9 @@ import {
 import { styled } from "@mui/material/styles";
 
 type TypeProps = {
-	setTypeProduct: (value: string) => void;
-	setTypeSaleProduct: (value: string) => void
-}
+  setTypeProduct: (value: string) => void;
+  setTypeSaleProduct: (value: string) => void;
+};
 
 const TextStyled = styled(Typography)`
   font-family: "Roboto";
@@ -86,7 +86,7 @@ const IOSSwitch = styled((props: SwitchProps) => (
     "&:before": {
       backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24"><path fill="white" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"/></svg>')`,
       //   left: 12,
-	  left: 3
+      left: 3,
     },
     "&:after": {
       backgroundImage: `url('/icons/icondeactiveswitch.png')`,
@@ -148,21 +148,21 @@ const TextRadioStyled = styled(Typography)`
   color: #1b3459;
 `;
 
-const SwitchComponent = ({setTypeProduct,setTypeSaleProduct}: TypeProps) => {
-	const typeProduct = localStorage?.getItem("typeProduct");
-	const typeSaleProduct = localStorage?.getItem("typeSaleProduct");
-	
-	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		setTypeProduct((event.target as HTMLInputElement).value);
-	  };
-	
-	  const handleChangeTop = (e: any) => {
-		if(e.target.checked === true){
-			setTypeSaleProduct('0')
-		}else{
-			setTypeSaleProduct('1')
-		}
-	  }
+const SwitchComponent = ({ setTypeProduct, setTypeSaleProduct }: TypeProps) => {
+  const typeProduct = localStorage?.getItem("typeProduct");
+  const typeSaleProduct = localStorage?.getItem("typeSaleProduct");
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTypeProduct((event.target as HTMLInputElement).value);
+  };
+
+  const handleChangeTop = (e: any) => {
+    if (e.target.checked === true) {
+      setTypeSaleProduct("0");
+    } else {
+      setTypeSaleProduct("1");
+    }
+  };
   const BpRadio = (props: RadioProps) => {
     return (
       <Radio
@@ -191,44 +191,60 @@ const SwitchComponent = ({setTypeProduct,setTypeSaleProduct}: TypeProps) => {
         }}
       >
         <TextStyled>Sản phẩm đang mở bán lên đầu</TextStyled>
-        <IOSSwitch defaultChecked={JSON.parse(typeSaleProduct) ===  '0' ? true : false} onChange={handleChangeTop}/>
+        <IOSSwitch
+          defaultChecked={JSON.parse(typeSaleProduct) === "0" ? true : false}
+          onChange={handleChangeTop}
+        />
       </div>
       {/* <div style={{ padding: "15px 20px 15px 20px" }}> */}
-        <FormControl style={{width: '100%'}}>
-          <RadioGroup
-            defaultValue={JSON.parse(typeProduct)}
-            aria-labelledby="demo-customized-radios"
-            name="customized-radios"
-			onChange={handleChange}
+      <FormControl style={{ width: "100%" }}>
+        <RadioGroup
+          defaultValue={JSON.parse(typeProduct)}
+          aria-labelledby="demo-customized-radios"
+          name="customized-radios"
+          onChange={handleChange}
+        >
+          <div
+            style={{ borderBottom: "1px solid #F2F2F5", padding: "5px 20px" }}
           >
-            <div style={{ borderBottom: "1px solid #F2F2F5" ,  padding: "5px 20px"}}>
-              <FormControlLabel
-                value="0"
-                control={<BpRadio />}
-                label={<TextRadioStyled>Mới nhất</TextRadioStyled>}
-              />
-            </div>
-			<div style={{ borderBottom: "1px solid #F2F2F5" ,  padding: "5px 20px"}}>
+            <FormControlLabel
+              value="0"
+              control={<BpRadio />}
+              label={<TextRadioStyled>Mới nhất</TextRadioStyled>}
+            />
+          </div>
+          <div
+            style={{ borderBottom: "1px solid #F2F2F5", padding: "5px 20px" }}
+          >
             <FormControlLabel
               value="1"
               control={<BpRadio />}
               label={<TextRadioStyled>Cũ nhất</TextRadioStyled>}
             />
-			</div>
-			 <div style={{ borderBottom: "1px solid #F2F2F5" ,  padding: "5px 20px"}}>
+          </div>
+          <div
+            style={{ borderBottom: "1px solid #F2F2F5", padding: "5px 20px" }}
+          >
             <FormControlLabel
               value="2"
               control={<BpRadio />}
               label={<TextRadioStyled>Giá cao - thấp</TextRadioStyled>}
-            /></div>
-			 <div style={{ borderBottom: "1px solid #F2F2F5" ,  padding:"5px 0px 5px 20px"}}>
+            />
+          </div>
+          <div
+            style={{
+              borderBottom: "1px solid #F2F2F5",
+              padding: "5px 0px 5px 20px",
+            }}
+          >
             <FormControlLabel
               value="3"
               control={<BpRadio />}
               label={<TextRadioStyled>Giá thấp - cao</TextRadioStyled>}
-            /></div>
-          </RadioGroup>
-        </FormControl>
+            />
+          </div>
+        </RadioGroup>
+      </FormControl>
       {/* </div> */}
     </>
   );

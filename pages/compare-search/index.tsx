@@ -48,10 +48,12 @@ const CompareSearch = () => {
     projectTypeId: projectTypeId ? projectTypeId : "",
     projectId: projectId ? projectId : "",
     categoryId: categoryId ? categoryId : "",
-    priceFrom: priceFrom ? priceFrom: "",
-    priceTo: priceTo ? priceTo: "",
+    priceFrom: priceFrom ? priceFrom : "",
+    priceTo: priceTo ? priceTo : "",
     areaFrom: Number(areaFrom),
     areaTo: Number(areaTo),
+    isPayment: 0,
+    sortType: 0,
   });
   const changePage = (e: any) => {
     setSearch({
@@ -63,6 +65,8 @@ const CompareSearch = () => {
     if (typeof window !== "undefined") {
       const listProjectType = localStorage?.getItem("listParamsLSProjectType");
       const listParamsIdProject = localStorage?.getItem("listParamsIdProject");
+      const typeProduct = localStorage?.getItem("typeProduct");
+      const typeSaleProduct = localStorage?.getItem("typeSaleProduct");
       setSearchBody({
         projectTypeId: projectTypeId ? projectTypeId : "",
         priceFrom: priceFrom ? priceFrom : "",
@@ -75,6 +79,8 @@ const CompareSearch = () => {
         projectIdList: listParamsIdProject
           ? JSON.parse(listParamsIdProject)
           : [],
+        isPayment: JSON.parse(typeSaleProduct),
+        sortType: JSON.parse(typeProduct),
       });
     }
   }, [router]);

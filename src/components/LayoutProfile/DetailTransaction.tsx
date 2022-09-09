@@ -31,6 +31,7 @@ import { dayOfWeekToString, getDateFromStringDMY } from "utils/helper";
 import Product3 from "../../../public/images/product3.png";
 import SelectInputComponent from "@components/CustomComponent/SelectInputComponent";
 import SelectInputTwo from "@components/CustomComponent/SelectInputComponent/SelectInputTwo";
+import SelectInputWithId from "@components/CustomComponent/SelectInputComponent/SelectInputWithId";
 type Props = {
   //   item: ContractI;
   setActiveTab: (d: any) => void;
@@ -214,19 +215,23 @@ type RequestType =
 
 const sendRequestTypes = [
   {
-    id: "liquidation",
+    id: 0,
+    code: "liquidation",
     name: "Thanh lý",
   },
   {
-    id: "deposit-refund",
+    id: 1,
+    code: "deposit-refund",
     name: "Hoàn cọc",
   },
   {
-    id: "transfer",
+    id: 3,
+    code: "transfer",
     name: "Chuyển nhượng",
   },
   {
-    id: "change-apartment",
+    id: 2,
+    code: "change-apartment",
     name: "Đổi lô / đổi căn",
   },
 ];
@@ -241,19 +246,29 @@ function createData(
   return { name, calories, fat, carbs, protein };
 }
 interface RequestParams {
-  id: RequestType;
+  code: RequestType;
   name: string;
+  id: number;
 }
 
 const rows = [createData("Frozen", 159, 6.0, 24, 4.0)];
 
+interface PaymentRequestType {
+  id: string;
+  name: string;
+}
+
 const DetailTransaction = ({ setActiveTab }: Props) => {
   const router = useRouter();
-  const { transCode, transactionId, uuid, productId, transactionCodeLandSoft } = router.query;
+  const { transCode, transactionId, uuid, productId, transactionCodeLandSoft } =
+    router.query;
   const [data, setData] = useState<any[any]>([]);
   const [displayCustomerDetail, setDisplayCustomerDetail] = useState<any>(
     fakeCustomers[0]
   );
+  const [paymentRequestTypeRes, setPaymentRequestTypeRes] = useState<
+    PaymentRequestType[]
+  >([]);
   const [requestType, setRequestType] = useState<RequestParams | null>(null);
   const fetchById = async (body: any) => {
     try {
@@ -263,6 +278,21 @@ const DetailTransaction = ({ setActiveTab }: Props) => {
       console.log(err);
     }
   };
+
+  useEffect(() => {
+    console.log("data12", data);
+    if (!data) return;
+
+    const paymentRequestList = data?.paymentRequestTypeResponseList?.map(
+      (paymentRequest) => ({
+        id: `${paymentRequest.requestId}`,
+        name: paymentRequest.requestType,
+      })
+    );
+
+    setPaymentRequestTypeRes(paymentRequestList);
+  }, [data]);
+
   useEffect(() => {
     if (!isEmpty(data)) {
       setDisplayCustomerDetail(data.paymentIdentityInfos[0]);
@@ -307,9 +337,14 @@ const DetailTransaction = ({ setActiveTab }: Props) => {
   }
 
   const handleChangeRequestType = (e: SelectChangeEvent) => {
-    const dataFind = sendRequestTypes.filter((x) => x.name === e.target.value);
-    setRequestType(dataFind[0] as RequestParams);
-    router.replace(`/send-request/${dataFind[0].id}/${transCode}`);
+    const data = sendRequestTypes.filter(
+      (x) => x.id.toString() === e.target.value
+    );
+    setRequestType(data[0] as RequestParams);
+
+    if (data.length > 0) {
+      router.replace(`/send-request/${data[0].code}/${transCode}`);
+    }
   };
 
   function customerTab(customer: any) {
@@ -382,7 +417,6 @@ const DetailTransaction = ({ setActiveTab }: Props) => {
     );
   }
   console.log("transactionCodeLandSoft", transactionCodeLandSoft, transCode);
-  
 
   function renderDetailCustomer() {
     return (
@@ -914,12 +948,13 @@ const DetailTransaction = ({ setActiveTab }: Props) => {
             />
             <HeaderTitle>Chi tiết giao dịch</HeaderTitle>
           </HeaderContainer>
-          <SelectInputTwo
-            data={sendRequestTypes}
+          <SelectInputWithId
+            data={paymentRequestTypeRes}
             value={requestType ? [requestType.name] : []}
             onChange={handleChangeRequestType}
             placeholder="Gửi yêu cầu"
             style={{ margin: 0 }}
+            disabled={paymentRequestTypeRes?.length === 0}
           />
         </div>
       }

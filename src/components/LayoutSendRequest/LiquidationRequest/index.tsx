@@ -11,6 +11,7 @@ import SendRequest from "../SendRequest";
 const LiquidationRequest = () => {
   const {
     query: { txcode },
+    replace,
   } = useRouter();
   const notification = useNotification();
   const [loading, setLoading] = useState<boolean>(false);
@@ -49,11 +50,13 @@ const LiquidationRequest = () => {
             severity: "success",
             message: "Gửi yêu cầu thanh lí thành công",
           });
+          replace("/send-request/success");
         } else {
           notification({
             severity: "error",
             message: res.responseMessage,
           });
+          replace("/send-request/failure");
         }
       })
       .catch((error) => {

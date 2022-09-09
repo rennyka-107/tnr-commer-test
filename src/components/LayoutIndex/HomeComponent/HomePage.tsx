@@ -87,8 +87,8 @@ const HomePage = () => {
   const [projectTypeName, setProjectTypeName] = useState<string[]>([]);
   const [categoryName, setCategoryName] = useState<string[]>([]);
   const [projectName, setProjectName] = useState<string[]>([]);
-  const [valueDienTich, setValueDientich] = useState<number[]>([30, 200]);
-  const [valueKhoanGia, setValueKhoangGia] = useState<number[]>([1, 20]);
+  const [valueDienTich, setValueDientich] = useState<number[]>([0, 1000]);
+  const [valueKhoanGia, setValueKhoangGia] = useState<number[]>([0, 50]);
   const [projectList, setProjectList] = useState<any[]>([]);
   const [listParamsProjectType, setParamsProjectType] = useState<any[]>([]);
   const [listIdProject, setListIdProject] = useState([]);
@@ -103,11 +103,11 @@ const HomePage = () => {
     provinceId: "",
     projectTypeId: "",
     projectId: "",
-    priceFrom: "1",
-    priceTo: "20",
+    priceFrom: "0",
+    priceTo: "50",
     categoryId: "",
-    areaFrom: "30",
-    areaTo: "200",
+    areaFrom: "0",
+    areaTo: "1000",
   });
 
   const { listMenuBarProjectType } = useSelector(
@@ -312,16 +312,16 @@ const HomePage = () => {
                 <SliderComponent
                   label="Diện tích (m2)"
                   onChange={handleChange1}
-                  numberMin={30}
-                  numberMax={200}
+                  numberMin={0}
+                  numberMax={1000}
                   value={valueDienTich}
                   unit="m2"
                 />
                 <SliderSearchKhoangGia
                   label="Khoảng giá"
                   onChange={handleChange2}
-                  numberMin={1}
-                  numberMax={20}
+                  numberMin={0}
+                  numberMax={50}
                   value={valueKhoanGia}
                   unit="tỷ"
                 />
