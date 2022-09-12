@@ -31,7 +31,7 @@ export default function ProjectInformation() {
             justifyContent: "center",
             position: "absolute",
             bottom: -15,
-            zIndex: "900",
+            zIndex: "991",
           }}
         >
           <Button
