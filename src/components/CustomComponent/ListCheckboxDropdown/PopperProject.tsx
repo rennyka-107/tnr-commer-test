@@ -204,7 +204,7 @@ export default function PopperProjectType({
         arr.map((item, index) => {
           const findItem = data.filter((it) => it.id === item.id);
           newArray.push(findItem);
-		  console.log(newArray)
+
         });
         if (!newArray) {
           setValue([]);

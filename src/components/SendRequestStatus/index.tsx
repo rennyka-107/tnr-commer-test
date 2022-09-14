@@ -75,7 +75,9 @@ const SendRequestStatus = ({ type }: Props) => {
   const { desc, desc1, icon, title, bottomComponent } = getContent();
 
   return (
-    <PageBorder sx={{ width: "100%" }}>
+    <PageBorder
+      sx={{ width: "100%", paddingLeft: "80px", paddingRight: "80px" }}
+    >
       <StyledStatus>
         <div className="title">{title}</div>
         <div className="icon">
@@ -86,7 +88,6 @@ const SendRequestStatus = ({ type }: Props) => {
           <br />
           {desc1}
         </div>
-
         {bottomComponent}
       </StyledStatus>
     </PageBorder>

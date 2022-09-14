@@ -79,7 +79,7 @@ const LayoutCompare = (props: Props) => {
     });
   };
   function currencyFormat(num) {
-	console.log(num)
+
     if (!num) {
       return;
     }
@@ -89,7 +89,7 @@ const LayoutCompare = (props: Props) => {
   }
 
   const renderDataChildren = ({ data }) => {
-	console.log("data",data)
+
     return (
       <React.Fragment>
         {data.map((item, index) => (

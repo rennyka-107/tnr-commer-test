@@ -20,6 +20,7 @@ import { isEmpty } from "lodash";
 import { apiValidReferenceCode } from "../../../../pages/api/paymentApi";
 import useNotification from "hooks/useNotification";
 import { setReferenceCode } from "../../../../store/paymentSlice";
+import useAuth from "hooks/useAuth";
 
 const BoxDetailInfo = styled(Box)({
   marginTop: 15,
@@ -38,6 +39,7 @@ type Props = {
 
 const TableQuote = ({ width, urlPayment, setScopeRender, item }: Props) => {
   const { cart } = useSelector((state: RootState) => state.carts);
+  const { isAuthenticated } = useAuth();
   const productItem = useSelector(
     (state: RootState) => state.products.productItem
   );
@@ -153,9 +155,8 @@ const TableQuote = ({ width, urlPayment, setScopeRender, item }: Props) => {
 
       {urlPayment && (
         <BoxDetailInfo>
-          <RowStyledAgain justifyContent={"start"}>
+          {!isAuthenticated && <RowStyledAgain justifyContent={"start"}>
             <IconInfoCircle />
-            &nbsp;
             <Text12ItalicStyled>
               Nếu đã có tài khoản, vui lòng{" "}
               <Link href={"/authen?prePath=payment-cart&tabIndex=login"}>
@@ -165,7 +166,7 @@ const TableQuote = ({ width, urlPayment, setScopeRender, item }: Props) => {
               </Link>
               để lưu thông tin thanh toán
             </Text12ItalicStyled>
-          </RowStyledAgain>
+          </RowStyledAgain>}
           <RowStyled>
             <ButtonAction
               sx={{

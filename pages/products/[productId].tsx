@@ -12,6 +12,7 @@ import { RootState, wrapper } from "../../store/store";
 import {
   getListProductApi,
   getProducById,
+  getRecentlyViewed,
   updateViewProduct,
 } from "../api/productsApi";
 import { getListTabsProjectApi } from "../api/projectApi";
@@ -34,6 +35,7 @@ const Product = () => {
     page: 1,
     size: 10,
   };
+  const [productsById, setProductsById] = useState<any>([]);
 
   const searchList = {
     projectId: productId,
@@ -44,25 +46,29 @@ const Product = () => {
   useEffect(() => {
     (async () => {
       try {
-       if(!isEmpty(productId)){
-		const response = await getListProductApi(paramsSearch, searchList);
-        dispatch(getListProduct(response.responseData));
-        const responAPIBYID = await getProducById(productId);
-        const accessToken =
-          LocalStorage.get("accessToken") || SessionStorage.get("accessToken");
-        if (!!responAPIBYID?.responseData?.id && accessToken) {
-          const response = updateViewProduct(responAPIBYID?.responseData?.id);
-        }
-        dispatch(getProductById(responAPIBYID.responseData));
+        if (!isEmpty(productId)) {
+          const response = await getListProductApi(paramsSearch, searchList);
 
-        if (
-          response.responseCode === "00" &&
-          responAPIBYID.responseCode === "00" &&
-          productId
-        ) {
-          setLoading(true);
+          dispatch(getListProduct(response.responseData));
+          const responAPIBYID = await getProducById(productId);
+          console.log("responAPIBYID", responAPIBYID);
+
+          const accessToken =
+            LocalStorage.get("accessToken") ||
+            SessionStorage.get("accessToken");
+          if (!!responAPIBYID?.responseData?.id && accessToken) {
+            const response = updateViewProduct(responAPIBYID?.responseData?.id);
+          }
+          dispatch(getProductById(responAPIBYID.responseData));
+
+          if (
+            response.responseCode === "00" &&
+            responAPIBYID.responseCode === "00" &&
+            productId
+          ) {
+            setLoading(true);
+          }
         }
-	   }
       } catch (error) {
         console.log(error);
       }

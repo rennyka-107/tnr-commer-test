@@ -51,6 +51,9 @@ import useForceUpdate from "hooks/useForceUpdate";
 import useNotification from "hooks/useNotification";
 import ConfirmDialog from "@components/SearchPage/ConfirmDialog";
 import PathRoute from "utils/PathRoute";
+import IconCoXay from "@components/Icons/IconCoXay";
+import IconCoxayDetail from "@components/Icons/IconCoxayDetail";
+import IconChuaXay from "@components/Icons/IconChuaXay";
 
 interface ProductsProps {
   listProject?: ProjectResponse[];
@@ -516,7 +519,7 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
   };
 
   const generalInfo = useSelector((state: RootState) => state.generalInfo);
-
+  console.log(dataProduct);
   return (
     <>
       <FlexContainer>
@@ -874,33 +877,16 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                     </SubRightText>
                   </div>
                 )}
+
                 <div style={{ border: " 1px solid #C7C9D9", width: 262 }}></div>
                 <CenterIntemWrap>
                   {dataProduct?.projectTypeCode === "1" ? (
                     <WrapItemCenter>
-                      <div style={{ display: "flex", flexDirection: "row" }}>
-                        <FloorIcon />
-                        <TextFloorStyled>min</TextFloorStyled>
-                      </div>
-                      <TextCenterItem>
-                        <TextFloorValue>
-                          {dataProduct?.minFloor} tầng
-                        </TextFloorValue>
-                      </TextCenterItem>
-                    </WrapItemCenter>
-                  ) : (
-                    <WrapItemCenter>
-                      <IconBedDouble />
-                      <TextCenterItem>
-                        {dataProduct?.numBed ? dataProduct?.numBed : "N/A"}
-                      </TextCenterItem>
-                    </WrapItemCenter>
-                  )}
-                  {dataProduct?.projectTypeCode === "1" ? (
-                    <WrapItemCenter>
                       <IconFrame />
                       <TextCenterItem>
-                        {dataProduct?.buildArea ? dataProduct?.buildArea : "N/A"}{" "}
+                        {dataProduct?.buildArea
+                          ? dataProduct?.buildArea
+                          : "N/A"}{" "}
                         m²
                       </TextCenterItem>
                     </WrapItemCenter>
@@ -908,22 +894,28 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                     <WrapItemCenter>
                       <IconFrame />
                       <TextCenterItem>
-                        {dataProduct?.clearArea ? dataProduct?.clearArea : "N/A"}{" "}
+                        {dataProduct?.clearArea
+                          ? dataProduct?.clearArea
+                          : "N/A"}{" "}
                         m²
                       </TextCenterItem>
                     </WrapItemCenter>
                   )}
 
                   {dataProduct?.projectTypeCode === "1" ? (
-                    <WrapItemCenter>
-                      <FloorIcon />
-                      <TextFloorStyled>max</TextFloorStyled>
-                      <TextCenterItem>
-                        <TextFloorValue>
-                          {dataProduct?.maxFloor} tầng
-                        </TextFloorValue>
-                      </TextCenterItem>
-                    </WrapItemCenter>
+                    <>
+                      {dataProduct.build ? (
+                        <WrapItemCenter>
+                          <IconCoxayDetail />
+                          <TextFloorValue>Có xây</TextFloorValue>
+                        </WrapItemCenter>
+                      ) : (
+                        <WrapItemCenter>
+                          <IconChuaXay />
+                          <TextFloorValue>Chưa xây</TextFloorValue>
+                        </WrapItemCenter>
+                      )}
+                    </>
                   ) : (
                     <WrapItemCenter>
                       <IconBath />
@@ -932,6 +924,7 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                       </TextCenterItem>
                     </WrapItemCenter>
                   )}
+
                   <WrapItemCenter>
                     <IconCompass />
                     <TextCenterItem>
@@ -940,6 +933,29 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                         : "N/A"}
                     </TextCenterItem>
                   </WrapItemCenter>
+                  {dataProduct?.projectTypeCode === "1" ? (
+                    <>
+                      {dataProduct.build ? (
+                        <WrapItemCenter>
+                          <FloorIcon />
+                          <TextCenterItem>
+                            <TextFloorValue>
+                              {dataProduct?.maxFloor} tầng
+                            </TextFloorValue>
+                          </TextCenterItem>
+                        </WrapItemCenter>
+                      ) : (
+                        <></>
+                      )}
+                    </>
+                  ) : (
+                    <WrapItemCenter>
+                      <IconBedDouble />
+                      <TextCenterItem>
+                        {dataProduct?.numBed ? dataProduct?.numBed : "N/A"}
+                      </TextCenterItem>
+                    </WrapItemCenter>
+                  )}
                 </CenterIntemWrap>
                 <div style={{ border: " 1px solid #C7C9D9", width: 262 }}></div>
                 <div style={{ marginTop: 12 }}>

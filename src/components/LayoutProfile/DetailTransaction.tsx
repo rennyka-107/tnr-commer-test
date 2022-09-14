@@ -280,7 +280,7 @@ const DetailTransaction = ({ setActiveTab }: Props) => {
   };
 
   useEffect(() => {
-    console.log("data12", data);
+
     if (!data) return;
 
     const paymentRequestList = data?.paymentRequestTypeResponseList?.map(

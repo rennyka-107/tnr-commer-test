@@ -238,18 +238,18 @@ const TextCenterRight = styled(Typography)`
   margin-bottom: 9px;
 `;
 const SubTextCenterRight = styled(Typography)`
-font-family: 'Roboto';
-font-style: normal;
-font-weight: 400;
-font-size: 14px;
-line-height: 18px;
-/* or 129% */
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18px;
+  /* or 129% */
 
-text-align: right;
+  text-align: right;
 
-/* Brand/Main color */
+  /* Brand/Main color */
 
-color: #1B3459;
+  color: #1b3459;
 `;
 
 const ButtonStyled = styled(Button)`
@@ -321,7 +321,7 @@ const PhieuTinhGia = ({
   });
 
   const [filterPtg, setFilterPtg] = React.useState({
-    productId: '0',
+    productId: "0",
     priceID: 0,
   });
 
@@ -440,7 +440,7 @@ const PhieuTinhGia = ({
 
   useEffect(() => {
     (async () => {
-      if (filterPayment.ScheduleID !== 0) {
+      if (filterPayment.ScheduleID !== 0 && filterPayment.BuildMoney !== 0) {
         const responsePayment = await getPaymentListByScheduleId(filterPayment);
         if (responsePayment.responseCode === "00") {
           setListPaymentItem(responsePayment.responseData);
@@ -504,7 +504,6 @@ const PhieuTinhGia = ({
   };
 
   function currencyFormat(num) {
-    console.log(num);
     if (!num) {
       return;
     }
@@ -512,6 +511,10 @@ const PhieuTinhGia = ({
       .toFixed(0)
       .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
   }
+
+  const currencyFormatPrice = (num) => {
+    return Number(num).toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+  };
 
   const handleThanhtoan = () => {
     addToCart(dataProduct.id);
@@ -620,7 +623,9 @@ const PhieuTinhGia = ({
                   Tầng:
                 </TextLeftOnCardLeftTypeCaoTang1>
                 <TextRightOnCardLeft>
-                  {dataProduct?.levelDetailName ? dataProduct?.levelDetailName : "N/A"}
+                  {dataProduct?.levelDetailName
+                    ? dataProduct?.levelDetailName
+                    : "N/A"}
                 </TextRightOnCardLeft>
               </WrapItemOnCard>
               <WrapItemOnCard>
@@ -1262,7 +1267,7 @@ const PhieuTinhGia = ({
                   </div>
                   <div style={{ textAlign: "right" }}>
                     <TextCenterRight>
-                      {currencyFormat(item.Amount)}
+                      {currencyFormatPrice(item.Amount)}
                     </TextCenterRight>
                     <SubTextCenterRight>
                       {item.percentageString}

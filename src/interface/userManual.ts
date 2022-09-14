@@ -4,7 +4,8 @@ export interface responseUserManual  {
 	status: number,
 	description: string,
 	iconUrl: string,
-	createAt: string
+	createAt: string,
+	icon: string
   }
 
 export interface userManualContent {

@@ -41,10 +41,10 @@ const useProjectRecenly = () => {
         
         if (response?.responseCode === "00") {
 			const dataProject = [
-				{
-				  id: "1",
-				  name: "Tất cả dự án",
-				},
+				// {
+				//   id: "1",
+				//   name: "Tất cả dự án",
+				// },
 			  ];
 			  const newDataProject = dataProject.concat(response?.responseData);
           setDataProductRecenly(newDataProject);

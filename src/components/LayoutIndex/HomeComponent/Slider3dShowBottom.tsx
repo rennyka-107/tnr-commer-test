@@ -30,7 +30,7 @@ const MarginContainerStyled = styled.div`
   margin-bottom: 130px;
   margin-left: 337px;
   @media only screen and (max-width: 1280px) {
-	margin: 20px;
+    margin: 20px;
   }
 `;
 
@@ -40,8 +40,8 @@ const ContainerStyled = styled.div`
   display: flex;
   align-items: center;
   @media only screen and (max-width: 1280px) {
-	flex-direction: column-reverse;
-	height: auto;
+    flex-direction: column-reverse;
+    height: auto;
   }
 `;
 
@@ -132,12 +132,12 @@ const TextInsideNumber = styled(Typography)`
 `;
 
 const ContainerText = styled.div`
-width: 300px;
-@media only screen and (max-width: 1280px) {
-	width: 700px;
-	text-align: center;
-}
-`
+  width: 300px;
+  @media only screen and (max-width: 1280px) {
+    width: 700px;
+    text-align: center;
+  }
+`;
 SwiperCore.use([Navigation, Pagination, EffectCoverflow, Autoplay]);
 const dataFake = [1, 2, 3, 4, 5, 6].map((el) => {
   return {
@@ -170,7 +170,7 @@ export default function Slider3dShowBottom() {
         : newArrayDataProductRecenly
     )?.map((el: any) => (
       <SwiperSlide
-        onClick={() => Router.push(`/recently-view`)}
+        onClick={() => Router.push(`/recently-view/${el.id}?title=${el.name}`)}
         className="swiper-3d"
         style={{
           width: "241px !important",
@@ -217,7 +217,7 @@ export default function Slider3dShowBottom() {
             <TextTitleStyled>BẤT ĐỘNG SẢN XEM GẦN ĐÂY</TextTitleStyled>
           </div>
           <ContainerStyled>
-            <ContainerText >
+            <ContainerText>
               <TextLeftStyled>
                 {generalInfo?.policyContent ?? ""}
               </TextLeftStyled>

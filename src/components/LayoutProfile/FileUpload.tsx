@@ -54,7 +54,6 @@ const FileUpload = ({
     useSelector((state: RootState) => state.payments);
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  console.log(fileIdNumberFront, fileIdNumberBehind, fileIdNumberHouseHold);
   const notification = useNotification();
   const onFileDrop = (e) => {
     const reader = new FileReader();
@@ -287,7 +286,9 @@ const FileUpload = ({
                       message: response.responseMessage,
                     });
                     dispatch(resetAllFileFinishTransaction());
-                    router.push("/result-payment?errorCode=0");
+                    router.push(
+                      `/result-payment?errorCode=0&bookingCode=${transactionCode}`
+                    );
                   } else {
                     notification({
                       severity: "error",

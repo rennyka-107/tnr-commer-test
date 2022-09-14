@@ -149,7 +149,7 @@ const SendRequest = () => {
       <FlexContainer>
         {!loading ? (
           <ContainerRequestTranfer title={renderBreadcrum()}>
-            <Box sx={{ display: "flex", width: "100%" }}>
+            <Box sx={{ display: "flex", width: "100%", columnGap: "30px" }}>
               <Box sx={{ width: "50%" }}>
                 <Subtitle>{renderTitle()}</Subtitle>
                 <ProductInformation orderDetail={orderDetail} />

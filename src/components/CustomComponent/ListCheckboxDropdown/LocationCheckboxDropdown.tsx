@@ -225,7 +225,6 @@ export default function LocationCheckboxDropdown({
   }
 
   const handleChange = (event) => {
-    console.log(123213);
     const value = event.target.value;
     if (value[value.length - 1] === "all") {
       setSelected(selected.length === data.length ? [] : data);

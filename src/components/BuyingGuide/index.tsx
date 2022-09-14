@@ -178,7 +178,7 @@ const BuyingGuideComponent = ({ data }: PropsUserManual) => {
                   >
                     <ListItemIcon style={{ minWidth: 30 }}>
                       <img
-                        src={item.iconUrl}
+                        src={`data:image/jpeg;base64,${item.icon}`}
                         style={{ width: 17, height: 17 }}
                       />
                     </ListItemIcon>

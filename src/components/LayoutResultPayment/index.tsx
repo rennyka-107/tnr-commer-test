@@ -70,7 +70,7 @@ const LayoutResultPayment = (props: Props) => {
     },
   });
   const {
-    query: { errorCode, transId, billNumber },
+    query: { errorCode, bookingCode },
   } = router;
   useEffect(() => {
     if (isEmpty(errorCode)) {
@@ -134,7 +134,7 @@ const LayoutResultPayment = (props: Props) => {
             Cảm ơn Quý khách hàng
           </Typography>
         )}
-        {!isEmpty(transId) && !isEmpty(billNumber) ? (
+        {isEmpty(bookingCode) ? (
           <Button
             sx={{
               borderRadius: "8px",
@@ -227,12 +227,10 @@ const LayoutResultPayment = (props: Props) => {
                   }
                 }
                 apiRateTransaction({
-                  msbTransID: transId,
-                  billNumber,
+                  bookingCode,
                   value,
                 })
                   .then((res) => {
-                    console.log(res, "Res");
                     if (res.responseCode === "00") {
                       notification({
                         severity: "success",

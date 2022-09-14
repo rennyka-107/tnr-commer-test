@@ -1,6 +1,6 @@
 import { IconRadio, IconTimes } from "@components/Icons";
 import styled from "@emotion/styled";
-import { Box, CardMedia } from "@mui/material";
+import { Box, CardMedia, Typography } from "@mui/material";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../store/store";
@@ -56,6 +56,18 @@ const BoxIconRadio = styled(Box)({
   transform: "translate(0px, -50%)",
 });
 
+const SubRightText = styled(Typography)`
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16px;
+
+  /* Brand */
+
+  color: #1b3459;
+`;
+
 const RowStyledAgain = styled(RowStyled)({ marginTop: 11 });
 
 type Props = {};
@@ -69,7 +81,6 @@ const CardItemProduct = (props: Props) => {
     if (!cart || !cart?.id) return;
     Router.push(`products/${cart.id}`);
   };
-  console.log(cart);
 
   return (
     <WrapperCardStyled onClick={handleViewDetail}>
@@ -100,8 +111,29 @@ const CardItemProduct = (props: Props) => {
         <Title28Styled>{cart.name ?? "N/A"}</Title28Styled>
 
         <RowStyledAgain>
-          <Text14Styled>{cart.lot_code ?? "N/A"}</Text14Styled>
-          <Text14Styled>{cart.code}</Text14Styled>
+          {cart.projectTypeCode === "2" ? (
+            <div
+              style={{
+                display: "flex",
+                gap: 37,
+              }}
+            >
+              <SubRightText>{cart?.levelDetailParentName}</SubRightText>
+              <SubRightText>{cart?.levelDetailName}</SubRightText>
+            </div>
+          ) : (
+            <div
+              style={{
+                display: "flex",
+                gap: 37,
+               
+              }}
+            >
+              <SubRightText>{cart?.levelDetailParentName}</SubRightText>
+            </div>
+          )}
+          {/* <Text14Styled>{cart.lot_code ?? "N/A"}</Text14Styled>
+          <Text14Styled>{cart.code}</Text14Styled> */}
         </RowStyledAgain>
 
         <LinedStyled borderColor={"#1b3459"} style={{ marginTop: 15 }} />

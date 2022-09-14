@@ -243,27 +243,28 @@ const TextFloorValue = styled(Typography)`
 
   color: #1b3459;
 `;
-export default function ItemProductCard({
-  src,
-  title,
-  subTitle,
-  dataItem,
-  priceListed,
-  priceSub,
-  projectName,
-  onClick,
-  onCompare,
-  projectTypeCode,
-  minFloor,
-  maxFloor,
-  ticketCard,
-  activeSoSanh,
-  build,
-  id,
-  buyDisabled,
-  favouriteStatus,
-  activeFavourite,
-}: Props) {
+export default function ItemProductCard(props: Props) {
+  const {
+    src,
+    title,
+    subTitle,
+    dataItem,
+    priceListed,
+    priceSub,
+    projectName,
+    onClick,
+    onCompare,
+    projectTypeCode,
+    minFloor,
+    maxFloor,
+    ticketCard,
+    activeSoSanh,
+    build,
+    id,
+    buyDisabled,
+    favouriteStatus,
+    activeFavourite,
+  } = props;
   const router = useRouter();
 
   const { addProductToFavouriteFunction } = useFavourite();
@@ -276,6 +277,10 @@ export default function ItemProductCard({
       .toFixed(0)
       .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
   }
+
+  const handleClickCard = () => {
+    Router.push(`/products/${id}`);
+  };
 
   return (
     <CardStyled sx={{ maxWidth: 350 }}>
@@ -356,7 +361,7 @@ export default function ItemProductCard({
 
       <CardContentStyled>
         <div>
-          <span onClick={() => Router.push(`/products/${id}`)}>
+          <span onClick={handleClickCard}>
             <TextTitleStyled style={{ marginBottom: 9 }}>
               {title}
             </TextTitleStyled>

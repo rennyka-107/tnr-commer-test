@@ -14,7 +14,7 @@ const PageBorder = ({ children, sx = {} }: Props) => {
         borderRadius: "20px",
         border: "1px solid #D8D8D8",
         padding: "30px",
-        margin: "0 8rem",
+        // margin: "0 8rem",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",

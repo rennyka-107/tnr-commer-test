@@ -101,7 +101,6 @@ const Login = () => {
   });
 
   const onSubmit = async (values) => {
-    console.log("verifySuccess", verifySuccess);
 
     if (verifySuccess) {
       setLoading(true);

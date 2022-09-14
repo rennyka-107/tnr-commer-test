@@ -16,14 +16,15 @@ const DynamicItemProductComponent = dynamic(
   { loading: () => <p>...</p> }
 );
 
-const ListRecentlyView: FC<ListRecentlyViewProps> = () => {
-  const router = useRouter();
+const ListProjectRecently: FC<ListRecentlyViewProps> = () => {
+  const { query } = useRouter();
   const dispatch = useDispatch();
   const [paramsSearch, setParamsSearch] = useState({
     page: 0,
     size: 12,
   });
-  const { dataProductRecenly }: any = useProjectRecenly();
+  // const { dataProductRecenly }: any = useProjectRecenly();
+  const [recentlyByProjectId, setRecentlyByProjectId] = useState<any>([]);
 
   const changePage = (e: any) => {
     setParamsSearch({
@@ -31,7 +32,22 @@ const ListRecentlyView: FC<ListRecentlyViewProps> = () => {
       size: 12,
     });
   };
-  
+
+  useEffect(() => {
+    if (!query.projectId) return;
+    getRecentlyViewed(
+      {
+        page: 0,
+        size: 1000,
+      },
+      {
+        projectId: query.projectId,
+      }
+    ).then((res) => {
+      console.log("ressss", res);
+      setRecentlyByProjectId(res?.responseData?.content);
+    });
+  }, [query]);
 
   return (
     <Page
@@ -42,8 +58,8 @@ const ListRecentlyView: FC<ListRecentlyViewProps> = () => {
     >
       <Box sx={{ mt: 4 }}>
         <FlexContainer>
-          <ContainerProduct title="BĐS xem gần đây" rightContent={<></>}>
-            <DynamicItemProductComponent data={dataProductRecenly} />
+          <ContainerProduct title={`${query.title}`} rightContent={<></>}>
+            <DynamicItemProductComponent data={recentlyByProjectId} />
           </ContainerProduct>
         </FlexContainer>
       </Box>
@@ -51,4 +67,4 @@ const ListRecentlyView: FC<ListRecentlyViewProps> = () => {
   );
 };
 
-export default ListRecentlyView;
+export default ListProjectRecently;

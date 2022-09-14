@@ -622,7 +622,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
               message: response.responseMessage,
             });
 
-            router.push("/result-payment?errorCode=0");
+            router.push(`/result-payment?errorCode=0&bookingCode=${transactionCode}`);
           } else {
             notification({
               severity: "error",

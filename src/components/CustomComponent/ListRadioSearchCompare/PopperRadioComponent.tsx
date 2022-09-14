@@ -347,7 +347,7 @@ export default function PopperRadioComponent({
                     width: "95%",
                     borderBottom: "1px solid #F2F2F5",
                   }}
-                  placeholder="Nhập tên tỉnh/thành phố"
+                  placeholder="Nhập tên loại BĐS"
                 />
               )}
             />
