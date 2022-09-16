@@ -274,7 +274,7 @@ const FileUpload = ({
               data.append("multipartFileList", fileIdNumberBehind.file);
               data.append("mediaTypeList", "1");
               data.append("multipartFileList", fileIdNumberHouseHold.file);
-              data.append("mediaTypeList", "2");
+              data.append("mediaTypeList", "4");
               data.append("paymentCode", transactionCode as string);
               // data.append("isMobileBanking", "0");
               apiUploadFile(data)
