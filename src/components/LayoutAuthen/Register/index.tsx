@@ -21,7 +21,7 @@ export interface RegisterParam {
 }
 
 const Index = () => {
-	const Route = useRouter();
+  const Route = useRouter();
 
   const [type, setType] = useState<any>("register");
   const [key, setKey] = useState("");
@@ -67,18 +67,18 @@ const Index = () => {
             next={() => setType("confirm")}
             setKey={setKey}
             setUserId={setUserId}
-			setTransKey={setTransKey}
-			setNumberPhone={setNumberPhone}
-			setEmailRegister={setEmailRegister}
+            setTransKey={setTransKey}
+            setNumberPhone={setNumberPhone}
+            setEmailRegister={setEmailRegister}
           />
         );
       case "confirm":
         return (
           <Confirm
             userId={userId}
-			transKey={transKey}
-			numberPhone={numberPhone}
-			emailRegister={emailRegister}
+            transKey={transKey}
+            numberPhone={numberPhone}
+            emailRegister={emailRegister}
             back={() => {
               Route.push({
                 pathname: PathRoute.Login,
@@ -98,7 +98,7 @@ const Index = () => {
             keycloakId={transKey}
             paramsEndcode={paramsEndcode.OTP}
             keyWidthOTPParams={paramsEndcode.key}
-			emailRegister={emailRegister}
+            emailRegister={emailRegister}
             userId={userId}
             back={() => setType("confirm")}
             next={() => setType("ChangeNewPass")}

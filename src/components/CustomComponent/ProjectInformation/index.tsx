@@ -1,18 +1,5 @@
 import styled from "@emotion/styled";
-import {
-  Box,
-  List,
-  ListItem,
-  ListItemIcon,
-  Typography,
-  Divider,
-  Tabs,
-  Tab,
-  Badge,
-  Backdrop,
-  CircularProgress,
-  Button,
-} from "@mui/material";
+import { Box, Typography, Divider, Tabs, Tab, Badge } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import ImageWithHideOnErrorOffers from "hooks/ImageWithHideOnErrorOffers";
 import { isEmpty } from "lodash";
@@ -21,8 +8,6 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../store/store";
 import Mask3 from "../../../../public/images/mask_g_3.png";
-import SliderSpecialSale from "../SliderSpecialSale.tsx";
-import { setOpenModalSale } from "../../../../store/projectMapSlice";
 type Props = {
   location: string;
   constructArea: number;
@@ -86,7 +71,7 @@ const useStyle = makeStyles({
     "& .MuiTabs-flexContainer": {
       gap: 20,
       marginLeft: "1rem",
-      marginTop: "10px"
+      marginTop: "10px",
     },
     "& 	.MuiTabs-indicator": {
       backgroundColor: "#FCB715 !important",
@@ -132,9 +117,7 @@ const ProjectInformation = ({
   const ProjectInformation = useSelector(
     (state: RootState) => state.projectMap.ProjectInformation
   );
-  const open = useSelector(
-    (state: RootState) => state.projectMap.openModalSale
-  );
+
   // const [open, setOpen] = useState(true);
   const classes = useStyle();
   const [value, setValue] = useState(0);
@@ -156,7 +139,7 @@ const ProjectInformation = ({
         sx={{ pl: 0, display: "flex", mt: 1, alignItems: "flex-start" }}
         key={idx}
       >
-        <Box sx={{ marginLeft: "-.8rem"}}>
+        <Box sx={{ marginLeft: "-.8rem" }}>
           <IconList
             style={{
               marginTop: ".5rem",
@@ -201,10 +184,6 @@ const ProjectInformation = ({
       </div>
     );
   }
-  const handleClose = () => {
-    // setOpen(false);
-    dispatch(setOpenModalSale(false));
-  };
 
   return (
     <>
@@ -252,7 +231,9 @@ const ProjectInformation = ({
             >
               Mô tả dự án
             </Typography>
-            <Typography sx={{ fontSize: ".9rem"}}>{description ?? ""}</Typography>
+            <Typography sx={{ fontSize: ".9rem" }}>
+              {description ?? ""}
+            </Typography>
           </Box>
         </TabPanel>
         <TabPanel value={value} index={1}>
@@ -283,38 +264,6 @@ const ProjectInformation = ({
           )}
         </TabPanel>
       </ContainerPJ>
-      {!isEmpty(ProjectInformation.lstOffers) ? (
-        <Backdrop
-          sx={{ color: "#fff", zIndex: 2000 }}
-          style={{ backgroundColor: "rgba(27, 52, 89, 0.95)" }}
-          open={open}
-          // onClick={handleClose}
-        >
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: 30,
-              alignItems: "center",
-            }}
-          >
-            <SliderSpecialSale data={ProjectInformation.lstOffers} />
-            <Button
-              style={{
-                border: "1px solid #ffffff",
-                height: 48,
-                width: 343,
-                borderRadius: 8,
-              }}
-              onClick={handleClose}
-            >
-              <TextButtonStyled>Đóng</TextButtonStyled>
-            </Button>
-          </div>
-        </Backdrop>
-      ) : (
-        <></>
-      )}
     </>
   );
 };

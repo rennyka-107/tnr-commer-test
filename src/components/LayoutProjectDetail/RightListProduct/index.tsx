@@ -18,6 +18,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { setTargetShape } from "../../../../store/projectMapSlice";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { Router, useRouter } from "next/router";
+import CircleArrow from "@components/Icons/CircleArrow";
 
 const DynamicProjectInformation = dynamic(
   () => import("@components/CustomComponent/ProjectInformation"),
@@ -53,37 +54,57 @@ export default function RightListProduct() {
   const ProjectInformation = useSelector(
     (state: RootState) => state.projectMap.ProjectInformation
   );
-
   const ListLevel = useSelector(
     (state: RootState) => state.projectMap.ListLevel
   );
-
-  const ListTarget = useSelector(
-    (state: RootState) => state.projectMap.ListTarget
-  );
-
   const ListChildTarget = useSelector(
     (state: RootState) => state.projectMap.ListChildTarget
   );
-
   const { listMenuBarType } = useSelector((state: RootState) => state.menubar);
   const OldTarget = useSelector(
     (state: RootState) => state.projectMap.OldTarget
   );
   const menuBarType = listMenuBarType?.filter((item) => item.id !== "1");
+  const [moveRightItem, setMoveRightItem] = useState<boolean>(false);
   function renderCard() {
     return (
       <Box
         sx={{
-          width: expandMore ? "95vw" : "30vw",
+          width: expandMore
+            ? "95vw"
+            : window.innerWidth <= 1024
+            ? window.innerWidth <= 768 ? "90vw" : "60vw"
+            : "30vw",
           // height: "65vw",
           height: "calc(100vh - 150px)",
           borderRadius: "8px 0px 0px 8px",
           position: "absolute",
-          zIndex: 990,
-          right: expandMore ? 0 : "unset",
+          zIndex: 800,
+          right: expandMore
+            ? 0
+            : window.innerWidth <= 1024
+            ? moveRightItem
+              ? 0
+              : window.innerWidth <= 768 ? "-80vw" : "-50vw"
+            : "unset",
         }}
       >
+        {window.innerWidth <= 1024 && (
+          <Box
+            sx={{
+              position: "absolute",
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              left: "-20px"
+            }}
+          >
+            <CircleArrow
+              onClick={() => setMoveRightItem(!moveRightItem)}
+              style={{ transform: moveRightItem ? "unset" : "rotate(180deg)" }}
+            />
+          </Box>
+        )}
         <Card
           sx={{
             width: "100%",

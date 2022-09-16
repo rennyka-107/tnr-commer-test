@@ -165,8 +165,8 @@ const Index = (props: Props) => {
 		};
 		try {
 			const response = await registerApi(body);
-
-			dispatch(registerAcc(response.responseData));
+      if(response.responseCode === '00'){
+        dispatch(registerAcc(response.responseData));
 		
 				reset();
 				props.setUserId(response.responseData?.id);
@@ -187,6 +187,14 @@ const Index = (props: Props) => {
 					severity: "success",
 					title: "Đăng ký tài khoản",
 				});
+      }else{
+        notification({
+          severity: "error",
+          title: "Đăng ký thất bại",
+          message: "Email hoặc số điện thoại đã được sử dụng. Vui lòng thay đổi để tiếp tục!",
+        });
+      }
+			
 			
 		} catch (error) {
 			notification({

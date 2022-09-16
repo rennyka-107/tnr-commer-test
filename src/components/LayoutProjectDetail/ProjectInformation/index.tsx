@@ -18,7 +18,7 @@ export default function ProjectInformation() {
         height: "100%",
         position: "absolute",
         top: 0,
-        zIndex: open ? 991 : "unset",
+        zIndex: open ? 900 : "unset",
         display: "flex",
         alignItems: "flex-end"
       }}
@@ -31,7 +31,7 @@ export default function ProjectInformation() {
             justifyContent: "center",
             position: "absolute",
             bottom: -15,
-            zIndex: "991",
+            zIndex: "900",
           }}
         >
           <Button
@@ -64,7 +64,7 @@ export default function ProjectInformation() {
           background: open ? "#FFFFFF" : "unset",
           boxShadow: "0px -4px 20px 1px rgba(0, 0, 0, 0.15)",
           borderRadius: "16px",
-          zIndex: open ? 990 : "unset",
+          zIndex: open ? 900 : "unset",
           overflowY: "auto",
         }}
       >
