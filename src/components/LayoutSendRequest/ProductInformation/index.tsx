@@ -1,16 +1,29 @@
+import styled from "@emotion/styled";
 import { Box, CardMedia, Divider, Typography } from "@mui/material";
+import { isEmpty } from "lodash";
 import React from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../../store/store";
+import Product3 from "../../../../public/images/product3.png";
 
 type Props = {
   orderDetail?: any;
 };
 
+const SubRightText = styled(Typography)`
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16px;
+
+  /* Brand */
+
+  color: #1b3459;
+`;
+
 const ProductInformation = ({ orderDetail }: Props) => {
   if (!orderDetail) return <></>;
 
-  const { production } = orderDetail;
+  const { production, productionImage } = orderDetail;
   const { apartmentModel } = production;
 
   console.log("production", production);
@@ -47,7 +60,7 @@ const ProductInformation = ({ orderDetail }: Props) => {
         component={"img"}
         image={
           // (!isEmpty(item) ? item.thumbnail : cart.thumbnail) ??
-          production?.apartmentModel?.image || production?.project?.avatar
+          !isEmpty(productionImage) ? productionImage : Product3
         }
         alt={"Product photo"}
       />
@@ -85,7 +98,6 @@ const ProductInformation = ({ orderDetail }: Props) => {
           <Box
             sx={{
               display: "flex",
-              gap: "2rem",
               mt: 3,
             }}
           >
@@ -99,7 +111,31 @@ const ProductInformation = ({ orderDetail }: Props) => {
             >
               {apartmentModel?.name}
             </Typography>
-            <Typography
+            {production.projectTypeCode === "2" ? (
+              <div
+                style={{
+                  display: "flex",
+                  gap: 37,
+                  marginBottom: 15,
+                  marginTop: 20,
+                }}
+              >
+                <SubRightText>{production?.levelDetailParentName}</SubRightText>
+                <SubRightText>{production?.levelDetailName}</SubRightText>
+              </div>
+            ) : (
+              <div
+                style={{
+                  display: "flex",
+                  gap: 37,
+                  marginBottom: 15,
+                  marginTop: 20,
+                }}
+              >
+                <SubRightText>{production?.levelDetailName}</SubRightText>
+              </div>
+            )}
+            {/* <Typography
               sx={{
                 color: "#1B3459",
                 lineHeight: "16px",
@@ -107,9 +143,8 @@ const ProductInformation = ({ orderDetail }: Props) => {
                 fontWeight: 400,
               }}
             >
-              {/* KHong biet field nay */}
               Tầng {production?.viewNum}
-            </Typography>
+            </Typography> */}
           </Box>
         </Box>
         <Box>
@@ -169,7 +204,7 @@ const ProductInformation = ({ orderDetail }: Props) => {
                 fontWeight: 400,
               }}
             >
-              {apartmentModel?.numBed || "N/A"}
+              {production?.numBed || "N/A"}
             </Typography>
           </Box>
           <Box
@@ -197,7 +232,7 @@ const ProductInformation = ({ orderDetail }: Props) => {
                 fontWeight: 400,
               }}
             >
-              {apartmentModel?.numBath || "N/A"}
+              {production?.numBath || "N/A"}
             </Typography>
           </Box>
           <Box

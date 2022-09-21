@@ -159,9 +159,9 @@ import {
 	  
 		const handleChangeTop = (e: any) => {
 		  if(e.target.checked === true){
-			  setTypeSaleProduct('0')
-		  }else{
 			  setTypeSaleProduct('1')
+		  }else{
+			  setTypeSaleProduct('0')
 		  }
 		}
 	const BpRadio = (props: RadioProps) => {
@@ -192,7 +192,7 @@ import {
 		  }}
 		>
 		  <TextStyled>Sản phẩm đang mở bán lên đầu</TextStyled>
-		  <IOSSwitch defaultChecked={JSON.parse(typeSaleProduct) ===  '0' ? true : false} onChange={handleChangeTop}/>
+		  <IOSSwitch defaultChecked={JSON.parse(typeSaleProduct) ===  '1' ? true : false} onChange={handleChangeTop}/>
 		</div>
 		{/* <div style={{ padding: "15px 20px 15px 20px" }}> */}
 		  <FormControl style={{width: '100%'}}>

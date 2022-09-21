@@ -376,7 +376,7 @@ const CustomerInformation = ({ listCustomer = [] }: Props) => {
       ) : (
         renderDetailCustomer()
       )}
-      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+      {/* <Box sx={{ display: "flex", justifyContent: "space-between" }}>
         <Typography
           sx={{
             fontSize: "16px",
@@ -398,7 +398,7 @@ const CustomerInformation = ({ listCustomer = [] }: Props) => {
         >
           Hướng dẫn sử dụng
         </Typography>
-      </Box>
+      </Box> */}
       {/* cho confirm */}
       {/* <Box>
         {loading ? (

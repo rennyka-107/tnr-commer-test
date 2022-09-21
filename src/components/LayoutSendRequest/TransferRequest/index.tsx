@@ -2,10 +2,9 @@ import PageBorder from "@components/Element/PageBorder";
 import Subtitle from "@components/Element/Subtitle";
 import TNRButton from "@components/Element/TNRButton";
 import ControllerDatePicker from "@components/Form/ControllerDatePicker";
+import ControllerReactDatePicker from "@components/Form/ControllerReactDatePicker";
 import ControllerTextField from "@components/Form/ControllerTextField";
-import {
-  Text14Styled
-} from "@components/StyledLayout/styled";
+import { Text14Styled } from "@components/StyledLayout/styled";
 import { yupResolver } from "@hookform/resolvers/yup";
 import AddIcon from "@mui/icons-material/Add";
 import { Box } from "@mui/material";
@@ -41,7 +40,13 @@ const validationSchema = yup.object().shape({
     .matches(Regexs.phone, "Số điện thoại không đúng")
     .required(validateLine.required)
     .default(""),
-  idNumber: yup.string().required(validateLine.required).nullable().default(""),
+  idNumber: yup
+    .string()
+    .max(12,"Số CCCD/CMND quá dài")
+    .matches(Regexs.idNumber, "Số CCCD/CMND không đúng")
+    .required(validateLine.required)
+    .nullable()
+    .default(""),
   issueDate: yup
     .string()
     .required(validateLine.required)
@@ -292,6 +297,13 @@ const TransferRequest = (props: Props) => {
                 required
                 focused={isAddingPerson}
                 disabled={Boolean(activePerson)}
+                InputProps={{
+                  style: {
+                    height: "44px",
+                    border: "1px solid #B8B8B8",
+                    borderRadius: "8px",
+                  },
+                }}
               />
               <ControllerTextField
                 variant="outlined"
@@ -302,6 +314,13 @@ const TransferRequest = (props: Props) => {
                 label="Email"
                 required
                 disabled={Boolean(activePerson)}
+                InputProps={{
+                  style: {
+                    height: "44px",
+                    border: "1px solid #B8B8B8",
+                    borderRadius: "8px",
+                  },
+                }}
               />
               <ControllerTextField
                 variant="outlined"
@@ -312,6 +331,13 @@ const TransferRequest = (props: Props) => {
                 label="Số điện thoại"
                 required
                 disabled={Boolean(activePerson)}
+                InputProps={{
+                  style: {
+                    height: "44px",
+                    border: "1px solid #B8B8B8",
+                    borderRadius: "8px",
+                  },
+                }}
               />
               <ControllerTextField
                 variant="outlined"
@@ -322,13 +348,26 @@ const TransferRequest = (props: Props) => {
                 label="Số căn cước công dân"
                 required
                 disabled={Boolean(activePerson)}
+                InputProps={{
+                  style: {
+                    height: "44px",
+                    border: "1px solid #B8B8B8",
+                    borderRadius: "8px",
+                  },
+                }}
               />
-              <ControllerDatePicker
+              {/* <ControllerDatePicker
                 control={control}
                 name="issueDate"
                 label="Ngày cấp"
+              /> */}
+              <ControllerReactDatePicker
+                control={control}
+                name="issueDate"
+                label="Ngày cấp"
+                required
+                maxDate={new Date()}
               />
-
               <ControllerTextField
                 variant="outlined"
                 hiddenLabel
@@ -338,6 +377,13 @@ const TransferRequest = (props: Props) => {
                 label="Nơi cấp"
                 required
                 disabled={Boolean(activePerson)}
+                InputProps={{
+                  style: {
+                    height: "44px",
+                    border: "1px solid #B8B8B8",
+                    borderRadius: "8px",
+                  },
+                }}
               />
               <Text14Styled>
                 Tất cả người được chuyển nhượng sẽ nhận được thông báo qua Email

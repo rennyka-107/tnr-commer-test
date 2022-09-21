@@ -5,7 +5,7 @@ import Subtitle from "@components/Element/Subtitle";
 import WithAuth from "@HOCs/WithAuth";
 import Page from "@layouts/Page";
 import { Box, CircularProgress } from "@mui/material";
-import { getOrderById } from "@service/Profile";
+import { getOrderById, getOrderDetail } from "@service/Profile";
 import isEmpty from "lodash/isEmpty";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
@@ -55,7 +55,14 @@ const requestType = [
 
 const SendRequest = () => {
   const {
-    query: { request, txcode },
+    query: {
+      request,
+      txcode,
+      transactionCodeLandSoft,
+      uuid,
+      transactionId,
+      productId,
+    },
   } = useRouter();
   const router = useRouter();
 
@@ -131,12 +138,14 @@ const SendRequest = () => {
   };
 
   useEffect(() => {
-    getOrderById(txcode).then((res) => {
-      if (res.responseCode === "00") {
-        setOrderDetail(res.responseData);
-      }
-    });
-  }, [txcode]);
+    if (typeof txcode === "string") {
+      getOrderDetail({ transactionCode: txcode }).then((res) => {
+        if (res.responseCode === "00") {
+          setOrderDetail(res.responseData);
+        }
+      });
+    }
+  }, [typeof txcode === "string"]);
 
   return (
     <Page

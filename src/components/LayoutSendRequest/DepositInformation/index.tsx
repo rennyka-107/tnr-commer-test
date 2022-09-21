@@ -1,9 +1,7 @@
 import { Box, Typography } from "@mui/material";
+import { parseISO, format, parse } from "date-fns";
 import React from "react";
-import { useSelector } from "react-redux";
-import DateFns from "utils/DateFns";
 import { currencyFormat } from "utils/helper";
-import { RootState } from "../../../../store/store";
 
 type Props = {
   title?: string;
@@ -11,10 +9,8 @@ type Props = {
 };
 
 const DepositInformation = ({ title, orderDetail }: Props) => {
-  console.log("orderDetail", orderDetail);
-  
+  console.log(orderDetail, "order detail")
   if (!orderDetail) return <></>;
-  
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mb: 5 }}>
@@ -37,7 +33,7 @@ const DepositInformation = ({ title, orderDetail }: Props) => {
             color: "#8190A7",
           }}
         >
-          Mã đặt chỗ
+          Mã giao dịch
         </Typography>
         <Typography
           sx={{
@@ -47,7 +43,7 @@ const DepositInformation = ({ title, orderDetail }: Props) => {
             color: "#1B3459",
           }}
         >
-          {orderDetail.transactionCodeObject.code}
+          {orderDetail.transactionCodeLandSoft ?? orderDetail.transactionCode}
         </Typography>
       </Box>
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -59,7 +55,7 @@ const DepositInformation = ({ title, orderDetail }: Props) => {
             color: "#8190A7",
           }}
         >
-          Thời gian đặt chỗ
+          Thời gian giao dịch
         </Typography>
         <Typography
           sx={{
@@ -69,7 +65,15 @@ const DepositInformation = ({ title, orderDetail }: Props) => {
             color: "#1B3459",
           }}
         >
-          {orderDetail.transactionCodeObject.createDate}
+          {/* {orderDetail.transactionCodeObject.createDate} */}
+          {format(
+            parse(
+              orderDetail.createdAt,
+              "dd-MM-yyyy HH:mm:ss",
+              new Date()
+            ),
+            "HH:mm | dd/MM/yyyy"
+          )}
         </Typography>
       </Box>
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>

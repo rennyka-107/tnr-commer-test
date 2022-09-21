@@ -468,7 +468,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
           notification({
             title: "Gửi thông tin vay tới MSB",
             message: res.responseMessage,
-            severity: "success",
+            severity: "error",
           });
         }
         setRegisterBorrow(false);

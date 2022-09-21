@@ -518,8 +518,6 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
     setOpenConfirmDialog(false);
   };
 
-  const generalInfo = useSelector((state: RootState) => state.generalInfo);
-  console.log(dataProduct);
   return (
     <>
       <FlexContainer>

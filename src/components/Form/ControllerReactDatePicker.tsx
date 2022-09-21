@@ -73,6 +73,7 @@ const ControllerReactDatePicker = <T extends FieldValues>(props: Props<T>) => {
                     ...InputProps.style,
                     paddingTop: 0,
                     paddingBottom: 0,
+                    border: "1px solid rgb(184, 184, 184)"
                   },
                 }}
                 error={Boolean(error)}

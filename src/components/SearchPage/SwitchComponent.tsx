@@ -158,9 +158,9 @@ const SwitchComponent = ({ setTypeProduct, setTypeSaleProduct }: TypeProps) => {
 
   const handleChangeTop = (e: any) => {
     if (e.target.checked === true) {
-      setTypeSaleProduct("0");
-    } else {
       setTypeSaleProduct("1");
+    } else {
+      setTypeSaleProduct("0");
     }
   };
   const BpRadio = (props: RadioProps) => {
@@ -192,7 +192,7 @@ const SwitchComponent = ({ setTypeProduct, setTypeSaleProduct }: TypeProps) => {
       >
         <TextStyled>Sản phẩm đang mở bán lên đầu</TextStyled>
         <IOSSwitch
-          defaultChecked={JSON.parse(typeSaleProduct) === "0" ? true : false}
+          defaultChecked={JSON.parse(typeSaleProduct) === "1" ? true : false}
           onChange={handleChangeTop}
         />
       </div>
