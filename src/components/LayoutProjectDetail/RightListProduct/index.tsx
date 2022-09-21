@@ -73,7 +73,9 @@ export default function RightListProduct() {
           width: expandMore
             ? "95vw"
             : window.innerWidth <= 1024
-            ? window.innerWidth <= 768 ? "90vw" : "60vw"
+            ? window.innerWidth <= 768
+              ? "90vw"
+              : "60vw"
             : "30vw",
           // height: "65vw",
           height: "calc(100vh - 150px)",
@@ -85,7 +87,9 @@ export default function RightListProduct() {
             : window.innerWidth <= 1024
             ? moveRightItem
               ? 0
-              : window.innerWidth <= 768 ? "-80vw" : "-50vw"
+              : window.innerWidth <= 768
+              ? "-80vw"
+              : "-50vw"
             : "unset",
         }}
       >
@@ -96,7 +100,7 @@ export default function RightListProduct() {
               height: "100%",
               display: "flex",
               alignItems: "center",
-              left: "-20px"
+              left: "-20px",
             }}
           >
             <CircleArrow
@@ -253,6 +257,9 @@ export default function RightListProduct() {
                   display: "flex",
                   flexWrap: "wrap",
                   gap: 1,
+                  justifyContent: "center",
+                  height: window.innerHeight - 400,
+                  overflowY: "auto",
                 }}
               >
                 {ListChildTarget.map((item) => (

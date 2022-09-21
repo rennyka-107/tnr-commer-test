@@ -113,8 +113,11 @@ const CartPayment = (props: Props) => {
 
   const handleChangeTieuChuan = (event: any) => {
     const datafilter = listPrice.filter((p) => p.PriceName === event.PriceName);
-    setPriceIdSelect(datafilter[0].PriceID);
-    setPaymentName(event.PriceName);
+	if(!isEmpty(datafilter)){
+		setPriceIdSelect(datafilter[0].PriceID);
+		setPaymentName(event.PriceName);
+	}
+
   };
 
   useEffect(() => {

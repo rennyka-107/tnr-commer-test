@@ -187,7 +187,7 @@ const Filter = (props: PropsI) => {
       } else {
         setListDataLSProjectType([]);
         setParamsProjectType([]);
-        localStorage.removeItem("listParamsLSProjectType");
+        // localStorage.removeItem("listParamsLSProjectType");
       }
       if (!isEmpty(listProjectData) || type !== "") {
         setListDataLSProjectType(JSON.parse(listProjectData));

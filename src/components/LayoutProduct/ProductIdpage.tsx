@@ -873,7 +873,7 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                     }}
                   >
                     <SubRightText>
-                      {dataProduct?.levelDetailParentName}
+                      {dataProduct?.levelDetailName}
                     </SubRightText>
                   </div>
                 )}
@@ -1053,7 +1053,7 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                   }}
                 >
                   <a
-                    href={`tel:${generalInfo.phoneNumber}`}
+                    href={`tel:${dataProduct.defaultPhoneNumber}`}
                     style={{ textAlign: "center" }}
                   >
                     <IconHeadSetProduct />

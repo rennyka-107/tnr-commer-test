@@ -376,7 +376,7 @@ const SearchCompare = ({
     localStorage.setItem("typeProduct", JSON.stringify(typeProduct));
     localStorage.setItem("typeSaleProduct", JSON.stringify(typeSaleProduct));
     router.push(
-      `/compare-search?priceTo=${filterSearch.priceTo}&priceFrom=${filterSearch.priceFrom}&areaTo=${filterSearch.areaTo}&areaFrom=${filterSearch.areaFrom}&categoryId=${filterSearch.categoryId}`
+      `/compare-search?priceTo=${filterSearch.priceTo}&priceFrom=${filterSearch.priceFrom}&areaTo=${filterSearch.areaTo}&areaFrom=${filterSearch.areaFrom}`
     );
   };
 

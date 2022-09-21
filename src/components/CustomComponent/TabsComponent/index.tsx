@@ -61,7 +61,7 @@ const TabsComponent = () => {
   };
 
   return (
-    <div style={{ marginTop: 44 }}>
+    <div style={{ marginTop: 44, width: '100%' }}>
       <Tabs
         style={{ gap: 50 }}
         value={value}

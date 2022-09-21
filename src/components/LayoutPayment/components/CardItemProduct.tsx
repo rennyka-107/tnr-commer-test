@@ -118,7 +118,7 @@ const CardItemProduct = (props: Props) => {
                 gap: 37,
               }}
             >
-              <SubRightText>{cart?.levelDetailParentName}</SubRightText>
+              {/* <SubRightText>{cart?.levelDetailParentName}</SubRightText> */}
               <SubRightText>{cart?.levelDetailName}</SubRightText>
             </div>
           ) : (
@@ -129,7 +129,7 @@ const CardItemProduct = (props: Props) => {
                
               }}
             >
-              <SubRightText>{cart?.levelDetailParentName}</SubRightText>
+              <SubRightText>{cart?.levelDetailName}</SubRightText>
             </div>
           )}
           {/* <Text14Styled>{cart.lot_code ?? "N/A"}</Text14Styled>

@@ -100,6 +100,7 @@ const Search = () => {
     }
   }, [router]);
 
+  console.log(searchBody)
   const changePage = (e: any) => {
     setSearch({
       page: e,

@@ -308,7 +308,7 @@ const HomePage = () => {
                   placeholder="Chọn dự án"
                 />
               </BoxStyled>
-              <div style={{ display: "flex", gap: 60 }}>
+              <div style={{ display: "flex", gap: 50, margin: '20px 20px 20px 10px' }}>
                 <SliderComponent
                   label="Diện tích (m2)"
                   onChange={handleChange1}

@@ -57,6 +57,7 @@ import {
   setData,
   setListPayment,
   setQrCode,
+  setUploadMedia,
 } from "../../../store/paymentSlice";
 import { useRouter } from "next/router";
 import useAddToCart from "hooks/useAddToCart";
@@ -264,6 +265,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
           provinceContactName,
           districtContactName,
           communeContactName,
+          id,
         } = res.responseData;
         if (isEmpty(transactionCode)) {
           dispatch(
@@ -287,6 +289,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                   districtContactName,
                   communeContactName,
                   mainUser: 1,
+                  userId: id,
                 },
               ],
             })
@@ -415,6 +418,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
     fetchPaymentMethod();
     return () => {
       dispatch(setData({ ...data, paymentStatus: 0 }));
+      dispatch(setUploadMedia([]));
     };
   }, []);
 
@@ -454,12 +458,19 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
     };
     apiSendInforMsb(sendData)
       .then((res) => {
-        console.log(res, "res");
-        notification({
-          title: "Gửi thông tin vay tới MSB",
-          message: "Thành công",
-          severity: "success",
-        });
+        if (res.responseCode === "00") {
+          notification({
+            title: "Gửi thông tin vay tới MSB",
+            message: res.responseMessage,
+            severity: "success",
+          });
+        } else {
+          notification({
+            title: "Gửi thông tin vay tới MSB",
+            message: res.responseMessage,
+            severity: "success",
+          });
+        }
         setRegisterBorrow(false);
       })
       .catch((err) => {
@@ -521,6 +532,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
           communeContactName,
           mainUser: 1,
           id,
+          userId: !isEmpty(info?.userId) ? info?.userId : null,
         };
       }
       return {
@@ -622,7 +634,9 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
               message: response.responseMessage,
             });
 
-            router.push(`/result-payment?errorCode=0&bookingCode=${transactionCode}`);
+            router.push(
+              `/result-payment?errorCode=0&bookingCode=${transactionCode}`
+            );
           } else {
             notification({
               severity: "error",

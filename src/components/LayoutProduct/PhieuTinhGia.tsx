@@ -587,7 +587,7 @@ const PhieuTinhGia = ({
                   {dataProduct?.buildArea ? dataProduct?.buildArea : "N/A"} m2
                 </TextRightOnCardLeft>
               </WrapItemOnCard>
-              <WrapItemOnCard>
+              {/* <WrapItemOnCard>
                 <TextLeftOnCardLeft>
                   Số tầng xây dựng thấp nhất:
                 </TextLeftOnCardLeft>
@@ -602,7 +602,7 @@ const PhieuTinhGia = ({
                 <TextRightOnCardLeft>
                   {dataProduct?.maxFloor ? dataProduct?.maxFloor : "N/A"}
                 </TextRightOnCardLeft>
-              </WrapItemOnCard>
+              </WrapItemOnCard> */}
             </WrapCardItem>
           </>
         ) : (

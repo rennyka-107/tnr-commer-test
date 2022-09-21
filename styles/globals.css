@@ -923,6 +923,16 @@ a {
     }
 }
 
+
+/* .mySwiper-BDSNB.swiper-wrapper:hover {
+    transition-duration: 0ms !important;
+} */
+
+
+/* .swiper-wrapper:hover {
+    animation-play-state: paused;
+} */
+
 @media only screen and (max-width: 1280px) {
     .mySwiper-BDSNB {
         width: 1200px;

@@ -108,6 +108,7 @@ export default function ProjectInformation() {
                 color: "#FEC83C",
                 fontWeight: "700",
                 fontSize: "44px",
+
                 lineHeight: "130%",
                 textAlign: "center",
                 mt: 5,

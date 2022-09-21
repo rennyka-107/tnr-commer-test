@@ -232,8 +232,6 @@ const SearchPage = ({
   const [typeProduct, setTypeProduct] = useState("0");
   const [typeSaleProduct, setTypeSaleProduct] = useState("0");
 
-
-
   const {
     textSearch,
     provinceId,
@@ -405,39 +403,39 @@ const SearchPage = ({
       const listProjectData = localStorage?.getItem("listDataLSProjectType");
       const listDataIdProject = localStorage?.getItem("listDataLSProject");
       const listParamsIdProject = localStorage?.getItem("listParamsIdProject");
-      if (!isEmpty(listProvince)) {
-        fetchListProject(JSON.parse(listProjectType));
-        fetchListProjectType(JSON.parse(listProvince));
-        setListParamsProvince(JSON.parse(listProvince));
-        fetchListProjectTypeByProvince(JSON.parse(listProvince));
-      } else {
-        fetchListProjectType([]);
-      }
-      if (!isEmpty(listProvinceData)) {
-        setListDataLSProvince(JSON.parse(listProvinceData));
-      }
+      //   if (!isEmpty(listProvince)) {
+      fetchListProject(JSON.parse(listProjectType));
+      fetchListProjectType(JSON.parse(listProvince));
+      setListParamsProvince(JSON.parse(listProvince));
+      fetchListProjectTypeByProvince(JSON.parse(listProvince));
+      //   } else {
+      //     fetchListProjectType([]);
+      //   }
+      //   if (!isEmpty(listProvinceData)) {
+      setListDataLSProvince(JSON.parse(listProvinceData));
+      //   }
 
-      if (!isEmpty(listProjectType) && !isEmpty(listParamsProjectType)) {
-        fetchListProject(JSON.parse(listProjectType));
-        setParamsProjectType(JSON.parse(listProjectType));
-      } else {
-        localStorage.removeItem("listParamsLSProjectType");
-      }
-      if (!isEmpty(listProjectData)) {
-        setListDataLSProjectType(JSON.parse(listProjectData));
-      } else {
-        localStorage.removeItem("listDataLSProjectType");
-      }
-      if (!isEmpty(listDataIdProject) && !isEmpty(listIdProject)) {
-        setListDataLSProject(JSON.parse(listDataIdProject));
-      } else {
-        localStorage.removeItem("listDataLSProject");
-      }
-      if (!isEmpty(listParamsIdProject)) {
-        setListIdProject(JSON.parse(listParamsIdProject));
-      } else {
-        localStorage.removeItem("listParamsIdProject");
-      }
+      //   if (!isEmpty(listProjectType) && !isEmpty(listParamsProjectType)) {
+      fetchListProject(JSON.parse(listProjectType));
+      setParamsProjectType(JSON.parse(listProjectType));
+      //   } else {
+      //     localStorage.removeItem("listParamsLSProjectType");
+      //   }
+      //   if (!isEmpty(listProjectData)) {
+      setListDataLSProjectType(JSON.parse(listProjectData));
+      //   } else {
+      //     localStorage.removeItem("listDataLSProjectType");
+      //   }
+      //   if (!isEmpty(listDataIdProject) && !isEmpty(listIdProject)) {
+      setListDataLSProject(JSON.parse(listDataIdProject));
+      //   } else {
+      //     localStorage.removeItem("listDataLSProject");
+      //   }
+      //   if (!isEmpty(listParamsIdProject)) {
+      setListIdProject(JSON.parse(listParamsIdProject));
+      //   } else {
+      //     localStorage.removeItem("listParamsIdProject");
+      //   }
     }
   }, [router]);
 
@@ -506,7 +504,7 @@ const SearchPage = ({
     localStorage.setItem("typeProduct", JSON.stringify(typeProduct));
     localStorage.setItem("typeSaleProduct", JSON.stringify(typeSaleProduct));
     router.push(
-      `/search?Type=Advanded&&textSearch=${filterSearch.textSearch}&&provinceId=${filterSearch.provinceId}&&projectTypeId=${filterSearch.projectTypeId}&&projectId=${filterSearch.projectId}&&priceFrom=${filterSearch.priceFrom}&&priceTo=${filterSearch.priceTo}&&areaFrom=${filterSearch.areaFrom}&&areaTo=${filterSearch.areaTo}`
+      `/search?Type=Advanded&&textSearch=${filterSearch.textSearch}&&provinceId=${filterSearch.provinceId}&&projectTypeId=${filterSearch.projectTypeId}&&projectId=${filterSearch.projectId}&&priceFrom=${filterSearch.priceFrom}&&priceTo=${filterSearch.priceTo}&&areaFrom=${filterSearch.areaFrom}&&areaTo=${filterSearch.areaTo}&&sortType=${typeProduct}&&isPayment=${typeSaleProduct}`
     );
     setSearchAction(!searchAction);
   };
@@ -529,7 +527,7 @@ const SearchPage = ({
     localStorage.removeItem("listDataLSProject");
     localStorage.removeItem("listParamsIdProject");
     localStorage.removeItem("typeProduct");
-      localStorage.removeItem("typeSaleProduct");
+    localStorage.removeItem("typeSaleProduct");
 
     router.push(
       `/search?Type=Advanded&&textSearch=&&provinceId=&&projectTypeId=&&projectId=&&priceFrom=&&priceTo=&&areaFrom=0&&areaTo=1000`
@@ -730,7 +728,13 @@ const SearchPage = ({
             {fetchComponent()}
           </div>
         </ContainerFilter>
-        <div style={{ display: "flex", justifyContent: "space-between",marginRight: 30 }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            marginRight: 30,
+          }}
+        >
           <div
             style={{
               display: "flex",

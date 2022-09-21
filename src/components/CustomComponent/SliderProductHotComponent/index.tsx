@@ -33,7 +33,6 @@ const CardContainer = styled.div`
 
 const LeftIconStyled = styled(IconCarsouelLeftProduct)`
   cursor: pointer;
-
 `;
 SwiperCore.use([Autoplay, Pagination, Navigation]);
 export default function SliderProductHotComponent() {
@@ -43,13 +42,24 @@ export default function SliderProductHotComponent() {
   const { listMenuBarType, listMenuBarProjectType } = useSelector(
     (state: RootState) => state.menubar
   );
-  const matches = useMediaQuery('(max-width:1110px)');
+  const matches = useMediaQuery("(max-width:1110px)");
   const [dataProjectType, setDataProjectType] = useState([]);
   const [dataProject, setDataProject] = useState([]);
   const [openConfirmDialog, setOpenConfirmDialog] = useState<boolean>(false);
   const [tempCart, setTempCart] = useState<searchLocationResponse | null>(null);
   const { cart } = useSelector((state: RootState) => state.carts);
   const notification = useNotification();
+
+  const swiperRef = React.useRef<SwiperCore>();
+  const onInit = (Swiper: SwiperCore): void => {
+    swiperRef.current = Swiper;
+  };
+  const handleMouseEnter = () => {
+    if (swiperRef.current) swiperRef.current.autoplay.stop();
+  };
+  const handleMouseLeave = () => {
+    if (swiperRef.current) swiperRef.current.autoplay.start();
+  };
 
   const addToCart = useAddToCart();
   const router = useRouter();
@@ -113,7 +123,7 @@ export default function SliderProductHotComponent() {
           areaFrom: "0",
         },
       });
-	  LocalStorage.set("compare-url", {
+      LocalStorage.set("compare-url", {
         projectId: projectId,
         projectTypeId: projectType,
         priceTo: "50",
@@ -150,69 +160,71 @@ export default function SliderProductHotComponent() {
   return (
     <WrapSlide>
       <LeftIconStyled />
-      <Swiper
-        spaceBetween={10}
-        speed={6000}
-        centeredSlides={false}
-        slidesPerView={matches ? 2 : 3}
-        autoplay={{
-          delay: 2000,
-          disableOnInteraction: false,
-          pauseOnMouseEnter: true,
-        }}
-        navigation={{
-          prevEl: ".icon-LeftArow-prod",
-          nextEl: ".icon-rightArow-prod",
-          // @ts-ignore
-          clickable: true,
-        }}
-        observer={true}
-        observeParents={true}
-        // modules={[Autoplay, Pagination, Navigation]}
-        className="mySwiper-BDSNB"
-    
-      >
-        {productTopByOutStanding.map((item, index) => (
-          <SwiperSlide key={index}>
-            <CardContainer>
-              <ItemProductCard
-                key={index}
-                id={item.id}
-                projectName={item.projectName}
-                src={item.avatar}
-                title={item.name}
-                subTitle={item.projectLocation}
-                activeFavourite={true}
-                dataItem={{
-                  item1: item.landArea,
-                  item2: item.numBath,
-                  item3: item.numBed,
-                  item4: item.doorDirection,
-                }}
-                priceListed={item.price}
-                priceSub={item.unitPrice}
-                ticketCard={item.category}
-                projectTypeCode={item.projectTypeCode}
-                favouriteStatus={item.favouriteStatus}
-                build={item.build}
-                minFloor={item.minFloor}
-                maxFloor={item.maxFloor}
-                onClick={handleAddToCart(item)}
-                activeSoSanh={true}
-                buyDisabled={item?.paymentStatus !== 2}
-                onCompare={onCompare(
-                  item.projectId,
-                  item.projectTypeId,
-                  item.avatar,
-                  item.name,
-                  item.projectName,
-                  item.id
-                )}
-              />
-            </CardContainer>
-          </SwiperSlide>
-        ))}
-      </Swiper>
+      {/* <div onMouseOver={handleMouseEnter} onMouseOut={handleMouseLeave}> */}
+        <Swiper
+        //   onInit={onInit}
+          spaceBetween={10}
+          speed={4000}
+          centeredSlides={false}
+          slidesPerView={matches ? 2 : 3}
+          autoplay={{
+            delay: 1000,
+            disableOnInteraction: false,
+            pauseOnMouseEnter: true,
+          }}
+          navigation={{
+            prevEl: ".icon-LeftArow-prod",
+            nextEl: ".icon-rightArow-prod",
+            // @ts-ignore
+            clickable: true,
+          }}
+          observer={true}
+          observeParents={true}
+          // modules={[Autoplay, Pagination, Navigation]}
+          className="mySwiper-BDSNB"
+        >
+          {productTopByOutStanding.map((item, index) => (
+            <SwiperSlide key={index}>
+              <CardContainer>
+                <ItemProductCard
+                  key={index}
+                  id={item.id}
+                  projectName={item.projectName}
+                  src={item.avatar}
+                  title={item.name}
+                  subTitle={item.projectLocation}
+                  activeFavourite={true}
+                  dataItem={{
+                    item1: item.landArea,
+                    item2: item.numBath,
+                    item3: item.numBed,
+                    item4: item.doorDirection,
+                  }}
+                  priceListed={item.price}
+                  priceSub={item.unitPrice}
+                  ticketCard={item.category}
+                  projectTypeCode={item.projectTypeCode}
+                  favouriteStatus={item.favouriteStatus}
+                  build={item.build}
+                  minFloor={item.minFloor}
+                  maxFloor={item.maxFloor}
+                  onClick={handleAddToCart(item)}
+                  activeSoSanh={true}
+                  buyDisabled={item?.paymentStatus !== 2}
+                  onCompare={onCompare(
+                    item.projectId,
+                    item.projectTypeId,
+                    item.avatar,
+                    item.name,
+                    item.projectName,
+                    item.id
+                  )}
+                />
+              </CardContainer>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      {/* </div> */}
       <IconCarsouelRightProduct style={{ cursor: "pointer" }} />
       <ConfirmDialog
         open={openConfirmDialog}
