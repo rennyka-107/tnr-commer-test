@@ -25,6 +25,7 @@ import {
   getCompareItem,
   getComparePopUpItem,
 } from "../../../../store/productCompareSlice";
+import PlusAddCompare from "@components/Icons/PlusAddCompare";
 
 type Props = {
   onClick?: MouseEventHandler<HTMLButtonElement>;
@@ -51,6 +52,7 @@ const TextStyled = styled.span`
   font-size: 14px;
   line-height: 16px;
   color: #0e1d34;
+  text-transform: none;
 `;
 const ButtonStyled = styled(Button)`
   width: 100%;
@@ -282,9 +284,10 @@ const ItemImport = ({ onChangeFilter, filter }: Props) => {
       </Modal> */}
       <WrapperContent>
         <ButtonStyled onClick={handleOnClick}>
-          <IconPlusProduct
+          {/* <IconPlusProduct
             style={{ width: 46.6, height: 46.6, marginTop: 10 }}
-          />
+          /> */}
+		  <PlusAddCompare />
           <TextStyled>Thêm sản phẩm so sánh</TextStyled>
         </ButtonStyled>
       </WrapperContent>

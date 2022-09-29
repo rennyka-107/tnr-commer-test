@@ -233,7 +233,7 @@ const LayoutCompare = (props: Props) => {
                   style={{ background: "#F3F3F3", marginLeft: 0 }}
                 >
                   <Box style={{ maxWidth: "35px" }}>
-                    <TitleMoneyStyled>Chi Tiết</TitleMoneyStyled>
+                    <TitleMoneyStyled>Chi tiết</TitleMoneyStyled>
                   </Box>
                 </AccordionSummary>
                 <AccordionDetails>

@@ -14,9 +14,10 @@ interface Props {
   total: number;
   totalElement: number;
   handleFilterName: (value: string) => void;
+  filterName: string;
 }
 
-const FilterSection = ({ handleChangeFilter, total, totalElement, handleFilterName }: Props) => {
+const FilterSection = ({ handleChangeFilter, total, totalElement, handleFilterName, filterName }: Props) => {
   const [openFilter, setOpenFilter] = useState<boolean>(false);
   const [radioValue, setRadioValue] = useState<RadioType>("0");
   const [switchValue, setSwitchValue] = useState<boolean>(true);
@@ -61,7 +62,7 @@ const FilterSection = ({ handleChangeFilter, total, totalElement, handleFilterNa
           <Box sx={{ color: "#8190A7" }}>Sản phẩm có thể đổi</Box>
         </Box>
         <Box>
-          <SearchForm handleFilter={handleFilterName} />
+          <SearchForm handleFilter={handleFilterName} filterName={filterName} />
         </Box>
       </Box>
 

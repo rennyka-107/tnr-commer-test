@@ -216,9 +216,18 @@ const DetailProduct = ({ onBack }: Props) => {
           <Grid item xs={6} display={"flex"} alignItems={"center"}>
             <IconFrame />
             &nbsp;&nbsp;
+			{Target.buildType === "1" ? (
             <TextStyled>
-              {Target.landArea ?? "N/A"} m<sup>2</sup>
+              {Target.buildArea ?? "N/A"} m<sup>2</sup>
             </TextStyled>
+          ) : (
+            <TextStyled>
+              {Target.clearArea ?? "N/A"} m<sup>2</sup>
+            </TextStyled>
+          )}
+            {/* <TextStyled>
+              {Target.landArea ?? "N/A"} m<sup>2</sup>
+            </TextStyled> */}
           </Grid>
           {Target.buildType === "1" && (
             <>

@@ -45,7 +45,7 @@ const TextMoneyStyled = styled(Text18Styled)({
 
 const BoxInputStyled = styled(Box)({
   minHeight: 59,
-  height: 'auto',
+  height: "auto",
   padding: "10px 0px 4px 12px",
   borderBottom: "1px solid #dcdcdc",
   display: "flex",
@@ -124,17 +124,28 @@ const ItemCompare = ({ onClick, data }: Props) => {
       .toFixed(0)
       .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
   }
-  
+
   const ValueCompare = (item: CompareParamsI) => {
-      if (item.keyMap.trim() === "totalPrice")
-        return <TitleMoneyStyled>{currencyFormat(data[item.keyMap])} đ</TitleMoneyStyled>;
-      if (item.keyMap.trim() === "landArea")
-        return <TextMoneyStyled> {CompareValueFormat(data[item.keyMap], item.keyMap)} m2</TextMoneyStyled>;
-      else
-        return <TextMoneyStyled>
+    if (item.keyMap.trim() === "totalPrice")
+      return (
+        <TitleMoneyStyled>
+          {currencyFormat(data[item.keyMap])} đ
+        </TitleMoneyStyled>
+      );
+    if (item.keyMap.trim() === "landArea")
+      return (
+        <TextMoneyStyled>
+          {" "}
+          {CompareValueFormat(data[item.keyMap], item.keyMap)} m2
+        </TextMoneyStyled>
+      );
+    else
+      return (
+        <TextMoneyStyled>
           {CompareValueFormat(data[item.keyMap], item.keyMap)}
-        </TextMoneyStyled>;
-  }
+        </TextMoneyStyled>
+      );
+  };
 
   return (
     <Box width={289}>
@@ -176,19 +187,51 @@ const ItemCompare = ({ onClick, data }: Props) => {
         <IconWrapper style={{ left: "249px", top: "10px" }} onClick={onRemove}>
           <IconX style={{ stroke: "white", width: "12px", height: "12px" }} />
         </IconWrapper>
-        <Box
+        {/* <Box
           style={{
             position: "absolute",
-            top: "138px",
+            top: "135px",
             left: "215px",
-            padding: "3px 8px",
-            background: "#868686",
+            padding: "5px 8px",
+			right: 0,
+			height: 25,
+            background: "#FEC83C",
+			textAlign: 'center'
           }}
         >
-          <Text14Styled color={"white"} style={{ whiteSpace: "pre" }}>
+          <Text14Styled color={"#0E1D34"} style={{ whiteSpace: "pre" , fontWeight: 400, fontSize: 14}}>
             {data?.categoryName}
           </Text14Styled>
-        </Box>
+        </Box> */}
+        {data?.categoryName && (
+          <div
+            style={{
+              background: "#FEC83C",
+              width: "auto",
+              height: "auto",
+              position: "absolute",
+              marginTop: 130,
+              right: 0,
+              padding: 3,
+              textAlign: "center",
+              zIndex: 10,
+            }}
+          >
+            <span
+              style={{
+                fontFamily: "roboto",
+                fontStyle: "normal",
+                fontWeight: 400,
+                fontSize: 14,
+                lineHeight: "16px",
+                color: "#0E1D34",
+              }}
+            >
+              {data?.categoryName}
+            </span>
+          </div>
+        )}
+
         <CardMedia
           component={"img"}
           height={160}
@@ -216,7 +259,13 @@ const ItemCompare = ({ onClick, data }: Props) => {
             onClick={onClick}
             disabled={data?.paymentStatus !== "2"}
           >
-            <Text16Styled style={{color: data?.paymentStatus === "2" ? '#ffffff' : 'gray'}}>Mua Online</Text16Styled>
+            <Text16Styled
+              style={{
+                color: data?.paymentStatus === "2" ? "#ffffff" : "gray",
+              }}
+            >
+              Mua Online
+            </Text16Styled>
             <Box width={19} height={19}>
               <IconArrowRight color={"white"} />
             </Box>
@@ -226,11 +275,9 @@ const ItemCompare = ({ onClick, data }: Props) => {
 
       {compareParams
         .filter((item) => item.type === "Thông tin chung")
-        .map((item) => 
-        <BoxInputStyled key={item.id}>
-        {ValueCompare(item)}
-        </BoxInputStyled>
-        )}
+        .map((item) => (
+          <BoxInputStyled key={item.id}>{ValueCompare(item)}</BoxInputStyled>
+        ))}
     </Box>
   );
 };

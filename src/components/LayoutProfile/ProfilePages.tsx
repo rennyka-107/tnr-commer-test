@@ -86,7 +86,6 @@ const ProfilePages = () => {
     | "editProfile"
     | "detailTransaction"
   >("contract");
-  console.log(activeTab)
 
   const renderRightContent = useMemo(() => {
     switch (activeTab) {

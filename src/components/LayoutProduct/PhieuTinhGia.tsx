@@ -440,7 +440,7 @@ const PhieuTinhGia = ({
 
   useEffect(() => {
     (async () => {
-      if (filterPayment.ScheduleID !== 0 && filterPayment.BuildMoney !== 0) {
+      if (filterPayment.ScheduleID !== 0 && filterPayment.TotalMoney !== 0) {
         const responsePayment = await getPaymentListByScheduleId(filterPayment);
         if (responsePayment.responseCode === "00") {
           setListPaymentItem(responsePayment.responseData);

@@ -2,6 +2,7 @@ import FlexContainer from "@components/CustomComponent/FlexContainer";
 import SliderCategoryIndex from "@components/CustomComponent/SliderCategoryIndex";
 import styled from "@emotion/styled";
 import { Typography } from "@mui/material";
+import useHover from "hooks/useHover";
 import { TBOUTStanding } from "interface/product";
 import _ from "lodash";
 import dynamic from "next/dynamic";
@@ -42,9 +43,10 @@ const ContainerProduct = styled.div`
 
   height: auto;
 `;
+
 export default function BodyIndex() {
   const dispatch = useDispatch();
-
+  const [hoverRef, isHovered] = useHover<HTMLDivElement>();
   const router = useRouter();
   const { listMenuBarProjectType } = useSelector(
     (state: RootState) => state.menubar
@@ -79,6 +81,7 @@ export default function BodyIndex() {
     //   console.log(error);
     // }
   };
+
   return (
     <FlexContainer>
       <SliderCategoryIndex />
@@ -93,16 +96,16 @@ export default function BodyIndex() {
             justifyContent: "space-between",
             textAlign: "center",
             marginTop: 75,
-            marginBottom: 33,
+
           }}
         ></div>
         {productTopByOutStanding?.length > 0 ? (
-          <div>
+          <div ref={hoverRef} style={{paddingTop: 50,height: 600}}>
             <div
               style={{
                 display: "flex",
                 justifyContent: "space-around",
-                marginBottom: 20,
+				marginBottom: 50
               }}
             >
               <TextBDS>BẤT ĐỘNG SẢN NỔI BẬT</TextBDS>
@@ -116,7 +119,7 @@ export default function BodyIndex() {
               }}
             >
               <>
-                <DynamicSliderHotProduct />
+                <DynamicSliderHotProduct hoverCheck={isHovered} />
               </>
             </div>
           </div>

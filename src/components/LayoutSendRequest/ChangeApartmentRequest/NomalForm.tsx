@@ -1,9 +1,9 @@
-import TNRButton from "@components/Element/TNRButton";
 import { ButtonAction, Text18Styled } from "@components/StyledLayout/styled";
 import styled from "@emotion/styled";
 import { CircularProgress } from "@mui/material";
 
 import { Box } from "@mui/system";
+import isEmpty from "lodash.isempty";
 import { useState } from "react";
 
 interface Props {
@@ -23,8 +23,14 @@ const NomalForm = ({ handleEnterProductCode, searchTextLoading }: Props) => {
         <StyledInput value={value} onChange={(e) => setValue(e.target.value)} />
         <Box>
           <ButtonAction
-            sx={{ backgroundColor: "#1B3459 !important", minWidth: "100px" }}
-            disabled={searchTextLoading}
+            sx={{
+              backgroundColor: isEmpty(value)
+                ? "#8190A7"
+                : "#1B3459 !important",
+              minWidth: "100px",
+            }}
+            disabled={searchTextLoading || isEmpty(value)}
+            style={{}}
             onClick={handleEnterProductCode(value)}
           >
             {!searchTextLoading ? (

@@ -1015,6 +1015,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                         justifyContent: "space-between",
                         border: "1px solid #C7C9D9",
                         p: 2,
+					
                         borderRadius: "8px",
                         mt: 1,
                       }}
@@ -1045,7 +1046,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                       </Box>
                     </Box>
                   )}
-                  <RowStyled>
+                  <RowStyled style={{gap: 38}}>
                     <BoxInfoUserStyled
                       sx={{
                         background: !isEmpty(transactionCode)

@@ -51,8 +51,8 @@ interface FormVisitI {
   fullname: string;
   email: string;
   phone: string | number;
-  date: string;
-  time: string;
+  visitDate: string;
+  visitTime: string;
 }
 
 const listTime = [
@@ -326,11 +326,11 @@ const ModalRegister = (props: PropsI) => {
       .max(10, "Số điện thoại không được nhiều hơn 10 số")
       .required(validateLine.required)
       .default(""),
-    date: yup
-      .date()
-      .required("không được bỏ trống")
-      .min(DateFns.getP(), "Không được chọn ngày trong quá khứ"),
-    time: yup.string().required("không được bỏ trống"),
+    visitDate: yup
+      .string()
+      .required("không được bỏ trống"),
+      // .min(DateFns.getP(), "Không được chọn ngày trong quá khứ"),
+    visitTime: yup.string().required("không được bỏ trống"),
   });
   const {
     control,
@@ -368,6 +368,7 @@ const ModalRegister = (props: PropsI) => {
 
   const submitForm = async (values) => {
     setLoading(true);
+    console.log(values, "!23")
     try {
       const response = await saveInforVisitApament(values);
       // console.log(response,'response');
@@ -481,10 +482,10 @@ const ModalRegister = (props: PropsI) => {
               />
             </FormGroup>
             <FormGroup fullWidth>
-              <ControllerDatePickerThamQuan
+              <ControllerReactDatePicker
                 label={"Ngày tham quan"}
                 control={control}
-                name={"date"}
+                name={"visitDate"}
                 required
               />
               {/* <ControllerDatePicker
@@ -496,7 +497,7 @@ const ModalRegister = (props: PropsI) => {
             <FormGroup fullWidth>
               <ControllerSelectTime
                 variant="outlined"
-                name="time"
+                name="visitTime"
                 label="Chọn giờ tham quan"
                 control={control}
                 setValue={setValue}

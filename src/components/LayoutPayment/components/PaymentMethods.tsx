@@ -101,8 +101,8 @@ const PaymentMethods = ({ payMethod, setPayMethod }: Props) => {
                                 minWidth: "100%",
                               }}
                             >
-                              <Text14Styled>Tên chủ tài khoản</Text14Styled>
-                              <Text14Styled>
+                              <Text14Styled style={{minWidth: 200}}>Tên chủ tài khoản</Text14Styled>
+                              <Text14Styled style={{textAlign: 'right'}}>
                                 {!isEmpty(cart) && !isEmpty(cart.accountMSB)
                                   ? cart.accountMSB?.name
                                   : ""}

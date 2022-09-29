@@ -2,7 +2,7 @@ import React, { MouseEventHandler } from "react";
 import styled from "@emotion/styled";
 import { Box, CardMedia, Grid, Typography } from "@mui/material";
 import {
-	FloorIcon,
+  FloorIcon,
   IconBath,
   IconBedDouble,
   IconCompass,
@@ -51,7 +51,7 @@ const TextStyled = styled(Typography)`
   font-family: "Roboto";
   font-style: normal;
   font-weight: 400;
-  font-size: .8rem;
+  font-size: 0.8rem;
   line-height: 16px;
   color: #1b3459;
 `;
@@ -79,7 +79,7 @@ const TextBottomStyled = styled(Typography)`
   font-family: "Roboto";
   font-style: normal;
   font-weight: 400;
-  font-size: .8rem;
+  font-size: 0.8rem;
   line-height: 21px;
 
   /* Brand */
@@ -99,6 +99,7 @@ const NumberBottomStyled = styled(Typography)`
 `;
 
 const ItemProductMap = ({ onClick, data }: Props) => {
+  // console.log(data)
   return (
     <WrapperContent onClick={onClick}>
       <WrapperImg>
@@ -126,9 +127,15 @@ const ItemProductMap = ({ onClick, data }: Props) => {
         <Grid item xs={6} display={"flex"} alignItems={"center"}>
           <IconFrame />
           &nbsp;&nbsp;
-          <TextStyled>
-            {data.landArea ?? "N/A"} m<sup>2</sup>
-          </TextStyled>
+          {data.buildType === "1" ? (
+            <TextStyled>
+              {data.buildArea ?? "N/A"} m<sup>2</sup>
+            </TextStyled>
+          ) : (
+            <TextStyled>
+              {data.clearArea ?? "N/A"} m<sup>2</sup>
+            </TextStyled>
+          )}
         </Grid>
         {data.buildType === "1" && (
           <>
@@ -149,7 +156,7 @@ const ItemProductMap = ({ onClick, data }: Props) => {
             )}
           </>
         )}
-	
+
         {data.buildType === "2" && (
           <Grid item xs={6} display={"flex"} alignItems={"center"}>
             <IconBedDouble />
@@ -167,12 +174,12 @@ const ItemProductMap = ({ onClick, data }: Props) => {
             &nbsp;&nbsp;<TextStyled>{data.numBath ?? "N/A"}</TextStyled>
           </Grid>
         )}
-			 {data.buildType === "1" && data.build && (
-			  <Grid item xs={6} display={"flex"} alignItems={"center"}>
-			  <FloorIcon />
-			  &nbsp;&nbsp;<TextStyled>{data.maxFloor ?? "N/A"} Tầng</TextStyled>
-			</Grid>
-		 ) }
+        {data.buildType === "1" && data.build && (
+          <Grid item xs={6} display={"flex"} alignItems={"center"}>
+            <FloorIcon />
+            &nbsp;&nbsp;<TextStyled>{data.maxFloor ?? "N/A"} Tầng</TextStyled>
+          </Grid>
+        )}
       </Grid>
     </WrapperContent>
   );

@@ -11,6 +11,7 @@ import { Box } from "@mui/material";
 import { nanoid } from "@reduxjs/toolkit";
 import { getOrderByUser } from "@service/Profile";
 import useNotification from "hooks/useNotification";
+import isEmpty from "lodash.isempty";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -89,10 +90,6 @@ const TransferRequest = (props: Props) => {
     control,
     handleSubmit,
     reset,
-    setValue,
-    watch,
-    getValues,
-    formState: { errors },
   } = useForm<FormData>({
     mode: "onChange",
     resolver: yupResolver(validationSchema),
@@ -109,8 +106,6 @@ const TransferRequest = (props: Props) => {
 
     const response = await getOrderByUser(data);
     const contacts = response?.responseData ?? [];
-    console.log("contacts", contacts);
-
     const contact = contacts.find((contact) => contact.bookingCode === txcode);
     setContact(contact);
   };
@@ -122,7 +117,6 @@ const TransferRequest = (props: Props) => {
     const newPerson = {
       onyFeId: nanoid(),
       ...data,
-      issueDate: DateFns.changeFormatDate(data.issueDate),
     };
 
     setListPersonAdded([...listPersonAdded, newPerson]);
@@ -180,7 +174,7 @@ const TransferRequest = (props: Props) => {
         } else {
           notification({
             severity: "error",
-            message: res.responseMessage,
+            message: !isEmpty(res.responseMessage) ? res.responseMessage : "Có lỗi xảy ra!" ,
           });
           replace("/send-request/failure");
         }
@@ -202,10 +196,6 @@ const TransferRequest = (props: Props) => {
     }
   };
 
-  const onAddPerson = (value: string) => {
-    console.log("adddd", value);
-  };
-
   const onDeletePerson = (id: string) => () => {
     const newList = listPersonAdded.filter((person) => person.onyFeId !== id);
     setActivePerson(null);
@@ -225,14 +215,6 @@ const TransferRequest = (props: Props) => {
   const handleViewAddedPerson = (person: PersonItem) => () => {
     setActivePerson(person);
   };
-
-  const handleClickOutSide = () => {
-    if (isAddingPerson) {
-      handleSubmit(onSenRequest)();
-    }
-  };
-
-  // useOnClickOutside(addingBtnRef, handleClickOutSide);
 
   return (
     <Box>
@@ -275,7 +257,6 @@ const TransferRequest = (props: Props) => {
               );
             })}
             {isAddingPerson && <TNRButton label="Họ và tên..." active />}
-            {/* {isAddingPerson && <AddPerson onAddPerson={onAddPerson} />} */}
           </Box>
 
           {isAddingPerson && (

@@ -89,10 +89,12 @@ const ComparePopUp = ({ }: ComparePopUpProps) => {
         <Stack direction="column" justifyContent="center" spacing={2}>
           <Button
             disabled={comparePopUpItem.length < 2}
+			style={{textTransform: 'none', borderRadius: 8, background: comparePopUpItem.length < 2 ? '#E7E9EC':'#1B3459', height: 40}}
             variant={"contained"}
             onClick={onCompare}
+		
           >
-            So sánh {comparePopUpItem.length}/3
+            So sánh ({comparePopUpItem.length}/3)
           </Button>
           <TextButtonStyled style={{ color: "#0063F7" }} onClick={remove()}>
             Xoá tất cả sản phẩm

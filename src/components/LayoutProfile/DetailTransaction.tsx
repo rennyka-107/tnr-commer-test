@@ -32,6 +32,7 @@ import Product3 from "../../../public/images/product3.png";
 import SelectInputComponent from "@components/CustomComponent/SelectInputComponent";
 import SelectInputTwo from "@components/CustomComponent/SelectInputComponent/SelectInputTwo";
 import SelectInputWithId from "@components/CustomComponent/SelectInputComponent/SelectInputWithId";
+import DialogFinishProfileTransaction from "./DialogFinishProfileTransaction";
 type Props = {
   //   item: ContractI;
   setActiveTab: (d: any) => void;
@@ -260,6 +261,7 @@ interface PaymentRequestType {
 
 const DetailTransaction = ({ setActiveTab }: Props) => {
   const router = useRouter();
+  const [open, setOpen] = useState<boolean>(false);
   const { transCode, transactionId, uuid, productId, transactionCodeLandSoft } =
     router.query;
   const [data, setData] = useState<any[any]>([]);
@@ -280,7 +282,6 @@ const DetailTransaction = ({ setActiveTab }: Props) => {
   };
 
   useEffect(() => {
-
     if (!data) return;
 
     const paymentRequestList = data?.paymentRequestTypeResponseList?.map(
@@ -612,13 +613,14 @@ const DetailTransaction = ({ setActiveTab }: Props) => {
                           fontWeight: 500,
                           borderRadius: 8,
                         }}
-                        onClick={() =>
-                          router.push(
-                            `/payment-cart?transactionCode=${transCode}`
-                          )
+                        onClick={
+                          () => setOpen(true)
+                          // router.push(
+                          //   `/payment-cart?transactionCode=${transCode}`
+                          // )
                         }
                       >
-                        Hoàn Thiện hồ sơ
+                        Hoàn thiện hồ sơ
                       </Button>
                     </>
                   ) : (
@@ -903,7 +905,6 @@ const DetailTransaction = ({ setActiveTab }: Props) => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {/* {data.map((row) => ( */}
                     <TableRow>
                       <TableCell component="th" scope="row">
                         {data.billNumber}
@@ -933,10 +934,6 @@ const DetailTransaction = ({ setActiveTab }: Props) => {
     );
   };
 
-  useEffect(() => {
-    fecthComponent();
-  }, [data]);
-
   return (
     <BoxContainer
       HeaderCustom={
@@ -960,23 +957,12 @@ const DetailTransaction = ({ setActiveTab }: Props) => {
       }
       styleCustom={{ padding: "21px 24px" }}
     >
-      {/* {item?.avatar ? (
-          <ImageProduct
-            loader={({ src, width, quality }) => {
-              return `${src}?w=${width}&q=${quality}`;
-            }}
-            src={
-              item?.avatar ??
-              "https://tse3.mm.bing.net/th?id=OIP.zsEgRepQ6Uh5OYkkhJyn2gHaE5&pid=Api&P=0&w=277&h=183"
-            }
-            width={159}
-            height={96}
-            alt=""
-          />
-        ) : ( */}
-
-      {/* )} */}
       {fecthComponent()}
+      <DialogFinishProfileTransaction
+        open={open}
+        onClose={() => setOpen(false)}
+        transactionCode={transCode as string}
+      />
     </BoxContainer>
   );
 };

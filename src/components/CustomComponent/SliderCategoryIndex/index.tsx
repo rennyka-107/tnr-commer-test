@@ -168,6 +168,7 @@ const SliderCategoryIndex = ({ data }: { data?: any[] }) => {
           //     zIndex: 10,
           //     marginLeft: 10,
           //   }}
+
           />
         </div>
         <WrapSlide>

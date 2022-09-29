@@ -329,7 +329,7 @@ export default function ItemCompareSearch({
               fontWeight: 400,
               fontSize: 14,
               lineHeight: "16px",
-              color: "#FFFFFF",
+              color: "#48576D",
             }}
           >
             {ticketCard}

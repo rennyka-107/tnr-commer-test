@@ -164,9 +164,9 @@ const CartPayment = (props: Props) => {
                 priceId: filterPtg.priceID,
               })
             );
-            // setPaymentPrice([
-            //   response.responseData.ListSchedule[0].ScheduleName,
-            // ]);
+            setPaymentPrice([
+              response.responseData.ListSchedule[0].ScheduleName,
+            ]);
             // setFilterpayment({
             //   LandMoney: response.responseData.LandMoney,
             //   BuildMoney: response.responseData.BuildMoney,

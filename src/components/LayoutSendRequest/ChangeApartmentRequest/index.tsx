@@ -5,7 +5,6 @@ import Subtitle from "@components/Element/Subtitle";
 import { Box, Dialog, Divider, Grid } from "@mui/material";
 import { getOrderByUser } from "@service/Profile";
 import useNotification from "hooks/useNotification";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import { Fragment, useEffect, useState } from "react";
 import { Product } from "type/common";
@@ -71,9 +70,7 @@ const ChangeApartmentRequest = ({ orderDetail }: Props) => {
   }, []);
 
   useEffect(() => {
-    console.log("orderDetail", orderDetail);
     if (!orderDetail?.production?.project?.id) return;
-
     let newFilter: any = {};
     if (filter) {
       newFilter = {
@@ -115,6 +112,7 @@ const ChangeApartmentRequest = ({ orderDetail }: Props) => {
 
   const handleEnterProductCode = (value: string) => () => {
     setSearchTextLoading(true);
+    setFilterName(value);
     getListProduct(params, {
       textSearch: value,
     })
@@ -173,8 +171,6 @@ const ChangeApartmentRequest = ({ orderDetail }: Props) => {
   const handleFilterName = (value: string) => {
     setFilterName(value);
   };
-
-  console.log(productList);
 
   const productListViewer = productList.filter((product) =>
     product.lotSymbolCommercial
@@ -242,6 +238,7 @@ const ChangeApartmentRequest = ({ orderDetail }: Props) => {
           total={total}
           totalElement={totalElement}
           handleFilterName={handleFilterName}
+          filterName={filterName}
         />
 
         <Box sx={{ p: "20px 40px" }}>
