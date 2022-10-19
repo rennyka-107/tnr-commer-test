@@ -182,7 +182,6 @@ const validationSchema = yup.object().shape({
   permanentAddress: yup
     .string()
     .max(255, "Không được vượt quá 255 ký tự")
-    .required(validateLine.required)
     .nullable()
     .default(""),
   contactAddress: yup

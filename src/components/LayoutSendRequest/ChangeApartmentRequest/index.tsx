@@ -27,10 +27,10 @@ interface Params {
 export interface Filter {
   isPayment: number;
   sortType: number;
-  projectId: string;
-  paymentStatus: number;
-  priceFrom: string;
-  priceTo: string;
+  projectId?: string;
+  paymentStatus?: number;
+  priceFrom?: string;
+  priceTo?: string;
 }
 
 const ChangeApartmentRequest = ({ orderDetail }: Props) => {
@@ -40,10 +40,14 @@ const ChangeApartmentRequest = ({ orderDetail }: Props) => {
   } = useRouter();
   const notification = useNotification();
   const [loading, setLoading] = useState<boolean>(false);
-  const [filter, setFilter] = useState<Filter | null>(null);
+  const [filter, setFilter] = useState<Filter | null>({
+    sortType: 0,
+    isPayment: 1,
+  });
   const [open, setOpen] = useState<boolean>(false);
   const [itemSelect, setItemSelect] = useState<any>(null);
   const [productList, setProductList] = useState<Product[]>([]);
+  const [typeAction, setTypeAction] = useState<1 | 2>(1);
   const [params, setParams] = useState<Params>({
     page: 0,
     size: 12,
@@ -70,40 +74,48 @@ const ChangeApartmentRequest = ({ orderDetail }: Props) => {
   }, []);
 
   useEffect(() => {
-    if (!orderDetail?.production?.project?.id) return;
-    let newFilter: any = {};
-    if (filter) {
-      newFilter = {
-        ...filter,
-        projectIdList: [orderDetail.production.project.id],
-      };
-    } else {
-      newFilter = {
-        projectIdList: [orderDetail.production.project.id],
-        projectId: orderDetail.production.project.id,
-        paymentStatus: 2,
-        priceFrom: orderDetail.production.totalVatPrice,
-        priceTo: "100000000000",
-      };
-    }
-
-    getListProduct(params, newFilter).then((res) => {
-      if (res.responseCode === "00") {
-        setProductList(res.responseData);
-        setTotal(Math.floor(res.totalElement / params.size) || 1);
-        setTotalElement(res.totalElement);
+    if(open === true && typeAction === 2) {
+      if (!orderDetail?.production?.project?.id) return;
+      let newFilter: any = {};
+      if (filter) {
+        newFilter = {
+          ...filter,
+          projectIdList: [orderDetail.production.project.id],
+          projectId: orderDetail.production.project.id,
+          paymentStatus: 2,
+          priceFrom: orderDetail.production.totalVatPrice,
+          priceTo: "100000000000",
+        };
+      } else {
+        newFilter = {
+          projectIdList: [orderDetail.production.project.id],
+          projectId: orderDetail.production.project.id,
+          paymentStatus: 2,
+          priceFrom: orderDetail.production.totalVatPrice,
+          priceTo: "100000000000",
+        };
       }
-    });
-  }, [params, filter, orderDetail]);
+
+      getListProduct(params, newFilter).then((res) => {
+        if (res.responseCode === "00") {
+          setProductList(res.responseData);
+          setTotal(Math.floor(res.totalElement / params.size) || 1);
+          setTotalElement(res.totalElement);
+        }
+      });
+    }
+  }, [params, filter, orderDetail, open, typeAction]);
   // F2B085F6-0D89-4517-97F9-1F67C74599E9
   const handleOpenModal = () => {
     if (!open) {
       setOpen(true);
+      setTypeAction(2);
     }
   };
 
   const handleCloseModal = () => {
     setOpen(false);
+    setFilter({ sortType: 0, isPayment: 1 });
   };
 
   const handleSelectItem = (item: any) => {
@@ -111,6 +123,7 @@ const ChangeApartmentRequest = ({ orderDetail }: Props) => {
   };
 
   const handleEnterProductCode = (value: string) => () => {
+    setTypeAction(1);
     setSearchTextLoading(true);
     setFilterName(value);
     getListProduct(params, {
