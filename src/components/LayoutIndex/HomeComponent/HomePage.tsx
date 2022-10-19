@@ -1,7 +1,13 @@
 import styled from "@emotion/styled";
 import { Box } from "@mui/system";
 import SelectInputComponent from "@components/CustomComponent/SelectInputComponent";
-import { Button, SelectChangeEvent, Stack, Typography, useMediaQuery } from "@mui/material";
+import {
+  Button,
+  SelectChangeEvent,
+  Stack,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import SliderComponent from "@components/CustomComponent/SliderComponent";
@@ -69,21 +75,21 @@ const CompareSwap = styled.div`
   gap: 100px;
   flex-direction: row;
   @media only screen and (max-width: 1110px) {
-	height: 484px;
+    height: 484px;
   }
 `;
 const BoxStyled = styled(Box)`
-padding: 40px;
-    display: flex;
-    gap: 30px;
-}
+  margin: 0px;
+  padding: 40px;
+  display: flex;
+  gap: 30px;
 `;
-const minDistance = 10;
-const minDistance2 = 1;
+const minDistance = 400;
+const minDistance2 = 10;
 
 const HomePage = () => {
   const router = useRouter();
-  const matches = useMediaQuery('(max-width:1110px)');
+  const matches = useMediaQuery("(max-width:1110px)");
   const [projectTypeName, setProjectTypeName] = useState<string[]>([]);
   const [categoryName, setCategoryName] = useState<string[]>([]);
   const [projectName, setProjectName] = useState<string[]>([]);
@@ -203,12 +209,34 @@ const HomePage = () => {
     if (!Array.isArray(newValue)) {
       return;
     }
-    setValueDientich([newValue[0], newValue[1]]);
-    setFilterSearch({
-      ...filterSearch,
-      areaFrom: newValue[0].toString(),
-      areaTo: newValue[1].toString(),
-    });
+    if (activeThumb === 0) {
+      setValueDientich([
+        Math.min(newValue[0], valueDienTich[1] - minDistance),
+        valueDienTich[1],
+      ]);
+      setFilterSearch({
+        ...filterSearch,
+        areaFrom: valueDienTich[0].toString(),
+        areaTo: valueDienTich[1].toString(),
+      });
+    } else {
+      setValueDientich([
+        valueDienTich[0],
+        Math.max(newValue[1], valueDienTich[0] + minDistance),
+      ]);
+      setFilterSearch({
+        ...filterSearch,
+        areaFrom: valueDienTich[0].toString(),
+        areaTo: valueDienTich[1].toString(),
+      });
+    }
+
+    // setValueDientich([newValue[0], newValue[1]]);
+    // setFilterSearch({
+    //   ...filterSearch,
+    //   areaFrom: newValue[0].toString(),
+    //   areaTo: newValue[1].toString(),
+    // });
   };
 
   const handleChange2 = (
@@ -219,13 +247,27 @@ const HomePage = () => {
     if (!Array.isArray(newValue)) {
       return;
     }
-
-    setValueKhoangGia([newValue[0], newValue[1]]);
-    setFilterSearch({
-      ...filterSearch,
-      priceFrom: newValue[0].toString(),
-      priceTo: newValue[1].toString(),
-    });
+    if (activeThumb === 0) {
+      setValueKhoangGia([
+        Math.min(newValue[0], valueKhoanGia[1] - minDistance2),
+        valueKhoanGia[1],
+      ]);
+      setFilterSearch({
+        ...filterSearch,
+        priceFrom: valueKhoanGia[0].toString(),
+        priceTo: valueKhoanGia[1].toString(),
+      });
+    } else {
+      setValueKhoangGia([
+        valueKhoanGia[0],
+        Math.max(newValue[1], valueKhoanGia[0] + minDistance2),
+      ]);
+      setFilterSearch({
+        ...filterSearch,
+        priceFrom: valueKhoanGia[0].toString(),
+        priceTo: valueKhoanGia[1].toString(),
+      });
+    }
   };
 
   const handleSearchCompare = () => {
@@ -284,7 +326,7 @@ const HomePage = () => {
               fontWeight: 500,
               fontSize: 28,
               color: "#ffffff",
-              margin: matches ? "45px 5px 0px 5px" : "45px 5px 18px 5px",
+              margin: matches ? "45px 5px 0px 5px" : "45px 5px 18px 8px",
             }}
           >
             SO SÁNH
@@ -308,7 +350,13 @@ const HomePage = () => {
                   placeholder="Chọn dự án"
                 />
               </BoxStyled>
-              <div style={{ display: "flex", gap: 50, margin: '20px 20px 20px 10px' }}>
+              <div
+                style={{
+                  display: "flex",
+                  gap: 50,
+                  margin: "40px 20px 20px 13px",
+                }}
+              >
                 <SliderComponent
                   label="Diện tích (m2)"
                   onChange={handleChange1}
@@ -337,7 +385,7 @@ const HomePage = () => {
                   fontSize: 16,
                   color: "#ffffff",
                   margin: matches ? "30px 50px 28px 5px" : "30px 5px 28px 5px",
-				  width: matches ? 300 : 'auto'
+                  width: matches ? 300 : "auto",
                 }}
               >
                 So sánh nhanh các sản phẩm theo tiêu chí lựa chọn của bạn giúp
@@ -351,6 +399,7 @@ const HomePage = () => {
                   marginTop: 10,
                   color: "#000000",
                   textTransform: "none",
+                  fontSize: 16,
                 }}
                 onClick={handleSearchCompare}
               >

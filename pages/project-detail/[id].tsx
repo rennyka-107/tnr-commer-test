@@ -18,10 +18,12 @@ import {
   setListLevel,
   setOpenModalSale,
   setProjectInformation,
+  setTarget,
 } from "../../store/projectMapSlice";
 import { getListTabsProject } from "../../store/projectSlice";
 import LoadingComponent from "@components/LoadingComponent";
 import styled from "@emotion/styled";
+import ZoomOutIcon from '@mui/icons-material/ZoomOut';
 
 const DynamicMap = dynamic(
   () => import("@components/LayoutProjectDetail/Map"),
@@ -92,8 +94,6 @@ const ProjectDetail = () => {
     dispatch(getListTabsProject(response.responseData));
   }
 
-  console.log(open, ProjectInformation.lstOffers,"!@3")
-
   useEffect(() => {
     if (isEmpty(Target) && !isEmpty(ListLevel)) {
       dispatch(setImgMap(ListLevel[0]["map"]));
@@ -141,9 +141,25 @@ const ProjectDetail = () => {
                       ? "90vw"
                       : "65vw",
                   height: "calc(100vh - 150px)",
+                  position: "relative",
                 }}
               >
                 <DynamicMap />
+                <Button
+                  sx={{
+                    position: "absolute",
+                    top: "20px",
+                    left: "20px",
+                    zIndex: 400,
+                    color: "white",
+                    p: "3px"
+                  }}
+                  disabled={isEmpty(Target)}
+                  onClick={() => dispatch(setTarget(null))}
+                  variant="contained"
+                >
+                  <ZoomOutIcon />
+                </Button>
               </Box>
               <RightListProduct />
             </Box>

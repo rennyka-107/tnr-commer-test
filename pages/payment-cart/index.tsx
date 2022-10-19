@@ -36,9 +36,9 @@ const PaymentLogin = () => {
   const scopePayment = (_scope) => {
     switch (_scope) {
       case "payment":
-        return <DynamicLayoutPayment setScopeRender={setScopeRender} />;
+        return <DynamicLayoutPayment scopeRender={scopeRender} setScopeRender={setScopeRender} />;
       case "info_custom":
-        return <DynamicLayoutInfoCustom setScopeRender={setScopeRender} />;
+        return <DynamicLayoutInfoCustom scopeRender={scopeRender} setScopeRender={setScopeRender} />;
       case "transaction_message":
         return <DynamicLayoutQRCode />;
     }

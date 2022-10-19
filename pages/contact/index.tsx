@@ -14,14 +14,19 @@ import PhoneOutlinedIcon from "@mui/icons-material/PhoneOutlined";
 import { CircularProgress, Grid, InputAdornment } from "@mui/material";
 import { Box } from "@mui/system";
 import useNotification from "hooks/useNotification";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { validateLine } from "utils/constants";
+import LocalStorage from "utils/LocalStorage";
 import Regexs from "utils/Regexs";
+import SessionStorage from "utils/SessionStorage";
 import * as yup from "yup";
+import { getUserInfo } from "../../store/profileSlice";
 import { RootState } from "../../store/store";
 import { createContactAPI } from "../api/contactApi";
+import { getUserInfoApi } from "../api/profileApi";
 
 const validationSchema = yup.object().shape({
   name: yup
@@ -65,14 +70,30 @@ interface FormData {
 }
 
 const Contact = () => {
-  const { control, handleSubmit, reset } = useForm<FormData>({
+  const detailUser = useSelector(
+    (state: RootState) => state?.profile?.userInfo
+  );
+  const { control, handleSubmit, reset, setValue } = useForm<FormData>({
     mode: "onSubmit",
     resolver: yupResolver(validationSchema),
     defaultValues: validationSchema.getDefault(),
   });
+  const router = useRouter();
   const notification = useNotification();
+  const dispatch = useDispatch();
   const generalInfo = useSelector((state: RootState) => state.generalInfo);
   const [loading, setLoading] = useState<boolean>(false);
+
+
+  useEffect(() => {
+    if (detailUser) {
+      setValue("name", detailUser.fullname);
+      setValue("email", detailUser.email);
+      setValue("phoneNumber", detailUser.phone);
+    } else {
+      reset({});
+    }
+  }, [detailUser, generalInfo, router]);
 
   const onSubmit = (data: FormData) => {
     setLoading(true);

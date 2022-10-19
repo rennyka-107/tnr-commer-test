@@ -14,6 +14,7 @@ import TableQuote from "./components/TableQuote";
 
 type Props = {
   setScopeRender: Dispatch<SetStateAction<string>>;
+  scopeRender?: string;
 };
 
 const StyledButton = styled(Button)`
@@ -39,7 +40,7 @@ const StyledTitle = styled(Typography)`
   text-align: center;
 `;
 
-const LayoutPayment = ({ setScopeRender }: Props) => {
+const LayoutPayment = ({ setScopeRender, scopeRender }: Props) => {
   const { cart } = useSelector((state: RootState) => state.carts);
   const router = useRouter();
   const dispatch = useDispatch();
@@ -70,7 +71,7 @@ const LayoutPayment = ({ setScopeRender }: Props) => {
       </Stack>
     </Container>
   ) : (
-    <Container title={"Thanh toán"}>
+    <Container title={"Giỏ hàng"}>
       <Grid container columnSpacing={"30px"}>
         <Grid
           item
@@ -84,6 +85,7 @@ const LayoutPayment = ({ setScopeRender }: Props) => {
         </Grid>
         <Grid item xs={5}>
           <TableQuote
+            scopeRender={scopeRender}
             width={445}
             urlPayment={"info_custom"}
             setScopeRender={setScopeRender}

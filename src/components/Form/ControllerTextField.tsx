@@ -11,6 +11,7 @@ interface Props<T> extends Omit<TextFieldProps, "name"> {
   labelColor?: string;
   variant?: "standard" | "filled" | "outlined";
   width?: number;
+  checkAutoComplete?: boolean;
 }
 
 const Container = styled.div``;
@@ -38,8 +39,10 @@ const ControllerTextField = <T extends FieldValues>(props: Props<T>) => {
     required,
     labelColor,
     width,
+	checkAutoComplete,
     ...rest
   } = props;
+  console.log(checkAutoComplete)
   return (
     <Container style={{ width: width ?? "100%" }}>
       {label && (

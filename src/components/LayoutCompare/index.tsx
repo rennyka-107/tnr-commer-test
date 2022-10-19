@@ -15,7 +15,7 @@ import {
   Title22Styled,
   Text18Styled,
 } from "@components/StyledLayout/styled";
-import { IconTimes } from "@components/Icons";
+import { IconDontHaveItem, IconHaveItem, IconTimes } from "@components/Icons";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import { searchLocationResponse } from "interface/searchIF";
@@ -23,8 +23,9 @@ import LocalStorage from "utils/LocalStorage";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../store/store";
 import { CompareValueFormat } from "utils/CompareValueFormat";
-import _ from "lodash";
+import _, { isEmpty } from "lodash";
 import useAddToCart from "hooks/useAddToCart";
+import { getComparePopUpItem } from "../../../store/productCompareSlice";
 
 type Props = {};
 
@@ -37,10 +38,10 @@ const ItemImportDynamic = dynamic(() => import("./components/ItemImport"), {
 
 const TitleMoneyStyled = styled(Title22Styled)({
   textAlign: "right",
-  marginRight: "35px",
   width: "100%",
   whiteSpace: "pre",
   color: "#1b3459",
+  fontWeight: 500
 });
 const BoxInputStyled = styled(Box)(
   {
@@ -59,7 +60,12 @@ const LayoutCompare = (props: Props) => {
   const { compareParams, compareItems } = useSelector(
     (state: RootState) => state.productCompareSlice
   );
+  const { comparePopUpItem } = useSelector(
+    (state: RootState) => state.productCompareSlice
+  );
+
   const addToCart = useAddToCart();
+  const dispatch = useDispatch();
   const [filterSearch, setFilterSearch] = useState({
     textSearch: "",
     provinceId: "",
@@ -79,27 +85,37 @@ const LayoutCompare = (props: Props) => {
     });
   };
   function currencyFormat(num) {
-
     if (!num) {
       return;
     }
     return Number(num)
       .toFixed(0)
-      .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+      .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
   }
 
   const renderDataChildren = ({ data }) => {
-
     return (
       <React.Fragment>
         {data.map((item, index) => (
           <ColStyled style={{ width: 293 }} key={index}>
             <BoxInputStyled width={293} paddingLeft={"14px"}>
-              <Text18Styled color={"#1b3459"} style={{ lineHeight: "31px" }}>
-                {item.key.trim()  === "totalPrice" ? (
+              <Text18Styled color={"#1b3459"} style={{ lineHeight: "31px" , textAlign: 'end'}}>
+                {item.key.trim() === "totalPrice" ? (
                   <>{currencyFormat(item.value)}đ</>
                 ) : (
-                  <>{CompareValueFormat(item.value, item.key)}</>
+                  <div key={item.key}>
+                    {item.key.trim() === "airConditioner" ? (
+                      <>{CompareValueFormat(item.value, item.key)}</>
+                    ) : (
+                      <>
+                      {Number(item.value) >= 1 ? (
+                          <IconHaveItem />
+                        ) : (
+                          <IconDontHaveItem />
+                        )}
+                      </>
+                    )}
+                  </div>
                 )}
               </Text18Styled>
             </BoxInputStyled>
@@ -166,7 +182,7 @@ const LayoutCompare = (props: Props) => {
                 .filter((item) => item.type === "Thông tin chung")
                 .map((item) => (
                   <BoxInputStyled key={item.id}>
-                    <TitleMoneyStyled>{item.name}</TitleMoneyStyled>
+                    <TitleMoneyStyled style={{textAlign: 'end', whiteSpace: 'normal', maxWidth:135, height: 'auto',fontSize: 18, marginLeft: 10 }}>{item.name}</TitleMoneyStyled>
                   </BoxInputStyled>
                 ))}
             </Box>
@@ -191,7 +207,7 @@ const LayoutCompare = (props: Props) => {
                   style={{ background: "#F3F3F3", marginLeft: 0 }}
                 >
                   <Box style={{ maxWidth: "35px" }}>
-                    <TitleMoneyStyled>Tiện ích</TitleMoneyStyled>
+                    <TitleMoneyStyled style={{fontSize: 18}}>Tiện ích</TitleMoneyStyled>
                   </Box>
                 </AccordionSummary>
 
@@ -208,7 +224,7 @@ const LayoutCompare = (props: Props) => {
                           }}
                         >
                           <BoxInputStyled>
-                            <TitleMoneyStyled>{item.name}</TitleMoneyStyled>
+                            <TitleMoneyStyled style={{textAlign: 'end', whiteSpace: 'normal', maxWidth:135, height: 'auto',fontSize: 18, marginLeft: 10 }}>{item.name}</TitleMoneyStyled>
                           </BoxInputStyled>
                         </ColStyled>
                         {renderDataChildren({
@@ -233,7 +249,7 @@ const LayoutCompare = (props: Props) => {
                   style={{ background: "#F3F3F3", marginLeft: 0 }}
                 >
                   <Box style={{ maxWidth: "35px" }}>
-                    <TitleMoneyStyled>Chi tiết</TitleMoneyStyled>
+                    <TitleMoneyStyled style={{fontSize: 18}}>Chi tiết</TitleMoneyStyled>
                   </Box>
                 </AccordionSummary>
                 <AccordionDetails>
@@ -249,7 +265,7 @@ const LayoutCompare = (props: Props) => {
                           }}
                         >
                           <BoxInputStyled>
-                            <TitleMoneyStyled>{item.name}</TitleMoneyStyled>
+                            <TitleMoneyStyled style={{textAlign: 'end', whiteSpace: 'normal', maxWidth:135, height: 'auto',fontSize: 18 }}>{item.name}</TitleMoneyStyled>
                           </BoxInputStyled>
                         </ColStyled>
                         {renderDataChildren({

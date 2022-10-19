@@ -45,6 +45,7 @@ export default function SliderProductHotComponent({ hoverCheck }) {
   );
 
   const matches = useMediaQuery("(max-width:1110px)");
+  
   const [dataProjectType, setDataProjectType] = useState([]);
   const [dataProject, setDataProject] = useState([]);
   const [openConfirmDialog, setOpenConfirmDialog] = useState<boolean>(false);
@@ -173,7 +174,7 @@ export default function SliderProductHotComponent({ hoverCheck }) {
   };
   return (
     <WrapSlide>
-      <LeftIconStyled style={{marginRight: 10}}/>
+      <LeftIconStyled style={{ cursor: 'pointer',marginRight: 20}}/>
       {/* <div onMouseOver={handleMouseEnter} onMouseOut={handleMouseLeave}> */}
       <Swiper
         onInit={onInit}

@@ -25,7 +25,8 @@ interface ListScheduleType {
   ScheduleName?: string;
 }
 export interface PTGResponse {
-  DepositMoney?: string;
+  DepositMoney?: number;
+  DepositMoneyMin?: number;
   PromotionMoney?: string;
   ApartmentPrice?: string;
   LandPrice?: string;
@@ -45,6 +46,8 @@ export interface PTGResponse {
   PreTotalMoney?: number;
   priceId?: number | null;
   scheduleId?: string | null;
+  TimeOfPayment?: number | null;
+  TimeOfPaymentUnit?: string | null;
 }
 
 //interface getListProducts
@@ -112,6 +115,7 @@ export interface ResponseSearchById {
   levelDetailParentName?: string;
   levelDetailGrandfatherName?: string;
   lot_code?: string;
+  visitContent?: string;
   build?: boolean;
   gym: number;
   projectType?: {
@@ -172,6 +176,7 @@ export interface ResponseSearchById {
     lsName: string;
     video?: string;
     hotline?: string;
+	visitContent?: string;
   };
   projectTypeId?: string;
   homeNum: string;
@@ -228,6 +233,7 @@ export interface ResponseSearchById {
   projectTypeCode?: string;
   minFloor?: number;
   maxFloor?: number;
+  buildType?: string;
 }
 
 ///api/product/information/find-top-by-outstanding

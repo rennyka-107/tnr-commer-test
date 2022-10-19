@@ -323,7 +323,7 @@ const DetailTransaction = ({ setActiveTab }: Props) => {
     }
     return Number(num)
       .toFixed(0)
-      .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+      .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
   }
 
   function checkVerifyCustomer({ verify }: any) {
@@ -445,6 +445,7 @@ const DetailTransaction = ({ setActiveTab }: Props) => {
             <div style={{ display: "flex", flexDirection: "row", gap: 50 }}>
               <ImageWithHideOnError
                 className="logo"
+				
                 src={
                   !isEmpty(data.productionImage)
                     ? data.productionImage

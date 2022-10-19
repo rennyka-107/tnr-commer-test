@@ -78,7 +78,7 @@ const StyledPopper = styled(Popper)(({ theme }) => ({
   }`,
   borderRadius: 6,
   width: 300,
-  zIndex: theme.zIndex.modal,
+  zIndex: 20,
   fontSize: 13,
   color: theme.palette.mode === "light" ? "#24292e" : "#c9d1d9",
   backgroundColor: theme.palette.mode === "light" ? "#fff" : "#1c2128",
@@ -119,10 +119,50 @@ const Button = styled(ButtonBase)(({ theme }) => ({
     width: "100%",
   },
   "& svg": {
-    width: 16,
-    height: 16,
+    width: 8,
+    height: 8,
   },
 }));
+
+const BpIcon = styled("span")(({ theme }) => ({
+  borderRadius: "4px",
+  width: 24,
+  height: 24,
+  padding: 2,
+  border: "1px solid #0063F7",
+  backgroundColor: theme.palette.mode === "dark" ? "#f5f8fa" : "#f5f8fa",
+  ".Mui-focusVisible &": {
+    outline: "2px auto rgba(19,124,189,.6)",
+    outlineOffset: 2,
+	
+  },
+  "input:hover ~ &": {
+    backgroundColor: theme.palette.mode === "dark" ? "#f5f8fa" : "#ebf1f5",
+  },
+  "input:disabled ~ &": {
+    boxShadow: "none",
+    background:
+      theme.palette.mode === "dark"
+        ? "rgba(57,75,89,.5)"
+        : "rgba(206,217,224,.5)",
+  },
+}));
+const BpCheckedIcon = styled(BpIcon)({
+  backgroundColor: "#0063F7",
+
+  backgroundImage:
+    "linear-gradient(180deg,hsla(0,0%,100%,.1),hsla(0,0%,100%,0))",
+  "&:before": {
+    display: "block",
+    width: 18,
+    height: 18,
+    backgroundImage: `url("images/Check-1.png")`,
+    content: '""',
+  },
+  "input:hover ~ &": {
+    backgroundColor: "#0063F7",
+  },
+});
 
 const OutlinedInputStyled = styled(OutlinedInput)`
   background-color: white;
@@ -173,6 +213,7 @@ export default function PopperProjectType({
   onChange,
   placeholder,
   checkSelectProvince,
+  style,
 }: TypeProps) {
   //   console.log(data);
   //   const inputStyles = useInputStyles();
@@ -204,7 +245,7 @@ export default function PopperProjectType({
         arr.map((item, index) => {
           const findItem = data.filter((it) => it.id === item.id);
           newArray.push(findItem);
-
+		  console.log(findItem)
         });
         if (!newArray) {
           setValue([]);
@@ -212,8 +253,9 @@ export default function PopperProjectType({
           setValue(newArray[0]);
         }
       } else {
-		setValue([]);
+        setValue([]);
       }
+	  console.log(newArray)
     }
   }, [router, data]);
 
@@ -242,8 +284,8 @@ export default function PopperProjectType({
 
   return (
     <React.Fragment>
-      <Box sx={{ width: 'auto', fontSize: 13 }}>
-        <FormControl sx={{ m: 1, width: 150, mt: 3 }}>
+      <Box sx={{ width: "auto", fontSize: 13 }}>
+        <FormControl sx={{ m: 1, mt: 3 }} style={style}>
           <TitleStyled>Loại BĐS</TitleStyled>
           <OutlinedInputStyled
             aria-describedby={id}
@@ -299,11 +341,13 @@ export default function PopperProjectType({
                       "&.Mui-checked": {
                         color: "#0063F7",
                       },
+					  padding: 0,
                       width: 24,
                       height: 24,
-                      marginRight: 2,
                       marginLeft: 2,
                     }}
+					icon={<BpIcon />}
+                    checkedIcon={<BpCheckedIcon />}
                   />
                   <Box
                     component="span"
@@ -327,7 +371,16 @@ export default function PopperProjectType({
                       },
                     }}
                   >
-                    {option?.name}
+                    <span
+                      style={{
+                        color: " #1B3459",
+                        fontWeight: 400,
+                        fontSize: 14,
+                      }}
+                    >
+                      {" "}
+                      {option?.name}
+                    </span>
                     <br />
                   </Box>
                 </li>

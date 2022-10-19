@@ -19,6 +19,8 @@ import { setNotification } from "../../store/notificationSlice";
 import { useRouter } from "next/router";
 import { removeAllComparePopUpItem } from "../../store/productCompareSlice";
 import { setData } from "../../store/paymentSlice";
+import { getUserInfoApi } from "../../pages/api/profileApi";
+import { getUserInfo } from "../../store/profileSlice";
 
 // import jwtDecode from 'jwt-decode';
 
@@ -177,6 +179,9 @@ const AuthContext = ({ children }) => {
       deviceToken: deviceToken as string,
       action: 0,
     });
+	const responseUser = await getUserInfoApi();
+	dispatch(getUserInfo(responseUser.responseData));
+	router.push('/authen?prePath=%2Fprofile&tabIndex=login')
   };
 
   useEffect(() => {

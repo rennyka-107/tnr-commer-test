@@ -76,6 +76,8 @@ const SendRequest = () => {
 
   const [loading, setLoading] = useState<boolean>(false);
 
+  console.log("orderDetail",orderDetail)
+
   const renderTitle = () => {
     switch (request) {
       case "change-apartment":
@@ -159,10 +161,11 @@ const SendRequest = () => {
         {!loading ? (
           <ContainerRequestTranfer title={renderBreadcrum()}>
             <Box sx={{ display: "flex", width: "100%", columnGap: "30px" }}>
-              <Box sx={{ width: "50%" }}>
+              <Box sx={{ width: "50%", marginRight: '100px' }}>
                 <Subtitle>{renderTitle()}</Subtitle>
                 <ProductInformation orderDetail={orderDetail} />
                 <DepositInformation
+			
                   orderDetail={orderDetail}
                   title={renderDepositInfomationTitle()}
                 />

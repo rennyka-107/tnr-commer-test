@@ -19,6 +19,8 @@ const initialState = {
   listProductResponse: [],
   totalElement: 0,
   productItem: {
+    DepositMoney: 0,
+    DepositMoneyMin: 0,
     ListPolicy: [],
     ListPromotion: [],
     ListSchedule: [],
@@ -36,7 +38,9 @@ const initialState = {
     MaintenanceFee: 0,
     PreTotalMoney: 0,
     priceId: null,
-    scheduleId: ""
+    scheduleId: "",
+	TimeOfPayment: 0,
+	TimeOfPaymentUnit: ""
   },
   productByID: {
     id: "adf68c39-c5b3-4a80-b806-a2b8a840d4c4",

@@ -52,13 +52,13 @@ const TextStyled = styled(InputBase)`
   font-weight: 400;
   font-size: 14px;
   line-height: 16px;
-  width: 200px;
+  width: 250px;
   background: #ffffff;
   border: 1px solid #c7c9d9;
   border-radius: 8px;
   height: 40px;
   color: #8190a7;
-  padding: 22px;
+  padding: 19px;
 `;
 const TextFilterStyled = styled.span`
   font-family: "Roboto";
@@ -83,12 +83,12 @@ const LinkStyled = styled.a`
   }
 `;
 const useStyles = makeStyles((theme) => ({
-//   root: {
-//     "& .MuiInputBase-root": {
-//       borderRadius: "8px",
-//       height: 40,
-//     },
-//   },
+  //   root: {
+  //     "& .MuiInputBase-root": {
+  //       borderRadius: "8px",
+  //       height: 40,
+  //     },
+  //   },
 }));
 
 const LabelStyled = styled(Typography)`
@@ -104,6 +104,29 @@ const LabelStyled = styled(Typography)`
   /* Shades/Dark 3 */
 
   color: #8190a7;
+`;
+
+const ContainerFilter = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  gap: 60px;
+  @media screen and (max-width: 1440px) {
+    flex-direction: column;
+    gap: 0px;
+    justify-content: center;
+    align-items: center;
+  }
+`;
+const ContainerLoc = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  align-items: center;
+  @media screen and (max-width: 1440px) {
+    width: 400px;
+    margin-left: 160px;
+  }
 `;
 
 const Filter = (props: PropsI) => {
@@ -128,8 +151,14 @@ const Filter = (props: PropsI) => {
   const [listDataLSProjectType, setListDataLSProjectType] = useState([]);
 
   useEffect(() => {
-    localStorage.setItem("listParamsLSProjectType", JSON.stringify([type]));
-    setParamsProjectType([type]);
+    if (!isEmpty(type)) {
+      localStorage.setItem("listParamsLSProjectType", JSON.stringify([type]));
+      setParamsProjectType([type]);
+    } else if (type !== undefined) {
+      localStorage.setItem("listParamsLSProjectType", JSON.stringify([]));
+      setParamsProjectType([]);
+    } else {
+    }
   }, [router]);
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -261,8 +290,14 @@ const Filter = (props: PropsI) => {
       console.log(err);
     }
   };
+
   const handleClickSearch = () => {
-    router.push(`/projectTNR?type=&textSearch=${textSearchValue}`);
+    router.push(
+      `/projectTNR?type=${
+        !isEmpty(listParamsProjectType[0]) ? listParamsProjectType[0] : ""
+      }&textSearch=${textSearchValue}`
+    );
+    onSubmit({ ...body, provinceId: "", textSearch: textSearchValue });
   };
   const handleChange = (event: any) => {
     const {
@@ -322,23 +357,14 @@ const Filter = (props: PropsI) => {
 
     router.push(
       `/projectTNR?type=${
-        listParamsProjectType && listParamsProjectType[0] !== null
-          ? listParamsProjectType[0]
-          : ""
+        !isEmpty(listParamsProjectType[0]) ? listParamsProjectType[0] : ""
       }`
     );
     onSubmit({ ...body, provinceId: "", textSearch: textSearchValue });
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "end",
-        gap: 60,
-      }}
-    >
+    <ContainerFilter>
       <div
         style={{
           display: "flex",
@@ -348,7 +374,7 @@ const Filter = (props: PropsI) => {
           gap: 60,
         }}
       >
-        <FormControl sx={{ m: 1, mt: 3 }}>
+        <FormControl sx={{ m: 1, mt: 3, width: 250 }}>
           <LabelStyled>Tìm kiếm</LabelStyled>
           <TextStyled
             // className={classes.root}
@@ -399,7 +425,7 @@ const Filter = (props: PropsI) => {
           onChange={handleChangeLocation}
           listDataLSProvince={listDataLSProvince}
           placeholder="Chọn vị trí"
-          style={{ width: 150, height: 40 }}
+          style={{ width: 250, height: 60 }}
         />
         <PopperProjectType
           label="Loại BĐS"
@@ -408,17 +434,10 @@ const Filter = (props: PropsI) => {
           listProjectType={projectName}
           onChange={handleSelectProject}
           placeholder="Loại BĐS"
-          style={{ width: 150, height: 40 }}
+          style={{ width: 250, height: 60 }}
         />
       </div>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          gap: 20,
-          alignItems: "center",
-        }}
-      >
+      <ContainerLoc>
         <Button
           style={{
             background: "#1B3459",
@@ -441,8 +460,8 @@ const Filter = (props: PropsI) => {
           </span>
         </Button>
         {fetchComponent()}
-      </div>
-    </div>
+      </ContainerLoc>
+    </ContainerFilter>
   );
 };
 

@@ -1,6 +1,7 @@
 import { IconHeartProduct, IconMuaOnline } from "@components/Icons";
 import { BoxTextOver } from "@components/StyledComponents";
 import styled from "@emotion/styled";
+import { useMediaQuery } from "@mui/material";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -30,11 +31,12 @@ const CardStyled = styled(Card)`
   width: 350px;
   /* Line/stroke */
   position: relative;
-  border: 1px solid #c7c9d9;
-  border-radius: 20px;
+  border: 0.5px solid #d8d8d8;
+  border-radius: 20px 20px 20px 20px;
+  box-shadow: none !important;
 `;
 const CardContentStyled = styled(CardContent)`
-  padding: 17px 25px 25px 25px;
+  padding: 10px 0px 0px 20px;
 `;
 const TextTitleStyled = styled.a`
   cursor: pointer;
@@ -126,6 +128,7 @@ export default function ItemProjectCard({
   el,
 }: ProjectI) {
   const router = useRouter();
+  const matches = useMediaQuery("(max-width:1440px)");
   // function currencyFormat(num) {
   //     if (!num) {
   //         return;
@@ -155,34 +158,39 @@ export default function ItemProjectCard({
           right: 0,
           margin: 20,zIndex: 10
         }}
-      />
-      <div
-        style={{
-          background: "#FEC83C",
-          width: "auto",
-          height: 30,
-          position: "absolute",
-          marginTop: 160,
-          right: 0,
-          padding: 4,
-          textAlign: "center",
-		  zIndex: 10
-        }}
-      >
-        <span
-          style={{
-            fontFamily: "roboto",
-            fontStyle: "normal",
-            fontWeight: 400,
-            fontSize: 14,
-            lineHeight: "16px",
-            color: "#1B3459",
-          }}
-        >
-          {ticketCard}
-        </span>
-      </div> */}
-      {/* <CardMedia
+      /> */}
+      <div style={{ position: "relative", maxHeight: matches ? 189 : 190 }}>
+        {ticketCard ? (
+          <div
+            style={{
+              background: "#FEC83C",
+              width: "auto",
+              height: "auto",
+              position: "absolute",
+              bottom: 0,
+              right: 0,
+              padding: 3,
+              textAlign: "center",
+              zIndex: 10,
+            }}
+          >
+            <span
+              style={{
+                fontFamily: "roboto",
+                fontStyle: "normal",
+                fontWeight: 400,
+                fontSize: 14,
+                lineHeight: "16px",
+                color: "#48576D",
+              }}
+            >
+              {ticketCard}
+            </span>
+          </div>
+        ) : (
+          <></>
+        )}
+        {/* <CardMedia
         component="img"
         height="190"
         alt="green iguana"
@@ -190,18 +198,20 @@ export default function ItemProjectCard({
           borderRadius: "20px 20px 0px 0px",
         }}
       /> */}
-      <ImageWithHideOnError
-        className="logo"
-        src={src ? src : Product3}
-        fallbackSrc={Product3}
-        height={190}
-        width={350}
-        title={"Logo "}
-        alt={"Logo "}
-        priority
-        unoptimized={true}
-        objectFit="cover"
-      />
+        <ImageWithHideOnError
+          className="logo"
+          src={src ? src : Product3}
+          fallbackSrc={Product3}
+          height={190}
+          width={350}
+          title={"Logo "}
+          alt={"Logo "}
+          priority
+		  style={""}
+          unoptimized={true}
+          objectFit="cover"
+        />
+      </div>
       {/* <Image
         src="/static-data/5c979bae-249b-4b0a-880a-9729cb757a50/eccda50b-6c1b-42f4-af84-c6a753a185bd/Project/f6caa857-2d8f-421f-bff9-dc120640e745/anh-dep-thien-nhien-3.jpg"
         placeholder="blur"
@@ -210,7 +220,8 @@ export default function ItemProjectCard({
 		height={190}
 		layout='fixed'
       /> */}
-      <CardContentStyled>
+      <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'space-between',height: 290}}>
+	  <CardContentStyled>
         <div style={{ marginBottom: 7 }}>
           <div onClick={handleChooseSearch}>
             <TextTitleStyled style={{ marginBottom: 10 }}>
@@ -235,6 +246,7 @@ export default function ItemProjectCard({
           <IconMuaOnline />
         </ButtonStyled>
       </CardActions>
+	  </div>
     </CardStyled>
   );
 }

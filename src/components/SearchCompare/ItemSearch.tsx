@@ -20,14 +20,19 @@ interface searchProps {
   data?: searchLocationResponse[];
 }
 const ContainerProduct = styled.div`
-  display: flex;
-  justify-content: center;
+@media screen and (max-width: 1440px) {
+	display: flex;
+	justify-content: center;
+}
 `;
 const ProductWrap = styled.div`
   display: grid;
   gap: 31px;
   grid-template-columns: repeat(4, 1fr);
   position: relative;
+  @media screen and (max-width: 1440px) {
+	grid-template-columns: repeat(3, 1fr);
+  }
 `;
 const ItemSearch = ({ data }: searchProps) => {
   const dispatch = useDispatch();
@@ -68,7 +73,7 @@ const ItemSearch = ({ data }: searchProps) => {
   };
 
   return (
-    <>
+    <ContainerProduct>
       <ProductWrap>
         {data?.map((product, index) => (
           <ItemCompareSearch
@@ -95,7 +100,7 @@ const ItemSearch = ({ data }: searchProps) => {
             ticketCard={product.category}
             onCompare={onCompare(product)}
             isCompare={
-              comparePopUpItem.filter(
+              comparePopUpItem?.filter(
                 (item) => item.productId === product.productId
               ).length > 0
             }
@@ -103,7 +108,7 @@ const ItemSearch = ({ data }: searchProps) => {
         ))}
         <ComparePopUp />
       </ProductWrap>
-    </>
+    </ContainerProduct>
   );
 };
 export default ItemSearch;

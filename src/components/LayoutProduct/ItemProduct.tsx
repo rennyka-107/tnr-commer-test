@@ -36,7 +36,6 @@ const ItemProduct = ({ data }: ProductsProps) => {
     query: { projectId },
   } = useRouter();
 
-
   
 
   return (

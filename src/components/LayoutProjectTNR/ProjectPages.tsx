@@ -15,9 +15,10 @@ import isEmpty from "lodash.isempty";
 import LoadingComponent from "@components/LoadingComponent";
 import ContainerProjectTypePage from "@components/Container/ContainerProjectTypePage";
 import NoProductComponent from "@components/CustomComponent/NoProductComponent";
+import NoProjectComponent from "@components/CustomComponent/NoProductComponent/NoProjectComponent";
 export interface ProjectInforI {
   id: string;
-
+  category: string;
   name: string;
   location: string;
   constructArea: number | null;
@@ -87,7 +88,11 @@ const ProjectPages = () => {
   );
 
   const onSubmit = (values: BodyListProjectI) => {
-    changeBody(values);
+    changeBody({
+      projectTypeId: values.projectTypeId !== "undefined" ? values.projectTypeId : [],
+      provinceId: values.provinceId,
+      textSearch: values.textSearch,
+    });
   };
   useEffect(() => {
     const items = listMenuBarProjectType.find(
@@ -125,11 +130,11 @@ const ProjectPages = () => {
                   <ContainerProduct>
                     <DynamicProductCard
                       id={el.id}
-					  el={el}
+                      el={el}
                       src={el.avatar}
                       title={el?.name}
                       subTitle={el?.location}
-                      ticketCard={el?.name}
+                      ticketCard={el?.category}
                       description={el?.description}
                     />
                   </ContainerProduct>
@@ -171,7 +176,7 @@ const ProjectPages = () => {
               <NumberTotalStyled>0</NumberTotalStyled>
               <TextTotalSeach>Sản phẩm phù hợp kết quả tìm kiếm</TextTotalSeach>
             </div>
-            <NoProductComponent />
+            <NoProjectComponent />
           </>
         )}
       </ContainerProjectTypePage>

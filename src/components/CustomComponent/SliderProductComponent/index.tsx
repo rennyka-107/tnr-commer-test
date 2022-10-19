@@ -35,6 +35,7 @@ const renderItems=useMemo(()=>{
             src={el??DefaultImage}
             fallbackSrc={DefaultImage}
             width={703}
+			style={""}
             height={381}
             priority
             layout="fill"

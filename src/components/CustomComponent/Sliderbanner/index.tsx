@@ -82,6 +82,7 @@ const Sliderbanner = ({ data }: { data?: any[] }) => {
           <ImageWithHideOnError
             className="logo"
             src={el.image ?? DefaultImage}
+			style={""}
             fallbackSrc={DefaultImage}
             width={1500}
             height={381}

@@ -275,7 +275,7 @@ export default function ProductCardSearch({
     }
     return Number(num)
       .toFixed(0)
-      .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+      .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
   }
 
   return (
@@ -343,6 +343,7 @@ export default function ProductCardSearch({
       <ImageWithHideOnError
         className="logo"
         src={src ? src : Product3}
+		style={""}
         fallbackSrc={Product3}
         height={190}
         width={350}

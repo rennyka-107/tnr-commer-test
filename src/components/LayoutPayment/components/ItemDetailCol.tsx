@@ -78,12 +78,6 @@ const ItemDetailCol = ({ item }: Props) => {
                 <SubRightText>{item?.levelDetailParentName}</SubRightText>
               </div>
             )}
-            {/* <Text14Styled style={{ marginRight: 37 }}>
-            {(!isEmpty(item) ? item.lot_code : cart.lot_code) ?? "N/A"}
-          </Text14Styled> */}
-            {/* <Text14Styled>
-            {(!isEmpty(item) ? item.code : cart.code) ?? "N/A"}
-          </Text14Styled> */}
           </RowStyledAgain>
         ) : (
           <RowStyledAgain jContent={"start"}>
@@ -104,15 +98,9 @@ const ItemDetailCol = ({ item }: Props) => {
                   gap: 37,
                 }}
               >
-                <SubRightText>{cart?.levelDetailParentName}</SubRightText>
+                <SubRightText>{cart?.levelDetailName}</SubRightText>
               </div>
             )}
-            {/* <Text14Styled style={{ marginRight: 37 }}>
-            {(!isEmpty(item) ? item.lot_code : cart.lot_code) ?? "N/A"}
-          </Text14Styled> */}
-            {/* <Text14Styled>
-            {(!isEmpty(item) ? item.code : cart.code) ?? "N/A"}
-          </Text14Styled> */}
           </RowStyledAgain>
         )}
 

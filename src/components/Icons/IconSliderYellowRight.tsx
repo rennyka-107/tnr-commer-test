@@ -10,7 +10,7 @@ const IconSliderYellowRight = ({ style, className }: { style?: React.CSSProperti
         className={className}
         style={style}
       >
-        <g filter="url(#filter0_d_516_8114)">
+        <g>
           <path
             d="M10.5 33C10.5 19.469 21.469 8.5 35 8.5C48.531 8.5 59.5 19.469 59.5 33C59.5 46.531 48.531 57.5 35 57.5C21.469 57.5 10.5 46.531 10.5 33Z"
             fill="white"

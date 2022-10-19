@@ -9,12 +9,15 @@ export const ContainerNavTop = styled.div`
 
 export const ResponsiveLayout = styled.div`
 	width: 100%;
-	padding: 0 20px;
+	padding: 0 15px;
 	background: #ffffff;
 	margin: 0 auto;
 	max-width: 1600px;
 	@media screen and (max-width: 1600px) {
 		max-width: 1280px;
+	}
+	@media screen and (max-width: 1440px) {
+		max-width: 1140px;
 	}
 
 	@media screen and (max-width: 1280px) {

@@ -62,7 +62,7 @@ const ListItem = withStyles({
     "&$selected:hover": {
       backgroundColor: "transparent",
       color: "rgb(27, 52, 89)",
-      fontWeight: 500,
+	  fontWeight: 500,
       fontSize: 18,
       lineHeight: 21.09,
       "& .MuiListItemIcon-root": {
@@ -75,16 +75,17 @@ const ListItem = withStyles({
     },
     "&:hover": {
       backgroundColor: "transparent",
-      color: "rgb(27, 52, 89)",
+      color: "#1B3459",
       fontWeight: 500,
       fontSize: 18,
       lineHeight: 21.09,
       "& .MuiListItemIcon-root": {
-        color: "rgb(27, 52, 89)",
+        color: "#1B3459",
       },
       "& .MuiTypography-root": {
-        fontWeight: 500,
-        fontSize: 18,
+        fontWeight: 400,
+
+		color: "#1B3459",
       },
     },
   },

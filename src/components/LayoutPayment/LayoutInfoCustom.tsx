@@ -104,6 +104,7 @@ const QontoConnector = styled(StepConnector)(({ theme }) => ({
 
 type Props = {
   setScopeRender: Dispatch<SetStateAction<string>>;
+  scopeRender: string;
 };
 
 const BoxInfoUserStyled = styled(Box)({
@@ -191,7 +192,7 @@ const validationSchema = yup.object().shape({
     .default(""),
 });
 
-const LayoutInfoCustom = ({ setScopeRender }: Props) => {
+const LayoutInfoCustom = ({ setScopeRender, scopeRender }: Props) => {
   const { control, handleSubmit, watch, reset, trigger, setError, setValue } =
     useForm<InformationBuyer>({
       mode: "onChange",
@@ -274,11 +275,11 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
               paymentIdentityInfos: [
                 {
                   fullname,
-                  dob,
+                  dob: dob ?? "",
                   phoneNumber,
                   email,
-                  idNumber,
-                  issueDate,
+                  idNumber: idNumber ?? "",
+                  issueDate: issueDate ?? "",
                   issuePlace,
                   permanentAddress,
                   contactAddress,
@@ -489,11 +490,13 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
       vat,
       totalVatPrice,
       maintainPrice,
-      minEarnestMoney,
-      regulationOrderPrice,
       totalPrice,
       id: productId,
     } = cart;
+    const {
+      DepositMoney: regulationOrderPrice,
+      DepositMoneyMin: minEarnestMoney,
+    } = productItem;
     const {
       fullname,
       dob,
@@ -586,6 +589,13 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
         : billing === 1
         ? minEarnestMoney
         : regulationOrderPrice,
+      isDepositMin: !isEmpty(transactionCode)
+        ? billing === 1
+          ? 0
+          : 1
+        : billing === 1
+        ? 0
+        : 1,
       totalDeposite: !isEmpty(transactionCode)
         ? billing === 1
           ? data.quotationRealt.minEarnestMoney
@@ -791,6 +801,8 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                 !isEmpty(res.responseData?.msbRedirectLink) &&
                 paymentFlag !== 0
               ) {
+                LocalStorage.remove('cart');
+                addToCart();
                 window.location.href = res.responseData?.msbRedirectLink;
                 return;
               }
@@ -1446,6 +1458,7 @@ const LayoutInfoCustom = ({ setScopeRender }: Props) => {
                   !isEmpty(data.quotationRealt) ? data.quotationRealt : null
                 }
                 setScopeRender={setScopeRender}
+                scopeRender={scopeRender}
               />
             </Box>
             <Box width={350}>

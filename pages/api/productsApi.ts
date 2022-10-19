@@ -76,7 +76,7 @@ export const getProductPtgApi = async (params: any) => {
 export const downloadPhieuTinhGiaAPI = async (data: any) => {
   const body = JSON.stringify(data);
   return HttpClient.post<any, CommonResponse>(
-    `/api/v1/landsoft/ptg/download`,
+    `/api/v1/landsoft/sync/ptg/download`,
     body,
     {
       withToken: false,

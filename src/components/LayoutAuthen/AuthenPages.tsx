@@ -26,9 +26,16 @@ const DynamicForgetPassword = dynamic(() =>
 );
 
 const ContainerRegister = styled.div`
-  background-image: url("/images/bg_register.png");
+  background-image: url("/images/bg_register.png"),
+    linear-gradient(
+      180deg,
+      rgba(2, 23, 98, 0) 0%,
+      rgba(3, 10, 77, 0.47) 47.92%,
+      rgba(0, 4, 10, 0.67) 98.96%
+    );
   width: 100%;
-  min-height: 898px;
+  //   min-height: 898px;
+  height: 1100px;
   margin-top: 127px;
   align-items: flex-start;
   background-position: center;
@@ -44,13 +51,14 @@ const ContainerRegister = styled.div`
 
 const ItemLeft = styled.div`
   display: flex;
-  width: 50%;
+  width: 500px;
   flex: 1;
   justify-content: center;
   @media (max-width: 900px) {
     width: 100%;
   }
-  margin: auto;
+  margin-top: 150px;
+  margin-left: 50px;
 `;
 
 const SpanTextIntro = styled.p`
@@ -58,7 +66,7 @@ const SpanTextIntro = styled.p`
   font-size: 42px;
   line-height: 49px;
   color: #fff;
-  width: 80%;
+  width: 70%;
   margin: auto;
 `;
 
@@ -67,9 +75,10 @@ const SpanTextSmall = styled.p`
   font-size: 28px;
   line-height: 32px;
   color: #fff;
-  width: 80%;
+  width: 100%;
   margin: auto;
   padding-top: 12px;
+  margin-left: 100px;
 `;
 
 const ItemRight = styled.div`
@@ -89,7 +98,13 @@ const ContainForm = styled.div`
   margin-bottom: 88px;
   padding: 38px 85px;
   width: 70%;
+  border-radius: 10px;
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.12);
+
+  @media (max-width: 1440px) {
+    width: 551px;
+    padding: 38px 77px;
+  }
 
   @media (max-width: 1024px) {
     padding: 20px;
@@ -179,7 +194,8 @@ const AuthenPages = () => {
                     background: "#FEC83C",
                     maxWidth: "102px",
                     height: "3px",
-                    marginLeft:"16px"
+                    marginLeft: tab == "register" ? 0 : "20px",
+
                   },
                 }}
                 scrollButtons
@@ -189,8 +205,10 @@ const AuthenPages = () => {
                   value="register"
                   label="Đăng ký tài khoản"
                   style={{
-                    // fontWeight: '700',
-                    fontSize: 20,
+                    fontWeight: tab == "register" ? 700 : 400,
+                    textTransform: "none",
+                    fontSize: 26,
+					padding: 0,
                     color: tab == "register" ? "#48576D" : "#8190A7",
                   }}
                 />
@@ -198,8 +216,10 @@ const AuthenPages = () => {
                   value="login"
                   label="Đăng nhập"
                   style={{
-                    // fontWeight: '700',
-                    fontSize: 20,
+                    fontWeight: tab == "login" ? 700 : 400,
+                    textTransform: "none",
+                    fontSize: 26,
+					
                     color: tab == "login" ? "#48576D" : "#8190A7",
                   }}
                 />
@@ -222,7 +242,7 @@ const AuthenPages = () => {
           <SpanTextIntro>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit.
           </SpanTextIntro>
-          <SpanTextSmall>Ornare euismod egestas tempor netus..</SpanTextSmall>
+          <SpanTextSmall>Ornare euismod egestas tempor netus.</SpanTextSmall>
         </div>
       </ItemLeft>
       <ItemRight>

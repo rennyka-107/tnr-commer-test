@@ -1,10 +1,11 @@
-import styled from '@emotion/styled';
-import type { TextFieldProps } from '@mui/material/TextField';
-import TextField from '@mui/material/TextField';
-import type { Control, FieldPath, FieldValues } from 'react-hook-form';
-import { Controller } from 'react-hook-form';
+import styled from "@emotion/styled";
+import type { TextFieldProps } from "@mui/material/TextField";
+import TextField from "@mui/material/TextField";
+import type { Control, FieldPath, FieldValues } from "react-hook-form";
+import { Controller } from "react-hook-form";
+import { InputProps } from "utils/constants";
 
-interface Props<T> extends Omit<TextFieldProps, 'name'> {
+interface Props<T> extends Omit<TextFieldProps, "name"> {
   control: Control<T>;
   name: FieldPath<T>;
   label?: string;
@@ -16,7 +17,7 @@ interface Props<T> extends Omit<TextFieldProps, 'name'> {
 const Container = styled.div``;
 const LabelSpan = styled.div<{ color: string }>`
   margin-bottom: 4px;
-  color:  #8190A7;
+  color: #8190a7;
   font-family: Roboto;
   font-style: normal;
   font-weight: 400;
@@ -27,38 +28,60 @@ const RequiredSpan = styled.span`
   color: red;
 `;
 const StyledTextField = styled(TextField)`
-.MuiInputBase-input{
-	padding: 10px !important;
-}
-`
+  .MuiInputBase-input {
+    padding: 10px !important;
+
+    border-radius: 8px;
+  }
+  .MuiOutlinedInput-notchedOutline{
+	border: 1px solid #b8b8b8;
+	border-color: #b8b8b8;
+  }
+`;
 // import { makeStyles } from "@material-ui/core/styles";
 
 const ControllerInputDatLich = <T extends FieldValues>(props: Props<T>) => {
-  const { control, name, label, variant, required, labelColor, width, ...rest } = props;
+  const {
+    control,
+    name,
+    label,
+    variant,
+    required,
+    labelColor,
+    width,
+    ...rest
+  } = props;
 
   return (
-    <Container style={{ width: width ?? '100%' }}>
-      {label && (<LabelSpan color={labelColor}>{label}&nbsp;{required && <RequiredSpan>*</RequiredSpan>}</LabelSpan>)}
+    <Container style={{ width: width ?? "100%" }}>
+      {label && (
+        <LabelSpan color={labelColor}>
+          {label}&nbsp;{required && <RequiredSpan>*</RequiredSpan>}
+        </LabelSpan>
+      )}
       <Controller
-        render={({ field, fieldState: { error } }) =>  (
-			<StyledTextField
-			  variant={variant}
-			  id={name}
-			  fullWidth
-			  error={Boolean(error)}
-			  helperText={error?.message && error.message}
-			  hiddenLabel
-			  {...field}
-			  {...rest}
-			/>
-		  )
+        render={({ field, fieldState: { error } }) => (
+          <StyledTextField
+            variant={variant}
+            id={name}
+            fullWidth
+            error={Boolean(error)}
+            helperText={error?.message && error.message}
+            hiddenLabel
+            {...field}
+            {...rest}
+            InputProps={{
+              style: {
+                ...InputProps.style,
 
-	}
+              },
+            }}
+          />
+        )}
         name={name}
         control={control}
       />
     </Container>
-
   );
 };
 

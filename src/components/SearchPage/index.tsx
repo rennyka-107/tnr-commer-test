@@ -162,6 +162,10 @@ const ContainerFilter = styled.div`
   margin-bottom: 31px;
   gap: 90px;
   align-items: center;
+  @media screen and (max-width: 1440px) {
+    flex-direction: column;
+    gap: 1px;
+  }
   @media screen and (max-width: 1260px) {
     gap: 30px;
   }
@@ -188,6 +192,9 @@ const FlexContainer = styled.div`
   @media screen and (max-width: 1560px) {
     gap: 32px;
   }
+  @media screen and (max-width: 1440px) {
+    gap: 70px;
+  }
   @media screen and (max-width: 1300px) {
     gap: 25px;
   }
@@ -197,6 +204,19 @@ const FlexContainer = styled.div`
   @media screen and (max-width: 800px) {
     gap: 5px;
   }
+`;
+
+const HuyLocStyled = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 15px;
+  margin-left: 13px;
+  padding: 20px 0px 0px 0px;
+  @media screen and (max-width: 1024px) {
+	padding: 0px 0px 0px 0px;
+  }
+
 `;
 
 const SearchPage = ({
@@ -559,20 +579,11 @@ const SearchPage = ({
         !isEmpty(filterSearch.priceTo) ||
         (!isEmpty(filterSearch.areaFrom) && filterSearch.areaFrom !== "0") ||
         !isEmpty(filterSearch.areaTo) ? (
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              padding: matches ? "10px 20px 0px 20px" : "20px 20px 0px 20px",
-              marginTop: matches ? 0 : 15,
-              gap: 10,
-            }}
-          >
+          <HuyLocStyled>
             <LinkStyled onClick={handleResetFilter}>
               <IconHuyLoc className="icon-huyloc" />
             </LinkStyled>
-          </div>
+          </HuyLocStyled>
         ) : (
           <></>
         )}
@@ -626,7 +637,7 @@ const SearchPage = ({
               onChange={handleChangeLocation}
               listDataLSProvince={listDataLSProvince}
               placeholder="Chọn vị trí"
-              //   style={{ width: 150, height: 40 }}
+              style={{ width: 150, height: 40 }}
             />
             <PopperProjectType
               label="Loại BĐS"
@@ -635,7 +646,7 @@ const SearchPage = ({
               listProjectType={projectName}
               onChange={handleSelectProject}
               placeholder="Loại BĐS"
-              //   style={{ width: 150, height: 40 }}
+              style={{ width: 150, height: 40 }}
             />
             <ProjectDropdown
               label="Chọn dự án"
@@ -645,7 +656,7 @@ const SearchPage = ({
               checkSelectProjectType={checkSelectProjectType}
               onChange={handleSelectProduct}
               placeholder="Chọn dự án"
-              //   style={{ width: 150, height: 40 }}
+              style={{ width: 150, height: 40 }}
             />
             <SliderGroupFilterSearch
               label={"Khác"}
@@ -732,7 +743,7 @@ const SearchPage = ({
           style={{
             display: "flex",
             justifyContent: "space-between",
-            marginRight: 30,
+            marginRight: 5,
           }}
         >
           <div
@@ -747,7 +758,7 @@ const SearchPage = ({
             <TextTotalSeach>Sản phẩm phù hợp kết quả tìm kiếm</TextTotalSeach>
           </div>
           <div>
-            <Button onClick={handleClick("bottom")}>
+            <Button style={{padding: 0}} onClick={handleClick("bottom")}>
               <LinkStyled>
                 <IconSapxep className="icon-sapxep" />
               </LinkStyled>

@@ -165,6 +165,7 @@ const FooterTop = (props: Props) => {
       if (response.responseCode === "00") {
         setOpen(true);
         setEmailValue("");
+		reset({email: ""})
       } else if (response.responseCode === "9999") {
         notification({
           severity: "error",

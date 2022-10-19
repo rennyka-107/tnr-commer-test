@@ -1,6 +1,7 @@
 import CustomButton from "@components/CustomComponent/CustomButton";
 import ControllerCheckbox from "@components/Form/ControllerCheckbox";
 import ControllerTextField from "@components/Form/ControllerTextField";
+import ControllerTextFieldRegister from "@components/Form/ControllerTextFieldRegister";
 import FormGroup from "@components/Form/FormGroup";
 import PasswordTextField from "@components/Form/PasswordTextField";
 import styled from "@emotion/styled";
@@ -10,7 +11,7 @@ import { Button, CircularProgress } from "@mui/material";
 import useNotification from "hooks/useNotification";
 import isEmpty from "lodash.isempty";
 import { useRouter } from "next/router";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { validateLine } from "utils/constants";
@@ -155,63 +156,64 @@ const Index = (props: Props) => {
   ]);
 
   const onSubmit = async (data: any) => {
-		setLoading(true);
-		const body = {
-			id: null,
-			fullName: data.fullName,
-			password: data.password,
-			email: data.email,
-			phone: data.phoneNumber,
-		};
-		try {
-			const response = await registerApi(body);
-      if(response.responseCode === '00'){
+    setLoading(true);
+    const body = {
+      id: null,
+      fullName: data.fullName,
+      password: data.password,
+      email: data.email,
+      phone: data.phoneNumber,
+    };
+    try {
+      const response = await registerApi(body);
+      if (response.responseCode === "00") {
         dispatch(registerAcc(response.responseData));
-		
-				reset();
-				props.setUserId(response.responseData?.id);
-				props.setTransKey(response.responseData?.transKey);
-				props.setNumberPhone(response.responseData?.phone);
-				props.setEmailRegister(response.responseData?.email);
-				props.setKey(response.responseData?.keycloakId);
-				props.next();
-				Route.push({
-					pathname: PathRoute.Login,
-					query: {
-						prePath: Route.pathname,
-						tabIndex: "confirm",
-					},
-				});
-				notification({
-					message: "Đăng ký tài khoản thành công. Vui lòng chọn phương thức xác thực!",
-					severity: "success",
-					title: "Đăng ký tài khoản",
-				});
-      }else{
+
+        reset();
+        props.setUserId(response.responseData?.id);
+        props.setTransKey(response.responseData?.transKey);
+        props.setNumberPhone(response.responseData?.phone);
+        props.setEmailRegister(response.responseData?.email);
+        props.setKey(response.responseData?.keycloakId);
+        props.next();
+        Route.push({
+          pathname: PathRoute.Login,
+          query: {
+            prePath: Route.pathname,
+            tabIndex: "confirm",
+          },
+        });
+        notification({
+          message:
+            "Đăng ký tài khoản thành công. Vui lòng chọn phương thức xác thực!",
+          severity: "success",
+          title: "Đăng ký tài khoản",
+        });
+      } else {
         notification({
           severity: "error",
           title: "Đăng ký thất bại",
-          message: "Email hoặc số điện thoại đã được sử dụng. Vui lòng thay đổi để tiếp tục!",
+          message:
+            "Email hoặc số điện thoại đã được sử dụng. Vui lòng thay đổi để tiếp tục!",
         });
       }
-			
-			
-		} catch (error) {
-			notification({
-				severity: "error",
-				title: "Đăng ký thất bại",
-				message: "Email hoặc số điện thoại đã được sử dụng. Vui lòng thay đổi để tiếp tục!",
-			});
-		} finally{
+    } catch (error) {
+      notification({
+        severity: "error",
+        title: "Đăng ký thất bại",
+        message:
+          "Email hoặc số điện thoại đã được sử dụng. Vui lòng thay đổi để tiếp tục!",
+      });
+    } finally {
       setLoading(false);
     }
-	};
+  };
 
   return (
     <form
       noValidate
       onSubmit={handleSubmit((data) => onSubmit(data))}
-      autoComplete="off"
+      autoComplete="new-password"
     >
       <div style={{ marginTop: 20 }}>
         <SpanHeaderForm>
@@ -220,7 +222,7 @@ const Index = (props: Props) => {
         </SpanHeaderForm>
       </div>
       <FormGroup sx={{ mb: 2, mt: 2 }} fullWidth>
-        <ControllerTextField
+        <ControllerTextFieldRegister
           variant="outlined"
           hiddenLabel
           name="fullName"
@@ -234,12 +236,13 @@ const Index = (props: Props) => {
         />
       </FormGroup>
       <FormGroup sx={{ mb: 2 }} fullWidth>
-        <ControllerTextField
+        <ControllerTextFieldRegister
           variant="outlined"
           hiddenLabel
           name="email"
           control={control}
           placeholder="Email"
+		  defaultValue={""}
           required
           fullWidth
           label="Email"
@@ -248,7 +251,7 @@ const Index = (props: Props) => {
         />
       </FormGroup>
       <FormGroup sx={{ mb: 2 }} fullWidth>
-        <ControllerTextField
+        <ControllerTextFieldRegister
           variant="outlined"
           hiddenLabel
           name="phoneNumber"
@@ -291,8 +294,11 @@ const Index = (props: Props) => {
           control={control}
           labelCustom={
             <SpanRadio>
-              Tôi đồng ý với <LinkLabel href="/buyingGuide?idUserManual=edef9816-8924-4857-ad52-7afc9124aqBV">Điều kiện và điều khoản</LinkLabel> của
-              TNR
+              Tôi đồng ý với{" "}
+              <LinkLabel href="/buyingGuide?idUserManual=edef9816-8924-4857-ad52-7afc9124aqBV">
+                Điều kiện và điều khoản
+              </LinkLabel>{" "}
+              của TNR
             </SpanRadio>
           }
           label=""

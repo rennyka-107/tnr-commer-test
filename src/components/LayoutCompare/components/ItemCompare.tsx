@@ -12,16 +12,28 @@ import {
 } from "@components/StyledLayout/styled";
 import styled from "@emotion/styled";
 import { Box, Button, CardMedia } from "@mui/material";
-import React, { MouseEventHandler, useEffect, useState } from "react";
+import React, {
+  MouseEventHandler,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../store/store";
 import { CompareValueFormat } from "utils/CompareValueFormat";
 import { useRouter } from "next/router";
 import useAuth from "hooks/useAuth";
-import { removeComparePopUpItem } from "../../../../store/productCompareSlice";
+import {
+  getComparePopUpItem,
+  removeComparePopUpItem,
+} from "../../../../store/productCompareSlice";
 import useFavourite from "hooks/useFavourite";
 import useAddToCart from "hooks/useAddToCart";
 import { CompareParamsI } from "../../../../pages/api/compareApi";
+import ImageWithHideOnError from "hooks/ImageWithHideOnError";
+import Product3 from "../../../../public/images/product3.png";
+import LocalStorage from "utils/LocalStorage";
+import { isArray, isEmpty } from "lodash";
 
 type Props = {
   onClick?: MouseEventHandler<HTMLButtonElement>;
@@ -95,9 +107,12 @@ const ItemCompare = ({ onClick, data }: Props) => {
   const [favorite, setFavorite] = useState<boolean>(
     data.favouriteStatus === "0" ? false : true
   );
-  const { compareParams, compareItems } = useSelector(
+  const [checked, setChecked] = useState([]);
+
+  const { compareParams, compareItems, comparePopUpItem } = useSelector(
     (state: RootState) => state.productCompareSlice
   );
+
   const { isAuthenticated } = useAuth();
   const { addProductToFavouriteFunction } = useFavourite();
 
@@ -116,13 +131,41 @@ const ItemCompare = ({ onClick, data }: Props) => {
       },
     });
   };
+  useEffect(() => {
+    if (!isArray(router.query.productId)) {
+      const param = LocalStorage.get("compare-url");
+      const projectIdLS = LocalStorage.get("listParamsIdProject");
+      const projectTypeIDLs = LocalStorage.get("listParamsLSProjectType");
+      if (!param) return;
+
+      dispatch(
+        getComparePopUpItem([
+          {
+            projectName: compareItems[0].projectName,
+            thumbnail: compareItems[0].thumbnail,
+            name: compareItems[0].productName,
+            productId: compareItems[0].productId,
+            projectId: projectIdLS[0],
+            projectType: projectTypeIDLs[0],
+          },
+        ])
+      );
+      router.push({
+        pathname: `/compare-search`,
+        query: {
+          ...param,
+        },
+      });
+    }
+  }, [router.query.productId]);
+
   function currencyFormat(num) {
     if (!num) {
       return;
     }
     return Number(num)
       .toFixed(0)
-      .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+      .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
   }
 
   const ValueCompare = (item: CompareParamsI) => {
@@ -184,7 +227,10 @@ const ItemCompare = ({ onClick, data }: Props) => {
             )}
           </IconWrapper>
         )}
-        <IconWrapper style={{ left: "249px", top: "10px" }} onClick={onRemove}>
+        <IconWrapper
+          style={{ left: "249px", top: "10px", zIndex: 300 }}
+          onClick={onRemove}
+        >
           <IconX style={{ stroke: "white", width: "12px", height: "12px" }} />
         </IconWrapper>
         {/* <Box
@@ -232,12 +278,25 @@ const ItemCompare = ({ onClick, data }: Props) => {
           </div>
         )}
 
-        <CardMedia
+        {/* <CardMedia
           component={"img"}
           height={160}
           style={{ borderRadius: "20px 20px 0px 0px" }}
           image={data?.thumbnail ?? "https://picsum.photos/308/200"}
           alt={data?.productName ?? "N/A"}
+        /> */}
+        <ImageWithHideOnError
+          className="logo"
+          src={data.thumbnail ? data.thumbnail : Product3}
+          fallbackSrc={Product3}
+          height={195}
+          width={350}
+          title={"Logo "}
+          alt={data?.productName ?? "N/A"}
+          priority
+          unoptimized={true}
+          style={{ borderRadius: "20px 20px 0px 0px" }}
+          objectFit="cover"
         />
         <ColStyled aItems="center" margin={"11px 0px 23px"}>
           <Title22Styled

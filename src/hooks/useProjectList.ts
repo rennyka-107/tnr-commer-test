@@ -56,7 +56,7 @@ const useProjectList = () => {
       const dataParams = {
         ...body,
         provinceIdList: listProvince ? JSON.parse(listProvince) : [],
-        projectTypeIdList: listProjectType ? JSON.parse(listProjectType) : [],
+        projectTypeIdList: listProjectType && JSON.parse(listProjectType) !== undefined ? JSON.parse(listProjectType) : [],
       };
       const fetch = async () => {
         setLoading(true);

@@ -82,7 +82,7 @@ const ChangeApartmentRequest = ({ orderDetail }: Props) => {
         projectIdList: [orderDetail.production.project.id],
         projectId: orderDetail.production.project.id,
         paymentStatus: 2,
-        priceFrom: orderDetail.production.price,
+        priceFrom: orderDetail.production.totalVatPrice,
         priceTo: "100000000000",
       };
     }

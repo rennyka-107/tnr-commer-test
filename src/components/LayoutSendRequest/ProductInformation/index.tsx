@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { Box, CardMedia, Divider, Typography } from "@mui/material";
+import ImageWithHideOnError from "hooks/ImageWithHideOnError";
 import { isEmpty } from "lodash";
 import React from "react";
 import Product3 from "../../../../public/images/product3.png";
@@ -26,8 +27,6 @@ const ProductInformation = ({ orderDetail }: Props) => {
   const { production, productionImage } = orderDetail;
   const { apartmentModel } = production;
 
-  console.log("production", production);
-
   const renderLandArea = () => {
     if (production?.landArea) {
       if (production.landArea === "0") {
@@ -41,7 +40,6 @@ const ProductInformation = ({ orderDetail }: Props) => {
       }
     }
   };
-
   return (
     <Box
       sx={{
@@ -50,7 +48,7 @@ const ProductInformation = ({ orderDetail }: Props) => {
         justifyContent: "space-between",
       }}
     >
-      <CardMedia
+      {/* <CardMedia
         sx={{
           borderRadius: "10px",
           marginBottom: 5,
@@ -63,14 +61,27 @@ const ProductInformation = ({ orderDetail }: Props) => {
           !isEmpty(productionImage) ? productionImage : Product3
         }
         alt={"Product photo"}
+      /> */}
+      <ImageWithHideOnError
+        className="logo"
+        src={productionImage ? productionImage : Product3}
+        fallbackSrc={Product3}
+        style={{ borderRadius: 10, marginBottom: 5 }}
+        height={199}
+        width={288}
+        title={"Logo "}
+        alt={"Logo "}
+		
+        priority
+        unoptimized={true}
+        objectFit="cover"
       />
       <Box
         sx={{
-          width: "18vw",
-          height: "15vw",
+          width: 255,
+          height: 199,
           display: "flex",
           flexDirection: "column",
-          justifyContent: "space-between",
         }}
       >
         <Box>
@@ -90,15 +101,14 @@ const ProductInformation = ({ orderDetail }: Props) => {
               lineHeight: "24px",
               fontSize: "24px",
               fontWeight: 500,
-              mt: 3,
             }}
+            style={{ marginTop: 5 }}
           >
             {production?.lotSymbolLegal}
           </Typography>
           <Box
             sx={{
               display: "flex",
-              mt: 3,
             }}
           >
             <Typography
@@ -111,13 +121,13 @@ const ProductInformation = ({ orderDetail }: Props) => {
             >
               {apartmentModel?.name}
             </Typography>
-            {production.projectTypeCode === "2" ? (
+            {production.buildType === "1" ? (
               <div
                 style={{
                   display: "flex",
                   gap: 37,
                   marginBottom: 15,
-                  marginTop: 20,
+                  marginTop: 11,
                 }}
               >
                 <SubRightText>{production?.levelDetailParentName}</SubRightText>
@@ -129,9 +139,10 @@ const ProductInformation = ({ orderDetail }: Props) => {
                   display: "flex",
                   gap: 37,
                   marginBottom: 15,
-                  marginTop: 20,
+                  marginTop: 11,
                 }}
               >
+                <SubRightText>{production?.levelDetailParentName}</SubRightText>
                 <SubRightText>{production?.levelDetailName}</SubRightText>
               </div>
             )}
@@ -150,13 +161,13 @@ const ProductInformation = ({ orderDetail }: Props) => {
         <Box>
           <Divider />
         </Box>
-        <Box>
+        <Box style={{display: 'flex', flexDirection: 'column', marginTop: 20, gap: 8}}>
           <Box
             sx={{
               display: "flex",
               justifyContent: "space-between",
-              mt: 3,
             }}
+			style={{height: 20}}
           >
             <Typography
               sx={{
@@ -176,15 +187,25 @@ const ProductInformation = ({ orderDetail }: Props) => {
                 fontWeight: 400,
               }}
             >
-              {renderLandArea()}
+              {/* {renderLandArea()} */}
+              {production.buildType === "1" ? (
+                <span>
+                  {production.buildArea ?? "N/A"} m<sup>2</sup>
+                </span>
+              ) : (
+                <span>
+                  {production.clearArea ?? "N/A"} m<sup>2</sup>
+                </span>
+              )}
+              {production.product}
             </Typography>
           </Box>
           <Box
             sx={{
               display: "flex",
               justifyContent: "space-between",
-              mt: 3,
             }}
+			style={{height: 20}}
           >
             <Typography
               sx={{
@@ -211,8 +232,8 @@ const ProductInformation = ({ orderDetail }: Props) => {
             sx={{
               display: "flex",
               justifyContent: "space-between",
-              mt: 3,
             }}
+			style={{height: 20}}
           >
             <Typography
               sx={{
@@ -238,9 +259,9 @@ const ProductInformation = ({ orderDetail }: Props) => {
           <Box
             sx={{
               display: "flex",
-              mt: 3,
               justifyContent: "space-between",
             }}
+			style={{height: 20}}
           >
             <Typography
               sx={{

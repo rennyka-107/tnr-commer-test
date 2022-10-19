@@ -66,14 +66,14 @@ const SelectInputWithId = ({
   const theme = useTheme();
 
   return (
-    <FormControl sx={{ m: 1, width: 300, mt: 3 }}>
+    <FormControl sx={{ m: 1, width: 196, mt: 3 }}>
       <LabelSelectStyled>{label}</LabelSelectStyled>
       <Select
         disabled={disabled}
         displayEmpty
         value={value}
         onChange={onChange}
-        input={<OutlinedInputStyled style={{ borderRadius: 8, height: 54 }} />}
+        input={<OutlinedInputStyled style={{ borderRadius: 8, height: 48 }} />}
         renderValue={(selected) => {
           if (selected.length === 0) {
             return <span>{placeholder}</span>;

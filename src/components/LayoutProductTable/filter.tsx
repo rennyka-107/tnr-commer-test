@@ -190,7 +190,7 @@ const Filter = (props: PropsI) => {
             required
             setValue={formControler.setValue}
             dataSelect={
-				listMenuBar?.map((el) => {
+              listMenuBar?.map((el) => {
                 return { label: el?.name, value: el?.id };
               }) ?? []
             }

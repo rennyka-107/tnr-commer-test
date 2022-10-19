@@ -5,40 +5,57 @@ import styled from "@emotion/styled";
 import React from "react";
 
 interface Props {
-    children: React.ReactNode;
-    title?: string;
-    rightContent?: React.ReactNode;
-	checkBread?: boolean;
+  children: React.ReactNode;
+  title?: string;
+  rightContent?: React.ReactNode;
+  checkBread?: boolean;
 }
 const ContainerWrapper = styled.div`
-    padding:29px 164px;
-    margin-top: 127px;
-    width:100%;
+  padding: 29px 164px;
+  margin-top: 127px;
+  width: 100%;
+  @media screen and (max-width: 1500px) {
+    padding: 20px 50px 20px 50px;
+  };
+  @media screen and (max-width: 1440px) {
+	padding: 20px 63px 20px 104px;
+  }
+
 `;
 
 const HeaderView = styled.div`
-    font-family: Roboto;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 28px;
-    line-height: 33px;
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 33px;
 `;
 
-const ContainerSearch: React.FC<Props> = ({ children, title, rightContent,checkBread }) => {
-    return (
-        <ContainerWrapper>
-            <Breadcrumbs title={title} />
-            <Row customStyle={{ marginBottom: 10, marginTop: 22 , display: 'flex', justifyContent: 'space-between' }}>
-                <Column customStyle={{ padding: 0, alignItems: "center"}} >
-                    {title && <HeaderView>{title}</HeaderView>}
-                </Column>
-                <div >
-                    {rightContent && rightContent}
-                </div>
-            </Row>
-            {children}
-        </ContainerWrapper>
-    )
-}
+const ContainerSearch: React.FC<Props> = ({
+  children,
+  title,
+  rightContent,
+  checkBread,
+}) => {
+  return (
+    <ContainerWrapper>
+      {/* <Breadcrumbs title={title} /> */}
+      <Row
+        customStyle={{
+          marginBottom: 10,
+          marginTop: 22,
+          display: "flex",
+          justifyContent: "space-between",
+        }}
+      >
+        <Column customStyle={{ padding: 0, alignItems: "center" }}>
+          {title && <HeaderView>{title}</HeaderView>}
+        </Column>
+        <div>{rightContent && rightContent}</div>
+      </Row>
+      {children}
+    </ContainerWrapper>
+  );
+};
 
-export default ContainerSearch
+export default ContainerSearch;

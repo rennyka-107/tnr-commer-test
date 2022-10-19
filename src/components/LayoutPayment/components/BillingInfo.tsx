@@ -43,7 +43,6 @@ type Props = {
 };
 
 const BillingInfo = ({ setBilling, billing }: Props) => {
-  const { cart } = useSelector((state: RootState) => state.carts);
   const [colorActive, setColorActive] = useState<string[]>([
     "#FCB715",
     "#C7C9D9",
@@ -52,6 +51,9 @@ const BillingInfo = ({ setBilling, billing }: Props) => {
     query: { transactionCode },
   } = useRouter();
   const data = useSelector((state: RootState) => state.payments.data);
+  const productPTG = useSelector(
+    (state: RootState) => state.products.productItem
+  );
   useEffect(() => {
     setColorActive(
       billing === 1 ? ["#FCB715", "#C7C9D9"] : ["#C7C9D9", "#FCB715"]
@@ -62,16 +64,10 @@ const BillingInfo = ({ setBilling, billing }: Props) => {
     if (
       !isEmpty(transactionCode) &&
       !isEmpty(data) &&
-      !isEmpty(data?.deposite)
+      !isEmpty(data?.deposite) && !isEmpty(data.quotationRealt)
     ) {
       setBilling(
-        !isEmpty(data.quotationRealt)
-          ? data?.quotationRealt?.minEarnestMoney === data?.deposite
-            ? 1
-            : 2
-          : cart.minEarnestMoney === data?.deposite
-          ? 1
-          : 2
+        data?.quotationRealt?.minEarnestMoney === data?.deposite ? 1 : 2
       );
     }
   }, [transactionCode, data?.deposite]);
@@ -98,7 +94,7 @@ const BillingInfo = ({ setBilling, billing }: Props) => {
                 <Text18Styled color={colorActive[0]}>
                   {!isEmpty(data.production)
                     ? currencyFormat(data?.quotationRealt?.minEarnestMoney)
-                    : currencyFormat(cart.minEarnestMoney)}{" "}
+                    : currencyFormat(productPTG.DepositMoneyMin)}{" "}
                   vnd
                 </Text18Styled>
               </BoxInputStyled>
@@ -116,17 +112,28 @@ const BillingInfo = ({ setBilling, billing }: Props) => {
                 <Text18Styled color={colorActive[1]}>
                   {!isEmpty(data.production)
                     ? currencyFormat(data?.quotationRealt?.regulationOrderPrice)
-                    : currencyFormat(cart.regulationOrderPrice)}
+                    : currencyFormat(productPTG.DepositMoney)}
                   vnd
                 </Text18Styled>
               </BoxInputStyled>
             </Grid>
           </Grid>
         </RadioGroup>
-        <Text14ItalicStyled sx={{ maxWidth: 330 }}>
-          Vui lòng thanh toán đủ tổng tiền cọc trong vòng 24h để được hoàn thiện
-          hồ sơ
-        </Text14ItalicStyled>
+        {billing === 1 && (
+          <Text14ItalicStyled
+            sx={{ maxWidth: 300 }}
+            style={{
+              color: "#FF3B3B",
+              fontWeight: 500,
+              fontSize: 14,
+              fontStyle: "italic",
+            }}
+          >
+            Vui lòng thanh toán đủ tổng tiền cọc trong vòng{" "}
+            {productPTG?.TimeOfPayment} {productPTG?.TimeOfPaymentUnit} để được
+            hoàn thiện hồ sơ
+          </Text14ItalicStyled>
+        )}
       </FormControl>
     </WrapperBoxBorderStyled>
   );

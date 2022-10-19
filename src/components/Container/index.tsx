@@ -10,6 +10,7 @@ interface Props {
   title?: string;
   rightContent?: React.ReactNode;
   style?: React.CSSProperties;
+  textsub?: boolean;
 }
 const ContainerWrapper = styled.div`
   padding: 29px 164px;
@@ -30,6 +31,7 @@ const Container: React.FC<Props> = ({
   title,
   rightContent,
   style,
+  textsub,
 }) => {
   return (
     <>
@@ -38,15 +40,20 @@ const Container: React.FC<Props> = ({
           <ContainerWrapper>
             <Breadcrumbs title={title} />
             <Row customStyle={{ marginBottom: 52, marginTop: 22 }}>
-              <Column
-                customStyle={{
-                  padding: 0,
-                  alignItems: "center",
-                  display: "flex",
-                }}
-              >
-                {title && <HeaderView>{title}</HeaderView>}
-              </Column>
+              {textsub ? (
+                <></>
+              ) : (
+                <Column
+                  customStyle={{
+                    padding: 0,
+                    alignItems: "center",
+                    display: "flex",
+                  }}
+                >
+                  {title && <HeaderView>{title}</HeaderView>}
+                </Column>
+              )}
+
               <Column customStyle={{ padding: 0 }}>
                 {rightContent && rightContent}
               </Column>

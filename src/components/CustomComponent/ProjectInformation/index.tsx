@@ -28,11 +28,12 @@ interface TabPanelProps {
 const ContainerPJ = styled.div`
   height: auto;
   width: 100%;
-  padding: 1.5rem 1.5rem 0 1.5rem;
+  padding: .5rem 1.5rem 0 1.5rem;
   border: 1px solid #c7c9d9;
   min-height: 554px;
   border-radius: 20px;
-  margin-top: 1rem;
+  // margin-top: 1rem;
+  overflow-y: auto;
 `;
 
 const TabStyled = styled(Tab)`
@@ -40,7 +41,7 @@ const TabStyled = styled(Tab)`
   font-style: normal;
   text-transform: "none";
   font-weight: 500;
-  font-size: 1rem;
+  font-size: 18px;
   line-height: 21px;
   /* identical to box height */
 
@@ -52,19 +53,6 @@ const TabStyled = styled(Tab)`
   }
 `;
 
-const TextButtonStyled = styled(Typography)`
-  font-family: "Roboto";
-  text-transform: none;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 17px;
-  line-height: 20px;
-  text-align: center;
-
-  /* White */
-
-  color: #ffffff;
-`;
 const useStyle = makeStyles({
   root: {
     // padding: '0px 50px 0px 100px',
@@ -113,7 +101,6 @@ const ProjectInformation = ({
   ownership,
 }: Props) => {
   const Router = useRouter();
-  const dispatch = useDispatch();
   const ProjectInformation = useSelector(
     (state: RootState) => state.projectMap.ProjectInformation
   );
@@ -226,19 +213,19 @@ const ProjectInformation = ({
           <Divider sx={{ mt: 1 }} />
           <Box sx={{ mt: 2 }}>
             <Typography
-              sx={{ fontWeight: "500", fontSize: "1rem", mb: 1 }}
+              sx={{ fontWeight: "500", fontSize: "14px", mb: 1 }}
               color="#FEC83C"
             >
               Mô tả dự án
             </Typography>
-            <Typography sx={{ fontSize: ".9rem" }}>
+            <Typography sx={{ fontSize: "14px" }}>
               {description ?? ""}
             </Typography>
           </Box>
         </TabPanel>
         <TabPanel value={value} index={1}>
           {!isEmpty(ProjectInformation.lstOffers) ? (
-            <div style={{ maxHeight: 550, overflow: "scroll" }}>
+            <div style={{ maxHeight: 440, overflow: "scroll" }}>
               {ProjectInformation.lstOffers.map((item, key) => (
                 <div
                   onClick={() => Router.push(`/sales/${item.offersId}`)}

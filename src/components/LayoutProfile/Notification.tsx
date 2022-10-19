@@ -70,14 +70,14 @@ const Notification = () => {
     getNotifications();
   }, [paginate.page]);
 
-  const ItemCard = (item: any) => (
+  const ItemCard = (item: any, idx: any) => (
     <AlertMessage
       severity={item.type}
       sx={{
         width: "100%",
         display: "flex",
         alignItems: "center",
-        margin: "1.5rem 0 0 0",
+        margin: idx === 0 ? "2rem 0 0 0 " :"12px 0 0 0",
         boxShadow: "unset",
         background: "unset",
         border: "1px solid #C7C9D9",
@@ -155,7 +155,7 @@ const Notification = () => {
   return (
     <BoxContainer
       titleHeader="Quản lý thông báo"
-      styleCustom={{ padding: "21px 24px" }}
+      styleCustom={{ padding: "30px 24px"}}
     >
       {loading ? (
         <Box
@@ -170,7 +170,7 @@ const Notification = () => {
         </Box>
       ) : !isEmpty(notifications) ? (
         notifications.map((item, idx) => (
-          <React.Fragment key={idx}>{ItemCard(item)}</React.Fragment>
+          <React.Fragment key={idx}>{ItemCard(item,idx)}</React.Fragment>
         ))
       ) : (
         <Typography sx={{ mt: 2, width: "100%", textAlign: "center" }}>

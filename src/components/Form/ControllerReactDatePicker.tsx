@@ -21,7 +21,7 @@ interface Props<T> extends Omit<TextFieldProps | any, "name"> {
 const Container = styled.div``;
 const LabelSpan = styled.div<{ color: string }>`
   margin-bottom: 4px;
-  color: ${({ color }) => color ?? "#1B3459"};
+  color: ${({ color }) => color ?? " #8190a7"};
   font-family: Roboto;
   font-style: normal;
   font-weight: 400;

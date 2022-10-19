@@ -108,6 +108,7 @@ const ItemCompareProduct = ({
         <ImageWithHideOnError
           className="logo"
           src={src}
+		  style={""}
           fallbackSrc={Product3}
           height={190}
           width={350}

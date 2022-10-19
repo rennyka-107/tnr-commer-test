@@ -28,7 +28,7 @@ const CardContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 100px;
+  gap: 120px;
   @media screen and (max-width: 1280px) {
 	gap: 5px;
   }
@@ -162,6 +162,7 @@ const SliderCategoryIndex = ({ data }: { data?: any[] }) => {
       <CardContainer>
         <div style={{ height: 85 }}>
           <IconPrevProduct
+		  style={{ cursor: "pointer" }}
           //   style={{
           //     cursor: "pointer",
           //     position: "absolute",
@@ -198,6 +199,7 @@ const SliderCategoryIndex = ({ data }: { data?: any[] }) => {
         </WrapSlide>
         <div style={{ height: 85 }}>
           <IconNextProduct
+		  style={{ cursor: "pointer" }}
           // style={{
           //   cursor: "pointer",
           //   position: "absolute",

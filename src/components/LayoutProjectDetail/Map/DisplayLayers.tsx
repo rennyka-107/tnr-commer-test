@@ -72,6 +72,7 @@ const DisplayLayers = ({ data, layerParent }: Props) => {
       } else {
         if (layer.feature.properties.level === "PRODUCT") {
           newLayer.setStyle({
+            weight: 1,
             color: "#1B3459",
             stroke: true,
             fillOpacity: 0,

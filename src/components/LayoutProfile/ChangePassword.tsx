@@ -5,11 +5,13 @@ import PasswordTextField from "@components/Form/PasswordTextField";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { changePassword } from "@service/Profile";
 import useNotification from "hooks/useNotification";
+import styled from '@emotion/styled'
 import React from "react";
 import { useForm } from "react-hook-form";
 import { InputProps, validateLine } from "utils/constants";
 import Regexs from "utils/Regexs";
 import * as yup from 'yup';
+import PasswordProfileTextField from "@components/Form/PasswordProfileTextField";
 
 
 export interface ChangePasswordForm {
@@ -67,43 +69,43 @@ const ChangePassword = () => {
     }
 
     return (
-        <BoxContainer titleHeader="Đổi mật khẩu" styleCustom={{ padding: "21px 24px" }}>
-            <form onSubmit={handleSubmit((values) => onSubmit(values))}>
+        <BoxContainer titleHeader="Đổi mật khẩu" styleCustom={{ padding: "28px 28px" }}>
+            <form onSubmit={handleSubmit((values) => onSubmit(values))} style={{maxWidth: 285, display: 'flex', flexDirection: 'column', margin: '34px 20px 37px 31px'}}>
                 <FormGroup sx={{ mb: 2, mt: 2 }} fullWidth>
-                    <PasswordTextField
+                    <PasswordProfileTextField
                         name="oldPassword"
                         control={control}
-                        placeholder="Mật khẩu hiện tại"
+                        placeholder="Nhập mật khẩu hiện tại"
                         required
                         fullWidth
-                        label="Mật khẩu hiện tại"
+                        labelText="Nhập mật khẩu hiện tại"
                         InputProps={InputProps}
                     />
                 </FormGroup>
                 <FormGroup sx={{ mb: 2, mt: 2 }} fullWidth>
-                    <PasswordTextField
+                    <PasswordProfileTextField
                         name="newPassword"
                         control={control}
-                        placeholder="Mật khẩu mới"
+                        placeholder="Nhập mật khẩu mới"
                         required
                         fullWidth
-                        label="Mật khẩu mới"
+                        labelText="Nhập mật khẩu mới"
                         InputProps={InputProps}
                     />
                 </FormGroup>
                 <FormGroup sx={{ mb: 2, mt: 2 }} fullWidth>
-                    <PasswordTextField
+                    <PasswordProfileTextField
                         name="confirmPass"
                         control={control}
-                        placeholder="Xác minh mật khẩu"
+                        placeholder="Xác nhận mật khẩu mới"
                         required
                         fullWidth
-                        label="Xác minh mật khẩu"
+                        labelText="Xác nhận mật khẩu mới"
                         InputProps={InputProps}
                     />
                 </FormGroup>
                 <CustomButton label="Cập nhật"
-                    style={{ width: 255 }}
+                    style={{ width: 285 , fontSize: 18, fontWeight: 400, fontFamily: 'Roboto', fontStyle: 'normal', marginTop: 20}}
                     type="submit"
                 />
             </form>

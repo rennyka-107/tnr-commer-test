@@ -22,19 +22,22 @@ import {
   getPriceListByProductLandsoft,
   getProductPtgApi,
 } from "../../../../pages/api/productsApi";
-import { isEmpty } from "lodash";
+import { filter, isEmpty } from "lodash";
 import SelectRadioComponent from "@components/CustomComponent/ListRadioPaymentCartComponent/SelectRadioComponent";
 import SelectCheckboxComponent from "@components/CustomComponent/ListRadioPaymentCartComponent/SelectCheckboxComponent";
 import { getProductPTG } from "../../../../store/productSlice";
 import { IconDropDown } from "@components/Icons";
 import { setReferenceCode } from "../../../../store/paymentSlice";
+import LocalStorage from "utils/LocalStorage";
+import useNotification from "hooks/useNotification";
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
   PaperProps: {
     style: {
       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
+      width: 315,
+      marginLeft: "1.1rem",
     },
   },
 };
@@ -45,7 +48,14 @@ const CartPayment = (props: Props) => {
   const productItem = useSelector(
     (state: RootState) => state.products.productItem
   );
+  const notification = useNotification();
   const { cart } = useSelector((state: RootState) => state.carts);
+  const [selectedPromotionIds, setSelectedPromotionIds] = useState<number[]>(
+    LocalStorage.get("promotions") ?? []
+  );
+  const [selectedScheduleId, setSelectedScheduleId] = useState<string>(
+    LocalStorage.get("PaymentSelect") ?? ""
+  );
   const [listPrice, setListPrice] = useState([]);
   const [paymentName, setPaymentName] = useState([]);
   const [paymentPrice, setPaymentPrice] = useState([]);
@@ -53,27 +63,22 @@ const CartPayment = (props: Props) => {
   const [priceIdSelect, setPriceIdSelect] = React.useState(0);
 
   const [filterPtg, setFilterPtg] = React.useState({
-    productId: '0',
+    productId: "0",
     priceID: 0,
+    scheduleId: "",
+    promotions: [],
   });
-
-  //   useEffect(() => {
-  // 	if (typeof window !== "undefined") {
-  // 		const dataSelectLS = localStorage?.getItem("IdTCBG");
-  // 		const arr: any = JSON.parse(dataSelectLS);
-  // 		console.log("arr",arr)
-  // 		// if(arr){
-  // 		// 	setPaymentPrice(arr);
-  // 		// }
-  // 	}
-  //   },[])
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const dataSelectLS = localStorage?.getItem("IdTCBG");
       const dataSelectLS2 = localStorage?.getItem("PaymentSelect");
+      const dataSelectLS3 = localStorage?.getItem("promotions");
+      const dataSelectLS4 = localStorage?.getItem("scheduleId");
       const arr: any = JSON.parse(dataSelectLS);
       const arr2: any = JSON.parse(dataSelectLS2);
+      const arr3: any = JSON.parse(dataSelectLS3);
+      const arr4: any = JSON.parse(dataSelectLS4);
       if (arr2) {
         setPaymentPrice(arr2);
       } else {
@@ -91,33 +96,65 @@ const CartPayment = (props: Props) => {
           setPaymentName(listPrice[0].PriceName);
         }
       }
+      if (!isEmpty(arr3)) {
+        setSelectedPromotionIds([...arr3]);
+      } else {
+        if (!isEmpty(listPrice)) {
+          setPriceIdSelect(listPrice[0].PriceID);
+          setPaymentName(listPrice[0].PriceName);
+        }
+      }
+      if (!isEmpty(arr4)) {
+        setSelectedScheduleId(arr4);
+      } else {
+        if (!isEmpty(listPrice)) {
+          setPriceIdSelect(listPrice[0].PriceID);
+          setPaymentName(listPrice[0].PriceName);
+        }
+      }
     }
   }, [listPrice]);
-
-  //   useEffect(() => {
-  //     if (typeof window !== "undefined") {
-  //       const dataSelectLS = localStorage?.getItem("PaymentSelect");
-  //       const arr: any = JSON.parse(dataSelectLS);
-  //       if (arr) {
-  //         setPaymentPrice(arr);
-  //       }
-  //     }
-  //   }, []);
 
   const handleChange = (event: SelectChangeEvent<typeof paymentPrice>) => {
     const {
       target: { value },
     } = event;
     setPaymentPrice(typeof value === "string" ? value.split(",") : value);
+    const findScheduleId = productItem.ListSchedule.find(
+      (item) => item.ScheduleName === value
+    );
+    if (!isEmpty(findScheduleId)) {
+      setFilterPtg({
+        ...filterPtg,
+        scheduleId: findScheduleId.ScheduleID.toString(),
+        promotions: [],
+      });
+    }
   };
+
+  useEffect(() => {
+    LocalStorage.set("filterPtg", filterPtg);
+    return () => {
+      LocalStorage.remove("filterPtg");
+    };
+  }, [
+    filterPtg.priceID,
+    filterPtg.productId,
+    filterPtg.promotions,
+    filterPtg.scheduleId,
+  ]);
 
   const handleChangeTieuChuan = (event: any) => {
     const datafilter = listPrice.filter((p) => p.PriceName === event.PriceName);
-	if(!isEmpty(datafilter)){
-		setPriceIdSelect(datafilter[0].PriceID);
-		setPaymentName(event.PriceName);
-	}
-
+    if (!isEmpty(datafilter)) {
+      setPriceIdSelect(datafilter[0].PriceID);
+      setPaymentName(event.PriceName);
+      // setSelectedPromotionIds([]);
+      localStorage.removeItem("IdTCBG");
+      localStorage.removeItem("PaymentSelect");
+      localStorage.removeItem("promotions");
+      localStorage.removeItem("scheduleId");
+    }
   };
 
   useEffect(() => {
@@ -125,68 +162,163 @@ const CartPayment = (props: Props) => {
       const response = await getPriceListByProductLandsoft(cart.idls);
       if (response.responseCode === "00" && !isEmpty(response.responseData)) {
         setListPrice(response.responseData);
+      } else {
+        notification({
+          error: "Có lỗi xảy ra trong quá trình load phiếu tính giá",
+          title: "Load phiếu tính giá"
+        })
+        dispatch(
+          getProductPTG({
+            ListPolicy: [],
+            ListPromotion: [],
+            ListSchedule: [],
+            MaintainanceFee: null,
+            LandPrice: 0,
+            BuildPrice: 0,
+            BuildMoney: 0,
+            LandMoney: 0,
+            ProductPrice: null,
+            ProductQuotation: null,
+            PromotionMoney: null,
+            TotalMoney: null,
+            TotalMoneyText: "",
+            VAT: 0,
+            MaintenanceFee: 0,
+            PreTotalMoney: 0,
+            priceId: null,
+            scheduleId: "",
+            TimeOfPayment: 0,
+            TimeOfPaymentUnit: "",
+          })
+        );
       }
     })();
   }, [cart]);
+
   useEffect(() => {
-    // if (!isEmpty(listPrice)) {
     setFilterPtg({
       productId: cart.id,
       priceID: priceIdSelect,
+      scheduleId: selectedScheduleId,
+      promotions: selectedPromotionIds,
     });
-    // }
-  }, [priceIdSelect]);
-
-  //   useEffect(() => {
-  //     if (typeof window !== "undefined") {
-  //       const dataSelectLS = localStorage?.getItem("IdTCBG");
-  //       const arr: any = JSON.parse(dataSelectLS);
-
-  //       if (arr) {
-  //         setFilterPtg({
-  //           ...filterPtg,
-  //           priceID: arr,
-  //         });
-  //       }
-  //     }
-  //   }, []);
+  }, [priceIdSelect, selectedScheduleId]);
 
   useEffect(() => {
-    // console.log("filterPtg",priceIdSelect)
-    {
+    setFilterPtg({
+      productId: cart.id,
+      priceID: priceIdSelect,
+      scheduleId: selectedScheduleId,
+      promotions: !isEmpty(selectedPromotionIds) ? selectedPromotionIds : [],
+    });
+  }, [selectedPromotionIds]);
+
+  async function fetchPtg(data: typeof filterPtg) {
+    try {
+      if (data.priceID !== 0) {
+        const response = await getProductPtgApi(data);
+        if (!isEmpty(response.responseData)) {
+          dispatch(
+            getProductPTG({
+              ...response.responseData,
+              priceId: filterPtg.priceID,
+            })
+          );
+        } else {
+          notification({
+            error: "Có lỗi xảy ra trong quá trình load phiếu tính giá",
+            title: "Load phiếu tính giá"
+          })
+          dispatch(
+            getProductPTG({
+              ListPolicy: [],
+              ListPromotion: [],
+              ListSchedule: [],
+              MaintainanceFee: null,
+              LandPrice: 0,
+              BuildPrice: 0,
+              BuildMoney: 0,
+              LandMoney: 0,
+              ProductPrice: null,
+              ProductQuotation: null,
+              PromotionMoney: null,
+              TotalMoney: null,
+              TotalMoneyText: "",
+              VAT: 0,
+              MaintenanceFee: 0,
+              PreTotalMoney: 0,
+              priceId: null,
+              scheduleId: "",
+              TimeOfPayment: 0,
+              TimeOfPaymentUnit: "",
+            })
+          );
+        }
+        return !isEmpty(response.responseData) ? response.responseData : null;
+      }
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  }
+
+  useEffect(() => {
+    if (!isEmpty(filterPtg.scheduleId)) {
       (async () => {
-        try {
-          if (filterPtg.priceID !== 0) {
-            const response = await getProductPtgApi(filterPtg);
-            dispatch(
-              getProductPTG({
-                ...response.responseData,
-                priceId: filterPtg.priceID,
-              })
-            );
-            setPaymentPrice([
-              response.responseData.ListSchedule[0].ScheduleName,
-            ]);
-            // setFilterpayment({
-            //   LandMoney: response.responseData.LandMoney,
-            //   BuildMoney: response.responseData.BuildMoney,
-            //   FoundationMoney: response.responseData.FoundationMoney,
-            //   TotalMoney: response.responseData.TotalMoney,
-            //   ScheduleID: response.responseData.ListSchedule[0].ScheduleID,
-            // });
+        const res = await fetchPtg({
+          ...filterPtg,
+          promotions: [],
+        });
+        if (!isEmpty(res)) {
+          setFilterPtg({
+            ...filterPtg,
+            promotions: [],
+          });
+          if (!isEmpty(selectedPromotionIds)) {
+            setSelectedPromotionIds([]);
           }
-        } catch (error) {
-          console.log(error);
         }
       })();
     }
-  }, [filterPtg, dispatch]);
+  }, [filterPtg.scheduleId]);
+
+  useEffect(() => {
+    (async () => {
+      const res = await fetchPtg({
+        ...filterPtg,
+        scheduleId: "",
+        promotions: [],
+      });
+      if (!isEmpty(res) && !isEmpty(res.ListSchedule)) {
+        setPaymentPrice([res.ListSchedule[0].ScheduleName]);
+        if (
+          filterPtg.scheduleId.toString() !==
+          res.ListSchedule[0].ScheduleID.toString()
+        ) {
+          setFilterPtg({
+            ...filterPtg,
+            scheduleId: res.ListSchedule[0].ScheduleID.toString(),
+            promotions: [],
+          });
+          setSelectedScheduleId(res.ListSchedule[0].ScheduleID.toString());
+        } else {
+          await fetchPtg({ ...filterPtg, promotions: [] });
+          if (!isEmpty(selectedPromotionIds)) {
+            setSelectedPromotionIds([]);
+          }
+        }
+        if (!isEmpty(selectedPromotionIds)) {
+          setSelectedPromotionIds([]);
+        }
+      }
+    })();
+  }, [filterPtg.priceID]);
 
   return (
     <Box width={637} mt={"10px"}>
       <WrapperBoxBorderStyled padding={"20px"} margin={"0px 0px 16px"}>
         <RowStyled>
-          <Text18Styled mw={109}>Mã giới thiệu</Text18Styled>
+        <Text18Styled mw={200}><div style={{display: 'flex', flexDirection: 'row'}}><span style={{width: 112}}>Mã giới thiệu </span><span style={{color: 'red'}}>*</span></div></Text18Styled>
           <TextField
             placeholder="Nhập mã"
             fullWidth
@@ -194,93 +326,38 @@ const CartPayment = (props: Props) => {
             onChange={(e) => {
               dispatch(setReferenceCode(e.target.value));
             }}
-            style={{ maxWidth: 317, marginLeft: 21 }}
+            sx={{
+              maxWidth: 317,
+              marginLeft: 15,
+              paddingTop: 0,
+              paddingBottom: 0,
+            }}
+            InputProps={{
+              style: {
+                height: "44px",
+                borderRadius: "8px",
+              },
+            }}
           />
         </RowStyled>
       </WrapperBoxBorderStyled>
       <WrapperBoxBorderStyled padding={"20px"}>
         <RowStyled>
-          <Text18Styled mw={200}>Tiêu chuẩn bàn giao</Text18Styled>
-          {/* <Autocomplete
-            popupIcon={<KeyboardArrowDownIcon fontSize="medium" />}
-            disablePortal
-            id="combo-box-demo"
-            options={listPrice}
-            sx={{ maxWidth: 317 }}
-            renderInput={(params) => (
-              <TextField
-                sx={{ width: 317 }}
-                {...params}
-                placeholder="Chọn chiết khấu"
-              />
-            )}
-          /> */}
+          <Text18Styled mw={200}>Tiêu chuẩn bàn giao <span style={{color: 'red'}}>*</span></Text18Styled>
+
           <SelectRadioComponent
             label="Tiêu chuẩn bàn giao"
             data={listPrice}
-            // checkSelectProvince={checkSelectProvince}
             listProjectType={paymentName}
             onChange={handleChangeTieuChuan}
             placeholder="Chọn Tiêu chuẩn bàn giao"
             style={{ width: 150, height: 40 }}
           />
-          {/* <TextField fullWidth style={{ maxWidth: 317 }} /> */}
         </RowStyled>
       </WrapperBoxBorderStyled>
       <WrapperBoxBorderStyled padding={"20px"} marginTop="1rem">
         <RowStyled>
-          <Text18Styled mw={132}>Chiết khấu</Text18Styled>
-          {/* <Text18Styled mw={132}>Chiết khấu</Text18Styled>
-          <Autocomplete
-            popupIcon={<KeyboardArrowDownIcon fontSize="medium" />}
-            disablePortal
-            id="combo-box-demo"
-            options={[
-              { label: "Chiết khấu 1", id: "1" },
-              { label: "Chiết khấu 2", id: "2" },
-            ]}
-            sx={{ maxWidth: 317 }}
-            renderInput={(params) => (
-              <TextField
-                sx={{ width: 317 }}
-                {...params}
-                placeholder="Chọn chiết khấu"
-              />
-            )}
-          /> */}
-          <SelectCheckboxComponent
-            label="Vị Trí"
-            data={productItem?.ListPromotion}
-            //   listLocation={location}
-            onChange={() => console.log("abcd")}
-            placeholder="Chọn vị trí"
-            style={{ width: 305, height: 54 }}
-          />
-          {/* <TextField fullWidth style={{ maxWidth: 317 }} /> */}
-        </RowStyled>
-      </WrapperBoxBorderStyled>
-
-      <WrapperBoxBorderStyled padding={"20px"} marginTop="1rem">
-        <RowStyled>
-          <Text18Styled mw={200}>Tiến độ thanh toán</Text18Styled>
-          {/* <Text18Styled mw={200}>Tiến độ thanh toán</Text18Styled>
-          <Autocomplete
-            popupIcon={<KeyboardArrowDownIcon fontSize="medium" />}
-            disablePortal
-            id="combo-box-demo"
-            options={[
-              { label: "Bước 1", id: "1" },
-              { label: "Bước 2", id: "2" },
-            ]}
-            sx={{ maxWidth: 317 }}
-            renderInput={(params) => (
-              <TextField
-                sx={{ width: 317 }}
-                {...params}
-                placeholder="Chọn tiến độ thanh toán"
-              />
-            )}
-          /> */}
+          <Text18Styled mw={200}>Tiến độ thanh toán  <span style={{color: 'red'}}>*</span></Text18Styled>
           <FormControl style={{ height: 44, width: 317 }}>
             <Select
               labelId="demo-multiple-name-label"
@@ -294,7 +371,6 @@ const CartPayment = (props: Props) => {
                   return <span>Tiến độ thanh toán</span>;
                 } else {
                   return selected.join(", ");
-                  // return <span>Tiến độ thanh toán</span>
                 }
               }}
               IconComponent={null}
@@ -308,16 +384,27 @@ const CartPayment = (props: Props) => {
               }}
             >
               {productItem?.ListSchedule?.map((name, index) => (
-                <MenuItem
-                  key={index}
-                  value={name.ScheduleName}
-                  // style={getStyles(name.ScheduleID, personName, theme)}
-                >
+                <MenuItem key={index} value={name.ScheduleName}>
                   {name.ScheduleName}
                 </MenuItem>
               ))}
             </Select>
           </FormControl>
+        </RowStyled>
+      </WrapperBoxBorderStyled>
+      <WrapperBoxBorderStyled padding={"20px"} marginTop="1rem">
+        <RowStyled>
+          <Text18Styled mw={132}>Chiết khấu  <span style={{color: 'red'}}>*</span></Text18Styled>
+          <SelectCheckboxComponent
+            label="Vị Trí"
+            data={productItem?.ListPromotion}
+            onChange={() => console.log("abcd")}
+            placeholder="Chọn vị trí"
+            style={{ width: 305, height: 54 }}
+            selectedPromotionIds={selectedPromotionIds}
+            setSelectedPromotionIds={setSelectedPromotionIds}
+            callback={(promotions) => fetchPtg({ ...filterPtg, promotions })}
+          />
         </RowStyled>
       </WrapperBoxBorderStyled>
     </Box>

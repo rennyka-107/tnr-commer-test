@@ -80,9 +80,11 @@ export default function SelectInputComponent({
           }
 
           return selected.join(", ");
-        }}
+        }}    
         MenuProps={MenuProps}
-        inputProps={{ "aria-label": "Without label" }}
+        inputProps={{ "aria-label": "Without label",
+		MenuProps: {disableScrollLock: true} }}
+		// inputProps={{MenuProps: {disableScrollLock: true}}}
         SelectDisplayProps={{
           style: {
             paddingTop: 18,

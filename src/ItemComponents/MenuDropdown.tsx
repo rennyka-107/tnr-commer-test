@@ -23,7 +23,7 @@ export type DropDownProps = {
 const MenuItemStyled = styled(MenuItem)`
   max-height: 300px;
   height: 53px;
-  
+  min-width: 206px;
 `;
 const TextInline = styled(Typography)`
   font-family: "Roboto";
@@ -98,10 +98,13 @@ export default function MenuDropdown({
         style={{ maxHeight: 400 }}
         MenuListProps={{
           "aria-labelledby": "basic-button",
+		  
         }}
+		disableScrollLock={ true }
       >
         {data?.map((item, index, row) => (
           <MenuItemStyled
+		  
             onClick={() => {
               handleClose();
               onSelect && onSelect(item);

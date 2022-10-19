@@ -17,6 +17,7 @@ interface Props<T> extends Omit<TextFieldProps | any, "name"> {
   variant?: "standard" | "filled" | "outlined";
   width?: number;
   maxDate?: Date;
+  minDate?: Date;
 }
 
 const Container = styled.div``;
@@ -47,6 +48,7 @@ const ControllerDateTimeDatLich = <T extends FieldValues>(props: Props<T>) => {
     labelColor,
     width,
     maxDate,
+    minDate,
     ...rest
   } = props;
 
@@ -97,6 +99,7 @@ const ControllerDateTimeDatLich = <T extends FieldValues>(props: Props<T>) => {
             }
             dateFormat="dd-MM-yyyy"
             maxDate={maxDate}
+            minDate={minDate}
             {...rest}
           />
         )}

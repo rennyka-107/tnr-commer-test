@@ -4,8 +4,10 @@ import {
   IconBath,
   IconBedDouble,
   IconCompass,
+  IconDoiLoCan,
   IconFrame,
   IconHeartProduct,
+  IconPlusDoiLoCan,
 } from "@components/Icons";
 import IconChuaXay from "@components/Icons/IconChuaXay";
 import IconCoXay from "@components/Icons/IconCoXay";
@@ -27,8 +29,11 @@ interface Props {
 }
 
 const CartItem = ({ children, item }: Props) => {
-  const { projectAvatar, ticketCard, id, activeFavourite, favouriteStatus } =
+  const { projectAvatar, ticketCard, id, activeFavourite, favouriteStatus ,thumbnail,category} =
     item;
+
+	console.log("item",item)
+
 
   const { addProductToFavouriteFunction } = useFavourite();
 
@@ -63,42 +68,43 @@ const CartItem = ({ children, item }: Props) => {
       ) : (
         <></>
       )}
-      {ticketCard ? (
-        <div
-          style={{
-            background: "#FEC83C",
-            width: "auto",
-            height: "auto",
-            position: "absolute",
-            marginTop: 160,
-            right: 0,
-            padding: 3,
-            textAlign: "center",
-            zIndex: 10,
-          }}
-        >
-          <span
-            style={{
-              fontFamily: "roboto",
-              fontStyle: "normal",
-              fontWeight: 400,
-              fontSize: 14,
-              lineHeight: "16px",
-              color: "#FFFFFF",
-            }}
-          >
-            {ticketCard}
-          </span>
-        </div>
+      {category ? (
+       <div
+	   style={{
+		 background: "#FEC83C",
+		 width: "auto",
+		 height: "auto",
+		 position: "absolute",
+		 marginTop: 160,
+		 right: 0,
+		 padding: 3,
+		 textAlign: "center",
+		 zIndex: 10,
+	   }}
+	 >
+	   <span
+		 style={{
+		   fontFamily: "roboto",
+		   fontStyle: "normal",
+		   fontWeight: 400,
+		   fontSize: 14,
+		   lineHeight: "16px",
+		   color: "#48576D",
+		 }}
+	   >
+		 {category}
+	   </span>
+	 </div>
       ) : (
         <></>
       )}
       <ImageWithHideOnError
         className="logo"
-        src={projectAvatar}
+        src={thumbnail}
         fallbackSrc={Product3}
         height={190}
         width={350}
+		style={""}
         title={"Logo "}
         alt={"Logo "}
         priority
@@ -118,7 +124,8 @@ CartItem.Title = ({ item }: Props) => {
 
   return (
     <div style={{ marginBottom: 7 }}>
-      <span onClick={() => router.push(`/products/${id}`)}>
+      {/* <span onClick={() => router.push(`/products/${id}`)}> */}
+      <span>
         <TextTitleStyled style={{ marginBottom: 9 }}>{title}</TextTitleStyled>
         <TextProjectStyled>{name}</TextProjectStyled>
       </span>
@@ -165,7 +172,7 @@ CartItem.GeneralInfo = ({ children, item }: Props) => {
       )}
 
       <WrapItemCenter>
-        <IconCompass /> 
+        <IconCompass />
         <TextCenterItem>
           {item?.doorDirection ? item.doorDirection : "N/A"}
         </TextCenterItem>
@@ -187,7 +194,9 @@ CartItem.GeneralInfo = ({ children, item }: Props) => {
               <FloorIcon />
               {/* <TextFloorStyled>max</TextFloorStyled> */}
               <TextCenterItem>
-                <TextFloorValue>{`${maxFloor ? `${maxFloor} tầng` : "N/A"}`} </TextFloorValue>
+                <TextFloorValue>
+                  {`${maxFloor ? `${maxFloor} tầng` : "N/A"}`}{" "}
+                </TextFloorValue>
               </TextCenterItem>
             </WrapItemCenter>
           ) : (
@@ -205,6 +214,15 @@ CartItem.ContentWrap = ({ children }: Props) => {
 
 CartItem.Price = ({ children, item }: Props) => {
   const { unitPrice, totalPrice, projectTypeCode } = item;
+  function currencyFormat(num) {
+    if (!num) {
+      return;
+    }
+    return Number(num)
+      .toFixed(0)
+      .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+  }
+
   return (
     <Box sx={{ mt: 2 }}>
       <StyledPrice>
@@ -227,7 +245,7 @@ CartItem.Price = ({ children, item }: Props) => {
               flex: 2,
             }}
           >
-            {totalPrice ? `${totalPrice}đ` : "N/A"}
+            {totalPrice ? `${currencyFormat(totalPrice)}đ` : "N/A"}
           </Box>
         </Box>
         {projectTypeCode === "1" ? (
@@ -252,7 +270,7 @@ CartItem.Price = ({ children, item }: Props) => {
                 flex: 2,
               }}
             >
-              {unitPrice}đ/m2
+              {currencyFormat(unitPrice)}đ/m2
             </Box>
           </Box>
         )}
@@ -287,13 +305,15 @@ CartItem.Select = ({
       }}
       onClick={handleSelect}
     >
-      <Image alt="" src="/icons/add_icon.svg" width={15} height={15} />
+      {/* <Image alt="" src="/icons/add_icon.svg" width={15} height={15} /> */}
+	  <IconPlusDoiLoCan />
       <Box
         sx={{
           color: "#0063F7",
           fontSize: "14px",
           fontWeight: 400,
           ml: "12px",
+
         }}
       >
         Chọn sản phẩm để đổi
@@ -318,7 +338,8 @@ CartItem.ChangeSelect = ({ item, handleOpenModal }: ChangeSelectProps) => {
       }}
       onClick={handleOpenModal}
     >
-      <Image alt="" src="/icons/add_icon.svg" width={15} height={15} />
+      {/* <Image alt="" src="/icons/add_icon.svg" width={15} height={15} /> */}
+	  <IconDoiLoCan/>
       <Box
         sx={{
           color: "#0063F7",

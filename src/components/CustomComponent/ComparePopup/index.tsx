@@ -67,6 +67,7 @@ const ComparePopUp = ({ }: ComparePopUpProps) => {
     });
   };
 
+  console.log(comparePopUpItem)
   return (
     <CardStyled hidden={comparePopUpItem.length === 0}>
       <Stack

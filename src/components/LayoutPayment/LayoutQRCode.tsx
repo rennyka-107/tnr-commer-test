@@ -28,7 +28,7 @@ const LayoutQRCode = () => {
   const router = useRouter();
   const qrCode = useSelector((state: RootState) => state.payments.qrCode);
   return (
-    <Container>
+    <Container title={"Thanh toán"} textsub={true}>
       <BoxTransaction>
         <Title28Styled>Tạo giao dịch thành công</Title28Styled>
         <CardMedia
@@ -44,7 +44,7 @@ const LayoutQRCode = () => {
           Quý khách vui lòng hoàn thiện hồ sơ mua bán trong vòng 12 tiếng để
           được nhận phiếu đặt hàng
         </Text18ItalicStyled>
-        <Text18Styled sx={{ mt: "20px"}} color={"#1b3459"}>Cám ơn Quý khách</Text18Styled>
+        <Text18Styled sx={{ mt: "20px"}} color={"#1b3459"}>Cảm ơn Quý khách</Text18Styled>
         <ButtonNormalStyled
           sx={{
             maxWidth: 225,

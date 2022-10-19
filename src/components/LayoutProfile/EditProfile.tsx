@@ -3,10 +3,16 @@ import Column from "@components/CustomComponent/Column";
 import CustomButton from "@components/CustomComponent/CustomButton";
 import HorizontalLine from "@components/CustomComponent/HorizontalLine";
 import Row from "@components/CustomComponent/Row";
+import CommuneEdit from "@components/Form/CommuneEdit";
 import CommuneSelect from "@components/Form/CommuneSelect";
+import ControllerReactDateEditProfile from "@components/Form/ControllerReactDateEditProfile";
 import ControllerReactDatePicker from "@components/Form/ControllerReactDatePicker";
 import ControllerSelectAutoComplete from "@components/Form/ControllerSelectAutoComplete";
+import ControllerSelectAutoCompleteEditProfile from "@components/Form/ControllerSelectAutoCompleteEditProfile";
+import ControllerSelectAutoCompleteEP from "@components/Form/ControllerSelectAutoCompleteEP";
 import ControllerTextField from "@components/Form/ControllerTextField";
+import ControllerTextFieldEditProfile from "@components/Form/ControllerTextFieldEditProfile";
+import DistrictEdit from "@components/Form/DistrictEdit";
 import DistricSelect from "@components/Form/DistrictSelect";
 import FormGroup from "@components/Form/FormGroup";
 import { IconDownloadPTG, IconEditWhite } from "@components/Icons";
@@ -19,7 +25,7 @@ import {
 } from "@components/StyledLayout/styled";
 import styled from "@emotion/styled";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Backdrop, Button, CircularProgress, Grid } from "@mui/material";
+import { Backdrop, Button, CircularProgress, Divider, Grid } from "@mui/material";
 import { Box } from "@mui/system";
 import { ProfileI } from "@service/Profile";
 import ImageWithHideOnError from "hooks/ImageWithHideOnError";
@@ -32,7 +38,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { InputProps, validateLine } from "utils/constants";
-import { isValidFileImage } from "utils/helper";
+import { isValidFileImage, validateVietnameseName } from "utils/helper";
 import Regexs from "utils/Regexs";
 import * as yup from "yup";
 import {
@@ -60,7 +66,7 @@ const IconWrapper = styled.div`
   align-items: center;
   position: absolute;
   bottom: 37px;
-  right: 305px;
+  right: 270px;
 `;
 const AttachWrapper = styled.div`
   display: flex;
@@ -137,7 +143,15 @@ const EditProfile = () => {
   const dispatch = useDispatch();
 
   const validationSchema = yup.object().shape({
-    fullname: yup.string().required(validateLine.required),
+    fullname:  yup
+	.string()
+	.trim(validateLine.trim)
+	.strict(true)
+	.required(validateLine.required)
+	.min(3, "Họ tên không được chứa ít hơn 3 ký tự")
+	.matches(validateVietnameseName(), "Họ và tên không đúng định dạng")
+	.max(255)
+	.default(""),
     phone: yup
       .string()
       .nullable()
@@ -370,7 +384,7 @@ const EditProfile = () => {
       </Backdrop>
       <BoxContainer
         titleHeader="Chỉnh sửa hồ sơ"
-        styleCustom={{ padding: "21px 24px" }}
+        styleCustom={{ padding: "46px 64px" }}
       >
         <AvataContainer>
           {loadingImg ? (
@@ -386,6 +400,7 @@ const EditProfile = () => {
                   width={125}
                   priority
                   unoptimized={true}
+				  style={{borderRadius: 20}}
                   objectFit="cover"
                 />
               {/* )} */}
@@ -410,8 +425,8 @@ const EditProfile = () => {
         </AvataContainer>
         <Row>
           <Column>
-            <FormGroup sx={{ mb: 2 }} fullWidth>
-              <ControllerSelectAutoComplete
+            <FormGroup sx={{ mb: 5 }} fullWidth>
+              <ControllerSelectAutoCompleteEditProfile
                 variant="outlined"
                 name="customerTypeId"
                 label="Đối tượng khách hàng"
@@ -422,8 +437,8 @@ const EditProfile = () => {
             </FormGroup>
           </Column>
           <Column>
-            <FormGroup sx={{ mb: 2 }} fullWidth>
-              <ControllerSelectAutoComplete
+            <FormGroup sx={{ mb: 5 }} fullWidth>
+              <ControllerSelectAutoCompleteEditProfile
                 variant="outlined"
                 name="appellation"
                 label="Danh xưng"
@@ -439,8 +454,8 @@ const EditProfile = () => {
         </Row>
         <Row>
           <Column>
-            <FormGroup sx={{ mb: 2 }} fullWidth>
-              <ControllerTextField
+            <FormGroup sx={{ mb: 5 }} fullWidth>
+              <ControllerTextFieldEditProfile
                 variant="outlined"
                 hiddenLabel
                 name="fullname"
@@ -453,12 +468,13 @@ const EditProfile = () => {
             </FormGroup>
           </Column>
           <Column>
-            <FormGroup sx={{ mb: 2 }} fullWidth>
-              <ControllerReactDatePicker
+            <FormGroup sx={{ mb: 5 }} fullWidth>
+              <ControllerReactDateEditProfile
                 control={control}
                 name="birth"
                 label="Ngày sinh"
                 maxDate={new Date()}
+				labelColor=" #8190a7"
               />
             </FormGroup>
           </Column>
@@ -466,7 +482,7 @@ const EditProfile = () => {
         <Row>
           <Column>
             <FormGroup fullWidth>
-              <ControllerTextField
+              <ControllerTextFieldEditProfile
                 variant="outlined"
                 hiddenLabel
                 name="phone"
@@ -480,7 +496,7 @@ const EditProfile = () => {
           </Column>
           <Column>
             <FormGroup fullWidth>
-              <ControllerTextField
+              <ControllerTextFieldEditProfile
                 variant="outlined"
                 hiddenLabel
                 name="email"
@@ -495,13 +511,14 @@ const EditProfile = () => {
         </Row>
         <Row>
           <Column>
-            <HorizontalLine mb={36} mt={36} />
+            {/* <HorizontalLine mb={36} mt={36} /> */}
+			<Divider style={{color: "#D8D8D8", marginBottom: 36, marginTop: 36}} />
           </Column>
         </Row>
         <Row>
           <Column>
-            <FormGroup sx={{ mb: 2 }} fullWidth>
-              <ControllerTextField
+            <FormGroup sx={{ mb: 5 }} fullWidth>
+              <ControllerTextFieldEditProfile
                 variant="outlined"
                 hiddenLabel
                 name="idNumber"
@@ -514,7 +531,7 @@ const EditProfile = () => {
             </FormGroup>
           </Column>
           <Column>
-            <FormGroup sx={{ mb: 2 }} fullWidth>
+            <FormGroup sx={{ mb: 5 }} fullWidth>
               <TextFileUpload>Đính kèm giấy CN ĐKDN</TextFileUpload>
               <AttachWrapper>
                 {!!getValues("businessRegistrationName") && (
@@ -556,8 +573,8 @@ const EditProfile = () => {
         </Row>
         <Row>
           <Column>
-            <FormGroup sx={{ mb: 2 }} fullWidth>
-              <ControllerTextField
+            <FormGroup sx={{ mb: 5 }} fullWidth>
+              <ControllerTextFieldEditProfile
                 variant="outlined"
                 hiddenLabel
                 name="idReceivePlace"
@@ -569,8 +586,8 @@ const EditProfile = () => {
             </FormGroup>
           </Column>
           <Column>
-            <FormGroup sx={{ mb: 2 }} fullWidth>
-              <ControllerReactDatePicker
+            <FormGroup sx={{ mb: 5 }} fullWidth>
+              <ControllerReactDateEditProfile
                 control={control}
                 name="idReceiveDate"
                 label="Ngày cấp"
@@ -582,7 +599,7 @@ const EditProfile = () => {
         {/* <Row>
           <Column>
             <FormGroup sx={{ mb: 2 }} fullWidth>
-              <ControllerTextField
+              <ControllerTextFieldEditProfile
                 variant="outlined"
                 hiddenLabel
                 name="address"
@@ -607,10 +624,10 @@ const EditProfile = () => {
             </RowStyled>
           </Column>
         </Row>
-        <Row customStyle={{ marginTop: "10px" }}>
+        <Row customStyle={{ marginTop: "40px" }}>
           <Column>
             <FormGroup>
-              <ControllerSelectAutoComplete
+              <ControllerSelectAutoCompleteEP
                 variant="outlined"
                 name="province"
                 label="Thành phố/Tỉnh"
@@ -626,7 +643,7 @@ const EditProfile = () => {
           </Column>
           <Column>
             <FormGroup>
-              <DistricSelect
+              <DistrictEdit
                 name="district"
                 label="Quận/Huyện"
                 control={control}
@@ -663,10 +680,10 @@ const EditProfile = () => {
             />
           </FormGroup>
         </Grid> */}
-        <Row customStyle={{ marginTop: "10px" }}>
+        <Row customStyle={{ marginTop: "40px" }}>
           <Column>
             <FormGroup>
-              <CommuneSelect
+              <CommuneEdit
                 name="commune"
                 label="Xã"
                 control={control}
@@ -678,14 +695,14 @@ const EditProfile = () => {
           </Column>
           <Column>
             <FormGroup>
-              <ControllerTextField
+              <ControllerTextFieldEditProfile
                 label=" "
                 control={control}
                 placeholder="Nhập địa chỉ cụ thể"
                 InputProps={{
                   style: {
                     height: "44px",
-                    border: "1px solid #B8B8B8",
+  
                     borderRadius: "8px",
                   },
                 }}
@@ -710,7 +727,7 @@ const EditProfile = () => {
         </Grid> */}
         {/* <Grid item xs={6}>
           <FormGroup>
-            <ControllerTextField
+            <ControllerTextFieldEditProfile
               label=" "
               control={control}
               placeholder="Nhập địa chỉ cụ thể"
@@ -727,7 +744,7 @@ const EditProfile = () => {
             />
           </FormGroup>
         </Grid> */}
-        <Row customStyle={{ marginTop: "10px" }}>
+        <Row customStyle={{ marginTop: "40px" }}>
           <Column>
             <RowStyled aItems={"baseline"} width="100%">
               <Title20Styled
@@ -751,10 +768,10 @@ const EditProfile = () => {
             <LinedStyled mw={500} />
           </RowStyled>
         </Grid> */}
-        <Row customStyle={{ marginTop: "10px" }}>
+        <Row customStyle={{ marginTop: "40px" }}>
           <Column>
             <FormGroup>
-              <ControllerSelectAutoComplete
+              <ControllerSelectAutoCompleteEP
                 variant="outlined"
                 name="provinceContactName"
                 label="Thành phố/Tỉnh"
@@ -770,7 +787,7 @@ const EditProfile = () => {
           </Column>
           <Column>
             <FormGroup>
-              <DistricSelect
+              <DistrictEdit
                 name="districtContactName"
                 label="Quận/Huyện"
                 control={control}
@@ -807,10 +824,10 @@ const EditProfile = () => {
             />
           </FormGroup>
         </Grid> */}
-        <Row customStyle={{ marginTop: "10px" }}>
+        <Row customStyle={{ marginTop: "40px" }}>
           <Column>
             <FormGroup>
-              <CommuneSelect
+              <CommuneEdit
                 name="communeContactName"
                 label="Xã"
                 control={control}
@@ -822,14 +839,14 @@ const EditProfile = () => {
           </Column>
           <Column>
             <FormGroup>
-              <ControllerTextField
+              <ControllerTextFieldEditProfile
                 label=" "
                 control={control}
                 variant={"outlined"}
                 InputProps={{
                   style: {
                     height: "44px",
-                    border: "1px solid #B8B8B8",
+
                     borderRadius: "8px",
                   },
                 }}
@@ -854,7 +871,7 @@ const EditProfile = () => {
         </Grid> */}
         {/* <Grid item xs={6}>
           <FormGroup>
-            <ControllerTextField
+            <ControllerTextFieldEditProfile
               label=" "
               control={control}
               variant={"outlined"}
@@ -874,7 +891,7 @@ const EditProfile = () => {
         {/* <Row>
           <Column>
             <FormGroup sx={{ mb: 2 }} fullWidth>
-              <ControllerTextField
+              <ControllerTextFieldEditProfile
                 variant="outlined"
                 hiddenLabel
                 name="address"
@@ -934,7 +951,7 @@ const EditProfile = () => {
               disabled={loading || isEqual(initialValue, watch())}
             >
               {!loading ? (
-                <Text18Styled color={"#fff"}>Cập nhật</Text18Styled>
+                <Text18Styled color={"#fff"} fontSize={18} fontWeight={400}>Lưu thông tin</Text18Styled>
               ) : (
                 <CircularProgress
                   style={{ height: 25, width: 25, color: "#ffffff" }}

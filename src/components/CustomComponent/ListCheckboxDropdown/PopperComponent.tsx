@@ -32,6 +32,7 @@ interface PopperComponentProps {
   anchorEl?: any;
   disablePortal?: boolean;
   open: boolean;
+  style?: any;
 }
 
 const StyledAutocompletePopper = styled("div")(({ theme }) => ({
@@ -78,7 +79,7 @@ const StyledPopper = styled(Popper)(({ theme }) => ({
   }`,
   borderRadius: 6,
   width: 300,
-  zIndex: theme.zIndex.modal,
+  zIndex: 20,
   fontSize: 13,
   color: theme.palette.mode === "light" ? "#24292e" : "#c9d1d9",
   backgroundColor: theme.palette.mode === "light" ? "#fff" : "#1c2128",
@@ -126,7 +127,47 @@ const Button = styled(ButtonBase)(({ theme }) => ({
 
 const OutlinedInputStyled = styled(OutlinedInput)`
   background-color: white;
+
 `;
+const BpIcon = styled("span")(({ theme }) => ({
+	borderRadius: "4px",
+	width: 24,
+	height: 24,
+	padding: 2,
+	border: "1px solid #0063F7",
+	backgroundColor: theme.palette.mode === "dark" ? "#f5f8fa" : "#f5f8fa",
+	".Mui-focusVisible &": {
+	  outline: "2px auto rgba(19,124,189,.6)",
+	  outlineOffset: 2,
+	  
+	},
+	"input:hover ~ &": {
+	  backgroundColor: theme.palette.mode === "dark" ? "#f5f8fa" : "#ebf1f5",
+	},
+	"input:disabled ~ &": {
+	  boxShadow: "none",
+	  background:
+		theme.palette.mode === "dark"
+		  ? "rgba(57,75,89,.5)"
+		  : "rgba(206,217,224,.5)",
+	},
+  }));
+  const BpCheckedIcon = styled(BpIcon)({
+	backgroundColor: "#0063F7",
+  
+	backgroundImage:
+	  "linear-gradient(180deg,hsla(0,0%,100%,.1),hsla(0,0%,100%,0))",
+	"&:before": {
+	  display: "block",
+	  width: 18,
+	  height: 18,
+	  backgroundImage: `url("images/Check-1.png")`,
+	  content: '""',
+	},
+	"input:hover ~ &": {
+	  backgroundColor: "#0063F7",
+	},
+  });
 
 const TitleStyled = styled(Typography)`
   font-family: "Roboto";
@@ -143,14 +184,14 @@ const TitleStyled = styled(Typography)`
   color: #8190a7;
 `;
 
-const useInputStyles = makeStyles(() => ({
-  // root: {
+// const useInputStyles = makeStyles(() => ({
+//   // root: {
 
-  // },
-  input: {
-    cursor: "pointer",
-  },
-}));
+//   // },
+//   input: {
+//     cursor: "pointer",
+//   },
+// }));
 
 type TypeProps = {
   //   data: LabelType[];
@@ -181,9 +222,10 @@ export default function GitHubLabel({
   onChange,
   placeholder,
   listDataLSProvince,
+  style
 }: TypeProps) {
   //   console.log(data);
-  const inputStyles = useInputStyles();
+//   const inputStyles = useInputStyles();
   const router = useRouter();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [value, setValue] = React.useState<MenuBarLocation[]>([]);
@@ -241,13 +283,13 @@ export default function GitHubLabel({
   return (
     <React.Fragment>
       <Box sx={{ width: 'auto', fontSize: 13 }}>
-        <FormControl sx={{ m: 1, width: 150, mt: 3 }}>
+        <FormControl sx={{ m: 1,  mt: 3 }} style={style}>
           <TitleStyled>Vị Trí</TitleStyled>
           <OutlinedInputStyled
             aria-describedby={id}
             value={renderValue(value)}
             readOnly
-            classes={inputStyles}
+            // classes={inputStyles}
             onClick={handleClick}
             style={{ borderRadius: 8, height: 40, textAlign: "center" }}
             endAdornment={<IconSelectDropdownFilter />}
@@ -259,6 +301,7 @@ export default function GitHubLabel({
         open={open}
         anchorEl={anchorEl}
         placement="bottom-start"
+
       >
         <ClickAwayListener onClickAway={handleClose}>
           <div>
@@ -297,11 +340,13 @@ export default function GitHubLabel({
                       "&.Mui-checked": {
                         color: "#0063F7",
                       },
+					  padding: 0,
                       width: 24,
                       height: 24,
-                      marginRight: 2,
                       marginLeft: 2,
                     }}
+					icon={<BpIcon />}
+                    checkedIcon={<BpCheckedIcon />}
                   />
                   <Box
                     component="span"
@@ -324,8 +369,15 @@ export default function GitHubLabel({
                             : "#8b949e",
                       },
                     }}
-                  >
+                  >      <span
+                      style={{
+                        color: " #1B3459",
+                        fontWeight: 400,
+                        fontSize: 14,
+                      }}
+                    >
                     {option?.ProvinceName}
+					</span>
                     <br />
                   </Box>
                 </li>

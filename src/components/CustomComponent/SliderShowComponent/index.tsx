@@ -40,7 +40,7 @@ export default function SliderShowComponent() {
     <>
       {SearchSpecialOffer && SearchSpecialOffer.length > 0 ? (
         <WrapSlide>
-          <IconCarouelHLeftArrow style={{ cursor: "pointer" }} />
+          <IconCarouelHLeftArrow style={{ cursor: "pointer", marginRight: 5 }} />
           <Swiper
             spaceBetween={10}
             speed={5000}
@@ -60,7 +60,7 @@ export default function SliderShowComponent() {
             observeParents={true}
             // modules={[Autoplay, Pagination, Navigation]}
             className="mySwiper-CTUD"
-            style={{ width: 1113 }}
+            style={{ width: 1133 }}
           >
             {SearchSpecialOffer.map((item, index) => (
 				<SwiperSlide key={index}>
@@ -82,7 +82,7 @@ export default function SliderShowComponent() {
                       className="logo"
                       src={item.avatar ? item.avatar : Mask3}
                       fallbackSrc={Mask3}
-                      width={360}
+                      width={350}
                       height={224}
                       priority
                       layout="fixed"

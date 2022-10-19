@@ -9,6 +9,7 @@ import "swiper/css";
 import "swiper/css/autoplay";
 import { IconPrevProduct, IconNextProduct } from "@components/Icons";
 import ImageWithHideOnError from "hooks/ImageWithHideOnError";
+import { useMediaQuery } from "@mui/material";
 
 const WrapSlide = styled.div`
   display: flex;
@@ -20,10 +21,13 @@ const CardContainer = styled.div`
   width: 360px;
   background-size: cover;
   border-radius: 10px;
+
 `;
 
 SwiperCore.use([Autoplay, Pagination, Navigation]);
 const SliderSpecialSale = ({ data }: { data?: any[] }) => {
+	const matches = useMediaQuery("(max-width:1500px)");
+
   const renderItems = useMemo(() => {
     return data?.map((el, index) => (
       <SwiperSlide key={index}>
@@ -32,8 +36,9 @@ const SliderSpecialSale = ({ data }: { data?: any[] }) => {
             className="logo"
             src={el.offersAvatar ?? DefaultImage}
             fallbackSrc={DefaultImage}
-            width={1500}
-            height={381}
+			style={""}
+            width={matches? 1000 : 1500}
+            height={matches ? 250 : 381}
             priority
             layout="fill"
             unoptimized={true}
@@ -72,7 +77,7 @@ const SliderSpecialSale = ({ data }: { data?: any[] }) => {
 		  }}
         //   modules={[Autoplay, Pagination, Navigation]}
           className="mySwiper"
-          style={{ width: 791, height: 639 }}
+          style={{ width: matches ? 600 : 791, height: matches ? 500 : 639 }}
         >
           {renderItems}
         </Swiper>

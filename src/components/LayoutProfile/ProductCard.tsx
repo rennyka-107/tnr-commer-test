@@ -1,4 +1,5 @@
 import BoxContainer from "@components/CustomComponent/BoxContainer";
+import BoxQLGD from "@components/CustomComponent/BoxContainer/BoxQLGD";
 import Column from "@components/CustomComponent/Column";
 import CustomButton from "@components/CustomComponent/CustomButton";
 import Row from "@components/CustomComponent/Row";
@@ -160,7 +161,7 @@ const ProductCard = (props: Props) => {
     }
     return Number(num)
       .toFixed(0)
-      .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+      .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
   }
 
   const handleChooseItem = (item: ContractI) => {
@@ -198,7 +199,7 @@ const ProductCard = (props: Props) => {
   }, [props.item]);
 
   return (
-    <BoxContainer
+    <BoxQLGD
       styleCustom={{
         padding: 18,
         borderRadius: 8,
@@ -226,8 +227,8 @@ const ProductCard = (props: Props) => {
             className="logo"
             src={item?.productionImage}
             fallbackSrc={Product3}
-            height={120}
-            width={180}
+            height={96}
+            width={159}
             title={"Logo "}
             alt={"Logo "}
             priority
@@ -365,7 +366,7 @@ const ProductCard = (props: Props) => {
           </>
         )}
         <DynamicHorizontalLine />
-        <Row>
+        <Row >
           <Column col={1} customStyle={{ paddingLeft: 0 }}>
             <TextProduct>Trạng thái:</TextProduct>
           </Column>
@@ -488,22 +489,26 @@ const ProductCard = (props: Props) => {
           sx={{
             display: "flex",
             alignItems: item.paymentStatus === "0" ? "center" : "flex-end",
-            ml: item.paymentStatus === "0" ? "0px" : "150px",
-            columnGap: "25px",
+            ml: item.paymentStatus === "0" ? "0px" : "0px",
+			justifyContent: 'flex-end',
+            columnGap: "15px",
           }}
+		  style={{marginTop: 30}}
         >
           {item.paymentStatus === "0" ? (
             <>
               <Button
                 style={{
                   height: 48,
-                  width: 186,
+                  width: 200,
                   background: "#FEC83C",
                   textTransform: "none",
                   color: "#0E1D34",
                   fontSize: 16,
                   fontWeight: 500,
                   borderRadius: 8,
+				  marginRight: 5,
+				  marginLeft: 10
                 }}
                 onClick={() => {
                   setDialog({
@@ -515,7 +520,7 @@ const ProductCard = (props: Props) => {
                   // );
                 }}
               >
-                Hoàn Thiện hồ sơ
+                Hoàn thiện hồ sơ
               </Button>
             </>
           ) : (
@@ -525,14 +530,14 @@ const ProductCard = (props: Props) => {
                 value={requestType ? [requestType.name] : []}
                 onChange={handleChangeRequestType}
                 placeholder="Gửi yêu cầu"
-                style={{ margin: 0 }}
+                style={{   height: 48,marginLeft: 25, width: 186 }}
                 disabled={paymentRequestTypeRes.length === 0}
               />
             </>
           )}
 
           <CustomButton
-            style={{ width: "300px", padding: "18px 50px", margin: "8px" }}
+            style={{ width: "150px", height: 48, margin: "8px", padding: 0}}
             label="Xem chi tiết"
             onClick={() => handleChooseItem(item)}
           />
@@ -548,7 +553,7 @@ const ProductCard = (props: Props) => {
           />
         </Box>
       </ContentProduct>
-    </BoxContainer>
+    </BoxQLGD>
   );
 };
 

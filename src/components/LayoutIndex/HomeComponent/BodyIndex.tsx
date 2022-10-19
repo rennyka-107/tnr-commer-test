@@ -1,7 +1,7 @@
 import FlexContainer from "@components/CustomComponent/FlexContainer";
 import SliderCategoryIndex from "@components/CustomComponent/SliderCategoryIndex";
 import styled from "@emotion/styled";
-import { Typography } from "@mui/material";
+import { Typography, useMediaQuery } from "@mui/material";
 import useHover from "hooks/useHover";
 import { TBOUTStanding } from "interface/product";
 import _ from "lodash";
@@ -46,6 +46,7 @@ const ContainerProduct = styled.div`
 
 export default function BodyIndex() {
   const dispatch = useDispatch();
+  const matches1080 = useMediaQuery("(max-width:1080px)");
   const [hoverRef, isHovered] = useHover<HTMLDivElement>();
   const router = useRouter();
   const { listMenuBarProjectType } = useSelector(
@@ -86,9 +87,9 @@ export default function BodyIndex() {
     <FlexContainer>
       <SliderCategoryIndex />
       <ContainerProduct
-        style={{
-          width: sizeOfArray >= 4 ? "100%" : 1115,
-        }}
+        // style={{
+        
+        // }}
       >
         <div
           style={{
@@ -104,9 +105,12 @@ export default function BodyIndex() {
             <div
               style={{
                 display: "flex",
-                justifyContent: "space-around",
-				marginBottom: 50
+                justifyContent: "space-between",
+				marginBottom: 50,
+				marginLeft: matches1080? 0 :70,
+				marginRight: matches1080 ? 0 :60
               }}
+			  className="dynamic-Header"
             >
               <TextBDS>BẤT ĐỘNG SẢN NỔI BẬT</TextBDS>
               <LinkStyled href="/hot-products">Xem tất cả</LinkStyled>
@@ -116,6 +120,7 @@ export default function BodyIndex() {
                 display: "grid",
                 gridTemplateColumns: "repeat(4, auto)",
                 justifyContent: sizeOfArray >= 4 ? "center" : "",
+				width: sizeOfArray >= 4 ? "100%" : 1115,
               }}
             >
               <>

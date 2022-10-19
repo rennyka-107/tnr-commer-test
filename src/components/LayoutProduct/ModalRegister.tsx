@@ -1,6 +1,7 @@
 import CustomButton from "@components/CustomComponent/CustomButton";
 import ControllerDatePicker from "@components/Form/ControllerDatePicker";
 import ControllerDatePickerThamQuan from "@components/Form/ControllerDatePickerThamQuan";
+import ControllerDatePickerTQNM from "@components/Form/ControllerDatePickerTQNM";
 import ControllerDateTimeDatLich from "@components/Form/ControllerDateTimeDatLich";
 import ControllerInputDatLich from "@components/Form/ControllerInputDatLich";
 import ControllerReactDatePicker from "@components/Form/ControllerReactDatePicker";
@@ -19,6 +20,7 @@ import {
   MenuItem,
   Modal,
   Select,
+  TextField,
 } from "@mui/material";
 import useForceUpdate from "hooks/useForceUpdate";
 import useNotification from "hooks/useNotification";
@@ -36,12 +38,19 @@ import * as yup from "yup";
 import { getUserInfoApi } from "../../../pages/api/profileApi";
 import { saveInforVisitApament } from "../../../pages/api/visitAparmentFormApi";
 import { getUserInfo } from "../../../store/profileSlice";
+import dayjs, { Dayjs } from "dayjs";
 import { RootState } from "../../../store/store";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { TimePicker } from "@mui/x-date-pickers/TimePicker";
+import ControllerTimeSelect from "@components/Form/ControllerTimeSelect";
+
 interface PropsI {
   isOpen: boolean;
   onClose?: () => void;
   product: ResponseSearchById;
   toggle: Function;
+  content: string;
 }
 
 interface FormVisitI {
@@ -52,203 +61,8 @@ interface FormVisitI {
   email: string;
   phone: string | number;
   visitDate: string;
-  visitTime: string;
+  visitTime: any;
 }
-
-const listTime = [
-  {
-    label: "00:00 AM",
-    value: "00:00 AM",
-  },
-  {
-    label: "00:30 AM",
-    value: "00:30 AM",
-  },
-  {
-    label: "01:00 AM",
-    value: "01:00 AM",
-  },
-  {
-    label: "01:30 AM",
-    value: "01:30 AM",
-  },
-  {
-    label: "02:00 AM",
-    value: "02:00 AM",
-  },
-  {
-    label: "02:30 AM",
-    value: "02:30 AM",
-  },
-  {
-    label: "03:00 AM",
-    value: "03:00 AM",
-  },
-  {
-    label: "03:30 AM",
-    value: "03:30 AM",
-  },
-  {
-    label: "04:00 AM",
-    value: "04:00 AM",
-  },
-  {
-    label: "04:30 AM",
-    value: "04:30 AM",
-  },
-  {
-    label: "05:00 AM",
-    value: "05:00 AM",
-  },
-  {
-    label: "05:30 AM",
-    value: "05:30 AM",
-  },
-  {
-    label: "06:00 AM",
-    value: "06:00 AM",
-  },
-  {
-    label: "06:30 AM",
-    value: "06:30 AM",
-  },
-  {
-    label: "07:00 AM",
-    value: "07:00 AM",
-  },
-  {
-    label: "07:30 AM",
-    value: "07:30 AM",
-  },
-  {
-    label: "08:00 AM",
-    value: "08:00 AM",
-  },
-  {
-    label: "08:30 AM",
-    value: "08:30 AM",
-  },
-  {
-    label: "09:00 AM",
-    value: "09:00 AM",
-  },
-  {
-    label: "09:30 AM",
-    value: "09:30 AM",
-  },
-  {
-    label: "10:00 AM",
-    value: "10:00 AM",
-  },
-  {
-    label: "10:30 AM",
-    value: "10:30 AM",
-  },
-  {
-    label: "11:00 AM",
-    value: "11:00 AM",
-  },
-  {
-    label: "11:30 AM",
-    value: "11:30 AM",
-  },
-  {
-    label: "12:00 PM",
-    value: "12:00 PM",
-  },
-  {
-    label: "12:30 PM",
-    value: "12:30 PM",
-  },
-  {
-    label: "13:00 PM",
-    value: "13:00 PM",
-  },
-  {
-    label: "13:30 PM",
-    value: "13:30 PM",
-  },
-  {
-    label: "14:00 PM",
-    value: "14:00 PM",
-  },
-  {
-    label: "14:30 PM",
-    value: "14:30 PM",
-  },
-  {
-    label: "15:00 PM",
-    value: "15:00 PM",
-  },
-  {
-    label: "15:30 PM",
-    value: "15:30 PM",
-  },
-  {
-    label: "16:00 PM",
-    value: "16:00 PM",
-  },
-  {
-    label: "16:30 PM",
-    value: "16:30 PM",
-  },
-  {
-    label: "17:00 PM",
-    value: "17:00 PM",
-  },
-  {
-    label: "17:30 PM",
-    value: "17:30 PM",
-  },
-  {
-    label: "18:00 PM",
-    value: "18:00 PM",
-  },
-  {
-    label: "18:30 PM",
-    value: "18:30 PM",
-  },
-  {
-    label: "19:00 PM",
-    value: "19:00 PM",
-  },
-  {
-    label: "19:30 PM",
-    value: "19:30 PM",
-  },
-  {
-    label: "20:00 PM",
-    value: "20:00 PM",
-  },
-  {
-    label: "20:30 PM",
-    value: "20:30 PM",
-  },
-  {
-    label: "21:00 PM",
-    value: "21:00 PM",
-  },
-  {
-    label: "21:30 PM",
-    value: "21:30 PM",
-  },
-  {
-    label: "22:00 PM",
-    value: "22:00 PM",
-  },
-  {
-    label: "22:30 PM",
-    value: "22:30 PM",
-  },
-  {
-    label: "23:00 PM",
-    value: "23:00 PM",
-  },
-  {
-    label: "23:30 PM",
-    value: "23:30 PM",
-  },
-];
 
 const TitleStyled = styled.span`
   font-family: "Roboto";
@@ -290,14 +104,36 @@ const ButtonStyled = styled(Button)`
   width: 100%;
   height: 54px;
 `;
+
+const TextGuideStyled = styled.span`
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 19px;
+
+  /* Brand/Main color */
+
+  color: #1b3459;
+`;
+
+const TextFieldStyled = styled(TextField)`
+
+.MuiOutlinedInput-input
+`;
+
 const ModalRegister = (props: PropsI) => {
-  const { isOpen, onClose, product, toggle } = props;
+  const { isOpen, onClose, product, toggle, content } = props;
   const [loading, setLoading] = useState(false);
+  const [visitContent, setVisitContent] = useState("");
+  const [dateValue, setDateValue] = useState("");
+  const [timeValue, setTimeValue] = useState("");
   const dispatch = useDispatch();
   //   const [rerender, forceUpdate] = useForceUpdate();
   const detailUser = useSelector(
     (state: RootState) => state?.profile?.userInfo
   );
+  console.log(dateValue);
 
   const notification = useNotification();
   const validationSchema = yup.object().shape({
@@ -326,20 +162,33 @@ const ModalRegister = (props: PropsI) => {
       .max(10, "Số điện thoại không được nhiều hơn 10 số")
       .required(validateLine.required)
       .default(""),
-    visitDate: yup
-      .string()
-      .required("không được bỏ trống"),
-      // .min(DateFns.getP(), "Không được chọn ngày trong quá khứ"),
-    visitTime: yup.string().required("không được bỏ trống"),
+    visitDate: yup.string().required("Không được bỏ trống"),
+    // .min(DateFns.getP(), "Không được chọn ngày trong quá khứ"),
+    visitTime: yup
+      .date()
+      .required("Không được bỏ trống")
+      .typeError("Thời gian chọn không hợp lệ!")
+    //   .min(
+    //     !isEmpty(dateValue) && new Date(dateValue) <= new Date()
+    //       ? dayjs(new Date())
+    //       : dayjs(new Date().getDate() - 1),
+    //     "Không được chọn thời gian nhỏ hơn hiện tại"
+    //   ),
+	.min(
+       new Date(dateValue) <= new Date()
+          ? dayjs(new Date())
+          : dayjs(new Date().getDate() - 1),
+        "Không được chọn thời gian nhỏ hơn hiện tại"
+      ),
   });
+  console.log
   const {
     control,
     handleSubmit,
     reset,
-    getValues,
     formState: { errors },
-    watch,
     setValue,
+    watch,
   } = useForm<FormVisitI>({
     mode: "onChange",
     resolver: yupResolver(validationSchema),
@@ -353,13 +202,24 @@ const ModalRegister = (props: PropsI) => {
     },
   });
 
+  const [expanded, setExpanded] = useState(false);
+  const dataForDisplay = expanded ? visitContent : visitContent?.slice(0, 70);
+
+  useEffect(() => {
+    if (!isEmpty(product.project)) {
+      setVisitContent(product.project.visitContent);
+    }
+  }, [product]);
+
   useEffect(() => {
     if (detailUser) {
       setValue("fullname", detailUser.fullname);
       setValue("email", detailUser.email);
       setValue("phone", detailUser.phone);
+      setValue("visitTime", dayjs(new Date()));
     }
-  }, [detailUser]);
+    console.log(dayjs(new Date()).format("HH:mm"));
+  }, [detailUser, isOpen]);
   useEffect(() => {
     if (!isOpen) {
       reset();
@@ -368,9 +228,14 @@ const ModalRegister = (props: PropsI) => {
 
   const submitForm = async (values) => {
     setLoading(true);
-    console.log(values, "!23")
+    const body = {
+		...values,
+		visitTime: dayjs(values.visitTime).format("HH:mm")
+	};
+	console.log(values)
+
     try {
-      const response = await saveInforVisitApament(values);
+      const response = await saveInforVisitApament(body);
       // console.log(response,'response');
       if (response?.responseCode == "00") {
         notification({
@@ -394,6 +259,7 @@ const ModalRegister = (props: PropsI) => {
       });
     }
   };
+
   return (
     <Modal
       open={isOpen}
@@ -442,6 +308,59 @@ const ModalRegister = (props: PropsI) => {
           {/* <LineStyled style={{ border: "1px solid #C7C9D9;" }} /> */}
 
           <div style={{ padding: "20px 50px" }}>
+            {!isEmpty(visitContent) ? (
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                  <TextGuideStyled>
+                    Hướng dẫn đặt lịch tham quan:
+                  </TextGuideStyled>
+                  <TextGuideStyled
+                    style={{
+                      maxHeight: 100,
+                      overflow: "auto",
+                      whiteSpace: "pre",
+                    }}
+                    dangerouslySetInnerHTML={{ __html: dataForDisplay }}
+                  />{" "}
+                  {expanded === false && (
+                    <div
+                      style={{
+                        position: "absolute",
+                        width: 335,
+                        height: 48,
+                        left: "27.5px",
+                        top: 135,
+                        background:
+                          " linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #FFFFFF 100%)",
+                      }}
+                    ></div>
+                  )}
+                </div>
+                <a
+                  style={{
+                    color: "#0063F7",
+                    fontWeight: 400,
+                    cursor: "pointer",
+                    //   fontStyle: "italic",
+                    fontSize: 16,
+                    textAlign: "center",
+                  }}
+                  onClick={() => setExpanded(!expanded)}
+                >
+                  {!isEmpty(visitContent) ? (
+                    <>
+                      {visitContent.length > 70 && (
+                        <> {expanded ? "Rút gọn" : "Xem thêm"}</>
+                      )}
+                    </>
+                  ) : (
+                    <></>
+                  )}
+                </a>
+              </div>
+            ) : (
+              <></>
+            )}
             <FormGroup fullWidth style={{ marginTop: 20 }}>
               <ControllerInputDatLich
                 variant="outlined"
@@ -482,11 +401,14 @@ const ModalRegister = (props: PropsI) => {
               />
             </FormGroup>
             <FormGroup fullWidth>
-              <ControllerReactDatePicker
+              <ControllerDatePickerTQNM
                 label={"Ngày tham quan"}
                 control={control}
                 name={"visitDate"}
+                setDateValue={setDateValue}
                 required
+                minDate={new Date()}
+                labelColor="#8190A7"
               />
               {/* <ControllerDatePicker
                 control={control}
@@ -495,15 +417,17 @@ const ModalRegister = (props: PropsI) => {
               /> */}
             </FormGroup>
             <FormGroup fullWidth>
-              <ControllerSelectTime
+              <ControllerTimeSelect
                 variant="outlined"
+                hiddenLabel
                 name="visitTime"
-                label="Chọn giờ tham quan"
                 control={control}
-                setValue={setValue}
-                dataSelect={listTime}
-                required={true}
-                isClear={true}
+                required
+                fullWidth
+                minDate={dateValue}
+                setTimeValue={setTimeValue}
+                label="Chọn giờ tham quan"
+                labelColor="#666666"
               />
             </FormGroup>
 

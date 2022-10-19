@@ -50,7 +50,7 @@ const CompareProduct = () => {
           )
         );
         dispatch(getCompareParam(res.responseData.compareProduct));
-        dispatch(removeAllComparePopUpItem({}));
+        // dispatch(removeAllComparePopUpItem({}));
       }
     }else if(router.isReady && !router.query.productId){
       dispatch(getCompareItem([]));

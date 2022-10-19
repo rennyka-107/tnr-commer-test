@@ -275,7 +275,7 @@ export default function ItemCompareSearch({
     }
     return Number(num)
       .toFixed(0)
-      .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+      .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
   }
   return (
     <CardStyled sx={{ maxWidth: 350 }}>
@@ -341,6 +341,7 @@ export default function ItemCompareSearch({
       <ImageWithHideOnError
         className="logo"
         src={src}
+		style={""}
         fallbackSrc={Product3}
         height={190}
         width={350}

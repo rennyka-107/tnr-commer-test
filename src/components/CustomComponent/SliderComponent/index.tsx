@@ -56,7 +56,7 @@ const CustomTittle = styled(Typography)`
   color: #ffffff;
 `;
 
-const minDistance = 10;
+const minDistance = 100;
 
 export default function SliderComponent({
   label,

@@ -1,4 +1,10 @@
-const IconSliderYellowLeft = ({ style, className }: { style?: React.CSSProperties, className }) => {
+const IconSliderYellowLeft = ({
+  style,
+  className,
+}: {
+  style?: React.CSSProperties;
+  className;
+}) => {
   return (
     <>
       <svg
@@ -10,7 +16,7 @@ const IconSliderYellowLeft = ({ style, className }: { style?: React.CSSPropertie
         className={className}
         style={style}
       >
-        <g filter="url(#filter0_d_605_23260)">
+        <g>
           <path
             d="M59.5 33C59.5 46.531 48.531 57.5 35 57.5C21.469 57.5 10.5 46.531 10.5 33C10.5 19.469 21.469 8.5 35 8.5C48.531 8.50001 59.5 19.469 59.5 33Z"
             fill="white"

@@ -12,7 +12,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/bundle";
-import { Button, Typography } from "@mui/material";
+import { Button, Typography, useMediaQuery } from "@mui/material";
 import styled from "@emotion/styled";
 import { IconEye, IconMuaOnline } from "@components/Icons";
 import IconSliderYellowLeft from "@components/Icons/IconSliderYellowLeft";
@@ -28,9 +28,18 @@ import { RootState } from "../../../../store/store";
 const MarginContainerStyled = styled.div`
   margin-top: 101px;
   margin-bottom: 130px;
-  margin-left: 337px;
+  margin-left: 380px;
   @media only screen and (max-width: 1280px) {
     margin: 20px;
+  };
+  @media only screen and (max-width: 1800px) {
+    margin-left: 300px;
+  };
+  @media only screen and (max-width: 1600px) {
+    margin-left: 170px;
+  };
+  @media only screen and (max-width: 1440px) {
+    margin-left: 150px;
   }
 `;
 
@@ -39,6 +48,10 @@ const ContainerStyled = styled.div`
   height: 481px;
   display: flex;
   align-items: center;
+  gap: 100px;
+  @media only screen and (max-width: 1500px) {
+    gap: 75px;
+  };
   @media only screen and (max-width: 1280px) {
     flex-direction: column-reverse;
     height: auto;
@@ -60,7 +73,7 @@ const TextLeftStyled = styled(Typography)`
 const ButtonStyled = styled(Button)`
   width: 164px;
   height: 48px;
-  background: #ea242a;
+  background: #EA242A;
   border-radius: 60px;
   :hover {
     background: #fec83c;
@@ -85,7 +98,7 @@ const ButtonStyled = styled(Button)`
 const TextTitleStyled = styled(Typography)`
   font-family: "Roboto";
   font-style: normal;
-  font-weight: 400;
+  font-weight: 500;
   font-size: 28px;
   line-height: 33px;
 
@@ -150,9 +163,189 @@ const dataFake = [1, 2, 3, 4, 5, 6].map((el) => {
 
 export default function Slider3dShowBottom() {
   const { dataProductRecenly } = useProjectRecenly();
+
+//   const defaultData = [
+//     {
+//       abbreviationName: "",
+//       avatar:
+//         "https://online-uat.tng-holdings.vn/static-data/DF5ACE60-3235-4F7A-8176-CC5EF0719F48/2360ee8d-53f3-42c3-a01a-e1cd1d937844/2567f8de-15d7-4d47-ac10-ce0061c78df0/67f0a8ad-47bf-4982-af0b-066666ac8961/88134e73-0953-47b8-b7c3-6f78d16343a2.jpg",
+//       code: "DAPL03",
+//       commune: "464",
+//       constructArea: "4.500",
+//       density: "120",
+//       description: "Dự án tiềm năng",
+//       diaChi: "P.Mỗ Lao, Quận Hà Đông, TP. Hà Nội",
+//       district: "23",
+//       funcDivision: "Khu vip",
+//       id: "2360ee8d-53f3-42c3-a01a-e1cd1d937844",
+//       location: "P.Mỗ Lao, Quận Hà Đông, TP. Hà Nội",
+//       lsName: "Dự án test phụ lục 03",
+//       lstProjectTypeId: null,
+//       map: "https://online-uat.tng-holdings.vn/static-data/DF5ACE60-3235-4F7A-8176-CC5EF0719F48/2360ee8d-53f3-42c3-a01a-e1cd1d937844/dd4b4af4-3d20-4c7b-9cc1-89f9e1cf9a5b/67f0a8ad-47bf-4982-af0b-066666ac8961/b6be6071-f9bc-4e44-bb50-31bc491755c8.jpg",
+//       modifyDate: "26-09-2022 11:18:14",
+//       name: "Dự án test phụ lục 03",
+//       ownership: "Sổ hồng, mua trả góp",
+//       provincial: "2",
+//       scale: "Siêu khổng lồ",
+//       status: null,
+//       tongBanGhi: null,
+//       tradeName: "Dự án test phụ lục 03",
+//       type: "",
+//       viewNum: 4345,
+//       visitContent: null,
+//     },
+// 	{
+// 		abbreviationName: "",
+// 		avatar:
+// 		  "https://online-uat.tng-holdings.vn/static-data/DF5ACE60-3235-4F7A-8176-CC5EF0719F48/2360ee8d-53f3-42c3-a01a-e1cd1d937844/2567f8de-15d7-4d47-ac10-ce0061c78df0/67f0a8ad-47bf-4982-af0b-066666ac8961/88134e73-0953-47b8-b7c3-6f78d16343a2.jpg",
+// 		code: "DAPL03",
+// 		commune: "464",
+// 		constructArea: "4.500",
+// 		density: "120",
+// 		description: "Dự án tiềm năng",
+// 		diaChi: "P.Mỗ Lao, Quận Hà Đông, TP. Hà Nội",
+// 		district: "23",
+// 		funcDivision: "Khu vip",
+// 		id: "2360ee8d-53f3-42c3-a01a-e1cd1d937844",
+// 		location: "P.Mỗ Lao, Quận Hà Đông, TP. Hà Nội",
+// 		lsName: "Dự án test phụ lục 03",
+// 		lstProjectTypeId: null,
+// 		map: "https://online-uat.tng-holdings.vn/static-data/DF5ACE60-3235-4F7A-8176-CC5EF0719F48/2360ee8d-53f3-42c3-a01a-e1cd1d937844/dd4b4af4-3d20-4c7b-9cc1-89f9e1cf9a5b/67f0a8ad-47bf-4982-af0b-066666ac8961/b6be6071-f9bc-4e44-bb50-31bc491755c8.jpg",
+// 		modifyDate: "26-09-2022 11:18:14",
+// 		name: "Dự án test phụ lục 03",
+// 		ownership: "Sổ hồng, mua trả góp",
+// 		provincial: "2",
+// 		scale: "Siêu khổng lồ",
+// 		status: null,
+// 		tongBanGhi: null,
+// 		tradeName: "Dự án test phụ lục 03",
+// 		type: "",
+// 		viewNum: 4345,
+// 		visitContent: null,
+// 	  },
+// 	  {
+// 		abbreviationName: "",
+// 		avatar:
+// 		  "https://online-uat.tng-holdings.vn/static-data/DF5ACE60-3235-4F7A-8176-CC5EF0719F48/2360ee8d-53f3-42c3-a01a-e1cd1d937844/2567f8de-15d7-4d47-ac10-ce0061c78df0/67f0a8ad-47bf-4982-af0b-066666ac8961/88134e73-0953-47b8-b7c3-6f78d16343a2.jpg",
+// 		code: "DAPL03",
+// 		commune: "464",
+// 		constructArea: "4.500",
+// 		density: "120",
+// 		description: "Dự án tiềm năng",
+// 		diaChi: "P.Mỗ Lao, Quận Hà Đông, TP. Hà Nội",
+// 		district: "23",
+// 		funcDivision: "Khu vip",
+// 		id: "2360ee8d-53f3-42c3-a01a-e1cd1d937844",
+// 		location: "P.Mỗ Lao, Quận Hà Đông, TP. Hà Nội",
+// 		lsName: "Dự án test phụ lục 03",
+// 		lstProjectTypeId: null,
+// 		map: "https://online-uat.tng-holdings.vn/static-data/DF5ACE60-3235-4F7A-8176-CC5EF0719F48/2360ee8d-53f3-42c3-a01a-e1cd1d937844/dd4b4af4-3d20-4c7b-9cc1-89f9e1cf9a5b/67f0a8ad-47bf-4982-af0b-066666ac8961/b6be6071-f9bc-4e44-bb50-31bc491755c8.jpg",
+// 		modifyDate: "26-09-2022 11:18:14",
+// 		name: "Dự án test phụ lục 03",
+// 		ownership: "Sổ hồng, mua trả góp",
+// 		provincial: "2",
+// 		scale: "Siêu khổng lồ",
+// 		status: null,
+// 		tongBanGhi: null,
+// 		tradeName: "Dự án test phụ lục 03",
+// 		type: "",
+// 		viewNum: 4345,
+// 		visitContent: null,
+// 	  },
+// 	  {
+// 		abbreviationName: "",
+// 		avatar:
+// 		  "https://online-uat.tng-holdings.vn/static-data/DF5ACE60-3235-4F7A-8176-CC5EF0719F48/2360ee8d-53f3-42c3-a01a-e1cd1d937844/2567f8de-15d7-4d47-ac10-ce0061c78df0/67f0a8ad-47bf-4982-af0b-066666ac8961/88134e73-0953-47b8-b7c3-6f78d16343a2.jpg",
+// 		code: "DAPL03",
+// 		commune: "464",
+// 		constructArea: "4.500",
+// 		density: "120",
+// 		description: "Dự án tiềm năng",
+// 		diaChi: "P.Mỗ Lao, Quận Hà Đông, TP. Hà Nội",
+// 		district: "23",
+// 		funcDivision: "Khu vip",
+// 		id: "2360ee8d-53f3-42c3-a01a-e1cd1d937844",
+// 		location: "P.Mỗ Lao, Quận Hà Đông, TP. Hà Nội",
+// 		lsName: "Dự án test phụ lục 03",
+// 		lstProjectTypeId: null,
+// 		map: "https://online-uat.tng-holdings.vn/static-data/DF5ACE60-3235-4F7A-8176-CC5EF0719F48/2360ee8d-53f3-42c3-a01a-e1cd1d937844/dd4b4af4-3d20-4c7b-9cc1-89f9e1cf9a5b/67f0a8ad-47bf-4982-af0b-066666ac8961/b6be6071-f9bc-4e44-bb50-31bc491755c8.jpg",
+// 		modifyDate: "26-09-2022 11:18:14",
+// 		name: "Dự án test phụ lục 03",
+// 		ownership: "Sổ hồng, mua trả góp",
+// 		provincial: "2",
+// 		scale: "Siêu khổng lồ",
+// 		status: null,
+// 		tongBanGhi: null,
+// 		tradeName: "Dự án test phụ lục 03",
+// 		type: "",
+// 		viewNum: 4345,
+// 		visitContent: null,
+// 	  },
+// 	  {
+// 		abbreviationName: "",
+// 		avatar:
+// 		  "https://online-uat.tng-holdings.vn/static-data/DF5ACE60-3235-4F7A-8176-CC5EF0719F48/2360ee8d-53f3-42c3-a01a-e1cd1d937844/2567f8de-15d7-4d47-ac10-ce0061c78df0/67f0a8ad-47bf-4982-af0b-066666ac8961/88134e73-0953-47b8-b7c3-6f78d16343a2.jpg",
+// 		code: "DAPL03",
+// 		commune: "464",
+// 		constructArea: "4.500",
+// 		density: "120",
+// 		description: "Dự án tiềm năng",
+// 		diaChi: "P.Mỗ Lao, Quận Hà Đông, TP. Hà Nội",
+// 		district: "23",
+// 		funcDivision: "Khu vip",
+// 		id: "2360ee8d-53f3-42c3-a01a-e1cd1d937844",
+// 		location: "P.Mỗ Lao, Quận Hà Đông, TP. Hà Nội",
+// 		lsName: "Dự án test phụ lục 03",
+// 		lstProjectTypeId: null,
+// 		map: "https://online-uat.tng-holdings.vn/static-data/DF5ACE60-3235-4F7A-8176-CC5EF0719F48/2360ee8d-53f3-42c3-a01a-e1cd1d937844/dd4b4af4-3d20-4c7b-9cc1-89f9e1cf9a5b/67f0a8ad-47bf-4982-af0b-066666ac8961/b6be6071-f9bc-4e44-bb50-31bc491755c8.jpg",
+// 		modifyDate: "26-09-2022 11:18:14",
+// 		name: "Dự án test phụ lục 03",
+// 		ownership: "Sổ hồng, mua trả góp",
+// 		provincial: "2",
+// 		scale: "Siêu khổng lồ",
+// 		status: null,
+// 		tongBanGhi: null,
+// 		tradeName: "Dự án test phụ lục 03",
+// 		type: "",
+// 		viewNum: 4345,
+// 		visitContent: null,
+// 	  },
+// 	  {
+// 		abbreviationName: "",
+// 		avatar:
+// 		  "https://online-uat.tng-holdings.vn/static-data/DF5ACE60-3235-4F7A-8176-CC5EF0719F48/2360ee8d-53f3-42c3-a01a-e1cd1d937844/2567f8de-15d7-4d47-ac10-ce0061c78df0/67f0a8ad-47bf-4982-af0b-066666ac8961/88134e73-0953-47b8-b7c3-6f78d16343a2.jpg",
+// 		code: "DAPL03",
+// 		commune: "464",
+// 		constructArea: "4.500",
+// 		density: "120",
+// 		description: "Dự án tiềm năng",
+// 		diaChi: "P.Mỗ Lao, Quận Hà Đông, TP. Hà Nội",
+// 		district: "23",
+// 		funcDivision: "Khu vip",
+// 		id: "2360ee8d-53f3-42c3-a01a-e1cd1d937844",
+// 		location: "P.Mỗ Lao, Quận Hà Đông, TP. Hà Nội",
+// 		lsName: "Dự án test phụ lục 03",
+// 		lstProjectTypeId: null,
+// 		map: "https://online-uat.tng-holdings.vn/static-data/DF5ACE60-3235-4F7A-8176-CC5EF0719F48/2360ee8d-53f3-42c3-a01a-e1cd1d937844/dd4b4af4-3d20-4c7b-9cc1-89f9e1cf9a5b/67f0a8ad-47bf-4982-af0b-066666ac8961/b6be6071-f9bc-4e44-bb50-31bc491755c8.jpg",
+// 		modifyDate: "26-09-2022 11:18:14",
+// 		name: "Dự án test phụ lục 03",
+// 		ownership: "Sổ hồng, mua trả góp",
+// 		provincial: "2",
+// 		scale: "Siêu khổng lồ",
+// 		status: null,
+// 		tongBanGhi: null,
+// 		tradeName: "Dự án test phụ lục 03",
+// 		type: "",
+// 		viewNum: 4345,
+// 		visitContent: null,
+// 	  },
+//   ];
   const newArrayDataProductRecenly = dataProductRecenly.filter(
     (item) => item.id !== "1"
   );
+  const matches = useMediaQuery("(max-width:1440px)");
+
+ 
 
   const [LSprojectId, setLSProjectID] = useState([]);
   useEffect(() => {
@@ -182,6 +375,7 @@ export default function Slider3dShowBottom() {
           backgroundAttachment: "fixed",
           backgroundRepeat: "no-repeat",
           filter: "brightness(0.7)",
+	
         }}
         key={el.id}
       >
@@ -195,6 +389,7 @@ export default function Slider3dShowBottom() {
             priority
             layout="fill"
             unoptimized={true}
+			style={""}
           />
           <IconEye style={{ zIndex: 1000 }} />
           <TextInsideNumber>{el?.viewNum}</TextInsideNumber>
@@ -222,7 +417,7 @@ export default function Slider3dShowBottom() {
                 {generalInfo?.policyContent ?? ""}
               </TextLeftStyled>
               <ButtonStyled onClick={handleShowAll}>
-                Xem tất cả&nbsp;
+                Xem tất cả&nbsp;&nbsp;&nbsp;
                 <IconMuaOnline />
               </ButtonStyled>
             </ContainerText>
@@ -239,7 +434,7 @@ export default function Slider3dShowBottom() {
               />
               <Swiper
                 autoplay={{
-                  delay: 1000,
+                  delay: 551000,
                 }}
                 navigation={{
                   nextEl: ".y-right",
@@ -281,7 +476,7 @@ export default function Slider3dShowBottom() {
                 style={{
                   zIndex: 10,
                   position: "absolute",
-                  right: "0px",
+                  right: matches && dataProductRecenly.length > 2 ? "60px" : matches ?  "45px" : "213px",
                   top: "42%",
                   cursor: "pointer",
                 }}

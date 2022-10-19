@@ -1,6 +1,8 @@
 import styled from "@emotion/styled";
 import { Stack, Typography, Box, CardMedia } from "@mui/material";
 import { IconX } from "@components/Icons";
+import Product3 from "../../../../public/images/product3.png";
+import ImageWithHideOnError from "hooks/ImageWithHideOnError";
 
 interface PopUpItemProps {
   onRemove: () => void;
@@ -48,12 +50,25 @@ const PopUpItem = ({ data, onRemove }: PopUpItemProps) => {
           <Description>{data.projectName}</Description>
         </Stack>
         <Box>
-          <CardMedia
+          {/* <CardMedia
             component={"img"}
             height={100}
             style={{ borderRadius: "15px 15px 15px 15px" }}
-            image={data.thumbnail ?? "https://picsum.photos/308/200"}
+            image={data.thumbnail ??  "https://picsum.photos/308/200"}
             alt={"green image"}
+          /> */}
+          <ImageWithHideOnError
+            className="logo"
+            src={data.thumbnail ? data.thumbnail : Product3}
+            fallbackSrc={Product3}
+            height={190}
+            width={350}
+            title={"Logo "}
+            alt={"Logo "}
+            priority
+            unoptimized={true}
+			style={{borderRadius: "15px 15px 15px 15px" }}
+            objectFit="cover"
           />
         </Box>
         <Box

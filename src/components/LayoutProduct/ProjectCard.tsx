@@ -145,6 +145,7 @@ export default function ItemProjectCard({
     <CardStyled sx={{ maxWidth: 350, minHeight: 500 }}>
       <ImageWithHideOnError
         className="logo"
+		style={""}
         src={src ? src : Product3}
         fallbackSrc={Product3}
         height={190}

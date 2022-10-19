@@ -275,7 +275,7 @@ export default function ItemProductCard(props: Props) {
     }
     return Number(num)
       .toFixed(0)
-      .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+      .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
   }
 
   const handleClickCard = () => {
@@ -350,6 +350,7 @@ export default function ItemProductCard(props: Props) {
       <ImageWithHideOnError
         className="logo"
         src={src}
+		style={""}
         fallbackSrc={Product3}
         height={190}
         width={350}

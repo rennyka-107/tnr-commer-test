@@ -13,7 +13,7 @@ import {
   SelectChangeEvent,
   FormControlLabel,
 } from "@mui/material";
-import React, { MouseEventHandler, useState } from "react";
+import React, { MouseEventHandler, useEffect, useState } from "react";
 import { IconTimes } from "@components/Icons";
 import dynamic from "next/dynamic";
 import { useDispatch, useSelector } from "react-redux";
@@ -26,6 +26,7 @@ import {
   getComparePopUpItem,
 } from "../../../../store/productCompareSlice";
 import PlusAddCompare from "@components/Icons/PlusAddCompare";
+import { isEmpty } from "lodash";
 
 type Props = {
   onClick?: MouseEventHandler<HTMLButtonElement>;
@@ -121,7 +122,7 @@ const ButtonSearchModalStyled = styled(Button)`
 
 const ItemImport = ({ onChangeFilter, filter }: Props) => {
   const [open, setOpen] = useState<boolean>(false);
-  const { compareParams, compareItems } = useSelector(
+  const { compareParams, compareItems,comparePopUpItem } = useSelector(
     (state: RootState) => state.productCompareSlice
   );
   const { listMenuBarProjectType, listCategory } = useSelector(
@@ -131,7 +132,6 @@ const ItemImport = ({ onChangeFilter, filter }: Props) => {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  
 
   const handleOnClick = () => {
     // setOpen(true);

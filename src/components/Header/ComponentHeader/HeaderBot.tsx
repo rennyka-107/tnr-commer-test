@@ -99,7 +99,6 @@ const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
     (state: RootState) => state?.shortcut
   );
   const userToken = LocalStorage.get("accessToken");
-  console.log(userToken);
 
   const { checkUp } = useSelector((state: RootState) => state.favourites);
   const fetchFavourite = async () => {
@@ -211,6 +210,7 @@ const HeaderBot = ({ menuDataProject, menuData }: MenuProps) => {
         )}
         {!isEmpty(menuData) ? (
           <MenuDropdown
+	
             title={"Dự án"}
             data={menuData}
             onSelect={(item) => {

@@ -12,8 +12,10 @@ const DepositInformation = ({ title, orderDetail }: Props) => {
   console.log(orderDetail, "order detail")
   if (!orderDetail) return <></>;
 
+  console.log("orderDetail",orderDetail)
+
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mb: 5 }}>
+    <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mb: 5, mt: 6 }}>
       <Typography
         sx={{
           fontWeight: 500,

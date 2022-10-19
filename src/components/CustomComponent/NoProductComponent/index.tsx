@@ -17,7 +17,7 @@ const TextStyled = styled.span`
 const NoProductComponent = () => {
   return (
     <div
-      style={{ textAlign: "center", display: "flex", flexDirection: "column" ,gap: 30}}
+      style={{ textAlign: "center", display: "flex", flexDirection: "column" ,gap: 30,padding: "50px 91px 30px 80px"}}
     >
       <div>
         {" "}

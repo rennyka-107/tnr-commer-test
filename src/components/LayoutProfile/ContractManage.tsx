@@ -112,6 +112,7 @@ const ContractManage = () => {
 
   return (
     <BoxContainer
+	
       HeaderCustom={
         <HeaderContainer>
           <HeaderTitle>Quản lý giao dịch</HeaderTitle>
@@ -124,7 +125,7 @@ const ContractManage = () => {
             }}
           >
             <MenuDropdown
-              title={"Dự Án"}
+              title={"Dự án"}
               data={listMenuBarType}
               onSelect={(item) => {
                 handleSelectProject(item);

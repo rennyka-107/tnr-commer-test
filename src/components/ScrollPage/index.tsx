@@ -40,7 +40,7 @@ const ScrollPage = () => {
           right: 0,
           bottom: "10%",
           marginRight: 20,
-          zIndex: 500,
+          zIndex: 1000,
         }}
       >
         <StyledPhoneContainer

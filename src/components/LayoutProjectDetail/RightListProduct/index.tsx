@@ -76,7 +76,7 @@ export default function RightListProduct() {
             ? window.innerWidth <= 768
               ? "90vw"
               : "60vw"
-            : "30vw",
+            : "35vw",
           // height: "65vw",
           height: "calc(100vh - 150px)",
           borderRadius: "8px 0px 0px 8px",
@@ -256,9 +256,10 @@ export default function RightListProduct() {
                   width: "80%",
                   display: "flex",
                   flexWrap: "wrap",
+                  alignItems: "flex-start",
                   gap: 1,
                   justifyContent: "center",
-                  height: window.innerHeight - 400,
+                  maxHeight: window.innerHeight - 400,
                   overflowY: "auto",
                 }}
               >
@@ -275,6 +276,7 @@ export default function RightListProduct() {
                     }}
                     sx={{
                       width: "40%",
+                      height: "32px",
                       background: "#F3F4F6",
                       mt: 1,
                       ml: 1,

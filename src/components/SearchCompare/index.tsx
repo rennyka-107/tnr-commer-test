@@ -36,6 +36,7 @@ import PopperRadioComponent from "@components/CustomComponent/ListRadioSearchCom
 import PopperRadioProject from "@components/CustomComponent/ListRadioSearchCompare/PopperRadioProject";
 import { removeAllComparePopUpItem } from "../../../store/productCompareSlice";
 import SwitchComponent from "@components/SearchCompare/SwitchComponent";
+import ContainerComparePage from "@components/Container/ContainerComparePage";
 
 type dataProps = {
   searchData?: searchLocationResponse[];
@@ -44,8 +45,12 @@ type dataProps = {
   totalTextSearch?: number;
   pageNumber?: number;
 };
+const minDistance2 = 10;
+const minDistance = 400;
 
-const ContainerSearchPage = styled.div``;
+const ContainerSearchPage = styled.div`
+
+`;
 
 const TextTotalSeach = styled(Typography)`
   font-family: "Roboto";
@@ -291,20 +296,54 @@ const SearchCompare = ({
     }
   };
 
-  const handleChangeKhoangGia = (event: any) => {
-    const {
-      target: { value },
-    } = event;
-    setDataKhoangGia(value);
+  const handleChangeKhoangGia = (
+    event: Event,
+    newValue: number | number[],
+    activeThumb: number
+  )=> {
+    if (!Array.isArray(newValue)) {
+		return;
+	  }
+	  if (activeThumb === 0) {
+		setDataKhoangGia([
+		  Math.min(newValue[0], dataKhoangGia[1] - minDistance2),
+		  dataKhoangGia[1],
+		]);
+	  } else {
+		setDataKhoangGia([
+			dataKhoangGia[0],
+		  Math.max(newValue[1], dataKhoangGia[0] + minDistance2),
+		]);
+	  }
+  };
+  const handleChangeDienTich = (
+    event: Event,
+    newValue: number | number[],
+    activeThumb: number
+  )=> {
+    if (!Array.isArray(newValue)) {
+		return;
+	  }
+	  if (activeThumb === 0) {
+		setDataDienTich([
+		  Math.min(newValue[0], dataDienTich[1] - minDistance),
+		  dataDienTich[1],
+		]);
+	  } else {
+		setDataDienTich([
+			dataDienTich[0],
+		  Math.max(newValue[1], dataDienTich[0] + minDistance),
+		]);
+	  }
   };
 
-  const handleChangeDienTich = (event: any) => {
-    const {
-      target: { value },
-    } = event;
+//   const handleChangeDienTich = (event: any) => {
+//     const {
+//       target: { value },
+//     } = event;
 
-    setDataDienTich(value);
-  };
+//     setDataDienTich(value);
+//   };
 
   const onFilterApply = () => {
     setFilterSearch({
@@ -436,7 +475,7 @@ const SearchCompare = ({
   };
 
   return (
-    <ContainerSearch title={"So sánh bất động sản"} checkBread={true}>
+    <ContainerComparePage title={"So sánh bất động sản"} checkBread={true}>
       <ContainerSearchPage>
         <div
           style={{
@@ -445,7 +484,6 @@ const SearchCompare = ({
             alignItems: "center",
             marginBottom: 43,
             justifyContent: "space-between",
-			marginRight: 22,
           }}
         >
           {/* <ProjectTypeRadio
@@ -543,7 +581,7 @@ const SearchCompare = ({
             style={{
               background: "#1B3459",
               width: 125,
-              marginTop: 24,
+              marginTop: 35,
               borderRadius: 8,
               height: 40,
             }}
@@ -562,14 +600,14 @@ const SearchCompare = ({
           </Button>
           {/* <div style={{ width: 150 }}>{fetchComponent()}</div> */}
         </div>
-        <div style={{ display: "flex", justifyContent: "space-between" ,marginRight: 22,}}>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
           <div
             style={{
               display: "flex",
               gap: 10,
               alignItems: "center",
               marginBottom: 21,
-			  
+
             }}
           >
             <NumberTotalStyled>{totalTextSearch}</NumberTotalStyled>
@@ -623,7 +661,7 @@ const SearchCompare = ({
       </Popper>
       </ContainerSearchPage>
 
-    </ContainerSearch>
+    </ContainerComparePage>
   );
 };
 export default SearchCompare;

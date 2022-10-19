@@ -10,6 +10,7 @@ import {
   IconClipboardProduct,
   IconCompass,
   IconDownloadPTG,
+  IconDownloadPTGTOP,
   IconFrame,
   IconHeadSetProduct,
   IconNhaMau,
@@ -24,6 +25,7 @@ import {
   Box,
   Button,
   CircularProgress,
+  Divider,
   Menu,
   MenuItem,
   Modal,
@@ -314,17 +316,15 @@ const TextFloorValue = styled(Typography)`
 `;
 
 const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
-  console.log({ dataProduct });
   const router = useRouter();
   const id = router.asPath.split("/")[2];
   const addToCart = useAddToCart();
 
   const [dataDownloadPtg, setDataDownloadPtg] = useState({
-    ProjectId: 0,
-    ProductId: 0,
-    DepositDate: "",
+    ProductId: "",
     PriceID: 0,
     ScheduleID: 0,
+    Promotions: [],
   });
   const listBread = [
     {
@@ -343,6 +343,8 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
       path: `/search?Type=Advanded&projectId=${dataProduct.project.id}`,
     },
   ];
+
+  console.log("dataProduct", dataProduct);
 
   const dispatch = useDispatch();
   const [tabCardValue, setTabCardValue] = useState(true);
@@ -427,27 +429,27 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
     }
     return Number(num)
       .toFixed(0)
-      .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+      .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
   }
-  const fetchPhieuTinhGia = () => {
-    return (
-      <>
-        {/* {!isEmpty(productItem) ? ( */}
-        <DynamicPhieuTinhGiaComponent
-          // productItem={productItem}
-          setDataDownloadPtg={setDataDownloadPtg}
-          dataProduct={dataProduct}
-        />
-        {/* ) : (
-          <>
-            <div style={{ textAlign: "center", marginTop: 200 }}>
-              <CircularProgress />
-            </div>
-          </>
-        )} */}
-      </>
-    );
-  };
+  // const fetchPhieuTinhGia = () => {
+  //   return (
+  //     <>
+  //       {/* {!isEmpty(productItem) ? ( */}
+  //       <DynamicPhieuTinhGiaComponent
+  //         // productItem={productItem}
+  //         setDataDownloadPtg={setDataDownloadPtg}
+  //         dataProduct={dataProduct}
+  //       />
+  //       {/* ) : (
+  //         <>
+  //           <div style={{ textAlign: "center", marginTop: 200 }}>
+  //             <CircularProgress />
+  //           </div>
+  //         </>
+  //       )} */}
+  //     </>
+  //   );
+  // };
   const handleClose = () => {
     setHandleOpen(false);
   };
@@ -568,6 +570,7 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
               />
               <ModalRegister
                 isOpen={openModalRegister}
+                content={dataProduct.project.visitContent}
                 onClose={() => setOpenModalRegister(!openModalRegister)}
                 product={dataProduct}
                 toggle={() => setOpenModalRegister(!openModalRegister)}
@@ -797,6 +800,9 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
               <div style={{ display: "flex", gap: 19, marginTop: 24 }}>
                 {typeBottomShow !== 1 ? (
                   <ButtonYellowStyled
+                    style={{
+                      width: dataProduct.projectTypeCode === "2" ? "auto" : 250,
+                    }}
                     onClick={() => {
                       setTypeBottomShow(1);
                       if (!tabCardValue) {
@@ -808,40 +814,62 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                     <TextInSideButtonYellow>Thông tin</TextInSideButtonYellow>
                   </ButtonYellowStyled>
                 ) : (
-                  <ButtonYellowStyledDisbaled disabled>
+                  <ButtonYellowStyledDisbaled
+                    disabled
+                    style={{
+                      width: dataProduct.projectTypeCode === "2" ? "auto" : 250,
+                    }}
+                  >
                     <IconInfor disabled />
                     <TextInSideButtonYellowDisabled>
                       Thông tin
                     </TextInSideButtonYellowDisabled>
                   </ButtonYellowStyledDisbaled>
                 )}
-                <ButtonYellowStyled onClick={() => setOpenModalVideo(true)}>
+                <ButtonYellowStyled
+                  onClick={() => setOpenModalVideo(true)}
+                  style={{
+                    width: dataProduct.projectTypeCode === "2" ? "auto" : 200,
+                  }}
+                >
                   <Icon360 />
                   <TextInSideButtonYellow> Video tour</TextInSideButtonYellow>
                 </ButtonYellowStyled>
 
                 {tabCardValue === true ? (
-                  <ButtonYellowStyled onClick={() => handlePhieuTinhGia()}>
+                  <ButtonYellowStyled
+                    onClick={() => handlePhieuTinhGia()}
+                    style={{
+                      width: dataProduct.projectTypeCode === "2" ? "auto" : 250,
+                    }}
+                  >
                     <IconPhieuTinhGia />
                     <TextInSideButtonYellow>
                       Phiếu tính giá
                     </TextInSideButtonYellow>
                   </ButtonYellowStyled>
                 ) : (
-                  <ButtonYellowStyledDisbaled disabled>
+                  <ButtonYellowStyledDisbaled
+                    disabled
+                    style={{
+                      width: dataProduct.projectTypeCode === "2" ? "auto" : 250,
+                    }}
+                  >
                     <IconReceiptDisabled />
                     <TextInSideButtonYellowDisabled>
                       Phiếu tính giá
                     </TextInSideButtonYellowDisabled>
                   </ButtonYellowStyledDisbaled>
                 )}
-                <ButtonYellowStyled onClick={() => handleThamQuan()}>
-                  <IconNhaMau />
-                  <TextInSideButtonYellow>
-                    {" "}
-                    Tham quan nhà mẫu
-                  </TextInSideButtonYellow>
-                </ButtonYellowStyled>
+                {dataProduct.projectTypeCode === "2" && (
+                  <ButtonYellowStyled onClick={() => handleThamQuan()}>
+                    <IconNhaMau />
+                    <TextInSideButtonYellow>
+                      {" "}
+                      Tham quan nhà mẫu
+                    </TextInSideButtonYellow>
+                  </ButtonYellowStyled>
+                )}
               </div>
             </div>
             <div>
@@ -870,13 +898,11 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                       marginTop: 20,
                     }}
                   >
-                    <SubRightText>
-                      {dataProduct?.levelDetailName}
-                    </SubRightText>
+                    <SubRightText>{dataProduct?.levelDetailName}</SubRightText>
                   </div>
                 )}
 
-                <div style={{ border: " 1px solid #C7C9D9", width: 262 }}></div>
+                <Divider style={{ color: "#C7C9D9", width: 262 }} />
                 <CenterIntemWrap>
                   {dataProduct?.projectTypeCode === "1" ? (
                     <WrapItemCenter>
@@ -955,7 +981,8 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                     </WrapItemCenter>
                   )}
                 </CenterIntemWrap>
-                <div style={{ border: " 1px solid #C7C9D9", width: 262 }}></div>
+                {/* <div style={{ border: " 1px solid #C7C9D9", width: 262 }}></div> */}
+                <Divider style={{ color: "#C7C9D9", width: 262 }} />
                 <div style={{ marginTop: 12 }}>
                   <div style={{ display: "flex", marginBottom: 14 }}>
                     <TextBottomStyled style={{ marginRight: 40 }}>
@@ -1108,9 +1135,9 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                 onClick={() => handleDownloadPhieuTinhGia()}
               >
                 {" "}
-                <IconDownloadPTG />
+                <IconDownloadPTGTOP />
                 <Typography
-                  style={{ fontSize: 16, fontWeight: 400, color: "#FCB715" }}
+                  style={{ fontSize: 16, fontWeight: 400, color: "#E4A501" }}
                 >
                   Tải phiếu tính giá
                 </Typography>

@@ -57,20 +57,25 @@ export const productCompareSlice = createSlice({
       }
     },
     removeCompareItem: (state, action) => {
+      //   if (state.compareItems.length >= 2) {
+      // 	console.log(action.payload)
       state.compareItems = state.compareItems.filter(
         (item) => item.productId !== action.payload
       );
+      //   }
     },
     removeComparePopUpItem: (state, action) => {
+      //   if (state.comparePopUpItem.length > 1) {
       const items = state.comparePopUpItem.filter(
         (item) => item.productId !== action.payload
       );
       LocalStorage.set("compare-item", items);
       state.comparePopUpItem = items;
+      //   }
     },
     removeAllComparePopUpItem: (state, action) => {
-      LocalStorage.remove("compare-item");
-      state.comparePopUpItem = [];
+        LocalStorage.remove("compare-item");
+        state.comparePopUpItem = [];
     },
     setValidCompare: (state, action) => {
       state.isValid = action.payload;

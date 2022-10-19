@@ -36,7 +36,7 @@ const IconHeart = ({ style,total }: { style?: React.CSSProperties,total?: number
           fill="#0E1D34"
         />
       </svg>
-	  {total > 0 && <TotalItemsContainer>{total}</TotalItemsContainer>}
+	  {/* {total > 0 && <TotalItemsContainer>{total}</TotalItemsContainer>} */}
     </WrapIconBagContainer>
   );
 };
