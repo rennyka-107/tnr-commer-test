@@ -97,6 +97,24 @@ const validationSchema = yup.object().shape({
     .max(255, "Không được vượt quá 255 ký tự")
     .required(validateLine.required)
     .default(""),
+  province: yup
+    .string()
+    .max(255, "Không được vượt quá 255 ký tự")
+    .required(validateLine.required)
+    .nullable()
+    .default(""),
+  district: yup
+    .string()
+    .max(255, "Không được vượt quá 255 ký tự")
+    .required(validateLine.required)
+    .nullable()
+    .default(""),
+  commune: yup
+    .string()
+    .max(255, "Không được vượt quá 255 ký tự")
+    .required(validateLine.required)
+    .nullable()
+    .default(""),
   contactAddress: yup
     .string()
     .max(255, "Không được vượt quá 255 ký tự")
@@ -261,7 +279,7 @@ const AddInfoCustom = (props: Props) => {
                     InputProps={{
                       style: {
                         height: "44px",
-                        border: "1px solid #B8B8B8",
+                        // border: "1px solid #B8B8B8",
                         borderRadius: "8px",
                       },
                     }}
@@ -288,7 +306,7 @@ const AddInfoCustom = (props: Props) => {
                     InputProps={{
                       style: {
                         height: "44px",
-                        border: "1px solid #B8B8B8",
+                        // border: "1px solid #B8B8B8",
                         borderRadius: "8px",
                       },
                     }}
@@ -306,7 +324,7 @@ const AddInfoCustom = (props: Props) => {
                     InputProps={{
                       style: {
                         height: "44px",
-                        border: "1px solid #B8B8B8",
+                        // border: "1px solid #B8B8B8",
                         borderRadius: "8px",
                       },
                     }}
@@ -332,7 +350,7 @@ const AddInfoCustom = (props: Props) => {
                     InputProps={{
                       style: {
                         height: "44px",
-                        border: "1px solid #B8B8B8",
+                        // border: "1px solid #B8B8B8",
                         borderRadius: "8px",
                       },
                     }}
@@ -349,7 +367,7 @@ const AddInfoCustom = (props: Props) => {
                     InputProps={{
                       style: {
                         height: "44px",
-                        border: "1px solid #B8B8B8",
+                        // border: "1px solid #B8B8B8",
                         borderRadius: "8px",
                       },
                     }}
@@ -392,6 +410,7 @@ const AddInfoCustom = (props: Props) => {
                     variant="outlined"
                     name="province"
                     label="Thành phố/Tỉnh"
+                    required
                     control={control}
                     setValue={setValue}
                     options={convertProvinType}
@@ -405,6 +424,7 @@ const AddInfoCustom = (props: Props) => {
               <Grid item xs={6}>
                 <FormGroup>
                   <DistricSelect
+                    required
                     name="district"
                     label="Quận/Huyện"
                     control={control}
@@ -416,6 +436,7 @@ const AddInfoCustom = (props: Props) => {
               <Grid item xs={6}>
                 <FormGroup>
                   <CommuneSelect
+                    required
                     name="commune"
                     label="Xã"
                     control={control}
@@ -428,13 +449,14 @@ const AddInfoCustom = (props: Props) => {
               <Grid item xs={6}>
                 <FormGroup>
                   <ControllerTextField
-                    label=" "
+                    label="Địa chỉ cụ thể"
+                    required
                     control={control}
                     placeholder="Nhập địa chỉ cụ thể"
                     InputProps={{
                       style: {
                         height: "44px",
-                        border: "1px solid #B8B8B8",
+                        // border: "1px solid #B8B8B8",
                         borderRadius: "8px",
                       },
                     }}
@@ -497,13 +519,13 @@ const AddInfoCustom = (props: Props) => {
               <Grid item xs={6}>
                 <FormGroup>
                   <ControllerTextField
-                    label=" "
+                    label="Địa chỉ cụ thể"
                     control={control}
                     variant={"outlined"}
                     InputProps={{
                       style: {
                         height: "44px",
-                        border: "1px solid #B8B8B8",
+                        // border: "1px solid #B8B8B8",
                         borderRadius: "8px",
                       },
                     }}
@@ -513,51 +535,7 @@ const AddInfoCustom = (props: Props) => {
                   />
                 </FormGroup>
               </Grid>
-              {/* <Grid item xs={12}>
-                <FormGroup>
-                  <ControllerTextField
-                    label={"Địa chỉ thường trú"}
-                    control={control}
-                    variant={"outlined"}
-                    name={"permanentAddress"}
-                    fullWidth
-                    required
-                  />
-                </FormGroup>
-              </Grid>
-
-              <Grid item xs={12}>
-                <FormGroup>
-                  <ControllerTextField
-                    label={"Địa chỉ liên lạc"}
-                    control={control}
-                    variant={"outlined"}
-                    name={"contactAddress"}
-                    fullWidth
-                  />
-                </FormGroup>
-              </Grid>
-
-              <Grid item xs={6}>
-                <FormGroup>
-                  <ControllerTextField
-                    label={"Thành phố/Tỉnh"}
-                    control={control}
-                    variant={"outlined"}
-                    name={"province"}
-                  />
-                </FormGroup>
-              </Grid>
-              <Grid item xs={6}>
-                <FormGroup>
-                  <ControllerTextField
-                    label={"Quận/Huyện"}
-                    control={control}
-                    variant={"outlined"}
-                    name={"district"}
-                  />
-                </FormGroup>
-              </Grid> */}
+              
             </Grid>
           </FormControl>
         </WrapperBoxBorderStyled>

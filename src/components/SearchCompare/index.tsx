@@ -38,6 +38,7 @@ import { removeAllComparePopUpItem } from "../../../store/productCompareSlice";
 import SwitchComponent from "@components/SearchCompare/SwitchComponent";
 import ContainerComparePage from "@components/Container/ContainerComparePage";
 
+
 type dataProps = {
   searchData?: searchLocationResponse[];
   setSearch?: any;

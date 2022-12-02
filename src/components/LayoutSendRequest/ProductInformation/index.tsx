@@ -130,7 +130,7 @@ const ProductInformation = ({ orderDetail }: Props) => {
                   marginTop: 11,
                 }}
               >
-                <SubRightText>{production?.levelDetailParentName}</SubRightText>
+                {/* <SubRightText>{production?.levelDetailParentName}</SubRightText> */}
                 <SubRightText>{production?.levelDetailName}</SubRightText>
               </div>
             ) : (

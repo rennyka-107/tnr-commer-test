@@ -20,10 +20,10 @@ interface searchProps {
   data?: searchLocationResponse[];
 }
 const ContainerProduct = styled.div`
-@media screen and (max-width: 1440px) {
-	display: flex;
-	justify-content: center;
-}
+  @media screen and (max-width: 1440px) {
+    display: flex;
+    justify-content: center;
+  }
 `;
 const ProductWrap = styled.div`
   display: grid;
@@ -31,7 +31,7 @@ const ProductWrap = styled.div`
   grid-template-columns: repeat(4, 1fr);
   position: relative;
   @media screen and (max-width: 1440px) {
-	grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
 `;
 const ItemSearch = ({ data }: searchProps) => {
@@ -94,8 +94,10 @@ const ItemSearch = ({ data }: searchProps) => {
             build={product.build}
             priceListed={product.totalPrice}
             projectTypeCode={product.projectTypeCode}
+            floor={product.floor}
             minFloor={product.minFloor}
             maxFloor={product.maxFloor}
+            floorHeight={product.floorHeight}
             priceSub={product.unitPrice}
             ticketCard={product.category}
             onCompare={onCompare(product)}

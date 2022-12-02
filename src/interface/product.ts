@@ -30,10 +30,14 @@ export interface PTGResponse {
   PromotionMoney?: string;
   ApartmentPrice?: string;
   LandPrice?: string;
+  PreLandPrice?: number;
   BuildPrice?: string;
+  PreBuildPrice?: number;
   LandMoney?: string;
+  PreLandMoney?: number;
   BuildMoney?: string;
-  FoundationMoney?: string;
+  PreBuildMoney?: number;
+  FoundationMoney?: string | number;
   TotalMoney?: string;
   ListDocument?: [];
   ListPolicy?: ListPolicyType[];
@@ -74,6 +78,7 @@ export interface ProductsResponse {
   projectLevelDetailId: string;
   diaChi?: string;
   status: number;
+  build?: boolean;
   apartmentModelId: string;
   lotSymbolLegal: string;
   lotSymbolCommercial: string;
@@ -81,6 +86,7 @@ export interface ProductsResponse {
   location?: string;
   projectId: string;
   homeNum: string;
+  buildArea?: string;
   wallArea: number;
   clearArea: number;
   price: 10.0;
@@ -93,8 +99,10 @@ export interface ProductsResponse {
   productId?: string;
   paymentStatus?: number | string | null;
   projectTypeCode?: string;
+  floor?: number;
   minFloor?: number;
   maxFloor?: number;
+  floorHeight?: string | null;
   projectLocation?: string;
   projectName?: string;
   projectTypeId: string;
@@ -176,7 +184,7 @@ export interface ResponseSearchById {
     lsName: string;
     video?: string;
     hotline?: string;
-	visitContent?: string;
+    visitContent?: string;
   };
   projectTypeId?: string;
   homeNum: string;
@@ -234,6 +242,7 @@ export interface ResponseSearchById {
   minFloor?: number;
   maxFloor?: number;
   buildType?: string;
+  floorHeight?: string | null;
 }
 
 ///api/product/information/find-top-by-outstanding

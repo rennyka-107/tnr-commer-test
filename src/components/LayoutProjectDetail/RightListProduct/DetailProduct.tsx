@@ -270,7 +270,7 @@ const DetailProduct = ({ onBack }: Props) => {
             <Grid item xs={6} display={"flex"} alignItems={"center"}>
               <FloorIcon />
               &nbsp;&nbsp;
-              <TextStyled>{Target.maxFloor ?? "N/A"} Tầng</TextStyled>
+              <TextStyled>{Target.floorHeight ?? "N/A"}</TextStyled>
             </Grid>
           )}
         </Grid>

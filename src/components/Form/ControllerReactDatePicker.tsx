@@ -16,12 +16,13 @@ interface Props<T> extends Omit<TextFieldProps | any, "name"> {
   variant?: "standard" | "filled" | "outlined";
   width?: number;
   maxDate?: Date;
+  fzLabel?: string;
 }
 
 const Container = styled.div``;
 const LabelSpan = styled.div<{ color: string }>`
   margin-bottom: 4px;
-  color: ${({ color }) => color ?? " #8190a7"};
+  color: ${({ color }) => color ?? "#8190a7"};
   font-family: Roboto;
   font-style: normal;
   font-weight: 400;
@@ -42,13 +43,14 @@ const ControllerReactDatePicker = <T extends FieldValues>(props: Props<T>) => {
     labelColor,
     width,
     maxDate,
+    fzLabel,
     ...rest
   } = props;
 
   return (
     <Container style={{ width: width ?? "100%" }}>
       {label && (
-        <LabelSpan color={labelColor}>
+        <LabelSpan style={{ fontSize: fzLabel}} color={labelColor}>
           {label}&nbsp;{required && <RequiredSpan>*</RequiredSpan>}
         </LabelSpan>
       )}
@@ -73,7 +75,7 @@ const ControllerReactDatePicker = <T extends FieldValues>(props: Props<T>) => {
                     ...InputProps.style,
                     paddingTop: 0,
                     paddingBottom: 0,
-                    border: "1px solid rgb(184, 184, 184)"
+                    // border: "1px solid rgb(184, 184, 184)"
                   },
                 }}
                 error={Boolean(error)}

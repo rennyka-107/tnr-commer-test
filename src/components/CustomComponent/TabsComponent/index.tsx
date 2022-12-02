@@ -61,7 +61,7 @@ const TabsComponent = () => {
   };
 
   return (
-    <div style={{ marginTop: 44, width: '100%' }}>
+    <div style={{ marginTop: 52, width: '100%' }}>
       <Tabs
         style={{ gap: 50 }}
         value={value}
@@ -86,7 +86,7 @@ const TabsComponent = () => {
         <>
           {" "}
           <div>
-            <div style={{ width: "100%", padding: 80 }}>
+            <div style={{ width: "100%", padding: 55, textAlign: "justify" }}>
               {!_.isEmpty(listTabsProject) ? (
                 <div
                   // className="ck-content"
@@ -110,7 +110,7 @@ const TabsComponent = () => {
             <div>
               {/* <div style={{ width: 896, padding: 50 }}>
                 <div className="ck-content" dangerouslySetInnerHTML={{ __html: itemView?.text }} /> */}
-              <div style={{ width: "100%", padding: 80 }}>
+              <div style={{ width: "100%", padding: 80, textAlign: "justify" }}>
                 <div
                   className="content-project-view ck-content"
                   dangerouslySetInnerHTML={{ __html: itemView?.text }}

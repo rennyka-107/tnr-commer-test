@@ -38,7 +38,6 @@ const SubRightText = styled(Typography)`
 
 const ItemDetailCol = ({ item }: Props) => {
   const { cart } = useSelector((state: RootState) => state.carts);
-
   return (
     <WrapperBoxBorderStyled mw={349} padding={"15px 12px 3px"}>
       <CardMedia
@@ -58,7 +57,7 @@ const ItemDetailCol = ({ item }: Props) => {
         </Title28Styled>
         {!isEmpty(item) ? (
           <RowStyledAgain jContent={"start"}>
-            {item.projectTypeCode === "2" ? (
+            {item.projectType?.code === "2" ? (
               <div
                 style={{
                   display: "flex",
@@ -75,7 +74,7 @@ const ItemDetailCol = ({ item }: Props) => {
                   gap: 37,
                 }}
               >
-                <SubRightText>{item?.levelDetailParentName}</SubRightText>
+                <SubRightText>{item?.levelDetailName}</SubRightText>
               </div>
             )}
           </RowStyledAgain>
@@ -113,18 +112,24 @@ const ItemDetailCol = ({ item }: Props) => {
             <sup>2</sup>
           </Text14Styled>
         </RowStyledAgain>
-        <RowStyledAgain>
-          <Text14Styled>Phòng ngủ</Text14Styled>
-          <Text14Styled>
-            {(!isEmpty(item) ? item.numBed : cart.numBed) ?? "N/A"}
-          </Text14Styled>
-        </RowStyledAgain>
-        <RowStyledAgain>
-          <Text14Styled>Phòng tắm</Text14Styled>
-          <Text14Styled>
-            {(!isEmpty(item) ? item.numBath : cart.numBath) ?? "N/A"}
-          </Text14Styled>
-        </RowStyledAgain>
+        {((!isEmpty(item) && item.projectType.code === "2") ||
+          (!isEmpty(cart) && cart.buildType === "2")) && (
+          <RowStyledAgain>
+            <Text14Styled>Phòng ngủ</Text14Styled>
+            <Text14Styled>
+              {(!isEmpty(item) ? item.numBed : cart.numBed) ?? "N/A"}
+            </Text14Styled>
+          </RowStyledAgain>
+        )}
+        {((!isEmpty(item) && item.projectType.code === "2") ||
+          (!isEmpty(cart) && cart.buildType === "2")) && (
+          <RowStyledAgain>
+            <Text14Styled>Phòng vệ sinh</Text14Styled>
+            <Text14Styled>
+              {(!isEmpty(item) ? item.numBath : cart.numBath) ?? "N/A"}
+            </Text14Styled>
+          </RowStyledAgain>
+        )}
         <RowStyledAgain>
           <Text14Styled>Hướng</Text14Styled>
           <Text14Styled>
@@ -132,6 +137,30 @@ const ItemDetailCol = ({ item }: Props) => {
               "N/A"}
           </Text14Styled>
         </RowStyledAgain>
+        {((!isEmpty(item) && item.projectType.code === "1") ||
+          (!isEmpty(cart) && cart.buildType === "1")) && (
+          <RowStyledAgain>
+            <Text14Styled>Phân loại</Text14Styled>
+            <Text14Styled>
+              {!isEmpty(item)
+                ? item.build
+                  ? "Có xây"
+                  : "Chưa xây"
+                : cart.build
+                ? "Có xây"
+                : "Chưa xây"}
+            </Text14Styled>
+          </RowStyledAgain>
+        )}
+        {((!isEmpty(item) && item.projectType.code === "1" && item.build) ||
+          (!isEmpty(cart) && cart.buildType === "1" && cart.build)) && (
+          <RowStyledAgain>
+            <Text14Styled>Số tầng cao</Text14Styled>
+            <Text14Styled>
+              {(!isEmpty(item) ? item.floorHeight : cart.floorHeight) ?? "N/A"}
+            </Text14Styled>
+          </RowStyledAgain>
+        )}
       </BoxDetailStyled>
     </WrapperBoxBorderStyled>
   );

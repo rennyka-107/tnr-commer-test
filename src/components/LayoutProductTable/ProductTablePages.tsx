@@ -28,7 +28,7 @@ import {
   IconNumberRoomSleep,
   PriceThapTang,
 } from "@components/Icons";
-import { Tooltip } from "@mui/material";
+import { Tooltip, Typography } from "@mui/material";
 import { ContactlessOutlined, DriveFileMove } from "@mui/icons-material";
 import ContainerProductTable from "@components/Container/ContainerProductTable";
 
@@ -51,6 +51,7 @@ type ListProductData = {
 
 type ProductionRowI = {
   doorDirection: string;
+  buildArea: string;
   isCornerApartment: number;
   landArea: number;
   numBath: number;
@@ -66,6 +67,10 @@ type ProductionRowI = {
   lstProductData: ListProductData[];
   maxFloor: string;
   minFloor: string;
+  wallArea: string;
+  clearArea: string;
+  floor: string;
+  floorHeight: string | null;
 };
 
 const TableCellStyled = styled(TableCell)`
@@ -150,6 +155,19 @@ const EmptyCartStyled = styled.div`
     margin-top: 16px;
     user-select: none;
   }
+`;
+
+const TextStyledOnField = styled(Typography)`
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 130%;
+  /* or 18px */
+
+  text-align: center;
+
+  color: #ffffff;
 `;
 
 const ProductTablePages = () => {
@@ -362,7 +380,10 @@ const ProductTablePages = () => {
                     style={{ backgroundColor: "#1B3459", color: "#FFFF" }}
                   >
                     <TableRow>
-                      <TableCellStyled align="left">
+                      <TableCellStyled
+                        align="left"
+                        style={{ padding: "7.5px 19px 7.5px 18px" }}
+                      >
                         <LabelContainer>
                           <div
                             style={{
@@ -372,18 +393,30 @@ const ProductTablePages = () => {
                             }}
                           >
                             {" "}
-                            <IconNumberRoom /> &nbsp; Thứ tự căn
+                            <IconNumberRoom /> &nbsp; Mã căn
                           </div>
                         </LabelContainer>
                       </TableCellStyled>
                       {data?.lstProductionRow?.map((el, index) => (
-                        <TableCellContent align="center" key={index}>
-                          {el?.code ?? "no stt"}
+                        <TableCellContent
+                          align="center"
+                          key={index}
+                          style={{ padding: "7.5px 19px 7.5px 18px" }}
+                        >
+                          {/* {el?.code ?? "no stt"} */}
+                          <div style={{ minWidth: 100, width: 'auto' }}>
+                            {/* <span> */}
+                            {el?.productionName ?? "no stt"}
+                            {/* </span> */}
+                          </div>
                         </TableCellContent>
                       ))}
                     </TableRow>
                     <TableRow>
-                      <TableCellStyled align="left">
+                      <TableCellStyled
+                        align="left"
+                        style={{ padding: "7.5px 19px 7.5px 18px" }}
+                      >
                         <div
                           style={{
                             display: "flex",
@@ -395,13 +428,20 @@ const ProductTablePages = () => {
                         </div>
                       </TableCellStyled>
                       {data?.lstProductionRow?.map((el, index) => (
-                        <TableCellContent align="center" key={index}>
+                        <TableCellContent
+                          align="center"
+                          key={index}
+                          style={{ padding: "7.5px 19px 7.5px 18px" }}
+                        >
                           {el?.numBed ?? "no bed"}
                         </TableCellContent>
                       ))}
                     </TableRow>
                     <TableRow>
-                      <TableCellStyled align="left">
+                      <TableCellStyled
+                        align="left"
+                        style={{ padding: "7.5px 19px 7.5px 18px" }}
+                      >
                         <div
                           style={{
                             display: "flex",
@@ -409,17 +449,24 @@ const ProductTablePages = () => {
                             alignItems: "center",
                           }}
                         >
-                          <IconBedProductTable /> &nbsp; Số phòng vệ sinh
+                          <IconBedProductTable /> &nbsp; Số nhà vệ sinh
                         </div>
                       </TableCellStyled>
                       {data?.lstProductionRow?.map((el, index) => (
-                        <TableCellContent align="center" key={index}>
+                        <TableCellContent
+                          align="center"
+                          key={index}
+                          style={{ padding: "7.5px 19px 7.5px 18px" }}
+                        >
                           {el?.numBath ?? 0}
                         </TableCellContent>
                       ))}
                     </TableRow>
                     <TableRow>
-                      <TableCellStyled align="left">
+                      <TableCellStyled
+                        align="left"
+                        style={{ padding: "7.5px 19px 7.5px 18px" }}
+                      >
                         <div
                           style={{
                             display: "flex",
@@ -431,31 +478,80 @@ const ProductTablePages = () => {
                         </div>
                       </TableCellStyled>
                       {data?.lstProductionRow?.map((el, index) => (
-                        <TableCellContent align="center" key={index}>
+                        <TableCellContent
+                          align="center"
+                          key={index}
+                          style={{ padding: "7.5px 19px 7.5px 18px" }}
+                        >
                           {el?.doorDirection ?? "no direction"}
                         </TableCellContent>
                       ))}
                     </TableRow>
                     <TableRow>
-                      <TableCellStyled align="left">
+                      <TableCellStyled
+                        align="left"
+                        style={{ padding: "7.5px 19px 7.5px 18px" }}
+                      >
                         <div
                           style={{
                             display: "flex",
                             flexDirection: "row",
                             alignItems: "center",
+                            width: 250,
                           }}
                         >
-                          <IconDienTichProductTable /> &nbsp; Diện tích (m2)
+                          <IconDienTichProductTable />{" "}
+                          <span>
+                            &nbsp; Diện tích tim tường (m
+                            <sup style={{ fontSize: 10 }}>2</sup>)
+                          </span>
                         </div>
                       </TableCellStyled>
                       {data?.lstProductionRow?.map((el, index) => (
-                        <TableCellContent align="center" key={index}>
-                          {el.landArea ? el.landArea : ""}
+                        <TableCellContent
+                          align="center"
+                          key={index}
+                          style={{ padding: "7.5px 19px 7.5px 18px" }}
+                        >
+                          {el.wallArea ? el.wallArea : ""}
                         </TableCellContent>
                       ))}
                     </TableRow>
                     <TableRow>
-                      <TableCellStyled align="left">
+                      <TableCellStyled
+                        align="left"
+                        style={{ padding: "7.5px 19px 7.5px 18px" }}
+                      >
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center",
+                            width: 250,
+                          }}
+                        >
+                          <IconDienTichProductTable />{" "}
+                          <span>
+                            &nbsp; Diện tích thông thủy (m
+                            <sup style={{ fontSize: 10 }}>2</sup>)
+                          </span>
+                        </div>
+                      </TableCellStyled>
+                      {data?.lstProductionRow?.map((el, index) => (
+                        <TableCellContent
+                          align="center"
+                          key={index}
+                          style={{ padding: "7.5px 19px 7.5px 18px" }}
+                        >
+                          {el.clearArea ? el.clearArea : ""}
+                        </TableCellContent>
+                      ))}
+                    </TableRow>
+                    <TableRow>
+                      <TableCellStyled
+                        align="left"
+                        style={{ padding: "7.5px 19px 7.5px 18px" }}
+                      >
                         <div
                           style={{
                             display: "flex",
@@ -467,7 +563,11 @@ const ProductTablePages = () => {
                         </div>
                       </TableCellStyled>
                       {data?.lstProductionRow?.map((el, index) => (
-                        <TableCellContent align="center" key={index}>
+                        <TableCellContent
+                          align="center"
+                          key={index}
+                          style={{ padding: "7.5px 19px 7.5px 18px" }}
+                        >
                           {el.isCornerApartment === 1 ? <Check /> : ""}
                         </TableCellContent>
                       ))}
@@ -534,7 +634,10 @@ const ProductTablePages = () => {
                     style={{ backgroundColor: "#1B3459", color: "#FFFF" }}
                   >
                     <TableRow>
-                      <TableCellStyled align="left">
+                      <TableCellStyled
+                        align="left"
+                        style={{ padding: "7.5px 19px 7.5px 18px" }}
+                      >
                         <LabelContainer>
                           <div
                             style={{
@@ -544,17 +647,21 @@ const ProductTablePages = () => {
                             }}
                           >
                             {" "}
-                            <IconNumberRoom /> &nbsp; Lô số
+                            <IconNumberRoom /> &nbsp; Mã lô
                           </div>
                         </LabelContainer>
                       </TableCellStyled>
                       {data?.lstProductionRow?.map((el, index) => (
-                        <TableCellContent align="center" key={index}>
-                          {el?.code ?? "no stt"}
+                        <TableCellContent
+                          align="center"
+                          key={index}
+                          style={{ padding: "7.5px 19px 7.5px 18px" }}
+                        >
+                          {el?.productionName ?? "no stt"}
                         </TableCellContent>
                       ))}
                     </TableRow>
-                    <TableRow>
+                    {/* <TableRow>
                       <TableCellStyled align="left">
                         <div
                           style={{
@@ -571,9 +678,12 @@ const ProductTablePages = () => {
                           {el?.minFloor ?? "no bed"}
                         </TableCellContent>
                       ))}
-                    </TableRow>
+                    </TableRow> */}
                     <TableRow>
-                      <TableCellStyled align="left">
+                      <TableCellStyled
+                        align="left"
+                        style={{ padding: "7.5px 19px 7.5px 18px" }}
+                      >
                         <div
                           style={{
                             display: "flex",
@@ -581,17 +691,24 @@ const ProductTablePages = () => {
                             alignItems: "center",
                           }}
                         >
-                          <FloorIconProductTable /> &nbsp; Số tầng xây dựng max
+                          <FloorIconProductTable /> &nbsp; Số tầng xây dựng
                         </div>
                       </TableCellStyled>
                       {data?.lstProductionRow?.map((el, index) => (
-                        <TableCellContent align="center" key={index}>
-                          {el?.maxFloor ?? 0}
+                        <TableCellContent
+                          align="center"
+                          key={index}
+                          style={{ padding: "7.5px 19px 7.5px 18px" }}
+                        >
+                          {el?.floorHeight ?? 0}
                         </TableCellContent>
                       ))}
                     </TableRow>
                     <TableRow>
-                      <TableCellStyled align="left">
+                      <TableCellStyled
+                        align="left"
+                        style={{ padding: "7.5px 19px 7.5px 18px" }}
+                      >
                         <div
                           style={{
                             display: "flex",
@@ -603,13 +720,20 @@ const ProductTablePages = () => {
                         </div>
                       </TableCellStyled>
                       {data?.lstProductionRow?.map((el, index) => (
-                        <TableCellContent align="center" key={index}>
+                        <TableCellContent
+                          align="center"
+                          key={index}
+                          style={{ padding: "7.5px 19px 7.5px 18px" }}
+                        >
                           {el?.doorDirection ?? "no direction"}
                         </TableCellContent>
                       ))}
                     </TableRow>
                     <TableRow>
-                      <TableCellStyled align="left">
+                      <TableCellStyled
+                        align="left"
+                        style={{ padding: "7.5px 19px 7.5px 18px" }}
+                      >
                         <div
                           style={{
                             display: "flex",
@@ -617,12 +741,49 @@ const ProductTablePages = () => {
                             alignItems: "center",
                           }}
                         >
-                          <IconDienTichProductTable /> &nbsp; m2
+                          <IconDienTichProductTable /> &nbsp;{" "}
+                          <span>
+                            &nbsp; Diện tích đất (m
+                            <sup style={{ fontSize: 10 }}>2</sup>)
+                          </span>
                         </div>
                       </TableCellStyled>
                       {data?.lstProductionRow?.map((el, index) => (
-                        <TableCellContent align="center" key={index}>
+                        <TableCellContent
+                          align="center"
+                          key={index}
+                          style={{ padding: "7.5px 19px 7.5px 18px" }}
+                        >
                           {el.landArea ? el.landArea : ""}
+                        </TableCellContent>
+                      ))}
+                    </TableRow>
+                    <TableRow>
+                      <TableCellStyled
+                        align="left"
+                        style={{ padding: "7.5px 19px 7.5px 18px" }}
+                      >
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center",
+                          }}
+                        >
+                          <IconDienTichProductTable /> &nbsp;{" "}
+                          <span>
+                            &nbsp; Diện tích xây dựng (m
+                            <sup style={{ fontSize: 10 }}>2</sup>)
+                          </span>
+                        </div>
+                      </TableCellStyled>
+                      {data?.lstProductionRow?.map((el, index) => (
+                        <TableCellContent
+                          align="center"
+                          key={index}
+                          style={{ padding: "7.5px 19px 7.5px 18px" }}
+                        >
+                          {el.buildArea ? el.buildArea : ""}
                         </TableCellContent>
                       ))}
                     </TableRow>
@@ -698,7 +859,9 @@ const ProductTablePages = () => {
           }}
         />
       </ContainerProductTable>
-      <div style={{ padding: 10, width: "100%" }}>{fetchTable()}</div>
+      <div style={{ padding: " 10px 25px 20px 20px", width: "100%" }}>
+        {fetchTable()}
+      </div>
     </FlexContainer>
   );
 };

@@ -23,7 +23,6 @@ const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
     maxWidth: 360,
-    fontWeight: "500 !important",
   },
 }));
 
@@ -47,6 +46,10 @@ const ItemRight = styled.div`
 
 const ListItem = withStyles({
   root: {
+    "& .MuiTypography-root": {
+      fontWeight: 500,
+      fontSize: 18,
+    },
     "&$selected": {
       backgroundColor: "transparent",
       color: "rgb(27, 52, 89)",
@@ -59,10 +62,11 @@ const ListItem = withStyles({
         fontSize: 18,
       },
     },
+
     "&$selected:hover": {
       backgroundColor: "transparent",
       color: "rgb(27, 52, 89)",
-	  fontWeight: 500,
+      fontWeight: 500,
       fontSize: 18,
       lineHeight: 21.09,
       "& .MuiListItemIcon-root": {
@@ -81,11 +85,12 @@ const ListItem = withStyles({
       lineHeight: 21.09,
       "& .MuiListItemIcon-root": {
         color: "#1B3459",
+        fontSize: 18,
       },
       "& .MuiTypography-root": {
-        fontWeight: 400,
+        fontWeight: 500,
 
-		color: "#1B3459",
+        color: "#1B3459",
       },
     },
   },
@@ -189,7 +194,6 @@ const BuyingGuideComponent = ({ data }: PropsUserManual) => {
                           indexSelected === index
                             ? "rgb(27, 52, 89)"
                             : "rgb(129, 144, 167)",
-                        fontWeight: "500 !important",
                       }}
                       primary={item.name}
                     />

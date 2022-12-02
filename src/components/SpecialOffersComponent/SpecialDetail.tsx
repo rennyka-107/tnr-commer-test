@@ -45,7 +45,7 @@ const SpecialDetail = ({ data }: Props) => {
     <ContainerSales title={data?.name} checkBread={true} breaditem={Breadcrumbs}>
       <div>
         <TitleStyled>{data?.startDate}</TitleStyled>
-        <div style={{ width: "100%", padding: 80 }}>
+        <div style={{ width: "100%", textAlign: "justify" }}>
           <div
             className="content-project-view ck-content"
             dangerouslySetInnerHTML={{ __html: data?.description }}

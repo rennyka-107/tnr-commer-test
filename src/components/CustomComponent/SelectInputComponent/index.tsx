@@ -16,6 +16,7 @@ interface Props extends SelectProps {
   placeholder?: string;
   onChange?: any;
   typeOfLocation?: boolean;
+  checkScroll?: boolean;
 }
 
 const LabelSelectStyled = styled(Typography)`
@@ -47,9 +48,11 @@ const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 10;
 const MenuProps = {
   PaperProps: {
+	// autoFocus: false,
     style: {
       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
       width: 250,
+	//   OverflowX: "scroll"
     },
   },
 };
@@ -61,6 +64,7 @@ export default function SelectInputComponent({
   value,
   placeholder,
   typeOfLocation,
+  checkScroll,
   disabled = false,
 }: Props) {
   const theme = useTheme();
@@ -71,6 +75,7 @@ export default function SelectInputComponent({
       <Select
         disabled={disabled}
         displayEmpty
+		
         value={value}
         onChange={onChange}
         input={<OutlinedInputStyled style={{ borderRadius: 8, height: 54 }} />}
@@ -83,7 +88,8 @@ export default function SelectInputComponent({
         }}    
         MenuProps={MenuProps}
         inputProps={{ "aria-label": "Without label",
-		MenuProps: {disableScrollLock: true} }}
+		MenuProps: {disableScrollLock: checkScroll ? false :true}
+	 }}
 		// inputProps={{MenuProps: {disableScrollLock: true}}}
         SelectDisplayProps={{
           style: {

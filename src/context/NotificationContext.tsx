@@ -103,7 +103,7 @@ const NotificationProvider: FC = ({ children }: { children: ReactNode }) => {
       <AlertMessage
         onClose={handleClose}
         severity={error ? "error" : severity}
-        sx={{ width: "100%", display: "flex", alignItems: "center" }}
+        sx={{ width: "100%", display: "flex", alignItems: "center" , backgroundColor: '#ffffff'}}
         icon={error ? "error" : severity}
       >
         <Box>

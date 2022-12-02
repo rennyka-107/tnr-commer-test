@@ -76,11 +76,11 @@ const TabsComponent = () => {
       {itemView.id === "" ? (
         <>
           {" "}
-          <div>
-            <div style={{ width: 1100, padding: 50 }}>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <div style={{ width: 1100, padding: 50, textAlign: "justify" }}>
               {!_.isEmpty(listTabsProject) ? (
                 <div
-				className="content-project-view"
+                  className="content-project-view"
                   dangerouslySetInnerHTML={{ __html: listTabsProject[0]?.text }}
                 />
               ) : (
@@ -97,9 +97,12 @@ const TabsComponent = () => {
         <>
           <>
             {" "}
-            <div>
-              <div style={{ width: 1100, padding: 50 }}>
-                <div className="content-project-view" dangerouslySetInnerHTML={{ __html: itemView?.text }} />
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <div style={{ width: 1100, padding: 50, textAlign: "justify" }}>
+                <div
+                  className="content-project-view"
+                  dangerouslySetInnerHTML={{ __html: itemView?.text }}
+                />
               </div>
               {/* <DynamicBottomProdComponent
 		style={{ marginTop: 50, marginBottom: 85 }}

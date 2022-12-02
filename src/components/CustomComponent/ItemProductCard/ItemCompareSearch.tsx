@@ -48,6 +48,8 @@ type Props = {
   onCompare?: MouseEventHandler<HTMLButtonElement>;
   ticketCard?: string;
   projectTypeCode?: string;
+  floor?: number;
+  floorHeight?: string | null;
   minFloor?: number;
   maxFloor?: number;
   isCompare?: boolean;
@@ -266,6 +268,8 @@ export default function ItemCompareSearch({
   activeFavourite,
   isCompare,
   favouriteStatus,
+  floor,
+  floorHeight
 }: Props) {
   const router = useRouter();
   const { addProductToFavouriteFunction } = useFavourite();
@@ -440,7 +444,7 @@ export default function ItemCompareSearch({
                     <FloorIcon />
                     {/* <TextFloorStyled>max</TextFloorStyled> */}
                     <TextCenterItem>
-                      <TextFloorValue>{maxFloor} tầng</TextFloorValue>
+                      <TextFloorValue>{floorHeight}</TextFloorValue>
                     </TextCenterItem>
                   </WrapItemCenter>
                 ) : (

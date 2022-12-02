@@ -565,7 +565,7 @@ const PhieuTinhGia = ({
           return response.responseData;
         } else {
           notification({
-            error: "Có lỗi xảy ra trong quá trình load phiếu tính giá",
+            error: response.responseMessage,
             title: "Load phiếu tính giá"
           })
           setListPaymentItem([])
@@ -699,7 +699,7 @@ const PhieuTinhGia = ({
         setLoading(false);
       } else {
         notification({
-          error: "Có lỗi xảy ra trong quá trình load phiếu tính giá",
+          error: response.responseMessage,
           title: "Load phiếu tính giá"
         })
         dispatch(
@@ -789,7 +789,7 @@ const PhieuTinhGia = ({
     }
     return Number(num)
       .toFixed(0)
-      .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+      .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
   }
   function currencyFormatTotal(num) {
     if (!num) {
@@ -797,12 +797,12 @@ const PhieuTinhGia = ({
     }
     return Number(num)
       .toFixed(0)
-      .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+      .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
   }
   const currencyFormatPrice = (num) => {
     return Number(num)
       .toFixed(0)
-      .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+      .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
   };
 
   const handleThanhtoan = () => {
@@ -872,12 +872,12 @@ const PhieuTinhGia = ({
                   {dataProduct?.landArea ? dataProduct?.landArea : "N/A"} m2
                 </TextRightOnCardLeft>
               </WrapItemOnCard>
-              <WrapItemOnCard>
+              {dataProduct.build && <WrapItemOnCard>
                 <TextLeftOnCardLeft>Diện tích xây dựng:</TextLeftOnCardLeft>
                 <TextRightOnCardLeft>
                   {dataProduct?.buildArea ? dataProduct?.buildArea : "N/A"} m2
                 </TextRightOnCardLeft>
-              </WrapItemOnCard>
+              </WrapItemOnCard>}
               {/* <WrapItemOnCard>
                 <TextLeftOnCardLeft>
                   Số tầng xây dựng thấp nhất:
@@ -949,7 +949,7 @@ const PhieuTinhGia = ({
               </WrapItemOnCard>
               <WrapItemOnCard>
                 <TextLeftOnCardLeftTypeCaoTang1>
-                  Diện tích tìm tường:
+                  Diện tích tim tường:
                 </TextLeftOnCardLeftTypeCaoTang1>
                 <TextRightOnCardLeft>
                   {dataProduct.wallArea ? dataProduct.wallArea : "N/A"} m2
@@ -994,7 +994,8 @@ const PhieuTinhGia = ({
                   },
                 }}
               >
-                {!isEmpty(productItem) && !isEmpty(productItem.ListSchedule) &&
+                {!isEmpty(productItem) &&
+                  !isEmpty(productItem.ListSchedule) &&
                   productItem.ListSchedule?.map((name, index) => (
                     <MenuItem
                       key={index}
@@ -1054,7 +1055,7 @@ const PhieuTinhGia = ({
       <ContainerRight>
         {dataProduct.projectTypeCode === "1" ? (
           <>
-            <TitleStyled>Giá trị nhà ở</TitleStyled>
+            <TitleStyled>Giá trị hợp đồng</TitleStyled>
             <WrapCardItem style={{ padding: 34 }}>
               <TitleSelectStyled>Chọn tiêu chuẩn bàn giao</TitleSelectStyled>
               <div>
@@ -1121,11 +1122,11 @@ const PhieuTinhGia = ({
                       fontWeight: 400,
                     }}
                   >
-                    {!isEmpty(productItem) && productItem.LandPrice ? (
+                    {!isEmpty(productItem) && productItem.PreLandPrice ? (
                       <>
                         {" "}
-                        {productItem?.LandPrice
-                          ? currencyFormat(productItem?.LandPrice)
+                        {productItem?.PreLandPrice
+                          ? currencyFormat(productItem?.PreLandPrice)
                           : "N/A"}
                       </>
                     ) : (
@@ -1159,7 +1160,7 @@ const PhieuTinhGia = ({
                       fontWeight: 400,
                     }}
                   >
-                    Tổng giá trị QSDĐ*:
+                    Giá trị QSDĐ*:
                   </TextOnCardRight>
 
                   <TextOnCardRight
@@ -1168,11 +1169,11 @@ const PhieuTinhGia = ({
                       fontWeight: 400,
                     }}
                   >
-                    {!isEmpty(productItem) && productItem.LandMoney ? (
+                    {!isEmpty(productItem) && productItem.PreLandMoney ? (
                       <>
                         {" "}
-                        {productItem?.LandMoney
-                          ? currencyFormat(productItem?.LandMoney)
+                        {productItem?.PreLandMoney
+                          ? currencyFormat(productItem?.PreLandMoney)
                           : "N/A"}
                       </>
                     ) : (
@@ -1217,11 +1218,11 @@ const PhieuTinhGia = ({
                           fontWeight: 400,
                         }}
                       >
-                        {!isEmpty(productItem) && productItem.BuildPrice ? (
+                        {!isEmpty(productItem) && productItem.PreBuildPrice ? (
                           <>
                             {" "}
-                            {productItem?.BuildPrice
-                              ? currencyFormat(productItem?.BuildPrice)
+                            {productItem?.PreBuildPrice
+                              ? currencyFormat(productItem?.PreBuildPrice)
                               : "N/A"}
                           </>
                         ) : (
@@ -1255,7 +1256,7 @@ const PhieuTinhGia = ({
                           fontWeight: 400,
                         }}
                       >
-                        Tổng giá trị xây dựng*:
+                        Giá trị xây dựng*:
                       </TextOnCardRight>
 
                       <TextOnCardRight
@@ -1264,11 +1265,11 @@ const PhieuTinhGia = ({
                           fontWeight: 400,
                         }}
                       >
-                        {productItem.BuildMoney ? (
+                        {productItem.PreBuildMoney ? (
                           <>
                             {" "}
-                            {productItem?.BuildMoney
-                              ? currencyFormat(productItem?.BuildMoney)
+                            {productItem?.PreBuildMoney
+                              ? currencyFormat(productItem?.PreBuildMoney)
                               : "N/A"}
                           </>
                         ) : (
@@ -1288,9 +1289,60 @@ const PhieuTinhGia = ({
                     </WrapRightCardText>
                   </WrapItemOnCard>
                 </>
-              ) : (
-                <></>
-              )}
+              ) : productItem.FoundationMoney ? (
+                <>
+                  <WrapItemOnCard>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        width: "70%",
+                      }}
+                    >
+                      <TextOnCardRight
+                        style={{
+                          color: "#1b3459",
+                          fontWeight: 400,
+                        }}
+                      >
+                        Giá trị móng*:
+                      </TextOnCardRight>
+
+                      <TextOnCardRight
+                        style={{
+                          color: "#1b3459",
+                          fontWeight: 400,
+                        }}
+                      >
+                        {!isEmpty(productItem) &&
+                        productItem.FoundationMoney ? (
+                          <>
+                            {" "}
+                            {productItem?.FoundationMoney
+                              ? currencyFormat(productItem?.FoundationMoney)
+                              : "N/A"}
+                          </>
+                        ) : productItem.FoundationMoney === 0 ? (
+                          "0"
+                        ) : (
+                          <Skeleton width={50} />
+                        )}
+                      </TextOnCardRight>
+                    </div>
+                    <WrapRightCardText>
+                      <TextOnCardRight
+                        style={{
+                          color: "#1b3459",
+                          fontWeight: 400,
+                        }}
+                      >
+                        đồng
+                      </TextOnCardRight>
+                    </WrapRightCardText>
+                  </WrapItemOnCard>
+                </>
+              ) : <></>}
               <WrapItemOnCard>
                 <div
                   style={{
@@ -1306,7 +1358,7 @@ const PhieuTinhGia = ({
                       fontWeight: "bold",
                     }}
                   >
-                    Tổng giá bán nhà ở*:
+                    Tổng giá trị hợp đồng trước chiết khấu*:
                   </TextOnCardRight>
 
                   <TextOnCardRight
@@ -1315,11 +1367,11 @@ const PhieuTinhGia = ({
                       fontWeight: "bold",
                     }}
                   >
-                    {!isEmpty(productItem) && productItem.TotalMoney ? (
+                    {!isEmpty(productItem) && productItem.PreTotalMoney ? (
                       <>
                         {" "}
-                        {productItem?.TotalMoney
-                          ? currencyFormat(productItem?.TotalMoney)
+                        {productItem?.PreTotalMoney
+                          ? currencyFormat(productItem?.PreTotalMoney)
                           : "N/A"}
                       </>
                     ) : (
@@ -1413,7 +1465,7 @@ const PhieuTinhGia = ({
                       fontWeight: 400,
                     }}
                   >
-                    Giá trị thông thủy*:
+                    Đơn giá thông thủy*:
                   </TextOnCardRight>
 
                   <TextOnCardRight
@@ -1422,12 +1474,13 @@ const PhieuTinhGia = ({
                       fontWeight: 400,
                     }}
                   >
-                    {filterPriceByName.ApartmentPrice ? (
+                    {productItem.PreLandMoney ||
+                    typeof productItem.PreLandMoney === "number" ? (
                       <>
                         {" "}
-                        {filterPriceByName?.ApartmentPrice
-                          ? currencyFormat(filterPriceByName?.ApartmentPrice)
-                          : "N/A"}
+                        {productItem.PreLandMoney
+                          ? currencyFormat(productItem.PreLandMoney)
+                          : "0"}
                       </>
                     ) : (
                       <Skeleton width={50} />
@@ -1460,7 +1513,7 @@ const PhieuTinhGia = ({
                       fontWeight: "bold",
                     }}
                   >
-                    Tổng giá bán căn hộ*:
+                    Tổng giá trị hợp đồng trước chiết khấu*:
                   </TextOnCardRight>
 
                   <TextOnCardRight
@@ -1469,11 +1522,16 @@ const PhieuTinhGia = ({
                       fontWeight: "bold",
                     }}
                   >
-                    {filterPriceByName.TotalMoney ? (
+                    {/* {filterPriceByName.TotalMoney ? (
                       <>
                         {" "}
                         {filterPriceByName?.TotalMoney
-                          ? currencyFormat(filterPriceByName?.TotalMoney)
+                          ? currencyFormat(filterPriceByName?.TotalMoney) */}
+                    {productItem.PreTotalMoney ? (
+                      <>
+                        {" "}
+                        {productItem.PreTotalMoney
+                          ? currencyFormat(productItem.PreTotalMoney)
                           : "N/A"}
                       </>
                     ) : (
@@ -1577,10 +1635,13 @@ const PhieuTinhGia = ({
                           );
                           if (!isEmpty(filterArr)) {
                             setSelectedPromotionIds([...filterArr]);
-                            fetchPtg({
-                              ...filterPtg,
-                              promotions: [...filterArr],
-                            }, true);
+                            fetchPtg(
+                              {
+                                ...filterPtg,
+                                promotions: [...filterArr],
+                              },
+                              true
+                            );
                           } else {
                             setSelectedPromotionIds([]);
                             fetchPtg({ ...filterPtg, promotions: [] }, true);
@@ -1602,13 +1663,16 @@ const PhieuTinhGia = ({
                             ...selectedPromotionIds,
                             item.PromotionID,
                           ]);
-                          fetchPtg({
-                            ...filterPtg,
-                            promotions: [
-                              ...selectedPromotionIds,
-                              item.PromotionID,
-                            ],
-                          }, true);
+                          fetchPtg(
+                            {
+                              ...filterPtg,
+                              promotions: [
+                                ...selectedPromotionIds,
+                                item.PromotionID,
+                              ],
+                            },
+                            true
+                          );
                         }}
                       />
                       <Box
@@ -1638,7 +1702,7 @@ const PhieuTinhGia = ({
                     flexDirection: "row",
                     width: "100%",
                   }}
-				  key={index}
+                  key={index}
                 >
                   <div style={{ display: "flex", gap: 5 }}>
                     <Checkbox
@@ -1676,7 +1740,10 @@ const PhieuTinhGia = ({
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <div>
               <TextBoldInWrapBottom style={{ fontSize: 18 }}>
-                {dataProduct.buildType === "1" ? "Tổng giá bán nhà ở" : "Tổng giá bán căn hộ"}
+                {/* {dataProduct.buildType === "1"
+                  ? "Tổng giá bán nhà ở"
+                  : "Giá sau chiết khấu"} */}
+                Giá sau chiết khấu
               </TextBoldInWrapBottom>
               <Typography
                 style={{
@@ -1692,19 +1759,19 @@ const PhieuTinhGia = ({
             <TextCenterRight
               style={{ fontSize: 18, margin: "auto", marginRight: 0 }}
             >
-              {currencyFormatTotal(productItem?.PreTotalMoney)} vnd
+              {currencyFormatTotal(productItem?.TotalMoney)} đồng
             </TextCenterRight>
           </div>
           <div style={{ border: "1px solid #C7C9D9" }} />
           <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <TextBoldInWrapBottom style={{ fontSize: 18 }}>
-                Giá sau chiết khấu
+              <TextBoldInWrapBottom style={{ fontSize: 18, maxWidth: "200px" }}>
+                Tổng giá trị hợp đồng sau chiết khấu
               </TextBoldInWrapBottom>
               <Typography
                 style={{ fontSize: 18, fontWeight: 700, color: "#EA242A" }}
               >
-                {currencyFormatTotal(productItem?.TotalMoney)} vnd
+                {currencyFormatTotal(productItem?.TotalMoney)} đồng
               </Typography>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>

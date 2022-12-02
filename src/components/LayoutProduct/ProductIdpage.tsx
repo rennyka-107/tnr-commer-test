@@ -56,6 +56,7 @@ import PathRoute from "utils/PathRoute";
 import IconCoXay from "@components/Icons/IconCoXay";
 import IconCoxayDetail from "@components/Icons/IconCoxayDetail";
 import IconChuaXay from "@components/Icons/IconChuaXay";
+import PopupCalling from "@components/PopupCalling";
 
 interface ProductsProps {
   listProject?: ProjectResponse[];
@@ -429,7 +430,7 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
     }
     return Number(num)
       .toFixed(0)
-      .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+      .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
   }
   // const fetchPhieuTinhGia = () => {
   //   return (
@@ -499,10 +500,11 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
   const handleAddToCart = (id: string) => () => {
     // addToCart(product.productId);
     if (cart && cart.id === id) {
-      notification({
-        severity: "success",
-        message: "Sản phẩm này đã có sẵn trong giỏ hàng",
-      });
+      // notification({
+      //   severity: "success",
+      //   message: "Sản phẩm này đã có sẵn trong giỏ hàng",
+      // });
+      router.push("/payment-cart")
     } else if (isEmpty(cart)) {
       addToCart(id);
     } else {
@@ -964,7 +966,7 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                           <FloorIcon />
                           <TextCenterItem>
                             <TextFloorValue>
-                              {dataProduct?.maxFloor} tầng
+                              {dataProduct?.floorHeight}
                             </TextFloorValue>
                           </TextCenterItem>
                         </WrapItemCenter>
@@ -1079,10 +1081,11 @@ const ProductIdpage = ({ navKey, dataProduct }: ProductsProps) => {
                 >
                   <a
                     href={`tel:${dataProduct.defaultPhoneNumber}`}
+					// onClick={() => PopupCalling()}
                     style={{ textAlign: "center" }}
                   >
                     <IconHeadSetProduct />
-                    <TextContact>Liên hệ tư vấn viên</TextContact>
+                    <TextContact>Liên hệ: {dataProduct.defaultPhoneNumber}</TextContact>
                   </a>
                   <div style={{ border: "1px solid #1B3459" }} />
                   <a

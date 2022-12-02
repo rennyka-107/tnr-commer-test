@@ -12,6 +12,7 @@ interface Props<T> extends Omit<TextFieldProps, "name"> {
   variant?: "standard" | "filled" | "outlined";
   width?: number;
   checkAutoComplete?: boolean;
+  fzLabel?: string;
 }
 
 const Container = styled.div``;
@@ -39,14 +40,15 @@ const ControllerTextField = <T extends FieldValues>(props: Props<T>) => {
     required,
     labelColor,
     width,
-	checkAutoComplete,
+    checkAutoComplete,
+    fzLabel,
     ...rest
   } = props;
   console.log(checkAutoComplete)
   return (
     <Container style={{ width: width ?? "100%" }}>
       {label && (
-        <LabelSpan color={labelColor}>
+        <LabelSpan style={{ fontSize: fzLabel}} color={labelColor}>
           {label}&nbsp;{required && <RequiredSpan>*</RequiredSpan>}
         </LabelSpan>
       )}

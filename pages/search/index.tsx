@@ -55,8 +55,8 @@ const Search = () => {
     projectTypeIdList: [],
     projectIdList: [],
     projectCategoryIdList: [],
-	isPayment:0,
-	sortType: 0
+    isPayment: 0,
+    sortType: 0,
   });
   const [loading, setLoading] = useState(false);
   const [searchAction, setSearchAction] = useState(false);
@@ -73,16 +73,16 @@ const Search = () => {
       const listProvince = localStorage?.getItem("listParamsLSProvince");
       const listProjectType = localStorage?.getItem("listParamsLSProjectType");
       const listParamsIdProject = localStorage?.getItem("listParamsIdProject");
-	  const typeProduct = localStorage?.getItem("typeProduct");
+      const typeProduct = localStorage?.getItem("typeProduct");
       const typeSaleProduct = localStorage?.getItem("typeSaleProduct");
       if (router.isReady === true) {
         setSearchBody({
           provinceId: provinceId ? provinceId : "",
           projectTypeId: projectTypeId ? projectTypeId : "",
           projectId: projectId ? projectId : "",
-          priceFrom: (priceFrom as string) ?? "1",
+          priceFrom: (priceFrom as string) ?? "0",
           priceTo: (priceTo as string) ?? "50",
-          areaFrom: (areaFrom as string) ?? "30",
+          areaFrom: (areaFrom as string) ?? "0",
           areaTo: (areaTo as string) ?? "1000",
           provinceIdList:
             listProvince !== "null" ? JSON.parse(listProvince) : [],
@@ -93,14 +93,14 @@ const Search = () => {
               ? JSON.parse(listParamsIdProject)
               : [],
           textSearch: textSearch ? textSearch : "",
-		  isPayment: JSON.parse(typeSaleProduct),
-		  sortType: JSON.parse(typeProduct)
+          isPayment: JSON.parse(typeSaleProduct),
+          sortType: JSON.parse(typeProduct),
         });
       }
     }
   }, [router]);
 
-  console.log(searchBody)
+  console.log(searchBody);
   const changePage = (e: any) => {
     setSearch({
       page: e,
@@ -109,7 +109,6 @@ const Search = () => {
   };
 
   const fetchAdvandedSearchList = async () => {
-
     try {
       if (router.isReady === true) {
         setLoading(false);
@@ -144,7 +143,7 @@ const Search = () => {
       console.log(err);
     }
   };
-  
+
   useEffect(() => {
     if (router.pathname === "/search") {
       fetchAdvandedSearchListFavorite();
@@ -194,15 +193,17 @@ const Search = () => {
       }}
     >
       <FlexContainer>{fetchComponent()} </FlexContainer>
-      <Row customStyle={{ padding: 70, justifyContent: "center" }}>
-        <PaginationComponent
-          count={pageNumber}
-          onChange={(event, page) => {
-            changePage(page - 1);
-          }}
-          page={search.page + 1}
-        />
-      </Row>
+      {pageNumber > 0 && (
+        <Row customStyle={{ padding: 70, justifyContent: "center" }}>
+          <PaginationComponent
+            count={pageNumber}
+            onChange={(event, page) => {
+              changePage(page - 1);
+            }}
+            page={search.page + 1}
+          />
+        </Row>
+      )}
     </Page>
   );
 };

@@ -195,7 +195,6 @@ const AuthenPages = () => {
                     maxWidth: "102px",
                     height: "3px",
                     marginLeft: tab == "register" ? 0 : "20px",
-
                   },
                 }}
                 scrollButtons
@@ -208,7 +207,7 @@ const AuthenPages = () => {
                     fontWeight: tab == "register" ? 700 : 400,
                     textTransform: "none",
                     fontSize: 26,
-					padding: 0,
+                    padding: 0,
                     color: tab == "register" ? "#48576D" : "#8190A7",
                   }}
                 />
@@ -219,7 +218,7 @@ const AuthenPages = () => {
                     fontWeight: tab == "login" ? 700 : 400,
                     textTransform: "none",
                     fontSize: 26,
-					
+
                     color: tab == "login" ? "#48576D" : "#8190A7",
                   }}
                 />
@@ -237,14 +236,7 @@ const AuthenPages = () => {
   }, [loading]);
   return (
     <ContainerRegister>
-      <ItemLeft>
-        <div>
-          <SpanTextIntro>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-          </SpanTextIntro>
-          <SpanTextSmall>Ornare euismod egestas tempor netus.</SpanTextSmall>
-        </div>
-      </ItemLeft>
+      <ItemLeft />
       <ItemRight>
         <ContainForm>{fetchTab()}</ContainForm>
       </ItemRight>

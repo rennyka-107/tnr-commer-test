@@ -49,6 +49,8 @@ type Props = {
   projectTypeCode?: string;
   minFloor?: number;
   maxFloor?: number;
+  floor?: number;
+  floorHeight?: string | null;
   buyDisabled?: boolean;
   activeFavourite?: boolean;
 };
@@ -264,19 +266,12 @@ export default function ItemProductCard(props: Props) {
     buyDisabled,
     favouriteStatus,
     activeFavourite,
+    floor,
+    floorHeight,
   } = props;
   const router = useRouter();
 
   const { addProductToFavouriteFunction } = useFavourite();
-
-  function currencyFormat(num) {
-    if (!num) {
-      return;
-    }
-    return Number(num)
-      .toFixed(0)
-      .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
-  }
 
   const handleClickCard = () => {
     Router.push(`/products/${id}`);
@@ -350,7 +345,7 @@ export default function ItemProductCard(props: Props) {
       <ImageWithHideOnError
         className="logo"
         src={src}
-		style={""}
+        style={""}
         fallbackSrc={Product3}
         height={190}
         width={350}
@@ -370,14 +365,8 @@ export default function ItemProductCard(props: Props) {
           </span>
           <TextitleBottom>{subTitle ? subTitle : "N/A"}</TextitleBottom>
         </div>
-        {/* <LineStyled /> */}
         <CenterIntemWrap>
-          {/* <WrapItemCenter>
-            <IconBath />
-            <TextCenterItem>
-              {dataItem.item2 ? dataItem?.item2 : "N/A"}
-            </TextCenterItem>
-          </WrapItemCenter> */}
+         
           <WrapItemCenter>
             <IconFrame />
 
@@ -416,12 +405,7 @@ export default function ItemProductCard(props: Props) {
               {dataItem.item4 ? dataItem?.item4 : "N/A"}
             </TextCenterItem>
           </WrapItemCenter>
-          {/* <WrapItemCenter>
-            <IconBedDouble />
-            <TextCenterItem>
-              {dataItem.item3 ? dataItem?.item3 : "N/A"}
-            </TextCenterItem>
-          </WrapItemCenter> */}
+        
 
           {projectTypeCode === "2" ? (
             <>
@@ -438,9 +422,8 @@ export default function ItemProductCard(props: Props) {
                 {build ? (
                   <WrapItemCenter>
                     <FloorIcon />
-                    {/* <TextFloorStyled>max</TextFloorStyled> */}
                     <TextCenterItem>
-                      <TextFloorValue>{maxFloor} tầng</TextFloorValue>
+                      <TextFloorValue>{floorHeight}</TextFloorValue>
                     </TextCenterItem>
                   </WrapItemCenter>
                 ) : (
@@ -450,25 +433,6 @@ export default function ItemProductCard(props: Props) {
             </>
           )}
         </CenterIntemWrap>
-        {/* <LineStyled /> */}
-        {/* <div style={{ marginTop: 12 }}> */}
-        {/* <div style={{ display: "flex" }}>
-            <TextBottomStyled style={{ marginRight: 40 }}>
-              Giá niêm yết{" "}
-            </TextBottomStyled>
-            <NumberBottomStyled>
-              {currencyFormat(priceListed)}đ
-            </NumberBottomStyled>
-          </div> */}
-        {/* <div style={{ display: "flex" }}>
-            <TextBottomStyled2 style={{ marginRight: 19 }}>
-              Đơn giá thông thuỷ{" "}
-            </TextBottomStyled2>
-            <NumberBottomStyled2>
-              {currencyFormat(priceSub)}đ/m2
-            </NumberBottomStyled2>
-          </div> */}
-        {/* </div> */}
       </CardContentStyled>
       {activeSoSanh === true ? (
         <CardActions

@@ -119,6 +119,7 @@ export default function RightListProduct() {
             boxShadow: "unset",
             display: "flex",
             flexDirection: "column",
+            overflowY: "auto",
           }}
         >
           <Autocomplete

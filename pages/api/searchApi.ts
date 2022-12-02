@@ -44,6 +44,7 @@ export const searchAdvanded = async (data: any, search: SearchParams) => {
     projectIdList: data.projectIdList ? data.projectIdList : [],
     isPayment: Number(data.isPayment),
     sortType: Number(data.sortType),
+	favouriteSearch: data.favouriteSearch ? data.favouriteSearch : 0
   };
 
   return HttpClient.post<any, CommonResponse>(

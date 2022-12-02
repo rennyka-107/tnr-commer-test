@@ -40,6 +40,7 @@ export interface Product {
   lotSymbolLegal: any;
   maxFloor: number;
   minFloor: number;
+  floorHeight: string | null;
   name: string;
   numBath: number;
   numBed: number;

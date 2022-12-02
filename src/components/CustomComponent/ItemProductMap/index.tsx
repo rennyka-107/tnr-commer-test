@@ -19,7 +19,7 @@ interface Props {
 }
 
 const WrapperContent = styled(Box)`
-  width: 15vw;
+  width: 90%;
   height: auto;
   border: 1px solid #d8d8d8;
   border-radius: 20px;
@@ -177,7 +177,7 @@ const ItemProductMap = ({ onClick, data }: Props) => {
         {data.buildType === "1" && data.build && (
           <Grid item xs={6} display={"flex"} alignItems={"center"}>
             <FloorIcon />
-            &nbsp;&nbsp;<TextStyled>{data.maxFloor ?? "N/A"} Tầng</TextStyled>
+            &nbsp;&nbsp;<TextStyled>{data.floorHeight ?? "N/A"}</TextStyled>
           </Grid>
         )}
       </Grid>

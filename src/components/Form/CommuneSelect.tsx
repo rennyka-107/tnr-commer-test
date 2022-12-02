@@ -10,6 +10,7 @@ interface PropsI {
   districtName: string;
   provinceName: string;
   disabled?: boolean;
+  required?: boolean;
 }
 
 interface optionI {
@@ -18,7 +19,7 @@ interface optionI {
 }
 
 const CommuneSelect = (props: PropsI) => {
-  const { control, label, name, setValue, districtName, provinceName, disabled } = props;
+  const { control, label, name, setValue, districtName, provinceName, disabled, required } = props;
   const [data, setData] = useState<optionI[]>([]);
 
   const getList = (provinceName: string, districtName: string) => {
@@ -48,7 +49,9 @@ const CommuneSelect = (props: PropsI) => {
 
   return (
     <ControllerSelectAutoComplete
+    fzLabel="16px"
       variant="outlined"
+      required={required}
       name={name}
       label={label}
       control={control}

@@ -16,7 +16,6 @@ const MapImage = ({ url }: Props) => {
   const ref = useRef<any>();
   const dispatch = useDispatch();
   const Target = useSelector((state: RootState) => state.projectMap.Target);
-
   function handleResizeMap() {
     const bound = L.latLngBounds(
       // [1.3 * window.innerWidth, 1.3 * window.innerWidth],

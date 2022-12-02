@@ -1,4 +1,10 @@
-import { IconAddHearProduct, IconHeartProduct, IconX } from "@components/Icons";
+import {
+  IconAddHearProduct,
+  IconDontHaveItem,
+  IconHaveItem,
+  IconHeartProduct,
+  IconX,
+} from "@components/Icons";
 import IconArrowRight from "@components/Icons/IconArrowRight";
 import {
   ButtonAction,
@@ -169,23 +175,62 @@ const ItemCompare = ({ onClick, data }: Props) => {
   }
 
   const ValueCompare = (item: CompareParamsI) => {
-    if (item.keyMap.trim() === "totalPrice")
-      return (
-        <TitleMoneyStyled>
-          {currencyFormat(data[item.keyMap])} đ
-        </TitleMoneyStyled>
-      );
-    if (item.keyMap.trim() === "landArea")
+	
+    if (
+      item.keyMap.trim() === "totalPrice" ||
+      item.keyMap.trim() === "landArea" ||
+      item.keyMap.trim() === "clearArea" ||
+      item.keyMap.trim() === "buildArea" ||
+      item.keyMap.trim() === "doorDirection" ||
+      item.keyMap.trim() === "barconyDirection" ||
+	  item.keyMap.trim() === "airConditioner" ||
+      item.keyMap.trim() === "buildArea"||
+	  item.keyMap.trim() === "numBath" ||
+	  item.keyMap.trim() === "numBed"
+    ) {
+      if (item.keyMap.trim() === "totalPrice")
+        return (
+          <TitleMoneyStyled>
+            {currencyFormat(data[item.keyMap])} đ
+          </TitleMoneyStyled>
+        );
+      //   if (item.keyMap.trim() === "parking")
+      // 	return (
+      // 	  <span>
+      // 		{data[item.keyMap] >= 1 ? <IconHaveItem /> : <IconDontHaveItem />}
+      // 	  </span>
+      // 	);
+	  if(item.keyMap.trim() === "airConditioner"){
+		{data[item.keyMap] >= 1 ? CompareValueFormat(data[item.keyMap], item.keyMap) : <IconDontHaveItem />}
+	  }
+      if (item.keyMap.trim() === "landArea")
+        return (
+          <TextMoneyStyled>
+            {" "}
+            {CompareValueFormat(data[item.keyMap], item.keyMap)} m2
+          </TextMoneyStyled>
+        );
+      if (
+        item.keyMap.trim() === "clearArea" ||
+        item.keyMap.trim() === "buildArea"
+      )
+        return (
+          <TextMoneyStyled>
+            {" "}
+            {CompareValueFormat(data[item.keyMap], item.keyMap)} m2
+          </TextMoneyStyled>
+        );
+      else
+        return (
+          <TextMoneyStyled>
+            {CompareValueFormat(data[item.keyMap], item.keyMap)}
+          </TextMoneyStyled>
+        );
+    } else
       return (
         <TextMoneyStyled>
-          {" "}
-          {CompareValueFormat(data[item.keyMap], item.keyMap)} m2
-        </TextMoneyStyled>
-      );
-    else
-      return (
-        <TextMoneyStyled>
-          {CompareValueFormat(data[item.keyMap], item.keyMap)}
+          {/* {CompareValueFormat(data[item.keyMap], item.keyMap)} */}
+          {data[item.keyMap] >= 1 ? <IconHaveItem /> : <IconDontHaveItem />}
         </TextMoneyStyled>
       );
   };

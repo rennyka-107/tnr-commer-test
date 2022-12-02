@@ -29,6 +29,9 @@ interface InitialState {
     scheduleId: string | null | number;
     referenceCode: string | null;
     priceId: string | null | number;
+    totalMoney: string | number;
+    promotionMoney: string | number | null;
+    isDepositMin: number;
   };
   referenceCode: string | null;
   fileIdNumberFront: {
@@ -96,6 +99,9 @@ const initialState: InitialState = {
     scheduleId: "",
     priceId: "",
     referenceCode: "",
+    totalMoney: 0,
+    promotionMoney: 0,
+    isDepositMin: 0
   },
   referenceCode: null,
   fileIdNumberFront: { file: null, path: "", name: "" },

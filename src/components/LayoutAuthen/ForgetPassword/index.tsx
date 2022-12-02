@@ -32,7 +32,7 @@ const Index = () => {
   const { key, otp } = Route.query;
   const [username, setUsername] = useState("");
   const [keyTrans, setKeyTrans] = useState("");
-  const[keyForgot, setKeyForgot] = useState("");
+  const [keyForgot, setKeyForgot] = useState("");
   const [emailUser, setEmailUser] = useState("");
 
   const [paramsEndcode, setParamsEndcode] = useState({
@@ -54,14 +54,13 @@ const Index = () => {
     }
   }, [Route]);
 
-
   const render = useMemo(() => {
     switch (type) {
       case "forgetPassword":
         return (
           <ForgetPassword
             setUsername={(value: string) => setUsername(value)}
-			setEmailUser={setEmailUser}
+            setEmailUser={setEmailUser}
             next={() => setType("confirm")}
           />
         );
@@ -69,8 +68,8 @@ const Index = () => {
         return (
           <Confirm
             username={username}
-			emailUser={emailUser}
-			setKeyForgot={setKeyForgot}
+            emailUser={emailUser}
+            setKeyForgot={setKeyForgot}
             next={() => setType("OTP")}
             setKeyTrans={setKeyTrans}
           />
@@ -78,11 +77,12 @@ const Index = () => {
       case "OTP":
         return (
           <OTP
-		  keyForgot={keyForgot}
+            keyForgot={keyForgot}
+            setKeyForgot={setKeyForgot}
             username={username}
             keyTrans={keyTrans}
-			emailUser={emailUser}
-			paramsEndcode={paramsEndcode.OTP}
+            emailUser={emailUser}
+            paramsEndcode={paramsEndcode.OTP}
             keyWidthOTPParams={paramsEndcode.key}
             next={() => setType("ChangeNewPass")}
           />
@@ -97,7 +97,7 @@ const Index = () => {
       default:
         return null;
     }
-  }, [type]);
+  }, [type,keyForgot]);
 
   return (
     <Form>

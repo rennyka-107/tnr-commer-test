@@ -227,12 +227,12 @@ export default function PopperProjectType({
     setPendingValue(value);
     setAnchorEl(event.currentTarget);
   };
-  React.useEffect(() => {
-    if (checkSelectProvince === true) {
-      setPendingValue([]);
-      setValue([]);
-    }
-  }, [checkSelectProvince]);
+//   React.useEffect(() => {
+//     if (checkSelectProvince === true) {
+//       setPendingValue([]);
+//       setValue([]);
+//     }
+//   }, [checkSelectProvince]);
 
   React.useEffect(() => {
     const newArray: any = [];
@@ -243,19 +243,17 @@ export default function PopperProjectType({
       const arr: MenuBar[] = JSON.parse(dataSelectLS);
       if (!isEmpty(arr)) {
         arr.map((item, index) => {
-          const findItem = data.filter((it) => it.id === item.id);
-          newArray.push(findItem);
-		  console.log(findItem)
+          const findItem = data.find((it) => it.id === item.id);
+		  newArray.push(findItem);
         });
         if (!newArray) {
           setValue([]);
         } else {
-          setValue(newArray[0]);
+          setValue(newArray);
         }
       } else {
         setValue([]);
       }
-	  console.log(newArray)
     }
   }, [router, data]);
 

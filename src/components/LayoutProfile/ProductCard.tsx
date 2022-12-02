@@ -13,6 +13,7 @@ import styled from "@emotion/styled";
 import { Button, SelectChangeEvent, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { ContractI, getOrderById } from "@service/Profile";
+import { format, parse } from "date-fns";
 import ImageWithHideOnError from "hooks/ImageWithHideOnError";
 import useNotification from "hooks/useNotification";
 import dynamic from "next/dynamic";
@@ -167,25 +168,25 @@ const ProductCard = (props: Props) => {
   const handleChooseItem = (item: ContractI) => {
     if (item.transactionCodeLandSoft) {
       router.replace(
-        `/profile?transCode=${item.bookingCode}&transactionCodeLandSoft=${item.transactionCodeLandSoft}&transactionId=${item.transactionId}&uuid=${item.uuid}&productId=${item.productId}`
+        `/profile?transCode=${item.bookingCode}&transactionCodeLandSoft=${item.transactionCodeLandSoft}&transactionId=${item.transactionId}&uuid=${item.uuid}&productId=${item.productId}&transactionTypeName=${item.transactionTypeName}&bookingTime=${item.bookingTime}`
       );
     } else {
       router.replace(
-        `/profile?transCode=${item.bookingCode}&transactionId=${item.transactionId}&uuid=${item.uuid}&productId=${item.productId}`
+        `/profile?transCode=${item.bookingCode}&transactionId=${item.transactionId}&uuid=${item.uuid}&productId=${item.productId}&transactionTypeName=${item.transactionTypeName}&bookingTime=${item.bookingTime}`
       );
     }
   };
 
-  const handleChangeRequestType = (e: SelectChangeEvent) => {
-    const data = sendRequestTypes.filter(
-      (x) => x.id.toString() === e.target.value
-    );
-    setRequestType(data[0] as RequestParams);
+  // const handleChangeRequestType = (e: SelectChangeEvent) => {
+  //   const data = sendRequestTypes.filter(
+  //     (x) => x.id.toString() === e.target.value
+  //   );
+  //   setRequestType(data[0] as RequestParams);
 
-    if (data.length > 0) {
-      router.replace(`/send-request/${data[0].code}/${item.bookingCode}`);
-    }
-  };
+  //   if (data.length > 0) {
+  //     router.replace(`/send-request/${data[0].code}/${item.bookingCode}`);
+  //   }
+  // };
 
   useEffect(() => {
     const paymentRequestList = props.item.paymentRequestTypeResponseList.map(
@@ -197,6 +198,20 @@ const ProductCard = (props: Props) => {
 
     setPaymentRequestTypeRes(paymentRequestList);
   }, [props.item]);
+
+  function convertTimeValue(time) {
+    try {
+      return format(
+        parse(time, "dd-MM-yyyy HH:mm:ss", new Date()),
+        "HH:mm | dd/MM/yyyy"
+      )
+    } catch(err) {
+      return format(
+        parse(time, "dd-MM-yyyy", new Date()),
+        "HH:mm | dd/MM/yyyy"
+      )
+    }
+  }
 
   return (
     <BoxQLGD
@@ -211,18 +226,6 @@ const ProductCard = (props: Props) => {
     >
       <div>
         {item?.productionImage ? (
-          //   <ImageProduct
-          //     loader={({ src, width, quality }) => {
-          //       return `${src}?w=${width}&q=${quality}`;
-          //     }}
-          //     src={
-          //       item?.productionImage ??
-          //       "https://tse3.mm.bing.net/th?id=OIP.zsEgRepQ6Uh5OYkkhJyn2gHaE5&pid=Api&P=0&w=277&h=183"
-          //     }
-          //     width={159}
-          //     height={96}
-          //     alt=""
-          //   />
           <ImageWithHideOnError
             className="logo"
             src={item?.productionImage}
@@ -247,9 +250,7 @@ const ProductCard = (props: Props) => {
           <TitleProject>{item?.projectName || "TNR"}</TitleProject>
           <TitleTime>
             Cập nhật:{" "}
-            {convertDateToString(
-              getDateFromStringDMY(item?.bookingTime) ?? new Date()
-            )}
+            {item?.bookingTime ? convertTimeValue(item?.bookingTime) : ""}
           </TitleTime>
         </HeaderTitle>
         <HeaderTitle
@@ -271,7 +272,17 @@ const ProductCard = (props: Props) => {
         </Row>
         <Row>
           <Column col={2} customStyle={{ paddingLeft: 0 }}>
-            <TextProduct>Mã đặt chỗ:</TextProduct>
+            <TextProduct>Loại hợp đồng:</TextProduct>
+          </Column>
+          <Column col={3} customStyle={{ paddingLeft: 0 }}>
+            <TextProduct>
+              {item?.transactionTypeName}
+            </TextProduct>
+          </Column>
+        </Row>
+        <Row>
+          <Column col={2} customStyle={{ paddingLeft: 0 }}>
+            <TextProduct>Mã giao dịch:</TextProduct>
           </Column>
           <Column col={3} customStyle={{ paddingLeft: 0 }}>
             <TextProduct>
@@ -285,9 +296,10 @@ const ProductCard = (props: Props) => {
           </Column>
           <Column col={3} customStyle={{ paddingLeft: 0 }}>
             <TextProduct>
-              {convertDateToString(
+              {/* {convertDateToString(
                 getDateFromStringDMY(item?.bookingTime) ?? new Date()
-              )}
+              )} */}
+              {item?.bookingTime ? convertTimeValue(item?.bookingTime) : ""}
             </TextProduct>
           </Column>
         </Row>
@@ -306,7 +318,10 @@ const ProductCard = (props: Props) => {
               </Column>
               <Column col={3} customStyle={{ paddingLeft: 0 }}>
                 <TextProduct color="#8190A7">
-                  {currencyFormat(item?.totalPrice)}&nbsp;đ
+                  {item?.totalDeposite
+                    ? currencyFormat(item?.totalDeposite)
+                    : "0"}
+                  &nbsp;đ
                 </TextProduct>
               </Column>
             </Row>
@@ -316,7 +331,7 @@ const ProductCard = (props: Props) => {
               </Column>
               <Column col={3} customStyle={{ paddingLeft: 0 }}>
                 <TextProduct color="#8190A7">
-                  {currencyFormat(item?.totalPrice)}&nbsp;đ
+                  {item?.deposite ? currencyFormat(item?.deposite) : "0"}&nbsp;đ
                 </TextProduct>
               </Column>
             </Row>
@@ -326,7 +341,8 @@ const ProductCard = (props: Props) => {
               </Column>
               <Column col={3} customStyle={{ paddingLeft: 0 }}>
                 <TextProduct color="#8190A7">
-                  {currencyFormat(item?.totalPrice)}&nbsp;đ
+                  {item?.amountLeft ? currencyFormat(item?.amountLeft) : "0"}
+                  &nbsp;đ
                 </TextProduct>
               </Column>
             </Row>
@@ -339,7 +355,10 @@ const ProductCard = (props: Props) => {
               </Column>
               <Column col={3} customStyle={{ paddingLeft: 0 }}>
                 <TextProduct color="#EA242A">
-                  {currencyFormat(item?.totalDeposite)}&nbsp;đ
+                  {item?.totalDeposite
+                    ? currencyFormat(item?.totalDeposite)
+                    : "0"}
+                  &nbsp;đ
                 </TextProduct>
               </Column>
             </Row>
@@ -349,7 +368,7 @@ const ProductCard = (props: Props) => {
               </Column>
               <Column col={3} customStyle={{ paddingLeft: 0 }}>
                 <TextProduct color="#EA242A">
-                  {currencyFormat(item?.deposite)}&nbsp;đ
+                  {item?.deposite ? currencyFormat(item?.deposite) : "0"}&nbsp;đ
                 </TextProduct>
               </Column>
             </Row>
@@ -359,14 +378,15 @@ const ProductCard = (props: Props) => {
               </Column>
               <Column col={3} customStyle={{ paddingLeft: 0 }}>
                 <TextProduct color="#EA242A">
-                  {currencyFormat(item?.amountLeft)}&nbsp;đ
+                  {item?.amountLeft ? currencyFormat(item?.amountLeft) : "0"}
+                  &nbsp;đ
                 </TextProduct>
               </Column>
             </Row>
           </>
         )}
         <DynamicHorizontalLine />
-        <Row >
+        <Row>
           <Column col={1} customStyle={{ paddingLeft: 0 }}>
             <TextProduct>Trạng thái:</TextProduct>
           </Column>
@@ -490,10 +510,10 @@ const ProductCard = (props: Props) => {
             display: "flex",
             alignItems: item.paymentStatus === "0" ? "center" : "flex-end",
             ml: item.paymentStatus === "0" ? "0px" : "0px",
-			justifyContent: 'flex-end',
+            justifyContent: "flex-end",
             columnGap: "15px",
           }}
-		  style={{marginTop: 30}}
+          style={{ marginTop: 30 }}
         >
           {item.paymentStatus === "0" ? (
             <>
@@ -507,8 +527,8 @@ const ProductCard = (props: Props) => {
                   fontSize: 16,
                   fontWeight: 500,
                   borderRadius: 8,
-				  marginRight: 5,
-				  marginLeft: 10
+                  marginRight: 5,
+                  marginLeft: 10,
                 }}
                 onClick={() => {
                   setDialog({
@@ -525,19 +545,19 @@ const ProductCard = (props: Props) => {
             </>
           ) : (
             <>
-              <SelectInputWithId
+              {/* <SelectInputWithId
                 data={paymentRequestTypeRes}
                 value={requestType ? [requestType.name] : []}
                 onChange={handleChangeRequestType}
                 placeholder="Gửi yêu cầu"
-                style={{   height: 48,marginLeft: 25, width: 186 }}
+                style={{ height: 48, marginLeft: 25, width: 186 }}
                 disabled={paymentRequestTypeRes.length === 0}
-              />
+              /> */}
             </>
           )}
 
           <CustomButton
-            style={{ width: "150px", height: 48, margin: "8px", padding: 0}}
+            style={{ width: "150px", height: 48, margin: "8px", padding: 0 }}
             label="Xem chi tiết"
             onClick={() => handleChooseItem(item)}
           />

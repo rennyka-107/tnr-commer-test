@@ -106,8 +106,8 @@ const FilterSection = ({ handleChangeFilter, total, totalElement, handleFilterNa
             </li>
             <li className="item">
               <Radio
-                checked={radioValue === "2"}
-                value="2"
+                checked={radioValue === "3"}
+                value="3"
                 onChange={handleChangeRadio}
                 name="radio-buttons"
               />
@@ -115,8 +115,8 @@ const FilterSection = ({ handleChangeFilter, total, totalElement, handleFilterNa
             </li>
             <li className="item">
               <Radio
-                checked={radioValue === "3"}
-                value="3"
+                checked={radioValue === "2"}
+                value="2"
                 onChange={handleChangeRadio}
                 name="radio-buttons"
               />

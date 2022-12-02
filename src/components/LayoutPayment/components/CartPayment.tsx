@@ -96,22 +96,22 @@ const CartPayment = (props: Props) => {
           setPaymentName(listPrice[0].PriceName);
         }
       }
-      if (!isEmpty(arr3)) {
-        setSelectedPromotionIds([...arr3]);
-      } else {
-        if (!isEmpty(listPrice)) {
-          setPriceIdSelect(listPrice[0].PriceID);
-          setPaymentName(listPrice[0].PriceName);
-        }
-      }
-      if (!isEmpty(arr4)) {
-        setSelectedScheduleId(arr4);
-      } else {
-        if (!isEmpty(listPrice)) {
-          setPriceIdSelect(listPrice[0].PriceID);
-          setPaymentName(listPrice[0].PriceName);
-        }
-      }
+      // if (!isEmpty(arr3)) {
+      //   setSelectedPromotionIds([...arr3]);
+      // } else {
+      //   if (!isEmpty(listPrice)) {
+      //     setPriceIdSelect(listPrice[0].PriceID);
+      //     setPaymentName(listPrice[0].PriceName);
+      //   }
+      // }
+      // if (!isEmpty(arr4)) {
+      //   setSelectedScheduleId(arr4);
+      // } else {
+      //   if (!isEmpty(listPrice)) {
+      //     setPriceIdSelect(listPrice[0].PriceID);
+      //     setPaymentName(listPrice[0].PriceName);
+      //   }
+      // }
     }
   }, [listPrice]);
 
@@ -129,6 +129,10 @@ const CartPayment = (props: Props) => {
         scheduleId: findScheduleId.ScheduleID.toString(),
         promotions: [],
       });
+      localStorage.removeItem("IdTCBG");
+      localStorage.removeItem("PaymentSelect");
+      localStorage.removeItem("promotions");
+      localStorage.removeItem("scheduleId");
     }
   };
 
@@ -164,7 +168,7 @@ const CartPayment = (props: Props) => {
         setListPrice(response.responseData);
       } else {
         notification({
-          error: "Có lỗi xảy ra trong quá trình load phiếu tính giá",
+          error: response.responseMessage,
           title: "Load phiếu tính giá"
         })
         dispatch(
@@ -226,7 +230,7 @@ const CartPayment = (props: Props) => {
           );
         } else {
           notification({
-            error: "Có lỗi xảy ra trong quá trình load phiếu tính giá",
+            error: response.responseMessage,
             title: "Load phiếu tính giá"
           })
           dispatch(
@@ -270,12 +274,35 @@ const CartPayment = (props: Props) => {
           promotions: [],
         });
         if (!isEmpty(res)) {
-          setFilterPtg({
-            ...filterPtg,
-            promotions: [],
-          });
-          if (!isEmpty(selectedPromotionIds)) {
-            setSelectedPromotionIds([]);
+          const lsPromotions = LocalStorage.get("promotions");
+          
+          if(!isEmpty(lsPromotions)) {
+            const arrCk = res.ListPromotion.map(item => item.PromotionID);
+            const found = lsPromotions.some(idf => arrCk.includes(idf));
+            if(found) {
+              setFilterPtg({
+                ...filterPtg,
+                promotions: lsPromotions
+              });
+              setSelectedPromotionIds([...lsPromotions]);
+              fetchPtg({ ...filterPtg, promotions: lsPromotions });
+            } else {
+              setFilterPtg({
+                ...filterPtg,
+                promotions: [],
+              });
+              if (!isEmpty(selectedPromotionIds)) {
+                setSelectedPromotionIds([]);
+              }
+            }
+          } else {
+            setFilterPtg({
+              ...filterPtg,
+              promotions: [],
+            });
+            if (!isEmpty(selectedPromotionIds)) {
+              setSelectedPromotionIds([]);
+            }
           }
         }
       })();
@@ -290,25 +317,41 @@ const CartPayment = (props: Props) => {
         promotions: [],
       });
       if (!isEmpty(res) && !isEmpty(res.ListSchedule)) {
-        setPaymentPrice([res.ListSchedule[0].ScheduleName]);
-        if (
-          filterPtg.scheduleId.toString() !==
-          res.ListSchedule[0].ScheduleID.toString()
-        ) {
+        const lsScheduleId = LocalStorage.get("scheduleId");
+        const findSchedule = lsScheduleId
+          ? res.ListSchedule.find(
+              (item) => item.ScheduleID.toString() === lsScheduleId.toString()
+            )
+          : null;
+        if(lsScheduleId && findSchedule) {
           setFilterPtg({
             ...filterPtg,
-            scheduleId: res.ListSchedule[0].ScheduleID.toString(),
+            scheduleId: lsScheduleId.toString(),
             promotions: [],
           });
-          setSelectedScheduleId(res.ListSchedule[0].ScheduleID.toString());
+          setSelectedScheduleId(lsScheduleId.toString());
+          setPaymentPrice(findSchedule.ScheduleName);
         } else {
-          await fetchPtg({ ...filterPtg, promotions: [] });
+          setPaymentPrice([res.ListSchedule[0].ScheduleName]);
+          if (
+            filterPtg.scheduleId.toString() !==
+            res.ListSchedule[0].ScheduleID.toString()
+          ) {
+            setFilterPtg({
+              ...filterPtg,
+              scheduleId: res.ListSchedule[0].ScheduleID.toString(),
+              promotions: [],
+            });
+            setSelectedScheduleId(res.ListSchedule[0].ScheduleID.toString());
+          } else {
+            await fetchPtg({ ...filterPtg, promotions: [] });
+            if (!isEmpty(selectedPromotionIds)) {
+              setSelectedPromotionIds([]);
+            }
+          }
           if (!isEmpty(selectedPromotionIds)) {
             setSelectedPromotionIds([]);
           }
-        }
-        if (!isEmpty(selectedPromotionIds)) {
-          setSelectedPromotionIds([]);
         }
       }
     })();
@@ -318,7 +361,12 @@ const CartPayment = (props: Props) => {
     <Box width={637} mt={"10px"}>
       <WrapperBoxBorderStyled padding={"20px"} margin={"0px 0px 16px"}>
         <RowStyled>
-        <Text18Styled mw={200}><div style={{display: 'flex', flexDirection: 'row'}}><span style={{width: 112}}>Mã giới thiệu </span><span style={{color: 'red'}}>*</span></div></Text18Styled>
+          <Text18Styled mw={200}>
+            <div style={{ display: "flex", flexDirection: "row" }}>
+              <span style={{ width: 112 }}>Mã giới thiệu </span>
+              <span style={{ color: "red" }}>*</span>
+            </div>
+          </Text18Styled>
           <TextField
             placeholder="Nhập mã"
             fullWidth
@@ -343,7 +391,9 @@ const CartPayment = (props: Props) => {
       </WrapperBoxBorderStyled>
       <WrapperBoxBorderStyled padding={"20px"}>
         <RowStyled>
-          <Text18Styled mw={200}>Tiêu chuẩn bàn giao <span style={{color: 'red'}}>*</span></Text18Styled>
+          <Text18Styled mw={200}>
+            Tiêu chuẩn bàn giao <span style={{ color: "red" }}>*</span>
+          </Text18Styled>
 
           <SelectRadioComponent
             label="Tiêu chuẩn bàn giao"
@@ -357,7 +407,9 @@ const CartPayment = (props: Props) => {
       </WrapperBoxBorderStyled>
       <WrapperBoxBorderStyled padding={"20px"} marginTop="1rem">
         <RowStyled>
-          <Text18Styled mw={200}>Tiến độ thanh toán  <span style={{color: 'red'}}>*</span></Text18Styled>
+          <Text18Styled mw={200}>
+            Tiến độ thanh toán <span style={{ color: "red" }}>*</span>
+          </Text18Styled>
           <FormControl style={{ height: 44, width: 317 }}>
             <Select
               labelId="demo-multiple-name-label"
@@ -370,7 +422,7 @@ const CartPayment = (props: Props) => {
                 if (selected.length === 0) {
                   return <span>Tiến độ thanh toán</span>;
                 } else {
-                  return selected.join(", ");
+                  return selected;
                 }
               }}
               IconComponent={null}
@@ -394,7 +446,9 @@ const CartPayment = (props: Props) => {
       </WrapperBoxBorderStyled>
       <WrapperBoxBorderStyled padding={"20px"} marginTop="1rem">
         <RowStyled>
-          <Text18Styled mw={132}>Chiết khấu  <span style={{color: 'red'}}>*</span></Text18Styled>
+          <Text18Styled mw={132}>
+            Chiết khấu <span style={{ color: "red" }}>*</span>
+          </Text18Styled>
           <SelectCheckboxComponent
             label="Vị Trí"
             data={productItem?.ListPromotion}
@@ -403,7 +457,13 @@ const CartPayment = (props: Props) => {
             style={{ width: 305, height: 54 }}
             selectedPromotionIds={selectedPromotionIds}
             setSelectedPromotionIds={setSelectedPromotionIds}
-            callback={(promotions) => fetchPtg({ ...filterPtg, promotions })}
+            callback={(promotions) => {
+              localStorage.removeItem("IdTCBG");
+              localStorage.removeItem("PaymentSelect");
+              localStorage.removeItem("promotions");
+              localStorage.removeItem("scheduleId");
+              fetchPtg({ ...filterPtg, promotions });
+            }}
           />
         </RowStyled>
       </WrapperBoxBorderStyled>

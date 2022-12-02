@@ -41,7 +41,7 @@ const TitleMoneyStyled = styled(Title22Styled)({
   width: "100%",
   whiteSpace: "pre",
   color: "#1b3459",
-  fontWeight: 500
+  fontWeight: 500,
 });
 const BoxInputStyled = styled(Box)(
   {
@@ -93,22 +93,63 @@ const LayoutCompare = (props: Props) => {
       .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
   }
 
+  const filterView = (item: any) => {
+    if (
+      item.key.trim() === "totalPrice" ||
+      item.key.trim() === "landArea" ||
+      item.key.trim() === "clearArea" ||
+      item.key.trim() === "buildArea" ||
+      item.key.trim() === "doorDirection" ||
+      item.key.trim() === "barconyDirection" ||
+      item.key.trim() === "airConditioner" ||
+      item.key.trim() === "buildArea" ||
+      item.key.trim() === "numBath" ||
+      item.key.trim() === "numBed"
+    ) {
+      if (item.key.trim() === "totalPrice") {
+        return <>{currencyFormat(item.value)}đ</>;
+      }
+      if (item.key.trim() === "airConditioner") {
+        return <>{CompareValueFormat(item.value, item.key)}</>;
+      }
+      if (item.key.trim() === "clearArea" || item.key.trim() === "buildArea") {
+        return (
+          <>
+            {CompareValueFormat(item.value, item.key)} m<sup>2</sup>
+          </>
+        );
+      } else {
+        return <>{CompareValueFormat(item.value, item.key)}</>;
+      }
+    } else {
+      return (
+        <>{Number(item.value) >= 1 ? <IconHaveItem /> : <IconDontHaveItem />}</>
+      );
+    }
+  };
+
   const renderDataChildren = ({ data }) => {
     return (
       <React.Fragment>
         {data.map((item, index) => (
           <ColStyled style={{ width: 293 }} key={index}>
             <BoxInputStyled width={293} paddingLeft={"14px"}>
-              <Text18Styled color={"#1b3459"} style={{ lineHeight: "31px" , textAlign: 'end'}}>
-                {item.key.trim() === "totalPrice" ? (
+              <Text18Styled
+                color={"#1b3459"}
+                style={{ lineHeight: "31px", textAlign: "end" }}
+              >
+                {filterView(item)}
+                {/* {item.key.trim() === "totalPrice" ? (
                   <>{currencyFormat(item.value)}đ</>
                 ) : (
                   <div key={item.key}>
-                    {item.key.trim() === "airConditioner" ? (
+                    {item.key.trim() === "airConditioner" ||
+                    item.key.trim() === "clearArea" ||
+                    item.key.trim() === "buildArea" ? (
                       <>{CompareValueFormat(item.value, item.key)}</>
                     ) : (
                       <>
-                      {Number(item.value) >= 1 ? (
+                        {Number(item.value) >= 1 ? (
                           <IconHaveItem />
                         ) : (
                           <IconDontHaveItem />
@@ -116,7 +157,7 @@ const LayoutCompare = (props: Props) => {
                       </>
                     )}
                   </div>
-                )}
+                )} */}
               </Text18Styled>
             </BoxInputStyled>
           </ColStyled>
@@ -182,7 +223,18 @@ const LayoutCompare = (props: Props) => {
                 .filter((item) => item.type === "Thông tin chung")
                 .map((item) => (
                   <BoxInputStyled key={item.id}>
-                    <TitleMoneyStyled style={{textAlign: 'end', whiteSpace: 'normal', maxWidth:135, height: 'auto',fontSize: 18, marginLeft: 10 }}>{item.name}</TitleMoneyStyled>
+                    <TitleMoneyStyled
+                      style={{
+                        textAlign: "end",
+                        whiteSpace: "normal",
+                        maxWidth: 135,
+                        height: "auto",
+                        fontSize: 18,
+                        marginLeft: 10,
+                      }}
+                    >
+                      {item.name}
+                    </TitleMoneyStyled>
                   </BoxInputStyled>
                 ))}
             </Box>
@@ -207,7 +259,9 @@ const LayoutCompare = (props: Props) => {
                   style={{ background: "#F3F3F3", marginLeft: 0 }}
                 >
                   <Box style={{ maxWidth: "35px" }}>
-                    <TitleMoneyStyled style={{fontSize: 18}}>Tiện ích</TitleMoneyStyled>
+                    <TitleMoneyStyled style={{ fontSize: 18 }}>
+                      Tiện ích
+                    </TitleMoneyStyled>
                   </Box>
                 </AccordionSummary>
 
@@ -224,7 +278,18 @@ const LayoutCompare = (props: Props) => {
                           }}
                         >
                           <BoxInputStyled>
-                            <TitleMoneyStyled style={{textAlign: 'end', whiteSpace: 'normal', maxWidth:135, height: 'auto',fontSize: 18, marginLeft: 10 }}>{item.name}</TitleMoneyStyled>
+                            <TitleMoneyStyled
+                              style={{
+                                textAlign: "end",
+                                whiteSpace: "normal",
+                                maxWidth: 135,
+                                height: "auto",
+                                fontSize: 18,
+                                marginLeft: 10,
+                              }}
+                            >
+                              {item.name}
+                            </TitleMoneyStyled>
                           </BoxInputStyled>
                         </ColStyled>
                         {renderDataChildren({
@@ -249,7 +314,9 @@ const LayoutCompare = (props: Props) => {
                   style={{ background: "#F3F3F3", marginLeft: 0 }}
                 >
                   <Box style={{ maxWidth: "35px" }}>
-                    <TitleMoneyStyled style={{fontSize: 18}}>Chi tiết</TitleMoneyStyled>
+                    <TitleMoneyStyled style={{ fontSize: 18 }}>
+                      Chi tiết
+                    </TitleMoneyStyled>
                   </Box>
                 </AccordionSummary>
                 <AccordionDetails>
@@ -265,7 +332,17 @@ const LayoutCompare = (props: Props) => {
                           }}
                         >
                           <BoxInputStyled>
-                            <TitleMoneyStyled style={{textAlign: 'end', whiteSpace: 'normal', maxWidth:135, height: 'auto',fontSize: 18 }}>{item.name}</TitleMoneyStyled>
+                            <TitleMoneyStyled
+                              style={{
+                                textAlign: "end",
+                                whiteSpace: "normal",
+                                maxWidth: 135,
+                                height: "auto",
+                                fontSize: 18,
+                              }}
+                            >
+                              {item.name}
+                            </TitleMoneyStyled>
                           </BoxInputStyled>
                         </ColStyled>
                         {renderDataChildren({

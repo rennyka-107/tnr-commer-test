@@ -97,6 +97,7 @@ export interface Props {
   keycloakId?: String;
   userId?: String;
   paramsEndcode?: string;
+  transKey?: String;
   emailRegister?: string;
   keyWidthOTPParams?: string;
   back?: () => void;
@@ -166,12 +167,20 @@ const OTP = (props: Props) => {
   };
 
   const reSend = () => {
-    getOTP(props.userId).then((response) => {
-      if (response.responseCode === "00") {
-        setTime(120);
-        countDown();
-      }
-    });
+	getOTP(props.transKey,0).then((response) => {
+		if (response.responseCode === "00") {
+			setTime(120);
+			countDown();
+		}
+		
+	  });
+    // getOTP(props.userId).then((response) => {
+    //   if (response.responseCode === "00") {
+    //     setTime(120);
+    //     countDown();
+    //   }
+    // });
+	
   };
 
   return (
@@ -220,7 +229,7 @@ const OTP = (props: Props) => {
                 time ? ` Vui lòng nhấn nhận mã xác thực sau ${time}s` : ""
               }`}
               <br />
-              {time ? "" : <Send onClick={reSend}>Gửi lại mã xác thực</Send>}
+              {time ? "" : <Send style={{cursor: 'pointer'}} onClick={reSend}>Gửi lại mã xác thực</Send>}
             </Content>
           ) : (
             <NotiFailed>

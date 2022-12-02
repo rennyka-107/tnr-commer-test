@@ -28,6 +28,7 @@ import {
   LinedStyled,
   RowStyled,
   Text14Styled,
+  Text16Styled,
   Text18Styled,
   Title20Styled,
   Title22Styled,
@@ -182,6 +183,25 @@ const validationSchema = yup.object().shape({
   permanentAddress: yup
     .string()
     .max(255, "Không được vượt quá 255 ký tự")
+    .required(validateLine.required)
+    .nullable()
+    .default(""),
+  province: yup
+    .string()
+    .max(255, "Không được vượt quá 255 ký tự")
+    .required(validateLine.required)
+    .nullable()
+    .default(""),
+  district: yup
+    .string()
+    .max(255, "Không được vượt quá 255 ký tự")
+    .required(validateLine.required)
+    .nullable()
+    .default(""),
+  commune: yup
+    .string()
+    .max(255, "Không được vượt quá 255 ký tự")
+    .required(validateLine.required)
     .nullable()
     .default(""),
   contactAddress: yup
@@ -440,7 +460,7 @@ const LayoutInfoCustom = ({ setScopeRender, scopeRender }: Props) => {
       loCan: cart?.name,
       giaTriBds:
         !isEmpty(productItem) &&
-        productItem.TotalMoney !== 0 &&
+        // productItem.TotalMoney !== 0 &&
         productItem.TotalMoney !== null
           ? productItem?.TotalMoney
           : cart?.totalPrice,
@@ -550,31 +570,37 @@ const LayoutInfoCustom = ({ setScopeRender, scopeRender }: Props) => {
         : {
             landPrice:
               !isEmpty(productItem) &&
-              productItem.LandPrice !== 0 &&
-              productItem.LandPrice !== null
-                ? productItem?.LandPrice
+              // productItem.PreLandPrice !== 0 &&
+              productItem.PreLandPrice !== null
+                ? productItem?.PreLandPrice
                 : totalVatPrice,
+            landMoney:
+              !isEmpty(productItem) &&
+              // productItem.PreLandMoney !== 0 &&
+              productItem.PreLandMoney !== null
+                ? productItem?.PreLandMoney
+                : 0,
             vat:
               !isEmpty(productItem) &&
-              productItem.VAT !== 0 &&
+              // productItem.VAT !== 0 &&
               productItem.VAT !== null
                 ? productItem?.VAT
                 : vat,
             maintainPrice:
               !isEmpty(productItem) &&
-              productItem.MaintenanceFee !== 0 &&
+              // productItem.MaintenanceFee !== 0 &&
               productItem.MaintenanceFee !== null
                 ? productItem?.MaintenanceFee
                 : maintainPrice,
             totalPrice:
               !isEmpty(productItem) &&
-              productItem.TotalMoney !== 0 &&
-              productItem.TotalMoney !== null
-                ? productItem?.TotalMoney
+              // productItem.PreTotalMoney !== 0 &&
+              productItem.PreTotalMoney !== null
+                ? productItem?.PreTotalMoney
                 : totalPrice,
             totalOnlinePrice:
               !isEmpty(productItem) &&
-              productItem.TotalMoney !== 0 &&
+              // productItem.TotalMoney !== 0 &&
               productItem.TotalMoney !== null
                 ? productItem?.TotalMoney
                 : totalPrice,
@@ -621,6 +647,16 @@ const LayoutInfoCustom = ({ setScopeRender, scopeRender }: Props) => {
         : !isEmpty(productItem.ListSchedule)
         ? productItem?.ListSchedule[0]["ScheduleID"]
         : "",
+      totalMoney: !isEmpty(transactionCode)
+        ? data?.totalMoney
+        : productItem.TotalMoney
+        ? productItem.TotalMoney
+        : 0,
+      promotionMoney: !isEmpty(transactionCode)
+        ? data?.promotionMoney
+        : productItem.PromotionMoney
+        ? productItem.PromotionMoney
+        : 0,
     };
 
     if (
@@ -800,7 +836,7 @@ const LayoutInfoCustom = ({ setScopeRender, scopeRender }: Props) => {
                 !isEmpty(res.responseData?.msbRedirectLink) &&
                 paymentFlag !== 0
               ) {
-                LocalStorage.remove('cart');
+                LocalStorage.remove("cart");
                 addToCart();
                 window.location.href = res.responseData?.msbRedirectLink;
                 return;
@@ -922,10 +958,11 @@ const LayoutInfoCustom = ({ setScopeRender, scopeRender }: Props) => {
         const ele2 =
           paymentIdentityInfos.length >= 1 ? paymentIdentityInfos.pop() : null;
         arrayElements.push(
-          <RowStyled key={ele1.idNumber + "1023"}>
-            <BoxInfoUserStyled style={{ cursor: "pointer", display: "flex" }}>
-              <ColStyled jContent={"center"} sx={{ gap: 1 }}>
+          <RowStyled key={ele1.idNumber} style={{ gap: 10 }}>
+            <BoxInfoUserStyled style={{ cursor: "pointer", display: "flex", width: "50%" }}>
+              <ColStyled jContent={"center"}>
                 <Text18Styled
+                  style={{ marginBottom: 8 }}
                   onClick={() => {
                     setFormInfo({ open: true, idNumber: ele1.idNumber });
                   }}
@@ -941,8 +978,8 @@ const LayoutInfoCustom = ({ setScopeRender, scopeRender }: Props) => {
                 <IconPlusCircle style={{ transform: "rotate(45deg)" }} />
               </IconButton>
             </BoxInfoUserStyled>
-            {!isEmpty(ele2) && (
-              <BoxInfoUserStyled style={{ cursor: "pointer", display: "flex" }}>
+            {!isEmpty(ele2) ? (
+              <BoxInfoUserStyled style={{ cursor: "pointer", display: "flex", width: "50%" }}>
                 <ColStyled jContent={"center"} sx={{ gap: 1 }}>
                   <Text18Styled
                     onClick={() => {
@@ -960,7 +997,7 @@ const LayoutInfoCustom = ({ setScopeRender, scopeRender }: Props) => {
                   <IconPlusCircle style={{ transform: "rotate(45deg)" }} />
                 </IconButton>
               </BoxInfoUserStyled>
-            )}
+            ) : <div></div>}
           </RowStyled>
         );
       }
@@ -1026,7 +1063,7 @@ const LayoutInfoCustom = ({ setScopeRender, scopeRender }: Props) => {
                         justifyContent: "space-between",
                         border: "1px solid #C7C9D9",
                         p: 2,
-					
+
                         borderRadius: "8px",
                         mt: 1,
                       }}
@@ -1057,7 +1094,7 @@ const LayoutInfoCustom = ({ setScopeRender, scopeRender }: Props) => {
                       </Box>
                     </Box>
                   )}
-                  <RowStyled style={{gap: 38}}>
+                  <RowStyled style={{ gap: 10 }}>
                     <BoxInfoUserStyled
                       sx={{
                         background: !isEmpty(transactionCode)
@@ -1065,6 +1102,8 @@ const LayoutInfoCustom = ({ setScopeRender, scopeRender }: Props) => {
                           : "#f3f4f6",
                         display: "flex",
                         alignItems: "center",
+                        width: "50% !important",
+                        maxWidth: "50%"
                       }}
                     >
                       <ColStyled jContent={"center"}>
@@ -1073,11 +1112,11 @@ const LayoutInfoCustom = ({ setScopeRender, scopeRender }: Props) => {
                             ? watch("fullname")
                             : "Khác hàng vãng lai"}
                         </Title22Styled>
-                        <Text14Styled color={"#5a5a5a"}>
+                        <Text16Styled color={"#5a5a5a"}>
                           {!isEmpty(watch("phoneNumber"))
                             ? "Số điện thoại: " + watch("phoneNumber")
                             : "Vui lòng điền đầy đủ thông tin bên dưới để tiến hành giao dịch."}
-                        </Text14Styled>
+                        </Text16Styled>
                       </ColStyled>
                       {!isEmpty(transactionCode) && (
                         <IconButton
@@ -1095,7 +1134,7 @@ const LayoutInfoCustom = ({ setScopeRender, scopeRender }: Props) => {
                       )}
                     </BoxInfoUserStyled>
                     <BoxInfoUserStyled
-                      style={{ cursor: "pointer" }}
+                      style={{ cursor: "pointer", width: "50%" }}
                       onClick={() => {
                         setFormInfo({ open: true, idNumber: "" });
                       }}
@@ -1115,6 +1154,7 @@ const LayoutInfoCustom = ({ setScopeRender, scopeRender }: Props) => {
                         <Grid item xs={6}>
                           <FormGroup>
                             <ControllerTextField
+                              fzLabel="16px"
                               label={"Họ và tên"}
                               control={control}
                               variant={"outlined"}
@@ -1123,10 +1163,13 @@ const LayoutInfoCustom = ({ setScopeRender, scopeRender }: Props) => {
                               InputProps={{
                                 style: {
                                   height: "44px",
-                                  border: "1px solid #B8B8B8",
+                                  // border: "1px solid #B8B8B8",
                                   borderRadius: "8px",
                                 },
                               }}
+                              // InputLabelProps={{
+                              //   style: { fontSize: "16px" },
+                              // }}
                             />
                           </FormGroup>
                         </Grid>
@@ -1136,11 +1179,13 @@ const LayoutInfoCustom = ({ setScopeRender, scopeRender }: Props) => {
                         <Grid item xs={6}>
                           <FormGroup>
                             <ControllerReactDatePicker
+                              fzLabel="16px"
                               label={"Ngày sinh"}
                               control={control}
                               name={"dob"}
                               required
                               maxDate={new Date()}
+                              labelColor=""
                             />
                           </FormGroup>
                         </Grid>
@@ -1149,6 +1194,7 @@ const LayoutInfoCustom = ({ setScopeRender, scopeRender }: Props) => {
                         <Grid item xs={6}>
                           <FormGroup>
                             <ControllerTextField
+                              fzLabel="16px"
                               label={"Số điện thoại"}
                               control={control}
                               variant={"outlined"}
@@ -1156,7 +1202,7 @@ const LayoutInfoCustom = ({ setScopeRender, scopeRender }: Props) => {
                               InputProps={{
                                 style: {
                                   height: "44px",
-                                  border: "1px solid #B8B8B8",
+                                  // border: "1px solid #B8B8B8",
                                   borderRadius: "8px",
                                 },
                               }}
@@ -1169,6 +1215,7 @@ const LayoutInfoCustom = ({ setScopeRender, scopeRender }: Props) => {
                         <Grid item xs={6}>
                           <FormGroup>
                             <ControllerTextField
+                              fzLabel="16px"
                               label={"Email"}
                               control={control}
                               variant={"outlined"}
@@ -1176,7 +1223,7 @@ const LayoutInfoCustom = ({ setScopeRender, scopeRender }: Props) => {
                               InputProps={{
                                 style: {
                                   height: "44px",
-                                  border: "1px solid #B8B8B8",
+                                  // border: "1px solid #B8B8B8",
                                   borderRadius: "8px",
                                 },
                               }}
@@ -1201,6 +1248,7 @@ const LayoutInfoCustom = ({ setScopeRender, scopeRender }: Props) => {
                       <Grid item xs={6}>
                         <FormGroup>
                           <ControllerTextField
+                            fzLabel="16px"
                             label={"CCCD/CMND"}
                             control={control}
                             variant={"outlined"}
@@ -1208,7 +1256,7 @@ const LayoutInfoCustom = ({ setScopeRender, scopeRender }: Props) => {
                             InputProps={{
                               style: {
                                 height: "44px",
-                                border: "1px solid #B8B8B8",
+                                // border: "1px solid #B8B8B8",
                                 borderRadius: "8px",
                               },
                             }}
@@ -1222,6 +1270,7 @@ const LayoutInfoCustom = ({ setScopeRender, scopeRender }: Props) => {
                         <Grid item xs={6}>
                           <FormGroup>
                             <ControllerTextField
+                              fzLabel="16px"
                               label={"Email"}
                               control={control}
                               variant={"outlined"}
@@ -1229,7 +1278,7 @@ const LayoutInfoCustom = ({ setScopeRender, scopeRender }: Props) => {
                               InputProps={{
                                 style: {
                                   height: "44px",
-                                  border: "1px solid #B8B8B8",
+                                  // border: "1px solid #B8B8B8",
                                   borderRadius: "8px",
                                 },
                               }}
@@ -1242,13 +1291,14 @@ const LayoutInfoCustom = ({ setScopeRender, scopeRender }: Props) => {
                       <Grid item xs={6}>
                         <FormGroup>
                           <ControllerTextField
+                            fzLabel="16px"
                             label={"Nơi cấp"}
                             control={control}
                             variant={"outlined"}
                             InputProps={{
                               style: {
                                 height: "44px",
-                                border: "1px solid #B8B8B8",
+                                // border: "1px solid #B8B8B8",
                                 borderRadius: "8px",
                               },
                             }}
@@ -1261,7 +1311,9 @@ const LayoutInfoCustom = ({ setScopeRender, scopeRender }: Props) => {
                       <Grid item xs={6}>
                         <FormGroup>
                           <ControllerReactDatePicker
+                            fzLabel="16px"
                             label={"Ngày cấp"}
+                            labelColor=""
                             control={control}
                             variant={"outlined"}
                             name={"issueDate"}
@@ -1286,10 +1338,12 @@ const LayoutInfoCustom = ({ setScopeRender, scopeRender }: Props) => {
                       <Grid item xs={6}>
                         <FormGroup>
                           <ControllerSelectAutoComplete
+                            fzLabel="16px"
                             disabled={disabledEditMainUser}
                             variant="outlined"
                             name="province"
-                            label="Thành phố/Tỉnh"
+                            required
+                            label="Thành phố/Tỉnh "
                             control={control}
                             setValue={setValue}
                             options={convertProvinType}
@@ -1305,7 +1359,8 @@ const LayoutInfoCustom = ({ setScopeRender, scopeRender }: Props) => {
                           <DistricSelect
                             disabled={disabledEditMainUser}
                             name="district"
-                            label="Quận/Huyện"
+                            required
+                            label="Quận/Huyện "
                             control={control}
                             setValue={setValue}
                             provinceName={watch("province")}
@@ -1317,7 +1372,8 @@ const LayoutInfoCustom = ({ setScopeRender, scopeRender }: Props) => {
                           <CommuneSelect
                             disabled={disabledEditMainUser}
                             name="commune"
-                            label="Xã"
+                            required
+                            label="Xã "
                             control={control}
                             setValue={setValue}
                             districtName={watch("district")}
@@ -1328,17 +1384,18 @@ const LayoutInfoCustom = ({ setScopeRender, scopeRender }: Props) => {
                       <Grid item xs={6}>
                         <FormGroup>
                           <ControllerTextField
-                            label=" "
+                            label="Địa chỉ cụ thể"
                             control={control}
                             placeholder="Nhập địa chỉ cụ thể"
                             InputProps={{
                               style: {
                                 height: "44px",
-                                border: "1px solid #B8B8B8",
+                                // border: "1px solid #B8B8B8",
                                 borderRadius: "8px",
                               },
                             }}
                             variant={"outlined"}
+                            required
                             name={"permanentAddress"}
                             fullWidth
                             disabled={disabledEditMainUser}
@@ -1359,6 +1416,7 @@ const LayoutInfoCustom = ({ setScopeRender, scopeRender }: Props) => {
                       <Grid item xs={6}>
                         <FormGroup>
                           <ControllerSelectAutoComplete
+                            fzLabel="16px"
                             disabled={disabledEditMainUser}
                             variant="outlined"
                             name="provinceContactName"
@@ -1401,13 +1459,13 @@ const LayoutInfoCustom = ({ setScopeRender, scopeRender }: Props) => {
                       <Grid item xs={6}>
                         <FormGroup>
                           <ControllerTextField
-                            label=" "
+                            label="Địa chỉ cụ thể"
                             control={control}
                             variant={"outlined"}
                             InputProps={{
                               style: {
                                 height: "44px",
-                                border: "1px solid #B8B8B8",
+                                // border: "1px solid #B8B8B8",
                                 borderRadius: "8px",
                               },
                             }}
@@ -1454,7 +1512,14 @@ const LayoutInfoCustom = ({ setScopeRender, scopeRender }: Props) => {
             <Box margin={"15px 0px"}>
               <TableQuote
                 item={
-                  !isEmpty(data.quotationRealt) ? data.quotationRealt : null
+                  !isEmpty(data.quotationRealt) && !isEmpty(data.production)
+                    ? {
+                        ...data.quotationRealt,
+                        build: data.production.build,
+                        buildType: data.production.buildType,
+                        projectTypeCode: data.production.projectType?.code,
+                      }
+                    : null
                 }
                 setScopeRender={setScopeRender}
                 scopeRender={scopeRender}
@@ -1575,7 +1640,8 @@ const LayoutInfoCustom = ({ setScopeRender, scopeRender }: Props) => {
                 />
                 <Text14Styled>Đăng ký vay ngân hàng</Text14Styled>
               </Box>
-              {(isEmpty(transactionCode) || data.paymentStatus === 0) && (
+              {(isEmpty(transactionCode) ||
+                (!isEmpty(transactionCode) && data.paymentStatus === 0)) && (
                 <ButtonAction
                   disabled={
                     formInfo.open || !acceptPolicy || data.paymentStatus !== 0
@@ -1641,11 +1707,9 @@ const LayoutInfoCustom = ({ setScopeRender, scopeRender }: Props) => {
                       ) &&
                       !isEmpty(transactionCode) &&
                       ((billing === 1 &&
-                        data?.deposite ===
-                          data?.quotationRealt?.minEarnestMoney) ||
+                        data.isDepositMin === 0) ||
                         (billing === 2 &&
-                          data?.deposite ===
-                            data?.quotationRealt?.regulationOrderPrice)) &&
+                          data.isDepositMin === 1)) &&
                       payMethod === data?.paymentMethodId &&
                       !validUpload) ||
                     (isEmpty(transactionCode) &&

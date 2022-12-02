@@ -117,10 +117,11 @@ const FooterBot = ({ listMenuBarProjectType, listUserManual }: MenuProps) => {
       <WrapContent>
         <BlockDiv>
           {generalInfo?.companyName ?? ""}
-          <LineInfoFirst>
+          {/* <LineInfoFirst>
             <TitleTypo>Địa chỉ: {""}</TitleTypo>
             {generalInfo?.address ?? ""}
-          </LineInfoFirst>
+          </LineInfoFirst> */}
+          <LineInfo style={{ margin: "20px 0"}}>{generalInfo.bussinessCert}</LineInfo>
           <LineInfo>
             <TitleTypo>Tel: {""}</TitleTypo>
             {generalInfo.phoneNumber}
@@ -129,9 +130,14 @@ const FooterBot = ({ listMenuBarProjectType, listUserManual }: MenuProps) => {
             <TitleTypo>Email: {""}</TitleTypo>
             {generalInfo?.email ?? ""}
           </LineInfo>
+          <LineInfo>
+            <TitleTypo>Trụ sở: {""}</TitleTypo>
+            {generalInfo?.email ?? ""}
+          </LineInfo>
           <LineInfo style={{ marginTop: 5 }}>
             <TitleTypo>
-              TNR Version {process.env.NEXT_PUBLIC_VERSION} Copyright © tnrholdings.com.vn {""}
+              TNR Version {process.env.NEXT_PUBLIC_VERSION} Copyright ©
+              tnrholdings.com.vn {""}
             </TitleTypo>
           </LineInfo>
         </BlockDiv>

@@ -67,7 +67,7 @@ const BillingInfo = ({ setBilling, billing }: Props) => {
       !isEmpty(data?.deposite) && !isEmpty(data.quotationRealt)
     ) {
       setBilling(
-        data?.quotationRealt?.minEarnestMoney === data?.deposite ? 1 : 2
+        data?.isDepositMin === 0 ? 1 : 2
       );
     }
   }, [transactionCode, data?.deposite]);

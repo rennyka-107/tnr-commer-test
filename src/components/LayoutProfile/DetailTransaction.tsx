@@ -33,6 +33,7 @@ import SelectInputComponent from "@components/CustomComponent/SelectInputCompone
 import SelectInputTwo from "@components/CustomComponent/SelectInputComponent/SelectInputTwo";
 import SelectInputWithId from "@components/CustomComponent/SelectInputComponent/SelectInputWithId";
 import DialogFinishProfileTransaction from "./DialogFinishProfileTransaction";
+import { format, parse } from "date-fns";
 type Props = {
   //   item: ContractI;
   setActiveTab: (d: any) => void;
@@ -262,8 +263,15 @@ interface PaymentRequestType {
 const DetailTransaction = ({ setActiveTab }: Props) => {
   const router = useRouter();
   const [open, setOpen] = useState<boolean>(false);
-  const { transCode, transactionId, uuid, productId, transactionCodeLandSoft } =
-    router.query;
+  const {
+    transCode,
+    transactionId,
+    uuid,
+    productId,
+    transactionCodeLandSoft,
+    transactionTypeName,
+    bookingTime,
+  } = router.query;
   const [data, setData] = useState<any[any]>([]);
   const [displayCustomerDetail, setDisplayCustomerDetail] = useState<any>(
     fakeCustomers[0]
@@ -347,6 +355,20 @@ const DetailTransaction = ({ setActiveTab }: Props) => {
       router.replace(`/send-request/${data[0].code}/${transCode}`);
     }
   };
+
+  function convertTimeValue(time: string) {
+    try {
+      return format(
+        parse(time, "dd-MM-yyyy HH:mm:ss", new Date()),
+        "HH:mm | dd/MM/yyyy"
+      );
+    } catch (err) {
+      return format(
+        parse(time, "dd-MM-yyyy", new Date()),
+        "HH:mm | dd/MM/yyyy"
+      );
+    }
+  }
 
   function customerTab(customer: any) {
     return (
@@ -445,7 +467,6 @@ const DetailTransaction = ({ setActiveTab }: Props) => {
             <div style={{ display: "flex", flexDirection: "row", gap: 50 }}>
               <ImageWithHideOnError
                 className="logo"
-				
                 src={
                   !isEmpty(data.productionImage)
                     ? data.productionImage
@@ -485,11 +506,13 @@ const DetailTransaction = ({ setActiveTab }: Props) => {
                   {data?.production.name ? data?.production.name : "N/A"}
                 </TitleNameProject>
                 <div style={{ display: "flex", gap: 13 }}>
-                  <TitleNameProject style={{ color: "#1B3459" }}>
-                    {data?.production.levelDetailParentName
-                      ? data?.production.levelDetailParentName
-                      : "N/A"}
-                  </TitleNameProject>
+                  {data?.production.projectTypeCode === "2" && (
+                    <TitleNameProject style={{ color: "#1B3459" }}>
+                      {data?.production.levelDetailParentName
+                        ? data?.production.levelDetailParentName
+                        : "N/A"}
+                    </TitleNameProject>
+                  )}
                   <TitleNameProject style={{ color: "#1B3459" }}>
                     {data?.production.levelDetailName
                       ? data?.production.levelDetailName
@@ -516,14 +539,24 @@ const DetailTransaction = ({ setActiveTab }: Props) => {
                       Diện tích
                     </TextLeftTop>
                     <TextLeftTop style={{ color: "#1B3459" }}>
-                      Phòng ngủ
+                      {data.production.projectTypeCode === "2"
+                        ? "Phòng ngủ"
+                        : "Hướng"}
                     </TextLeftTop>
                     <TextLeftTop style={{ color: "#1B3459" }}>
-                      Phòng tắm
+                      {data.production.projectTypeCode === "2"
+                        ? "Phòng vệ sinh"
+                        : "Phân loại"}
                     </TextLeftTop>
-                    <TextLeftTop style={{ color: "#1B3459" }}>
-                      Hướng
-                    </TextLeftTop>
+                    {(data.production.projectTypeCode === "2" ||
+                      (data.production.projectTypeCode === "1" &&
+                        data.production.build)) && (
+                      <TextLeftTop style={{ color: "#1B3459" }}>
+                        {data.production.projectTypeCode === "2"
+                          ? "Hướng"
+                          : "Tầng cao"}
+                      </TextLeftTop>
+                    )}
                   </div>
                   <div
                     style={{
@@ -539,18 +572,36 @@ const DetailTransaction = ({ setActiveTab }: Props) => {
                         : "N/A"}
                     </TextRightTop>
                     <TextRightTop>
-                      {data.production.numBed ? data.production.numBed : "N/A"}
-                    </TextRightTop>
-                    <TextRightTop>
-                      {data.production.numBath
-                        ? data.production.numBath
-                        : "N/A"}
-                    </TextRightTop>
-                    <TextRightTop>
-                      {data.production.doorDirection
+                      {data.production.projectTypeCode === "2"
+                        ? data.production.numBed
+                          ? data.production.numBed
+                          : "N/A"
+                        : data.production.doorDirection
                         ? data.production.doorDirection
                         : "N/A"}
                     </TextRightTop>
+                    <TextRightTop>
+                      {data.production.projectTypeCode === "2"
+                        ? data.production.numBath
+                          ? data.production.numBath
+                          : "N/A"
+                        : data.production.build
+                        ? "Có xây"
+                        : "Chưa xây"}
+                    </TextRightTop>
+                    {(data.production.projectTypeCode === "2" ||
+                      (data.production.projectTypeCode === "1" &&
+                        data.production.build)) && (
+                      <TextRightTop>
+                        {data.production.projectTypeCode === "2"
+                          ? data.production.doorDirection
+                            ? data.production.doorDirection
+                            : "N/A"
+                          : data.production.floorHeight
+                          ? data.production.floorHeight
+                          : "N/A"}
+                      </TextRightTop>
+                    )}
                   </div>
                 </div>
               </div>
@@ -574,8 +625,9 @@ const DetailTransaction = ({ setActiveTab }: Props) => {
                     marginTop: 15,
                   }}
                 >
-                  <TextLeftTop>Mã đặt chỗ</TextLeftTop>
-                  <TextLeftTop>Thời gian đặt chỗ</TextLeftTop>
+                  <TextLeftTop>Mã giao dịch</TextLeftTop>
+                  <TextLeftTop>Loại hợp đồng</TextLeftTop>
+                  <TextLeftTop>Thời gian giao dịch</TextLeftTop>
                   <TextLeftTop>Tình trạng đặt chỗ</TextLeftTop>
                 </div>
                 <div
@@ -591,10 +643,11 @@ const DetailTransaction = ({ setActiveTab }: Props) => {
                   <TextRightTop>
                     {transactionCodeLandSoft || transCode || data.billNumber}
                   </TextRightTop>
+                  <TextRightTop>{transactionTypeName}</TextRightTop>
                   <TextRightTop>
-                    {convertDateToString(
-                      getDateFromStringDMY(data.createdAt) ?? new Date()
-                    )}
+                    {bookingTime
+                      ? convertTimeValue(bookingTime as string)
+                      : "N/A"}
                   </TextRightTop>
                   {data.paymentStatus === 0 ? (
                     <>
@@ -676,7 +729,7 @@ const DetailTransaction = ({ setActiveTab }: Props) => {
               <TitleCenterStyled style={{ marginBottom: 20 }}>
                 Báo giá
               </TitleCenterStyled>
-              <div
+              {/* <div
                 style={{
                   display: "flex",
                   justifyContent: "space-between",
@@ -705,11 +758,6 @@ const DetailTransaction = ({ setActiveTab }: Props) => {
                   }}
                 >
                   <TextRightTop>
-                    {data.quotationRealt.landPrice
-                      ? `${currencyFormat(data.quotationRealt.landPrice)} đ`
-                      : "N/A"}
-                  </TextRightTop>
-                  <TextRightTop>
                     {data.quotationRealt.vat
                       ? `${currencyFormat(data.quotationRealt.vat)} đ`
                       : "N/A"}
@@ -720,15 +768,15 @@ const DetailTransaction = ({ setActiveTab }: Props) => {
                       : "N/A"}
                   </TextRightTop>
                 </div>
-              </div>
+              </div> */}
             </div>
-            <div
+            {/* <div
               style={{
                 border: "1px solid #C7C9D9",
                 marginTop: 20,
                 marginBottom: 20,
               }}
-            />
+            /> */}
             <div>
               <div
                 style={{
@@ -745,6 +793,7 @@ const DetailTransaction = ({ setActiveTab }: Props) => {
                     marginTop: 15,
                   }}
                 >
+                  <TextLeftTop>Giá BĐS</TextLeftTop>
                   <TextLeftTop>Tổng tiền niêm yết</TextLeftTop>
                   <TextLeftTop>Giảm giá</TextLeftTop>
                   <TextLeftTop>Tổng tiền mua online</TextLeftTop>
@@ -759,13 +808,18 @@ const DetailTransaction = ({ setActiveTab }: Props) => {
                   }}
                 >
                   <TextRightTop>
+                    {data.quotationRealt.landPrice
+                      ? `${currencyFormat(data.quotationRealt.landPrice)} đ`
+                      : "N/A"}
+                  </TextRightTop>
+                  <TextRightTop>
                     {data.quotationRealt.totalPrice
                       ? `${currencyFormat(data.quotationRealt.totalPrice)} đ`
                       : "N/A"}
                   </TextRightTop>
                   <TextRightTop>
-                    {data.quotationRealt.nppDiscount
-                      ? `${currencyFormat(data.quotationRealt.nppDiscount)} đ`
+                    {data.promotionMoney !== null
+                      ? `${currencyFormat(data.promotionMoney)} đ`
                       : "N/A"}
                   </TextRightTop>
                   <TextRightTop style={{ color: "#EA242A", fontWeight: 500 }}>
@@ -906,24 +960,34 @@ const DetailTransaction = ({ setActiveTab }: Props) => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    <TableRow>
-                      <TableCell component="th" scope="row">
-                        {data.billNumber}
-                      </TableCell>
-                      <TableCell align="right"> {data.createdAt}</TableCell>
-                      <TableCell align="right">
-                        {" "}
-                        {currencyFormat(data.deposite)} đ
-                      </TableCell>
-                      <TableCell align="right">
-                        {" "}
-                        N/A
-                        {/* {data.paymentMethod.name} */}
-                      </TableCell>
-                      <TableCell align="right">
-                        {data.paymentStatusString}
-                      </TableCell>
-                    </TableRow>
+                    {!isEmpty(data?.paymentHistoryList) ? (
+                      data?.paymentHistoryList.map((item, idx) => (
+                        <TableRow key={item.PaymentHistoryId + "unique" + idx}>
+                          <TableCell component="th" scope="row">
+                            {item.PaymentHistoryId}
+                          </TableCell>
+                          <TableCell align="right">
+                            {" "}
+                            {item.PaymentDate}
+                          </TableCell>
+                          <TableCell align="right">
+                            {item.PaymentAmout
+                              ? currencyFormat(item.PaymentAmout)
+                              : 0}{" "}
+                            đ
+                          </TableCell>
+                          <TableCell align="right">
+                            {item.PaymentMethod ?? "N/A"}
+                          </TableCell>
+                          <TableCell align="right">
+                            {item.PaymentStatus}
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    ) : (
+                      <></>
+                    )}
+
                     {/* ))} */}
                   </TableBody>
                 </Table>

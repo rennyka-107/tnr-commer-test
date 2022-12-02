@@ -42,17 +42,17 @@ const Send = styled.a`
   line-height: 20px;
 `;
 const ButtonStyled = styled(Button)`
-text-transform: none;
-border-radius: 8px;
-font-weight: 400;
-font-size: 16px;
-line-height: 19px;
-color: #ffffff;
-padding: 14px 70px;
-cursor: pointer;
-border: unset;
-width:100%;
-`
+  text-transform: none;
+  border-radius: 8px;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 19px;
+  color: #ffffff;
+  padding: 14px 70px;
+  cursor: pointer;
+  border: unset;
+  width: 100%;
+`;
 const TypeConFirm = styled.div`
   font-weight: 400;
   font-size: 18px;
@@ -69,6 +69,7 @@ export interface Props {
   paramsEndcode?: string;
   keyForgot?: string;
   keyWidthOTPParams?: string;
+  setKeyForgot?: (value: string) => void;
   emailUser: string;
   keyTrans?: String;
   next: () => void;
@@ -77,7 +78,7 @@ export interface Props {
 const OTP = (props: Props) => {
   const [OTP, setOTP] = useState("");
   const Router = useRouter();
-  const {link,key} = Router.query;
+  const { link, key } = Router.query;
   const [loading, setLoading] = useState(false);
   const [checked, setChecked] = useState(true);
   const [time, setTime] = useState<number>(120);
@@ -88,6 +89,7 @@ const OTP = (props: Props) => {
   useEffect(() => {
     countDown();
   }, []);
+
   useEffect(() => {
     if (paramsOTP !== "") {
       setOTP(paramsOTP);
@@ -110,36 +112,44 @@ const OTP = (props: Props) => {
       interval.current && clearInterval(interval.current);
     };
   }, []);
- 
+
+
+
   const checkOTP = () => {
-	setLoading(true)
-	if(link === '1'){
-		checkValidOTP(key, OTP).then((response) => {
-			if (response.responseCode === "00") {
-				setLoading(false)
-				props.next();
-			} else {
-			  setChecked(false);
-			  setLoading(false)
-			}
-		  });
-	}else {
-		checkValidOTP(props.keyForgot, OTP).then((response) => {
-			if (response.responseCode === "00") {
-				setLoading(false)
-				props.next();
-			} else {
-			  setChecked(false);
-			  setLoading(false)
-			}
-		  });
-	}
-    
+    setLoading(true);
+    if (link === "1") {
+      checkValidOTP(key, OTP).then((response) => {
+        if (response.responseCode === "00") {
+          setLoading(false);
+          props.next();
+        } else {
+          setChecked(false);
+          setLoading(false);
+        }
+      });
+    } else {
+      checkValidOTP(props.keyForgot, OTP).then((response) => {
+        if (response.responseCode === "00") {
+          setLoading(false);
+          props.next();
+        } else {
+          setChecked(false);
+          setLoading(false);
+        }
+      });
+    }
   };
 
   const reSend = () => {
-    checkValidOTP(props.username, OTP).then((response) => {
+    HttpClient.post<any, CommonResponse>(
+      `/api-account/v1/account/forget-password?username=${props.username}`,
+      {},
+      {
+        withToken: false,
+      }
+    ).then((response) => {
       if (response.responseCode === "00") {
+        props.setKeyForgot(response.responseData);
         setTime(120);
         countDown();
       }
@@ -149,36 +159,36 @@ const OTP = (props: Props) => {
   return (
     <Form>
       <Label>Nhập mã xác thực</Label>
-	  {checked ? (
-            <>
-              {" "}
-              <TypeConFirm>
-                Mã xác nhận đã được gửi tới email {props.emailUser} của quý
-                khách hàng. Nhập mã xác thực quý khách hàng nhận được dưới đây{" "}
-              </TypeConFirm>
-            </>
-          ) : (
-            <></>
-          )}
+      {checked ? (
+        <>
+          {" "}
+          <TypeConFirm>
+            Mã xác nhận đã được gửi tới email {props.emailUser} của quý khách
+            hàng. Nhập mã xác thực quý khách hàng nhận được dưới đây{" "}
+          </TypeConFirm>
+        </>
+      ) : (
+        <></>
+      )}
       <OtpInput
         value={OTP}
         onChange={(otp) => setOTP(otp)}
         numInputs={6}
         focusStyle={{
-			outline: "none",
-			border: "2px solid #FEC83C",
-			borderRadius: "8px",
-		  }}
-		  containerStyle={{ justifyContent: "center", gap: 18 }}
-		  inputStyle={{
-			width: 48,
-			height: 48,
-			border: checked ? "1.5px solid #C7C9D9" : "1.5px solid #FF3B3B",
-			borderRadius: 8,
-			fontSize: 20,
-			fontWeight: 600,
-		  }}
-		isDisabled={loading}
+          outline: "none",
+          border: "2px solid #FEC83C",
+          borderRadius: "8px",
+        }}
+        containerStyle={{ justifyContent: "center", gap: 18 }}
+        inputStyle={{
+          width: 48,
+          height: 48,
+          border: checked ? "1.5px solid #C7C9D9" : "1.5px solid #FF3B3B",
+          borderRadius: 8,
+          fontSize: 20,
+          fontWeight: 600,
+        }}
+        isDisabled={loading}
       />
       {checked ? (
         <Content>
@@ -186,7 +196,13 @@ const OTP = (props: Props) => {
             time ? ` Vui lòng nhấn nhận mã xác thực sau ${time}s` : ""
           }`}
           <br />
-          {time ? "" : <Send onClick={reSend}>Gửi lại mã xác thực</Send>}
+          {time ? (
+            ""
+          ) : (
+            <Send style={{ cursor: "pointer" }} onClick={reSend}>
+              Gửi lại mã xác thực
+            </Send>
+          )}
         </Content>
       ) : (
         <NotiFailed>Mã xác thực không chính xác</NotiFailed>
@@ -198,12 +214,19 @@ const OTP = (props: Props) => {
           type="button"
           onClick={checkOTP}
         /> */}
-		 <ButtonStyled
-            style={{ background: "#D60000", marginTop: 30 ,}}
-            type="button" onClick={checkOTP}
-          >
-           {loading === false ? 'Hoàn tất' : <CircularProgress style={{height: 25, width: 25, color: '#ffffff'}}/>}
-          </ButtonStyled>
+        <ButtonStyled
+          style={{ background: "#D60000", marginTop: 30 }}
+          type="button"
+          onClick={checkOTP}
+        >
+          {loading === false ? (
+            "Hoàn tất"
+          ) : (
+            <CircularProgress
+              style={{ height: 25, width: 25, color: "#ffffff" }}
+            />
+          )}
+        </ButtonStyled>
       </FormGroup>
     </Form>
   );

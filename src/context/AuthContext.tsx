@@ -21,6 +21,7 @@ import { removeAllComparePopUpItem } from "../../store/productCompareSlice";
 import { setData } from "../../store/paymentSlice";
 import { getUserInfoApi } from "../../pages/api/profileApi";
 import { getUserInfo } from "../../store/profileSlice";
+import useAddToCart from "hooks/useAddToCart";
 
 // import jwtDecode from 'jwt-decode';
 
@@ -48,6 +49,7 @@ const AuthContext = ({ children }) => {
   const [deviceToken, setDeviceToken] = useState<string | null>();
   const notification = useNotification();
   const dispatch = useDispatch();
+  const addToCart = useAddToCart();
   const data = useSelector((state: RootState) => state.payments.data);
   const [mounted, setMounted] = useState(false);
   if (mounted) {
@@ -131,6 +133,8 @@ const AuthContext = ({ children }) => {
         LocalStorage.set("accessToken", access_token, forceUpdate);
         LocalStorage.set("refreshToken", refresh_token);
       }
+      LocalStorage.remove("cart");
+      addToCart();
       await sendNotificationToken({ deviceToken, action: 1 });
       //   LocalStorage.remove("accessToken");
       //   LocalStorage.remove("refreshToken");
@@ -148,6 +152,8 @@ const AuthContext = ({ children }) => {
     LocalStorage.remove("refreshToken");
     SessionStorage.remove("accessToken", forceUpdate);
     SessionStorage.remove("refreshToken");
+    LocalStorage.remove("cart");
+    addToCart();
     const deviceToken = await LocalStorage.get("fcm_token");
     dispatch(
       setData({

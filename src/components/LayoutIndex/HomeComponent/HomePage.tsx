@@ -23,6 +23,7 @@ import {
   IconDecorHome3,
 } from "@components/Icons";
 import useProjectRecenly from "hooks/useProjectRecenly";
+import useNotification from "hooks/useNotification";
 
 const DynamicBanner = dynamic(() => import("./BannerIndex"), {
   loading: () => <p>...</p>,
@@ -103,6 +104,7 @@ const HomePage = () => {
   const [saveDataProjectType, setSaveDataProjectType] = useState([]);
   const [saveDataProject, setSaveDataProject] = useState([]);
   const { dataProductRecenly } = useProjectRecenly();
+  const notification = useNotification();
 
   const [filterSearch, setFilterSearch] = useState({
     textSearch: "",
@@ -145,27 +147,27 @@ const HomePage = () => {
     }
   };
 
-  useEffect(() => {
-    if (listMenuBarProjectType?.length > 0) {
-      setProjectTypeName(listMenuBarProjectType[0].name.split(","));
-      saveDataProjectType.push(listMenuBarProjectType[0]);
-      fetchProjectByType(listMenuBarProjectType[0].id);
-    }
-  }, [listMenuBarProjectType, router]);
+//   useEffect(() => {
+//     if (listMenuBarProjectType?.length > 0) {
+//       setProjectTypeName(listMenuBarProjectType[0].name.split(","));
+//       saveDataProjectType.push(listMenuBarProjectType[0]);
+//       fetchProjectByType(listMenuBarProjectType[0].id);
+//     }
+//   }, [listMenuBarProjectType, router]);
 
-  useEffect(() => {
-    if (!isEmpty(saveDataProjectType)) {
-      setParamsProjectType([saveDataProjectType[0].id]);
-      setListDataLSProjectType([saveDataProjectType[0]]);
-    }
-  }, [saveDataProjectType, listMenuBarProjectType]);
+//   useEffect(() => {
+//     if (!isEmpty(saveDataProjectType)) {
+//       setParamsProjectType([saveDataProjectType[0].id]);
+//       setListDataLSProjectType([saveDataProjectType[0]]);
+//     }
+//   }, [saveDataProjectType, listMenuBarProjectType]);
 
-  useEffect(() => {
-    if (!isEmpty(saveDataProject)) {
-      setListIdProject([saveDataProject[0].id]);
-      setListDataLSProject([saveDataProject[0]]);
-    }
-  }, [saveDataProject, router, listMenuBarProjectType]);
+//   useEffect(() => {
+//     if (!isEmpty(saveDataProject)) {
+//       setListIdProject([saveDataProject[0].id]);
+//       setListDataLSProject([saveDataProject[0]]);
+//     }
+//   }, [saveDataProject, router, listMenuBarProjectType]);
   //   useEffect(() => {
   //     if (router.pathname !== "/") {
   //       listParamsProjectType.push(listMenuBarProjectType[0].id);
@@ -271,23 +273,32 @@ const HomePage = () => {
   };
 
   const handleSearchCompare = () => {
-    localStorage.setItem(
-      "listDataLSProjectType",
-      JSON.stringify(listDataLSProjectType)
-    );
-    localStorage.setItem(
-      "listParamsLSProjectType",
-      JSON.stringify(listParamsProjectType)
-    );
-    localStorage.setItem(
-      "listDataLSProject",
-      JSON.stringify(listDataLSProject)
-    );
-    localStorage.setItem("listParamsIdProject", JSON.stringify(listIdProject));
+	if(isEmpty(projectTypeName)){
+		notification({
+			severity: "warning",
+			title: `Thông báo`,
+			message: `Bạn vui lòng chọn loại bất động sản, sau đó là dự án để so sánh`,
+		  });
+	}else{
+		localStorage.setItem(
+			"listDataLSProjectType",
+			JSON.stringify(listDataLSProjectType)
+		  );
+		  localStorage.setItem(
+			"listParamsLSProjectType",
+			JSON.stringify(listParamsProjectType)
+		  );
+		  localStorage.setItem(
+			"listDataLSProject",
+			JSON.stringify(listDataLSProject)
+		  );
+		  localStorage.setItem("listParamsIdProject", JSON.stringify(listIdProject));
+	  
+		  router.push(
+			`/compare-search?priceTo=${filterSearch.priceTo}&priceFrom=${filterSearch.priceFrom}&areaTo=${filterSearch.areaTo}&areaFrom=${filterSearch.areaFrom}&categoryId=${filterSearch.categoryId}`
+		  );
+	}
 
-    router.push(
-      `/compare-search?priceTo=${filterSearch.priceTo}&priceFrom=${filterSearch.priceFrom}&areaTo=${filterSearch.areaTo}&areaFrom=${filterSearch.areaFrom}&categoryId=${filterSearch.categoryId}`
-    );
   };
 
   return (
@@ -333,7 +344,7 @@ const HomePage = () => {
           </Typography>
           <Stack direction={matches ? "column" : "row"} spacing={5}>
             <Stack direction={"column"}>
-              <BoxStyled sx={{ minWidth: 120, padding: "0px !important" }}>
+              <BoxStyled sx={{ minWidth: 120, padding: "0px !important" }} >
                 <SelectInputComponent
                   label="Loại bất động sản"
                   data={listMenuBarProjectType}
@@ -341,6 +352,7 @@ const HomePage = () => {
                   onChange={handleSelectProject}
                   placeholder="Chọn loại bất động sản"
                   style={{ margin: 0 }}
+				  checkScroll={true}
                 />
                 <SelectInputComponent
                   label="Dự án"
@@ -348,6 +360,7 @@ const HomePage = () => {
                   value={projectName}
                   onChange={handleSelectProjectName}
                   placeholder="Chọn dự án"
+				  checkScroll={true}
                 />
               </BoxStyled>
               <div

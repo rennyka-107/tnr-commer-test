@@ -101,7 +101,7 @@ const HeaderTop = () => {
           <TextLink
             onClick={() => {
               Router.replace(
-                `${PathRoute.BuyingGuide}?idUserManual=3e63c59e-7995-4f8b-b553-740d131a052f&&selected=0`,
+                `${PathRoute.BuyingGuide}?idUserManual=808c2f4c-0c23-4960-8885-7b56c29f42f0`,
                 undefined,
                 {
                   shallow: true,

@@ -17,6 +17,7 @@ export interface searchLocationResponse {
   commune: string;
   thumbnail: string;
   diaChi: string;
+  floor: number;
   tongBanGhi: string;
   buildArea: string;
   clearArea: string;
@@ -25,6 +26,7 @@ export interface searchLocationResponse {
   category: string;
   maxFloor?: number;
   minFloor?: number;
+  floorHeight?: string | null;
   name: string;
   projectTypeCode?: string;
   paymentStatus?:string|number|null;

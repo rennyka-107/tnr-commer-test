@@ -2,7 +2,12 @@ import { useEffect, useRef } from "react";
 import { FeatureGroup, useMap } from "react-leaflet";
 import L, { LatLngExpression } from "leaflet";
 import isEmpty from "lodash.isempty";
-import { createLockIcon, getBoundsLockIcon } from "utils/leafletHelper";
+import {
+  createCanBuyIcon,
+  createLockIcon,
+  createSmallLockIcon,
+  getBoundsLockIcon,
+} from "utils/leafletHelper";
 import { RootState } from "../../../../store/store";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -24,11 +29,40 @@ const DisplayLayers = ({ data, layerParent }: Props) => {
   function renderColorProduct(status: string): string | null {
     switch (status) {
       case "2":
-        return "#06C270";
+        return "#24FF54";
       case "3":
-        return "#FFCC00";
+        return "#FEC83C";
       default:
-        return null;
+        return "#1B3459";
+    }
+  }
+  function renderStatus(status: string | number) {
+    switch (status) {
+      case "2":
+        return " (Đang mở bán)";
+      case "3":
+        return " (Tạm khóa)";
+      default:
+        return " (Không mở bán)";
+    }
+  }
+  function renderIconProduct(newLayer: any, status: string | number) {
+    switch (status) {
+      case "2":
+        return new L.SVGOverlay(
+          createCanBuyIcon(),
+          getBoundsLockIcon(newLayer, map.getZoom())
+        );
+      case "3":
+        return new L.SVGOverlay(
+          createSmallLockIcon(),
+          getBoundsLockIcon(newLayer, map.getZoom())
+        );
+      default:
+        return new L.SVGOverlay(
+          createLockIcon(),
+          getBoundsLockIcon(newLayer, map.getZoom())
+        );
     }
   }
   function fetchLayer() {
@@ -42,11 +76,19 @@ const DisplayLayers = ({ data, layerParent }: Props) => {
       const newLatLng = layer.feature.properties.radius
         ? {
             // lat: (oldLatLng.lat * 0.65 * window.innerWidth) / 700,
-            lng: (oldLatLng.lng * (window.innerWidth <= 1024 ? 0.9 : 0.65) * window.innerWidth) / 700,
+            lng:
+              (oldLatLng.lng *
+                (window.innerWidth <= 1024 ? 0.9 : 0.65) *
+                window.innerWidth) /
+              700,
             lat: (oldLatLng.lat * (window.innerHeight - 150)) / 700,
           }
         : oldLatLng.map((ll: any) => ({
-            lng: (ll.lng * (window.innerWidth <= 1024 ? 0.9 : 0.65) * window.innerWidth) / 700,
+            lng:
+              (ll.lng *
+                (window.innerWidth <= 1024 ? 0.9 : 0.65) *
+                window.innerWidth) /
+              700,
             lat: (ll.lat * (window.innerHeight - 150)) / 700,
             // lat: (ll.lat * 0.65 * window.innerWidth) / 700,
             // lng: (ll.lng * (window.innerHeight - 150)) / 700,
@@ -54,7 +96,10 @@ const DisplayLayers = ({ data, layerParent }: Props) => {
       const newLayer = layer.feature.properties.radius
         ? new L.Circle(
             newLatLng,
-            (layer.feature.properties.radius * (window.innerWidth <= 1024 ? 0.9 : 0.65) * window.innerWidth) / 700
+            (layer.feature.properties.radius *
+              (window.innerWidth <= 1024 ? 0.9 : 0.65) *
+              window.innerWidth) /
+              700
           )
         : new L.Polygon(newLatLng as LatLngExpression[]);
 
@@ -64,38 +109,37 @@ const DisplayLayers = ({ data, layerParent }: Props) => {
         !isEmpty(renderColorProduct(layer.feature.properties.status))
       ) {
         newLayer.setStyle({
-          stroke: false,
-          fillOpacity: 0.5,
+          stroke: true,
+          // fillOpacity: 0.5,
+          weight: 3,
+          fillOpacity: 0,
           fillColor: renderColorProduct(layer.feature.properties.status),
           color: renderColorProduct(layer.feature.properties.status),
         });
       } else {
         if (layer.feature.properties.level === "PRODUCT") {
           newLayer.setStyle({
-            weight: 1,
+            weight: 3,
             color: "#1B3459",
+            // color: "red",
             stroke: true,
             fillOpacity: 0,
           });
         } else {
           newLayer.setStyle({
-            stroke: false,
+            stroke: true,
+            weight: 3,
             fillOpacity: 0,
             fillColor: renderColorProduct(layer.feature.properties.status),
+            color: "#24FF54",
           });
         }
       }
 
-      let svgIconLayer = null;
-      if (
-        layer.feature.properties.status === "4" ||
-        layer.feature.properties.status === "99"
-      ) {
-        svgIconLayer = new L.SVGOverlay(
-          createLockIcon(),
-          getBoundsLockIcon(newLayer)
+      if (layer.feature.properties.level === "PRODUCT") {
+        ref?.current?.addLayer(
+          renderIconProduct(newLayer, layer.feature.properties.status)
         );
-        ref?.current?.addLayer(svgIconLayer);
       }
 
       newLayer.on("click", function (e: any) {
@@ -118,19 +162,48 @@ const DisplayLayers = ({ data, layerParent }: Props) => {
       newLayer.on("mouseover", function (e: any) {
         newLayer.setStyle({
           stroke: true,
-          color: "#24FF54",
+          color:
+            layer.feature.properties.level !== "PRODUCT"
+              ? "#FF1C23"
+              : renderColorProduct(layer.feature.properties.status),
+          fillColor:
+            layer.feature.properties.level !== "PRODUCT"
+              ? "#FF1C23"
+              : renderColorProduct(layer.feature.properties.status),
+          fillOpacity: 0.4,
+          weight: layer.feature.properties.level !== "PRODUCT" ? 3 : 3,
         });
-        newLayer.bindPopup(layer.feature.properties.name).openPopup();
+        newLayer
+          .bindPopup(
+            layer.feature.properties.name +
+              `${
+                layer.feature.properties.level === "PRODUCT"
+                  ? renderStatus(layer.feature.properties.status)
+                  : ""
+              }`
+          )
+          .openPopup();
       });
       newLayer.on("mouseout", function (e: any) {
         newLayer.setStyle({
-          stroke: layer.feature.properties.level === "PRODUCT" ? true : false,
+          weight: layer.feature.properties.level !== "PRODUCT" ? 3 : 3,
+          // stroke: layer.feature.properties.level === "PRODUCT" ? true : false,
+          stroke: true,
           color:
-            layer.feature.properties.level === "PRODUCT" &&
-            (layer.feature.properties.status === "4" ||
-              layer.feature.properties.status === "99")
-              ? "#1B3459"
-              : undefined,
+            layer.feature.properties.level !== "PRODUCT"
+              ? "#24FF54"
+              : renderColorProduct(layer.feature.properties.status),
+          fillColor:
+            layer.feature.properties.level !== "PRODUCT"
+              ? "#FF1C23"
+              : renderColorProduct(layer.feature.properties.status),
+          fillOpacity: 0,
+          // color:
+          //   layer.feature.properties.level === "PRODUCT" &&
+          //   (layer.feature.properties.status === "4" ||
+          //     layer.feature.properties.status === "99")
+          //     ? "#1B3459"
+          //     : undefined,
         });
         newLayer.closePopup();
       });
@@ -143,11 +216,19 @@ const DisplayLayers = ({ data, layerParent }: Props) => {
         : layerParent.getLatLngs()[0];
       const newLatLng = layerParent.feature.properties.radius
         ? {
-            lng: (oldLatLng.lng * (window.innerWidth <= 1024 ? 0.9 : 0.65) * window.innerWidth) / 700,
+            lng:
+              (oldLatLng.lng *
+                (window.innerWidth <= 1024 ? 0.9 : 0.65) *
+                window.innerWidth) /
+              700,
             lat: (oldLatLng.lat * (window.innerHeight - 150)) / 700,
           }
         : oldLatLng.map((ll: any) => ({
-            lng: (ll.lng * (window.innerWidth <= 1024 ? 0.9 : 0.65) * window.innerWidth) / 700,
+            lng:
+              (ll.lng *
+                (window.innerWidth <= 1024 ? 0.9 : 0.65) *
+                window.innerWidth) /
+              700,
             lat: (ll.lat * (window.innerHeight - 150)) / 700,
             // lat: (ll.lat * 0.65 * window.innerWidth) / 700,
             // lng: (ll.lng * (window.innerHeight - 150)) / 700,
@@ -155,17 +236,19 @@ const DisplayLayers = ({ data, layerParent }: Props) => {
       const newLayer = layerParent.feature.properties.radius
         ? new L.Circle(
             newLatLng,
-            (layerParent.feature.properties.radius * (window.innerWidth <= 1024 ? 0.9 : 0.65) * window.innerWidth) /
+            (layerParent.feature.properties.radius *
+              (window.innerWidth <= 1024 ? 0.9 : 0.65) *
+              window.innerWidth) /
               700
           )
         : new L.Polygon(newLatLng as LatLngExpression[]);
-
       ref?.current?.addLayer(newLayer);
       map.fitBounds(newLayer.getBounds() as L.LatLngBoundsExpression);
       newLayer.setStyle({
+        weight: 3,
         stroke: true,
         fillOpacity: 0,
-        color: "red",
+        color: !isEmpty(Target) && !isEmpty(Target.productId) ? "" : "#FF1A20",
       });
     }
   }

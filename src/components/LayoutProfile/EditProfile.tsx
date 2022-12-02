@@ -25,7 +25,13 @@ import {
 } from "@components/StyledLayout/styled";
 import styled from "@emotion/styled";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Backdrop, Button, CircularProgress, Divider, Grid } from "@mui/material";
+import {
+  Backdrop,
+  Button,
+  CircularProgress,
+  Divider,
+  Grid,
+} from "@mui/material";
 import { Box } from "@mui/system";
 import { ProfileI } from "@service/Profile";
 import ImageWithHideOnError from "hooks/ImageWithHideOnError";
@@ -143,32 +149,34 @@ const EditProfile = () => {
   const dispatch = useDispatch();
 
   const validationSchema = yup.object().shape({
-    fullname:  yup
-	.string()
-	.trim(validateLine.trim)
-	.strict(true)
-	.required(validateLine.required)
-	.min(3, "Họ tên không được chứa ít hơn 3 ký tự")
-	.matches(validateVietnameseName(), "Họ và tên không đúng định dạng")
-	.max(255)
-	.default(""),
-    phone: yup
+    fullname: yup
       .string()
-      .nullable()
       .trim(validateLine.trim)
       .strict(true)
-      .max(10, "Số điện thoại quá dài")
+      .required(validateLine.required)
+      .min(3, "Họ tên không được chứa ít hơn 3 ký tự")
+      .matches(validateVietnameseName(), "Họ và tên không đúng định dạng")
+      .max(255)
+      .default(""),
+    phone: yup
+      .string()
+      .trim(validateLine.trim)
+      .strict(true)
       .matches(Regexs.phone, "Số điện thoại không đúng")
+      .min(10, "Số điện thoại không được dưới 10 số")
+      .max(10, "Số điện thoại không được nhiều hơn 10 số")
       .required(validateLine.required)
       .default(""),
     idNumber: yup
       .string()
-      .nullable()
-      .trim(validateLine.trim)
-      .strict(true)
-      .max(12, "Số CMND quá dài")
-      .matches(Regexs.idNumber, "Số CMND không đúng")
+      //   .min(9, "Số CCCD/CMND không được dưới 9 số")
+      .max(12, "Số CCCD/CMND quá dài")
+      .matches(
+        Regexs.idNumber,
+        "CMND gồm 9 chữ số , CCCD gồm 12 chữ số , Hộ chiếu gồm 1 chữ cái hoa và 7 chữ số"
+      )
       .required(validateLine.required)
+      .nullable()
       .default(""),
     email: yup
       .string()
@@ -392,17 +400,17 @@ const EditProfile = () => {
           ) : (
             <Box sx={{ width: 125, height: 125 }}>
               {/* {detailUser?.avatar && ( */}
-                <ImageWithHideOnError
-                  className="logo"
-                  src={watch("avatar") ?? "/images/avatar.png"}
-                  fallbackSrc={"/images/avatar.png"}
-                  height={125}
-                  width={125}
-                  priority
-                  unoptimized={true}
-				  style={{borderRadius: 20}}
-                  objectFit="cover"
-                />
+              <ImageWithHideOnError
+                className="logo"
+                src={watch("avatar") ?? "/images/avatar.png"}
+                fallbackSrc={"/images/avatar.png"}
+                height={125}
+                width={125}
+                priority
+                unoptimized={true}
+                style={{ borderRadius: 20 }}
+                objectFit="cover"
+              />
               {/* )} */}
             </Box>
           )}
@@ -474,7 +482,7 @@ const EditProfile = () => {
                 name="birth"
                 label="Ngày sinh"
                 maxDate={new Date()}
-				labelColor=" #8190a7"
+                labelColor=" #8190a7"
               />
             </FormGroup>
           </Column>
@@ -512,7 +520,9 @@ const EditProfile = () => {
         <Row>
           <Column>
             {/* <HorizontalLine mb={36} mt={36} /> */}
-			<Divider style={{color: "#D8D8D8", marginBottom: 36, marginTop: 36}} />
+            <Divider
+              style={{ color: "#D8D8D8", marginBottom: 36, marginTop: 36 }}
+            />
           </Column>
         </Row>
         <Row>
@@ -702,7 +712,7 @@ const EditProfile = () => {
                 InputProps={{
                   style: {
                     height: "44px",
-  
+
                     borderRadius: "8px",
                   },
                 }}
@@ -951,7 +961,9 @@ const EditProfile = () => {
               disabled={loading || isEqual(initialValue, watch())}
             >
               {!loading ? (
-                <Text18Styled color={"#fff"} fontSize={18} fontWeight={400}>Lưu thông tin</Text18Styled>
+                <Text18Styled color={"#fff"} fontSize={18} fontWeight={400}>
+                  Lưu thông tin
+                </Text18Styled>
               ) : (
                 <CircularProgress
                   style={{ height: 25, width: 25, color: "#ffffff" }}

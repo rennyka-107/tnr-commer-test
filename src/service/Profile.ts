@@ -51,6 +51,7 @@ export interface ContractI {
   paymentIdentityInfos: any;
   transactionCodeLandSoft?: string;
   paymentRequestTypeResponseList: PaymentRequest[];
+  transactionTypeName: string | null;
 }
 
 export interface ProfileI {

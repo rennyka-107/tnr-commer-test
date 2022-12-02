@@ -32,7 +32,7 @@ const ListProductCard = ({ data, expandMore }: ProductsProps) => {
       {!isEmpty(data) ? (
         <Grid
           container
-        //   spacing={{ xs: 2, md: 3 }}
+          //   spacing={{ xs: 2, md: 3 }}
           sx={{
             pt: 0,
             display: "grid",
@@ -49,7 +49,7 @@ const ListProductCard = ({ data, expandMore }: ProductsProps) => {
               }}
               item
               key={index}
-			  style={{marginBottom: 25}}
+              style={{ marginBottom: 25 }}
             >
               <ContainerProduct>
                 <ItemProductMap

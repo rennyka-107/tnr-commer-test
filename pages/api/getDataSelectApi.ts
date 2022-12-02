@@ -25,3 +25,9 @@ export const apiGetProjectTypeBoard = async () => {
 	);
   };
   
+  export const apiGetFloorBoard = async (idProject: string,projectLevel1: string) => {
+	return HttpClient.get<string, CommonResponse>(
+	  `/api/param/board/floor/${idProject}/${projectLevel1}`
+	);
+  };
+  

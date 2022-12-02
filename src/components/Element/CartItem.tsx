@@ -136,7 +136,7 @@ CartItem.Title = ({ item }: Props) => {
 };
 
 CartItem.GeneralInfo = ({ children, item }: Props) => {
-  const { dataItem, projectTypeCode, minFloor, maxFloor, build } = item;
+  const { dataItem, projectTypeCode, minFloor, maxFloor, build, floorHeight } = item;
   return (
     <CenterIntemWrap>
       <WrapItemCenter>
@@ -195,7 +195,7 @@ CartItem.GeneralInfo = ({ children, item }: Props) => {
               {/* <TextFloorStyled>max</TextFloorStyled> */}
               <TextCenterItem>
                 <TextFloorValue>
-                  {`${maxFloor ? `${maxFloor} tầng` : "N/A"}`}{" "}
+                  {`${floorHeight ? `${floorHeight}` : "N/A"}`}{" "}
                 </TextFloorValue>
               </TextCenterItem>
             </WrapItemCenter>

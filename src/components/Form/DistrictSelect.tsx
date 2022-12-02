@@ -9,6 +9,7 @@ interface PropsI {
   setValue: any;
   provinceName: string;
   disabled?: boolean;
+  required?: boolean;
 }
 
 interface optionI {
@@ -17,7 +18,7 @@ interface optionI {
 }
 
 const DistricSelect = (props: PropsI) => {
-  const { control, label, name, setValue, provinceName, disabled } = props;
+  const { control, label, name, setValue, provinceName, disabled, required } = props;
   const [data, setData] = useState<optionI[]>([]);
   const getList = (name: string) => {
     try {
@@ -47,7 +48,9 @@ const DistricSelect = (props: PropsI) => {
   }, [provinceName]);
   return (
     <ControllerSelectAutoComplete
+      fzLabel="16px"
       variant="outlined"
+      required={required}
       name={name}
       label={label}
       control={control}

@@ -8,6 +8,7 @@ export interface BodyRequest {
 	projectTypeId?: string | null;
     saleProductStatus?: (string | number)[] | string;
 	projectTypeCode?: string | null;
+	floorName?: string | null;
 	levelDetailName?: string | null;
 }
 

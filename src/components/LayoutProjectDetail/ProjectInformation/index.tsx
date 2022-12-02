@@ -111,7 +111,7 @@ export default function ProjectInformation() {
 
                 lineHeight: "130%",
                 textAlign: "center",
-                mt: 5,
+                mt: "85px",
               }}
             >
               Thông tin dự án

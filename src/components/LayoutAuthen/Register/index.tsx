@@ -97,6 +97,7 @@ const Index = () => {
           <OTP
             keycloakId={transKey}
             paramsEndcode={paramsEndcode.OTP}
+			transKey={transKey}
             keyWidthOTPParams={paramsEndcode.key}
             emailRegister={emailRegister}
             userId={userId}

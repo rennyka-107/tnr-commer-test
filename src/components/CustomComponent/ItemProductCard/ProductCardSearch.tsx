@@ -50,7 +50,9 @@ type Props = {
   ticketCard?: string;
   projectTypeCode?: string;
   minFloor?: number;
+  floor?: number;
   maxFloor?: number;
+  floorHeight?: string | number,
   buyDisabled?: boolean;
   activeFavourite?: boolean;
 };
@@ -262,6 +264,8 @@ export default function ProductCardSearch({
   ticketCard,
   activeSoSanh,
   build,
+  floor,
+  floorHeight,
   id,
   buyDisabled,
   favouriteStatus,
@@ -420,7 +424,7 @@ export default function ProductCardSearch({
                     <FloorIcon />
                     {/* <TextFloorStyled>max</TextFloorStyled> */}
                     <TextCenterItem>
-                      <TextFloorValue>{maxFloor} tầng</TextFloorValue>
+                      <TextFloorValue>{floorHeight}</TextFloorValue>
                     </TextCenterItem>
                   </WrapItemCenter>
                 ) : (

@@ -17,7 +17,7 @@ interface Props {
 	checkBread?: boolean;
 }
 const ContainerWrapper = styled.div`
-    padding:29px 164px;
+    padding:29px 307px;
     margin-top: 127px;
     width:100%;
 `;

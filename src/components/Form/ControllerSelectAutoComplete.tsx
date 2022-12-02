@@ -35,6 +35,7 @@ interface Props<T> {
   onChangeExtra?: (data: itemSelect) => void;
   options: itemSelect[];
   disabled?: boolean;
+  fzLabel?: string;
 }
 
 const Container = styled.div``;
@@ -70,13 +71,14 @@ const ControllerSelectAutoComplete = <T extends FieldValues>(
     options,
     onChangeExtra,
     disabled,
+    fzLabel,
     ...res
   } = props;
 
   return (
     <Container>
       {label && (
-        <LabelSpan color={labelColor}>
+        <LabelSpan style={{ fontSize: fzLabel}} color={labelColor}>
           {label}
           {required && <RequiredSpan>*</RequiredSpan>}
         </LabelSpan>

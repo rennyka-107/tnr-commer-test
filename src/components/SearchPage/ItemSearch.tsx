@@ -107,7 +107,7 @@ const ItemSearch = ({ data, buyDisabled }: searchProps) => {
           areaFrom: "0",
         },
       });
-	  LocalStorage.set("compare-url", {
+      LocalStorage.set("compare-url", {
         projectId: projectId,
         projectTypeId: projectType,
         priceTo: "50",
@@ -124,13 +124,13 @@ const ItemSearch = ({ data, buyDisabled }: searchProps) => {
 
   const handleAddToCart = (product: searchLocationResponse) => () => {
     // addToCart(product.productId);
-    console.log("addd", product);
-    console.log("cart123123", cart, isEmpty(cart));
+
     if (cart && cart.id === product.productId) {
-      notification({
-        severity: "success",
-        message: "Sản phẩm này đã có sẵn trong giỏ hàng",
-      });
+      // notification({
+      //   severity: "success",
+      //   message: "Sản phẩm này đã có sẵn trong giỏ hàng",
+      // });
+      router.push("/payment-cart");
     } else if (isEmpty(cart)) {
       addToCart(product.productId);
     } else {
@@ -146,8 +146,14 @@ const ItemSearch = ({ data, buyDisabled }: searchProps) => {
 
   return (
     <>
-        <div style={{display: 'flex', justifyContent:'center', alignItems: 'center'}}>
-      <ProductWrap>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <ProductWrap>
           {data?.map((product, index) => {
             return (
               <ProductCardSearch
@@ -155,24 +161,29 @@ const ItemSearch = ({ data, buyDisabled }: searchProps) => {
                 key={index}
                 id={product.productId}
                 src={product.thumbnail}
-                projectName={product.projectName}  
+                projectName={product.projectName}
                 title={product.name}
                 subTitle={product.location}
                 build={product.build}
                 activeFavourite={true}
                 dataItem={{
-                  item1: product.projectTypeCode === "1" ? product.buildArea : product.clearArea,
+                  item1:
+                    product.projectTypeCode === "1"
+                      ? product.buildArea
+                      : product.clearArea,
                   item2: product.numBath,
                   item3: product.numBed,
                   item4: product.doorDirection,
                 }}
                 priceListed={product.totalPrice}
                 favouriteStatus={product.favouriteStatus}
+                floor={product.floor}
                 priceSub={product.unitPrice}
                 ticketCard={product.category}
                 projectTypeCode={product.projectTypeCode}
                 minFloor={product.minFloor}
                 maxFloor={product.maxFloor}
+                floorHeight={product.floorHeight}
                 activeSoSanh={true}
                 buyDisabled={product?.paymentStatus !== 2}
                 onCompare={onCompare(
@@ -186,8 +197,8 @@ const ItemSearch = ({ data, buyDisabled }: searchProps) => {
               />
             );
           })}
-      </ProductWrap>
-        </div>
+        </ProductWrap>
+      </div>
       <ConfirmDialog
         open={openConfirmDialog}
         handleClose={handleCloseConfirmDialog}

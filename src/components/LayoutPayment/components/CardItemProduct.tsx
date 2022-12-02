@@ -13,7 +13,7 @@ import {
 } from "../../StyledLayout/styled";
 import LocalStorage from "utils/LocalStorage";
 import Router, { useRouter } from "next/router";
-import Link from "next/link";
+import isEmpty from "lodash.isempty";
 
 const WrapperCardStyled = styled(Box)(
   {
@@ -118,7 +118,7 @@ const CardItemProduct = (props: Props) => {
                 gap: 37,
               }}
             >
-              {/* <SubRightText>{cart?.levelDetailParentName}</SubRightText> */}
+              <SubRightText>{cart?.levelDetailParentName}</SubRightText>
               <SubRightText>{cart?.levelDetailName}</SubRightText>
             </div>
           ) : (
@@ -126,7 +126,6 @@ const CardItemProduct = (props: Props) => {
               style={{
                 display: "flex",
                 gap: 37,
-               
               }}
             >
               <SubRightText>{cart?.levelDetailName}</SubRightText>
@@ -155,18 +154,34 @@ const CardItemProduct = (props: Props) => {
             </>
           )}
         </RowStyledAgain>
-        <RowStyledAgain>
-          <Text14Styled>Phòng ngủ</Text14Styled>
-          <Text14Styled>{cart.numBed ?? "N/A"}</Text14Styled>
-        </RowStyledAgain>
-        <RowStyledAgain>
-          <Text14Styled>Phòng tắm</Text14Styled>
-          <Text14Styled>{cart.numBath ?? "N/A"}</Text14Styled>
-        </RowStyledAgain>
+        {!isEmpty(cart) && cart.buildType === "2" && (
+          <RowStyledAgain>
+            <Text14Styled>Phòng ngủ</Text14Styled>
+            <Text14Styled>{cart.numBed ?? "N/A"}</Text14Styled>
+          </RowStyledAgain>
+        )}
+        {!isEmpty(cart) && cart.buildType === "2" && (
+          <RowStyledAgain>
+            <Text14Styled>Phòng vệ sinh</Text14Styled>
+            <Text14Styled>{cart.numBath ?? "N/A"}</Text14Styled>
+          </RowStyledAgain>
+        )}
         <RowStyledAgain>
           <Text14Styled>Hướng</Text14Styled>
           <Text14Styled>{cart.doorDirection ?? "N/A"}</Text14Styled>
         </RowStyledAgain>
+        {!isEmpty(cart) && cart.buildType === "1" && (
+          <RowStyledAgain>
+            <Text14Styled>Phân loại</Text14Styled>
+            <Text14Styled>{cart.build ? "Có xây" : "Chưa xây"}</Text14Styled>
+          </RowStyledAgain>
+        )}
+        {!isEmpty(cart) && cart.buildType === "1" && cart.build && (
+          <RowStyledAgain>
+            <Text14Styled>Số tầng cao</Text14Styled>
+            <Text14Styled>{cart.floorHeight ?? "N/A"}</Text14Styled>
+          </RowStyledAgain>
+        )}
       </Box>
     </WrapperCardStyled>
   );

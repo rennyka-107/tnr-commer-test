@@ -20,6 +20,8 @@ import { resetProjectMap } from "../../../store/projectMapSlice";
 import { RootState } from "../../../store/store";
 import { styled } from "@mui/material/styles";
 import { apiGetProjectTypeBoard } from "../../../pages/api/getDataSelectApi";
+import FLOORSelect from "@components/Form/FLOORSelect";
+import { isEmpty } from "lodash";
 interface PropsI {
   onSubmit?: (values: BodyRequest) => void;
   body?: BodyRequest;
@@ -32,6 +34,7 @@ interface FormI {
   //   categoryId: string;
   saleProductStatus: string[];
   projectId: string;
+  floor: string;
 }
 const BpIcon = styled("span")(({ theme }) => ({
   borderRadius: "50%",
@@ -73,19 +76,20 @@ const BpCheckedIcon = styled(BpIcon)({
 const Filter = (props: PropsI) => {
   const { onSubmit, body } = props;
   const [listMenuBar, setListMenuBar] = useState([]);
+  const [typeProject, setTypeProject] = useState("");
   const { listMenuBarProjectType, listMenuBarType } = useSelector(
     (state: RootState) => state.menubar
   );
+  //   console.log(listMenuBarType)
 
-	useEffect(() => {
-		(async() => {
-			const response = await apiGetProjectTypeBoard();
-			if(response.responseCode === '00'){
-				setListMenuBar(response.responseData)
-			}
-		})();
-	},[])
-
+  useEffect(() => {
+    (async () => {
+      const response = await apiGetProjectTypeBoard();
+      if (response.responseCode === "00") {
+        setListMenuBar(response.responseData);
+      }
+    })();
+  }, []);
 
   const formControler = useForm<FormI>({
     mode: "onChange",
@@ -94,7 +98,6 @@ const Filter = (props: PropsI) => {
   });
   const { control, handleSubmit, watch, getValues, setValue, reset } =
     formControler;
-	
 
   useEffect(() => {
     // reset("projectId")
@@ -105,16 +108,33 @@ const Filter = (props: PropsI) => {
       const ProjectTypeSelect = listMenuBar.filter(
         (item) => item.id === projectTypeId
       );
+      if (!isEmpty(ProjectTypeSelect)) {
+        setTypeProject(ProjectTypeSelect[0].code);
+      }
       if (!!getValues("projectLevel1")) {
-        onSubmit({
-          ...body,
-          projectId: getValues("projectId"),
-          projectTypeId: ProjectTypeSelect[0].id,
-          saleProductStatus: getValues("saleProductStatus") as string[],
-          // categoryId: getValues("categoryId"),
-          levelDetailName: getValues("projectLevel1"),
-          projectTypeCode: ProjectTypeSelect[0].code,
-        });
+        if (!!getValues("floor")) {
+          onSubmit({
+            ...body,
+            projectId: getValues("projectId"),
+            projectTypeId: ProjectTypeSelect[0].id,
+            saleProductStatus: getValues("saleProductStatus") as string[],
+            // categoryId: getValues("categoryId"),
+            levelDetailName: getValues("projectLevel1"),
+            projectTypeCode: ProjectTypeSelect[0].code,
+            floorName: getValues("floor"),
+          });
+        } else {
+          onSubmit({
+            ...body,
+            projectId: getValues("projectId"),
+            projectTypeId: ProjectTypeSelect[0].id,
+            saleProductStatus: getValues("saleProductStatus") as string[],
+            // categoryId: getValues("categoryId"),
+            levelDetailName: getValues("projectLevel1"),
+            projectTypeCode: ProjectTypeSelect[0].code,
+            floorName: "",
+          });
+        }
       } else {
         onSubmit({});
       }
@@ -128,6 +148,7 @@ const Filter = (props: PropsI) => {
           // categoryId: getValues("categoryId"),
           levelDetailName: getValues("projectLevel1"),
           projectTypeCode: "",
+          floorName: "",
         });
       } else {
         onSubmit({});
@@ -138,6 +159,7 @@ const Filter = (props: PropsI) => {
     watch("saleProductStatus"),
     watch("projectTypeId"),
     watch("projectLevel1"),
+    watch("floor"),
   ]);
 
   const statusOptions = [
@@ -231,7 +253,7 @@ const Filter = (props: PropsI) => {
         </FormGroup>
         <FormGroup sx={{ mb: 2, paddingRight: 2, width: 250 }}>
           <ProjectSelect
-            style={{ width: 240 }}
+            style={{ width: 240, height: 48 }}
             name="projectId"
             label="Dự án"
             control={control}
@@ -243,23 +265,43 @@ const Filter = (props: PropsI) => {
         </FormGroup>
         <FormGroup sx={{ mb: 2, paddingRight: 2, width: 260 }}>
           <LOTSelect
-            style={{ width: 240 }}
+            style={{ width: 240, height: 48 }}
             name="projectLevel1"
             label="Khu"
             control={control}
             required
             setValue={formControler.setValue}
-            isClear
+            // isClear
             idProject={watch("projectId")}
             idProjectType={watch("projectTypeId")}
           />
         </FormGroup>
+        {!isEmpty(typeProject) && typeProject === "2" && (
+          <FormGroup
+            sx={{ mb: 2, paddingRight: 2, width: 260 }}
+            style={{ margin: 0 }}
+          >
+            <FLOORSelect
+              style={{ width: 240, height: 48 }}
+              name="floor"
+              label="Tầng"
+              control={control}
+              // required
+              setValue={formControler.setValue}
+              isClear
+              idProject={watch("projectId")}
+              projectLevel1={watch("projectLevel1")}
+            />
+          </FormGroup>
+        )}
+
         <FormGroup sx={{ mb: 2, paddingRight: 2 }}>
           <ControllerSelect
             variant="outlined"
             name="saleProductStatus"
             label="Trạng thái"
             control={control}
+            style={{ height: 48 }}
             fullWidth
             inputProps={InputProps}
             setValue={formControler.setValue}

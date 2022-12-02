@@ -1,0 +1,11 @@
+{
+    "applinks": {
+        "apps": [],
+        "details": [{
+            "appID": "LL6RB5292K.com.tng-hoding.tnr-online",
+            "paths": [
+                "/universal/*"
+            ]
+        }]
+    }
+}

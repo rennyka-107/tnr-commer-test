@@ -45,7 +45,7 @@ export default function SliderProductHotComponent({ hoverCheck }) {
   );
 
   const matches = useMediaQuery("(max-width:1110px)");
-  
+
   const [dataProjectType, setDataProjectType] = useState([]);
   const [dataProject, setDataProject] = useState([]);
   const [openConfirmDialog, setOpenConfirmDialog] = useState<boolean>(false);
@@ -80,8 +80,6 @@ export default function SliderProductHotComponent({ hoverCheck }) {
   const addToCart = useAddToCart();
   const router = useRouter();
   const dispatch = useDispatch();
-
-  useEffect(() => {}, []);
 
   const onCompare =
     (
@@ -152,10 +150,11 @@ export default function SliderProductHotComponent({ hoverCheck }) {
 
   const handleAddToCart = (product: any) => () => {
     if (cart && cart.id === product.id) {
-      notification({
-        severity: "success",
-        message: "Sản phẩm này đã có sẵn trong giỏ hàng",
-      });
+      // notification({
+      //   severity: "success",
+      //   message: "Sản phẩm này đã có sẵn trong giỏ hàng",
+      // });
+      router.push("/payment-cart");
     } else if (isEmpty(cart)) {
       addToCart(product.id);
     } else {
@@ -174,7 +173,7 @@ export default function SliderProductHotComponent({ hoverCheck }) {
   };
   return (
     <WrapSlide>
-      <LeftIconStyled style={{ cursor: 'pointer',marginRight: 20}}/>
+      <LeftIconStyled style={{ cursor: "pointer", marginRight: 20 }} />
       {/* <div onMouseOver={handleMouseEnter} onMouseOut={handleMouseLeave}> */}
       <Swiper
         onInit={onInit}
@@ -224,6 +223,8 @@ export default function SliderProductHotComponent({ hoverCheck }) {
                 build={item.build}
                 minFloor={item.minFloor}
                 maxFloor={item.maxFloor}
+                floor={item.floor}
+                floorHeight={item.floorHeight}
                 onClick={handleAddToCart(item)}
                 activeSoSanh={true}
                 buyDisabled={item?.paymentStatus !== 2}

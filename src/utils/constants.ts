@@ -8,7 +8,7 @@ const version = process.env.REACT_APP_VERSION;
 
 const validateLine = {
   regexPassword:
-    "Mật khẩu phải chứa 1 chữ hoa, 1 chữ thường , 1 số và không có khoảng trắng",
+    "Mật khẩu phải chứa ít nhất 1 chữ hoa, 1 chữ thường, 1 ký tự đặc biệt, 1 số và không có khoảng trắng",
   required: "Không được để trống",
   trim: "Không được chứa khoảng trắng đầu và cuối",
   email: "Email không hợp lệ",

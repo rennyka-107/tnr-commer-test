@@ -21,7 +21,7 @@ const ContainerWrapper = styled.div`
     padding: 20px 50px 20px 50px;
   }
   @media screen and (max-width: 1440px) {
-    padding: 29px 150px 150px 150px;
+    padding: 29px 156px 150px 165px;
   }
 `;
 
